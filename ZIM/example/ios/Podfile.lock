@@ -1,0 +1,29 @@
+PODS:
+  - Flutter (1.0.0)
+  - zim (0.0.1):
+    - Flutter
+    - ZIM
+  - ZIM (2.0.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - zim (from `.symlinks/plugins/zim/ios`)
+
+SPEC REPOS:
+  trunk:
+    - ZIM
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  zim:
+    :path: ".symlinks/plugins/zim/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  ZIM: 3d210e70ce15276dd37f0ed69e1f7f0e4b097767
+  zim: 3ab2dd770a02666818a439bb0ab7ac6b480fce1c
+
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+
+COCOAPODS: 1.11.3
