@@ -12,7 +12,7 @@ abstract class ZIM {
 
   Future<String> getVersion();
 
-//MARK: -Main
+//MARK: - Main
   Future<void> create(int appID);
 
   Future<void> destroy();
@@ -20,6 +20,8 @@ abstract class ZIM {
   Future<void> setLogConfig(ZIMLogConfig config);
 
   Future<void> setCacheConfig(ZIMCacheConfig config);
+
+  Future<void> setEventHander(id);
 
   Future<ZIMLoggedInResult> login(String userID, String userName, String token);
 
@@ -29,7 +31,7 @@ abstract class ZIM {
 
   Future<ZIMUsersInfoQueriedResult> queryUsersInfo(List<String> userIDs);
 
-//MARK: -Conversation
+//MARK: - Conversation
   Future<ZIMConversationListQueriedResult> queryConversationList(
       ZIMConversationQueryConfig config);
 
@@ -46,7 +48,7 @@ abstract class ZIM {
           String conversationID,
           ZIMConversationType conversationType);
 
-  //MARK: -Message
+//MARK: -Message
   Future<ZIMMessageSentResult> sendPeerMessage(
       ZIMMessage message, String toUserID, ZIMMessageSendConfig config);
 
@@ -68,7 +70,101 @@ abstract class ZIM {
       ZIMConversationType conversationType,
       ZIMMessageDeleteConfig config);
 
-  //MARK: -createRoom
+//MARK: - createRoom
   Future<ZIMRoomCreatedResult> createRoom(ZIMRoomInfo roomInfo,
       [ZIMRoomAdvancedConfig? config]);
+
+  Future<ZIMRoomJoinedResult> joinRoom(String roomID);
+
+  Future<ZIMRoomLeftResult> leaveRoom(String roomID);
+
+  Future<ZIMRoomMemberQueriedResult> queryRoomMemberList(
+      String roomID, ZIMRoomMemberQueryConfig config);
+
+  Future<ZIMRoomOnlineMemberCountQueriedResult> queryRoomOnlineMemberCount(
+      String roomID);
+
+  Future<ZIMRoomAttributesOperatedCallResult> setRoomAttributes(
+      Map<String, String> roomAttributes,
+      String roomID,
+      ZIMRoomAttributesSetConfig? config);
+
+  Future<ZIMRoomAttributesOperatedCallResult> deleteRoomAttributes(
+      List<String> keys, String roomID, ZIMRoomAttributesDeleteConfig? config);
+
+  Future<void> beginRoomAttributesBatchOperation(
+      String roomID, ZIMRoomAttributesBatchOperationConfig? config);
+
+  Future<ZIMRoomAttributesBatchOperatedResult> endRoomAttributesBatchOperation(
+      String roomID);
+
+  Future<ZIMRoomAttributesQueriedResult> queryRoomAllAttributes(String roomID);
+
+//MARK: - Group
+  Future<ZIMGroupCreatedResult> createGroup(
+      ZIMGroupInfo groupInfo, List<String> userIDs,
+      [ZIMGroupAdvancedConfig? config]);
+
+  Future<ZIMGroupDismissedResult> dismissGroup(String groupID);
+
+  Future<ZIMGroupJoinedResult> joinGroup(String groupID);
+
+  Future<ZIMGroupLeftResult> leaveGroup(String groupID);
+
+  Future<ZIMGroupUsersInvitedResult> inviteUsersIntoGroup(
+      List<String> userIDs, String groupID);
+
+  Future<ZIMGroupMemberKickedResult> kickGroupMembers(
+      List<String> userIDs, String groupID);
+
+  Future<ZIMGroupOwnerTransferredResult> transferGroupOwner(
+      String toUserID, String groupID);
+
+  Future<ZIMGroupNameUpdatedResult> updateGroupName(
+      String groupName, String groupID);
+
+  Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
+      String groupNotice, String groupID);
+
+  Future<ZIMGroupInfoQueriedResult> queryGroupInfo(String groupID);
+
+  Future<ZIMGroupAttributesOperatedResult> setGroupAttributes(
+      Map<String, String> groupAttributes, String groupID);
+
+  Future<ZIMGroupAttributesOperatedResult> deleteGroupAttributes(
+      List<String> keys, String groupID);
+
+  Future<ZIMGroupAttributesQueriedResult> queryGroupAttributes(
+      List<String> keys, String groupID);
+
+  Future<ZIMGroupAttributesQueriedResult> queryGroupAllAttributes(
+      String groupID);
+
+  Future<ZIMGroupMemberRoleUpdatedResult> setGroupMemberRole(
+      ZIMGroupMemberRole role, String forUserID, String groupID);
+
+  Future<ZIMGroupMemberNicknameUpdatedResult> setGroupMemberNickname(
+      String nickname, String forUserID, String groupID);
+
+  Future<ZIMGroupMemberInfoQueriedResult> queryGroupMemberInfo(
+      String userID, String groupID);
+
+  Future<ZIMGroupListQueriedResult> queryGroupList();
+
+  Future<ZIMGroupMemberListQueriedResult> queryGroupMemberList(
+      String groupID, ZIMGroupMemberQueryConfig config);
+
+//MARK: - CallInvite
+
+  Future<ZIMCallInvitationSentResult> callInvite(
+      List<String> invitees, ZIMCallInviteConfig config);
+
+  Future<ZIMCallCancelSentResult> callCancel(
+      List<String> invitees, String callID, ZIMCallCancelConfig config);
+
+  Future<ZIMCallAcceptanceSentResult> callAccept(
+      String callID, ZIMCallAcceptConfig config);
+
+  Future<ZIMCallRejectionSentResult> callReject(
+      String callID, ZIMCallRejectConfig config);
 }

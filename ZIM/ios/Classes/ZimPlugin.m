@@ -1,18 +1,43 @@
 #import "ZimPlugin.h"
 #import <ZIM/ZIM.h>
+#import <ZIM/ZIMEventHandler.h>
 static ZIM *zim;
-@interface ZimPlugin()
+@interface ZimPlugin()<ZIMEventHandler,FlutterStreamHandler>
 
+@property (nonatomic, strong) id<FlutterPluginRegistrar> registrar;
+
+@property (nonatomic, strong) FlutterMethodChannel *methodChannel;
+@property (nonatomic, strong) FlutterEventChannel *eventChannel;
+
+@property (nonatomic, strong) FlutterEventSink events;
 
 @end
 
 @implementation ZimPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
+    FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"zim"
             binaryMessenger:[registrar messenger]];
-  ZimPlugin* instance = [[ZimPlugin alloc] init];
-  [registrar addMethodCallDelegate:instance channel:channel];
+    ZimPlugin* instance = [[ZimPlugin alloc] init];
+    [registrar addMethodCallDelegate:instance channel:channel];
+    instance.methodChannel = channel;
+
+    FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@"zim_event_handler" binaryMessenger:[registrar messenger]];
+    [eventChannel setStreamHandler:(id)instance];
+    instance.eventChannel = eventChannel;
+    
+}
+
+- (FlutterError* _Nullable)onListenWithArguments:(id _Nullable)arguments
+                                       eventSink:(FlutterEventSink)events {
+    self.events = events;
+    
+    return nil;
+}
+
+- (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments {
+    self.events = nil;
+    return nil;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
@@ -20,8 +45,9 @@ static ZIM *zim;
       result([ZIM getVersion]);
   }
   else if ([@"create" isEqualToString:call.method]){
-      unsigned int AppID = [[call.arguments objectForKey:@"AppID"] unsignedIntValue];
+      unsigned int AppID = [[call.arguments objectForKey:@"appID"] unsignedIntValue];
       zim = [ZIM createWithAppID:AppID];
+      [zim setEventHandler:self];
       result(nil);
   }
   else if ([@"destory" isEqualToString:call.method]){
@@ -58,6 +84,19 @@ static ZIM *zim;
   else {
     result(FlutterMethodNotImplemented);
   }
+}
+
+
+//MARK: - ZIMEventHandler
+- (void)zim:(ZIM *)zim
+    connectionStateChanged:(ZIMConnectionState)state
+                     event:(ZIMConnectionEvent)event
+extendedData:(NSDictionary *)extendedData{
+    if(_events == nil){
+        return;
+    }
+    NSDictionary *resultDic = @{@"method":@"connectionStateChanged",@"state":[NSNumber numberWithInt:(int)state],@"event":[NSNumber numberWithInt:(int)event]};
+    _events(resultDic);
 }
 
 @end

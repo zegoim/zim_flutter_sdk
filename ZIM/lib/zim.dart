@@ -6,3 +6,5 @@ export 'src/zim_errorCode.dart';
 export 'src/zim_errorCode_extension.dart';
 export 'src/zim_define.dart';
 export 'src/zim_define_extension.dart';
+export 'src/zim_event_handler.dart';
+export 'src/zim_event_handler_impl.dart';

@@ -39,9 +39,17 @@ class _MyAppState extends State<MyApp> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
+    ZIMEventHandlerImpl.registerEventHandler();
+    ZIMEventHandler.connectionStateChanged = connectionStateChanged;
+    ZIMEventHandler.connectionStateChanged =
+        (ZIMConnectionState state, ZIMConnectionEvent event, Map extendedData) {
+      print(state);
+      print(event);
+      print(extendedData);
+    };
     await ZIM.getInstance().create(2845718148);
-    ZIMLoggedInResult result =
-        await ZIM.getInstance().login('userID', 'userName', 'token');
+    ZIMLoggedInResult result = await ZIM.getInstance().login('9999', '',
+        '04AAAAAGJeX6YAEHh0OW80dHRydTZvZzk2bDkAcLYmuuOm3WkEmLIfvxavR5bJM7Xx5PSshKjS0wo127wCzuUcQyE6vQyzcmdZaPUrovsu/CcgVac8w/ITGEbtcN0jXIHVCEwq6OB3mGDvF5xtosghn0LfpzFSg+7yd1vxQVNvKadQO+j7kjo4yslPRPw=');
     if (result.errorInfo.code != ZIMErrorCode.success) print('loginfaild');
     ZIM.getInstance().createRoom(ZIMRoomInfo());
     ZIM.getInstance().createRoom(ZIMRoomInfo(), ZIMRoomAdvancedConfig());
@@ -62,5 +70,12 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  connectionStateChanged(
+      ZIMConnectionState state, ZIMConnectionEvent event, Map extendedData) {
+    print(state);
+    print(event);
+    print(extendedData);
   }
 }
