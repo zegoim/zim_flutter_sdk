@@ -4,7 +4,7 @@ import 'dart:ffi';
 import 'package:flutter/services.dart';
 import 'package:zim/src/zim_event_handler.dart';
 import 'package:zim/zim.dart';
-import 'zim_define.dart';
+import '../zim_defines.dart';
 
 class ZIMEventHandlerImpl implements ZIMEventHandler {
   static const EventChannel _event = EventChannel('zim_event_handler');

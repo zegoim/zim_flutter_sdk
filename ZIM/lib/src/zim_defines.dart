@@ -4,7 +4,7 @@ import 'dart:typed_data';
 export 'package:flutter/services.dart';
 import 'package:zim/zim.dart';
 
-import 'zim_errorCode.dart';
+import 'zim_error_code.dart';
 
 enum ZIMConnectionState { disconnected, connecting, connected, reconnecting }
 
