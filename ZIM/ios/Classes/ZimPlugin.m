@@ -60,11 +60,15 @@ static ZIM *zim;
       userInfo.userID = [call.arguments objectForKey:@"userID"];
       userInfo.userName = [call.arguments objectForKey:@"userName"];
       NSString *token = [call.arguments objectForKey:@"token"];
-      
       [zim loginWithUserInfo:userInfo token:token callback:^(ZIMError * _Nonnull errorInfo) {
-          NSDictionary *zimErrorDic = @{@"code":[NSNumber numberWithInt:(int)errorInfo.code],@"message":errorInfo.message};
-          NSDictionary *resultDic = @{@"ZIMError":zimErrorDic};
-          result(resultDic);
+          if(errorInfo.code == 0){
+              NSDictionary *zimErrorDic = @{@"code":[NSNumber numberWithInt:(int)errorInfo.code],@"message":errorInfo.message};
+              NSDictionary *resultDic = @{@"ZIMError":zimErrorDic};
+              result(resultDic);
+          }else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+             
+          }
       }];
   }
   else if ([@"uploadLog" isEqualToString:call.method]){

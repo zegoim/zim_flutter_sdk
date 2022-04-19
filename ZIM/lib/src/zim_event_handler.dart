@@ -9,6 +9,7 @@ class ZIMEventHandler {
   static void Function(
           ZIMConnectionState state, ZIMConnectionEvent event, Map extendedData)?
       connectionStateChanged;
+
 /* Main */
   static void Function(ZIMError errorInfo)? onError;
 
@@ -23,7 +24,6 @@ class ZIMEventHandler {
       conversationTotalUnreadMessageCountUpdated;
 
 /* Message */
-
   static void Function(List<ZIMMessage> messageList, String fromUserID)?
       receivePeerMessage;
 
@@ -34,7 +34,6 @@ class ZIMEventHandler {
       receiveGroupMessage;
 
 /* Room */
-
   static void Function(List<ZIMUserInfo> memberList, String roomID)?
       roomMemberJoined;
 
@@ -52,7 +51,6 @@ class ZIMEventHandler {
       roomAttributesBatchUpdated;
 
 /* Group */
-
   static void Function(
       ZIMGroupState state,
       ZIMGroupEvent event,
@@ -78,5 +76,23 @@ class ZIMEventHandler {
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? groupMemberStateChanged;
 
-  // static void Function(ZIMGroup)
+  static void Function(
+      List<ZIMGroupMemberInfo> userInfo,
+      ZIMGroupOperatedInfo operatedInfo,
+      String groupID)? groupMemberInfoUpdated;
+
+/* Invite */
+  static void Function(ZIMCallInvitationReceivedInfo info, String callID)?
+      callInvitationReceived;
+
+  static void Function(ZIMCallInvitationCancelledInfo info, String callID)?
+      callInvitationCancelled;
+
+  static void Function(ZIMCallInvitationAcceptedInfo info, String callID)?
+      callInvitationAccepted;
+
+  static void Function(ZIMCallInvitationRejectedInfo info, String callID)?
+      callInvitationRejected;
+
+  static void Function(String callID)? callInvitationTimeout;
 }

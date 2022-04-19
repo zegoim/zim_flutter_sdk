@@ -49,15 +49,13 @@ class ZIMImpl implements ZIM {
   }
 
   @override
-  Future<ZIMLoggedInResult> login(
-      String userID, String userName, String token) async {
-    Map resultMap = await _channel.invokeMethod(
+  Future<void> login(String userID, String userName, String token) async {
+    return await _channel.invokeMethod(
         "login", {"userID": userID, "userName": userName, "token": token});
-    return ZIMConverter.CNVLoggedInMap(resultMap);
   }
 
   @override
-  Future<ZIMTokenRenewedResult> logout() async {
+  Future<void> logout() async {
     // TODO: implement logout
     throw UnimplementedError();
   }
@@ -167,8 +165,8 @@ class ZIMImpl implements ZIM {
     } else {
       print('填了');
     }
-    ZIMRoomCreatedResult result = ZIMRoomCreatedResult(
-        roomInfo: ZIMRoomFullInfo(), errorInfo: ZIMError());
+    ZIMRoomCreatedResult result =
+        ZIMRoomCreatedResult(roomInfo: ZIMRoomFullInfo());
     return result;
   }
 
@@ -399,13 +397,4 @@ class ZIMImpl implements ZIM {
     // TODO: implement setEventHander
     throw UnimplementedError();
   }
-
-  // static void registerEventHandler() async {
-  //   streamSubscription = event.receiveBroadcastStream().listen(eventListener);
-  // }
-
-  // static void unregisterEventHandler() async {
-  //   await streamSubscription?.cancel();
-  //   streamSubscription = null;
-  // }
 }

@@ -320,108 +320,85 @@ class ZIMCallInvitationTimeoutInfo {
 
 //MARK : Result
 
-class ZIMLoggedInResult {
-  ZIMError errorInfo;
-  ZIMLoggedInResult({required this.errorInfo});
-}
+// class ZIMLoggedInResult {
+//   ZIMError errorInfo;
+//   ZIMLoggedInResult({required this.errorInfo});
+// }
 
 class ZIMTokenRenewedResult {
   String token;
-  ZIMError errorInfo;
-  ZIMTokenRenewedResult({required this.token, required this.errorInfo});
+  ZIMTokenRenewedResult({required this.token});
 }
 
 class ZIMUsersInfoQueriedResult {
   List<ZIMUserInfo> userList;
   List<ZIMErrorUserInfo> errorUserList;
-  ZIMError errorInfo;
   ZIMUsersInfoQueriedResult(
-      {required this.userList,
-      required this.errorUserList,
-      required this.errorInfo});
+      {required this.userList, required this.errorUserList});
 }
 
 class ZIMConversationListQueriedResult {
   List<ZIMConversation> conversationList;
-  ZIMError errorInfo;
-  ZIMConversationListQueriedResult(
-      {required this.conversationList, required this.errorInfo});
+
+  ZIMConversationListQueriedResult({required this.conversationList});
 }
 
 class ZIMConversationDeletedResult {
   String conversationID;
   ZIMConversationType conversationType;
-  ZIMError errorInfo;
   ZIMConversationDeletedResult(
-      {required this.conversationID,
-      required this.conversationType,
-      required this.errorInfo});
+      {required this.conversationID, required this.conversationType});
 }
 
 class ZIMConversationUnreadMessageCountClearedResult {
   String conversationID;
   ZIMConversationType conversationType;
-  ZIMError errorInfo;
   ZIMConversationUnreadMessageCountClearedResult(
-      {required this.conversationID,
-      required this.conversationType,
-      required this.errorInfo});
+      {required this.conversationID, required this.conversationType});
 }
 
 class ZIMConversationNotificationStatusSetResult {
   String conversationID;
   ZIMConversationType conversationType;
-  ZIMError errorInfo;
   ZIMConversationNotificationStatusSetResult(
-      {required this.conversationID,
-      required this.conversationType,
-      required this.errorInfo});
+      {required this.conversationID, required this.conversationType});
 }
 
 class ZIMMessageSentResult {
   ZIMMessage message;
-  ZIMError errorInfo;
-  ZIMMessageSentResult({required this.message, required this.errorInfo});
+  ZIMMessageSentResult({required this.message});
 }
 
 class ZIMMessageQueriedResult {
   String conversationID;
   ZIMConversationType conversationType;
   List<ZIMMessage> messageList;
-  ZIMError errorInfo;
   ZIMMessageQueriedResult(
       {required this.conversationID,
       required this.conversationType,
-      required this.messageList,
-      required this.errorInfo});
+      required this.messageList});
 }
 
 class ZIMMessageDeletedResult {
   String conversationID;
   ZIMConversationType conversationType;
-  ZIMError errorInfo;
   ZIMMessageDeletedResult(
-      {required this.conversationID,
-      required this.conversationType,
-      required this.errorInfo});
+      {required this.conversationID, required this.conversationType});
 }
 
 class ZIMRoomCreatedResult {
   ZIMRoomFullInfo roomInfo;
-  ZIMError errorInfo;
-  ZIMRoomCreatedResult({required this.roomInfo, required this.errorInfo});
+  ZIMRoomCreatedResult({required this.roomInfo});
 }
 
 class ZIMRoomJoinedResult {
   ZIMRoomFullInfo roomInfo;
-  ZIMError errorInfo;
-  ZIMRoomJoinedResult({required this.roomInfo, required this.errorInfo});
+  ZIMRoomJoinedResult({required this.roomInfo});
 }
 
 class ZIMRoomLeftResult {
   String roomID;
-  ZIMError errorInfo;
-  ZIMRoomLeftResult({required this.roomID, required this.errorInfo});
+  ZIMRoomLeftResult({required this.roomID});
 }
 
 class ZIMRoomMemberQueriedResult {
@@ -433,34 +410,27 @@ class ZIMRoomMemberQueriedResult {
 class ZIMRoomOnlineMemberCountQueriedResult {
   String roomID;
   int count;
-  ZIMError errorInfo;
   ZIMRoomOnlineMemberCountQueriedResult(
-      {required this.roomID, required this.count, required this.errorInfo});
+      {required this.roomID, required this.count});
 }
 
 class ZIMRoomAttributesOperatedCallResult {
   String roomID;
   List<String> errorKeys;
-  ZIMError errorInfo;
   ZIMRoomAttributesOperatedCallResult(
-      {required this.roomID, required this.errorKeys, required this.errorInfo});
+      {required this.roomID, required this.errorKeys});
 }
 
 class ZIMRoomAttributesBatchOperatedResult {
   String roomID;
-  ZIMError errorInfo;
-  ZIMRoomAttributesBatchOperatedResult(
-      {required this.roomID, required this.errorInfo});
+  ZIMRoomAttributesBatchOperatedResult({required this.roomID});
 }
 
 class ZIMRoomAttributesQueriedResult {
   String roomID;
   Map<String, String> roomAttributes;
-  ZIMError errorInfo;
   ZIMRoomAttributesQueriedResult(
-      {required this.roomID,
-      required this.roomAttributes,
-      required this.errorInfo});
+      {required this.roomID, required this.roomAttributes});
 }
 
 class ZIMGroupCreatedResult {
@@ -471,20 +441,17 @@ class ZIMGroupCreatedResult {
 
 class ZIMGroupDismissedResult {
   String groupID;
-  ZIMError errorInfo;
-  ZIMGroupDismissedResult({required this.groupID, required this.errorInfo});
+  ZIMGroupDismissedResult({required this.groupID});
 }
 
 class ZIMGroupJoinedResult {
   ZIMGroupFullInfo groupInfo;
-  ZIMError errorInfo;
-  ZIMGroupJoinedResult({required this.groupInfo, required this.errorInfo});
+  ZIMGroupJoinedResult({required this.groupInfo});
 }
 
 class ZIMGroupLeftResult {
   String groupID;
-  ZIMError errorInfo;
-  ZIMGroupLeftResult({required this.groupID, required this.errorInfo});
+  ZIMGroupLeftResult({required this.groupID});
 }
 
 class ZIMGroupUsersInvitedResult {
@@ -501,146 +468,106 @@ class ZIMGroupMemberKickedResult {
   String groupID;
   List<String> kickedUserIDList;
   List<ZIMErrorUserInfo> errorUserList;
-  ZIMError errorInfo;
   ZIMGroupMemberKickedResult(
       {required this.groupID,
       required this.kickedUserIDList,
-      required this.errorUserList,
-      required this.errorInfo});
+      required this.errorUserList});
 }
 
 class ZIMGroupOwnerTransferredResult {
   String groupID;
   String toUserID;
-  ZIMError errorInfo;
   ZIMGroupOwnerTransferredResult(
-      {required this.groupID, required this.toUserID, required this.errorInfo});
+      {required this.groupID, required this.toUserID});
 }
 
 class ZIMGroupNameUpdatedResult {
   String groupID;
   String groupName;
-  ZIMError errorInfo;
-  ZIMGroupNameUpdatedResult(
-      {required this.groupID,
-      required this.groupName,
-      required this.errorInfo});
+  ZIMGroupNameUpdatedResult({required this.groupID, required this.groupName});
 }
 
 class ZIMGroupNoticeUpdatedResult {
   String groupID;
   String groupNotice;
-  ZIMError errorInfo;
   ZIMGroupNoticeUpdatedResult(
-      {required this.groupID,
-      required this.groupNotice,
-      required this.errorInfo});
+      {required this.groupID, required this.groupNotice});
 }
 
 class ZIMGroupInfoQueriedResult {
   ZIMGroupFullInfo groupInfo;
-  ZIMError errorInfo;
-  ZIMGroupInfoQueriedResult({required this.groupInfo, required this.errorInfo});
+  ZIMGroupInfoQueriedResult({required this.groupInfo});
 }
 
 class ZIMGroupAttributesOperatedResult {
   String groupID;
   List<String> errorKeys;
-  ZIMError errorInfo;
   ZIMGroupAttributesOperatedResult(
-      {required this.groupID,
-      required this.errorKeys,
-      required this.errorInfo});
+      {required this.groupID, required this.errorKeys});
 }
 
 class ZIMGroupAttributesQueriedResult {
   String groupID;
   Map<String, String> groupAttributes;
-  ZIMError errorInfo;
   ZIMGroupAttributesQueriedResult(
-      {required this.groupID,
-      required this.groupAttributes,
-      required this.errorInfo});
+      {required this.groupID, required this.groupAttributes});
 }
 
 class ZIMGroupMemberRoleUpdatedResult {
   String groupID;
   String forUserID;
   ZIMGroupMemberRole role;
-  ZIMError errorInfo;
   ZIMGroupMemberRoleUpdatedResult(
-      {required this.groupID,
-      required this.forUserID,
-      required this.role,
-      required this.errorInfo});
+      {required this.groupID, required this.forUserID, required this.role});
 }
 
 class ZIMGroupMemberNicknameUpdatedResult {
   String groupID;
   String forUserID;
   String nickname;
-  ZIMError errorInfo;
   ZIMGroupMemberNicknameUpdatedResult(
-      {required this.groupID,
-      required this.forUserID,
-      required this.nickname,
-      required this.errorInfo});
+      {required this.groupID, required this.forUserID, required this.nickname});
 }
 
 class ZIMGroupMemberInfoQueriedResult {
   String groupID;
   ZIMGroupMemberInfo userInfo;
-  ZIMError errorInfo;
   ZIMGroupMemberInfoQueriedResult(
-      {required this.groupID, required this.userInfo, required this.errorInfo});
+      {required this.groupID, required this.userInfo});
 }
 
 class ZIMGroupListQueriedResult {
   List<ZIMGroup> groupList;
-  ZIMError errorInfo;
-  ZIMGroupListQueriedResult({required this.groupList, required this.errorInfo});
+  ZIMGroupListQueriedResult({required this.groupList});
 }
 
 class ZIMGroupMemberListQueriedResult {
   String groupID;
   List<ZIMGroupMemberInfo> userList;
   int nextFlag;
-  ZIMError errorInfo;
   ZIMGroupMemberListQueriedResult(
-      {required this.groupID,
-      required this.userList,
-      required this.nextFlag,
-      required this.errorInfo});
+      {required this.groupID, required this.userList, required this.nextFlag});
 }
 
 class ZIMCallInvitationSentResult {
   String callID;
   List<String> errorInvitees;
-  ZIMError errorInfo;
   ZIMCallInvitationSentResult(
-      {required this.callID,
-      required this.errorInvitees,
-      required this.errorInfo});
+      {required this.callID, required this.errorInvitees});
 }
 
 class ZIMCallCancelSentResult {
   String callID;
   List<String> errorInvitees;
-  ZIMError errorInfo;
-  ZIMCallCancelSentResult(
-      {required this.callID,
-      required this.errorInvitees,
-      required this.errorInfo});
+  ZIMCallCancelSentResult({required this.callID, required this.errorInvitees});
 }
 
 class ZIMCallAcceptanceSentResult {
   String callID;
-  ZIMError errorInfo;
-  ZIMCallAcceptanceSentResult({required this.callID, required this.errorInfo});
+  ZIMCallAcceptanceSentResult({required this.callID});
 }
 
 class ZIMCallRejectionSentResult {
   String callID;
-  ZIMError errorInfo;
-  ZIMCallRejectionSentResult({required this.callID, required this.errorInfo});
+  ZIMCallRejectionSentResult({required this.callID});
 }

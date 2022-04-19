@@ -48,9 +48,25 @@ class _MyAppState extends State<MyApp> {
       print(extendedData);
     };
     await ZIM.getInstance().create(2845718148);
-    ZIMLoggedInResult result = await ZIM.getInstance().login('9999', '',
-        '04AAAAAGJeX6YAEHh0OW80dHRydTZvZzk2bDkAcLYmuuOm3WkEmLIfvxavR5bJM7Xx5PSshKjS0wo127wCzuUcQyE6vQyzcmdZaPUrovsu/CcgVac8w/ITGEbtcN0jXIHVCEwq6OB3mGDvF5xtosghn0LfpzFSg+7yd1vxQVNvKadQO+j7kjo4yslPRPw=');
-    if (result.errorInfo.code != ZIMErrorCode.success) print('loginfaild');
+    try {
+      await ZIM.getInstance().login('9999', '',
+          '04AAAAAGJeX6YAEHh0OW80dHRydTZvZzk2bDkAcLYmuuOm3WkEmLIfvxavR5bJM7Xx5PSshKjS0wo127wCzuUcQyE6vQyzcmdZaPUrovsu/CcgVac8w/ITGEbtcN0jXIHVCEwq6OB3mGDvF5xtosghn0LfpzFSg+7yd1vxQVNvKadQO+j7kjo4yslPRPw=');
+    } on PlatformException catch (error) {
+      print(error.code);
+    }
+    ;
+
+    ZIM
+        .getInstance()
+        .login('9999', '', '22')
+        .then((value) {})
+        .catchError((onError) {
+      if (onError is PlatformException) {
+        print(onError.code);
+        print(onError.message);
+      }
+    });
+    //if (result.errorInfo.code != ZIMErrorCode.success) print('loginfaild');
     ZIM.getInstance().createRoom(ZIMRoomInfo());
     ZIM.getInstance().createRoom(ZIMRoomInfo(), ZIMRoomAdvancedConfig());
     setState(() {
