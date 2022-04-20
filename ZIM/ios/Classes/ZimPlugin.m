@@ -55,6 +55,19 @@ static ZIM *zim;
       zim = nil;
       result(nil);
   }
+  else if ([@"setLogConfig" isEqualToString:call.method]){
+      ZIMLogConfig *logConfig = [[ZIMLogConfig alloc] init];
+      logConfig.logPath = [call.arguments objectForKey:@"logPath"];
+      logConfig.logSize = [[call.arguments objectForKey:@"logSize"] unsignedLongLongValue];
+      [ZIM setLogConfig:logConfig];
+      result(nil);
+  }
+  else if ([@"setCacheConfig" isEqualToString:call.method]){
+      ZIMCacheConfig *cacheConfig = [[ZIMCacheConfig alloc] init];
+      cacheConfig.cachePath = [call.arguments objectForKey:@"cachePath"];
+      [ZIM setCacheConfig:cacheConfig];
+      result(nil);
+  }
   else if ([@"login" isEqualToString:call.method]){
       ZIMUserInfo *userInfo = [[ZIMUserInfo alloc] init];
       userInfo.userID = [call.arguments objectForKey:@"userID"];
@@ -62,27 +75,59 @@ static ZIM *zim;
       NSString *token = [call.arguments objectForKey:@"token"];
       [zim loginWithUserInfo:userInfo token:token callback:^(ZIMError * _Nonnull errorInfo) {
           if(errorInfo.code == 0){
-              NSDictionary *zimErrorDic = @{@"code":[NSNumber numberWithInt:(int)errorInfo.code],@"message":errorInfo.message};
-              NSDictionary *resultDic = @{@"ZIMError":zimErrorDic};
-              result(resultDic);
-          }else{
+              result(nil);
+          }
+          else{
               result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
-             
           }
       }];
   }
+  else if ([@"logout" isEqualToString:call.method]){
+      [zim logout];
+      result(nil);
+  }
   else if ([@"uploadLog" isEqualToString:call.method]){
       [zim uploadLog:^(ZIMError * _Nonnull errorInfo) {
-          NSDictionary *resultDic = @{@"errorCode":[NSNumber numberWithInt:(int)errorInfo.code],@"errorMessage":errorInfo.message};
-          result(resultDic);
+          if(errorInfo.code == 0){
+              result(nil);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
       }];
   }
   else if ([@"renewToken" isEqualToString:call.method]){
       NSString *token = [call.arguments objectForKey:@"token"];
       [zim renewToken:token callback:^(NSString * _Nonnull token, ZIMError * _Nonnull errorInfo) {
-          NSDictionary *errorInfoDic = @{@"code":[NSNumber numberWithInt:(int)errorInfo.code],@"message":errorInfo.message};
-          NSDictionary *resultDic = @{@"token":token,@"errorInfo":errorInfoDic};
-          result(resultDic);
+          if(errorInfo.code == 0){
+              NSDictionary *resultDic = @{@"token":token};
+              result(resultDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
+  else if ([@"queryUsersInfo" isEqualToString:call.method]){
+      NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
+      [zim queryUsersInfo:userIDs callback:^(NSArray<ZIMUserInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSMutableArray *userListBasic = [[NSMutableArray alloc] init];
+              for (ZIMUserInfo *userInfo in userList) {
+                  NSDictionary *userInfoDic = @{@"userID":userInfo.userID,@"userName":userInfo.userName};
+                  [userListBasic addObject:userInfoDic];
+              }
+              NSMutableArray *errorUserListBasic = [[NSMutableArray alloc] init];
+              for (ZIMErrorUserInfo *errorUserInfo in errorUserList) {
+                  NSDictionary *errorUserInfoDic = @{@"userID":errorUserInfo.userID,@"reason":[NSNumber numberWithUnsignedInt:errorUserInfo.reason]};
+                  [errorUserListBasic addObject:errorUserInfoDic];
+              }
+              NSDictionary *resultDic = @{@"userList":userListBasic,@"errorUserList":errorUserList};
+              result(resultDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
       }];
   }
   else {

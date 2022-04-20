@@ -23,9 +23,11 @@ abstract class ZIM {
 
   Future<void> setEventHander(id);
 
-  Future<ZIMLoggedInResult> login(String userID, String userName, String token);
+  Future<void> login(String userID, String userName, String token);
 
   Future<void> logout();
+
+  Future<void> uploadLog();
 
   Future<ZIMTokenRenewedResult> renewToken(String token);
 

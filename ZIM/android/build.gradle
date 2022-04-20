@@ -1,10 +1,11 @@
 group 'com.zego.im.zim'
-version '1.0'
+version '2.1.0'
 
 buildscript {
     repositories {
         google()
         mavenCentral()
+         jcenter()
     }
 
     dependencies {
@@ -14,8 +15,10 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
+        maven { url 'https://www.jitpack.io' }
         google()
         mavenCentral()
+        jcenter()
     }
 }
 
@@ -31,5 +34,14 @@ android {
 
     defaultConfig {
         minSdkVersion 16
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    lintOptions{
+        disable 'InvalidPackge'
+    }
+}
+
+dependencies {
+    // for other module visit
+    api 'com.github.zegolibrary:zim:2.0.0'
 }

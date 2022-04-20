@@ -27,18 +27,6 @@ class ZIMImpl implements ZIM {
   }
 
   @override
-  Future<void> setLogConfig(ZIMLogConfig config) {
-    // TODO: implement setLogConfig
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> setCacheConfig(ZIMCacheConfig config) {
-    // TODO: implement setCacheConfig
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> create(int appID) async {
     return await _channel.invokeMethod("create", {"appID": appID});
   }
@@ -49,6 +37,18 @@ class ZIMImpl implements ZIM {
   }
 
   @override
+  Future<void> setLogConfig(ZIMLogConfig config) async {
+    return await _channel.invokeMethod(
+        'setLogConfig', {'logPath': config.logPath, 'logSize': config.logSize});
+  }
+
+  @override
+  Future<void> setCacheConfig(ZIMCacheConfig config) async {
+    return await _channel
+        .invokeMethod('setCacheConfig', {'cachePath': config.cachePath});
+  }
+
+  @override
   Future<void> login(String userID, String userName, String token) async {
     return await _channel.invokeMethod(
         "login", {"userID": userID, "userName": userName, "token": token});
@@ -56,20 +56,25 @@ class ZIMImpl implements ZIM {
 
   @override
   Future<void> logout() async {
-    // TODO: implement logout
-    throw UnimplementedError();
+    return await _channel.invokeMethod('logout');
+  }
+
+  @override
+  Future<void> uploadLog() async {
+    return await _channel.invokeMethod('uploadLog');
   }
 
   @override
   Future<ZIMTokenRenewedResult> renewToken(String token) async {
-    // TODO: implement renewToken
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('renewToken');
+    return ZIMConverter.cnvTokenRenewedMapToObject(resultMap);
   }
 
   @override
   Future<ZIMUsersInfoQueriedResult> queryUsersInfo(List<String> userIDs) async {
-    // TODO: implement queryUsersInfo
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('queryUsersInfo', {'userIDs':userIDs});
+
+    return ZIMConverter.cnvUsersInfoQueriedMapToObject(resultMap);
   }
 
   @override
