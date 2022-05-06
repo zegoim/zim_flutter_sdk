@@ -2,15 +2,11 @@ package com.zego.im.zim;
 
 import androidx.annotation.NonNull;
 
+import com.zego.im.zim.internal.ZIMPluginEventHandler;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.EventChannel;
@@ -18,7 +14,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import im.zego.zim.ZIM;
 
 /** ZimPlugin */
 public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
@@ -30,9 +25,9 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
 
   private EventChannel eventChannel;
 
-  private EventChannel.EventSink sink;
-
   private final Class<?> manager;
+
+  private ZIMPluginEventHandler zimPluginEventHandler = null;
 
   private final HashMap<String,Method> methodHashMap = new HashMap<>();
 
@@ -40,7 +35,7 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
 
   public ZimPlugin(){
     try{
-      this.manager = Class.forName("com.zego.im.zim.internal.ZIMMethodEventHandler");
+      this.manager = Class.forName("com.zego.im.zim.internal.ZIMPluginMethodHandler");
     }catch (ClassNotFoundException e){
       throw new RuntimeException(e);
     }
@@ -51,7 +46,12 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "zim");
     methodChannel.setMethodCallHandler(this);
+
+    eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(),"zim_event_handler");
+    eventChannel.setStreamHandler(this);
+
     this.binding = flutterPluginBinding;
+    this.zimPluginEventHandler = new ZIMPluginEventHandler();
   }
 
   @Override
@@ -60,14 +60,14 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
       Method method = methodHashMap.get(call.method);
       if(method == null){
         if(call.method.equals("create")){
-          method = this.manager.getMethod(call.method,MethodCall.class,Result.class,FlutterPluginBinding.class);
+          method = this.manager.getMethod(call.method,MethodCall.class,Result.class,FlutterPluginBinding.class,ZIMPluginEventHandler.class);
         }else {
           method = this.manager.getMethod(call.method, MethodCall.class, Result.class);
         }
         methodHashMap.put(call.method, method);
       }
       if(call.method.equals(("create"))){
-        method.invoke(null,call,result,this.binding);
+        method.invoke(null,call,result,this.binding,this.zimPluginEventHandler);
       }
       else {
         method.invoke(null, call, result);
@@ -91,11 +91,11 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
 
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {
-    this.sink = events;
+    this.zimPluginEventHandler.setSink(events);
   }
 
   @Override
   public void onCancel(Object arguments) {
-    this.sink = null;
+    this.zimPluginEventHandler.setSink(null);
   }
 }

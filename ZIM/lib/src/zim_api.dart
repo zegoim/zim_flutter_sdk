@@ -21,8 +21,6 @@ abstract class ZIM {
 
   Future<void> setCacheConfig(ZIMCacheConfig config);
 
-  Future<void> setEventHander(id);
-
   Future<void> login(String userID, String userName, String token);
 
   Future<void> logout();
@@ -42,7 +40,7 @@ abstract class ZIM {
 
   Future<ZIMConversationUnreadMessageCountClearedResult>
       clearConversationUnreadMessageCount(
-          String conversation, ZIMConversationType conversationType);
+          String conversationID, ZIMConversationType conversationType);
 
   Future<ZIMConversationNotificationStatusSetResult>
       setConversationNotificationStatus(

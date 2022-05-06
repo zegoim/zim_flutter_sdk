@@ -72,16 +72,19 @@ class ZIMImpl implements ZIM {
 
   @override
   Future<ZIMUsersInfoQueriedResult> queryUsersInfo(List<String> userIDs) async {
-    Map resultMap = await _channel.invokeMethod('queryUsersInfo', {'userIDs':userIDs});
+    Map resultMap =
+        await _channel.invokeMethod('queryUsersInfo', {'userIDs': userIDs});
 
-    return ZIMConverter.cnvUsersInfoQueriedMapToObject(resultMap);
+    return ZIMConverter.cnvZIMUsersInfoQueriedMapToObject(resultMap);
   }
 
   @override
   Future<ZIMConversationListQueriedResult> queryConversationList(
       ZIMConversationQueryConfig config) async {
-    // TODO: implement queryConversationList
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('queryConversationList', {
+      'config': ZIMConverter.cnvZIMConversationQueryConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMConversationListQueriedMapToObject(resultMap);
   }
 
   @override
@@ -89,16 +92,27 @@ class ZIMImpl implements ZIM {
       String conversationID,
       ZIMConversationType conversationType,
       ZIMMessageDeleteConfig config) async {
-    // TODO: implement deleteConversation
-    throw UnimplementedError();
+    return await _channel.invokeMethod('deleteConversation', {
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType],
+      'config': ZIMConverter.cnvZIMMessageDeleteConfigObjectToMap(config)
+    });
   }
 
   @override
   Future<ZIMConversationUnreadMessageCountClearedResult>
       clearConversationUnreadMessageCount(
-          String conversation, ZIMConversationType conversationType) async {
-    // TODO: implement clearConversationUnreadMessageCount
-    throw UnimplementedError();
+          String conversationID, ZIMConversationType conversationType) async {
+    Map resultMap =
+        await _channel.invokeMethod('clearConversationUnreadMessageCount', {
+      'conversationID': conversationID,
+      'ZIMConversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter
+        .cnvZIMConversationUnreadMessageCountClearedResultMapToObject(
+            resultMap);
   }
 
   @override
@@ -107,29 +121,45 @@ class ZIMImpl implements ZIM {
           ZIMConversationNotificationStatus status,
           String conversationID,
           ZIMConversationType conversationType) async {
-    // TODO: implement setConversationNotificationStatus
-    throw UnimplementedError();
+    Map resultMap =
+        await _channel.invokeMethod('setConversationNotificationStatus', {
+      'status': ZIMConversationNotificationStatusExtension.valueMap[status],
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter
+        .cnvZIMConversationNotificationStatusSetResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMMessageSentResult> sendPeerMessage(
       ZIMMessage message, String toUserID, ZIMMessageSendConfig config) async {
-    // TODO: implement sendPeerMessage
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('sendPeerMessage', {
+      'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+      'toUserID': toUserID,
+      'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMMessageSentResult> sendGroupMessage(
       ZIMMessage message, String toGroupID, ZIMMessageSendConfig config) async {
-    // TODO: implement sendGroupMessage
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('sendGroupMessage', {
+      'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+      'toGroupID': toGroupID,
+      'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMMessageSentResult> sendRoomMessage(
       ZIMMessage message, String toRoomID, ZIMMessageSendConfig config) async {
-    // TODO: implement sendRoomMessage
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('sendRoomMessage',
+        {'message': ZIMConverter.cnvZIMMessageObjectToMap(message)});
+    return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
   }
 
   @override
@@ -137,8 +167,13 @@ class ZIMImpl implements ZIM {
       String conversationID,
       ZIMConversationType conversationType,
       ZIMMessageQueryConfig config) async {
-    // TODO: implement queryHistoryMessage
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('queryHistoryMessage', {
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType],
+      'config': ZIMConverter.cnvZIMMessageQueryConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMMessageQueriedResultMapToObject(resultMap);
   }
 
   @override
@@ -146,8 +181,13 @@ class ZIMImpl implements ZIM {
       String conversationID,
       ZIMConversationType conversationType,
       ZIMMessageDeleteConfig config) async {
-    // TODO: implement deleteAllMessage
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('deleteAllMessage', {
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType],
+      'config': ZIMConverter.cnvZIMMessageDeleteConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMMessageDeletedResultMapToObject(resultMap);
   }
 
   @override
@@ -156,8 +196,14 @@ class ZIMImpl implements ZIM {
       String conversationID,
       ZIMConversationType conversationType,
       ZIMMessageDeleteConfig config) async {
-    // TODO: implement deleteMessages
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('deleteMessages', {
+      'messageList': ZIMConverter.cnvZIMMessageListObjectToMap(messageList),
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType],
+      'config': ZIMConverter.cnvZIMMessageDeleteConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMMessageDeletedResultMapToObject(resultMap);
   }
 
   @override
@@ -394,12 +440,6 @@ class ZIMImpl implements ZIM {
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config) async {
     // TODO: implement callReject
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> setEventHander(id) {
-    // TODO: implement setEventHander
     throw UnimplementedError();
   }
 }

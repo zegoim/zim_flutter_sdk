@@ -8,30 +8,30 @@ import 'zim_defines.dart';
 class ZIMEventHandler {
   static void Function(
           ZIMConnectionState state, ZIMConnectionEvent event, Map extendedData)?
-      connectionStateChanged;
+      onConnectionStateChanged;
 
 /* Main */
   static void Function(ZIMError errorInfo)? onError;
 
-  static void Function(int second)? tokenWillExpire;
+  static void Function(int second)? onTokenWillExpire;
 
 /* Conversation */
   static void Function(
           List<ZIMConversationChangeInfo> conversationChangeInfoList)?
-      conversationChanged;
+      onConversationChanged;
 
   static void Function(int totalUnreadMessageCount)?
-      conversationTotalUnreadMessageCountUpdated;
+      onConversationTotalUnreadMessageCountUpdated;
 
 /* Message */
   static void Function(List<ZIMMessage> messageList, String fromUserID)?
-      receivePeerMessage;
+      onReceivePeerMessage;
 
   static void Function(List<ZIMMessage> messageList, String fromRoomID)?
-      receiveRoomMessage;
+      onReceiveRoomMessage;
 
   static void Function(List<ZIMMessage> messageList, String fromGroupID)?
-      receiveGroupMessage;
+      onReceiveGroupMessage;
 
 /* Room */
   static void Function(List<ZIMUserInfo> memberList, String roomID)?

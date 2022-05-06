@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:typed_data';
 export 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:zim/zim.dart';
 
 import 'zim_error_code.dart';
@@ -72,33 +73,38 @@ enum ZIMCallRejectState { busy, reject }
 typedef ZIMGroupMemberRole = int;
 
 class ZIMError {
-  ZIMErrorCode? code;
-  String message = "";
+  int code;
+  String message;
+  ZIMError({required this.code, required this.message});
 }
 
 class ZIMLogConfig {
-  String logPath = "";
-  int logSize = 0;
+  String logPath;
+  int logSize;
+  ZIMLogConfig({required this.logPath, required this.logSize});
 }
 
 class ZIMCacheConfig {
-  String cachePath = "";
+  String cachePath;
+  ZIMCacheConfig({required this.cachePath});
 }
 
 class ZIMPushConfig {
-  String title = "";
-  String content = "";
-  String extendedData = "";
+  String title;
+  String content;
+  String? extendedData;
+  ZIMPushConfig({required this.title, required this.content});
 }
 
 class ZIMMessageSendConfig {
-  ZIMPushConfig pushConfig = ZIMPushConfig();
-  ZIMMessagePriority priority = ZIMMessagePriority.low;
+  ZIMPushConfig? pushConfig;
+  ZIMMessagePriority priority;
+  ZIMMessageSendConfig({required this.priority});
 }
 
 class ZIMUserInfo {
   String userID = "";
-  String userName = "";
+  String? userName;
 }
 
 class ZIMMessage {

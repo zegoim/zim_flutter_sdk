@@ -40,8 +40,8 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
     ZIMEventHandlerImpl.registerEventHandler();
-    ZIMEventHandler.connectionStateChanged = connectionStateChanged;
-    ZIMEventHandler.connectionStateChanged =
+    ZIMEventHandler.onConnectionStateChanged = connectionStateChanged;
+    ZIMEventHandler.onConnectionStateChanged =
         (ZIMConnectionState state, ZIMConnectionEvent event, Map extendedData) {
       print(state);
       print(event);
@@ -49,23 +49,23 @@ class _MyAppState extends State<MyApp> {
     };
     await ZIM.getInstance().create(2845718148);
     try {
-      await ZIM.getInstance().login('9999', '',
-          '04AAAAAGJeX6YAEHh0OW80dHRydTZvZzk2bDkAcLYmuuOm3WkEmLIfvxavR5bJM7Xx5PSshKjS0wo127wCzuUcQyE6vQyzcmdZaPUrovsu/CcgVac8w/ITGEbtcN0jXIHVCEwq6OB3mGDvF5xtosghn0LfpzFSg+7yd1vxQVNvKadQO+j7kjo4yslPRPw=');
+      await ZIM.getInstance().login('510', '',
+          '04AAAAAGJ/iRwAEGRiNm95ZTRkcXNuYmx6OGgAcE5Tptt0hDv/whOdCAi3pBAu0j/C7lV3uE0/aVScezQ/h8yUUXUSzf5BJOXWJmdcLVM3Q2dqDFnDQVRVksHvSaxgMf7S4E/r3DsiBzq755z6N1gq6g6WdvRblIbfwUsn+OvzMC3lFTGQzvT2BgR5c+I=');
     } on PlatformException catch (error) {
       print(error.code);
     }
     ;
 
-    ZIM
-        .getInstance()
-        .login('9999', '', '22')
-        .then((value) {})
-        .catchError((onError) {
-      if (onError is PlatformException) {
-        print(onError.code);
-        print(onError.message);
-      }
-    });
+    // ZIM
+    //     .getInstance()
+    //     .login('9999', '', '22')
+    //     .then((value) {})
+    //     .catchError((onError) {
+    //   if (onError is PlatformException) {
+    //     print(onError.code);
+    //     print(onError.message);
+    //   }
+    // });
     //if (result.errorInfo.code != ZIMErrorCode.success) print('loginfaild');
     ZIM.getInstance().createRoom(ZIMRoomInfo());
     ZIM.getInstance().createRoom(ZIMRoomInfo(), ZIMRoomAdvancedConfig());

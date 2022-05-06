@@ -144,7 +144,10 @@ extendedData:(NSDictionary *)extendedData{
     if(_events == nil){
         return;
     }
-    NSDictionary *resultDic = @{@"method":@"connectionStateChanged",@"state":[NSNumber numberWithInt:(int)state],@"event":[NSNumber numberWithInt:(int)event]};
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:extendedData options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    NSDictionary *resultDic = @{@"method":@"onConnectionStateChanged",@"state":[NSNumber numberWithInt:(int)state],@"event":[NSNumber numberWithInt:(int)event],@"extendedData":json};
     _events(resultDic);
 }
 
