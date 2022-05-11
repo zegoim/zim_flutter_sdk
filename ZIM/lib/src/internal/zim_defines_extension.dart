@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:ffi';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
 import '../zim_defines.dart';
 
 extension ZIMConnectionStateExtension on ZIMConnectionState {

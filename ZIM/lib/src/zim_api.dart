@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'dart:ffi';
-
-import 'package:flutter/services.dart';
 import 'package:zim/zim.dart';
-import 'zim_defines.dart';
 
 abstract class ZIM {
   static ZIM getInstance() {
@@ -155,7 +151,6 @@ abstract class ZIM {
       String groupID, ZIMGroupMemberQueryConfig config);
 
 //MARK: - CallInvite
-
   Future<ZIMCallInvitationSentResult> callInvite(
       List<String> invitees, ZIMCallInviteConfig config);
 

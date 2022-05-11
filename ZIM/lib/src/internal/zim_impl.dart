@@ -2,12 +2,6 @@ import 'dart:async';
 import 'package:zim/src/internal/zim_converter.dart';
 import 'package:zim/zim.dart';
 
-import '../zim_api.dart';
-import 'package:flutter/services.dart';
-import '../zim_defines.dart';
-import 'zim_defines_extension.dart';
-import '../zim_error_code.dart';
-
 class ZIMImpl implements ZIM {
   static const MethodChannel _channel = MethodChannel('zim');
   static ZIMImpl? _zimImpl;
@@ -157,8 +151,11 @@ class ZIMImpl implements ZIM {
   @override
   Future<ZIMMessageSentResult> sendRoomMessage(
       ZIMMessage message, String toRoomID, ZIMMessageSendConfig config) async {
-    Map resultMap = await _channel.invokeMethod('sendRoomMessage',
-        {'message': ZIMConverter.cnvZIMMessageObjectToMap(message)});
+    Map resultMap = await _channel.invokeMethod('sendRoomMessage', {
+      'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+      'toRoomID': toRoomID,
+      'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
+    });
     return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
   }
 
@@ -209,42 +206,49 @@ class ZIMImpl implements ZIM {
   @override
   Future<ZIMRoomCreatedResult> createRoom(ZIMRoomInfo roomInfo,
       [ZIMRoomAdvancedConfig? config]) async {
-    // TODO: implement createRoom
-
+    Map resultMap;
     if (config == null) {
-      print('没填');
+      resultMap = await _channel.invokeMethod('createRoom',
+          {'roomInfo': ZIMConverter.cnvZIMRoomInfoObjectToMap(roomInfo)});
     } else {
-      print('填了');
+      resultMap = await _channel.invokeMethod('createRoomWithConfig', {
+        'roomInfo': ZIMConverter.cnvZIMRoomInfoObjectToMap(roomInfo),
+        'config': ZIMConverter.cnvZIMRoomAdvancedConfigObjectToMap(config)
+      });
     }
-    ZIMRoomCreatedResult result =
-        ZIMRoomCreatedResult(roomInfo: ZIMRoomFullInfo());
-    return result;
+    return ZIMConverter.cnvZIMRoomCreatedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMRoomJoinedResult> joinRoom(String roomID) async {
-    // TODO: implement joinRoom
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('joinRoom', {'roomID': roomID});
+    return ZIMConverter.cnvZIMRoomJoinedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMRoomLeftResult> leaveRoom(String roomID) async {
-    // TODO: implement leaveRoom
-    throw UnimplementedError();
+    Map resultMap =
+        await _channel.invokeMethod('leaveRoom', {'roomID': roomID});
+    return ZIMConverter.cnvZIMRoomLeftResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMRoomMemberQueriedResult> queryRoomMemberList(
       String roomID, ZIMRoomMemberQueryConfig config) async {
-    // TODO: implement queryRoomMemberList
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('queryRoomMemberList', {
+      'roomID': roomID,
+      'config': ZIMConverter.cnvZIMRoomMemberQueryConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMRoomMemberQueriedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMRoomOnlineMemberCountQueriedResult> queryRoomOnlineMemberCount(
       String roomID) async {
-    // TODO: implement queryRoomOnlineMemberCount
-    throw UnimplementedError();
+    Map resultMap = await _channel
+        .invokeMethod('queryRoomOnlineMemberCount', {'roomID': roomID});
+    return ZIMConverter.cnvZIMRoomOnlineMemberCountQueriedResultMapToObject(
+        resultMap);
   }
 
   @override
@@ -252,8 +256,13 @@ class ZIMImpl implements ZIM {
       Map<String, String> roomAttributes,
       String roomID,
       ZIMRoomAttributesSetConfig? config) async {
-    // TODO: implement setRoomAttributes
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('setRoomAttributes', {
+      'roomAttributes': roomAttributes,
+      'roomID': roomID,
+      'config': ZIMConverter.cnvZIMRoomAttributesSetConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMRoomAttributesOperatedCallResultMapToObject(
+        resultMap);
   }
 
   @override
@@ -261,158 +270,209 @@ class ZIMImpl implements ZIM {
       List<String> keys,
       String roomID,
       ZIMRoomAttributesDeleteConfig? config) async {
-    // TODO: implement deleteRoomAttributes
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('deleteRoomAttributes', {
+      'keys': keys,
+      'roomID': roomID,
+      "config": ZIMConverter.cnvZIMRoomAttributesDeleteConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMRoomAttributesOperatedCallResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<void> beginRoomAttributesBatchOperation(
       String roomID, ZIMRoomAttributesBatchOperationConfig? config) async {
-    // TODO: implement beginRoomAttributesBatchOperation
-    throw UnimplementedError();
+    return await _channel.invokeMethod('beginRoomAttributesBatchOperation', {
+      'roomID': roomID,
+      'config':
+          ZIMConverter.cnvZIMRoomAttributesBatchOperationConfigObjectToMap(
+              config)
+    });
   }
 
   @override
   Future<ZIMRoomAttributesBatchOperatedResult> endRoomAttributesBatchOperation(
       String roomID) async {
-    // TODO: implement endRoomAttributesBatchOperation
-    throw UnimplementedError();
+    Map resultMap = await _channel
+        .invokeMethod('endRoomAttributesBatchOperation', {'roomID': roomID});
+    return ZIMConverter.cnvZIMRoomAttributesBatchOperatedResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<ZIMRoomAttributesQueriedResult> queryRoomAllAttributes(
       String roomID) async {
-    // TODO: implement queryRoomAllAttributes
-    throw UnimplementedError();
+    Map resultMap = await _channel
+        .invokeMethod('queryRoomAllAttributes', {'roomID': roomID});
+    return ZIMConverter.cnvZIMRoomAttributesQueriedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupCreatedResult> createGroup(
       ZIMGroupInfo groupInfo, List<String> userIDs,
       [ZIMGroupAdvancedConfig? config]) async {
-    // TODO: implement createGroup
-    throw UnimplementedError();
+    Map resultMap;
+    if (config == null) {
+      resultMap = await _channel.invokeMethod('createGroup', {
+        'groupInfo': ZIMConverter.cnvZIMGroupInfoObjectToMap(groupInfo),
+        'userIDs': userIDs
+      });
+    } else {
+      resultMap = await _channel.invokeMethod('createGroupWithConfig', {
+        'groupInfo': ZIMConverter.cnvZIMGroupInfoObjectToMap(groupInfo),
+        'userIDs': userIDs,
+        'config': ZIMConverter.cnvZIMGroupAdvancedConfigObjectToMap(config)
+      });
+    }
+    return ZIMConverter.cnvZIMGroupCreatedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupDismissedResult> dismissGroup(String groupID) async {
-    // TODO: implement dismissGroup
-    throw UnimplementedError();
+    Map resultMap =
+        await _channel.invokeMethod('dismissGroup', {'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupDismissedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupJoinedResult> joinGroup(String groupID) async {
-    // TODO: implement joinGroup
-    throw UnimplementedError();
+    Map resultMap =
+        await _channel.invokeMethod('joinGroup', {'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupJoinedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupLeftResult> leaveGroup(String groupID) async {
-    // TODO: implement leaveGroup
-    throw UnimplementedError();
+    Map resultMap =
+        await _channel.invokeMethod('leaveGroup', {'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupLeftResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupUsersInvitedResult> inviteUsersIntoGroup(
       List<String> userIDs, String groupID) async {
-    // TODO: implement inviteUsersIntoGroup
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod(
+        'inviteUsersIntoGroup', {'userIDs': userIDs, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupUsersInvitedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupMemberKickedResult> kickGroupMembers(
       List<String> userIDs, String groupID) async {
-    // TODO: implement kickGroupMembers
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod(
+        'kickGroupMembers', {'userIDs': userIDs, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupMemberKickedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupOwnerTransferredResult> transferGroupOwner(
       String toUserID, String groupID) async {
-    // TODO: implement transferGroupOwner
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod(
+        'transferGroupOwner', {'toUserID': toUserID, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupOwnerTransferredResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupNameUpdatedResult> updateGroupName(
       String groupName, String groupID) async {
-    // TODO: implement updateGroupName
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod(
+        'updateGroupName', {'groupName': groupName, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupNameUpdatedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
       String groupNotice, String groupID) async {
-    // TODO: implement updateGroupNotice
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod(
+        'updateGroupNotice', {'groupNotice': groupNotice, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupNoticeUpdatedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupInfoQueriedResult> queryGroupInfo(String groupID) async {
-    // TODO: implement queryGroupInfo
-    throw UnimplementedError();
+    Map resultMap =
+        await _channel.invokeMethod('queryGroupInfo', {'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupInfoQueriedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupAttributesOperatedResult> setGroupAttributes(
       Map<String, String> groupAttributes, String groupID) async {
-    // TODO: implement setGroupAttributes
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('setGroupAttributes',
+        {'groupAttributes': groupAttributes, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupAttributesOperatedResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<ZIMGroupAttributesOperatedResult> deleteGroupAttributes(
       List<String> keys, String groupID) async {
-    // TODO: implement deleteGroupAttributes
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod(
+        'deleteGroupAttributes', {'keys': keys, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupAttributesOperatedResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<ZIMGroupAttributesQueriedResult> queryGroupAttributes(
       List<String> keys, String groupID) async {
-    // TODO: implement queryGroupAttributes
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod(
+        'queryGroupAttributes', {'keys': keys, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupAttributesQueriedResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<ZIMGroupAttributesQueriedResult> queryGroupAllAttributes(
       String groupID) async {
-    // TODO: implement queryGroupAllAttributes
-    throw UnimplementedError();
+    Map resultMap = await _channel
+        .invokeMethod('queryGroupAllAttributes', {'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupAttributesQueriedResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<ZIMGroupMemberRoleUpdatedResult> setGroupMemberRole(
       ZIMGroupMemberRole role, String forUserID, String groupID) async {
-    // TODO: implement setGroupMemberRole
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('setGroupMemberRole',
+        {'role': role, 'forUserID': forUserID, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupMemberRoleUpdatedResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<ZIMGroupMemberNicknameUpdatedResult> setGroupMemberNickname(
       String nickname, String forUserID, String groupID) async {
-    // TODO: implement setGroupMemberNickname
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('setGroupMemberNickname',
+        {'nickname': nickname, 'forUserID': forUserID, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupMemberNicknameUpdatedResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<ZIMGroupMemberInfoQueriedResult> queryGroupMemberInfo(
       String userID, String groupID) async {
-    // TODO: implement queryGroupMemberInfo
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod(
+        'queryGroupMemberInfo', {'userID': userID, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupMemberInfoQueriedResultMapToObject(
+        resultMap);
   }
 
   @override
   Future<ZIMGroupListQueriedResult> queryGroupList() async {
-    // TODO: implement queryGroupList
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('queryGroupList');
+    return ZIMConverter.cnvZIMGroupListQueriedResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMGroupMemberListQueriedResult> queryGroupMemberList(
       String groupID, ZIMGroupMemberQueryConfig config) async {
-    // TODO: implement queryGroupMemberList
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('queryGroupMemberList', {
+      'groupID': groupID,
+      'config': ZIMConverter.cnvZIMGroupMemberQueryConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMGroupMemberListQueriedResultMapToResult(
+        resultMap);
   }
 
   @override

@@ -156,7 +156,7 @@ public class ZIMPluginMethodHandler {
             @Override
             public void onConversationListQueried(ArrayList<ZIMConversation> conversationList, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
-                    HashMap conversationListMap = ZIMPluginConverter.cnvZIMConversationObjectToMap()
+                    HashMap conversationListMap = ZIMPluginConverter.cnvZIMConversationObjectToMap();
                     result.success();
                 }
                 else{

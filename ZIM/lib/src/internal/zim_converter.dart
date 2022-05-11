@@ -1,10 +1,4 @@
-import 'dart:async';
-import 'dart:ffi';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
 import 'package:zim/zim.dart';
-import '../zim_defines.dart';
-import 'zim_defines_extension.dart';
 
 //MARK: Tools
 class ZIMConverter {
@@ -37,6 +31,24 @@ class ZIMConverter {
 
     return ZIMUsersInfoQueriedResult(
         userList: userList, errorUserList: errorUserList);
+  }
+
+  static ZIMErrorUserInfo cnvZIMErrorUserInfoMapToObject(Map resultMap) {
+    ZIMErrorUserInfo errorUserInfo = ZIMErrorUserInfo();
+    errorUserInfo.userID = resultMap['userID'];
+    errorUserInfo.reason = resultMap['reason'];
+    return errorUserInfo;
+  }
+
+  static List<ZIMErrorUserInfo> cnvBasicListToZIMErrorUserInfoList(
+      List basicList) {
+    List<ZIMErrorUserInfo> errorUserInfoList = [];
+    for (Map errorUserInfoMap in basicList) {
+      ZIMErrorUserInfo errorUserInfo =
+          cnvZIMErrorUserInfoMapToObject(errorUserInfoMap);
+      errorUserInfoList.add(errorUserInfo);
+    }
+    return errorUserInfoList;
   }
 
   static Map cnvZIMConversationQueryConfigObjectToMap(
@@ -297,4 +309,405 @@ class ZIMConverter {
         conversationID: conversationID, conversationType: conversationType);
   }
 
+  static Map cnvZIMRoomInfoObjectToMap(ZIMRoomInfo roomInfo) {
+    Map roomInfoMap = {};
+    roomInfoMap['roomID'] = roomInfo.roomID;
+    roomInfoMap['roomName'] = roomInfo.roomName;
+
+    return roomInfoMap;
+  }
+
+  static ZIMRoomInfo cnvZIMRoomInfoMapToObject(Map roomInfoMap) {
+    ZIMRoomInfo roomInfo = ZIMRoomInfo();
+    roomInfo.roomID = roomInfoMap["roomID"];
+    roomInfo.roomName = roomInfoMap["roomName"];
+
+    return roomInfo;
+  }
+
+  static ZIMRoomFullInfo cnvZIMRoomFullInfoMapToObject(Map roomFullInfoMap) {
+    ZIMRoomFullInfo roomFullInfo = ZIMRoomFullInfo();
+
+    roomFullInfo.baseInfo =
+        cnvZIMRoomInfoMapToObject(roomFullInfoMap["baseInfo"]);
+
+    return roomFullInfo;
+  }
+
+  static ZIMRoomCreatedResult cnvZIMRoomCreatedResultMapToObject(
+      Map resultMap) {
+    ZIMRoomFullInfo roomInfo =
+        cnvZIMRoomFullInfoMapToObject(resultMap["roomInfo"]);
+
+    return ZIMRoomCreatedResult(roomInfo: roomInfo);
+  }
+
+  static Map cnvZIMRoomAdvancedConfigObjectToMap(ZIMRoomAdvancedConfig config) {
+    Map configMap = {};
+    configMap['roomAttributes'] = config.roomAttributes;
+    configMap['roomDestroyDelayTime'] = config.roomDestroyDelayTime;
+    return configMap;
+  }
+
+  static ZIMRoomJoinedResult cnvZIMRoomJoinedResultMapToObject(Map resultMap) {
+    return ZIMRoomJoinedResult(
+        roomInfo: cnvZIMRoomFullInfoMapToObject(resultMap['roomInfo']));
+  }
+
+  static ZIMRoomLeftResult cnvZIMRoomLeftResultMapToObject(Map resultMap) {
+    return ZIMRoomLeftResult(roomID: resultMap['roomID']);
+  }
+
+  static Map cnvZIMRoomMemberQueryConfigObjectToMap(
+      ZIMRoomMemberQueryConfig config) {
+    Map configMap = {};
+    configMap['nextFlag'] = config.nextFlag;
+    configMap['count'] = config.count;
+    return configMap;
+  }
+
+  static ZIMRoomMemberQueryConfig cnvZIMRoomMemberQueryConfigMapToObject(
+      Map configMap) {
+    ZIMRoomMemberQueryConfig queryConfig = ZIMRoomMemberQueryConfig();
+    queryConfig.count = configMap['count'];
+    queryConfig.nextFlag = configMap['nextFlag'];
+    return queryConfig;
+  }
+
+  static ZIMUserInfo cnvZIMUserInfoMapToObject(Map userInfoMap) {
+    ZIMUserInfo userInfo = ZIMUserInfo();
+    userInfo.userID = userInfoMap['userID'];
+    userInfo.userName = userInfoMap['userName'];
+    return userInfo;
+  }
+
+  static List<ZIMUserInfo> cnvZIMUserInfoListBasicToObject(
+      List memberListBasic) {
+    List<ZIMUserInfo> memberList = [];
+    for (Map memberInfoMap in memberListBasic) {
+      memberList.add(cnvZIMUserInfoMapToObject(memberInfoMap));
+    }
+    return memberList;
+  }
+
+  static ZIMRoomMemberQueriedResult cnvZIMRoomMemberQueriedResultMapToObject(
+      Map resultMap) {
+    return ZIMRoomMemberQueriedResult(
+        roomID: resultMap['roomID'],
+        memberList: cnvZIMUserInfoListBasicToObject(resultMap['memberList']));
+  }
+
+  static ZIMRoomOnlineMemberCountQueriedResult
+      cnvZIMRoomOnlineMemberCountQueriedResultMapToObject(Map resultMap) {
+    return ZIMRoomOnlineMemberCountQueriedResult(
+        roomID: resultMap['roomID'], count: resultMap['count']);
+  }
+
+  static Map? cnvZIMRoomAttributesSetConfigObjectToMap(
+      ZIMRoomAttributesSetConfig? config) {
+    Map configMap;
+    if (config != null) {
+      configMap = {};
+      configMap['isForce'] = config.isForce;
+      configMap['isDeleteAfterOwnerLeft'] = config.isDeleteAfterOwnerLeft;
+      configMap['isUpdateOwner'] = config.isUpdateOwner;
+      return configMap;
+    } else {
+      return null;
+    }
+  }
+
+  static ZIMRoomAttributesOperatedCallResult
+      cnvZIMRoomAttributesOperatedCallResultMapToObject(Map resultMap) {
+    return ZIMRoomAttributesOperatedCallResult(
+        roomID: resultMap['roomID'], errorKeys: resultMap['errorKeys']);
+  }
+
+  static Map? cnvZIMRoomAttributesDeleteConfigObjectToMap(
+      ZIMRoomAttributesDeleteConfig? config) {
+    if (config == null) {
+      return null;
+    }
+    Map configMap = {};
+    configMap['isForce'] = config.isForce;
+    return configMap;
+  }
+
+  static Map? cnvZIMRoomAttributesBatchOperationConfigObjectToMap(
+      ZIMRoomAttributesBatchOperationConfig? config) {
+    if (config == null) {
+      return null;
+    }
+    Map configMap = {};
+    configMap['isForce'] = config.isForce;
+    configMap['isDeleteAfterOwnerLeft'] = config.isDeleteAfterOwnerLeft;
+    configMap['isUpdateOwner'] = config.isUpdateOwner;
+    return configMap;
+  }
+
+  static ZIMRoomAttributesBatchOperatedResult
+      cnvZIMRoomAttributesBatchOperatedResultMapToObject(Map resultMap) {
+    return ZIMRoomAttributesBatchOperatedResult(roomID: resultMap['roomID']);
+  }
+
+  static ZIMRoomAttributesQueriedResult
+      cnvZIMRoomAttributesQueriedResultMapToObject(Map resultMap) {
+    return ZIMRoomAttributesQueriedResult(
+        roomID: resultMap['roomID'],
+        roomAttributes: resultMap['roomAttributes']);
+  }
+
+  static ZIMRoomAttributesUpdateInfo cnvZIMRoomAttributesUpdateInfoMapToObject(
+      Map infoMap) {
+    return ZIMRoomAttributesUpdateInfo(
+        action:
+            ZIMRoomAttributesUpdateActionExtension.mapValue[infoMap['action']]!,
+        roomAttributes: infoMap['roomAttributes']);
+  }
+
+  static List<ZIMRoomAttributesUpdateInfo>
+      cnvZIMRoomAttributesUpdateInfoListBasicToObject(List infoBasicList) {
+    List<ZIMRoomAttributesUpdateInfo> infoList = [];
+    for (Map infoMap in infoBasicList) {
+      infoList.add(cnvZIMRoomAttributesUpdateInfoMapToObject(infoMap));
+    }
+    return infoList;
+  }
+
+  static Map? cnvZIMGroupInfoObjectToMap(ZIMGroupInfo? groupInfo) {
+    if (groupInfo == null) {
+      return null;
+    }
+    Map groupInfoMap = {};
+    groupInfoMap['groupID'] = groupInfo.groupID;
+    groupInfoMap['groupName'] = groupInfo.groupName;
+    return groupInfoMap;
+  }
+
+  static ZIMGroupInfo? cnvZIMGroupInfoMapToObject(Map? groupInfoMap) {
+    if (groupInfoMap == null) {
+      return null;
+    }
+    ZIMGroupInfo groupInfo = ZIMGroupInfo();
+    groupInfo.groupID = groupInfoMap['groupID'];
+    groupInfo.groupName = groupInfoMap['groupName'];
+    return groupInfo;
+  }
+
+  static ZIMGroupFullInfo? cnvZIMGroupFullInfoMapToObject(
+      Map? groupFullInfoMap) {
+    if (groupFullInfoMap == null) {
+      return null;
+    }
+    ZIMGroupFullInfo groupFullInfo = ZIMGroupFullInfo();
+    groupFullInfo.groupNotice = groupFullInfoMap['groupNotice'];
+    groupFullInfo.baseInfo =
+        cnvZIMGroupInfoMapToObject(groupFullInfoMap['baseInfo']);
+    return groupFullInfo;
+  }
+
+  static Map? cnvZIMGroupAdvancedConfigObjectToMap(
+      ZIMGroupAdvancedConfig? config) {
+    if (config == null) {
+      return null;
+    }
+    Map configMap = {};
+    configMap['groupNotice'] = config.groupNotice;
+    configMap['groupAttributes'] = config.groupAttributes;
+    return configMap;
+  }
+
+  static ZIMGroupCreatedResult cnvZIMGroupCreatedResultMapToObject(
+      Map resultMap) {
+    ZIMGroupFullInfo groupInfo =
+        cnvZIMGroupFullInfoMapToObject(resultMap['groupInfo'])!;
+    List<String> userIDs = resultMap['userIDs'];
+    ZIMGroupCreatedResult result =
+        ZIMGroupCreatedResult(groupInfo: groupInfo, userIDs: userIDs);
+    return result;
+  }
+
+  static ZIMGroupDismissedResult cnvZIMGroupDismissedResultMapToObject(
+      Map resultMap) {
+    return ZIMGroupDismissedResult(groupID: resultMap['groupID']);
+  }
+
+  static ZIMGroupJoinedResult cnvZIMGroupJoinedResultMapToObject(
+      Map resultMap) {
+    ZIMGroupFullInfo groupInfo =
+        cnvZIMGroupFullInfoMapToObject(resultMap['groupInfo'])!;
+    return ZIMGroupJoinedResult(groupInfo: groupInfo);
+  }
+
+  static ZIMGroupLeftResult cnvZIMGroupLeftResultMapToObject(Map resultMap) {
+    return ZIMGroupLeftResult(groupID: resultMap['groupID']);
+  }
+
+  static ZIMGroupUsersInvitedResult cnvZIMGroupUsersInvitedResultMapToObject(
+      Map resultMap) {
+    List<ZIMErrorUserInfo> errorUserList =
+        cnvBasicListToZIMErrorUserInfoList(resultMap['errorUserList']);
+
+    return ZIMGroupUsersInvitedResult(
+        errorUserList: errorUserList,
+        groupID: resultMap['groupID'],
+        userIDList: resultMap['userIDList']);
+  }
+
+  static ZIMGroupMemberKickedResult cnvZIMGroupMemberKickedResultMapToObject(
+      Map resultMap) {
+    List<ZIMErrorUserInfo> errorUserList =
+        cnvBasicListToZIMErrorUserInfoList(resultMap['errorUserList']);
+    return ZIMGroupMemberKickedResult(
+        groupID: resultMap['groupID'],
+        kickedUserIDList: resultMap['kickedUserIDList'],
+        errorUserList: errorUserList);
+  }
+
+  static ZIMGroupOwnerTransferredResult
+      cnvZIMGroupOwnerTransferredResultMapToObject(Map resultMap) {
+    return ZIMGroupOwnerTransferredResult(
+        groupID: resultMap['groupID'], toUserID: resultMap['toUserID']);
+  }
+
+  static ZIMGroupNameUpdatedResult cnvZIMGroupNameUpdatedResultMapToObject(
+      Map resultMap) {
+    return ZIMGroupNameUpdatedResult(
+        groupID: resultMap['groupID'], groupName: resultMap['groupName']);
+  }
+
+  static ZIMGroupNoticeUpdatedResult cnvZIMGroupNoticeUpdatedResultMapToObject(
+      Map resultMap) {
+    return ZIMGroupNoticeUpdatedResult(
+        groupID: resultMap['groupID'], groupNotice: resultMap['groupNotice']);
+  }
+
+  static ZIMGroupInfoQueriedResult cnvZIMGroupInfoQueriedResultMapToObject(
+      Map groupInfoMap) {
+    ZIMGroupFullInfo groupInfo = cnvZIMGroupFullInfoMapToObject(groupInfoMap)!;
+    return ZIMGroupInfoQueriedResult(groupInfo: groupInfo);
+  }
+
+  static ZIMGroupAttributesOperatedResult
+      cnvZIMGroupAttributesOperatedResultMapToObject(Map resultMap) {
+    return ZIMGroupAttributesOperatedResult(
+        groupID: resultMap['groupID'], errorKeys: resultMap['errorKeys']);
+  }
+
+  static ZIMGroupAttributesQueriedResult
+      cnvZIMGroupAttributesQueriedResultMapToObject(Map resultMap) {
+    return ZIMGroupAttributesQueriedResult(
+        groupID: resultMap['groupID'],
+        groupAttributes: resultMap['groupAttributes']);
+  }
+
+  static ZIMGroupMemberRoleUpdatedResult
+      cnvZIMGroupMemberRoleUpdatedResultMapToObject(Map resultMap) {
+    return ZIMGroupMemberRoleUpdatedResult(
+        groupID: resultMap['groupID'],
+        forUserID: resultMap['forUserID'],
+        role: resultMap['role']);
+  }
+
+  static ZIMGroupMemberNicknameUpdatedResult
+      cnvZIMGroupMemberNicknameUpdatedResultMapToObject(Map resultMap) {
+    return ZIMGroupMemberNicknameUpdatedResult(
+        groupID: resultMap['groupID'],
+        forUserID: resultMap['forUserID'],
+        nickname: resultMap['nickname']);
+  }
+
+  static ZIMGroupMemberInfo cnvZIMGroupMemberInfoMapToObject(
+      Map memberInfoMap) {
+    ZIMUserInfo userInfo = cnvZIMUserInfoMapToObject(memberInfoMap);
+    ZIMGroupMemberInfo groupMemberInfo = userInfo as ZIMGroupMemberInfo;
+    groupMemberInfo.memberRole = memberInfoMap['memberRole'];
+    groupMemberInfo.memberNickname = memberInfoMap['memberNickname'];
+    return groupMemberInfo;
+  }
+
+  static List<ZIMGroupMemberInfo> cnvBasicListToZIMGroupMemberInfoList(
+      List basicList) {
+    List<ZIMGroupMemberInfo> userList = [];
+    for (Map memberInfoMap in basicList) {
+      userList.add(cnvZIMGroupMemberInfoMapToObject(memberInfoMap));
+    }
+    return userList;
+  }
+
+  static ZIMGroupMemberInfoQueriedResult
+      cnvZIMGroupMemberInfoQueriedResultMapToObject(Map resultMap) {
+    ZIMGroupMemberInfo userInfo =
+        cnvZIMGroupMemberInfoMapToObject(resultMap['groupMemberInfo']);
+    return ZIMGroupMemberInfoQueriedResult(
+        groupID: resultMap['groupID'], userInfo: userInfo);
+  }
+
+  static ZIMGroup cnvZIMGroupMapToObject(Map resultMap) {
+    ZIMGroup group = ZIMGroup();
+    group.notificationStatus = ZIMGroupMessageNotificationStatusEventExtension
+        .mapValue[resultMap['notificationStatus']]!;
+    group.baseInfo = cnvZIMGroupInfoMapToObject(resultMap['baseInfo']);
+    return group;
+  }
+
+  static List<ZIMGroup> cnvBasicListToZIMGroupList(List basicGroupList) {
+    List<ZIMGroup> groupList = [];
+    for (Map groupMap in basicGroupList) {
+      groupList.add(cnvZIMGroupMapToObject(groupMap));
+    }
+    return groupList;
+  }
+
+  static ZIMGroupListQueriedResult cnvZIMGroupListQueriedResultMapToObject(
+      Map resultMap) {
+    List<ZIMGroup> groupList =
+        cnvBasicListToZIMGroupList(resultMap['groupList']);
+    return ZIMGroupListQueriedResult(groupList: groupList);
+  }
+
+  static Map cnvZIMGroupMemberQueryConfigObjectToMap(
+      ZIMGroupMemberQueryConfig config) {
+    Map configMap = {};
+    configMap['count'] = config.count;
+    configMap['nextFlag'] = config.nextFlag;
+    return configMap;
+  }
+
+  static ZIMGroupMemberListQueriedResult
+      cnvZIMGroupMemberListQueriedResultMapToResult(Map resultMap) {
+    List<ZIMGroupMemberInfo> userList =
+        cnvBasicListToZIMGroupMemberInfoList(resultMap['userList']);
+
+    return ZIMGroupMemberListQueriedResult(
+        groupID: resultMap['groupID'],
+        userList: userList,
+        nextFlag: resultMap['nextFlag']);
+  }
+
+  static ZIMGroupOperatedInfo cnvZIMGroupOperatedInfoMapToObject(
+      Map resultMap) {
+    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo();
+    info.operatedUserInfo =
+        cnvZIMGroupMemberInfoMapToObject(resultMap['ZIMGroupOperatedInfo']);
+    return info;
+  }
+
+  static ZIMGroupAttributesUpdateInfo
+      cnvZIMGroupAttributesUpdateInfoMapToObject(Map infoMap) {
+    ZIMGroupAttributesUpdateInfo info = ZIMGroupAttributesUpdateInfo();
+    info.action =
+        ZIMGroupAttributesUpdateActionExtension.mapValue[infoMap['action']]!;
+    info.groupAttributes = infoMap['groupAttributes'];
+    return info;
+  }
+
+  static List<ZIMGroupAttributesUpdateInfo>
+      cnvBasicListToZIMGroupAttributesUpdateInfoList(List basicList) {
+    List<ZIMGroupAttributesUpdateInfo> infoList = [];
+    for (Map infoMap in basicList) {
+      infoList.add(cnvZIMGroupAttributesUpdateInfoMapToObject(infoMap));
+    }
+    return infoList;
+  }
 }

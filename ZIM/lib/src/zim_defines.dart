@@ -1,11 +1,5 @@
-import 'dart:async';
-import 'dart:ffi';
 import 'dart:typed_data';
 export 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
-import 'package:zim/zim.dart';
-
-import 'zim_error_code.dart';
 
 enum ZIMConnectionState { disconnected, connecting, connected, reconnecting }
 
@@ -221,7 +215,10 @@ class ZIMRoomAttributesDeleteConfig {
 }
 
 class ZIMRoomAttributesUpdateInfo {
-  ZIMRoomAttributesUpdateAction action = ZIMRoomAttributesUpdateAction.set;
+  ZIMRoomAttributesUpdateAction action;
+  Map<String, String> roomAttributes;
+  ZIMRoomAttributesUpdateInfo(
+      {required this.action, required this.roomAttributes});
 }
 
 class ZIMErrorUserInfo {
@@ -409,8 +406,8 @@ class ZIMRoomLeftResult {
 
 class ZIMRoomMemberQueriedResult {
   String roomID;
-  ZIMRoomMemberQueryConfig config;
-  ZIMRoomMemberQueriedResult({required this.roomID, required this.config});
+  List<ZIMUserInfo> memberList;
+  ZIMRoomMemberQueriedResult({required this.roomID, required this.memberList});
 }
 
 class ZIMRoomOnlineMemberCountQueriedResult {
@@ -440,7 +437,7 @@ class ZIMRoomAttributesQueriedResult {
 }
 
 class ZIMGroupCreatedResult {
-  ZIMGroupInfo groupInfo;
+  ZIMGroupFullInfo groupInfo;
   List<String> userIDs;
   ZIMGroupCreatedResult({required this.groupInfo, required this.userIDs});
 }
@@ -462,11 +459,11 @@ class ZIMGroupLeftResult {
 
 class ZIMGroupUsersInvitedResult {
   String groupID;
-  List<String> kickedUserIDList;
+  List<String> userIDList;
   List<ZIMErrorUserInfo> errorUserList;
   ZIMGroupUsersInvitedResult(
       {required this.groupID,
-      required this.kickedUserIDList,
+      required this.userIDList,
       required this.errorUserList});
 }
 

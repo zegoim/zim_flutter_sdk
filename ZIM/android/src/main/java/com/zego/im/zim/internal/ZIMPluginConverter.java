@@ -1,5 +1,7 @@
 package com.zego.im.zim.internal;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +56,10 @@ public class ZIMPluginConverter {
             conversationMap.put("lastMessage",null);
         }
         return conversationMap;
+    }
+
+    static public ArrayList cnvZIMConversationListToBasicList(ArrayList<ZIMConversation> conversationList){
+        ArrayList
     }
 
     static public HashMap cnvZIMMessageObjectToMap(ZIMMessage message){

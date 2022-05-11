@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:ffi';
-
-import 'package:flutter/services.dart';
 import 'package:zim/zim.dart';
 import 'zim_defines.dart';
 
@@ -35,51 +31,51 @@ class ZIMEventHandler {
 
 /* Room */
   static void Function(List<ZIMUserInfo> memberList, String roomID)?
-      roomMemberJoined;
+      onRoomMemberJoined;
 
   static void Function(List<ZIMUserInfo> memberList, String roomID)?
-      roomMemberLeft;
+      onRoomMemberLeft;
 
   static void Function(ZIMRoomState state, ZIMRoomEvent event, Map extendedData,
-      String roomID)? roomStateChanged;
+      String roomID)? onRoomStateChanged;
 
   static void Function(ZIMRoomAttributesUpdateInfo updateInfo, String roomID)?
-      roomAttributesUpdated;
+      onRoomAttributesUpdated;
 
   static void Function(
           List<ZIMRoomAttributesUpdateInfo> updateInfo, String roomID)?
-      roomAttributesBatchUpdated;
+      onRoomAttributesBatchUpdated;
 
 /* Group */
   static void Function(
       ZIMGroupState state,
       ZIMGroupEvent event,
       ZIMGroupOperatedInfo operatedInfo,
-      ZIMGroupFullInfo groupInfo)? groupStateChanged;
+      ZIMGroupFullInfo groupInfo)? onGroupStateChanged;
 
   static void Function(
           String groupName, ZIMGroupOperatedInfo operatedInfo, String groupID)?
-      groupNameUpdated;
+      onGroupNameUpdated;
 
   static void Function(String groupNotice, ZIMGroupOperatedInfo operatedInfo,
-      String groupID)? groupNoticeUpdated;
+      String groupID)? onGroupNoticeUpdated;
 
   static void Function(
       List<ZIMGroupAttributesUpdateInfo> updateInfo,
       ZIMGroupOperatedInfo operatedInfo,
-      String groupID)? groupAttributesUpdated;
+      String groupID)? onGroupAttributesUpdated;
 
   static void Function(
       ZIMGroupMemberState state,
       ZIMGroupMemberEvent event,
       List<ZIMGroupMemberInfo> userList,
       ZIMGroupOperatedInfo operatedInfo,
-      String groupID)? groupMemberStateChanged;
+      String groupID)? onGroupMemberStateChanged;
 
   static void Function(
       List<ZIMGroupMemberInfo> userInfo,
       ZIMGroupOperatedInfo operatedInfo,
-      String groupID)? groupMemberInfoUpdated;
+      String groupID)? onGroupMemberInfoUpdated;
 
 /* Invite */
   static void Function(ZIMCallInvitationReceivedInfo info, String callID)?
