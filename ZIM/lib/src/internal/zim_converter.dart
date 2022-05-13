@@ -111,20 +111,48 @@ class ZIMConverter {
     messageMap['timestamp'] = message.timestamp;
     messageMap['conversationSeq'] = message.conversationSeq;
     messageMap['orderKey'] = message.orderKey;
+    if (message is ZIMMediaMessage) {
+      messageMap['fileLocalPath'] = message.fileLocalPath;
+      messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
+      messageMap['fileUID'] = message.fileUID;
+      messageMap['fileName'] = message.fileName;
+      messageMap['fileSize'] = message.fileSize;
+    }
     switch (message.type) {
       case ZIMMessageType.unKnown:
         break;
       case ZIMMessageType.text:
-        ZIMTextMessage txtMsg = (message as ZIMTextMessage);
-        messageMap['message'] = txtMsg.message;
+        message as ZIMTextMessage;
+        messageMap['message'] = message.message;
         break;
       case ZIMMessageType.command:
-        ZIMCommandMessage cmdMsg = (message as ZIMCommandMessage);
-        messageMap['message'] = cmdMsg.message;
+        message as ZIMCommandMessage;
+        messageMap['message'] = message.message;
         break;
       case ZIMMessageType.barrage:
-        ZIMBarrageMessage brgMsg = (message as ZIMBarrageMessage);
-        messageMap['message'] = brgMsg.message;
+        message as ZIMBarrageMessage;
+        messageMap['message'] = message.message;
+        break;
+      case ZIMMessageType.file:
+        break;
+      case ZIMMessageType.audio:
+        message as ZIMAudioMessage;
+        messageMap['audioDuration'] = message.audioDuration;
+        break;
+      case ZIMMessageType.image:
+        message as ZIMImageMessage;
+        messageMap['thumbnailDownloadUrl'] = message.thumbnailDownloadUrl;
+        messageMap['thumbnailLocalPath'] = message.thumbnailLocalPath;
+        messageMap['largeImageDownloadUrl'] = message.largeImageDownloadUrl;
+        messageMap['largeImageLocalPath'] = message.largeImageLocalPath;
+        break;
+      case ZIMMessageType.video:
+        message as ZIMVideoMessage;
+        messageMap['videoDuration'] = message.videoDuration;
+        messageMap['videoFirstFrameDownloadUrl'] =
+            message.videoFirstFrameDownloadUrl;
+        messageMap['videoFirstFrameLocalPath'] =
+            message.videoFirstFrameLocalPath;
         break;
       default:
         break;
@@ -133,7 +161,58 @@ class ZIMConverter {
   }
 
   static ZIMMessage cnvZIMMessageMapToObject(Map resultMap) {
-    ZIMMessage message = ZIMMessage();
+    ZIMMessageType msgType =
+        ZIMMessageTypeExtension.mapValue[resultMap['type']]!;
+    ZIMMessage message;
+    switch (msgType) {
+      case ZIMMessageType.unKnown:
+        message = ZIMMessage();
+        break;
+      case ZIMMessageType.text:
+        message = ZIMTextMessage();
+        message as ZIMTextMessage;
+        message.message = resultMap['message'];
+        break;
+      case ZIMMessageType.command:
+        message = ZIMCommandMessage();
+        (message as ZIMCommandMessage);
+        message.message = resultMap['message'];
+        break;
+      case ZIMMessageType.barrage:
+        message = ZIMBarrageMessage();
+        (message as ZIMBarrageMessage);
+        message.message = resultMap['message'];
+        break;
+      case ZIMMessageType.image:
+        message = ZIMImageMessage();
+        message as ZIMImageMessage;
+        message.thumbnailDownloadUrl = resultMap['thumbnailDownloadUrl'];
+        message.thumbnailLocalPath = resultMap['thumbnailLocalPath'];
+        message.largeImageDownloadUrl = resultMap['largeImageDownloadUrl'];
+        message.largeImageLocalPath = resultMap['largeImageLocalPath'];
+        break;
+      case ZIMMessageType.file:
+        message = ZIMFileMessage();
+        message as ZIMFileMessage;
+        break;
+      case ZIMMessageType.audio:
+        message = ZIMAudioMessage();
+        message as ZIMAudioMessage;
+        message.audioDuration = resultMap['audioDuration'];
+        break;
+      case ZIMMessageType.video:
+        message = ZIMVideoMessage();
+        message as ZIMVideoMessage;
+        message.videoDuration = resultMap['videoDuration'];
+        message.videoFirstFrameDownloadUrl =
+            resultMap['videoFirstFrameDownloadUrl'];
+        message.videoFirstFrameLocalPath =
+            resultMap['videoFirstFrameLocalPath'];
+        break;
+      default:
+        message = ZIMMessage();
+        break;
+    }
     message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']]!;
     message.messageID = resultMap['messageID'];
     message.localMessageID = resultMap['localMessageID'];
@@ -148,24 +227,16 @@ class ZIMConverter {
     message.timestamp = resultMap['timestamp'];
     message.conversationSeq = resultMap['conversationSeq'];
     message.orderKey = resultMap['orderKey'];
-    switch (message.type) {
-      case ZIMMessageType.unKnown:
-        return message;
-      case ZIMMessageType.text:
-        ZIMTextMessage txtMsg = (message as ZIMTextMessage);
-        txtMsg.message = resultMap['message'];
-        return txtMsg;
-      case ZIMMessageType.command:
-        ZIMCommandMessage cmdMsg = (message as ZIMCommandMessage);
-        cmdMsg.message = resultMap['message'];
-        return cmdMsg;
-      case ZIMMessageType.barrage:
-        ZIMBarrageMessage brgMsg = (message as ZIMBarrageMessage);
-        brgMsg.message = resultMap['message'];
-        return brgMsg;
-      default:
-        return message;
+
+    if (message is ZIMMediaMessage) {
+      message.fileLocalPath = resultMap['fileLocalPath'];
+      message.fileDownloadUrl = resultMap['fileDownloadUrl'];
+      message.fileUID = resultMap['fileUID'];
+      message.fileName = resultMap['fileName'];
+      message.fileSize = resultMap['fileSize'];
     }
+
+    return message;
   }
 
   static List cnvZIMMessageListObjectToMap(List<ZIMMessage> messageList) {
@@ -709,5 +780,103 @@ class ZIMConverter {
       infoList.add(cnvZIMGroupAttributesUpdateInfoMapToObject(infoMap));
     }
     return infoList;
+  }
+
+  static Map cnvZIMCallInviteConfigObjectToMap(ZIMCallInviteConfig config) {
+    Map configMap = {};
+    configMap['timeout'] = config.timeout;
+    configMap['extendedData'] = config.extendedData;
+    return configMap;
+  }
+
+  static ZIMCallInvitationSentInfo cnvZIMCallInvitationSentInfoMapToObject(
+      Map infoMap) {
+    ZIMCallInvitationSentInfo info = ZIMCallInvitationSentInfo();
+    info.timeout = infoMap['timeout'];
+    info.errorInvitees = infoMap['errorInvitees'];
+    return info;
+  }
+
+  static ZIMCallInvitationSentResult cnvZIMCallInvitationSentResultMapToObject(
+      Map resultMap) {
+    ZIMCallInvitationSentInfo info =
+        ZIMConverter.cnvZIMCallInvitationSentInfoMapToObject(resultMap['info']);
+    return ZIMCallInvitationSentResult(
+        callID: resultMap['callID'],
+        errorInvitees: resultMap['errorInvitees'],
+        info: info);
+  }
+
+  static Map cnvZIMCallCancelConfigObjectToMap(ZIMCallCancelConfig config) {
+    Map configMap = {};
+    configMap['extendedData'] = config.extendedData;
+    return configMap;
+  }
+
+  static ZIMCallCancelSentResult cnvZIMCallCancelSentResultMapToObject(
+      Map resultMap) {
+    return ZIMCallCancelSentResult(
+        callID: resultMap['callID'], errorInvitees: resultMap['errorInvitees']);
+  }
+
+  static Map cnvZIMCallAcceptConfigObjectToMap(ZIMCallAcceptConfig config) {
+    Map configMap = {};
+    configMap['extendedData'] = config.extendedData;
+    return configMap;
+  }
+
+  static ZIMCallAcceptanceSentResult cnvZIMCallAcceptanceSentResultMapToObject(
+      Map resultMap) {
+    return ZIMCallAcceptanceSentResult(callID: resultMap['callID']);
+  }
+
+  static Map cnvZIMCallRejectConfigObjectToMap(ZIMCallRejectConfig config) {
+    Map configMap = {};
+    configMap['extendedData'] = config.extendedData;
+    return configMap;
+  }
+
+  static ZIMCallRejectionSentResult cnvZIMCallRejectionSentResultMapToObject(
+      Map resultMap) {
+    return ZIMCallRejectionSentResult(callID: resultMap['callID']);
+  }
+
+  static ZIMCallInvitationReceivedInfo
+      cnvZIMCallInvitationReceivedInfoMapToObject(Map infoMap) {
+    ZIMCallInvitationReceivedInfo info = ZIMCallInvitationReceivedInfo();
+    info.timeout = infoMap['timeout'];
+    info.inviter = infoMap['inviter'];
+    info.extendedData = infoMap['extendedData'];
+    return info;
+  }
+
+  static ZIMCallInvitationCancelledInfo
+      cnvZIMCallInvitationCancelledInfoMapToObject(Map infoMap) {
+    ZIMCallInvitationCancelledInfo info = ZIMCallInvitationCancelledInfo();
+    info.inviter = infoMap['inviter'];
+    info.extendedData = infoMap['extendedData'];
+    return info;
+  }
+
+  static ZIMCallInvitationAcceptedInfo
+      cnvZIMCallInvitationAcceptedInfoMapToObject(Map infoMap) {
+    ZIMCallInvitationAcceptedInfo info = ZIMCallInvitationAcceptedInfo();
+    info.invitee = infoMap['invitee'];
+    info.extendedData = infoMap['extendedData'];
+    return info;
+  }
+
+  static ZIMCallInvitationRejectedInfo
+      cnvZIMCallInvitationRejectedInfoMapToObject(Map infoMap) {
+    ZIMCallInvitationRejectedInfo info = ZIMCallInvitationRejectedInfo();
+    info.invitee = infoMap['invitee'];
+    info.extendedData = infoMap['extendedData'];
+    return info;
+  }
+
+  static ZIMMediaDownloadedResult cnvZIMMediaDownloadedResultMapToObject(
+      Map resultMap) {
+    return ZIMMediaDownloadedResult(
+        message: cnvZIMMessageMapToObject(resultMap['message']));
   }
 }

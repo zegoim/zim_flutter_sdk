@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:zim/src/internal/zim_common_data.dart';
 import 'package:zim/zim.dart';
 import 'zim_converter.dart';
 
@@ -166,6 +167,68 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
             ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
                 map['operatedInfo']),
             map['groupID']);
+        break;
+      case 'onCallInvitationReceived':
+        if (ZIMEventHandler.onCallInvitationReceived == null) return;
+
+        ZIMEventHandler.onCallInvitationReceived!(
+            ZIMConverter.cnvZIMCallInvitationReceivedInfoMapToObject(
+                map['info']),
+            map['callID']);
+        break;
+      case 'onCallInvitationCancelled':
+        if (ZIMEventHandler.onCallInvitationCancelled == null) return;
+
+        ZIMEventHandler.onCallInvitationCancelled!(
+            ZIMConverter.cnvZIMCallInvitationCancelledInfoMapToObject(
+                map['info']),
+            map['callID']);
+        break;
+      case 'onCallInvitationAccepted':
+        if (ZIMEventHandler.onCallInvitationAccepted == null) return;
+
+        ZIMEventHandler.onCallInvitationAccepted!(
+            ZIMConverter.cnvZIMCallInvitationAcceptedInfoMapToObject(
+                map['info']),
+            map['callID']);
+        break;
+      case 'onCallInvitationRejected':
+        if (ZIMEventHandler.onCallInvitationRejected == null) return;
+
+        ZIMEventHandler.onCallInvitationRejected!(
+            ZIMConverter.cnvZIMCallInvitationRejectedInfoMapToObject(
+                map['info']),
+            map['callID']);
+        break;
+      case 'onCallInvitationTimeout':
+        if (ZIMEventHandler.onCallInvitationTimeout == null) return;
+
+        ZIMEventHandler.onCallInvitationTimeout!(map['callID']);
+        break;
+
+      case 'downloadMediaFileProgress':
+        String progressID = map['progressID'];
+        ZIMMessage message =
+            ZIMConverter.cnvZIMMessageMapToObject(map['message']);
+        int currentFileSize = map['currentFileSize'];
+        int totalFileSize = map['totalFileSize'];
+        ZIMMediaDownloadingProgress? progress =
+            ZIMCommonData.mediaDownloadingProgressMap[progressID];
+        if (progress != null) {
+          progress(message, currentFileSize, totalFileSize);
+        }
+        break;
+      case 'uploadMediaProgress':
+        String progressID = map['progressID'];
+        ZIMMessage message =
+            ZIMConverter.cnvZIMMessageMapToObject(map['message']);
+        int currentFileSize = map['currentFileSize'];
+        int totalFileSize = map['totalFileSize'];
+        ZIMMediaUploadingProgress? progress =
+            ZIMCommonData.mediaUploadingProgressMap[progressID];
+        if (progress != null) {
+          progress(message, currentFileSize, totalFileSize);
+        }
         break;
       default:
         break;

@@ -226,7 +226,7 @@ static ZIM *zim;
       }];
   }
   else if ([@"sendGroupMessage" isEqualToString:call.method]){
-      ZIMMessage *message = [ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments objectForKey:@"message"]];
+      ZIMMessage *message = [ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments safeObjectForKey:@"message"]];
       NSString *toGroupID = (NSString *)[call.arguments objectForKey:@"toGroupID"];
       ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter cnvZIMMessageSendConfigDicToObject:[call.arguments objectForKey:@"config"]];
       [zim sendGroupMesage:message toGroupID:toGroupID config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
@@ -234,6 +234,67 @@ static ZIM *zim;
               NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
               NSDictionary *resultDic = @{@"message":messageDic};
               result(resultDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
+  else if ([@"sendMediaMessage" isEqualToString:call.method]){
+      ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments safeObjectForKey:@"message"]];
+      NSString *toConversationID = [call.arguments safeObjectForKey:@"toConversationID"];
+      int conversationType = ((NSNumber *)[call.arguments safeObjectForKey:@"conversationType"]).intValue;
+      ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter cnvZIMMessageSendConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+      NSString *progressID = [call.arguments safeObjectForKey:@"progressID"];
+      [zim sendMediaMessage:message toConversationID:toConversationID conversationType:conversationType config:sendConfig progress:^(ZIMMessage * _Nonnull message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
+          if(progressID == nil){
+              return;
+          }
+          NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+          
+          NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+          [resultDic safeSetObject:@"uploadMediaProgress" forKey:@"method"];
+          [resultDic safeSetObject:progressID forKey:@"progressID"];
+          [resultDic safeSetObject:messageDic forKey:@"message"];
+          [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:currentFileSize] forKey:@"currentFileSize"];
+          [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:totalFileSize] forKey:@"totalFileSize"];
+          self.events(resultDic);
+      } callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+              NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+              [resultMtDic safeSetObject:messageDic forKey:@"message"];
+              result(resultMtDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
+  else if ([@"downloadMediaFile" isEqualToString:call.method]){
+      ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments safeObjectForKey:@"message"]];
+      int fileType = ((NSNumber *)[call.arguments safeObjectForKey:@"fileType"]).intValue;
+      NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
+
+      [zim downloadMediaFileWithMessage:message  fileType:fileType progress:^(ZIMMessage * _Nonnull message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
+          if(progressID == nil){
+              return;
+          }
+          NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+          
+          NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+          [resultDic safeSetObject:@"downloadMediaFileProgress" forKey:@"method"];
+          [resultDic safeSetObject:progressID forKey:@"progressID"];
+          [resultDic safeSetObject:messageDic forKey:@"message"];
+          [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:currentFileSize] forKey:@"currentFileSize"];
+          [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:totalFileSize] forKey:@"totalFileSize"];
+          self.events(resultDic);
+      } callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+              NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+              [resultMtDic safeSetObject:messageDic forKey:@"message"];
+              result(resultMtDic);
           }
           else{
               result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
@@ -733,6 +794,67 @@ static ZIM *zim;
           }
       }];
   }
+  else if ([@"callInvite" isEqualToString:call.method]){
+      NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
+      ZIMCallInviteConfig *config = [ZIMPluginConverter cnvZIMCallInviteConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+      [zim callInviteWithInvitees:invitees config:config callback:^(NSString * _Nonnull callID, ZIMCallInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+              [resultMtDic safeSetObject:callID forKey:@"callID"];
+              NSDictionary *infoDic = [ZIMPluginConverter cnvZIMCallInvitationSentInfoObjectToDic:info];
+              [resultMtDic safeSetObject:infoDic forKey:@"info"];
+              result(resultMtDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
+  else if ([@"callCancel" isEqualToString:call.method]){
+      NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
+      NSString *callID = [call.arguments safeObjectForKey:@"callID"];
+      ZIMCallCancelConfig *config = [ZIMPluginConverter cnvZIMCallCancelConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+      [zim callCancelWithInvitees:invitees callID:callID config:config callback:^(NSString * _Nonnull callID, NSArray<NSString *> * _Nonnull errorInvitees, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+              [resultMtDic safeSetObject:callID forKey:@"callID"];
+              [resultMtDic safeSetObject:errorInvitees forKey:@"errorInvitees"];
+              result(resultMtDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
+  else if ([@"callAccept" isEqualToString:call.method]){
+      NSString *callID = [call.arguments safeObjectForKey:@"callID"];
+      ZIMCallAcceptConfig *config = [ZIMPluginConverter cnvZIMCallAcceptConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+      
+      [zim callAcceptWithCallID:callID config:config callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+              [resultMtDic safeSetObject:callID forKey:@"callID"];
+              result(resultMtDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
+  else if ([@"callReject" isEqualToString:call.method]){
+      NSString *callID = [call.arguments safeObjectForKey:@"callID"];
+      ZIMCallRejectConfig *config = [ZIMPluginConverter cnvZIMCallRejectConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+      [zim callRejectWithCallID:callID config:config callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+              [resultMtDic safeSetObject:callID forKey:@"callID"];
+              result(resultMtDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
   else {
     result(FlutterMethodNotImplemented);
   }
@@ -985,6 +1107,76 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:groupID forKey:@"groupID"];
     NSArray *basicUserInfoList = [ZIMPluginConverter cnvZIMGroupMemberInfoListToBasicList:userInfo];
     [resultDic safeSetObject:basicUserInfoList forKey:@"userInfo"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    callInvitationReceived:(ZIMCallInvitationReceivedInfo *)info
+     callID:(NSString *)callID{
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *callInvitationReceivedInfoDic = [[NSMutableDictionary alloc] init];
+    [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
+    [callInvitationReceivedInfoDic safeSetObject:info.inviter forKey:@"inviter"];
+    [callInvitationReceivedInfoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [resultDic safeSetObject:@"onCallInvitationReceived" forKey:@"method"];
+    [resultDic safeSetObject:callInvitationReceivedInfoDic forKey:@"info"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    callInvitationCancelled:(ZIMCallInvitationCancelledInfo *)info
+     callID:(NSString *)callID{
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.inviter forKey:@"inviter"];
+    [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [resultDic safeSetObject:@"onCallInvitationCancelled" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    callInvitationAccepted:(ZIMCallInvitationAcceptedInfo *)info
+     callID:(NSString *)callID{
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.invitee forKey:@"invitee"];
+    [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [resultDic safeSetObject:@"onCallInvitationAccepted" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    callInvitationRejected:(ZIMCallInvitationRejectedInfo *)info
+     callID:(NSString *)callID{
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.invitee forKey:@"invitee"];
+    [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [resultDic safeSetObject:@"onCallInvitationRejected" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim callInvitationTimeout:(NSString *)callID{
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onCallInvitationTimeout" forKey:@"method"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    callInviteesAnsweredTimeout:(NSArray<NSString *> *)invitees
+     callID:(NSString *)callID{
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onCallInviteesAnsweredTimeout" forKey:@"method"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:invitees forKey:@"invitees"];
     _events(resultDic);
 }
 @end

@@ -79,16 +79,16 @@ class ZIMEventHandler {
 
 /* Invite */
   static void Function(ZIMCallInvitationReceivedInfo info, String callID)?
-      callInvitationReceived;
+      onCallInvitationReceived;
 
   static void Function(ZIMCallInvitationCancelledInfo info, String callID)?
-      callInvitationCancelled;
+      onCallInvitationCancelled;
 
   static void Function(ZIMCallInvitationAcceptedInfo info, String callID)?
-      callInvitationAccepted;
+      onCallInvitationAccepted;
 
   static void Function(ZIMCallInvitationRejectedInfo info, String callID)?
-      callInvitationRejected;
+      onCallInvitationRejected;
 
-  static void Function(String callID)? callInvitationTimeout;
+  static void Function(String callID)? onCallInvitationTimeout;
 }

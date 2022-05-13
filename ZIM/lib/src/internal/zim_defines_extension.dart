@@ -98,13 +98,39 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.unKnown: 0,
     ZIMMessageType.text: 1,
     ZIMMessageType.command: 2,
+    ZIMMessageType.image: 11,
+    ZIMMessageType.file: 12,
+    ZIMMessageType.audio: 13,
+    ZIMMessageType.video: 14,
     ZIMMessageType.barrage: 20
   };
   static const mapValue = {
     0: ZIMMessageType.unKnown,
     1: ZIMMessageType.text,
     2: ZIMMessageType.command,
+    11: ZIMMessageType.image,
+    12: ZIMMessageType.file,
+    13: ZIMMessageType.audio,
+    14: ZIMMessageType.video,
     20: ZIMMessageType.barrage
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMMediaFileTypeExtension on ZIMMediaFileType {
+  static const valueMap = {
+    ZIMMediaFileType.originalFile: 1,
+    ZIMMediaFileType.largeImage: 2,
+    ZIMMediaFileType.thumbnail: 3,
+    ZIMMediaFileType.videoFirstFrame: 4
+  };
+
+  static const mapValue = {
+    1: ZIMMediaFileType.originalFile,
+    2: ZIMMediaFileType.largeImage,
+    3: ZIMMediaFileType.thumbnail,
+    4: ZIMMediaFileType.videoFirstFrame
   };
 
   int get value => valueMap[this] ?? -1;

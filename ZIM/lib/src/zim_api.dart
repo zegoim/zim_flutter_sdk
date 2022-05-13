@@ -54,6 +54,16 @@ abstract class ZIM {
   Future<ZIMMessageSentResult> sendRoomMessage(
       ZIMMessage message, String toRoomID, ZIMMessageSendConfig config);
 
+  Future<ZIMMessageSentResult> sendMediaMessage(
+      ZIMMediaMessage message,
+      String toConversationID,
+      ZIMConversationType conversationType,
+      ZIMMessageSendConfig config,
+      ZIMMediaUploadingProgress progress);
+
+  Future<ZIMMediaDownloadedResult> downloadMediaFile(ZIMMediaMessage message,
+      ZIMMediaFileType fileType, ZIMMediaDownloadingProgress progress);
+
   Future<ZIMMessageQueriedResult> queryHistoryMessage(String conversationID,
       ZIMConversationType conversationType, ZIMMessageQueryConfig config);
 
@@ -66,7 +76,7 @@ abstract class ZIM {
       ZIMConversationType conversationType,
       ZIMMessageDeleteConfig config);
 
-//MARK: - createRoom
+//MARK: - Room
   Future<ZIMRoomCreatedResult> createRoom(ZIMRoomInfo roomInfo,
       [ZIMRoomAdvancedConfig? config]);
 

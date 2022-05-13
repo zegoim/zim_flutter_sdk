@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:zim/src/internal/zim_common_data.dart';
 import 'package:zim/src/internal/zim_converter.dart';
 import 'package:zim/zim.dart';
+import 'zim_common_tools.dart';
 
 class ZIMImpl implements ZIM {
   static const MethodChannel _channel = MethodChannel('zim');
@@ -157,6 +159,38 @@ class ZIMImpl implements ZIM {
       'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
     });
     return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
+  }
+
+  @override
+  Future<ZIMMediaDownloadedResult> downloadMediaFile(ZIMMediaMessage message,
+      ZIMMediaFileType fileType, ZIMMediaDownloadingProgress? progress) async {
+    if (progress != null) {
+      String uuid = ZIMCommonTools.uuid;
+      ZIMCommonData.mediaDownloadingProgressMap[uuid] = progress;
+      mediaDownloadingProgressMap[uuid] = progress;
+      Map resultMap = await _channel.invokeMethod('downloadMediaFile', {
+        'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+        'fileType': ZIMMediaFileTypeExtension.valueMap[fileType],
+        'progressID': uuid
+      });
+      mediaDownloadingProgressMap.remove(uuid);
+    } else {
+      Map resultMap = await _channel.invokeMethod('downloadMediaFile', {
+        'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+        'fileType': ZIMMediaFileTypeExtension.valueMap[fileType]
+      });
+    }
+  }
+
+  @override
+  Future<ZIMMessageSentResult> sendMediaMessage(
+      ZIMMediaMessage message,
+      String toConversationID,
+      ZIMConversationType conversationType,
+      ZIMMessageSendConfig config,
+      ZIMMediaUploadingProgress progress) {
+    // TODO: implement sendMediaMessage
+    throw UnimplementedError();
   }
 
   @override
@@ -478,28 +512,41 @@ class ZIMImpl implements ZIM {
   @override
   Future<ZIMCallInvitationSentResult> callInvite(
       List<String> invitees, ZIMCallInviteConfig config) async {
-    // TODO: implement callInvite
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('callInvite', {
+      'invitees': invitees,
+      'config': ZIMConverter.cnvZIMCallInviteConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMCallInvitationSentResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMCallCancelSentResult> callCancel(
       List<String> invitees, String callID, ZIMCallCancelConfig config) async {
-    // TODO: implement callCancel
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('callCancel', {
+      'invitees': invitees,
+      'callID': callID,
+      'config': ZIMConverter.cnvZIMCallCancelConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMCallCancelSentResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMCallAcceptanceSentResult> callAccept(
       String callID, ZIMCallAcceptConfig config) async {
-    // TODO: implement callAccept
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('callAccept', {
+      'callID': callID,
+      'config': ZIMConverter.cnvZIMCallAcceptConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMCallAcceptanceSentResultMapToObject(resultMap);
   }
 
   @override
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config) async {
-    // TODO: implement callReject
-    throw UnimplementedError();
+    Map resultMap = await _channel.invokeMethod('callReject', {
+      'callID': callID,
+      'config': ZIMConverter.cnvZIMCallRejectConfigObjectToMap(config)
+    });
+    return ZIMConverter.cnvZIMCallRejectionSentResultMapToObject(resultMap);
   }
 }

@@ -109,40 +109,77 @@
     if(messageDic == nil){
         return nil;
     }
-    ZIMMessage *message = [[ZIMMessage alloc] init];
-    [message safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"type"]  forKey:@"type"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"messageID"]  forKey:@"messageID"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"localMessageID"]  forKey:@"localMessageID"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"senderUserID"]  forKey:@"senderUserID"];
-    [message safeSetValue:(NSString *)[messageDic objectForKey:@"conversationID"] forKey:@"conversationID"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"direction"]  forKey:@"direction"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"sentStatus"]  forKey:@"sentStatus"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"conversationType"]  forKey:@"conversationType"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"timestamp"]  forKey:@"timestamp"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"conversationSeq"]  forKey:@"conversationSeq"];
-    [message safeSetValue:(NSNumber *)[messageDic objectForKey:@"orderKey"]  forKey:@"orderKey"];
-    switch (message.type) {
+    id msg;
+    ZIMMessageType msgType = ((NSNumber *)[messageDic safeObjectForKey:@"type"]).intValue;
+    switch (msgType) {
         case ZIMMessageTypeUnknown:{
-            return message;
+            msg = [[ZIMMessage alloc] init];
+            break;
         }
         case ZIMMessageTypeText:{
-            ZIMTextMessage *txtMsg = (ZIMTextMessage *)message;
-            txtMsg.message = (NSString *)[messageDic safeObjectForKey:@"message"];
-            return txtMsg;
+            msg = [[ZIMTextMessage alloc] init];
+            ((ZIMTextMessage *)msg).message = (NSString *)[messageDic safeObjectForKey:@"message"];
+            break;
         }
         case ZIMMessageTypeCommand:{
-            ZIMCommandMessage *cmdMsg = (ZIMCommandMessage *)message;
-            cmdMsg.message = ((FlutterStandardTypedData *)[messageDic safeObjectForKey:@"message"]).data;
-            return cmdMsg;
+            msg = [[ZIMCommandMessage alloc] init];
+            ((ZIMCommandMessage *)msg).message = ((FlutterStandardTypedData *)[messageDic safeObjectForKey:@"message"]).data;
+            break;
         }
         case ZIMMessageTypeBarrage:{
-            ZIMBarrageMessage *brgMsg = (ZIMBarrageMessage *)message;
-            brgMsg.message = (NSString *)[messageDic safeObjectForKey:@"message"];
-            return brgMsg;
+            msg = [[ZIMBarrageMessage alloc] init];
+            ((ZIMBarrageMessage *)msg).message = (NSString *)[messageDic safeObjectForKey:@"message"];
+            break;
+        }
+        case ZIMMessageTypeFile:{
+            msg = [[ZIMFileMessage alloc] init];
+            break;
+        }
+        case ZIMMessageTypeAudio:{
+            msg = [[ZIMAudioMessage alloc] init];
+             
+            ((ZIMAudioMessage *)msg).audioDuration = ((NSNumber *)[messageDic safeObjectForKey:@"audioDuration"]).unsignedIntValue;
+            break;
+        }
+        case ZIMMessageTypeVideo:{
+            msg = [[ZIMVideoMessage alloc] init];
+            ((ZIMVideoMessage *)msg).videoDuration = ((NSNumber *)[messageDic safeObjectForKey:@"videoDuration"]).unsignedIntValue;
+            [((ZIMVideoMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"videoFirstFrameDownloadUrl"] forKey:@"videoFirstFrameDownloadUrl"];
+            [((ZIMVideoMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"videoFirstFrameLocalPath"] forKey:@"videoFirstFrameLocalPath"];
+            break;
+        }
+        case ZIMMessageTypeImage:{
+            msg = [[ZIMImageMessage alloc] init];
+            ((ZIMImageMessage *)msg).thumbnailDownloadUrl = [messageDic safeObjectForKey:@"thumbnailDownloadUrl"];
+            [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"thumbnailLocalPath"] forKey:@"thumbnailLocalPath"];
+            [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"largeImageDownloadUrl"] forKey:@"largeImageDownloadUrl"];
+            [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"largeImageLocalPath"] forKey:@"largeImageLocalPath"];
+            break;
         }
         default:
             break;
     }
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"type"]  forKey:@"type"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"messageID"]  forKey:@"messageID"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"localMessageID"]  forKey:@"localMessageID"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"senderUserID"]  forKey:@"senderUserID"];
+    [msg safeSetValue:(NSString *)[messageDic objectForKey:@"conversationID"] forKey:@"conversationID"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"direction"]  forKey:@"direction"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"sentStatus"]  forKey:@"sentStatus"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"conversationType"]  forKey:@"conversationType"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"timestamp"]  forKey:@"timestamp"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"conversationSeq"]  forKey:@"conversationSeq"];
+    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"orderKey"]  forKey:@"orderKey"];
+    
+    if([[msg superclass] isKindOfClass:[ZIMMediaMessage class]]){
+        [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileLocalPath"]  forKey:@"fileLocalPath"];
+        [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileDownloadUrl"] forKey:@"fileDownloadUrl"];
+        [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileUID"] forKey:@"fileUID"];
+        [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileName"] forKey:@"fileName"];
+        [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"fileSize"] forKey:@"fileSize"];
+    }
+    
+    return msg;
 }
 
 +(NSDictionary *)cnvZIMMessageObjectToDic:(ZIMMessage *)message{
@@ -167,6 +204,16 @@
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.conversationSeq] forKey:@"conversationSeq"];
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.orderKey] forKey:@"orderKey"];
     
+    if([message.superclass isKindOfClass:[ZIMMediaMessage class]]){
+        ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
+        [messageDic safeSetObject:mediaMsg.fileLocalPath forKey:@"fileLocalPath"];
+        [messageDic safeSetObject:mediaMsg.fileDownloadUrl forKey:@"fileDownloadUrl"];
+        [messageDic safeSetObject:mediaMsg.fileUID forKey:@"fileUID"];
+        [messageDic safeSetObject:mediaMsg.fileName forKey:@"fileName"];
+        [messageDic safeSetObject:[NSNumber numberWithLongLong:mediaMsg.fileSize] forKey:@"fileSize"];
+        
+    }
+    
     switch (message.type) {
         case ZIMMessageTypeUnknown:{
             break;
@@ -184,6 +231,24 @@
         case ZIMMessageTypeBarrage:{
             ZIMBarrageMessage *brgMsg = (ZIMBarrageMessage *)message;
             [messageDic safeSetObject:brgMsg.message forKey:@"message"];
+            break;
+        }
+        case ZIMMessageTypeFile:{
+            break;
+        }
+        case ZIMMessageTypeImage:{
+            ZIMImageMessage *imgMsg = (ZIMImageMessage *)message;
+            [messageDic safeSetObject:imgMsg.thumbnailDownloadUrl forKey:@"thumbnailDownloadUrl"];
+            [messageDic safeSetObject:imgMsg.thumbnailLocalPath forKey:@"thumbnailLocalPath"];
+            [messageDic safeSetObject:imgMsg.largeImageDownloadUrl forKey:@"largeImageDownloadUrl"];
+            [messageDic safeSetObject:imgMsg.largeImageLocalPath forKey:@"largeImageLocalPath"];
+            break;
+        }
+        case ZIMMessageTypeVideo:{
+            ZIMVideoMessage *videoMsg = (ZIMVideoMessage *)message;
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedInt:videoMsg.videoDuration] forKey:@"videoDuration"];
+            [messageDic safeSetObject:videoMsg.videoFirstFrameDownloadUrl forKey:@"videoFirstFrameDownloadUrl"];
+            [messageDic safeSetObject:videoMsg.videoFirstFrameLocalPath forKey:@"videoFirstFrameLocalPath"];
             break;
         }
         default:
@@ -558,4 +623,74 @@
     }
     return basicList;
 }
+
++(nullable NSDictionary *)cnvZIMCallUserInfoObjectToDic:(ZIMCallUserInfo *)callUserInfo{
+    if(callUserInfo == nil || callUserInfo == NULL || [callUserInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *callUserInfoDic = [[NSMutableDictionary alloc] init];
+    [callUserInfoDic safeSetObject:callUserInfo.userID forKey:@"userID"];
+    [callUserInfoDic safeSetObject:[NSNumber numberWithInt:(int)callUserInfo.state] forKey:@"state"];
+    return callUserInfoDic;
+}
+
++(nullable NSArray *)cnvZIMCallUserInfoListToBasicList:(NSArray<ZIMCallUserInfo *> *)callUserInfoList{
+    if(callUserInfoList == nil || callUserInfoList == NULL || [callUserInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicList = [[NSMutableArray alloc] init];
+    for (ZIMCallUserInfo *userInfo in callUserInfoList) {
+        NSDictionary *userInfoDic = [ZIMPluginConverter cnvZIMCallUserInfoObjectToDic:userInfo];
+        [basicList safeAddObject:userInfoDic];
+    }
+    return basicList;
+}
+
++(nullable ZIMCallInviteConfig *)cnvZIMCallInviteConfigDicToObject:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallInviteConfig *config = [[ZIMCallInviteConfig alloc] init];
+    config.timeout = ((NSNumber *)[configDic safeObjectForKey:@"timeout"]).unsignedIntValue;
+    config.extendedData = [configDic safeObjectForKey:@"extendedData"];
+    return config;
+}
+
++(nullable NSDictionary *)cnvZIMCallInvitationSentInfoObjectToDic:(nullable ZIMCallInvitationSentInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
+    [infoDic safeSetObject:[ZIMPluginConverter cnvZIMCallUserInfoListToBasicList:info.errorInvitees] forKey:@"errorInvitees"];
+    return infoDic;
+}
+
++(nullable ZIMCallCancelConfig *)cnvZIMCallCancelConfigDicToObject:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallCancelConfig *config = [[ZIMCallCancelConfig alloc] init];
+    config.extendedData = [configDic safeObjectForKey:@"extendedData"];
+    return config;
+}
+
++(nullable ZIMCallAcceptConfig *)cnvZIMCallAcceptConfigDicToObject:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallAcceptConfig *config = [[ZIMCallAcceptConfig alloc] init];
+    config.extendedData = [configDic safeObjectForKey:@"extendedData"];
+    return config;
+}
+
++(nullable ZIMCallRejectConfig *)cnvZIMCallRejectConfigDicToObject:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallRejectConfig *config = [[ZIMCallRejectConfig alloc] init];
+    config.extendedData = [configDic safeObjectForKey:@"extendedData"];
+    return config;
+}
+
 @end

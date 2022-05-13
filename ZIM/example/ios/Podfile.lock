@@ -3,7 +3,7 @@ PODS:
   - zim (0.0.1):
     - Flutter
     - ZIM
-  - ZIM (2.0.0)
+  - ZIM (2.1.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -21,7 +21,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  ZIM: 3d210e70ce15276dd37f0ed69e1f7f0e4b097767
+  ZIM: 6a4f294825ac93f16c5101d3e97d211c2d17fa33
   zim: 3ab2dd770a02666818a439bb0ab7ac6b480fce1c
 
 PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d

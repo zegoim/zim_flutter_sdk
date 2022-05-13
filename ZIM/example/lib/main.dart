@@ -46,6 +46,10 @@ class _MyAppState extends State<MyApp> {
       print(event);
       print(extendedData);
     };
+    ZIMMessage fileMsg = ZIMFileMessage();
+    ZIMMessage txtMsg = ZIMTextMessage();
+    print(fileMsg is ZIMMediaMessage);
+    print(txtMsg is ZIMMediaMessage);
     await ZIM.getInstance().create(2845718148);
     try {
       await ZIM.getInstance().login('510', '',

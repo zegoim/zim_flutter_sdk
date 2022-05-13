@@ -27,7 +27,18 @@ enum ZIMRoomEvent {
 
 enum ZIMMessagePriority { low, medium, high }
 
-enum ZIMMessageType { unKnown, text, command, barrage }
+enum ZIMMessageType {
+  unKnown,
+  text,
+  command,
+  barrage,
+  image,
+  file,
+  audio,
+  video
+}
+
+enum ZIMMediaFileType { originalFile, largeImage, thumbnail, videoFirstFrame }
 
 enum ZIMRoomAttributesUpdateAction { set, delete }
 
@@ -142,6 +153,39 @@ class ZIMBarrageMessage extends ZIMMessage {
     textMessage.message = message;
     return textMessage;
   }
+}
+
+class ZIMMediaMessage extends ZIMMessage {
+  String fileLocalPath = "";
+  String fileDownloadUrl = "";
+  String fileUID = "";
+  String fileName = "";
+  int fileSize = 0;
+}
+
+typedef ZIMMediaUploadingProgress = void Function(
+    ZIMMessage message, int currentFileSize, int totalFileSize);
+
+typedef ZIMMediaDownloadingProgress = void Function(
+    ZIMMessage message, int currentFileSize, int totalFileSize);
+
+class ZIMImageMessage extends ZIMMediaMessage {
+  String thumbnailDownloadUrl = "";
+  String thumbnailLocalPath = "";
+  String largeImageDownloadUrl = "";
+  String largeImageLocalPath = "";
+}
+
+class ZIMFileMessage extends ZIMMediaMessage {}
+
+class ZIMAudioMessage extends ZIMMediaMessage {
+  int audioDuration = 0;
+}
+
+class ZIMVideoMessage extends ZIMMediaMessage {
+  int videoDuration = 0;
+  String videoFirstFrameDownloadUrl = "";
+  String videoFirstFrameLocalPath = "";
 }
 
 class ZIMConversation {
@@ -370,6 +414,11 @@ class ZIMConversationNotificationStatusSetResult {
 class ZIMMessageSentResult {
   ZIMMessage message;
   ZIMMessageSentResult({required this.message});
+}
+
+class ZIMMediaDownloadedResult {
+  ZIMMessage message;
+  ZIMMediaDownloadedResult({required this.message});
 }
 
 class ZIMMessageQueriedResult {

@@ -85,4 +85,15 @@
 +(nullable NSDictionary *)cnvZIMGroupAttributesUpdateInfoObjectToDic:(nullable ZIMGroupAttributesUpdateInfo *)updateInfo;
 
 +(nullable NSArray *)cnvZIMGroupAttributesUpdateInfoListToBasicList:(nullable NSArray<ZIMGroupAttributesUpdateInfo *> *)updateInfoList;
+
++(nullable ZIMCallInviteConfig *)cnvZIMCallInviteConfigDicToObject:(nullable NSDictionary *)configDic;
+
++(nullable NSDictionary *)cnvZIMCallInvitationSentInfoObjectToDic:(nullable ZIMCallInvitationSentInfo *)info;
+
++(nullable ZIMCallCancelConfig *)cnvZIMCallCancelConfigDicToObject:(nullable NSDictionary *)configDic;
+
++(nullable ZIMCallAcceptConfig *)cnvZIMCallAcceptConfigDicToObject:(nullable NSDictionary *)configDic;
+
++(nullable ZIMCallRejectConfig *)cnvZIMCallRejectConfigDicToObject:(nullable NSDictionary *)configDic;
+
 @end
