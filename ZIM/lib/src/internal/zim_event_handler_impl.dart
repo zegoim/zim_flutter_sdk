@@ -205,7 +205,12 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
 
         ZIMEventHandler.onCallInvitationTimeout!(map['callID']);
         break;
+      case 'onCallInviteesAnsweredTimeout':
+        if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;
 
+        ZIMEventHandler.onCallInviteesAnsweredTimeout!(
+            map['invitees'], map['callID']);
+        break;
       case 'downloadMediaFileProgress':
         String progressID = map['progressID'];
         ZIMMessage message =

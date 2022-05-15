@@ -164,22 +164,23 @@ class ZIMImpl implements ZIM {
   @override
   Future<ZIMMediaDownloadedResult> downloadMediaFile(ZIMMediaMessage message,
       ZIMMediaFileType fileType, ZIMMediaDownloadingProgress? progress) async {
+    Map resultMap;
     if (progress != null) {
-      String uuid = ZIMCommonTools.uuid;
-      ZIMCommonData.mediaDownloadingProgressMap[uuid] = progress;
-      mediaDownloadingProgressMap[uuid] = progress;
-      Map resultMap = await _channel.invokeMethod('downloadMediaFile', {
+      String progressID = ZIMCommonTools.uuid;
+      ZIMCommonData.mediaDownloadingProgressMap[progressID] = progress;
+      resultMap = await _channel.invokeMethod('downloadMediaFile', {
         'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
         'fileType': ZIMMediaFileTypeExtension.valueMap[fileType],
-        'progressID': uuid
+        'progressID': progressID
       });
-      mediaDownloadingProgressMap.remove(uuid);
+      ZIMCommonData.mediaDownloadingProgressMap.remove(progressID);
     } else {
-      Map resultMap = await _channel.invokeMethod('downloadMediaFile', {
+      resultMap = await _channel.invokeMethod('downloadMediaFile', {
         'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
         'fileType': ZIMMediaFileTypeExtension.valueMap[fileType]
       });
     }
+    return ZIMConverter.cnvZIMMediaDownloadedResultMapToObject(resultMap);
   }
 
   @override
@@ -188,9 +189,30 @@ class ZIMImpl implements ZIM {
       String toConversationID,
       ZIMConversationType conversationType,
       ZIMMessageSendConfig config,
-      ZIMMediaUploadingProgress progress) {
-    // TODO: implement sendMediaMessage
-    throw UnimplementedError();
+      ZIMMediaUploadingProgress? progress) async {
+    Map resultMap;
+    if (progress != null) {
+      String progressID = ZIMCommonTools.uuid;
+      ZIMCommonData.mediaUploadingProgressMap[progressID] = progress;
+      resultMap = await _channel.invokeMethod('sendMediaMessage', {
+        'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+        'toConversationID': toConversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType],
+        'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config),
+        'progressID': progressID
+      });
+      ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
+    } else {
+      resultMap = await _channel.invokeMethod('sendMediaMessage', {
+        'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+        'toConversationID': toConversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType],
+        'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
+      });
+    }
+    return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
   }
 
   @override

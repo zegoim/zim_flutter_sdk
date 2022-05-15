@@ -367,11 +367,6 @@ class ZIMCallInvitationTimeoutInfo {
 
 //MARK : Result
 
-// class ZIMLoggedInResult {
-//   ZIMError errorInfo;
-//   ZIMLoggedInResult({required this.errorInfo});
-// }
-
 class ZIMTokenRenewedResult {
   String token;
   ZIMTokenRenewedResult({required this.token});
@@ -602,10 +597,11 @@ class ZIMGroupMemberListQueriedResult {
 }
 
 class ZIMCallInvitationSentResult {
-  String callID;
-  List<String> errorInvitees;
+  String callID = "";
+  ZIMCallInvitationSentInfo info;
+  List<String> errorInvitees = [];
   ZIMCallInvitationSentResult(
-      {required this.callID, required this.errorInvitees});
+      {required this.callID, required this.info, required this.errorInvitees});
 }
 
 class ZIMCallCancelSentResult {

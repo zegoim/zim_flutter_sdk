@@ -23,8 +23,6 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
   /// when the Flutter Engine is detached from the Activity
   private MethodChannel methodChannel;
 
-  private EventChannel eventChannel;
-
   private final Class<?> manager;
 
   private ZIMPluginEventHandler zimPluginEventHandler = null;
@@ -47,7 +45,7 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
     methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "zim");
     methodChannel.setMethodCallHandler(this);
 
-    eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(),"zim_event_handler");
+    EventChannel eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "zim_event_handler");
     eventChannel.setStreamHandler(this);
 
     this.binding = flutterPluginBinding;

@@ -8,7 +8,7 @@
 
 @implementation ZIMPluginConverter
 
-+(NSDictionary *)cnvZIMErrorObjectToDic:(ZIMError *)errorInfo{
++(nullable NSDictionary *)cnvZIMErrorObjectToDic:(nullable ZIMError *)errorInfo{
     if(errorInfo == nil || errorInfo == NULL || [errorInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -18,7 +18,7 @@
     return errorInfoDic;
 }
 
-+(NSDictionary *)cnvZIMUserInfoObjectToBasic:(ZIMUserInfo *)userInfo{
++(nullable NSDictionary *)cnvZIMUserInfoObjectToBasic:(nullable ZIMUserInfo *)userInfo{
     if(userInfo == nil || userInfo == NULL || [userInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -28,7 +28,7 @@
     return userInfoDic;
 }
 
-+(NSArray *)cnvZIMUserInfoListTobasicList:(NSArray<ZIMUserInfo *> *)userInfoList{
++(nullable NSArray *)cnvZIMUserInfoListTobasicList:(nullable NSArray<ZIMUserInfo *> *)userInfoList{
     if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
         return nil;
     }
@@ -40,8 +40,8 @@
     return basicZIMUserInfoList;
 }
 
-+(ZIMConversation *)cnvZIMConversationDicToObject:(NSDictionary *)conversationDic{
-    if(conversationDic == nil){
++(nullable ZIMConversation *)cnvZIMConversationDicToObject:(nullable NSDictionary *)conversationDic{
+    if(conversationDic == nil || conversationDic == NULL || [conversationDic isEqual:[NSNull null]]){
         return nil;
     }
     ZIMConversation *conversation = [[ZIMConversation alloc] init];
@@ -55,8 +55,8 @@
     return conversation;
 }
 
-+(NSDictionary *)cnvZIMConversationObjectToDic:(ZIMConversation *)conversation{
-    if(conversation == nil){
++(nullable NSDictionary *)cnvZIMConversationObjectToDic:(nullable ZIMConversation *)conversation{
+    if(conversation == nil || conversation == NULL || [conversation isEqual:[NSNull null]]){
         return nil;
     }
     NSMutableDictionary *conversationDic = [[NSMutableDictionary alloc] init];
@@ -71,7 +71,7 @@
     
 }
 
-+(NSArray *)cnvZIMConversationListObjectToBasic:(NSArray<ZIMConversation *> *)conversationList{
++(nullable NSArray *)cnvZIMConversationListObjectToBasic:(nullable NSArray<ZIMConversation *> *)conversationList{
     if(conversationList == nil || conversationList == NULL || [conversationList isEqual:[NSNull null]]){
         return nil;
     }
@@ -82,7 +82,7 @@
     return conversationBasicList;
 }
 
-+(NSArray *)cnvConversationChangeInfoListToBasicList:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList{
++(nullable NSArray *)cnvConversationChangeInfoListToBasicList:(nullable NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList{
     if(conversationChangeInfoList == nil || conversationChangeInfoList == NULL || [conversationChangeInfoList isEqual:[NSNull null]]){
         return nil;
     }
@@ -94,7 +94,7 @@
     return basicChangeInfoList;
 }
 
-+(NSDictionary *)cnvConversationChangeInfoObjectToDic:(ZIMConversationChangeInfo *)changeInfo{
++(nullable NSDictionary *)cnvConversationChangeInfoObjectToDic:(nullable ZIMConversationChangeInfo *)changeInfo{
     if(changeInfo == nil || changeInfo == NULL || [changeInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -105,8 +105,8 @@
     return changeInfoDic;
 }
 
-+(ZIMMessage *)cnvZIMMessageDicToObject:(NSDictionary *)messageDic{
-    if(messageDic == nil){
++(nullable ZIMMessage *)cnvZIMMessageDicToObject:(nullable NSDictionary *)messageDic{
+    if(messageDic == nil || messageDic == NULL || [messageDic isEqual:[NSNull null]]){
         return nil;
     }
     id msg;
@@ -182,8 +182,8 @@
     return msg;
 }
 
-+(NSDictionary *)cnvZIMMessageObjectToDic:(ZIMMessage *)message{
-    if(message == nil){
++(nullable NSDictionary *)cnvZIMMessageObjectToDic:(nullable ZIMMessage *)message{
+    if(message == nil || message == NULL || [message isEqual:[NSNull null]]){
         return nil;
     }
     NSMutableDictionary *messageDic = [[NSMutableDictionary alloc] init];
@@ -257,7 +257,7 @@
     return messageDic;
 }
 
-+(NSArray *)cnvZIMMessageListToDicList:(NSArray<ZIMMessage *>*)messageList{
++(nullable NSArray *)cnvZIMMessageListToDicList:(nullable NSArray<ZIMMessage *>*)messageList{
     if(messageList == nil || messageList == NULL || [messageList isEqual:[NSNull null]]){
         return nil;
     }
@@ -268,7 +268,7 @@
     return DicArr;
 }
 
-+(NSArray<ZIMMessage *>*)cnvBasicListToZIMMessageList:(NSArray *)basicList{
++(nullable NSArray<ZIMMessage *>*)cnvBasicListToZIMMessageList:(nullable NSArray *)basicList{
     if(basicList == nil || basicList == NULL || [basicList isEqual:[NSNull null]]){
         return nil;
     }
@@ -279,7 +279,7 @@
     return messageList;
 }
 
-+(ZIMMessageDeleteConfig *)cnvZIMMessageDeleteConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMMessageDeleteConfig *)cnvZIMMessageDeleteConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -288,7 +288,7 @@
     return deleteConfig;
 }
 
-+(NSDictionary *)cnvZIMMessageDeleteConfigObjectToDic:(ZIMMessageDeleteConfig *)config{
++(nullable NSDictionary *)cnvZIMMessageDeleteConfigObjectToDic:(nullable ZIMMessageDeleteConfig *)config{
     if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
         return nil;
     }
@@ -299,7 +299,7 @@
 }
 
 
-+(ZIMConversationDeleteConfig *)cnvZIMConversationDeleteConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMConversationDeleteConfig *)cnvZIMConversationDeleteConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -308,7 +308,7 @@
     return deleteConfig;
 }
 
-+(ZIMMessageSendConfig *)cnvZIMMessageSendConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMMessageSendConfig *)cnvZIMMessageSendConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -318,7 +318,7 @@
     return sendConfig;
 }
 
-+(ZIMPushConfig *)cnvZIMPushConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMPushConfig *)cnvZIMPushConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -329,7 +329,7 @@
     return pushConfig;
 }
 
-+(ZIMMessageQueryConfig *)cnvZIMMessageQueryConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMMessageQueryConfig *)cnvZIMMessageQueryConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -340,7 +340,7 @@
     return config;
 }
 
-+(ZIMRoomInfo *)cnvZIMRoomInfoBasicToObject:(NSDictionary *)roomInfoDic{
++(nullable ZIMRoomInfo *)cnvZIMRoomInfoBasicToObject:(nullable NSDictionary *)roomInfoDic{
     if(roomInfoDic == nil || roomInfoDic == NULL || [roomInfoDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -350,7 +350,7 @@
     return roomInfo;
 }
 
-+(NSDictionary *)cnvZIMRoomInfoObjectToBasic:(ZIMRoomInfo *)roomInfo{
++(nullable NSDictionary *)cnvZIMRoomInfoObjectToBasic:(nullable ZIMRoomInfo *)roomInfo{
     if(roomInfo == nil || roomInfo == NULL || [roomInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -360,7 +360,7 @@
     return roomInfoDic;
 }
 
-+(NSDictionary *)cnvZIMRoomFullInfoObjectToDic:(ZIMRoomFullInfo *)roomFullInfo{
++(nullable NSDictionary *)cnvZIMRoomFullInfoObjectToDic:(nullable ZIMRoomFullInfo *)roomFullInfo{
     if(roomFullInfo == nil || roomFullInfo == NULL || [roomFullInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -370,7 +370,7 @@
     return roomFullInfoDic;
 }
 
-+(ZIMRoomAdvancedConfig *)cnvZIMRoomAdvancedConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMRoomAdvancedConfig *)cnvZIMRoomAdvancedConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -380,7 +380,7 @@
     return config;
 }
 
-+(ZIMRoomMemberQueryConfig *)cnvZIMRoomMemberQueryConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMRoomMemberQueryConfig *)cnvZIMRoomMemberQueryConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -390,7 +390,7 @@
     return config;
 }
 
-+(ZIMRoomAttributesSetConfig *)cnvZIMRoomAttributesSetConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMRoomAttributesSetConfig *)cnvZIMRoomAttributesSetConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -401,7 +401,7 @@
     return config;
 }
 
-+(ZIMRoomAttributesDeleteConfig *)cnvZIMRoomAttributesDeleteConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMRoomAttributesDeleteConfig *)cnvZIMRoomAttributesDeleteConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -410,7 +410,7 @@
     return config;
 }
 
-+(ZIMRoomAttributesBatchOperationConfig *)cnvZIMRoomAttributesBatchOperationConfigDicToObject:(NSDictionary *)configDic{
++(nullable ZIMRoomAttributesBatchOperationConfig *)cnvZIMRoomAttributesBatchOperationConfigDicToObject:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -422,7 +422,7 @@
     return config;
 }
 
-+(NSDictionary *)cnvZIMRoomAttributesUpdateInfoObjectToDic:(ZIMRoomAttributesUpdateInfo *)updateInfo{
++(nullable NSDictionary *)cnvZIMRoomAttributesUpdateInfoObjectToDic:(nullable ZIMRoomAttributesUpdateInfo *)updateInfo{
     if(updateInfo == nil || updateInfo == NULL || [updateInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -432,7 +432,7 @@
     return basicUpdateInfo;
 }
 
-+(NSArray *)cnvZIMRoomAttributesUpdateInfoListToBasicList:(NSArray<ZIMRoomAttributesUpdateInfo *> *)updateInfoList{
++(nullable NSArray *)cnvZIMRoomAttributesUpdateInfoListToBasicList:(nullable NSArray<ZIMRoomAttributesUpdateInfo *> *)updateInfoList{
     if(updateInfoList == nil || updateInfoList == NULL || [updateInfoList isEqual:[NSNull null]]){
         return nil;
     }
@@ -444,7 +444,7 @@
     return basicUpadteInfoList;
 }
 
-+(ZIMGroupInfo *)cnvZIMGroupInfoDicToObject:(NSDictionary *)groupInfoDic{
++(nullable ZIMGroupInfo *)cnvZIMGroupInfoDicToObject:(nullable NSDictionary *)groupInfoDic{
     if(groupInfoDic == nil || groupInfoDic == NULL || [groupInfoDic isEqual:[NSNull null]]){
         return nil;
     }
@@ -454,7 +454,7 @@
     return info;
 }
 
-+(NSDictionary *)cnvZIMGroupInfoObjectToDic:(ZIMGroupInfo *)groupInfo{
++(nullable NSDictionary *)cnvZIMGroupInfoObjectToDic:(nullable ZIMGroupInfo *)groupInfo{
     if(groupInfo == nil || groupInfo == NULL || [groupInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -464,7 +464,7 @@
     return groupInfoDic;
 }
 
-+(NSDictionary *)cnvZIMGroupMemberInfoObjectToDic:(ZIMGroupMemberInfo *)memberInfo{
++(nullable NSDictionary *)cnvZIMGroupMemberInfoObjectToDic:(nullable ZIMGroupMemberInfo *)memberInfo{
     if(memberInfo == nil || memberInfo == NULL || [memberInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -480,7 +480,7 @@
     
 }
 
-+(NSArray *)cnvZIMGroupMemberInfoListToBasicList:(NSArray<ZIMGroupMemberInfo *> *)memberInfoList{
++(nullable NSArray *)cnvZIMGroupMemberInfoListToBasicList:(nullable NSArray<ZIMGroupMemberInfo *> *)memberInfoList{
     if(memberInfoList == nil || memberInfoList == NULL || [memberInfoList isEqual:[NSNull null]]){
         return nil;
     }
@@ -492,7 +492,7 @@
     return basicList;
 }
 
-+(NSDictionary *)cnvZIMErrorUserInfoToDic:(ZIMErrorUserInfo *)errorUserInfo{
++(nullable NSDictionary *)cnvZIMErrorUserInfoToDic:(nullable ZIMErrorUserInfo *)errorUserInfo{
     if(errorUserInfo == nil || errorUserInfo == NULL || [errorUserInfo isEqual:[NSNull null]]){
         return nil;
     }
@@ -502,7 +502,7 @@
     return errorUserInfoDic;
 }
 
-+(NSArray *)cnvZIMErrorUserInfoListToBasicList:(NSArray<ZIMErrorUserInfo *> *)errorUserInfoList{
++(nullable NSArray *)cnvZIMErrorUserInfoListToBasicList:(nullable NSArray<ZIMErrorUserInfo *> *)errorUserInfoList{
     if(errorUserInfoList == nil || errorUserInfoList == NULL || [errorUserInfoList isEqual:[NSNull null]]){
         return nil;
     }
@@ -514,7 +514,7 @@
     return basicList;
 }
 
-+(NSDictionary *)cnvZIMGroupFullInfoObjectToDic:(ZIMGroupFullInfo *)groupFullInfo{
++(nullable NSDictionary *)cnvZIMGroupFullInfoObjectToDic:(nullable ZIMGroupFullInfo *)groupFullInfo{
     if(groupFullInfo == nil || groupFullInfo == NULL || [groupFullInfo isEqual:[NSNull null]]){
         return nil;
     }
