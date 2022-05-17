@@ -55,7 +55,7 @@ static ZIM *zim;
       [zim setEventHandler:self];
       result(nil);
   }
-  else if ([@"destory" isEqualToString:call.method]){
+  else if ([@"destroy" isEqualToString:call.method]){
       [zim destroy];
       zim = nil;
       result(nil);

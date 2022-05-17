@@ -15,8 +15,7 @@ class ZIMConverter {
 
     List<ZIMUserInfo> userList = [];
     for (Map userInfoMap in userListBasic) {
-      ZIMUserInfo userInfo = ZIMUserInfo();
-      userInfo.userID = userInfoMap['userID'];
+      ZIMUserInfo userInfo = ZIMUserInfo(userID: userInfoMap['userID']);
       userInfo.userName = userInfoMap['userName'];
       userList.add(userInfo);
     }
@@ -55,14 +54,13 @@ class ZIMConverter {
       ZIMConversationQueryConfig config) {
     Map queryConfigMap = {};
     queryConfigMap['count'] = config.count;
-    if (config.nextConversation != null) {
-      queryConfigMap['nextConversation'] =
-          cnvZIMConversationObjectToMap(config.nextConversation!);
-    }
+    queryConfigMap['nextConversation'] =
+        cnvZIMConversationObjectToMap(config.nextConversation);
     return queryConfigMap;
   }
 
-  static Map cnvZIMConversationObjectToMap(ZIMConversation conversation) {
+  static Map? cnvZIMConversationObjectToMap(ZIMConversation? conversation) {
+    if (conversation == null) return null;
     Map conversationMap = {};
     conversationMap['conversationID'] = conversation.conversationID;
     conversationMap['conversationName'] = conversation.conversationName;
@@ -169,19 +167,13 @@ class ZIMConverter {
         message = ZIMMessage();
         break;
       case ZIMMessageType.text:
-        message = ZIMTextMessage();
-        message as ZIMTextMessage;
-        message.message = resultMap['message'];
+        message = ZIMTextMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.command:
-        message = ZIMCommandMessage();
-        (message as ZIMCommandMessage);
-        message.message = resultMap['message'];
+        message = ZIMCommandMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.barrage:
-        message = ZIMBarrageMessage();
-        (message as ZIMBarrageMessage);
-        message.message = resultMap['message'];
+        message = ZIMBarrageMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.image:
         message = ZIMImageMessage(fileLocalPath: resultMap['fileLocalPath']);
@@ -332,24 +324,19 @@ class ZIMConverter {
   static Map cnvZIMMessageSendConfigObjectToMap(
       ZIMMessageSendConfig sendConfig) {
     Map sendConfigMap = {};
-    if (sendConfig.pushConfig != null) {
-      sendConfigMap['pushConfig'] =
-          cnvZIMPushConfigObjectToMap(sendConfig.pushConfig!);
-    }
+    sendConfigMap['pushConfig'] =
+        cnvZIMPushConfigObjectToMap(sendConfig.pushConfig);
     sendConfigMap['priority'] =
         ZIMMessagePriorityExtension.valueMap[sendConfig.priority];
     return sendConfigMap;
   }
 
-  static Map cnvZIMPushConfigObjectToMap(ZIMPushConfig pushConfig) {
+  static Map? cnvZIMPushConfigObjectToMap(ZIMPushConfig? pushConfig) {
+    if (pushConfig == null) return null;
     Map pushConfigMap = {};
     pushConfigMap['title'] = pushConfig.title;
     pushConfigMap['content'] = pushConfig.content;
-    if (pushConfig.extendedData != null) {
-      pushConfigMap['extendedData'] = pushConfig.extendedData!;
-    } else {
-      pushConfigMap['extendedData'] = "";
-    }
+    pushConfigMap['extendedData'] = pushConfig.extendedData;
     return pushConfigMap;
   }
 
@@ -406,8 +393,7 @@ class ZIMConverter {
   }
 
   static ZIMRoomInfo cnvZIMRoomInfoMapToObject(Map roomInfoMap) {
-    ZIMRoomInfo roomInfo = ZIMRoomInfo();
-    roomInfo.roomID = roomInfoMap["roomID"];
+    ZIMRoomInfo roomInfo = ZIMRoomInfo(roomID: roomInfoMap["roomID"]);
     roomInfo.roomName = roomInfoMap["roomName"];
 
     return roomInfo;
@@ -461,8 +447,7 @@ class ZIMConverter {
   }
 
   static ZIMUserInfo cnvZIMUserInfoMapToObject(Map userInfoMap) {
-    ZIMUserInfo userInfo = ZIMUserInfo();
-    userInfo.userID = userInfoMap['userID'];
+    ZIMUserInfo userInfo = ZIMUserInfo(userID: userInfoMap['userID']);
     userInfo.userName = userInfoMap['userName'];
     return userInfo;
   }
@@ -773,9 +758,9 @@ class ZIMConverter {
 
   static ZIMGroupOperatedInfo cnvZIMGroupOperatedInfoMapToObject(
       Map resultMap) {
-    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo();
-    info.operatedUserInfo =
-        cnvZIMGroupMemberInfoMapToObject(resultMap['ZIMGroupOperatedInfo']);
+    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(
+        operatedUserInfo: cnvZIMGroupMemberInfoMapToObject(
+            resultMap['ZIMGroupOperatedInfo']));
     return info;
   }
 

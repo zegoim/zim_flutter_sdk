@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-export 'package:flutter/services.dart';
 
 enum ZIMConnectionState { disconnected, connecting, connected, reconnecting }
 
@@ -78,26 +77,26 @@ enum ZIMCallRejectState { busy, reject }
 typedef ZIMGroupMemberRole = int;
 
 class ZIMError {
-  int code;
-  String message;
+  int code = 0;
+  String message = '';
   ZIMError({required this.code, required this.message});
 }
 
 class ZIMLogConfig {
-  String logPath;
-  int logSize;
+  String logPath = '';
+  int logSize = 0;
   ZIMLogConfig({required this.logPath, required this.logSize});
 }
 
 class ZIMCacheConfig {
-  String cachePath;
+  String cachePath = '';
   ZIMCacheConfig({required this.cachePath});
 }
 
 class ZIMPushConfig {
-  String title;
-  String content;
-  String? extendedData;
+  String title = '';
+  String content = '';
+  String extendedData = '';
   ZIMPushConfig({required this.title, required this.content});
 }
 
@@ -108,8 +107,9 @@ class ZIMMessageSendConfig {
 }
 
 class ZIMUserInfo {
-  String userID = "";
-  String? userName;
+  String userID = '';
+  String userName = '';
+  ZIMUserInfo({required this.userID});
 }
 
 class ZIMMessage {
@@ -119,7 +119,7 @@ class ZIMMessage {
   String senderUserID = "";
   String conversationID = "";
   ZIMMessageDirection direction = ZIMMessageDirection.send;
-  ZIMMessageSentStatus sentStatus = ZIMMessageSentStatus.success;
+  ZIMMessageSentStatus sentStatus = ZIMMessageSentStatus.sending;
   ZIMConversationType conversationType = ZIMConversationType.peer;
   int timestamp = 0;
   int conversationSeq = 0;
@@ -127,39 +127,35 @@ class ZIMMessage {
 }
 
 class ZIMTextMessage extends ZIMMessage {
-  String message = "";
+  String message = '';
 
-  static ZIMTextMessage initWithMessage(String message) {
-    ZIMTextMessage textMessage = ZIMTextMessage();
-    textMessage.message = message;
-    return textMessage;
+  ZIMTextMessage({required this.message}) {
+    super.type = ZIMMessageType.text;
   }
 }
 
 class ZIMCommandMessage extends ZIMMessage {
-  Uint8List message = Uint8List(0);
+  Uint8List message;
 
-  static ZIMCommandMessage initWithMessage(Uint8List message) {
-    ZIMCommandMessage commandMessage = ZIMCommandMessage();
-    commandMessage.message = message;
-    return commandMessage;
+  ZIMCommandMessage({
+    required this.message,
+  }) {
+    super.type = ZIMMessageType.command;
   }
 }
 
 class ZIMBarrageMessage extends ZIMMessage {
   String message = "";
-  static ZIMTextMessage initWithMessage(String message) {
-    ZIMTextMessage textMessage = ZIMTextMessage();
-    textMessage.message = message;
-    return textMessage;
+  ZIMBarrageMessage({required this.message}) {
+    super.type = ZIMMessageType.barrage;
   }
 }
 
 class ZIMMediaMessage extends ZIMMessage {
   String fileLocalPath;
-  String fileDownloadUrl = "";
-  String fileUID = "";
-  String fileName = "";
+  String fileDownloadUrl = '';
+  String fileUID = '';
+  String fileName = '';
   int fileSize = 0;
   ZIMMediaMessage({required this.fileLocalPath});
 }
@@ -171,35 +167,42 @@ typedef ZIMMediaDownloadingProgress = void Function(
     ZIMMessage message, int currentFileSize, int totalFileSize);
 
 class ZIMImageMessage extends ZIMMediaMessage {
-  String thumbnailDownloadUrl = "";
-  String thumbnailLocalPath = "";
-  String largeImageDownloadUrl = "";
-  String largeImageLocalPath = "";
-  ZIMImageMessage({required super.fileLocalPath});
+  String thumbnailDownloadUrl = '';
+  String thumbnailLocalPath = '';
+  String largeImageDownloadUrl = '';
+  String largeImageLocalPath = '';
+  ZIMImageMessage({required super.fileLocalPath}) {
+    super.type = ZIMMessageType.image;
+  }
 }
 
 class ZIMFileMessage extends ZIMMediaMessage {
-  ZIMFileMessage({required super.fileLocalPath});
+  ZIMFileMessage({required super.fileLocalPath}) {
+    super.type = ZIMMessageType.file;
+  }
 }
 
 class ZIMAudioMessage extends ZIMMediaMessage {
   int audioDuration = 0;
 
-  ZIMAudioMessage({required super.fileLocalPath});
+  ZIMAudioMessage({required super.fileLocalPath}) {
+    super.type = ZIMMessageType.audio;
+  }
 }
 
 class ZIMVideoMessage extends ZIMMediaMessage {
   int videoDuration = 0;
-  String videoFirstFrameDownloadUrl = "";
-  String videoFirstFrameLocalPath = "";
+  String videoFirstFrameDownloadUrl = '';
+  String videoFirstFrameLocalPath = '';
 
-  ZIMVideoMessage({required String fileLocalPath})
-      : super(fileLocalPath: fileLocalPath);
+  ZIMVideoMessage({required super.fileLocalPath}) {
+    super.type = ZIMMessageType.video;
+  }
 }
 
 class ZIMConversation {
-  String conversationID = "";
-  String conversationName = "";
+  String conversationID = '';
+  String conversationName = '';
   ZIMConversationType type = ZIMConversationType.peer;
   ZIMConversationNotificationStatus notificationStatus =
       ZIMConversationNotificationStatus.notify;
@@ -223,8 +226,9 @@ class ZIMConversationChangeInfo {
 }
 
 class ZIMRoomInfo {
-  String roomID = "";
-  String roomName = "";
+  String roomID = '';
+  String roomName = '';
+  ZIMRoomInfo({required this.roomID});
 }
 
 class ZIMRoomFullInfo {
@@ -248,7 +252,7 @@ class ZIMRoomMemberQueryConfig {
 }
 
 class ZIMRoomAdvancedConfig {
-  Map<String, String>? roomAttributes;
+  Map<String, String> roomAttributes = {};
   int roomDestroyDelayTime = 0;
 }
 
@@ -302,10 +306,13 @@ class ZIMGroup {
 class ZIMGroupMemberInfo extends ZIMUserInfo {
   String memberNickname = "";
   ZIMGroupMemberRole memberRole = 1;
+
+  ZIMGroupMemberInfo({required super.userID});
 }
 
 class ZIMGroupOperatedInfo {
-  ZIMGroupMemberInfo operatedUserInfo = ZIMGroupMemberInfo();
+  ZIMGroupMemberInfo operatedUserInfo;
+  ZIMGroupOperatedInfo({required this.operatedUserInfo});
 }
 
 class ZIMGroupMemberQueryConfig {

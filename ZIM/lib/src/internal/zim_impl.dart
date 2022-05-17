@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:zim/src/internal/zim_common_data.dart';
 import 'package:zim/src/internal/zim_converter.dart';
 import 'package:zim/zim.dart';

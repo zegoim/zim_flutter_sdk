@@ -139,6 +139,10 @@ void main() {
     'lastMessage': null
   };
 
+  Map roomFullInfoMap = {
+    'baseInfo': {'roomID': 'roomID', 'roomName': 'roomName'}
+  };
+
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
       switch (methodCall.method) {
@@ -214,6 +218,10 @@ void main() {
             'conversationType': 1,
             'messageList': [txtMsgMap]
           };
+        case 'createRoom':
+          return {'roomInfo': roomFullInfoMap};
+        case 'createRoomWithConfig':
+          return {'roomInfo': roomFullInfoMap};
         default:
       }
     });
@@ -318,8 +326,7 @@ void main() {
   });
 
   test('sendPeerMessage', () async {
-    ZIMTextMessage txtMsg = ZIMTextMessage();
-    txtMsg.message = 'test msg.';
+    ZIMTextMessage txtMsg = ZIMTextMessage(message: 'test msg.');
     ZIMMessageSendConfig sendConfig =
         ZIMMessageSendConfig(priority: ZIMMessagePriority.high);
     await ZIM
@@ -332,8 +339,7 @@ void main() {
   test('sendGroupMessage', () async {
     List<int> list = [0, 1, 2];
     Uint8List bytes = Uint8List.fromList(list);
-    ZIMCommandMessage cmdMsg = ZIMCommandMessage();
-    cmdMsg.message = bytes;
+    ZIMCommandMessage cmdMsg = ZIMCommandMessage(message: bytes);
     ZIMMessageSendConfig config =
         ZIMMessageSendConfig(priority: ZIMMessagePriority.medium);
     await ZIM.getInstance().sendGroupMessage(cmdMsg, 'toGroupID', config).then(
@@ -344,8 +350,7 @@ void main() {
   });
 
   test('sendRoomMessage', () async {
-    ZIMBarrageMessage message = ZIMBarrageMessage();
-    message.message = 'message';
+    ZIMBarrageMessage message = ZIMBarrageMessage(message: 'message');
     ZIMMessageSendConfig config =
         ZIMMessageSendConfig(priority: ZIMMessagePriority.low);
     await ZIM.getInstance().sendRoomMessage(message, 'toRoomID', config).then(
@@ -401,7 +406,7 @@ void main() {
   test('deleteMessages', () async {
     ZIMMessageDeleteConfig config = ZIMMessageDeleteConfig();
     config.isAlsoDeleteServerMessage = true;
-    ZIMTextMessage message = ZIMTextMessage();
+    ZIMTextMessage message = ZIMTextMessage(message: 'message');
 
     await ZIM.getInstance().deleteMessages([
       message
@@ -410,8 +415,7 @@ void main() {
   });
 
   test('createRoom', () async {
-    ZIMRoomInfo info = ZIMRoomInfo();
-    info.roomID = 'roomID';
+    ZIMRoomInfo info = ZIMRoomInfo(roomID: 'roomID');
     info.roomName = 'roomName';
 
     await ZIM
@@ -420,5 +424,17 @@ void main() {
         .then((value) => {expect(value.roomInfo.baseInfo.roomID, 'roomID')});
   });
 
-  //test('description', body)
+  test('createRoomWithConfig', () async {
+    ZIMRoomInfo info = ZIMRoomInfo(roomID: 'roomID');
+    info.roomName = 'roomName';
+
+    ZIMRoomAdvancedConfig config = ZIMRoomAdvancedConfig();
+    config.roomAttributes = {'key': 'value'};
+    config.roomDestroyDelayTime = 10;
+
+    await ZIM
+        .getInstance()
+        .createRoom(info, config)
+        .then((value) => {expect(value.roomInfo.baseInfo.roomID, 'roomID')});
+  });
 }
