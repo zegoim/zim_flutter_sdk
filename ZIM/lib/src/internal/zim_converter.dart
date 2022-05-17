@@ -117,7 +117,7 @@ class ZIMConverter {
       messageMap['fileSize'] = message.fileSize;
     }
     switch (message.type) {
-      case ZIMMessageType.unKnown:
+      case ZIMMessageType.unknown:
         break;
       case ZIMMessageType.text:
         message as ZIMTextMessage;
@@ -163,7 +163,7 @@ class ZIMConverter {
         ZIMMessageTypeExtension.mapValue[resultMap['type']]!;
     ZIMMessage message;
     switch (msgType) {
-      case ZIMMessageType.unKnown:
+      case ZIMMessageType.unknown:
         message = ZIMMessage();
         break;
       case ZIMMessageType.text:

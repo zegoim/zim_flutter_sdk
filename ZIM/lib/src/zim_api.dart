@@ -93,13 +93,13 @@ abstract class ZIM {
   Future<ZIMRoomAttributesOperatedCallResult> setRoomAttributes(
       Map<String, String> roomAttributes,
       String roomID,
-      ZIMRoomAttributesSetConfig? config);
+      ZIMRoomAttributesSetConfig config);
 
   Future<ZIMRoomAttributesOperatedCallResult> deleteRoomAttributes(
-      List<String> keys, String roomID, ZIMRoomAttributesDeleteConfig? config);
+      List<String> keys, String roomID, ZIMRoomAttributesDeleteConfig config);
 
   Future<void> beginRoomAttributesBatchOperation(
-      String roomID, ZIMRoomAttributesBatchOperationConfig? config);
+      String roomID, ZIMRoomAttributesBatchOperationConfig config);
 
   Future<ZIMRoomAttributesBatchOperatedResult> endRoomAttributesBatchOperation(
       String roomID);

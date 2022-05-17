@@ -239,7 +239,7 @@ public class ZIMPluginMethodHandler {
 
     public static void deleteConversation(MethodCall call, Result result){
         String conversationID = call.argument("conversationID");
-        ZIMConversationType conversationType = ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType"))];
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMConversationDeleteConfig config = ZIMPluginConverter.cnvZIMConversationDeleteConfigBasicToObject(Objects.requireNonNull(call.argument("config")));
         zim.deleteConversation(conversationID, conversationType, config, new ZIMConversationDeletedCallback() {
             @Override
@@ -259,7 +259,7 @@ public class ZIMPluginMethodHandler {
 
     public static void clearConversationUnreadMessageCount(MethodCall call, Result result){
         String conversationID = call.argument("conversationID");
-        ZIMConversationType conversationType = ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType"))];
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         zim.clearConversationUnreadMessageCount(conversationID, conversationType, new ZIMConversationUnreadMessageCountClearedCallback() {
             @Override
             public void onConversationUnreadMessageCountCleared(String conversationID, ZIMConversationType conversationType, ZIMError errorInfo) {
@@ -277,9 +277,9 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void setConversationNotificationStatus(MethodCall call, Result result){
-        ZIMConversationNotificationStatus status = ZIMConversationNotificationStatus.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("status"))];
+        ZIMConversationNotificationStatus status = ZIMConversationNotificationStatus.getZIMConversationNotificationStatus(ZIMPluginCommonTools.safeGetIntValue(call.argument("status")));
         String conversationID = call.argument("conversationID");
-        ZIMConversationType conversationType = ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType"))];
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         zim.setConversationNotificationStatus(status, conversationID, conversationType, new ZIMConversationNotificationStatusSetCallback() {
             @Override
             public void onConversationNotificationStatusSet(String conversationID, ZIMConversationType conversationType, ZIMError errorInfo) {
@@ -358,7 +358,7 @@ public class ZIMPluginMethodHandler {
 
     public static void downloadMediaFile(MethodCall call, Result result){
         ZIMMediaMessage mediaMessage = (ZIMMediaMessage) ZIMPluginConverter.cnvZIMMessageMapToObject(Objects.requireNonNull(call.argument("message")));
-        ZIMMediaFileType fileType = ZIMMediaFileType.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("fileType"))];
+        ZIMMediaFileType fileType = ZIMMediaFileType.getZIMImageType(ZIMPluginCommonTools.safeGetIntValue(call.argument("fileType")));
         String progressID = call.argument("progressID");
         zim.downloadMediaFile(mediaMessage, fileType, new ZIMMediaDownloadedCallback() {
             @Override
@@ -396,7 +396,7 @@ public class ZIMPluginMethodHandler {
     public static void sendMediaMessage(MethodCall call, Result result){
         ZIMMediaMessage mediaMessage = (ZIMMediaMessage) ZIMPluginConverter.cnvZIMMessageMapToObject(Objects.requireNonNull(call.argument("message")));
         String toConversationID = call.argument("toConversationID");
-        ZIMConversationType conversationType = ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType"))];
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMMessageSendConfig config = ZIMPluginConverter.cnvZIMMessageSendConfigMapToObject(Objects.requireNonNull(call.argument("config")));
         String progressID = call.argument("progressID");
 
@@ -433,7 +433,7 @@ public class ZIMPluginMethodHandler {
 
     public static void queryHistoryMessage(MethodCall call, Result result) {
         String conversationID = call.argument("conversationID");
-        ZIMConversationType conversationType = ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType"))];
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMMessageQueryConfig config = ZIMPluginConverter.cnvZIMMessageQueryConfigMapToObject(Objects.requireNonNull(call.argument("config")));
 
         zim.queryHistoryMessage(conversationID, conversationType, config, new ZIMMessageQueriedCallback() {
@@ -455,7 +455,7 @@ public class ZIMPluginMethodHandler {
 
     public static void deleteAllMessage(MethodCall call, Result result) {
         String conversationID = call.argument("conversationID");
-        ZIMConversationType conversationType = ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType"))];
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMMessageDeleteConfig config = ZIMPluginConverter.cnvZIMMessageDeleteConfigBasicToObject(Objects.requireNonNull(call.argument("config")));
 
         zim.deleteAllMessage(conversationID, conversationType, config, new ZIMMessageDeletedCallback() {
@@ -477,7 +477,7 @@ public class ZIMPluginMethodHandler {
     public static void deleteMessages(MethodCall call, Result result) {
         ArrayList<ZIMMessage> messageList = ZIMPluginConverter.cnvBasicListToZIMMessageList(Objects.requireNonNull(call.argument("messageList")));
         String conversationID = call.argument("conversationID");
-        ZIMConversationType conversationType = ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType"))];
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMMessageDeleteConfig config = ZIMPluginConverter.cnvZIMMessageDeleteConfigBasicToObject(Objects.requireNonNull(call.argument("config")));
 
         zim.deleteMessages(messageList, conversationID, conversationType, config, new ZIMMessageDeletedCallback() {

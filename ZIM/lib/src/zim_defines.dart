@@ -17,7 +17,7 @@ enum ZIMRoomEvent {
   interrupted,
   disconnected,
   roomNotExist,
-  acticeCreate,
+  activeCreate,
   createFailed,
   activeEnter,
   enterFailed,
@@ -27,7 +27,7 @@ enum ZIMRoomEvent {
 enum ZIMMessagePriority { low, medium, high }
 
 enum ZIMMessageType {
-  unKnown,
+  unknown,
   text,
   command,
   barrage,
@@ -72,8 +72,6 @@ enum ZIMCallUserState {
   received
 }
 
-enum ZIMCallRejectState { busy, reject }
-
 typedef ZIMGroupMemberRole = int;
 
 class ZIMError {
@@ -113,7 +111,7 @@ class ZIMUserInfo {
 }
 
 class ZIMMessage {
-  ZIMMessageType type = ZIMMessageType.unKnown;
+  ZIMMessageType type = ZIMMessageType.unknown;
   int messageID = 0;
   int localMessageID = 0;
   String senderUserID = "";

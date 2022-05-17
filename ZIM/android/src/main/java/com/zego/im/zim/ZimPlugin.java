@@ -68,7 +68,7 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
         method.invoke(null,call,result,this.binding,this.zimPluginEventHandler);
       }
       else {
-        method.invoke(null, call, result);
+        method.invoke(null,call, result);
       }
     }
     catch (NoSuchMethodException e){

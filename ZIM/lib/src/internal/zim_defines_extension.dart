@@ -57,7 +57,7 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     ZIMRoomEvent.interrupted: 1,
     ZIMRoomEvent.disconnected: 2,
     ZIMRoomEvent.roomNotExist: 3,
-    ZIMRoomEvent.acticeCreate: 4,
+    ZIMRoomEvent.activeCreate: 4,
     ZIMRoomEvent.createFailed: 5,
     ZIMRoomEvent.activeEnter: 6,
     ZIMRoomEvent.enterFailed: 7,
@@ -68,7 +68,7 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     1: ZIMRoomEvent.interrupted,
     2: ZIMRoomEvent.disconnected,
     3: ZIMRoomEvent.roomNotExist,
-    4: ZIMRoomEvent.acticeCreate,
+    4: ZIMRoomEvent.activeCreate,
     5: ZIMRoomEvent.createFailed,
     6: ZIMRoomEvent.activeEnter,
     7: ZIMRoomEvent.enterFailed,
@@ -95,7 +95,7 @@ extension ZIMMessagePriorityExtension on ZIMMessagePriority {
 
 extension ZIMMessageTypeExtension on ZIMMessageType {
   static const valueMap = {
-    ZIMMessageType.unKnown: 0,
+    ZIMMessageType.unknown: 0,
     ZIMMessageType.text: 1,
     ZIMMessageType.command: 2,
     ZIMMessageType.image: 11,
@@ -105,7 +105,7 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.barrage: 20
   };
   static const mapValue = {
-    0: ZIMMessageType.unKnown,
+    0: ZIMMessageType.unknown,
     1: ZIMMessageType.text,
     2: ZIMMessageType.command,
     11: ZIMMessageType.image,
@@ -322,19 +322,6 @@ extension ZIMCallUserStateEventExtension on ZIMCallUserState {
     3: ZIMCallUserState.cancelled,
     4: ZIMCallUserState.offline,
     5: ZIMCallUserState.received,
-  };
-
-  int get value => valueMap[this] ?? -1;
-}
-
-extension ZIMCallRejectStateEventExtension on ZIMCallRejectState {
-  static const valueMap = {
-    ZIMCallRejectState.busy: 0,
-    ZIMCallRejectState.reject: 1,
-  };
-  static const mapValue = {
-    0: ZIMCallRejectState.busy,
-    1: ZIMCallRejectState.reject,
   };
 
   int get value => valueMap[this] ?? -1;

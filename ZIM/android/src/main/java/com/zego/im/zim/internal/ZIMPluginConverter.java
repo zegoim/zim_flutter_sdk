@@ -102,7 +102,7 @@ public class ZIMPluginConverter {
 
     static public HashMap<String,Object> cnvZIMMessageObjectToMap(ZIMMessage message){
         HashMap<String,Object> messageMap = new HashMap<>();
-        messageMap.put("type",message.getType());
+        messageMap.put("type",message.getType().value());
         messageMap.put("messageID",message.getMessageID());
         messageMap.put("conversationID",message.getConversationID());
         messageMap.put("conversationSeq",message.getConversationSeq());
@@ -119,6 +119,7 @@ public class ZIMPluginConverter {
                 break;
             case COMMAND:
                 messageMap.put("message",((ZIMCommandMessage)message).message);
+                break;
             case BARRAGE:
 
                 assert message instanceof ZIMBarrageMessage;
@@ -185,7 +186,7 @@ public class ZIMPluginConverter {
             return null;
         }
         ZIMMessage message;
-        ZIMMessageType type = ZIMMessageType.values()[ZIMPluginCommonTools.safeGetIntValue(messageMap.get("type"))];
+        ZIMMessageType type = ZIMMessageType.getZIMMessageType(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("type")));
         switch(type){
             case TEXT:
                 message = new ZIMTextMessage();
@@ -250,7 +251,7 @@ public class ZIMPluginConverter {
         try {
             Field msgTypeField = ZIMMessage.class.getDeclaredField("type");
             msgTypeField.setAccessible(true);
-            msgTypeField.set(message,ZIMMessageType.values()[ZIMPluginCommonTools.safeGetIntValue(messageMap.get("type"))]);
+            msgTypeField.set(message,ZIMMessageType.getZIMMessageType(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("type"))));
             msgTypeField.setAccessible(false);
 
             Field messageIDField = ZIMMessage.class.getDeclaredField("messageID");
@@ -284,17 +285,17 @@ public class ZIMPluginConverter {
 
             Field conversationTypeField = ZIMMessage.class.getDeclaredField("conversationType");
             conversationTypeField.setAccessible(true);
-            conversationTypeField.set(message,ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(messageMap.get("conversationType"))]);
+            conversationTypeField.set(message,ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("conversationType"))));
             conversationTypeField.setAccessible(false);
 
             Field directionField = ZIMMessage.class.getDeclaredField("direction");
             directionField.setAccessible(true);
-            directionField.set(message,ZIMMessageDirection.values()[ZIMPluginCommonTools.safeGetIntValue(messageMap.get("direction"))]);
+            directionField.set(message,ZIMMessageDirection.getZIMMessageDirection(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("direction"))));
             directionField.setAccessible(false);
 
             Field sentStatusField = ZIMMessage.class.getDeclaredField("sentStatus");
             sentStatusField.setAccessible(true);
-            sentStatusField.set(message,ZIMMessageSentStatus.values()[ZIMPluginCommonTools.safeGetIntValue(messageMap.get("sentStatus"))]);
+            sentStatusField.set(message,ZIMMessageSentStatus.getZIMMessageSentStatus(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("sentStatus"))));
             sentStatusField.setAccessible(false);
 
             Field orderKeyField = ZIMMessage.class.getDeclaredField("orderKey");
@@ -401,10 +402,10 @@ public class ZIMPluginConverter {
         ZIMConversation conversation = new ZIMConversation();
         conversation.conversationID = (String) resultMap.get("conversationID");
         conversation.conversationName = (String) resultMap.get("conversationName");
-        conversation.type = ZIMConversationType.values()[ZIMPluginCommonTools.safeGetIntValue(resultMap.get("type"))];
+        conversation.type = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(resultMap.get("type")));
         conversation.unreadMessageCount = ZIMPluginCommonTools.safeGetIntValue(resultMap.get("unreadMessageCount"));
         conversation.orderKey = ZIMPluginCommonTools.safeGetLongValue(resultMap.get("orderKey"));
-        conversation.notificationStatus = ZIMConversationNotificationStatus.values()[ZIMPluginCommonTools.safeGetIntValue(resultMap.get("notificationStatus"))];
+        conversation.notificationStatus = ZIMConversationNotificationStatus.getZIMConversationNotificationStatus(ZIMPluginCommonTools.safeGetIntValue(resultMap.get("notificationStatus")));
         if(resultMap.get("lastMessage") != null) {
             conversation.lastMessage = cnvZIMMessageMapToObject((ZIMPluginCommonTools.safeGetHashMap(resultMap.get("lastMessage"))));
         }else{
@@ -447,7 +448,7 @@ public class ZIMPluginConverter {
 
     static public ZIMMessageSendConfig cnvZIMMessageSendConfigMapToObject(HashMap<String,Object> configMap){
         ZIMMessageSendConfig config = new ZIMMessageSendConfig();
-        config.priority = ZIMMessagePriority.values()[ZIMPluginCommonTools.safeGetIntValue(configMap.get("priority"))];
+        config.priority = ZIMMessagePriority.getZIMMessagePriority(ZIMPluginCommonTools.safeGetIntValue(configMap.get("priority")));
         config.pushConfig = cnvZIMPushConfigMapToObject(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         return config;
     }

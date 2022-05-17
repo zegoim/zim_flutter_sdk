@@ -45,31 +45,35 @@ class _MyAppState extends State<MyApp> {
     }
     ;
 
-    await ZIM
-        .getInstance()
-        .login('9999', '', '22')
-        .then((value) {})
-        .catchError((onError) {
-      if (onError is PlatformException) {
-        print(onError.code);
-        print(onError.message);
-      }
-    });
+    // await ZIM
+    //     .getInstance()
+    //     .login('9999', '', '22')
+    //     .then((value) {})
+    //     .catchError((onError) {
+    //   if (onError is PlatformException) {
+    //     print(onError.code);
+    //     print(onError.message);
+    //   }
+    // });
 
     ZIMTextMessage txtMsg = ZIMTextMessage(message: 'message');
     ZIMMessageSendConfig config =
         ZIMMessageSendConfig(priority: ZIMMessagePriority.high);
-    await ZIM.getInstance().sendPeerMessage(txtMsg, '510', config);
+    // await ZIM.getInstance().sendPeerMessage(txtMsg, '510', config);
     ZIMConversationDeleteConfig deleteConfig = ZIMConversationDeleteConfig();
     deleteConfig.isAlsoDeleteServerConversation = true;
 
-    await ZIM.getInstance().setConversationNotificationStatus(
-        ZIMConversationNotificationStatus.doNotDisturb,
-        '510',
-        ZIMConversationType.peer);
+    // await ZIM.getInstance().setConversationNotificationStatus(
+    //     ZIMConversationNotificationStatus.doNotDisturb,
+    //     '510',
+    //     ZIMConversationType.peer);
+    // await ZIM
+    //     .getInstance()
+    //     .deleteConversation('510', ZIMConversationType.peer, deleteConfig);
+
     await ZIM
         .getInstance()
-        .deleteConversation('510', ZIMConversationType.peer, deleteConfig);
+        .clearConversationUnreadMessageCount('510', ZIMConversationType.peer);
   }
 
   @override

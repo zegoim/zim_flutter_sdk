@@ -1,4 +1,3 @@
-// ignore: unused_import
 import 'package:flutter/services.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -121,7 +120,7 @@ void main() {
       await ZIM
           .getInstance()
           .sendPeerMessage(txtMsg, '510', sendConfig)
-          .then((value) => {});
+          .then((value) => {expect(value.message.conversationID, '510')});
     });
 
     testWidgets('que_conv_list', (WidgetTester tester) async {
