@@ -27,8 +27,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMEventHandler.onConnectionStateChanged!(
             ZIMConnectionStateExtension.mapValue[map['state']]!,
             ZIMConnectionEventExtension.mapValue[map['event']]!,
-            map['extendedData']);
-        // json.decode(map['extendedData'])
+            json.decode(map['extendedData']));
         break;
       case 'onError':
         if (ZIMEventHandler.onError == null) return;

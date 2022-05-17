@@ -32,7 +32,7 @@ abstract class ZIM {
       ZIMConversationQueryConfig config);
 
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
-      ZIMConversationType conversationType, ZIMMessageDeleteConfig config);
+      ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
   Future<ZIMConversationUnreadMessageCountClearedResult>
       clearConversationUnreadMessageCount(

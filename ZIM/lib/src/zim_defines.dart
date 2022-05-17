@@ -113,7 +113,7 @@ class ZIMUserInfo {
 }
 
 class ZIMMessage {
-  ZIMMessageType type = ZIMMessageType.text;
+  ZIMMessageType type = ZIMMessageType.unKnown;
   int messageID = 0;
   int localMessageID = 0;
   String senderUserID = "";
@@ -156,11 +156,12 @@ class ZIMBarrageMessage extends ZIMMessage {
 }
 
 class ZIMMediaMessage extends ZIMMessage {
-  String fileLocalPath = "";
+  String fileLocalPath;
   String fileDownloadUrl = "";
   String fileUID = "";
   String fileName = "";
   int fileSize = 0;
+  ZIMMediaMessage({required this.fileLocalPath});
 }
 
 typedef ZIMMediaUploadingProgress = void Function(
@@ -174,18 +175,26 @@ class ZIMImageMessage extends ZIMMediaMessage {
   String thumbnailLocalPath = "";
   String largeImageDownloadUrl = "";
   String largeImageLocalPath = "";
+  ZIMImageMessage({required super.fileLocalPath});
 }
 
-class ZIMFileMessage extends ZIMMediaMessage {}
+class ZIMFileMessage extends ZIMMediaMessage {
+  ZIMFileMessage({required super.fileLocalPath});
+}
 
 class ZIMAudioMessage extends ZIMMediaMessage {
   int audioDuration = 0;
+
+  ZIMAudioMessage({required super.fileLocalPath});
 }
 
 class ZIMVideoMessage extends ZIMMediaMessage {
   int videoDuration = 0;
   String videoFirstFrameDownloadUrl = "";
   String videoFirstFrameLocalPath = "";
+
+  ZIMVideoMessage({required String fileLocalPath})
+      : super(fileLocalPath: fileLocalPath);
 }
 
 class ZIMConversation {
@@ -219,7 +228,8 @@ class ZIMRoomInfo {
 }
 
 class ZIMRoomFullInfo {
-  ZIMRoomInfo? baseInfo;
+  ZIMRoomInfo baseInfo;
+  ZIMRoomFullInfo({required this.baseInfo});
 }
 
 class ZIMMessageQueryConfig {

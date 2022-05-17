@@ -46,9 +46,10 @@ class _MyAppState extends State<MyApp> {
       print(event);
       print(extendedData);
     };
-    ZIMMessage fileMsg = ZIMFileMessage();
+    //ZIMMessage fileMsg = ZIMFileMessage();
+
     ZIMMessage txtMsg = ZIMTextMessage();
-    print(fileMsg is ZIMMediaMessage);
+    //print(fileMsg is ZIMMediaMessage);
     print(txtMsg is ZIMMediaMessage);
     await ZIM.getInstance().create(2845718148);
     try {
@@ -72,6 +73,10 @@ class _MyAppState extends State<MyApp> {
     //if (result.errorInfo.code != ZIMErrorCode.success) print('loginfaild');
     ZIM.getInstance().createRoom(ZIMRoomInfo());
     ZIM.getInstance().createRoom(ZIMRoomInfo(), ZIMRoomAdvancedConfig());
+    ZIM.getInstance().setConversationNotificationStatus(
+        ZIMConversationNotificationStatus.notify,
+        'id',
+        ZIMConversationType.group);
     setState(() {
       //_platformVersion = platformVersion;
     });

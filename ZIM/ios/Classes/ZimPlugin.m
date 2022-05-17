@@ -140,7 +140,7 @@ static ZIM *zim;
       ZIMConversationQueryConfig *config = [[ZIMConversationQueryConfig alloc] init];
       config.count = ((NSNumber *)[configDic objectForKey:@"count"]).unsignedIntValue;
       config.nextConversation = [ZIMPluginConverter cnvZIMConversationDicToObject:(NSDictionary *)[configDic objectForKey:@"nextConversation"]];
-      [zim queryConversationListWithConfig:config callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo) {
+      [zim queryConversationListWithConfig:config callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo)  {
           if(errorInfo.code == 0){
               NSArray *conversationBasicList = [ZIMPluginConverter cnvZIMConversationListObjectToBasic:conversationList];
               NSDictionary *resultDic = @{@"conversationList":conversationBasicList};

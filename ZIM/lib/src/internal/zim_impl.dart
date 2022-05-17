@@ -87,13 +87,14 @@ class ZIMImpl implements ZIM {
   Future<ZIMConversationDeletedResult> deleteConversation(
       String conversationID,
       ZIMConversationType conversationType,
-      ZIMMessageDeleteConfig config) async {
-    return await _channel.invokeMethod('deleteConversation', {
+      ZIMConversationDeleteConfig config) async {
+    Map resultMap = await _channel.invokeMethod('deleteConversation', {
       'conversationID': conversationID,
       'conversationType':
           ZIMConversationTypeExtension.valueMap[conversationType],
-      'config': ZIMConverter.cnvZIMMessageDeleteConfigObjectToMap(config)
+      'config': ZIMConverter.cnvZIMConversationDeleteConfigObjectToMap(config)
     });
+    return ZIMConverter.cnvZIMConversationDeletedResultMapToObject(resultMap);
   }
 
   @override
@@ -103,7 +104,7 @@ class ZIMImpl implements ZIM {
     Map resultMap =
         await _channel.invokeMethod('clearConversationUnreadMessageCount', {
       'conversationID': conversationID,
-      'ZIMConversationType':
+      'conversationType':
           ZIMConversationTypeExtension.valueMap[conversationType]
     });
     return ZIMConverter

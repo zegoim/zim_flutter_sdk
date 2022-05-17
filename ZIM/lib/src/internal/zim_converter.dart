@@ -184,7 +184,7 @@ class ZIMConverter {
         message.message = resultMap['message'];
         break;
       case ZIMMessageType.image:
-        message = ZIMImageMessage();
+        message = ZIMImageMessage(fileLocalPath: resultMap['fileLocalPath']);
         message as ZIMImageMessage;
         message.thumbnailDownloadUrl = resultMap['thumbnailDownloadUrl'];
         message.thumbnailLocalPath = resultMap['thumbnailLocalPath'];
@@ -192,16 +192,16 @@ class ZIMConverter {
         message.largeImageLocalPath = resultMap['largeImageLocalPath'];
         break;
       case ZIMMessageType.file:
-        message = ZIMFileMessage();
+        message = ZIMFileMessage(fileLocalPath: resultMap['fileLocalPath']);
         message as ZIMFileMessage;
         break;
       case ZIMMessageType.audio:
-        message = ZIMAudioMessage();
+        message = ZIMAudioMessage(fileLocalPath: resultMap['fileLocalPath']);
         message as ZIMAudioMessage;
         message.audioDuration = resultMap['audioDuration'];
         break;
       case ZIMMessageType.video:
-        message = ZIMVideoMessage();
+        message = ZIMVideoMessage(fileLocalPath: resultMap['fileLocalPath']);
         message as ZIMVideoMessage;
         message.videoDuration = resultMap['videoDuration'];
         message.videoFirstFrameDownloadUrl =
@@ -265,6 +265,14 @@ class ZIMConverter {
     return ZIMConversationListQueriedResult(conversationList: conversationList);
   }
 
+  static Map cnvZIMConversationDeleteConfigObjectToMap(
+      ZIMConversationDeleteConfig config) {
+    Map configMap = {};
+    configMap['isAlsoDeleteServerConversation'] =
+        config.isAlsoDeleteServerConversation;
+    return configMap;
+  }
+
   static Map cnvZIMMessageDeleteConfigObjectToMap(
       ZIMMessageDeleteConfig config) {
     Map map = {};
@@ -276,7 +284,8 @@ class ZIMConverter {
       cnvZIMConversationUnreadMessageCountClearedResultMapToObject(
           Map resultMap) {
     String conversationID = resultMap['conversationID'];
-    ZIMConversationType conversationType = resultMap['conversationType'];
+    ZIMConversationType conversationType =
+        ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
     return ZIMConversationUnreadMessageCountClearedResult(
         conversationID: conversationID, conversationType: conversationType);
   }
@@ -299,6 +308,14 @@ class ZIMConverter {
           cnvZIMConversationChangeInfoMapToObject(conversationChangeInfoMap));
     }
     return conversationChangeInfoList;
+  }
+
+  static ZIMConversationDeletedResult
+      cnvZIMConversationDeletedResultMapToObject(Map resultMap) {
+    return ZIMConversationDeletedResult(
+        conversationID: resultMap['conversationID'],
+        conversationType: ZIMConversationTypeExtension
+            .mapValue[resultMap['conversationType']]!);
   }
 
   static ZIMConversationChangeInfo cnvZIMConversationChangeInfoMapToObject(
@@ -397,11 +414,9 @@ class ZIMConverter {
   }
 
   static ZIMRoomFullInfo cnvZIMRoomFullInfoMapToObject(Map roomFullInfoMap) {
-    ZIMRoomFullInfo roomFullInfo = ZIMRoomFullInfo();
-
-    roomFullInfo.baseInfo =
+    ZIMRoomInfo roomInfo =
         cnvZIMRoomInfoMapToObject(roomFullInfoMap["baseInfo"]);
-
+    ZIMRoomFullInfo roomFullInfo = ZIMRoomFullInfo(baseInfo: roomInfo);
     return roomFullInfo;
   }
 
