@@ -306,7 +306,7 @@ extension ZIMGroupMessageNotificationStatusEventExtension
   int get value => valueMap[this] ?? -1;
 }
 
-extension ZIMCallUserStateEventExtension on ZIMCallUserState {
+extension ZIMCallUserStateExtension on ZIMCallUserState {
   static const valueMap = {
     ZIMCallUserState.inviting: 0,
     ZIMCallUserState.accepted: 1,

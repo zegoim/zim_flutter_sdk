@@ -55,6 +55,7 @@ import im.zego.zim.callback.ZIMRoomAttributesBatchOperatedCallback;
 import im.zego.zim.callback.ZIMRoomAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMRoomAttributesQueriedCallback;
 import im.zego.zim.callback.ZIMRoomCreatedCallback;
+import im.zego.zim.callback.ZIMRoomEnteredCallback;
 import im.zego.zim.callback.ZIMRoomJoinedCallback;
 import im.zego.zim.callback.ZIMRoomLeftCallback;
 import im.zego.zim.callback.ZIMRoomMemberQueriedCallback;
@@ -536,6 +537,25 @@ public class ZIMPluginMethodHandler {
             }
         });
     }
+
+    public static void enterRoom(MethodCall call, Result result) {
+        ZIMRoomInfo roomInfo = ZIMPluginConverter.cnvZIMRoomInfoMapToObejct(Objects.requireNonNull(call.argument("roomInfo")));
+        ZIMRoomAdvancedConfig config = ZIMPluginConverter.cnvZIMRoomAdvancedConfigMapToObject(Objects.requireNonNull(ZIMPluginCommonTools.safeGetHashMap(call.argument("config"))));
+        zim.enterRoom(roomInfo, config, new ZIMRoomEnteredCallback() {
+            @Override
+            public void onRoomEntered(ZIMRoomFullInfo roomInfo, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    HashMap<String,Object> roomInfoMap = ZIMPluginConverter.cnvZIMRoomFullInfoObjectToMap(roomInfo);
+                    resultMap.put("roomInfo",roomInfoMap);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    };
 
     public static void joinRoom(MethodCall call, Result result){
         String roomID = call.argument("roomID");

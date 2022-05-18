@@ -72,7 +72,10 @@ enum ZIMCallUserState {
   received
 }
 
-typedef ZIMGroupMemberRole = int;
+class ZIMGroupMemberRole {
+  static const int owner = 1;
+  static const int member = 3;
+}
 
 class ZIMError {
   int code = 0;
@@ -100,8 +103,8 @@ class ZIMPushConfig {
 
 class ZIMMessageSendConfig {
   ZIMPushConfig? pushConfig;
-  ZIMMessagePriority priority;
-  ZIMMessageSendConfig({required this.priority});
+  ZIMMessagePriority priority = ZIMMessagePriority.low;
+  ZIMMessageSendConfig();
 }
 
 class ZIMUserInfo {
@@ -288,11 +291,12 @@ class ZIMGroupInfo {
 }
 
 class ZIMGroupFullInfo {
-  ZIMGroupInfo? baseInfo;
+  ZIMGroupInfo baseInfo;
   String groupNotice = "";
-  Map<String, String>? groupAttributes;
+  Map<String, String> groupAttributes = {};
   ZIMGroupMessageNotificationStatus notificationStatus =
       ZIMGroupMessageNotificationStatus.notify;
+  ZIMGroupFullInfo({required this.baseInfo});
 }
 
 class ZIMGroup {
@@ -303,7 +307,8 @@ class ZIMGroup {
 
 class ZIMGroupMemberInfo extends ZIMUserInfo {
   String memberNickname = "";
-  ZIMGroupMemberRole memberRole = 1;
+
+  int memberRole = ZIMGroupMemberRole.member;
 
   ZIMGroupMemberInfo({required super.userID});
 }
@@ -352,7 +357,7 @@ class ZIMCallRejectConfig {
 
 class ZIMCallInvitationSentInfo {
   int timeout = 0;
-  List<ZIMCallUserInfo>? errorInvitees;
+  List<ZIMCallUserInfo> errorInvitees = [];
 }
 
 class ZIMCallInvitationReceivedInfo {
@@ -453,6 +458,11 @@ class ZIMRoomCreatedResult {
   ZIMRoomCreatedResult({required this.roomInfo});
 }
 
+class ZIMRoomEnteredResult {
+  ZIMRoomFullInfo roomInfo;
+  ZIMRoomEnteredResult({required this.roomInfo});
+}
+
 class ZIMRoomJoinedResult {
   ZIMRoomFullInfo roomInfo;
   ZIMRoomJoinedResult({required this.roomInfo});
@@ -497,8 +507,12 @@ class ZIMRoomAttributesQueriedResult {
 
 class ZIMGroupCreatedResult {
   ZIMGroupFullInfo groupInfo;
-  List<String> userIDs;
-  ZIMGroupCreatedResult({required this.groupInfo, required this.userIDs});
+  List<String> userList;
+  List<String> errorUserList;
+  ZIMGroupCreatedResult(
+      {required this.groupInfo,
+      required this.userList,
+      required this.errorUserList});
 }
 
 class ZIMGroupDismissedResult {
@@ -518,11 +532,11 @@ class ZIMGroupLeftResult {
 
 class ZIMGroupUsersInvitedResult {
   String groupID;
-  List<String> userIDList;
+  List<ZIMGroupMemberInfo> userList;
   List<ZIMErrorUserInfo> errorUserList;
   ZIMGroupUsersInvitedResult(
       {required this.groupID,
-      required this.userIDList,
+      required this.userList,
       required this.errorUserList});
 }
 
@@ -578,7 +592,7 @@ class ZIMGroupAttributesQueriedResult {
 class ZIMGroupMemberRoleUpdatedResult {
   String groupID;
   String forUserID;
-  ZIMGroupMemberRole role;
+  int role;
   ZIMGroupMemberRoleUpdatedResult(
       {required this.groupID, required this.forUserID, required this.role});
 }
@@ -614,9 +628,7 @@ class ZIMGroupMemberListQueriedResult {
 class ZIMCallInvitationSentResult {
   String callID = "";
   ZIMCallInvitationSentInfo info;
-  List<String> errorInvitees = [];
-  ZIMCallInvitationSentResult(
-      {required this.callID, required this.info, required this.errorInvitees});
+  ZIMCallInvitationSentResult({required this.callID, required this.info});
 }
 
 class ZIMCallCancelSentResult {

@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'zim'
-  s.version          = '0.0.1'
+  s.version          = '2.1.1'
   s.summary          = 'A ZIM Flutter Plugin'
   s.description      = <<-DESC
 A ZIM Flutter Plugin
@@ -16,7 +16,7 @@ A ZIM Flutter Plugin
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'ZIM'
+  s.dependency 'ZIM','2.1.1'
   s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.

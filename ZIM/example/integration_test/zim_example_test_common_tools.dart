@@ -1,6 +1,6 @@
 import 'dart:math';
 
-class ZIMCommonTools {
+class ZIMExampleTestCommonTools {
   static get uuid {
     String randomstr = Random().nextInt(10).toString();
     for (var i = 0; i < 3; i++) {

@@ -14,6 +14,7 @@ class ZIMImpl implements ZIM {
 
   static ZIMImpl getInstance() {
     _zimImpl ??= ZIMImpl();
+    ZIMEventHandlerImpl.registerEventHandler();
     return _zimImpl!;
   }
 
@@ -46,9 +47,12 @@ class ZIMImpl implements ZIM {
   }
 
   @override
-  Future<void> login(String userID, String userName, String token) async {
-    return await _channel.invokeMethod(
-        "login", {"userID": userID, "userName": userName, "token": token});
+  Future<void> login(ZIMUserInfo userInfo, String token) async {
+    return await _channel.invokeMethod("login", {
+      "userID": userInfo.userID,
+      "userName": userInfo.userName,
+      "token": token
+    });
   }
 
   @override
@@ -284,6 +288,22 @@ class ZIMImpl implements ZIM {
   }
 
   @override
+  Future<ZIMRoomEnteredResult> enterRoom(
+      ZIMRoomInfo roomInfo, ZIMRoomAdvancedConfig config) async {
+    Map resultMap;
+    // if (config == null) {
+    //   resultMap = await _channel.invokeMethod('enterRoom',
+    //       {'roomInfo': ZIMConverter.cnvZIMRoomInfoObjectToMap(roomInfo)});
+    // } else {
+    resultMap = await _channel.invokeMethod('enterRoom', {
+      'roomInfo': ZIMConverter.cnvZIMRoomInfoObjectToMap(roomInfo),
+      'config': ZIMConverter.cnvZIMRoomAdvancedConfigObjectToMap(config)
+    });
+    //}
+    return ZIMConverter.cnvZIMRoomEnteredResultMapToObject(resultMap);
+  }
+
+  @override
   Future<ZIMRoomLeftResult> leaveRoom(String roomID) async {
     Map resultMap =
         await _channel.invokeMethod('leaveRoom', {'roomID': roomID});
@@ -491,7 +511,7 @@ class ZIMImpl implements ZIM {
 
   @override
   Future<ZIMGroupMemberRoleUpdatedResult> setGroupMemberRole(
-      ZIMGroupMemberRole role, String forUserID, String groupID) async {
+      int role, String forUserID, String groupID) async {
     Map resultMap = await _channel.invokeMethod('setGroupMemberRole',
         {'role': role, 'forUserID': forUserID, 'groupID': groupID});
     return ZIMConverter.cnvZIMGroupMemberRoleUpdatedResultMapToObject(

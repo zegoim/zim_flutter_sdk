@@ -64,13 +64,13 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (ZIMEventHandler.onReceiveRoomMessage == null) return;
         List<ZIMMessage> messageList =
             ZIMConverter.cnvZIMMessageListMapToObject(map['messageList']);
-        ZIMEventHandler.onReceivePeerMessage!(messageList, map['fromRoomID']);
+        ZIMEventHandler.onReceiveRoomMessage!(messageList, map['fromRoomID']);
         break;
       case 'onReceiveGroupMessage':
-        if (ZIMEventHandler.onReceiveRoomMessage == null) return;
+        if (ZIMEventHandler.onReceiveGroupMessage == null) return;
         List<ZIMMessage> messageList =
             ZIMConverter.cnvZIMMessageListMapToObject(map['messageList']);
-        ZIMEventHandler.onReceivePeerMessage!(messageList, map['fromGroupID']);
+        ZIMEventHandler.onReceiveGroupMessage!(messageList, map['fromGroupID']);
         break;
       case 'onRoomMemberJoined':
         if (ZIMEventHandler.onRoomMemberJoined == null) return;
@@ -152,8 +152,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (ZIMEventHandler.onGroupMemberStateChanged == null) return;
 
         ZIMEventHandler.onGroupMemberStateChanged!(
-            ZIMGroupMemberStateExtension.mapValue['state']!,
-            ZIMGroupMemberEventExtension.mapValue['event']!,
+            ZIMGroupMemberStateExtension.mapValue[map['state']]!,
+            ZIMGroupMemberEventExtension.mapValue[map['event']]!,
             ZIMConverter.cnvBasicListToZIMGroupMemberInfoList(map['userList']),
             ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
                 map['operatedInfo']),
@@ -209,7 +209,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;
 
         ZIMEventHandler.onCallInviteesAnsweredTimeout!(
-            map['invitees'], map['callID']);
+            (map['invitees'] as List).cast<String>(), map['callID']);
         break;
       case 'downloadMediaFileProgress':
         String progressID = map['progressID'];

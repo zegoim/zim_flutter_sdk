@@ -7,6 +7,8 @@
 #import "NSMutableArray+safeInvoke.h"
 #import "NSObject+safeInvoke.h"
 static ZIM *zim;
+
+static ZimPlugin *instance;
 @interface ZimPlugin()<ZIMEventHandler,FlutterStreamHandler>
 
 @property (nonatomic, strong) id<FlutterPluginRegistrar> registrar;
@@ -23,13 +25,14 @@ static ZIM *zim;
     FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"zim"
             binaryMessenger:[registrar messenger]];
-    ZimPlugin* instance = [[ZimPlugin alloc] init];
+    instance = [[ZimPlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:channel];
     instance.methodChannel = channel;
 
     FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@"zim_event_handler" binaryMessenger:[registrar messenger]];
-    [eventChannel setStreamHandler:(id)instance];
+    [eventChannel setStreamHandler:instance];
     instance.eventChannel = eventChannel;
+
     
 }
 
@@ -347,6 +350,20 @@ static ZIM *zim;
           }
       }];
   }
+  else if([@"enterRoom" isEqualToString:call.method]){
+      ZIMRoomInfo *roomInfo = [ZIMPluginConverter cnvZIMRoomInfoBasicToObject:[call.arguments objectForKey:@"roomInfo"]];
+      ZIMRoomAdvancedConfig *config = [ZIMPluginConverter cnvZIMRoomAdvancedConfigDicToObject:[call.arguments objectForKey:@"config"]];
+      [zim enterRoom:roomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSDictionary *roomInfoDic = [ZIMPluginConverter cnvZIMRoomFullInfoObjectToDic:roomInfo];
+              NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
+              result(resultDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
   else if ([@"createRoom" isEqualToString:call.method]){
       ZIMRoomInfo *roomInfo = [ZIMPluginConverter cnvZIMRoomInfoBasicToObject:[call.arguments objectForKey:@"roomInfo"]];
       
@@ -408,7 +425,7 @@ static ZIM *zim;
       [zim queryRoomMemberListByRoomID:roomID config:config callback:^(NSString * _Nonnull roomID, NSArray<ZIMUserInfo *> * _Nonnull memberList, NSString * _Nonnull nextFlag, ZIMError * _Nonnull errorInfo) {
           if(errorInfo.code == 0){
               NSArray *basicMemberList = [ZIMPluginConverter cnvZIMUserInfoListTobasicList:memberList];
-              NSDictionary *resultDic = @{@"memberList":basicMemberList,@"nextFlag":nextFlag};
+              NSDictionary *resultDic = @{@"roomID":roomID,@"memberList":basicMemberList,@"nextFlag":nextFlag};
               result(resultDic);
           }
           else{
@@ -599,7 +616,7 @@ static ZIM *zim;
       }];
   }
   else if ([@"transferGroupOwner" isEqualToString:call.method]){
-      NSString *userID = [call.arguments objectForKey:@"userID"];
+      NSString *userID = [call.arguments objectForKey:@"toUserID"];
       NSString *groupID = [call.arguments objectForKey:@"groupID"];
       [zim transferGroupOwnerToUserID:userID groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull toUserID, ZIMError * _Nonnull errorInfo) {
           if(errorInfo.code == 0){
@@ -722,6 +739,7 @@ static ZIM *zim;
               NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
               [resultMtDic safeSetObject:groupID forKey:@"groupID"];
               [resultMtDic safeSetObject:forUserID forKey:@"forUserID"];
+              [resultMtDic safeSetObject:[NSNumber numberWithInt:role] forKey:@"role"];
               result(resultMtDic);
           }
           else{
@@ -870,14 +888,16 @@ extendedData:(NSDictionary *)extendedData{
     if(_events == nil){
         return;
     }
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:extendedData options:NSJSONWritingPrettyPrinted error:nil];
-//    NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-//    json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-    
+    NSString *json = @"{}";
+    if(extendedData != nil){
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:extendedData options:NSJSONWritingPrettyPrinted error:nil];
+        NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    }
     NSDictionary *resultDic = @{@"method":@"onConnectionStateChanged",@"state":[NSNumber numberWithInt:(int)state],@"event":[NSNumber numberWithInt:(int)event]};
     NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] initWithDictionary:resultDic];
-    [resultMtDic safeSetObject:extendedData forKey:@"extendedData"];
-    _events(resultDic);
+    [resultMtDic safeSetObject:json forKey:@"extendedData"];
+    _events(resultMtDic);
 }
 
 - (void)zim:(ZIM *)zim errorInfo:(ZIMError *)errorInfo{
@@ -984,7 +1004,18 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSDictionary *resultDic = @{@"method":@"onRoomStateChanged",@"state":[NSNumber numberWithInt:(int)state],@"event":[NSNumber numberWithInt:(int)event],@"extendedData":extendedData};
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onRoomStateChanged" forKey:@"method"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)state] forKey:@"state"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)event] forKey:@"event"];
+    [resultDic safeSetObject:roomID forKey:@"roomID"];
+    NSString *json = @"{}";
+    if(extendedData != nil){
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:extendedData options:NSJSONWritingPrettyPrinted error:nil];
+        NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    }
+    [resultDic safeSetObject:json forKey:@"extendedData"];
     _events(resultDic);
 }
 
@@ -1025,6 +1056,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     NSDictionary *groupInfoDic = [ZIMPluginConverter cnvZIMGroupFullInfoObjectToDic:groupInfo];
     [resultDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
+    [resultDic safeSetObject:@"onGroupStateChanged" forKey:@"method"];
     _events(resultDic);
 }
 
@@ -1040,6 +1072,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupName forKey:@"groupName"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:@"onGroupNameUpdated" forKey:@"method"];
     _events(resultDic);
 }
 
@@ -1055,6 +1088,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupNotice forKey:@"groupNotice"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:@"onGroupNoticeUpdated" forKey:@"method"];
     _events(resultDic);
 }
 
@@ -1071,6 +1105,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
     [resultDic safeSetObject:updateInfoArr forKey:@"updateInfo"];
+    [resultDic safeSetObject:@"onGroupAttributesUpdated" forKey:@"method"];
     _events(resultDic);
 }
 
@@ -1091,6 +1126,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:userListArr forKey:@"userList"];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)state] forKey:@"state"];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)event] forKey:@"event"];
+    [resultDic safeSetObject:@"onGroupMemberStateChanged" forKey:@"method"];
     _events(resultDic);
 }
 
@@ -1107,6 +1143,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:groupID forKey:@"groupID"];
     NSArray *basicUserInfoList = [ZIMPluginConverter cnvZIMGroupMemberInfoListToBasicList:userInfo];
     [resultDic safeSetObject:basicUserInfoList forKey:@"userInfo"];
+    [resultDic safeSetObject:@"onGroupMemberInfoUpdated" forKey:@"method"];
     _events(resultDic);
 }
 

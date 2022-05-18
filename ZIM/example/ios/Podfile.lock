@@ -2,10 +2,10 @@ PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
-  - zim (0.0.1):
-    - Flutter
-    - ZIM
   - ZIM (2.1.1)
+  - zim (2.1.1):
+    - Flutter
+    - ZIM (= 2.1.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -28,7 +28,7 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
   ZIM: 6a4f294825ac93f16c5101d3e97d211c2d17fa33
-  zim: 3ab2dd770a02666818a439bb0ab7ac6b480fce1c
+  zim: f10cbb37f432e9f318ee3261959e0e7ce1a378e5
 
 PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
 

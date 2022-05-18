@@ -72,7 +72,7 @@ public class ZIMPluginConverter {
 
     static public HashMap<String,Object> cnvZIMConversationChangeInfoObjectToMap(ZIMConversationChangeInfo conversationChangeInfo){
         HashMap<String,Object> conversationChangeInfoMap = new HashMap<>();
-        conversationChangeInfoMap.put("event",conversationChangeInfo.event);
+        conversationChangeInfoMap.put("event",conversationChangeInfo.event.value());
 
 
         conversationChangeInfoMap.put("conversation",cnvZIMConversationObjectToMap(conversationChangeInfo.conversation));
@@ -553,6 +553,8 @@ public class ZIMPluginConverter {
         HashMap<String,Object> groupMemberInfoMap = new HashMap<>();
         groupMemberInfoMap.put("memberNickname",groupMemberInfo.memberNickname);
         groupMemberInfoMap.put("memberRole",groupMemberInfo.memberRole);
+        groupMemberInfoMap.put("userID",groupMemberInfo.userID);
+        groupMemberInfoMap.put("userName",groupMemberInfo.userName);
         return groupMemberInfoMap;
     }
 

@@ -471,6 +471,8 @@
     NSMutableDictionary *memberInfoDic = (NSMutableDictionary *)[ZIMPluginConverter cnvZIMUserInfoObjectToBasic:memberInfo];
     [memberInfoDic safeSetObject:memberInfo.memberNickname forKey:@"memberNickname"];
     [memberInfoDic safeSetObject:[NSNumber numberWithInt:memberInfo.memberRole] forKey:@"memberRole"];
+    [memberInfoDic safeSetObject:memberInfo.userID forKey:@"userID"];
+    [memberInfoDic safeSetObject:memberInfo.userName forKey:@"userName"];
     return memberInfoDic;
     
     
@@ -598,7 +600,7 @@
     }
     NSMutableDictionary *operatedInfoDic = [[NSMutableDictionary alloc] init];
     NSDictionary *operatedUserInfoDic = [ZIMPluginConverter cnvZIMGroupMemberInfoObjectToDic:operatedInfo.operatedUserInfo];
-    [operatedInfoDic safeSetObject:operatedUserInfoDic forKey:@"operatedUserInfoDic"];
+    [operatedInfoDic safeSetObject:operatedUserInfoDic forKey:@"operatedUserInfo"];
     return operatedInfoDic;
 }
 
