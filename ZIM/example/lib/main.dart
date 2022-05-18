@@ -36,7 +36,8 @@ class _MyAppState extends State<MyApp> {
       print(error.code);
     }
     ;
-    ZIMRoomInfo roomInfo = ZIMRoomInfo(roomID: '111');
+    ZIMRoomInfo roomInfo = ZIMRoomInfo();
+    roomInfo.roomID = '111';
     ZIMRoomAdvancedConfig advancedConfig = ZIMRoomAdvancedConfig();
     await ZIM.getInstance().enterRoom(roomInfo, advancedConfig);
     // await ZIM

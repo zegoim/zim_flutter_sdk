@@ -86,19 +86,19 @@ class ZIMError {
 class ZIMLogConfig {
   String logPath = '';
   int logSize = 0;
-  ZIMLogConfig({required this.logPath, required this.logSize});
+  ZIMLogConfig();
 }
 
 class ZIMCacheConfig {
   String cachePath = '';
-  ZIMCacheConfig({required this.cachePath});
+  ZIMCacheConfig();
 }
 
 class ZIMPushConfig {
   String title = '';
   String content = '';
   String extendedData = '';
-  ZIMPushConfig({required this.title, required this.content});
+  ZIMPushConfig();
 }
 
 class ZIMMessageSendConfig {
@@ -229,7 +229,7 @@ class ZIMConversationChangeInfo {
 class ZIMRoomInfo {
   String roomID = '';
   String roomName = '';
-  ZIMRoomInfo({required this.roomID});
+  ZIMRoomInfo();
 }
 
 class ZIMRoomFullInfo {

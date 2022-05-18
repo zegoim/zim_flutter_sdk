@@ -244,12 +244,13 @@ void main() {
   });
 
   test('setLogConfig', () async {
-    ZIMLogConfig config = ZIMLogConfig(logPath: 'logPath', logSize: 5);
+    ZIMLogConfig config = ZIMLogConfig();
     await ZIM.getInstance().setLogConfig(config);
   });
 
   test('setCacheConfig', () async {
-    ZIMCacheConfig config = ZIMCacheConfig(cachePath: 'cachePath');
+    ZIMCacheConfig config = ZIMCacheConfig();
+    config.cachePath = 'cachePath';
     await ZIM.getInstance().setCacheConfig(config);
   });
 
@@ -411,7 +412,9 @@ void main() {
   });
 
   test('createRoom', () async {
-    ZIMRoomInfo info = ZIMRoomInfo(roomID: 'roomID');
+    ZIMRoomInfo info = ZIMRoomInfo();
+
+    info.roomID = 'roomID';
     info.roomName = 'roomName';
 
     await ZIM
@@ -421,7 +424,8 @@ void main() {
   });
 
   test('createRoomWithConfig', () async {
-    ZIMRoomInfo info = ZIMRoomInfo(roomID: 'roomID');
+    ZIMRoomInfo info = ZIMRoomInfo();
+    info.roomID = 'roomID';
     info.roomName = 'roomName';
 
     ZIMRoomAdvancedConfig config = ZIMRoomAdvancedConfig();

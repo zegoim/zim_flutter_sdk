@@ -395,7 +395,8 @@ class ZIMConverter {
   }
 
   static ZIMRoomInfo cnvZIMRoomInfoMapToObject(Map roomInfoMap) {
-    ZIMRoomInfo roomInfo = ZIMRoomInfo(roomID: roomInfoMap["roomID"]);
+    ZIMRoomInfo roomInfo = ZIMRoomInfo();
+    roomInfo.roomID = roomInfoMap["roomID"];
     roomInfo.roomName = roomInfoMap["roomName"];
 
     return roomInfo;

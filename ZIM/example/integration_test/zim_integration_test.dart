@@ -81,13 +81,15 @@ void main() {
       await ZIM.getInstance().destroy();
     });
     testWidgets('create_leave_room', (WidgetTester tester) async {
-      ZIMRoomInfo roomInfo = ZIMRoomInfo(roomID: 'flutterTestRoom1');
+      ZIMRoomInfo roomInfo = ZIMRoomInfo();
+      roomInfo.roomID = 'flutterTestRoom1';
       await ZIM.getInstance().createRoom(roomInfo);
       await ZIM.getInstance().leaveRoom('flutterTestRoom1');
     });
 
     testWidgets('create_leave_room_with_config', (WidgetTester tester) async {
-      ZIMRoomInfo roomInfo = ZIMRoomInfo(roomID: 'flutterTestRoom2');
+      ZIMRoomInfo roomInfo = ZIMRoomInfo();
+      roomInfo.roomID = 'flutterTestRoom2';
       ZIMRoomAdvancedConfig roomAdvancedConfig = ZIMRoomAdvancedConfig();
       roomAdvancedConfig.roomAttributes = {'flutter_key': 'flutter_value'};
       roomAdvancedConfig.roomDestroyDelayTime = 10;
@@ -107,7 +109,8 @@ void main() {
       await ZIM.getInstance().create(2845718148);
       await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
-      ZIMRoomInfo roomInfo = ZIMRoomInfo(roomID: 'flutterTestRoom3');
+      ZIMRoomInfo roomInfo = ZIMRoomInfo();
+      roomInfo.roomID = 'flutterTestRoom3';
       await ZIM.getInstance().createRoom(roomInfo);
     });
     tearDownAll(() async {
