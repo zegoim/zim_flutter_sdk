@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
+
 enum ZIMConnectionState { disconnected, connecting, connected, reconnecting }
 
 enum ZIMRoomState { disconnected, connecting, connected }
@@ -110,7 +112,7 @@ class ZIMMessageSendConfig {
 class ZIMUserInfo {
   String userID = '';
   String userName = '';
-  ZIMUserInfo({required this.userID});
+  ZIMUserInfo();
 }
 
 class ZIMMessage {
@@ -172,13 +174,13 @@ class ZIMImageMessage extends ZIMMediaMessage {
   String thumbnailLocalPath = '';
   String largeImageDownloadUrl = '';
   String largeImageLocalPath = '';
-  ZIMImageMessage({required super.fileLocalPath}) {
+  ZIMImageMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.image;
   }
 }
 
 class ZIMFileMessage extends ZIMMediaMessage {
-  ZIMFileMessage({required super.fileLocalPath}) {
+  ZIMFileMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.file;
   }
 }
@@ -186,7 +188,7 @@ class ZIMFileMessage extends ZIMMediaMessage {
 class ZIMAudioMessage extends ZIMMediaMessage {
   int audioDuration = 0;
 
-  ZIMAudioMessage({required super.fileLocalPath}) {
+  ZIMAudioMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.audio;
   }
 }
@@ -196,7 +198,7 @@ class ZIMVideoMessage extends ZIMMediaMessage {
   String videoFirstFrameDownloadUrl = '';
   String videoFirstFrameLocalPath = '';
 
-  ZIMVideoMessage({required super.fileLocalPath}) {
+  ZIMVideoMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.video;
   }
 }
@@ -309,8 +311,6 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
   String memberNickname = "";
 
   int memberRole = ZIMGroupMemberRole.member;
-
-  ZIMGroupMemberInfo({required super.userID});
 }
 
 class ZIMGroupOperatedInfo {

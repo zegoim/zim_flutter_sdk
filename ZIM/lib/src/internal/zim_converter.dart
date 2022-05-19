@@ -15,7 +15,8 @@ class ZIMConverter {
 
     List<ZIMUserInfo> userList = [];
     for (Map userInfoMap in userListBasic) {
-      ZIMUserInfo userInfo = ZIMUserInfo(userID: userInfoMap['userID']);
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = userInfoMap['userID'];
       userInfo.userName = userInfoMap['userName'];
       userList.add(userInfo);
     }
@@ -176,7 +177,7 @@ class ZIMConverter {
         message = ZIMBarrageMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.image:
-        message = ZIMImageMessage(fileLocalPath: resultMap['fileLocalPath']);
+        message = ZIMImageMessage(resultMap['fileLocalPath']);
         message as ZIMImageMessage;
         message.thumbnailDownloadUrl = resultMap['thumbnailDownloadUrl'];
         message.thumbnailLocalPath = resultMap['thumbnailLocalPath'];
@@ -184,16 +185,16 @@ class ZIMConverter {
         message.largeImageLocalPath = resultMap['largeImageLocalPath'];
         break;
       case ZIMMessageType.file:
-        message = ZIMFileMessage(fileLocalPath: resultMap['fileLocalPath']);
+        message = ZIMFileMessage(resultMap['fileLocalPath']);
         message as ZIMFileMessage;
         break;
       case ZIMMessageType.audio:
-        message = ZIMAudioMessage(fileLocalPath: resultMap['fileLocalPath']);
+        message = ZIMAudioMessage(resultMap['fileLocalPath']);
         message as ZIMAudioMessage;
         message.audioDuration = resultMap['audioDuration'];
         break;
       case ZIMMessageType.video:
-        message = ZIMVideoMessage(fileLocalPath: resultMap['fileLocalPath']);
+        message = ZIMVideoMessage(resultMap['fileLocalPath']);
         message as ZIMVideoMessage;
         message.videoDuration = resultMap['videoDuration'];
         message.videoFirstFrameDownloadUrl =
@@ -458,7 +459,8 @@ class ZIMConverter {
   }
 
   static ZIMUserInfo cnvZIMUserInfoMapToObject(Map userInfoMap) {
-    ZIMUserInfo userInfo = ZIMUserInfo(userID: userInfoMap['userID']);
+    ZIMUserInfo userInfo = ZIMUserInfo();
+    userInfo.userID = userInfoMap['userID'];
     userInfo.userName = userInfoMap['userName'];
     return userInfo;
   }
@@ -713,8 +715,8 @@ class ZIMConverter {
 
   static ZIMGroupMemberInfo cnvZIMGroupMemberInfoMapToObject(
       Map memberInfoMap) {
-    ZIMGroupMemberInfo groupMemberInfo =
-        ZIMGroupMemberInfo(userID: memberInfoMap['userID']);
+    ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
+    groupMemberInfo.userID = memberInfoMap['userID'];
     if (memberInfoMap['userName'] == null) {
       groupMemberInfo.userName = '';
     } else {
