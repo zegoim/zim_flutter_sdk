@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1dac61ff-7415-44ff-9e75-495d655729f0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/zim_flutter_sdk.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/zim_flutter_sdk.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/android/src/main/java/com/zego/im/zim/internal/ZIMPluginConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/android/src/main/java/com/zego/im/zim/internal/ZIMPluginConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/example/integration_test/zim_integration_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/example/integration_test/zim_integration_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/ios/Classes/ZimPlugin.m" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/ios/Classes/ZimPlugin.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/ios/Classes/internal/ZIMPluginConverter.m" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/ios/Classes/internal/ZIMPluginConverter.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/ios/zim.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/ios/zim.podspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/lib/src/internal/zim_common_tools.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/lib/src/internal/zim_common_tools.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/lib/src/internal/zim_converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/lib/src/internal/zim_converter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/lib/src/internal/zim_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/lib/src/internal/zim_impl.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/lib/src/zim_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/lib/src/zim_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/lib/src/zim_defines.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/lib/src/zim_defines.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZIM/test/zim_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ZIM/test/zim_test.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2862bQ9Xj61EqPh3UGmBJ8vhknf" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunManager" selected="Flutter.main.dart">
+    <configuration name="zim_integration_test.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/ZIM/example/integration_test/zim_integration_test.dart" />
+      <option name="workingDirectory" value="$PROJECT_DIR$/ZIM/example" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/ZIM/example/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Flutter.main.dart" />
+        <item itemvalue="Dart Command Line App.zim_integration_test.dart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1dac61ff-7415-44ff-9e75-495d655729f0" name="Default Changelist" comment="" />
+      <created>1650522785662</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1650522785662</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/ZIM/android/src/main/java/com/zego/im/zim/ZimPlugin.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/ZIM/android/src/main/java/com/zego/im/zim/ZimPlugin.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/ZIM/android/src/main/java/com/zego/im/zim/internal/ZIMPluginMethodHandler.java</url>
+          <line>306</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-method">
+          <url>file://$PROJECT_DIR$/ZIM/android/src/main/java/com/zego/im/zim/ZimPlugin.java</url>
+          <line>55</line>
+          <properties class="com.zego.im.zim.ZimPlugin" method="onMethodCall">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-method">
+          <url>file://$PROJECT_DIR$/ZIM/android/src/main/java/com/zego/im/zim/internal/ZIMPluginMethodHandler.java</url>
+          <line>298</line>
+          <properties class="com.zego.im.zim.internal.ZIMPluginMethodHandler" method="sendPeerMessage">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
