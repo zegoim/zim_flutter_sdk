@@ -1,16 +1,10 @@
 import 'dart:io';
-
-import 'package:flutter/services.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zim/zim.dart';
 import 'zim_example_test_common_tools.dart';
-import 'zim_integration_event_handler.dart';
+
 
 void main() {
-  setUpAll(() {
-    //IntegrationTestEventHander.loadEventHandler();
-  });
   group("static mod", () {
     testWidgets('getVersion', (WidgetTester tester) async {
       expect(await ZIM.getInstance().getVersion(), '2.1.1.612');
@@ -45,7 +39,9 @@ void main() {
     });
 
     testWidgets('login_uploadLog_logout', (WidgetTester tester) async {
-      await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = 'fluttertest1';
+      await ZIM.getInstance().login(userInfo,
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
       await ZIM.getInstance().uploadLog();
       await ZIM.getInstance().logout();
@@ -55,7 +51,9 @@ void main() {
   group('main mod', () {
     setUpAll(() async {
       await ZIM.getInstance().create(2845718148);
-      await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = 'fluttertest1';
+      await ZIM.getInstance().login(userInfo,
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
     });
 
@@ -73,7 +71,9 @@ void main() {
   group('enter_room', () {
     setUpAll(() async {
       await ZIM.getInstance().create(2845718148);
-      await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = 'fluttertest1';
+      await ZIM.getInstance().login(userInfo,
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
     });
     tearDownAll(() async {
@@ -107,7 +107,9 @@ void main() {
   group('room_activity', () {
     setUpAll(() async {
       await ZIM.getInstance().create(2845718148);
-      await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = 'fluttertest1';
+      await ZIM.getInstance().login(userInfo,
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
       ZIMRoomInfo roomInfo = ZIMRoomInfo();
       roomInfo.roomID = 'flutterTestRoom3';
@@ -199,7 +201,10 @@ void main() {
   group('msg_mod', () {
     setUpAll(() async {
       await ZIM.getInstance().create(2845718148);
-      await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = 'fluttertest1';
+
+      await ZIM.getInstance().login(userInfo,
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
     });
     tearDownAll(() async {
@@ -220,7 +225,9 @@ void main() {
   group('conv_mod', () {
     setUp(() async {
       await ZIM.getInstance().create(2845718148);
-      await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = 'fluttertest1';
+      await ZIM.getInstance().login(userInfo,
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
       ZIMTextMessage txtMsg = ZIMTextMessage(message: 'message');
       ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
@@ -259,7 +266,9 @@ void main() {
   group('group_mod', () {
     setUpAll(() async {
       await ZIM.getInstance().create(2845718148);
-      await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = 'fluttertest1';
+      await ZIM.getInstance().login(userInfo,
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
     });
 
@@ -557,7 +566,9 @@ void main() {
   group('call_invite_mod', () {
     setUpAll(() async {
       await ZIM.getInstance().create(2845718148);
-      await ZIM.getInstance().login(ZIMUserInfo(userID: 'fluttertest1'),
+      ZIMUserInfo userInfo = ZIMUserInfo();
+      userInfo.userID = 'fluttertest1';
+      await ZIM.getInstance().login(userInfo,
           '04AAAAAGKi8AUAEDJsN216eWQ4MG5nZzhzMG8AcLEUYLTvW3TFte+hEXgJFMQ1hEcGr1WLkK5PCUwmPiLb0Y6pS9ONoouWJZXvbCReMyOrkTEuQzvyra0Mdsdb8/mf2mOZTdXfzObGe6dYFZfmOObCzLXDgX5883cxdC1IaK1E5h8EXTBej62DBZa0Z3c=');
     });
 

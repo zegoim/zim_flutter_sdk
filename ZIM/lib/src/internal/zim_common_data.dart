@@ -2,8 +2,9 @@ import 'dart:math';
 import 'package:zim/zim.dart';
 
 class ZIMCommonData {
-  static Map<String, ZIMMediaDownloadingProgress> mediaDownloadingProgressMap =
-      {};
+  static int progressSequence = 0;
 
-  static Map<String, ZIMMediaUploadingProgress> mediaUploadingProgressMap = {};
+  static Map<int, ZIMMediaDownloadingProgress> mediaDownloadingProgressMap = {};
+
+  static Map<int, ZIMMediaUploadingProgress> mediaUploadingProgressMap = {};
 }

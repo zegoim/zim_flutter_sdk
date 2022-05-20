@@ -357,7 +357,7 @@ void main() {
   });
 
   test('downloadMediaFile', () async {
-    ZIMVideoMessage message = ZIMVideoMessage(fileLocalPath: 'fileLocalPath');
+    ZIMVideoMessage message = ZIMVideoMessage('fileLocalPath');
     await ZIM
         .getInstance()
         .downloadMediaFile(message, ZIMMediaFileType.originalFile,
@@ -370,7 +370,7 @@ void main() {
   });
 
   test('sendMediaMessage', () async {
-    ZIMFileMessage message = ZIMFileMessage(fileLocalPath: 'fileLocalPath');
+    ZIMFileMessage message = ZIMFileMessage('fileLocalPath');
     ZIMMessageSendConfig config = ZIMMessageSendConfig();
     await ZIM
         .getInstance()

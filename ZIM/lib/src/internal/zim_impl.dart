@@ -172,7 +172,8 @@ class ZIMImpl implements ZIM {
       ZIMMediaFileType fileType, ZIMMediaDownloadingProgress? progress) async {
     Map resultMap;
     if (progress != null) {
-      String progressID = ZIMCommonTools.uuid;
+      int progressID = ZIMCommonData.progressSequence + 1;
+      ZIMCommonData.progressSequence = ZIMCommonData.progressSequence + 1;
       ZIMCommonData.mediaDownloadingProgressMap[progressID] = progress;
       resultMap = await _channel.invokeMethod('downloadMediaFile', {
         'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
@@ -198,7 +199,8 @@ class ZIMImpl implements ZIM {
       ZIMMediaUploadingProgress? progress) async {
     Map resultMap;
     if (progress != null) {
-      String progressID = ZIMCommonTools.uuid;
+      int progressID = ZIMCommonData.progressSequence + 1;
+      ZIMCommonData.progressSequence = ZIMCommonData.progressSequence + 1;
       ZIMCommonData.mediaUploadingProgressMap[progressID] = progress;
       resultMap = await _channel.invokeMethod('sendMediaMessage', {
         'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
