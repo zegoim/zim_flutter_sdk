@@ -248,7 +248,7 @@ static ZimPlugin *instance;
       NSString *toConversationID = [call.arguments safeObjectForKey:@"toConversationID"];
       int conversationType = ((NSNumber *)[call.arguments safeObjectForKey:@"conversationType"]).intValue;
       ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter cnvZIMMessageSendConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
-      NSString *progressID = [call.arguments safeObjectForKey:@"progressID"];
+      NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
       [zim sendMediaMessage:message toConversationID:toConversationID conversationType:conversationType config:sendConfig progress:^(ZIMMessage * _Nonnull message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
           if(progressID == nil){
               return;

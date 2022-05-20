@@ -360,7 +360,7 @@ public class ZIMPluginMethodHandler {
     public static void downloadMediaFile(MethodCall call, Result result){
         ZIMMediaMessage mediaMessage = (ZIMMediaMessage) ZIMPluginConverter.cnvZIMMessageMapToObject(Objects.requireNonNull(call.argument("message")));
         ZIMMediaFileType fileType = ZIMMediaFileType.getZIMImageType(ZIMPluginCommonTools.safeGetIntValue(call.argument("fileType")));
-        String progressID = call.argument("progressID");
+        Integer progressID = call.argument("progressID");
         zim.downloadMediaFile(mediaMessage, fileType, new ZIMMediaDownloadedCallback() {
             @Override
             public void onMediaDownloaded(ZIMMessage message, ZIMError errorInfo) {
@@ -399,7 +399,7 @@ public class ZIMPluginMethodHandler {
         String toConversationID = call.argument("toConversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMMessageSendConfig config = ZIMPluginConverter.cnvZIMMessageSendConfigMapToObject(Objects.requireNonNull(call.argument("config")));
-        String progressID = call.argument("progressID");
+        Integer progressID = call.argument("progressID");
 
         zim.sendMediaMessage(mediaMessage, toConversationID, conversationType, config, new ZIMMediaMessageSentCallback() {
             @Override
