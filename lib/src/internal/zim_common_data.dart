@@ -1,5 +1,4 @@
-import 'dart:math';
-import 'package:zim/zim.dart';
+import '../zim_defines.dart';
 
 class ZIMCommonData {
   static int progressSequence = 0;

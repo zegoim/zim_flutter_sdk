@@ -1,4 +1,5 @@
-import 'package:zim/zim.dart';
+import '../zim_defines.dart';
+import 'zim_defines_extension.dart';
 
 //MARK: Tools
 class ZIMConverter {

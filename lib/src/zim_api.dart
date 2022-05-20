@@ -1,5 +1,5 @@
-import 'dart:async';
-import 'package:zim/zim.dart';
+import 'internal/zim_impl.dart';
+import 'zim_defines.dart';
 
 abstract class ZIM {
   static ZIM getInstance() {

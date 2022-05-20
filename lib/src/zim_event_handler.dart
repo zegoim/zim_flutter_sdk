@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:zim/zim.dart';
 import 'zim_defines.dart';
 
 class ZIMEventHandler {

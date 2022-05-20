@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:zim/src/internal/zim_common_data.dart';
-import 'package:zim/zim.dart';
+import 'zim_common_data.dart';
+import '../zim_event_handler.dart';
+import '../zim_defines.dart';
+import 'zim_defines_extension.dart';
 import 'zim_converter.dart';
 
 class ZIMEventHandlerImpl implements ZIMEventHandler {

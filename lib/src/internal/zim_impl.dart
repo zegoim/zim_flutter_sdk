@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:zim/src/internal/zim_common_data.dart';
-import 'package:zim/src/internal/zim_converter.dart';
-import 'package:zim/zim.dart';
-import 'zim_common_tools.dart';
+import 'zim_common_data.dart';
+import 'zim_converter.dart';
+import 'zim_event_handler_impl.dart';
+import '../../zim.dart';
+import 'zim_defines_extension.dart';
 
 class ZIMImpl implements ZIM {
   static const MethodChannel _channel = MethodChannel('zim');

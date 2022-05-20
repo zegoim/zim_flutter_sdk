@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
-
 enum ZIMConnectionState { disconnected, connecting, connected, reconnecting }
 
 enum ZIMRoomState { disconnected, connecting, connected }
