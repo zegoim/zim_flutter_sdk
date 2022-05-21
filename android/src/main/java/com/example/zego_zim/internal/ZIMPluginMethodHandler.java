@@ -1,4 +1,4 @@
-package com.example.zim_plugin.internal;
+package com.example.zego_zim.internal;
 
 import android.app.Application;
 

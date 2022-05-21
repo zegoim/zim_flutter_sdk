@@ -1,10 +1,9 @@
-package com.example.zim_plugin.internal;
+package com.example.zego_zim.internal;
 
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import im.zego.zim.entity.ZIMAudioMessage;

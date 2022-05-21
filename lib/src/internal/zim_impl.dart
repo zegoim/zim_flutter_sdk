@@ -8,7 +8,7 @@ import '../zim_defines.dart';
 import 'zim_defines_extension.dart';
 
 class ZIMImpl implements ZIM {
-  static const MethodChannel _channel = MethodChannel('zim_plugin');
+  static const MethodChannel _channel = MethodChannel('zego_zim_plugin');
   static ZIMImpl? _zimImpl;
 
   /// Used to receive the native event stream

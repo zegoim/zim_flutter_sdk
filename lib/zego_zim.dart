@@ -1,4 +1,4 @@
-library zim_plugin;
+library zego_zim;
 
 export 'src/zim_api.dart';
 export 'src/zim_error_code.dart';

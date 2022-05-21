@@ -1,8 +1,8 @@
-package com.example.zim_plugin;
+package com.example.zego_zim;
 
 import androidx.annotation.NonNull;
 
-import com.example.zim_plugin.internal.ZIMPluginEventHandler;
+import com.example.zego_zim.internal.ZIMPluginEventHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,8 +15,8 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
-/** ZimPlugin */
-public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+/** ZegoZimPlugin */
+public class ZegoZimPlugin implements FlutterPlugin, MethodCallHandler,EventChannel.StreamHandler{
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -31,18 +31,17 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
 
   private FlutterPluginBinding binding = null;
 
-  public ZimPlugin(){
+  public ZegoZimPlugin() {
     try{
-      this.manager = Class.forName("com.example.zim_plugin.internal.ZIMPluginMethodHandler");
+      this.manager = Class.forName("com.example.zego_zim.internal.ZIMPluginMethodHandler");
     }catch (ClassNotFoundException e){
       throw new RuntimeException(e);
     }
   }
 
-
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "zim_plugin");
+    methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "zego_zim_plugin");
     methodChannel.setMethodCallHandler(this);
 
     EventChannel eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "zim_event_handler");
@@ -86,6 +85,7 @@ public class ZimPlugin implements FlutterPlugin, MethodCallHandler, EventChannel
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     methodChannel.setMethodCallHandler(null);
   }
+
 
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {

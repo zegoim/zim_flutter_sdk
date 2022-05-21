@@ -1,4 +1,4 @@
-# zim_plugin
+# zego_zim
 
 A new Flutter project.
 

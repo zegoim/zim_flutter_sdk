@@ -1,4 +1,4 @@
-package com.example.zim_plugin_example;
+package com.example.zego_zim_example;
 
 import io.flutter.embedding.android.FlutterActivity;
 

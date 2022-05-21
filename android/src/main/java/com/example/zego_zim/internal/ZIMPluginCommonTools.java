@@ -1,11 +1,11 @@
-package com.example.zim_plugin.internal;
+package com.example.zego_zim.internal;
 
 import java.util.HashMap;
 
 public class ZIMPluginCommonTools {
     static public int safeGetIntValue(Object intObject){
         if(intObject instanceof Integer){
-            return ((Integer) intObject).intValue();
+            return (Integer) intObject;
         }
         if(intObject != null){
             return (int) intObject;

@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zim_plugin/zim_plugin.dart';
+import 'package:zego_zim/zego_zim.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('zim_plugin');
+  const MethodChannel channel = MethodChannel('zego_zim');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -18,6 +18,6 @@ void main() {
   });
 
   // test('getPlatformVersion', () async {
-  //   expect(await ZimPlugin.platformVersion, '42');
+  //   expect(await ZegoZim.platformVersion, '42');
   // });
 }

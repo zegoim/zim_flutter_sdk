@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.zim_plugin_example">
+    package="com.example.zego_zim_example">
    <application
-        android:label="zim_plugin_example"
+        android:label="zego_zim_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

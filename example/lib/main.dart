@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:zim_plugin/zim_plugin.dart';
+import 'package:zego_zim/zego_zim.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
+  var version = await ZIM.getInstance().getVersion();
+  log(version);
 }
 
 class MyApp extends StatefulWidget {
@@ -33,19 +35,18 @@ class _MyAppState extends State<MyApp> {
     // We also handle the message potentially returning null.
     // try {
     //   platformVersion =
-    //       await ZimPlugin.platformVersion ?? 'Unknown platform version';
+    //       await ZegoZim.platformVersion ?? 'Unknown platform version';
     // } on PlatformException {
     //   platformVersion = 'Failed to get platform version.';
     // }
-    var version = await ZIM.getInstance().getVersion();
-    log(version);
+
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
-      //_platformVersion = platformVersion;
+      // _platformVersion = platformVersion;
     });
   }
 

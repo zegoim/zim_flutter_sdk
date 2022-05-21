@@ -1,4 +1,4 @@
-#import "ZimPlugin.h"
+#import "ZegoZimPlugin.h"
 #import <ZIM/ZIM.h>
 #import <ZIM/ZIMEventHandler.h>
 #import "ZIMPluginConverter.h"
@@ -6,10 +6,11 @@
 #import "NSMutableDictionary+safeInvoke.h"
 #import "NSMutableArray+safeInvoke.h"
 #import "NSObject+safeInvoke.h"
+
 static ZIM *zim;
 
-static ZimPlugin *instance;
-@interface ZimPlugin()<ZIMEventHandler,FlutterStreamHandler>
+static ZegoZimPlugin *instance;
+@interface ZegoZimPlugin()<ZIMEventHandler,FlutterStreamHandler>
 
 @property (nonatomic, strong) id<FlutterPluginRegistrar> registrar;
 
@@ -20,12 +21,12 @@ static ZimPlugin *instance;
 
 @end
 
-@implementation ZimPlugin
+@implementation ZegoZimPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel = [FlutterMethodChannel
-      methodChannelWithName:@"zim_plugin"
+      methodChannelWithName:@"zego_zim_plugin"
             binaryMessenger:[registrar messenger]];
-    instance = [[ZimPlugin alloc] init];
+    instance = [[ZegoZimPlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:channel];
     instance.methodChannel = channel;
 
@@ -1216,4 +1217,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:invitees forKey:@"invitees"];
     _events(resultDic);
 }
+
+
+
 @end

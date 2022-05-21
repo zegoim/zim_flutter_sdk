@@ -1,6 +1,6 @@
-# zim_plugin_example
+# zego_zim_example
 
-Demonstrates how to use the zim_plugin plugin.
+Demonstrates how to use the zego_zim plugin.
 
 ## Getting Started
 

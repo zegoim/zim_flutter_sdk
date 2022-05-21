@@ -170,13 +170,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  zim_plugin:
+  zego_zim:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "2.1.1"
+    version: "0.9.0"
 sdks:
-  dart: ">=2.17.0-182.1.beta <3.0.0"
+  dart: ">=2.14.0 <3.0.0"
   flutter: ">=2.5.0"
