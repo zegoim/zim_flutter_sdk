@@ -1,6 +1,6 @@
 name: zim_plugin
 description: A ZIM Flutter Plugin
-version: 0.9.2
+version: 2.1.1
 homepage: https://www.zego.im
 
 environment:
