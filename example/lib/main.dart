@@ -8,8 +8,7 @@ import 'package:zego_zim/zego_zim.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
-  var version = await ZIM.getInstance().getVersion();
-  log(version);
+
 }
 
 class MyApp extends StatefulWidget {

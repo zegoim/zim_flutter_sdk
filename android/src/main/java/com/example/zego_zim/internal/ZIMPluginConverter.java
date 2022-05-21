@@ -126,10 +126,11 @@ public class ZIMPluginConverter {
                 break;
             case IMAGE:
                 assert message instanceof ZIMImageMessage;
-                messageMap.put("thumbnailDownloadUrl",((ZIMImageMessage) message).getThumbnailDownloadUrl());
-                messageMap.put("thumbnailLocalPath",((ZIMImageMessage) message).getThumbnailLocalPath());
-                messageMap.put("largeImageDownloadUrl",((ZIMImageMessage) message).getLargeImageDownloadUrl());
-                messageMap.put("largeImageLocalPath",((ZIMImageMessage) message).getLargeImageLocalPath());
+
+                messageMap.put("thumbnailDownloadUrl",((ZIMImageMessage) message).getThumbnailDownloadUrl() != null?((ZIMImageMessage) message).getThumbnailDownloadUrl(): "");
+                messageMap.put("thumbnailLocalPath",((ZIMImageMessage) message).getThumbnailLocalPath() != null ? ((ZIMImageMessage) message).getThumbnailLocalPath() : "");
+                messageMap.put("largeImageDownloadUrl",((ZIMImageMessage) message).getLargeImageDownloadUrl() != null ? ((ZIMImageMessage) message).getLargeImageDownloadUrl() : "");
+                messageMap.put("largeImageLocalPath",((ZIMImageMessage) message).getLargeImageLocalPath() != null ? ((ZIMImageMessage) message).getLargeImageLocalPath() : "");
                 break;
             case VIDEO:
                 assert message instanceof ZIMVideoMessage;

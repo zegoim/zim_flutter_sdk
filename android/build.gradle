@@ -1,5 +1,5 @@
 group 'com.example.zego_zim'
-version '0.9.0'
+version '2.1.1'
 
 buildscript {
     repositories {
