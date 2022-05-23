@@ -337,7 +337,7 @@ class ZIMImpl implements ZIM {
   Future<ZIMRoomAttributesOperatedCallResult> setRoomAttributes(
       Map<String, String> roomAttributes,
       String roomID,
-      ZIMRoomAttributesSetConfig? config) async {
+      ZIMRoomAttributesSetConfig config) async {
     Map resultMap = await _channel.invokeMethod('setRoomAttributes', {
       'roomAttributes': roomAttributes,
       'roomID': roomID,
@@ -351,7 +351,7 @@ class ZIMImpl implements ZIM {
   Future<ZIMRoomAttributesOperatedCallResult> deleteRoomAttributes(
       List<String> keys,
       String roomID,
-      ZIMRoomAttributesDeleteConfig? config) async {
+      ZIMRoomAttributesDeleteConfig config) async {
     Map resultMap = await _channel.invokeMethod('deleteRoomAttributes', {
       'keys': keys,
       'roomID': roomID,
@@ -363,7 +363,7 @@ class ZIMImpl implements ZIM {
 
   @override
   Future<void> beginRoomAttributesBatchOperation(
-      String roomID, ZIMRoomAttributesBatchOperationConfig? config) async {
+      String roomID, ZIMRoomAttributesBatchOperationConfig config) async {
     return await _channel.invokeMethod('beginRoomAttributesBatchOperation', {
       'roomID': roomID,
       'config':

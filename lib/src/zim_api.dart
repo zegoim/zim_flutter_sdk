@@ -269,7 +269,7 @@ abstract class ZIM {
       String toConversationID,
       ZIMConversationType conversationType,
       ZIMMessageSendConfig config,
-      ZIMMediaUploadingProgress progress);
+      ZIMMediaUploadingProgress? progress);
 
   /// Download media message content.
   ///
@@ -285,7 +285,7 @@ abstract class ZIM {
   /// [fileType] Media file type
   /// [progress] Callback of the progress.
   Future<ZIMMediaDownloadedResult> downloadMediaFile(ZIMMediaMessage message,
-      ZIMMediaFileType fileType, ZIMMediaDownloadingProgress progress);
+      ZIMMediaFileType fileType, ZIMMediaDownloadingProgress? progress);
 
   /// Supported versions: 2.0.0 and above.
 
