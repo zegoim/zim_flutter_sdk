@@ -162,7 +162,7 @@
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"type"]  forKey:@"type"];
     [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"messageID"]  forKey:@"messageID"];
     [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"localMessageID"]  forKey:@"localMessageID"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"senderUserID"]  forKey:@"senderUserID"];
+    [msg safeSetValue:(NSString *)[messageDic objectForKey:@"senderUserID"]  forKey:@"senderUserID"];
     [msg safeSetValue:(NSString *)[messageDic objectForKey:@"conversationID"] forKey:@"conversationID"];
     [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"direction"]  forKey:@"direction"];
     [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"sentStatus"]  forKey:@"sentStatus"];
@@ -249,6 +249,11 @@
             [messageDic safeSetObject:[NSNumber numberWithUnsignedInt:videoMsg.videoDuration] forKey:@"videoDuration"];
             [messageDic safeSetObject:videoMsg.videoFirstFrameDownloadUrl forKey:@"videoFirstFrameDownloadUrl"];
             [messageDic safeSetObject:videoMsg.videoFirstFrameLocalPath forKey:@"videoFirstFrameLocalPath"];
+            break;
+        }
+        case ZIMMessageTypeAudio:{
+            ZIMAudioMessage *audioMsg = (ZIMAudioMessage *)message;
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedInt:audioMsg.audioDuration] forKey:@"audioDuration"];
             break;
         }
         default:

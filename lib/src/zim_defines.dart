@@ -473,8 +473,10 @@ class ZIMRoomLeftResult {
 
 class ZIMRoomMemberQueriedResult {
   String roomID;
+  String nextFlag;
   List<ZIMUserInfo> memberList;
-  ZIMRoomMemberQueriedResult({required this.roomID, required this.memberList});
+  ZIMRoomMemberQueriedResult(
+      {required this.roomID, required this.nextFlag, required this.memberList});
 }
 
 class ZIMRoomOnlineMemberCountQueriedResult {

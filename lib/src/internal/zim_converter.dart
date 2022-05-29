@@ -479,6 +479,7 @@ class ZIMConverter {
       Map resultMap) {
     return ZIMRoomMemberQueriedResult(
         roomID: resultMap['roomID'],
+        nextFlag: resultMap['nextFlag'],
         memberList: cnvZIMUserInfoListBasicToObject(resultMap['memberList']));
   }
 
