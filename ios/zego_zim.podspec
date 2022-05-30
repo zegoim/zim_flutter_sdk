@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'zego_zim'
-  s.version          = '2.1.1'
+  s.version          = '2.1.2'
   s.summary          = 'ZIM SDK for Flutter.'
   s.description      = <<-DESC
   ZIM Flutter SDK is a flutter plugin wrapper based on ZIM native Android / iOS SDK
