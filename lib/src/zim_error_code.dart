@@ -25,6 +25,8 @@ class ZIMErrorCode {
   static const int messageModuleServerError = 6000202;
   static const int messageModuleSendMessageFailed = 6000203;
   static const int messageModuleTargetDoseNotExist = 6000204;
+  static const int messageModuleAuditRejected = 6000221;
+  static const int messageModuleAuditFailed = 6000222;
   static const int messageModuleCallError = 6000270;
   static const int messageModuleCancelCallError = 6000271;
   static const int messageModuleCallServerError = 6000272;

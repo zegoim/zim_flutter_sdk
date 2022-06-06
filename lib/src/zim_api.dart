@@ -11,7 +11,7 @@ abstract class ZIM {
   /// When the SDK is running, the developer finds that it does not match the expected situation and submits the problem and related logs to the ZEGO technical staff for locating. The ZEGO technical staff may need the information of the engine version to assist in locating the problem.
   /// Developers can also collect this information as the version information of the engine used by the app, so that the SDK corresponding to each version of the app on the line.
   ///
-  /// Available since: 1.1.0.
+  /// Available since: 2.1.5.
   ///
   /// Description: Get the SDK version.
   ///
@@ -44,7 +44,7 @@ abstract class ZIM {
   /// [config] Log configuration object.
   Future<void> setLogConfig(ZIMLogConfig config);
 
-  /// Supported version: 1.1.0 and above.
+  /// Supported version: 2.1.5 and above.
   ///
   /// Detailed description: Example Set the SDK cache file path. Because the SDK has a default path, it is generally not recommended that you set your own path unless there is a strong need to do so.
   ///
@@ -84,7 +84,7 @@ abstract class ZIM {
   /// [token] The token issued by the developer's business server, used to ensure security. The generation rules are detailed in ZEGO document website.
   Future<ZIMTokenRenewedResult> renewToken(String token);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: Through this interface, you can query and obtain the corresponding UserInfo by userID.
   ///
@@ -95,7 +95,7 @@ abstract class ZIM {
 
 //MARK: - Conversation
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
 
   /// Description: This method displays the session list of the logged in user.
 
@@ -113,7 +113,7 @@ abstract class ZIM {
   Future<ZIMConversationListQueriedResult> queryConversationList(
       ZIMConversationQueryConfig config);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: This interface is invoked when a session needs to be deleted. All members in the session can invoke this interface.
   ///
@@ -127,7 +127,7 @@ abstract class ZIM {
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: Used to clear unread for the current user target session.
   ///
@@ -149,7 +149,7 @@ abstract class ZIM {
       clearConversationUnreadMessageCount(
           String conversationID, ZIMConversationType conversationType);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: This method enables DND by selecting whether the unread of the target session is updated when a message is received.
   ///
@@ -178,7 +178,7 @@ abstract class ZIM {
 
 //MARK: -Message
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
 
   /// Description: After this function is called, a message is sent to the specified user. At the same time, a [ZIMMessageSentCallback] callback is received, which can be used to determine whether the message is sent successfully.
 
@@ -202,7 +202,7 @@ abstract class ZIM {
   Future<ZIMMessageSentResult> sendPeerMessage(
       ZIMMessage message, String toUserID, ZIMMessageSendConfig config);
 
-  /// Supported versions: 2.0.0 and above.
+  /// Supported versions: 2.1.5 and above.
 
   /// Detail description: This interface is called when a group chat message needs to be sent.
 
@@ -228,7 +228,7 @@ abstract class ZIM {
 
   /// Send room messages.
   ///
-  /// Available since: 1.1.0 or above
+  /// Available since: 2.1.5 or above
   ///
   /// Description: When this function is called, the message will be sent in the room. At the same time, the [ZIMMessageSentCallback] callback will be received, which can be used to determine whether the message was sent successfully.
   ///
@@ -241,7 +241,7 @@ abstract class ZIM {
       ZIMMessage message, String toRoomID, ZIMMessageSendConfig config);
 
   /// Send media messages.
-  /// Supported versions: 2.1.0 and above.
+  /// Supported versions: 2.1.5 and above.
   ///
   /// Detailed description: This method can be used to send messages in single chat, room and group chat.
   ///
@@ -273,7 +273,7 @@ abstract class ZIM {
 
   /// Download media message content.
   ///
-  /// Supported versions: 2.1.0 and above.
+  /// Supported versions: 2.1.5 and above.
   ///
   /// Detailed description: This method can be used to download the content of media messages, including the original image, large image, thumbnail image, file message, audio message, video message and the first frame of the image message.
   ///
@@ -287,7 +287,7 @@ abstract class ZIM {
   Future<ZIMMediaDownloadedResult> downloadMediaFile(ZIMMediaMessage message,
       ZIMMediaFileType fileType, ZIMMediaDownloadingProgress? progress);
 
-  /// Supported versions: 2.0.0 and above.
+  /// Supported versions: 2.1.5 and above.
 
   /// Detailed description: This method is used to query historical messages.
 
@@ -304,7 +304,7 @@ abstract class ZIM {
   Future<ZIMMessageQueriedResult> queryHistoryMessage(String conversationID,
       ZIMConversationType conversationType, ZIMMessageQueryConfig config);
 
-  /// Supported versions: 2.0.0 and above.
+  /// Supported versions: 2.1.5 and above.
   ///
   /// Detail description: When you need to delete all messages under the target session, call this method.
   ///
@@ -326,7 +326,7 @@ abstract class ZIM {
   Future<ZIMMessageDeletedResult> deleteAllMessage(String conversationID,
       ZIMConversationType conversationType, ZIMMessageDeleteConfig config);
 
-  /// Supported versions: 2.0.0 and above.
+  /// Supported versions: 2.1.5 and above.
 
   /// Detail description: This method implements the function of deleting messages.
 
@@ -354,7 +354,7 @@ abstract class ZIM {
 
   /// Create a room.
   ///
-  /// Available since: 1.1.0 or above.
+  /// Available since: 2.1.5 or above.
   ///
   /// Description: When a room is created, other users can join this room through [joinRoom] function.
   ///
@@ -375,7 +375,7 @@ abstract class ZIM {
 
   /// Join a room.
   ///
-  /// Available since: 1.1.0 or above.
+  /// Available since: 2.1.5 or above.
   ///
   /// Description: If the room does not exist, the join fails and you need to call [createRoom] to create the room first.
   ///
@@ -392,12 +392,25 @@ abstract class ZIM {
   /// [roomID] ID of the room to join.
   Future<ZIMRoomJoinedResult> joinRoom(String roomID);
 
+  /// Supported version: 2.1.5.
+
+  /// Detail description: After calling this API, ZIM will decide whether to create a room or join a room according to whether the user is the first to enter. At the same time, if the first user to enter has room advanced attributes, those attributes will take effect.
+
+  /// Business scenario: When you need to enter a multi-person chat scene with custom attributes, and you do not need to distinguish whether the room is created or added, you can enter a room through this interface.
+
+  /// When to call: It can be called after logging in.
+
+  /// Note: When everyone leaves the room, the room will be automatically destroyed, and a user can be in a maximum of 5 rooms at the same time. [enterRoom] is equivalent to [createRoom] or [joinRoom], so you only need to choose one of the APIs.
+
+  /// Related callbacks: The result of entering the room can be obtained through the [onRoomEntered] callback.
+
+  /// Related interface: You can enter the room through [enterRoom], and leave the room through [leaveRoom].
   Future<ZIMRoomEnteredResult> enterRoom(
       ZIMRoomInfo roomInfo, ZIMRoomAdvancedConfig config);
 
   /// Leave a room.
   ///
-  /// Available since: 1.1.0 or above.
+  /// Available since: 2.1.5 or above.
   ///
   /// Description: When users in the room need to leave the room, they can join this room through [leaveRoom].
   ///
@@ -416,7 +429,7 @@ abstract class ZIM {
 
   /// Query the list of members in the room.
   ///
-  /// Available since: 1.1.0 or above.
+  /// Available since: 2.1.5 or above.
   ///
   /// Description: After joining a room, you can use this function to get the list of members in the room.
   ///
@@ -437,7 +450,7 @@ abstract class ZIM {
 
   /// Query the number of online members in the room.
   ///
-  /// Available since: 1.1.0 or above.
+  /// Available since: 2.1.5 or above.
   ///
   /// Description: After joining a room, you can use this function to get the number of online members in the room.
   ///
@@ -455,7 +468,7 @@ abstract class ZIM {
 
   /// Set room attributes (use this for all additions and changes).
   ///
-  /// Available since: 1.3.0.
+  /// Available since: 2.1.5.
   ///
   /// Description: Used to set room properties.
   ///
@@ -469,7 +482,7 @@ abstract class ZIM {
 
   /// Delete room attributes.
   ///
-  /// Available since: 1.3.0.
+  /// Available since: 2.1.5.
   ///
   /// Description: Used to delete room attributes.
   ///
@@ -481,7 +494,7 @@ abstract class ZIM {
 
   /// Open combination room attribute operation.
   ///
-  /// Available since: 1.3.0.
+  /// Available since: 2.1.5.
   ///
   /// Description: Used to turn on the combination of room attributes.
   ///
@@ -492,7 +505,7 @@ abstract class ZIM {
 
   /// Complete the property operation of the combined room.
   ///
-  /// Available since: 1.3.0.
+  /// Available since: 2.1.5.
   ///
   /// Description: After completing the operation of combining room attributes,
   /// all the setting/deleting operations from the last call to beginRoomAttributesBatchOperation
@@ -504,7 +517,7 @@ abstract class ZIM {
 
   /// Query all properties of the room.
   ///
-  /// Available since: 1.3.0.
+  /// Available since: 2.1.5.
   ///
   /// Used to query room attributes.
   ///
@@ -513,7 +526,7 @@ abstract class ZIM {
 
 //MARK: - Group
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: You can call this interface to create a group, and the person who calls this interface is the group leader. An empty string if the group name is left blank.
   ///
@@ -533,7 +546,7 @@ abstract class ZIM {
       ZIMGroupInfo groupInfo, List<String> userIDs,
       [ZIMGroupAdvancedConfig? config]);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: When a group is created, you can use [dismissGroup] to dismiss it.
   ///
@@ -550,7 +563,7 @@ abstract class ZIM {
   /// [groupID] The ID of the group to be disbanded.
   Future<ZIMGroupDismissedResult> dismissGroup(String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, other users can use [joinGroup] to join the group.
   ///
@@ -567,7 +580,7 @@ abstract class ZIM {
   /// [groupID] The group ID to join.
   Future<ZIMGroupJoinedResult> joinGroup(String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a user joins a group, the user can leave the group through this interface.
   ///
@@ -584,7 +597,7 @@ abstract class ZIM {
   /// [groupID] The group ID to leave.
   Future<ZIMGroupLeftResult> leaveGroup(String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, users can add multiple users to the group through this interface. The interface can be invoked by both the master and members of the group.
   ///
@@ -604,7 +617,7 @@ abstract class ZIM {
   Future<ZIMGroupUsersInvitedResult> inviteUsersIntoGroup(
       List<String> userIDs, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a user joins a group, you can use this method to remove the user from the group.
   ///
@@ -625,7 +638,7 @@ abstract class ZIM {
   Future<ZIMGroupMemberKickedResult> kickGroupMembers(
       List<String> userIDs, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, the group owner can use this method to assign the group owner to a specified user.
   ///
@@ -641,7 +654,7 @@ abstract class ZIM {
   Future<ZIMGroupOwnerTransferredResult> transferGroupOwner(
       String toUserID, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, users can call this method to change the group name.
   ///
@@ -658,7 +671,7 @@ abstract class ZIM {
   Future<ZIMGroupNameUpdatedResult> updateGroupName(
       String groupName, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: When a group is created, users can use this method to update the group bulletin.
   ///
@@ -673,7 +686,7 @@ abstract class ZIM {
   Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
       String groupNotice, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: Query information about a created group.
   ///
@@ -686,7 +699,7 @@ abstract class ZIM {
   /// [groupID] The group ID of the group information to be queried.
   Future<ZIMGroupInfoQueriedResult> queryGroupInfo(String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: If a group already exists, all users of the group can use this method to set group properties.
   ///
@@ -724,7 +737,7 @@ abstract class ZIM {
   Future<ZIMGroupAttributesOperatedResult> deleteGroupAttributes(
       List<String> keys, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, you can use this method to query the specified group properties.
   ///
@@ -741,7 +754,7 @@ abstract class ZIM {
   Future<ZIMGroupAttributesQueriedResult> queryGroupAttributes(
       List<String> keys, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, you can use this method to query all group attributes.
   ///
@@ -757,7 +770,7 @@ abstract class ZIM {
   Future<ZIMGroupAttributesQueriedResult> queryGroupAllAttributes(
       String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, you can use this method to set the roles of group members.
   ///
@@ -774,7 +787,7 @@ abstract class ZIM {
   Future<ZIMGroupMemberRoleUpdatedResult> setGroupMemberRole(
       int role, String forUserID, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, you can use this method to set nicknames for group members.
   ///
@@ -792,7 +805,7 @@ abstract class ZIM {
   Future<ZIMGroupMemberNicknameUpdatedResult> setGroupMemberNickname(
       String nickname, String forUserID, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, you can use this method to query information about a specified group member.
   ///
@@ -808,7 +821,7 @@ abstract class ZIM {
   Future<ZIMGroupMemberInfoQueriedResult> queryGroupMemberInfo(
       String userID, String groupID);
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: Query the list of all groups.
   ///
@@ -820,7 +833,7 @@ abstract class ZIM {
   ///
   Future<ZIMGroupListQueriedResult> queryGroupList();
 
-  /// Available since: 2.0.0 and above.
+  /// Available since: 2.1.5 and above.
   ///
   /// Description: After a group is created, you can use this method to query the group member list.
   ///
@@ -837,7 +850,7 @@ abstract class ZIM {
 
 //MARK: - CallInvite
 
-  /// Supported versions: 2.0.0 and above.
+  /// Supported versions: 2.1.5 and above.
   ///
   /// Detail description: When the caller initiates a call invitation, the called party can use [callAccept] to accept the call invitation or [callReject] to reject the invitation.
   ///
@@ -852,7 +865,7 @@ abstract class ZIM {
   Future<ZIMCallInvitationSentResult> callInvite(
       List<String> invitees, ZIMCallInviteConfig config);
 
-  /// Supported versions: 2.0.0 and above.
+  /// Supported versions: 2.1.5 and above.
   ///
   /// Detail description: After the caller initiates a call invitation, the call invitation can be canceled through this interface before the timeout period.
   ///
@@ -868,7 +881,7 @@ abstract class ZIM {
   Future<ZIMCallCancelSentResult> callCancel(
       List<String> invitees, String callID, ZIMCallCancelConfig config);
 
-  /// Supported versions: 2.0.0 and above.
+  /// Supported versions: 2.1.5 and above.
   ///
   /// Detail description: When the calling party initiates a call invitation, the called party can accept the call invitation through this interface.
   ///
@@ -883,7 +896,7 @@ abstract class ZIM {
   Future<ZIMCallAcceptanceSentResult> callAccept(
       String callID, ZIMCallAcceptConfig config);
 
-  /// Supported versions: 2.0.0 and above.
+  /// Supported versions: 2.1.5 and above.
   ///
   /// Detail description: When the calling party initiates a call invitation, the called party can reject the call invitation through this interface.
   ///

@@ -134,35 +134,13 @@ public class ZIMPluginConverter {
                 break;
             case VIDEO:
                 assert message instanceof ZIMVideoMessage;
-                try {
-                    Field videoDurationField = ZIMVideoMessage.class.getDeclaredField("videoDuration");
-                    videoDurationField.setAccessible(true);
-                    messageMap.put("videoDuration",videoDurationField.get(message));
-                    videoDurationField.setAccessible(false);
-                }
-                catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                }
-                catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                messageMap.put("videoDuration",((ZIMVideoMessage) message).getVideoDuration());
                 messageMap.put("videoFirstFrameDownloadUrl",((ZIMVideoMessage) message).getVideoFirstFrameDownloadUrl());
                 messageMap.put("videoFirstFrameLocalPath",((ZIMVideoMessage) message).getVideoFirstFrameLocalPath());
                 break;
             case AUDIO:
                 assert message instanceof ZIMAudioMessage;
-                try {
-                    Field audioDurationField = ZIMAudioMessage.class.getDeclaredField("audioDuration");
-                    audioDurationField.setAccessible(true);
-                    messageMap.put("audioDuration",audioDurationField.get(message));
-                    audioDurationField.setAccessible(false);
-                }
-                catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                }
-                catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                messageMap.put("audioDuration",((ZIMAudioMessage) message).getAudioDuration());
                 break;
             case FILE:
                 assert message instanceof ZIMFileMessage;
@@ -232,6 +210,11 @@ public class ZIMPluginConverter {
                     videoFirstFrameDownloadUrlField.setAccessible(true);
                     videoFirstFrameDownloadUrlField.set(message,messageMap.get("videoFirstFrameDownloadUrl"));
                     videoFirstFrameDownloadUrlField.setAccessible(false);
+
+                    Field videoFirstFrameLocalPathField = ZIMVideoMessage.class.getDeclaredField("videoFirstFrameLocalPath");
+                    videoFirstFrameLocalPathField.setAccessible(true);
+                    videoFirstFrameLocalPathField.set(message,messageMap.get("videoFirstFrameLocalPath"));
+                    videoFirstFrameLocalPathField.setAccessible(false);
                 }
                 catch (NoSuchFieldException e) {
                     e.printStackTrace();
@@ -262,6 +245,7 @@ public class ZIMPluginConverter {
             Field conversationIDField = ZIMMessage.class.getDeclaredField("conversationID");
             conversationIDField.setAccessible(true);
             conversationIDField.set(message,messageMap.get("conversationID"));
+            conversationIDField.setAccessible(false);
 
             Field conversationSeqField = ZIMMessage.class.getDeclaredField("conversationSeq");
             conversationSeqField.setAccessible(true);

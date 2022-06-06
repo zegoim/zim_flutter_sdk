@@ -1,6 +1,6 @@
 # zego_zim
 
-A new Flutter project.
+ZIM Flutter project.
 
 ## Getting Started
 

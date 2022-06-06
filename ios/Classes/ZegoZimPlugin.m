@@ -29,7 +29,6 @@ static ZegoZimPlugin *instance;
     instance = [[ZegoZimPlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:channel];
     instance.methodChannel = channel;
-
     FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@"zim_event_handler" binaryMessenger:[registrar messenger]];
     [eventChannel setStreamHandler:instance];
     instance.eventChannel = eventChannel;
@@ -1216,6 +1215,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:callID forKey:@"callID"];
     [resultDic safeSetObject:invitees forKey:@"invitees"];
     _events(resultDic);
+    
 }
 
 

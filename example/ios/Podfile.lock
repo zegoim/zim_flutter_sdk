@@ -1,12 +1,15 @@
 PODS:
   - Flutter (1.0.0)
-  - zego_zim (0.9.0):
+  - integration_test (0.0.1):
     - Flutter
-    - ZIM (= 2.1.1)
-  - ZIM (2.1.1)
+  - zego_zim (2.1.5):
+    - Flutter
+    - ZIM (= 2.1.5)
+  - ZIM (2.1.5)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - zego_zim (from `.symlinks/plugins/zego_zim/ios`)
 
 SPEC REPOS:
@@ -16,13 +19,16 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
   zego_zim:
     :path: ".symlinks/plugins/zego_zim/ios"
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  zego_zim: 6b0e42be86caaa51310da49f71237d7013124efc
-  ZIM: 6a4f294825ac93f16c5101d3e97d211c2d17fa33
+  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
+  zego_zim: 641bedd0eb77a202716910134d67af6462a5e672
+  ZIM: 6bfd53cfb6fc930681fca8c9d5f2b0b760d6c9da
 
 PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
 

@@ -1,3 +1,7 @@
+## 2.1.5
+
+- Release version, update native SDK dependency version to 2.1.5
+
 ## 2.1.2
 
 - Fix some bug about converted, with native SDK dependency version 2.1.1
