@@ -2,7 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_zim/zego_zim.dart';
+import 'package:zego_zim_example/topics/items/dia_log_items/error_dia_log.dart';
+import 'package:zego_zim_example/topics/items/key_center/04_token_plugin/04_token_plugin.dart';
 import 'package:zego_zim_example/topics/login/user_model.dart';
 import 'package:zego_zim_example/topics/menu/menu_page.dart';
 
@@ -16,7 +19,28 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> loginKey = GlobalKey<FormState>();
   ZIMUserInfo userInfo = ZIMUserInfo();
-  String token = '';
+
+  showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, //点击遮罩不关闭对话框
+      builder: (context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              CircularProgressIndicator(),
+              Padding(
+                padding: const EdgeInsets.only(top: 26.0),
+                child: Text("loading..."),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -97,51 +121,34 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'User Name'),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey, width: 0.25),
-                  borderRadius: BorderRadius.circular((20.0)),
-                ),
-                child: TextField(
-                  textInputAction: TextInputAction.done,
-                  onChanged: (value) {
-                    token = value;
-                  },
-                  onEditingComplete: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.only(top: 0, left: 15, right: 15),
-                      border: InputBorder.none,
-                      labelText: 'Token'),
-                ),
-              ),
               const SizedBox(
                 height: 20,
               ),
               ElevatedButton(
-                  onPressed: (() async {
-                    try {
-                      await ZIM.getInstance().login(userInfo, token);
-                      log('success');
-                      UserModel.shared().userInfo = userInfo;
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return MenuPage();
-                      }));
-                    } on PlatformException catch (onError) {
-                      log(onError.code);
-                      log(onError.message!);
-                    }
-                  }),
-                  child: const Text('login'),
-                  ),
+                onPressed: (() async {
+                  try {
+                    showLoadingDialog();
+                    String token = await TokenPlugin.makeToken(userInfo.userID);
+
+                    await ZIM.getInstance().login(userInfo, token);
+                    Navigator.of(context).pop;
+                    log('success');
+                    UserModel.shared().userInfo = userInfo;
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('userID', userInfo.userID);
+                    await prefs.setString('userName', userInfo.userName);
+                    Navigator.pushAndRemoveUntil(context,
+                        MaterialPageRoute(builder: ((context) {
+                      return MenuPage();
+                    })), (route) => false);
+                  } on PlatformException catch (onError) {
+                    Navigator.of(context).pop();
+                     bool? delete = await ErrorDiaLog.showFailedDialog(context
+                         onError.code, onError.message!);
+                  }
+                }),
+                child: const Text('login'),
+              ),
             ],
           ),
         ),

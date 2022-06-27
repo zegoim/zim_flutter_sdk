@@ -1,58 +1,61 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:zego_zim_example/topics/conversation/conver_model.dart';
-import 'package:zego_zim_example/topics/items/msg_items/receive_items/receive_text_msg_cell.dart';
-import 'package:zego_zim_example/topics/items/msg_items/send_items/send_text_msg_cell.dart';
 
 class MsgList extends StatefulWidget {
-  MsgList({required this.converModel});
-  ConverModel converModel;
+  MsgList(List<Widget> historyMessageWidgetList,
+      {required this.loadMoreHistoryMsg})
+      : _historyMessageWidgetList = historyMessageWidgetList;
 
-  @override
-  State<StatefulWidget> createState() => _MyState();
-}
+  final List<Widget> _historyMessageWidgetList;
 
-class _MyState extends State<MsgList> {
-  List<Widget> _messageCellList = [];
+  Function loadMoreHistoryMsg;
 
   ScrollController scrollController = ScrollController();
 
-  // void _scrollToend() {
-  //   scrollController.jumpTo(scrollController.position.maxScrollExtent);
-  // }
+  @override
+  State<StatefulWidget> createState() => MsgListState();
+}
 
-  getMessageList() {
-    List<Widget> targetList = [];
-    _messageCellList = widget.converModel.getCurrentMessageWidgetList();
-    targetList.addAll(_messageCellList);
+class MsgListState extends State<MsgList> {
+  bool isInvokeQueryMethod = false;
 
-    widget.converModel.updateMessageWidgetList((converWidgetList) {
-      setState(() {});
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent, //滚动到底部
+  @override
+  void initState() {
+    super.initState();
+  }
 
-        duration: const Duration(milliseconds: 300),
-
-        curve: Curves.easeOut,
-      );
-    });
-    targetList.add(SizedBox(height: 200));
-    return targetList;
+  @override
+  void didUpdateWidget(covariant MsgList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    isInvokeQueryMethod = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
-      // 显示进度条
-      controller: scrollController,
-      child: SingleChildScrollView(
-        // padding: EdgeInsets.only(bottom: 20),
-        controller: scrollController,
-        primary: false,
-        child: Center(
-          child: Column(
-              //动态创建一个List<Widget>
+      controller: widget.scrollController,
+      child: NotificationListener(
+        onNotification: (ScrollNotification notification) {
+          double progressMedian = notification.metrics.pixels /
+              notification.metrics.maxScrollExtent;
+          int progress = (progressMedian * 100).toInt();
 
-              children: getMessageList()),
+          if (progress >= 90 && !isInvokeQueryMethod) {
+            log('该刷新了');
+            widget.loadMoreHistoryMsg();
+            isInvokeQueryMethod = true;
+          }
+          return false;
+        },
+        child: SingleChildScrollView(
+          controller: widget.scrollController,
+          reverse: true,
+          child: Center(
+            child: Column(
+                //动态创建一个List<Widget>
+                children: widget._historyMessageWidgetList),
+          ),
         ),
       ),
     );

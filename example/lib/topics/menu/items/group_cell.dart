@@ -1,7 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zego_zim/zego_zim.dart';
 
-class GroupListCell extends StatelessWidget {
+class GroupListCell extends StatefulWidget {
+  ZIMGroup zimGroup;
+  GroupListCell({required this.zimGroup});
+  @override
+  State<StatefulWidget> createState() => _MyState();
+}
+
+class _MyState extends State<GroupListCell> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -18,33 +26,36 @@ class GroupListCell extends StatelessWidget {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(left: 13.0, right: 13.0),
-              child: Icon(
-                Icons.group,
-                size: 45,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    border: Border.all(width: 1, color: Colors.grey)),
+                child: Icon(
+                  Icons.group,
+                  size: 45,
+                ),
               ),
             ),
             Column(
-                    //垂直方向居中对齐
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    //水平方向靠左对齐
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'group name',
-                        style:
-                            TextStyle(fontSize: 16.0, color: Color(0xFF353535)),
-                        maxLines: 1,
-                      ),
-                      Padding(padding: const EdgeInsets.only(top: 8.0)),
-                      Text(
-                        'groupID',
-                        style:
-                            TextStyle(fontSize: 14.0, color: Color(0xFFa9a9a9)),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )
-                    ],
-                  ),
+              //垂直方向居中对齐
+              mainAxisAlignment: MainAxisAlignment.center,
+              //水平方向靠左对齐
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget.zimGroup.baseInfo!.groupName,
+                  style: TextStyle(fontSize: 16.0, color: Color(0xFF353535)),
+                  maxLines: 1,
+                ),
+                Padding(padding: const EdgeInsets.only(top: 8.0)),
+                Text(
+                  widget.zimGroup.baseInfo!.groupID,
+                  style: TextStyle(fontSize: 14.0, color: Color(0xFFa9a9a9)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              ],
+            ),
           ],
         ),
       ),

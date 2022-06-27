@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zim_example/topics/login/user_model.dart';
+
 
 import '../../login/login_page.dart';
 
@@ -56,7 +58,13 @@ class Left_drawer extends StatelessWidget {
                       try {
                         await ZIM.getInstance().logout();
                         UserModel.release();
-                        Navigator.popUntil(context, (route) => route.isFirst);
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString('userID', '');
+                        await prefs.setString('userName', '');
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: ((context) {
+                          return LoginPage();
+                        })), (route) => false);
                       } on PlatformException catch (onError) {
                         log('log out error');
                       }

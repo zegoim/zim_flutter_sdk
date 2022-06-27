@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zego_zim/zego_zim.dart';
-import 'package:zego_zim_example/topics/conversation/peer/peer_chat_page.dart';
+import 'package:zego_zim_example/topics/items/dia_log_items/error_dia_log.dart';
+
+import '../../chat/chat_with_conversation/peer/peer_chat_page.dart';
 
 class CreatePeerPage extends StatefulWidget {
   @override
@@ -73,25 +75,18 @@ class _PageState extends State<CreatePeerPage> {
                           ZIMUsersInfoQueriedResult result = await ZIM
                               .getInstance()
                               .queryUsersInfo([targetUserID]);
-                          ZIMConversation conversation = ZIMConversation();
-                          conversation.conversationID =
-                              result.userList.first.userID;
-                          conversation.conversationName =
-                              result.userList.first.userName;
-                          conversation.type = ZIMConversationType.peer;
                           Navigator.pop(context);
                           Navigator.push(context,
                               MaterialPageRoute(builder: ((context) {
-                            return PeerChatPage(conversation);
+                            return PeerChatPage(
+                                conversationID: result.userList.first.userID,
+                                conversationName:
+                                    result.userList.first.userName);
                           })));
-                          // Navigator.pushAndRemoveUntil(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           PeerChatPage(conversation)),
-                          //   (route) => route == null,
-                          // );
-                        } on PlatformException catch (onError) {}
+                        } on PlatformException catch (onError) {
+                          ErrorDiaLog.showFailedDialog(
+                              context, onError.code, onError.message!);
+                        }
                       }),
                       child: const Text('OK'),
                     ),
