@@ -1,3 +1,6 @@
+## 2.1.6
+
+- Release version, update native SDK dependency version to 2.1.6
 ## 2.1.5
 
 - Release version, update native SDK dependency version to 2.1.5

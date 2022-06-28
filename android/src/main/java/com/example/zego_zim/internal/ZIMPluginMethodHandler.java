@@ -359,11 +359,11 @@ public class ZIMPluginMethodHandler {
 
     public static void downloadMediaFile(MethodCall call, Result result){
         ZIMMediaMessage mediaMessage = (ZIMMediaMessage) ZIMPluginConverter.cnvZIMMessageMapToObject(Objects.requireNonNull(call.argument("message")));
-        ZIMMediaFileType fileType = ZIMMediaFileType.getZIMImageType(ZIMPluginCommonTools.safeGetIntValue(call.argument("fileType")));
+        ZIMMediaFileType fileType = ZIMMediaFileType.getZIMMediaFileType(ZIMPluginCommonTools.safeGetIntValue(call.argument("fileType")));
         Integer progressID = call.argument("progressID");
         zim.downloadMediaFile(mediaMessage, fileType, new ZIMMediaDownloadedCallback() {
             @Override
-            public void onMediaDownloaded(ZIMMessage message, ZIMError errorInfo) {
+            public void onMediaDownloaded(ZIMMediaMessage message, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> messageMap = ZIMPluginConverter.cnvZIMMessageObjectToMap(message);
                     HashMap<String,Object> resultMap = new HashMap<>();
@@ -373,12 +373,10 @@ public class ZIMPluginMethodHandler {
                 else{
                     result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
                 }
-
             }
 
             @Override
-            public void onMediaDownloadingProgress(ZIMMessage message, long currentFileSize, long totalFileSize) {
-
+            public void onMediaDownloadingProgress(ZIMMediaMessage message, long currentFileSize, long totalFileSize) {
                 if(ZIMPluginEventHandler.mysink == null) {
                     return;
                 }
@@ -403,7 +401,7 @@ public class ZIMPluginMethodHandler {
 
         zim.sendMediaMessage(mediaMessage, toConversationID, conversationType, config, new ZIMMediaMessageSentCallback() {
             @Override
-            public void onMessageSent(ZIMMessage message, ZIMError errorInfo) {
+            public void onMessageSent(ZIMMediaMessage message, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> messageMap = ZIMPluginConverter.cnvZIMMessageObjectToMap(message);
                     HashMap<String,Object> resultMap = new HashMap<>();
@@ -416,7 +414,7 @@ public class ZIMPluginMethodHandler {
             }
 
             @Override
-            public void onMediaUploadingProgress(String fileUID, long currentFileSize, long totalFileSize, ZIMMediaMessage message) {
+            public void onMediaUploadingProgress(ZIMMediaMessage message, long currentFileSize, long totalFileSize) {
                 if(ZIMPluginEventHandler.mysink == null) {
                     return;
                 }
