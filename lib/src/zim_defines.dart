@@ -1,4 +1,7 @@
+import 'dart:ffi';
 import 'dart:typed_data';
+
+import 'package:zego_zim/zego_zim.dart';
 
 /// Connection state.
 ///
@@ -362,6 +365,11 @@ class ZIMUserInfo {
   /// User name, a string with a maximum length of 64 bytes or less.
   String userName = '';
   ZIMUserInfo();
+}
+
+class ZIMUserFullInfo {
+  ZIMUserInfo baseInfo = ZIMUserInfo();
+  String extendedData = '';
 }
 
 class ZIMMessage {
@@ -766,10 +774,20 @@ class ZIMTokenRenewedResult {
 /// [userList]  List of the userInfo queried.
 /// [errorUserList] Failed to query the userInfo list.
 class ZIMUsersInfoQueriedResult {
-  List<ZIMUserInfo> userList;
+  List<ZIMUserFullInfo> userList;
   List<ZIMErrorUserInfo> errorUserList;
   ZIMUsersInfoQueriedResult(
       {required this.userList, required this.errorUserList});
+}
+
+class ZIMUserNameUpdatedResult {
+  String userName;
+  ZIMUserNameUpdatedResult({required this.userName});
+}
+
+class ZIMUserExtendedDataUpdatedResult {
+  String extendedData;
+  ZIMUserExtendedDataUpdatedResult({required this.extendedData});
 }
 
 /// Available since: 2.0.0 and above.
@@ -1271,6 +1289,13 @@ class ZIMGroupMemberListQueriedResult {
   int nextFlag;
   ZIMGroupMemberListQueriedResult(
       {required this.groupID, required this.userList, required this.nextFlag});
+}
+
+class ZIMGroupMemberCountQueriedResult {
+  String groupID;
+  int count;
+  ZIMGroupMemberCountQueriedResult(
+      {required this.groupID, required this.count});
 }
 
 /// Supported version: 2.0.0.

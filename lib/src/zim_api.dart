@@ -93,6 +93,10 @@ abstract class ZIM {
   /// [userIDs] userID list.
   Future<ZIMUsersInfoQueriedResult> queryUsersInfo(List<String> userIDs);
 
+  Future<ZIMUserNameUpdatedResult> updateUserName(String userName);
+
+  Future<ZIMUserExtendedDataUpdatedResult> updateUserExtendedData(
+      String extendedData);
 //MARK: - Conversation
 
   /// Available since: 2.1.5 and above.
@@ -847,6 +851,10 @@ abstract class ZIM {
   /// [config] Group member query configuration.
   Future<ZIMGroupMemberListQueriedResult> queryGroupMemberList(
       String groupID, ZIMGroupMemberQueryConfig config);
+
+
+  Future<ZIMGroupMemberCountQueriedResult> queryGroupMemberCount(
+      String groupID);
 
 //MARK: - CallInvite
 

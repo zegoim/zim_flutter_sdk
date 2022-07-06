@@ -82,6 +82,21 @@ class ZIMImpl implements ZIM {
   }
 
   @override
+  Future<ZIMUserExtendedDataUpdatedResult> updateUserExtendedData(
+      String extendedData) async {
+    Map resultMap = await _channel
+        .invokeMethod('updateUserExtendedData', {'extendedData': extendedData});
+    return ZIMConverter.cnvZIMUserExtendedDataUpdatedMapToObject(resultMap);
+  }
+
+  @override
+  Future<ZIMUserNameUpdatedResult> updateUserName(String userName) async {
+    Map resultMap =
+        await _channel.invokeMethod('updateUserName', {'userName': userName});
+    return ZIMConverter.cnvZIMUserNameUpdatedMapToObject(resultMap);
+  }
+
+  @override
   Future<ZIMConversationListQueriedResult> queryConversationList(
       ZIMConversationQueryConfig config) async {
     Map resultMap = await _channel.invokeMethod('queryConversationList', {
@@ -537,6 +552,15 @@ class ZIMImpl implements ZIM {
     Map resultMap = await _channel.invokeMethod(
         'queryGroupMemberInfo', {'userID': userID, 'groupID': groupID});
     return ZIMConverter.cnvZIMGroupMemberInfoQueriedResultMapToObject(
+        resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMemberCountQueriedResult> queryGroupMemberCount(
+      String groupID) async {
+    Map resultMap = await _channel
+        .invokeMethod('queryGroupMemberCount', {'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupMemberCountQueriedResultMapToObject(
         resultMap);
   }
 

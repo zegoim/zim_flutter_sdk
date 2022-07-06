@@ -18,6 +18,17 @@
     return errorInfoDic;
 }
 
++(nullable NSDictionary *)cnvZIMUserFullInfoObjectToBasic:(nullable ZIMUserFullInfo *)userFullInfo{
+    if(userFullInfo == nil || userFullInfo == NULL || [userFullInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *userFullInfoDic = [[NSMutableDictionary alloc] init];
+    [userFullInfoDic safeSetObject:userFullInfo.extendedData forKey:@"extendedData"];
+    NSDictionary *baseInfodic = [ZIMPluginConverter cnvZIMUserInfoObjectToBasic:userFullInfo.baseInfo];
+    [userFullInfoDic safeSetObject:baseInfodic forKey:@"baseInfo"];
+    return userFullInfoDic;
+}
+
 +(nullable NSDictionary *)cnvZIMUserInfoObjectToBasic:(nullable ZIMUserInfo *)userInfo{
     if(userInfo == nil || userInfo == NULL || [userInfo isEqual:[NSNull null]]){
         return nil;

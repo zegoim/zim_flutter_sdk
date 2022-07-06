@@ -116,14 +116,37 @@ static ZegoZimPlugin *instance;
           }
       }];
   }
+  else if([@"updateUserName" isEqualToString:call.method]){
+      NSString *userName = [call.arguments objectForKey:@"userName"];
+      [zim updateUserName:userName callback:^(NSString * _Nonnull userName, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSDictionary *resultDic = @{@"userName":userName};
+              result(resultDic);
+          }else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+      
+  }
+  else if ([@"updateUserExtendedData" isEqualToString:call.method]){
+      NSString *updateUserExtendedData = [call.arguments objectForKey:@"updateUserExtendedData"];
+      [zim updateUserExtendedData:updateUserExtendedData callback:^(NSString * _Nonnull extendedData, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSDictionary *resultDic = @{@"extendedData":extendedData};
+              result(resultDic);
+          }else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
   else if ([@"queryUsersInfo" isEqualToString:call.method]){
       NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
       [zim queryUsersInfo:userIDs callback:^(NSArray<ZIMUserInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
           if(errorInfo.code == 0){
               NSMutableArray *userListBasic = [[NSMutableArray alloc] init];
-              for (ZIMUserInfo *userInfo in userList) {
-                  NSDictionary *userInfoDic = @{@"userID":userInfo.userID,@"userName":userInfo.userName};
-                  [userListBasic addObject:userInfoDic];
+              for (ZIMUserFullInfo *userFullInfo in userList) {
+                  NSDictionary *userFullInfoDic = [ZIMPluginConverter cnvZIMUserFullInfoObjectToBasic:userFullInfo];
+                  [userListBasic addObject:userFullInfoDic];
               }
               NSMutableArray *errorUserListBasic = [[NSMutableArray alloc] init];
               for (ZIMErrorUserInfo *errorUserInfo in errorUserList) {
@@ -805,6 +828,20 @@ static ZegoZimPlugin *instance;
               [resultMtDic safeSetObject:groupID forKey:@"groupID"];
               [resultMtDic safeSetObject:basicUserList forKey:@"userList"];
               [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInt:nextFlag] forKey:@"nextFlag"];
+              result(resultMtDic);
+          }
+          else{
+              result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+          }
+      }];
+  }
+  else if([@"queryGroupMemberCount" isEqualToString:call.method]){
+      NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
+      [zim queryGroupMemberCountByGroupID:groupID callback:^(NSString * _Nonnull groupID, unsigned int count, ZIMError * _Nonnull errorInfo) {
+          if(errorInfo.code == 0){
+              NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+              [resultMtDic safeSetObject:groupID forKey:@"groupID"];
+              [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInt:count] forKey:@"count"];
               result(resultMtDic);
           }
           else{

@@ -10,7 +10,9 @@ class ZIMErrorCode {
   static const int commonModuleSwitchServerError = 6000006;
   static const int commonModuleIMServerError = 6000007;
   static const int commonModuleIMDataBaseError = 6000008;
+  static const int commonModuleImServerDisconnect = 6000009;
   static const int commonModuleUploadLogError = 6000010;
+  static const int commonModuleUserIsNotExist = 6000011;
 
   static const int networkModuleCommonError = 6000101;
   static const int networkModuleServerError = 6000102;
@@ -18,6 +20,7 @@ class ZIMErrorCode {
   static const int networkModuleNetworkError = 6000104;
   static const int networkModuleTokenExpired = 6000106;
   static const int networkModuleTokenVersionError = 6000107;
+  static const int networkModuleTokenTimeIsTooShort = 6000108;
   static const int networkModuleUserHasAlreadyLogged = 6000111;
   static const int networkModuleUserIsNotLogged = 6000121;
 
@@ -40,6 +43,7 @@ class ZIMErrorCode {
   static const int roomModuleCreateRoomError = 6000303;
   static const int roomModuleJoinRoomError = 6000304;
   static const int roomModuleLeaveRoomError = 6000306;
+  static const int roomModuleUserIsAlreadyInTheRoom = 6000320;
   static const int roomModuleUserIsNotInTheRoom = 6000321;
   static const int roomModuleTheRoomDoseNotExist = 6000322;
   static const int roomModuleTheRoomAlreadyExists = 6000323;

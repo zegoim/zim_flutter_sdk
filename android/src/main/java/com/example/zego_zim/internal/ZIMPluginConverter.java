@@ -49,6 +49,7 @@ import im.zego.zim.entity.ZIMRoomFullInfo;
 import im.zego.zim.entity.ZIMRoomInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
 import im.zego.zim.entity.ZIMTextMessage;
+import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.entity.ZIMVideoMessage;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
@@ -349,6 +350,23 @@ public class ZIMPluginConverter {
             userInfoBasicList.add(cnvZIMUserInfoObjectToMap(userInfo));
         }
         return userInfoBasicList;
+    }
+
+    static public HashMap<String,Object> cnvZIMUserFullInfoObjectToBasic(ZIMUserFullInfo userFullInfo){
+        HashMap<String,Object> userFullInfoMap = new HashMap<>();
+        userFullInfoMap.put("extendedData",userFullInfo.extendedData);
+        HashMap<String,Object> baseInfoMap = cnvZIMUserInfoObjectToMap(userFullInfo.baseInfo);
+        userFullInfoMap.put("baseInfo",baseInfoMap);
+        return  userFullInfoMap;
+    }
+
+    static public ArrayList<HashMap<String,Object>> cnvZIMUserFullInfoListToBasicList(ArrayList<ZIMUserFullInfo> userFullInfoList){
+        ArrayList<HashMap<String,Object>> userFullInfoBasicList = new ArrayList<>();
+        for (ZIMUserFullInfo userFullInfo:userFullInfoList
+             ) {
+            userFullInfoBasicList.add(cnvZIMUserFullInfoObjectToBasic(userFullInfo));
+        }
+        return userFullInfoBasicList;
     }
 
     static public HashMap<String,Object> cnvZIMUserInfoObjectToMap(ZIMUserInfo userInfo){

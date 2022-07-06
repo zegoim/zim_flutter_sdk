@@ -8,6 +8,9 @@
 
 +(nullable NSDictionary *)cnvZIMErrorObjectToDic:(nullable ZIMError *)errorInfo;
 
+
++(nullable NSDictionary *)cnvZIMUserFullInfoObjectToBasic:(nullable ZIMUserFullInfo *)userFullInfo;
+
 +(nullable NSDictionary *)cnvZIMUserInfoObjectToBasic:(nullable ZIMUserInfo *)userInfo;
 
 +(nullable NSArray *)cnvZIMUserInfoListTobasicList:(nullable NSArray<ZIMUserInfo *> *)userInfoList;

@@ -14,32 +14,55 @@ class ZIMConverter {
     List userListBasic = resultMap['userList'];
     List errorUserListBasic = resultMap['errorUserList'];
 
-    List<ZIMUserInfo> userList = [];
-    for (Map userInfoMap in userListBasic) {
-      ZIMUserInfo userInfo = ZIMUserInfo();
-      userInfo.userID = userInfoMap['userID'];
-      userInfo.userName = userInfoMap['userName'];
-      userList.add(userInfo);
+    List<ZIMUserFullInfo> userList = [];
+    for (Map userFullInfoMap in userListBasic) {
+      userList.add(cnvZIMUserFullInfoMapToObject(userFullInfoMap));
     }
 
     List<ZIMErrorUserInfo> errorUserList = [];
-    for (Map userInfoMap in errorUserListBasic) {
-      ZIMErrorUserInfo errorUserInfo = ZIMErrorUserInfo();
-      errorUserInfo.userID = userInfoMap['userID'];
-      errorUserInfo.reason = userInfoMap['reason'];
-      errorUserList.add(errorUserInfo);
+    for (Map errorUserInfoBasic in errorUserListBasic) {
+      errorUserList.add(cnvZIMErrorUserInfoMapToObject(errorUserInfoBasic));
     }
 
     return ZIMUsersInfoQueriedResult(
         userList: userList, errorUserList: errorUserList);
   }
 
-  static ZIMErrorUserInfo cnvZIMErrorUserInfoMapToObject(Map resultMap) {
+  static ZIMUserFullInfo cnvZIMUserFullInfoMapToObject(
+      Map userFullInfoBasicMap) {
+    ZIMUserFullInfo userFullInfo = ZIMUserFullInfo();
+    userFullInfo.baseInfo =
+        cnvZIMUserInfoMapToObject(userFullInfoBasicMap['baseInfo']);
+    userFullInfo.extendedData = userFullInfoBasicMap['extendedData'];
+    return userFullInfo;
+  }
+
+  static ZIMUserInfo cnvZIMUserInfoMapToObject(Map userInfoBasicMap) {
+    ZIMUserInfo userInfo = ZIMUserInfo();
+    userInfo.userID = userInfoBasicMap['userID'];
+    userInfo.userName = userInfoBasicMap['userName'];
+    return userInfo;
+  }
+
+  static ZIMErrorUserInfo cnvZIMErrorUserInfoMapToObject(
+      Map errorUserInfoBasicMap) {
     ZIMErrorUserInfo errorUserInfo = ZIMErrorUserInfo();
-    errorUserInfo.userID = resultMap['userID'];
-    errorUserInfo.reason = resultMap['reason'];
+    errorUserInfo.userID = errorUserInfoBasicMap['userID'];
+    errorUserInfo.reason = errorUserInfoBasicMap['reason'];
     return errorUserInfo;
   }
+
+  static ZIMUserExtendedDataUpdatedResult
+      cnvZIMUserExtendedDataUpdatedMapToObject(Map resultMap) {
+    return ZIMUserExtendedDataUpdatedResult(
+        extendedData: resultMap['extendedData']);
+  }
+
+  static ZIMUserNameUpdatedResult cnvZIMUserNameUpdatedMapToObject(
+      Map resultMap) {
+    return ZIMUserNameUpdatedResult(userName: resultMap['userName']);
+  }
+
 
   static List<ZIMErrorUserInfo> cnvBasicListToZIMErrorUserInfoList(
       List basicList) {
@@ -459,13 +482,6 @@ class ZIMConverter {
     return queryConfig;
   }
 
-  static ZIMUserInfo cnvZIMUserInfoMapToObject(Map userInfoMap) {
-    ZIMUserInfo userInfo = ZIMUserInfo();
-    userInfo.userID = userInfoMap['userID'];
-    userInfo.userName = userInfoMap['userName'];
-    return userInfo;
-  }
-
   static List<ZIMUserInfo> cnvZIMUserInfoListBasicToObject(
       List memberListBasic) {
     List<ZIMUserInfo> memberList = [];
@@ -745,6 +761,12 @@ class ZIMConverter {
         cnvZIMGroupMemberInfoMapToObject(resultMap['userInfo']);
     return ZIMGroupMemberInfoQueriedResult(
         groupID: resultMap['groupID'], userInfo: userInfo);
+  }
+
+  static ZIMGroupMemberCountQueriedResult
+      cnvZIMGroupMemberCountQueriedResultMapToObject(Map resultMap) {
+    return ZIMGroupMemberCountQueriedResult(
+        groupID: resultMap['groupID'], count: resultMap['count']);
   }
 
   static ZIMGroup cnvZIMGroupMapToObject(Map resultMap) {

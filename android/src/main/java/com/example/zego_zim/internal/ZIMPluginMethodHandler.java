@@ -35,6 +35,7 @@ import im.zego.zim.callback.ZIMGroupInfoQueriedCallback;
 import im.zego.zim.callback.ZIMGroupJoinedCallback;
 import im.zego.zim.callback.ZIMGroupLeftCallback;
 import im.zego.zim.callback.ZIMGroupListQueriedCallback;
+import im.zego.zim.callback.ZIMGroupMemberCountQueriedCallback;
 import im.zego.zim.callback.ZIMGroupMemberInfoQueriedCallback;
 import im.zego.zim.callback.ZIMGroupMemberKickedCallback;
 import im.zego.zim.callback.ZIMGroupMemberListQueriedCallback;
@@ -61,6 +62,8 @@ import im.zego.zim.callback.ZIMRoomLeftCallback;
 import im.zego.zim.callback.ZIMRoomMemberQueriedCallback;
 import im.zego.zim.callback.ZIMRoomOnlineMemberCountQueriedCallback;
 import im.zego.zim.callback.ZIMTokenRenewedCallback;
+import im.zego.zim.callback.ZIMUserExtendedDataUpdatedCallback;
+import im.zego.zim.callback.ZIMUserNameUpdatedCallback;
 import im.zego.zim.callback.ZIMUsersInfoQueriedCallback;
 import im.zego.zim.callback.ZIMCallCancelSentCallback;
 import im.zego.zim.entity.ZIMCacheConfig;
@@ -94,6 +97,7 @@ import im.zego.zim.entity.ZIMRoomAttributesSetConfig;
 import im.zego.zim.entity.ZIMRoomFullInfo;
 import im.zego.zim.entity.ZIMRoomInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
+import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
@@ -204,11 +208,46 @@ public class ZIMPluginMethodHandler {
         zim.queryUsersInfo(userIDs, new ZIMUsersInfoQueriedCallback() {
 
             @Override
-            public void onUsersInfoQueried(ArrayList<ZIMUserInfo> userList, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+            public void onUsersInfoQueried(ArrayList<ZIMUserFullInfo> userList, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
-                    resultMap.put("userList",ZIMPluginConverter.cnvZIMUserInfoListObjectToBasic(userList));
+                    resultMap.put("userList",ZIMPluginConverter.cnvZIMUserFullInfoListToBasicList(userList));
                     resultMap.put("errorUserList",ZIMPluginConverter.cnvZIMErrorUserInfoListObjectToBasic(errorUserList));
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void updateUserName(MethodCall call, Result result){
+        String userName = call.argument("userName");
+        zim.updateUserName(userName, new ZIMUserNameUpdatedCallback() {
+            @Override
+            public void onUserNameUpdated(String userName, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("userName",userName);
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+
+    public static void updateUserExtendedData(MethodCall call ,Result result){
+        String extendedData = call.argument("extendedData");
+        zim.updateUserExtendedData(extendedData, new ZIMUserExtendedDataUpdatedCallback() {
+            @Override
+            public void onUserExtendedDataUpdated(String extendedData, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("extendedData",extendedData);
                     result.success(resultMap);
                 }
                 else{
@@ -926,6 +965,8 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+
+
     public static void queryGroupInfo(MethodCall call,Result result){
         String groupID = call.argument("groupID");
 
@@ -1118,6 +1159,24 @@ public class ZIMPluginMethodHandler {
                     resultMap.put("groupID",groupID);
                     resultMap.put("userList",basicUserList);
                     resultMap.put("nextFlag",nextFlag);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryGroupMemberCount(MethodCall call, Result result){
+        String groupID = call.argument("groupID");
+        zim.queryGroupMemberCount(groupID, new ZIMGroupMemberCountQueriedCallback() {
+            @Override
+            public void onGroupMemberCountQueried(String groupID, int count, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("groupID",groupID);
+                    resultMap.put("count",count);
                     result.success(resultMap);
                 }
                 else {
