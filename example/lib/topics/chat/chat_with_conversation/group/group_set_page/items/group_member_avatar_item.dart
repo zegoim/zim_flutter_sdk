@@ -13,7 +13,7 @@ class GroupMemberAvatarItemState extends State<GroupMemberAvatarItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 50),
+      //constraints: BoxConstraints(maxWidth: 100,maxHeight: 100),
       child: Column(
         children: [
           UserAvatarItem(),

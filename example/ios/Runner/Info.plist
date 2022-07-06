@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>告诉用户你使用相机的目的</string>
+	<string>Zego requires access to your camera.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>告诉用户你使用麦克风的目的</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>告诉用户你使用相册的目的</string>
+	<string>Zego requires access to your album.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -46,6 +46,10 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

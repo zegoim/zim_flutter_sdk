@@ -2,10 +2,18 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:zego_zim/zego_zim.dart';
+import 'package:zego_zim_example/topics/items/msg_items/downloading_progress_model.dart';
+import 'package:zego_zim_example/topics/items/msg_items/receive_items/receive_image_msg_cell.dart';
+import 'package:zego_zim_example/topics/items/msg_items/receive_items/receive_video_msg_cell.dart';
+import 'package:zego_zim_example/topics/items/msg_items/send_items/send_video_msg_cell.dart';
+import 'package:zego_zim_example/topics/items/msg_items/uploading_progress_model.dart';
 import 'package:zego_zim_example/topics/items/msg_items/msg_bottom_box/msg_bottom_model.dart';
 import 'package:zego_zim_example/topics/items/msg_items/msg_converter.dart';
+import 'package:zego_zim_example/topics/items/msg_items/send_items/send_image_msg_cell.dart';
+import 'package:zego_zim_example/topics/login/user_model.dart';
 
 import '../../../items/msg_items/msg_bottom_box/msg_normal_bottom_box.dart';
 
@@ -17,6 +25,7 @@ class PeerChatPage extends StatefulWidget {
   PeerChatPage({required this.conversationID, required this.conversationName}) {
     ZIM.getInstance().clearConversationUnreadMessageCount(
         conversationID, ZIMConversationType.peer);
+    clearUnReadMessage();
   }
   String conversationID;
   String conversationName;
@@ -25,7 +34,15 @@ class PeerChatPage extends StatefulWidget {
   List<ZIMMessage> _historyZIMMessageList = <ZIMMessage>[];
   List<Widget> _historyMessageWidgetList = <Widget>[];
 
+  double progress = 0.0;
+
   bool queryHistoryMsgComplete = false;
+
+  clearUnReadMessage() {
+    ZIM.getInstance().clearConversationUnreadMessageCount(
+        conversationID, ZIMConversationType.peer);
+  }
+
   @override
   State<StatefulWidget> createState() => _MyPageState();
 }
@@ -97,8 +114,17 @@ class _MyPageState extends State<PeerChatPage> {
                 )),
           ),
           MsgNormalBottomBox(
-            sendTextFieldonSubmitted: (value) {
-              sendTextMessage(value);
+            sendTextFieldonSubmitted: (message) {
+              sendTextMessage(message);
+            },
+            onCameraIconButtonOnPressed: (path) {
+              sendMediaMessage(path, ZIMMessageType.image);
+            },
+            onImageIconButtonOnPressed: (path) {
+              sendMediaMessage(path, ZIMMessageType.image);
+            },
+            onVideoIconButtonOnPressed: (path) {
+              sendMediaMessage(path, ZIMMessageType.video);
             },
           ),
         ],
@@ -110,20 +136,81 @@ class _MyPageState extends State<PeerChatPage> {
 
   sendTextMessage(String message) async {
     ZIMTextMessage textMessage = ZIMTextMessage(message: message);
+    textMessage.senderUserID = UserModel.shared().userInfo!.userID;
     ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
+    widget._historyZIMMessageList.add(textMessage);
+
+    SendTextMsgCell cell = SendTextMsgCell(message: textMessage);
+    setState(() {
+      widget._historyMessageWidgetList.add(cell);
+    });
     try {
       ZIMMessageSentResult result = await ZIM
           .getInstance()
           .sendPeerMessage(textMessage, widget.conversationID, sendConfig);
-      widget._historyZIMMessageList.add(result.message);
+      int index = widget._historyZIMMessageList
+          .lastIndexWhere((element) => element == textMessage);
+      widget._historyZIMMessageList[index] = result.message;
       SendTextMsgCell cell =
           SendTextMsgCell(message: (result.message as ZIMTextMessage));
 
       setState(() {
-        widget._historyMessageWidgetList.add(cell);
+        widget._historyMessageWidgetList[index] = cell;
       });
     } on PlatformException catch (onError) {
       log('send error,code:' + onError.code + 'message:' + onError.message!);
+      setState(() {
+        int index = widget._historyZIMMessageList
+            .lastIndexWhere((element) => element == textMessage);
+        widget._historyZIMMessageList[index].sentStatus =
+            ZIMMessageSentStatus.failed;
+        SendTextMsgCell cell = SendTextMsgCell(
+            message: (widget._historyZIMMessageList[index] as ZIMTextMessage));
+        widget._historyMessageWidgetList[index] = cell;
+      });
+    }
+  }
+
+  sendMediaMessage(String? path, ZIMMessageType messageType) async {
+    if (path == null) return;
+    ZIMMediaMessage mediaMessage =
+        MsgConverter.mediaMessageFactory(path, messageType);
+    mediaMessage.senderUserID = UserModel.shared().userInfo!.userID;
+    UploadingprogressModel uploadingprogressModel = UploadingprogressModel();
+    Widget sendMsgCell = MsgConverter.sendMediaMessageCellFactory(
+        mediaMessage, uploadingprogressModel);
+
+    setState(() {
+      widget._historyZIMMessageList.add(mediaMessage);
+      widget._historyMessageWidgetList.add(sendMsgCell);
+    });
+    try {
+      log(mediaMessage.fileLocalPath);
+      ZIMMessageSentResult result = await ZIM.getInstance().sendMediaMessage(
+          mediaMessage,
+          widget.conversationID,
+          ZIMConversationType.peer,
+          ZIMMessageSendConfig(), (message, currentFileSize, totalFileSize) {
+        uploadingprogressModel.uploadingprogress!(
+            message, currentFileSize, totalFileSize);
+      });
+      int index = widget._historyZIMMessageList
+          .lastIndexWhere((element) => element == mediaMessage);
+      Widget resultCell = MsgConverter.sendMediaMessageCellFactory(
+          result.message as ZIMMediaMessage, null);
+      setState(() {
+        widget._historyMessageWidgetList[index] = resultCell;
+      });
+    } on PlatformException catch (onError) {
+      int index = widget._historyZIMMessageList
+          .lastIndexWhere((element) => element == mediaMessage);
+      widget._historyZIMMessageList[index].sentStatus =
+          ZIMMessageSentStatus.failed;
+      Widget failedCell = MsgConverter.sendMediaMessageCellFactory(
+          widget._historyZIMMessageList[index] as ZIMMediaMessage, null);
+      setState(() {
+        widget._historyMessageWidgetList[index] = failedCell;
+      });
     }
   }
 
@@ -131,6 +218,7 @@ class _MyPageState extends State<PeerChatPage> {
     if (widget.queryHistoryMsgComplete) {
       return;
     }
+
     ZIMMessageQueryConfig queryConfig = ZIMMessageQueryConfig();
     queryConfig.count = 20;
     queryConfig.reverse = true;
@@ -161,11 +249,13 @@ class _MyPageState extends State<PeerChatPage> {
     }
   }
 
+
   registerZIMEvent() {
     ZIMEventHandler.onReceivePeerMessage = (messageList, fromUserID) {
       if (fromUserID != widget.conversationID) {
         return;
       }
+      widget.clearUnReadMessage();
       widget._historyZIMMessageList.addAll(messageList);
       for (ZIMMessage message in messageList) {
         switch (message.type) {
@@ -173,6 +263,54 @@ class _MyPageState extends State<PeerChatPage> {
             ReceiceTextMsgCell cell =
                 ReceiceTextMsgCell(message: (message as ZIMTextMessage));
             widget._historyMessageWidgetList.add(cell);
+            break;
+          case ZIMMessageType.image:
+            if ((message as ZIMImageMessage).fileLocalPath == "") {
+              DownloadingProgressModel downloadingProgressModel =
+                  DownloadingProgressModel();
+
+              ReceiveImageMsgCell resultCell;
+              ZIM
+                  .getInstance()
+                  .downloadMediaFile(message, ZIMMediaFileType.thumbnail,
+                      (message, currentFileSize, totalFileSize) {})
+                  .then((value) => {
+                        resultCell = ReceiveImageMsgCell(
+                            message: (value.message as ZIMImageMessage),
+                            downloadingProgress: null,
+                            downloadingProgressModel: downloadingProgressModel),
+                        widget._historyMessageWidgetList.add(resultCell),
+                        setState(() {})
+                      });
+            } else {
+              ReceiveImageMsgCell resultCell = ReceiveImageMsgCell(
+                  message: message,
+                  downloadingProgress: null,
+                  downloadingProgressModel: null);
+              widget._historyMessageWidgetList.add(resultCell);
+            }
+
+            break;
+          case ZIMMessageType.video:
+            if ((message as ZIMVideoMessage).fileLocalPath == "") {
+              ReceiveVideoMsgCell resultCell;
+              ZIM
+                  .getInstance()
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                      (message, currentFileSize, totalFileSize) {})
+                  .then((value) => {
+                        resultCell = ReceiveVideoMsgCell(
+                            message: value.message as ZIMVideoMessage,
+                            downloadingProgressModel: null),
+                        widget._historyMessageWidgetList.add(resultCell),
+                        setState(() {})
+                      });
+            } else {
+              ReceiveVideoMsgCell resultCell = ReceiveVideoMsgCell(
+                  message: message, downloadingProgressModel: null);
+              widget._historyMessageWidgetList.add(resultCell);
+              setState(() {});
+            }
             break;
           default:
         }

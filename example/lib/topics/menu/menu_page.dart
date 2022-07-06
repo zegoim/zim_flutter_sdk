@@ -12,11 +12,13 @@ import 'package:zego_zim_example/topics/menu/items/left_drawer.dart';
 import 'package:zego_zim_example/topics/menu/pop_button_menu/pop_button_menu.dart';
 import 'package:provider/provider.dart';
 
+
 class MenuPage extends StatefulWidget {
   int totalUnreadMsg = 0;
   bool isDisConnected = false;
   bool isConnecting = false;
   String recentAppBarTitle = "ZEGO IM";
+
   @override
   State<StatefulWidget> createState() => _MenuPageState();
 }
@@ -56,12 +58,6 @@ class _MenuPageState extends State<MenuPage> {
   void initState() {
     registerZIMEvent();
     super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant MenuPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    registerZIMEvent();
   }
 
   @override

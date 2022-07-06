@@ -4,14 +4,17 @@ import 'dart:io';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:zego_zim_example/topics/items/msg_items/msg_bottom_box/msg_bottom_model.dart';
 
 import 'msg_bottom_box_expand/msg_normal_bottom_box_expand.dart';
 
 class MsgNormalBottomBox extends StatefulWidget {
-  MsgNormalBottomBox({
-    required this.sendTextFieldonSubmitted,
-  });
+  MsgNormalBottomBox(
+      {required this.sendTextFieldonSubmitted,
+      required this.onCameraIconButtonOnPressed,
+      required this.onImageIconButtonOnPressed,
+      required this.onVideoIconButtonOnPressed});
 
   Function? nonselfOnTapResponse;
   double boxBottomPadding = 50;
@@ -19,6 +22,9 @@ class MsgNormalBottomBox extends StatefulWidget {
   bool bottomExpandShowing = false;
   void Function(String) sendTextFieldonSubmitted;
 
+  void Function(String?) onCameraIconButtonOnPressed;
+  void Function(String?) onImageIconButtonOnPressed;
+  void Function(String?) onVideoIconButtonOnPressed;
   @override
   State<StatefulWidget> createState() => _WidgetState();
 }
@@ -78,12 +84,12 @@ class _WidgetState extends State<MsgNormalBottomBox> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.multitrack_audio,
-                      size: 30,
-                    )),
+                // IconButton(
+                //     onPressed: () {},
+                //     icon: const Icon(
+                //       Icons.multitrack_audio,
+                //       size: 30,
+                //     )),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
@@ -202,7 +208,17 @@ class _WidgetState extends State<MsgNormalBottomBox> {
             ),
             Offstage(
               offstage: !widget.bottomExpandShowing,
-              child: MsgNormalBottomBoxExpand(),
+              child: MsgNormalBottomBoxExpand(
+                onCameraIconButtonOnPressed: (path) {
+                  widget.onCameraIconButtonOnPressed(path);
+                },
+                onImageIconButtonOnPressed: (path) {
+                  widget.onImageIconButtonOnPressed(path);
+                },
+                onVideoIconButtonOnPressed: (path) {
+                  widget.onVideoIconButtonOnPressed(path);
+                },
+              ),
             ),
           ],
         ),

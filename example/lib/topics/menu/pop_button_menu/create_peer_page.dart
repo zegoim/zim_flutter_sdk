@@ -81,7 +81,7 @@ class _PageState extends State<CreatePeerPage> {
                             return PeerChatPage(
                                 conversationID: result.userList.first.userID,
                                 conversationName:
-                                    result.userList.first.userName);
+                                    result.userList.first.userID);
                           })));
                         } on PlatformException catch (onError) {
                           ErrorDiaLog.showFailedDialog(

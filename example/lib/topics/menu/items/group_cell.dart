@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zego_zim/zego_zim.dart';
 
+import '../../chat/chat_with_conversation/group/group_chat_page.dart';
+
 class GroupListCell extends StatefulWidget {
   ZIMGroup zimGroup;
   GroupListCell({required this.zimGroup});
@@ -13,7 +15,16 @@ class _MyState extends State<GroupListCell> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context,
+                              MaterialPageRoute(builder: ((context) {
+                            return GroupChatPage(
+                                conversationID:
+                                    widget.zimGroup.baseInfo!.groupID,
+                                conversationName:
+                                    widget.zimGroup.baseInfo!.groupName,);
+                          })));
+      },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

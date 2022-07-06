@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:zego_zim/zego_zim.dart';
 
 class DeleteAndQuitGroupChatItem extends StatefulWidget {
+  DeleteAndQuitGroupChatItem({required this.groupID});
+  String groupID;
   @override
   State<StatefulWidget> createState() => DeleteAndQuitGroupChatItemState();
 }
@@ -22,15 +26,30 @@ class DeleteAndQuitGroupChatItemState
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'delete and quit group chat',
-            style: TextStyle(color: Colors.red),
-            textScaleFactor: 1.2,
-            
-          ),
+          TextButton(
+            onPressed: () {
+              ZIMConversationDeleteConfig deleteConfig =
+                    ZIMConversationDeleteConfig();
+                deleteConfig.isAlsoDeleteServerConversation = false;
+              try {
+                ZIM
+                    .getInstance()
+                    .leaveGroup(widget.groupID)
+                    .then((value) => {
+                      ZIM.getInstance().deleteConversation(widget.groupID, ZIMConversationType.group, deleteConfig)
+                    });
+                
+                Navigator.pop(context);
+                Navigator.pop(context);
+              } on PlatformException catch (onError) {}
+            },
+            child: Text(
+              'delete and quit group chat',
+              style: TextStyle(color: Colors.red),
+            ),
+          )
         ],
       ),
     );
   }
-      
 }

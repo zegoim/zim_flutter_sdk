@@ -1,12 +1,86 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zego_zim/zego_zim.dart';
 
 class GroupSetPageNoticeItem extends StatefulWidget {
+  GroupSetPageNoticeItem({required this.groupNotice, required this.groupID});
+
+  String groupID;
+  String newGroupNotice = '';
+  String groupNotice;
   @override
   State<StatefulWidget> createState() => GroupSetPageNoticeItemState();
 }
 
 class GroupSetPageNoticeItemState extends State<GroupSetPageNoticeItem> {
+  get groupNotice {
+    if (widget.groupNotice == '') {
+      return 'group notice is empty';
+    } else {
+      return widget.groupNotice;
+    }
+  }
+
+  showUpdateGroupNoticeDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: Text('Group Notice'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 100,
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey, width: 0.25),
+                      //borderRadius: BorderRadius.circular((20.0)),
+                    ),
+                    child: TextField(
+                      maxLines: 20,
+                      textInputAction: TextInputAction.done,
+                      onChanged: (value) {
+                        widget.newGroupNotice = value;
+                      },
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      decoration: const InputDecoration(
+                        contentPadding:
+                            EdgeInsets.only(top: 0, left: 15, right: 15),
+                        border: InputBorder.none,
+                        //labelText: 'Group Notice',
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: 100,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          ZIMGroupNoticeUpdatedResult result = await ZIM
+                              .getInstance()
+                              .updateGroupNotice(
+                                  widget.newGroupNotice, widget.groupID);
+                          Navigator.pop(context);
+                        },
+                        child: Text('OK')),
+                  )
+                ],
+              ));
+        });
+  }
+
+  @override
+  void initState() {
+    //  registerZIMEvent();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,14 +105,30 @@ class GroupSetPageNoticeItemState extends State<GroupSetPageNoticeItem> {
                 textScaleFactor: 1.2,
               ),
               Text(
-                'awdawdawdawdawdawd3244134124124124124121231232124124214124awdawd',
+                groupNotice,
                 style: TextStyle(color: Colors.grey),
               )
             ],
           )),
-          IconButton(onPressed: () {}, icon: Icon(Icons.chevron_right_outlined,color: Colors.grey,))
+          IconButton(
+              onPressed: () {
+                showUpdateGroupNoticeDialog();
+              },
+              icon: Icon(
+                Icons.chevron_right_outlined,
+                color: Colors.grey,
+              ))
         ],
       ),
     );
   }
+
+  // registerZIMEvent() {
+  //   ZIMEventHandler.onGroupNoticeUpdated =
+  //       (groupNotice, operatedInfo, groupID) {
+  //     setState(() {
+  //       widget.groupNotice = groupNotice;
+  //     });
+  //   };
+  // }
 }
