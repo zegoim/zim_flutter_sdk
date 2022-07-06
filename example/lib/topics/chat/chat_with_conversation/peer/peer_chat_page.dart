@@ -272,7 +272,7 @@ class _MyPageState extends State<PeerChatPage> {
               ReceiveImageMsgCell resultCell;
               ZIM
                   .getInstance()
-                  .downloadMediaFile(message, ZIMMediaFileType.thumbnail,
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveImageMsgCell(
