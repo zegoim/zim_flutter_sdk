@@ -91,7 +91,7 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// [userIDs] userID list.
-  Future<ZIMUsersInfoQueriedResult> queryUsersInfo(List<String> userIDs);
+  // Future<ZIMUsersInfoQueriedResult> queryUsersInfo(List<String> userIDs);
 
   Future<ZIMUserNameUpdatedResult> updateUserName(String userName);
 
