@@ -70,6 +70,7 @@ class ConverListState extends State<ConverList> {
             ConverListCell newConverListCell =
                 ConverListCell(changeInfo.conversation!);
             widget._converWidgetList.insert(0, newConverListCell);
+
             break;
           case ZIMConversationEvent.updated:
             ZIMConversation oldConver = widget._converList.singleWhere(
@@ -86,6 +87,20 @@ class ConverListState extends State<ConverList> {
                 ConverListCell(changeInfo.conversation!);
             widget._converWidgetList[oldConverListCellIndex] =
                 newConverListCell;
+
+            break;
+          case ZIMConversationEvent.disabled:
+            ZIMConversation oldConver = widget._converList.singleWhere(
+                (element) =>
+                    element.conversationID ==
+                    changeInfo.conversation?.conversationID);
+            int oldConverIndex = widget._converList.indexOf(oldConver);
+            widget._converList.removeAt(oldConverIndex);
+            ConverListCell oldConverListCell = widget._converWidgetList
+                .singleWhere((element) => element.conversation == oldConver);
+            int oldConverListCellIndex =
+                widget._converWidgetList.indexOf(oldConverListCell);
+            widget._converWidgetList.removeAt(oldConverListCellIndex);
             break;
           default:
         }

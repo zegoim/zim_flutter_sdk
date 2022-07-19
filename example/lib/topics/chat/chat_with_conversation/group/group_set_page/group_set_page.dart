@@ -1,91 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zim_example/topics/chat/chat_with_conversation/group/group_set_page/items/group_member_list_item.dart';
@@ -98,23 +10,9 @@ import 'items/transfer_group_ownership_item.dart';
 
 class GroupSetPage extends StatefulWidget {
   GroupSetPage(
-      {required this.myGroupMemberInfo, required this.myGroupFullInfo}) {
-    ZIMGroupMemberQueryConfig groupMemberQueryConfig =
-        ZIMGroupMemberQueryConfig();
-    groupMemberQueryConfig.count = 20;
-    ZIM
-        .getInstance()
-        .queryGroupMemberList(
-            myGroupFullInfo.baseInfo.groupID, groupMemberQueryConfig)
-        .then((value) => {
-          
-        });
-    
-  }
+      {required this.myGroupMemberInfo, required this.myGroupFullInfo});
   ZIMGroupMemberInfo myGroupMemberInfo;
   ZIMGroupFullInfo myGroupFullInfo;
-
-  
 
   @override
   State<StatefulWidget> createState() => GroupSetPageState();
@@ -127,6 +25,13 @@ class GroupSetPageState extends State<GroupSetPage> {
     } else {
       return false;
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    registerZIMEvent();
   }
 
   @override
@@ -158,20 +63,50 @@ class GroupSetPageState extends State<GroupSetPage> {
             width: double.infinity,
             height: double.infinity,
             color: Colors.grey.shade200,
-            child: Column(
-              children: [
-                GroupMemberListItem(groupID: widget.myGroupFullInfo.baseInfo.groupID,),
-                GroupSetPageNameItem(),
-                GroupSetPageNoticeItem(),
-                Offstage(
-                  offstage: !isGroupOwner(),
-                  child: TransferGroupOwnershipItem(),
-                ),
-                ClearChatLogsItem(),
-                DeleteAndQuitGroupChatItem()
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  GroupMemberListItem(
+                    groupID: widget.myGroupFullInfo.baseInfo.groupID,
+                  ),
+                  GroupSetPageNameItem(
+                      groupName: widget.myGroupFullInfo.baseInfo.groupName,
+                      groupID: widget.myGroupFullInfo.baseInfo.groupID),
+                  GroupSetPageNoticeItem(
+                    groupID: widget.myGroupFullInfo.baseInfo.groupID,
+                    groupNotice: widget.myGroupFullInfo.groupNotice,
+                  ),
+                  // Offstage(
+                  //   offstage: !isGroupOwner(),
+                  //   child: TransferGroupOwnershipItem(),
+                  // ),
+                  ClearChatLogsItem(conversationID: widget.myGroupFullInfo.baseInfo.groupID,conversationType: ZIMConversationType.group,),
+                  DeleteAndQuitGroupChatItem(groupID: widget.myGroupFullInfo.baseInfo.groupID,)
+                ],
+              ),
             ),
           ),
         ));
+  }
+
+  registerZIMEvent() {
+    ZIMEventHandler.onGroupNameUpdated = (groupName, operatedInfo, groupID) {
+      if (groupID != widget.myGroupFullInfo.baseInfo.groupID) {
+        return;
+      }
+      setState(() {
+        widget.myGroupFullInfo.baseInfo.groupName = groupName;
+      });
+    };
+
+    ZIMEventHandler.onGroupNoticeUpdated =
+        (groupNotice, operatedInfo, groupID) {
+      if (groupID != widget.myGroupFullInfo.baseInfo.groupID) {
+        return;
+      }
+      setState(() {
+        widget.myGroupFullInfo.groupNotice = groupNotice;
+      });
+    };
   }
 }

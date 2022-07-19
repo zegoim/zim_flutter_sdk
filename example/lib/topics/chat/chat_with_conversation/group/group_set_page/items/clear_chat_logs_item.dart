@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zego_zim/zego_zim.dart';
 
 class ClearChatLogsItem extends StatefulWidget {
+  ClearChatLogsItem(
+      {required this.conversationID, required this.conversationType});
+  String conversationID;
+  ZIMConversationType conversationType;
   @override
   State<StatefulWidget> createState() => ClearChatLogsItemState();
 }
@@ -22,12 +27,19 @@ class ClearChatLogsItemState extends State<ClearChatLogsItem> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'clear chat logs',
-            style: TextStyle(color: Colors.red),
-            textScaleFactor: 1.2,
-            
-          ),
+          TextButton(
+            onPressed: () {
+              ZIM.getInstance().deleteAllMessage(widget.conversationID,
+                  widget.conversationType, ZIMMessageDeleteConfig());
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: Text(
+              'clear chat logs',
+              style: TextStyle(color: Colors.red),
+              textScaleFactor: 1.2,
+            ),
+          )
         ],
       ),
     );

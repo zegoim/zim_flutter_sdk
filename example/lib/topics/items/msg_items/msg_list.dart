@@ -1,6 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:zego_zim/zego_zim.dart';
+import 'package:zego_zim_example/topics/items/msg_items/receive_items/receive_image_msg_cell.dart';
+import 'package:zego_zim_example/topics/items/msg_items/send_items/send_image_msg_cell.dart';
 
 class MsgList extends StatefulWidget {
   MsgList(List<Widget> historyMessageWidgetList,
@@ -53,8 +56,9 @@ class MsgListState extends State<MsgList> {
           reverse: true,
           child: Center(
             child: Column(
-                //动态创建一个List<Widget>
-                children: widget._historyMessageWidgetList),
+              children: widget._historyMessageWidgetList,
+              //children: [],
+            ),
           ),
         ),
       ),

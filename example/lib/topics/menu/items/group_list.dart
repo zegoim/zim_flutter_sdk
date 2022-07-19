@@ -18,9 +18,11 @@ class GroupListState extends State<GroupList> {
 
   @override
   void initState() {
-    if(widget._groupWidgetList.isEmpty) updateGroupList();
+    updateGroupList();
     super.initState();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {

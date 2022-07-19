@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 Widget TextBubble(String content,Color colors,Color txtColor,double bottomleft,double bottomRight){
   return ConstrainedBox(
     constraints: BoxConstraints(
-        maxWidth: 500
+        maxWidth: 250
     ),
     child: Container(
       margin: EdgeInsets.only(top: 10),

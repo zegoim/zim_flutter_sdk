@@ -6,10 +6,15 @@ import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zim_example/topics/items/msg_items/msg_bottom_box/msg_bottom_model.dart';
 import 'package:zego_zim_example/topics/items/msg_items/msg_converter.dart';
 
+import '../../../items/msg_items/downloading_progress_model.dart';
 import '../../../items/msg_items/msg_bottom_box/msg_normal_bottom_box.dart';
+import '../../../items/msg_items/receive_items/receive_image_msg_cell.dart';
 import '../../../items/msg_items/receive_items/receive_text_msg_cell.dart';
+import '../../../items/msg_items/receive_items/receive_video_msg_cell.dart';
 import '../../../items/msg_items/send_items/send_text_msg_cell.dart';
 import '../../../items/msg_items/msg_list.dart';
+import '../../../items/msg_items/uploading_progress_model.dart';
+import '../../../login/user_model.dart';
 
 class RoomChatPage extends StatefulWidget {
   RoomChatPage({required this.roomID, required this.roomName});
@@ -100,12 +105,21 @@ class RoomChatPageState extends State<RoomChatPage> {
               ),
             ),
           ),
-          MsgNormalBottomBox(
-            sendTextFieldonSubmitted: (value) {
-              FocusScope.of(context).unfocus();
-              sendTextMessage(value);
-            },
-          ),
+          // MsgNormalBottomBox(
+          //   sendTextFieldonSubmitted: (value) {
+          //     FocusScope.of(context).unfocus();
+          //     sendTextMessage(value);
+          //   },
+          // ),
+          MsgNormalBottomBox(sendTextFieldonSubmitted: (message) {
+            sendTextMessage(message);
+          }, onCameraIconButtonOnPressed: (path) {
+            sendMediaMessage(path, ZIMMessageType.image);
+          }, onImageIconButtonOnPressed: (path) {
+            sendMediaMessage(path, ZIMMessageType.image);
+          }, onVideoIconButtonOnPressed: (path) {
+            sendMediaMessage(path, ZIMMessageType.video);
+          })
         ],
       ),
       backgroundColor: Colors.grey[100],
@@ -128,6 +142,49 @@ class RoomChatPageState extends State<RoomChatPage> {
       });
     } on PlatformException catch (onError) {
       log('send error,code:' + onError.code + 'message:' + onError.message!);
+    }
+  }
+
+  sendMediaMessage(String? path, ZIMMessageType messageType) async {
+    if (path == null) return;
+    ZIMMediaMessage mediaMessage =
+        MsgConverter.mediaMessageFactory(path, messageType);
+    mediaMessage.senderUserID = UserModel.shared().userInfo!.userID;
+    UploadingprogressModel uploadingprogressModel = UploadingprogressModel();
+    Widget sendMsgCell = MsgConverter.sendMediaMessageCellFactory(
+        mediaMessage, uploadingprogressModel);
+
+    setState(() {
+      widget._historyZIMMessageList.add(mediaMessage);
+      widget._historyMessageWidgetList.add(sendMsgCell);
+    });
+    try {
+      log(mediaMessage.fileLocalPath);
+      ZIMMessageSentResult result = await ZIM.getInstance().sendMediaMessage(
+          mediaMessage,
+          widget.roomID,
+          ZIMConversationType.room,
+          ZIMMessageSendConfig(), (message, currentFileSize, totalFileSize) {
+        uploadingprogressModel.uploadingprogress!(
+            message, currentFileSize, totalFileSize);
+      });
+      int index = widget._historyZIMMessageList
+          .lastIndexWhere((element) => element == mediaMessage);
+      Widget resultCell = MsgConverter.sendMediaMessageCellFactory(
+          result.message as ZIMMediaMessage, null);
+      setState(() {
+        widget._historyMessageWidgetList[index] = resultCell;
+      });
+    } on PlatformException catch (onError) {
+      int index = widget._historyZIMMessageList
+          .lastIndexWhere((element) => element == mediaMessage);
+      widget._historyZIMMessageList[index].sentStatus =
+          ZIMMessageSentStatus.failed;
+      Widget failedCell = MsgConverter.sendMediaMessageCellFactory(
+          widget._historyZIMMessageList[index] as ZIMMediaMessage, null);
+      setState(() {
+        widget._historyMessageWidgetList[index] = failedCell;
+      });
     }
   }
 
@@ -175,6 +232,54 @@ class RoomChatPageState extends State<RoomChatPage> {
             ReceiceTextMsgCell cell =
                 ReceiceTextMsgCell(message: (message as ZIMTextMessage));
             widget._historyMessageWidgetList.add(cell);
+            break;
+          case ZIMMessageType.image:
+            if ((message as ZIMImageMessage).fileLocalPath == "") {
+              DownloadingProgressModel downloadingProgressModel =
+                  DownloadingProgressModel();
+
+              ReceiveImageMsgCell resultCell;
+              ZIM
+                  .getInstance()
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                      (message, currentFileSize, totalFileSize) {})
+                  .then((value) => {
+                        resultCell = ReceiveImageMsgCell(
+                            message: (value.message as ZIMImageMessage),
+                            downloadingProgress: null,
+                            downloadingProgressModel: downloadingProgressModel),
+                        widget._historyMessageWidgetList.add(resultCell),
+                        setState(() {})
+                      });
+            } else {
+              ReceiveImageMsgCell resultCell = ReceiveImageMsgCell(
+                  message: message,
+                  downloadingProgress: null,
+                  downloadingProgressModel: null);
+              widget._historyMessageWidgetList.add(resultCell);
+            }
+
+            break;
+          case ZIMMessageType.video:
+            if ((message as ZIMVideoMessage).fileLocalPath == "") {
+              ReceiveVideoMsgCell resultCell;
+              ZIM
+                  .getInstance()
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                      (message, currentFileSize, totalFileSize) {})
+                  .then((value) => {
+                        resultCell = ReceiveVideoMsgCell(
+                            message: value.message as ZIMVideoMessage,
+                            downloadingProgressModel: null),
+                        widget._historyMessageWidgetList.add(resultCell),
+                        setState(() {})
+                      });
+            } else {
+              ReceiveVideoMsgCell resultCell = ReceiveVideoMsgCell(
+                  message: message, downloadingProgressModel: null);
+              widget._historyMessageWidgetList.add(resultCell);
+              setState(() {});
+            }
             break;
           default:
         }

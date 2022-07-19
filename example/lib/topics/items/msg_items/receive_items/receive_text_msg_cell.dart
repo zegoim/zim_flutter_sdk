@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zego_zim/zego_zim.dart';
-import 'package:zego_zim_example/topics/items/msg_items/text_bubble.dart';
+
+import '../bubble/text_bubble.dart';
 
 class ReceiceTextMsgCell extends StatefulWidget {
   ZIMTextMessage message;

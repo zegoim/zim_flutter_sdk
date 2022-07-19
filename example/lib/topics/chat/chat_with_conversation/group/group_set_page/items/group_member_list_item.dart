@@ -45,7 +45,7 @@ class GroupMemberListItemState extends State<GroupMemberListItem> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5, childAspectRatio: 1.0),
+                  crossAxisCount: 5, childAspectRatio: 0.8),
               children: widget.userWidgetList),
         ));
   }
