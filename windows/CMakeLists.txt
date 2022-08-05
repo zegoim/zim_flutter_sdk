@@ -5,26 +5,41 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Project-level configuration.
-set(PROJECT_NAME "zim_flutter_sdk")
+set(PROJECT_NAME "zego_zim")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 # This value is used when generating builds using this plugin, so it must
 # not be changed
-set(PLUGIN_NAME "zim_flutter_sdk_plugin")
+set(PLUGIN_NAME "zego_zim_plugin")
+
+# Download native windows sdk with a script(python)
+# If developers need to copy sdk locally, this command can be commented
+execute_process(COMMAND python ${CMAKE_CURRENT_LIST_DIR}/download_native_sdk.py)
+
+# Setup deps: native SDK header and link search path
+include_directories(${CMAKE_CURRENT_LIST_DIR}/deps/x64/include)
+
+# It seems that flutter doesn't support windows on x86
+link_directories(${CMAKE_CURRENT_LIST_DIR}/deps/x64)
 
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
-  "zim_flutter_sdk_plugin.cpp"
-  "zim_flutter_sdk_plugin.h"
+  "zego_zim_plugin.cpp"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment
 # on PLUGIN_NAME above).
 add_library(${PLUGIN_NAME} SHARED
-  "include/zim_flutter_sdk/zim_flutter_sdk_plugin_c_api.h"
-  "zim_flutter_sdk_plugin_c_api.cpp"
+  "include/zego_zim/zego_zim_plugin.h"
+  "internal/ZIMPluginMethodHandler.h"
+  "internal/ZIMPluginMethodHandler.cpp"
+  "internal/ZIMPluginEventHandler.h"
+  "internal/ZIMPluginEventHandler.cpp"
   ${PLUGIN_SOURCES}
 )
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /utf-8")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")
 
 # Apply a standard set of build settings that are configured in the
 # application-level CMakeLists.txt. This can be removed for plugins that want
@@ -42,12 +57,12 @@ target_compile_definitions(${PLUGIN_NAME} PRIVATE FLUTTER_PLUGIN_IMPL)
 # dependencies here.
 target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
+target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ZIM.lib)
 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
 set(zim_flutter_sdk_bundled_libraries
-  ""
+  ${CMAKE_CURRENT_LIST_DIR}/deps/lib/x64/ZIM.dll
   PARENT_SCOPE
 )
