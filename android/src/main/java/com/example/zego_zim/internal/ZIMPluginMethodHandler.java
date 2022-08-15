@@ -193,7 +193,9 @@ public class ZIMPluginMethodHandler {
             @Override
             public void onTokenRenewed(String token, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
-                    result.success(null);
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("token",token);
+                    result.success(resultMap);
                 }
                 else {
                     result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);

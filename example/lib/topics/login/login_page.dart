@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                     })), (route) => false);
                   } on PlatformException catch (onError) {
                     Navigator.of(context).pop();
-                     bool? delete = await ErrorDiaLog.showFailedDialog(context
+                     bool? delete = await ErrorDiaLog.showFailedDialog(context,
                          onError.code, onError.message!);
                   }
                 }),

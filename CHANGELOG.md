@@ -1,4 +1,11 @@
+## 2.2.3
 
+- Release version, update native SDK dependency version to 2.2.3
+
+## 2.2.1
+
+- fixd renewtoken method pass token param error
+ 
 ## 2.2.0
 
 - Release version, update native SDK dependency version to 2.2.1

@@ -69,7 +69,7 @@ class ZIMImpl implements ZIM {
 
   @override
   Future<ZIMTokenRenewedResult> renewToken(String token) async {
-    Map resultMap = await _channel.invokeMethod('renewToken');
+    Map resultMap = await _channel.invokeMethod('renewToken', {'token':token});
     return ZIMConverter.cnvTokenRenewedMapToObject(resultMap);
   }
 
