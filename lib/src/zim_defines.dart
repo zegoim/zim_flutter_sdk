@@ -1059,8 +1059,8 @@ class ZIMRoomAttributesQueriedResult {
 /// [errorUserList] errorUserList.
 class ZIMGroupCreatedResult {
   ZIMGroupFullInfo groupInfo;
-  List<String> userList;
-  List<String> errorUserList;
+  List<ZIMGroupMemberInfo> userList;
+  List<ZIMErrorUserInfo> errorUserList;
   ZIMGroupCreatedResult(
       {required this.groupInfo,
       required this.userList,

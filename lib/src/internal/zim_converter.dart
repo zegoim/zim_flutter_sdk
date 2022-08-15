@@ -628,9 +628,8 @@ class ZIMConverter {
       Map resultMap) {
     ZIMGroupFullInfo groupInfo =
         cnvZIMGroupFullInfoMapToObject(resultMap['groupInfo'])!;
-    List<String> userList = (resultMap['userList'] as List).cast<String>();
-    List<String> errorUserList =
-        (resultMap['errorUserList'] as List).cast<String>();
+    List<ZIMGroupMemberInfo> userList = cnvBasicListToZIMGroupMemberInfoList(resultMap['userList']);
+    List<ZIMErrorUserInfo> errorUserList = cnvBasicListToZIMErrorUserInfoList(resultMap['errorUserList']);
     ZIMGroupCreatedResult result = ZIMGroupCreatedResult(
         groupInfo: groupInfo, userList: userList, errorUserList: errorUserList);
     return result;
