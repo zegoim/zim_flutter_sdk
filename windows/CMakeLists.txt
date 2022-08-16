@@ -35,6 +35,8 @@ add_library(${PLUGIN_NAME} SHARED
   "internal/ZIMPluginMethodHandler.cpp"
   "internal/ZIMPluginEventHandler.h"
   "internal/ZIMPluginEventHandler.cpp"
+  "internal/ZIMPluginConverter.h"
+  "internal/ZIMPluginConverter.cpp"
   ${PLUGIN_SOURCES}
 )
 
@@ -62,7 +64,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ZIM.
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-set(zim_flutter_sdk_bundled_libraries
-  ${CMAKE_CURRENT_LIST_DIR}/deps/lib/x64/ZIM.dll
+set(zego_zim_bundled_libraries
+  ${CMAKE_CURRENT_LIST_DIR}/deps/x64/ZIM.dll
   PARENT_SCOPE
 )
