@@ -29,7 +29,7 @@ class ZIMImpl implements ZIM {
   @override
   Future<void> create(ZIMAppConfig config) async {
     return await _channel.invokeMethod("create",
-        {"appConfig": ZIMConverter.cnvZIMAppConfigObjectToMap(config)});
+        {"config": ZIMConverter.cnvZIMAppConfigObjectToMap(config)});
   }
 
   @override
