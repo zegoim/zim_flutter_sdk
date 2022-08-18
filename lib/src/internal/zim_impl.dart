@@ -28,8 +28,8 @@ class ZIMImpl implements ZIM {
 
   @override
   Future<void> create(ZIMAppConfig config) async {
-    return await _channel.invokeMethod("create",
-        {"config": ZIMConverter.cnvZIMAppConfigObjectToMap(config)});
+    return await _channel
+        .invokeMethod("create", {"config": ZIMConverter.mZIMAppConfig(config)});
   }
 
   @override
@@ -71,7 +71,7 @@ class ZIMImpl implements ZIM {
   @override
   Future<ZIMTokenRenewedResult> renewToken(String token) async {
     Map resultMap = await _channel.invokeMethod('renewToken', {'token': token});
-    return ZIMConverter.cnvTokenRenewedMapToObject(resultMap);
+    return ZIMConverter.oTokenRenewedResult(resultMap);
   }
 
   @override
@@ -79,10 +79,10 @@ class ZIMImpl implements ZIM {
       List<String> userIDs, ZIMUserInfoQueryConfig config) async {
     Map resultMap = await _channel.invokeMethod('queryUsersInfo', {
       'userIDs': userIDs,
-      'config': ZIMConverter.cnvZIMUserInfoQueryConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMUserInfoQueryConfig(config)
     });
 
-    return ZIMConverter.cnvZIMUsersInfoQueriedMapToObject(resultMap);
+    return ZIMConverter.oZIMUsersInfoQueriedResult(resultMap);
   }
 
   @override
@@ -90,23 +90,22 @@ class ZIMImpl implements ZIM {
       String extendedData) async {
     Map resultMap = await _channel
         .invokeMethod('updateUserExtendedData', {'extendedData': extendedData});
-    return ZIMConverter.cnvZIMUserExtendedDataUpdatedMapToObject(resultMap);
+    return ZIMConverter.oZIMUserExtendedDataUpdatedResult(resultMap);
   }
 
   @override
   Future<ZIMUserNameUpdatedResult> updateUserName(String userName) async {
     Map resultMap =
         await _channel.invokeMethod('updateUserName', {'userName': userName});
-    return ZIMConverter.cnvZIMUserNameUpdatedMapToObject(resultMap);
+    return ZIMConverter.oZIMUserNameUpdatedResult(resultMap);
   }
 
   @override
   Future<ZIMConversationListQueriedResult> queryConversationList(
       ZIMConversationQueryConfig config) async {
-    Map resultMap = await _channel.invokeMethod('queryConversationList', {
-      'config': ZIMConverter.cnvZIMConversationQueryConfigObjectToMap(config)
-    });
-    return ZIMConverter.cnvZIMConversationListQueriedMapToObject(resultMap);
+    Map resultMap = await _channel.invokeMethod('queryConversationList',
+        {'config': ZIMConverter.mZIMConversationQueryConfig(config)});
+    return ZIMConverter.oZIMConversationListQueriedResult(resultMap);
   }
 
   @override
@@ -118,9 +117,9 @@ class ZIMImpl implements ZIM {
       'conversationID': conversationID,
       'conversationType':
           ZIMConversationTypeExtension.valueMap[conversationType],
-      'config': ZIMConverter.cnvZIMConversationDeleteConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMConversationDeleteConfig(config)
     });
-    return ZIMConverter.cnvZIMConversationDeletedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMConversationDeletedResult(resultMap);
   }
 
   @override
@@ -133,9 +132,8 @@ class ZIMImpl implements ZIM {
       'conversationType':
           ZIMConversationTypeExtension.valueMap[conversationType]
     });
-    return ZIMConverter
-        .cnvZIMConversationUnreadMessageCountClearedResultMapToObject(
-            resultMap);
+    return ZIMConverter.oZIMConversationUnreadMessageCountClearedResult(
+        resultMap);
   }
 
   @override
@@ -151,41 +149,40 @@ class ZIMImpl implements ZIM {
       'conversationType':
           ZIMConversationTypeExtension.valueMap[conversationType]
     });
-    return ZIMConverter
-        .cnvZIMConversationNotificationStatusSetResultMapToObject(resultMap);
+    return ZIMConverter.oZIMConversationNotificationStatusSetResult(resultMap);
   }
 
   @override
   Future<ZIMMessageSentResult> sendPeerMessage(
       ZIMMessage message, String toUserID, ZIMMessageSendConfig config) async {
     Map resultMap = await _channel.invokeMethod('sendPeerMessage', {
-      'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+      'message': ZIMConverter.mZIMMessage(message),
       'toUserID': toUserID,
-      'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMMessageSendConfig(config)
     });
-    return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
+    return ZIMConverter.oZIMMessageSentResult(resultMap);
   }
 
   @override
   Future<ZIMMessageSentResult> sendGroupMessage(
       ZIMMessage message, String toGroupID, ZIMMessageSendConfig config) async {
     Map resultMap = await _channel.invokeMethod('sendGroupMessage', {
-      'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+      'message': ZIMConverter.mZIMMessage(message),
       'toGroupID': toGroupID,
-      'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMMessageSendConfig(config)
     });
-    return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
+    return ZIMConverter.oZIMMessageSentResult(resultMap);
   }
 
   @override
   Future<ZIMMessageSentResult> sendRoomMessage(
       ZIMMessage message, String toRoomID, ZIMMessageSendConfig config) async {
     Map resultMap = await _channel.invokeMethod('sendRoomMessage', {
-      'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+      'message': ZIMConverter.mZIMMessage(message),
       'toRoomID': toRoomID,
-      'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMMessageSendConfig(config)
     });
-    return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
+    return ZIMConverter.oZIMMessageSentResult(resultMap);
   }
 
   @override
@@ -197,18 +194,18 @@ class ZIMImpl implements ZIM {
       ZIMCommonData.progressSequence = ZIMCommonData.progressSequence + 1;
       ZIMCommonData.mediaDownloadingProgressMap[progressID] = progress;
       resultMap = await _channel.invokeMethod('downloadMediaFile', {
-        'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+        'message': ZIMConverter.mZIMMessage(message),
         'fileType': ZIMMediaFileTypeExtension.valueMap[fileType],
         'progressID': progressID
       });
       ZIMCommonData.mediaDownloadingProgressMap.remove(progressID);
     } else {
       resultMap = await _channel.invokeMethod('downloadMediaFile', {
-        'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+        'message': ZIMConverter.mZIMMessage(message),
         'fileType': ZIMMediaFileTypeExtension.valueMap[fileType]
       });
     }
-    return ZIMConverter.cnvZIMMediaDownloadedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMMediaDownloadedResult(resultMap);
   }
 
   @override
@@ -224,24 +221,24 @@ class ZIMImpl implements ZIM {
       ZIMCommonData.progressSequence = ZIMCommonData.progressSequence + 1;
       ZIMCommonData.mediaUploadingProgressMap[progressID] = progress;
       resultMap = await _channel.invokeMethod('sendMediaMessage', {
-        'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+        'message': ZIMConverter.mZIMMessage(message),
         'toConversationID': toConversationID,
         'conversationType':
             ZIMConversationTypeExtension.valueMap[conversationType],
-        'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config),
+        'config': ZIMConverter.mZIMMessageSendConfig(config),
         'progressID': progressID
       });
       ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
     } else {
       resultMap = await _channel.invokeMethod('sendMediaMessage', {
-        'message': ZIMConverter.cnvZIMMessageObjectToMap(message),
+        'message': ZIMConverter.mZIMMessage(message),
         'toConversationID': toConversationID,
         'conversationType':
             ZIMConversationTypeExtension.valueMap[conversationType],
-        'config': ZIMConverter.cnvZIMMessageSendConfigObjectToMap(config)
+        'config': ZIMConverter.mZIMMessageSendConfig(config)
       });
     }
-    return ZIMConverter.cnvZIMMessageSentResultMapToObject(resultMap);
+    return ZIMConverter.oZIMMessageSentResult(resultMap);
   }
 
   @override
@@ -253,9 +250,9 @@ class ZIMImpl implements ZIM {
       'conversationID': conversationID,
       'conversationType':
           ZIMConversationTypeExtension.valueMap[conversationType],
-      'config': ZIMConverter.cnvZIMMessageQueryConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMMessageQueryConfig(config)
     });
-    return ZIMConverter.cnvZIMMessageQueriedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMMessageQueriedResult(resultMap);
   }
 
   @override
@@ -267,9 +264,9 @@ class ZIMImpl implements ZIM {
       'conversationID': conversationID,
       'conversationType':
           ZIMConversationTypeExtension.valueMap[conversationType],
-      'config': ZIMConverter.cnvZIMMessageDeleteConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMMessageDeleteConfig(config)
     });
-    return ZIMConverter.cnvZIMMessageDeletedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMMessageDeletedResult(resultMap);
   }
 
   @override
@@ -279,13 +276,13 @@ class ZIMImpl implements ZIM {
       ZIMConversationType conversationType,
       ZIMMessageDeleteConfig config) async {
     Map resultMap = await _channel.invokeMethod('deleteMessages', {
-      'messageList': ZIMConverter.cnvZIMMessageListObjectToMap(messageList),
+      'messageList': ZIMConverter.mZIMMessageList(messageList),
       'conversationID': conversationID,
       'conversationType':
           ZIMConversationTypeExtension.valueMap[conversationType],
-      'config': ZIMConverter.cnvZIMMessageDeleteConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMMessageDeleteConfig(config)
     });
-    return ZIMConverter.cnvZIMMessageDeletedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMMessageDeletedResult(resultMap);
   }
 
   @override
@@ -293,21 +290,21 @@ class ZIMImpl implements ZIM {
       [ZIMRoomAdvancedConfig? config]) async {
     Map resultMap;
     if (config == null) {
-      resultMap = await _channel.invokeMethod('createRoom',
-          {'roomInfo': ZIMConverter.cnvZIMRoomInfoObjectToMap(roomInfo)});
+      resultMap = await _channel.invokeMethod(
+          'createRoom', {'roomInfo': ZIMConverter.mZIMRoomInfo(roomInfo)});
     } else {
       resultMap = await _channel.invokeMethod('createRoomWithConfig', {
-        'roomInfo': ZIMConverter.cnvZIMRoomInfoObjectToMap(roomInfo),
-        'config': ZIMConverter.cnvZIMRoomAdvancedConfigObjectToMap(config)
+        'roomInfo': ZIMConverter.mZIMRoomInfo(roomInfo),
+        'config': ZIMConverter.mZIMRoomAdvancedConfig(config)
       });
     }
-    return ZIMConverter.cnvZIMRoomCreatedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMRoomCreatedResult(resultMap);
   }
 
   @override
   Future<ZIMRoomJoinedResult> joinRoom(String roomID) async {
     Map resultMap = await _channel.invokeMethod('joinRoom', {'roomID': roomID});
-    return ZIMConverter.cnvZIMRoomJoinedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMRoomJoinedResult(resultMap);
   }
 
   @override
@@ -319,18 +316,18 @@ class ZIMImpl implements ZIM {
     //       {'roomInfo': ZIMConverter.cnvZIMRoomInfoObjectToMap(roomInfo)});
     // } else {
     resultMap = await _channel.invokeMethod('enterRoom', {
-      'roomInfo': ZIMConverter.cnvZIMRoomInfoObjectToMap(roomInfo),
-      'config': ZIMConverter.cnvZIMRoomAdvancedConfigObjectToMap(config)
+      'roomInfo': ZIMConverter.mZIMRoomInfo(roomInfo),
+      'config': ZIMConverter.mZIMRoomAdvancedConfig(config)
     });
     //}
-    return ZIMConverter.cnvZIMRoomEnteredResultMapToObject(resultMap);
+    return ZIMConverter.oZIMRoomEnteredResult(resultMap);
   }
 
   @override
   Future<ZIMRoomLeftResult> leaveRoom(String roomID) async {
     Map resultMap =
         await _channel.invokeMethod('leaveRoom', {'roomID': roomID});
-    return ZIMConverter.cnvZIMRoomLeftResultMapToObject(resultMap);
+    return ZIMConverter.oZIMRoomLeftResult(resultMap);
   }
 
   @override
@@ -338,9 +335,9 @@ class ZIMImpl implements ZIM {
       String roomID, ZIMRoomMemberQueryConfig config) async {
     Map resultMap = await _channel.invokeMethod('queryRoomMemberList', {
       'roomID': roomID,
-      'config': ZIMConverter.cnvZIMRoomMemberQueryConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMRoomMemberQueryConfig(config)
     });
-    return ZIMConverter.cnvZIMRoomMemberQueriedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMRoomMemberQueriedResult(resultMap);
   }
 
   @override
@@ -348,8 +345,7 @@ class ZIMImpl implements ZIM {
       String roomID) async {
     Map resultMap = await _channel
         .invokeMethod('queryRoomOnlineMemberCount', {'roomID': roomID});
-    return ZIMConverter.cnvZIMRoomOnlineMemberCountQueriedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMRoomOnlineMemberCountQueriedResult(resultMap);
   }
 
   @override
@@ -360,10 +356,9 @@ class ZIMImpl implements ZIM {
     Map resultMap = await _channel.invokeMethod('setRoomAttributes', {
       'roomAttributes': roomAttributes,
       'roomID': roomID,
-      'config': ZIMConverter.cnvZIMRoomAttributesSetConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMRoomAttributesSetConfig(config)
     });
-    return ZIMConverter.cnvZIMRoomAttributesOperatedCallResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMRoomAttributesOperatedCallResult(resultMap);
   }
 
   @override
@@ -374,10 +369,9 @@ class ZIMImpl implements ZIM {
     Map resultMap = await _channel.invokeMethod('deleteRoomAttributes', {
       'keys': keys,
       'roomID': roomID,
-      "config": ZIMConverter.cnvZIMRoomAttributesDeleteConfigObjectToMap(config)
+      "config": ZIMConverter.mZIMRoomAttributesDeleteConfig(config)
     });
-    return ZIMConverter.cnvZIMRoomAttributesOperatedCallResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMRoomAttributesOperatedCallResult(resultMap);
   }
 
   @override
@@ -385,9 +379,7 @@ class ZIMImpl implements ZIM {
       String roomID, ZIMRoomAttributesBatchOperationConfig config) async {
     return await _channel.invokeMethod('beginRoomAttributesBatchOperation', {
       'roomID': roomID,
-      'config':
-          ZIMConverter.cnvZIMRoomAttributesBatchOperationConfigObjectToMap(
-              config)
+      'config': ZIMConverter.mZIMRoomAttributesBatchOperationConfig(config)
     });
   }
 
@@ -396,8 +388,7 @@ class ZIMImpl implements ZIM {
       String roomID) async {
     Map resultMap = await _channel
         .invokeMethod('endRoomAttributesBatchOperation', {'roomID': roomID});
-    return ZIMConverter.cnvZIMRoomAttributesBatchOperatedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMRoomAttributesBatchOperatedResult(resultMap);
   }
 
   @override
@@ -405,7 +396,7 @@ class ZIMImpl implements ZIM {
       String roomID) async {
     Map resultMap = await _channel
         .invokeMethod('queryRoomAllAttributes', {'roomID': roomID});
-    return ZIMConverter.cnvZIMRoomAttributesQueriedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMRoomAttributesQueriedResult(resultMap);
   }
 
   @override
@@ -415,38 +406,38 @@ class ZIMImpl implements ZIM {
     Map resultMap;
     if (config == null) {
       resultMap = await _channel.invokeMethod('createGroup', {
-        'groupInfo': ZIMConverter.cnvZIMGroupInfoObjectToMap(groupInfo),
+        'groupInfo': ZIMConverter.mZIMGroupInfo(groupInfo),
         'userIDs': userIDs
       });
     } else {
       resultMap = await _channel.invokeMethod('createGroupWithConfig', {
-        'groupInfo': ZIMConverter.cnvZIMGroupInfoObjectToMap(groupInfo),
+        'groupInfo': ZIMConverter.mZIMGroupInfo(groupInfo),
         'userIDs': userIDs,
-        'config': ZIMConverter.cnvZIMGroupAdvancedConfigObjectToMap(config)
+        'config': ZIMConverter.mZIMGroupAdvancedConfig(config)
       });
     }
-    return ZIMConverter.cnvZIMGroupCreatedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupCreatedResult(resultMap);
   }
 
   @override
   Future<ZIMGroupDismissedResult> dismissGroup(String groupID) async {
     Map resultMap =
         await _channel.invokeMethod('dismissGroup', {'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupDismissedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupDismissedResult(resultMap);
   }
 
   @override
   Future<ZIMGroupJoinedResult> joinGroup(String groupID) async {
     Map resultMap =
         await _channel.invokeMethod('joinGroup', {'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupJoinedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupJoinedResult(resultMap);
   }
 
   @override
   Future<ZIMGroupLeftResult> leaveGroup(String groupID) async {
     Map resultMap =
         await _channel.invokeMethod('leaveGroup', {'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupLeftResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupLeftResult(resultMap);
   }
 
   @override
@@ -454,7 +445,7 @@ class ZIMImpl implements ZIM {
       List<String> userIDs, String groupID) async {
     Map resultMap = await _channel.invokeMethod(
         'inviteUsersIntoGroup', {'userIDs': userIDs, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupUsersInvitedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupUsersInvitedResult(resultMap);
   }
 
   @override
@@ -462,7 +453,7 @@ class ZIMImpl implements ZIM {
       List<String> userIDs, String groupID) async {
     Map resultMap = await _channel.invokeMethod(
         'kickGroupMembers', {'userIDs': userIDs, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupMemberKickedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupMemberKickedResult(resultMap);
   }
 
   @override
@@ -470,7 +461,7 @@ class ZIMImpl implements ZIM {
       String toUserID, String groupID) async {
     Map resultMap = await _channel.invokeMethod(
         'transferGroupOwner', {'toUserID': toUserID, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupOwnerTransferredResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupOwnerTransferredResult(resultMap);
   }
 
   @override
@@ -478,7 +469,7 @@ class ZIMImpl implements ZIM {
       String groupName, String groupID) async {
     Map resultMap = await _channel.invokeMethod(
         'updateGroupName', {'groupName': groupName, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupNameUpdatedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupNameUpdatedResult(resultMap);
   }
 
   @override
@@ -486,14 +477,14 @@ class ZIMImpl implements ZIM {
       String groupNotice, String groupID) async {
     Map resultMap = await _channel.invokeMethod(
         'updateGroupNotice', {'groupNotice': groupNotice, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupNoticeUpdatedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupNoticeUpdatedResult(resultMap);
   }
 
   @override
   Future<ZIMGroupInfoQueriedResult> queryGroupInfo(String groupID) async {
     Map resultMap =
         await _channel.invokeMethod('queryGroupInfo', {'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupInfoQueriedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupInfoQueriedResult(resultMap);
   }
 
   @override
@@ -501,8 +492,7 @@ class ZIMImpl implements ZIM {
       Map<String, String> groupAttributes, String groupID) async {
     Map resultMap = await _channel.invokeMethod('setGroupAttributes',
         {'groupAttributes': groupAttributes, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupAttributesOperatedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMGroupAttributesOperatedResult(resultMap);
   }
 
   @override
@@ -510,8 +500,7 @@ class ZIMImpl implements ZIM {
       List<String> keys, String groupID) async {
     Map resultMap = await _channel.invokeMethod(
         'deleteGroupAttributes', {'keys': keys, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupAttributesOperatedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMGroupAttributesOperatedResult(resultMap);
   }
 
   @override
@@ -519,8 +508,7 @@ class ZIMImpl implements ZIM {
       List<String> keys, String groupID) async {
     Map resultMap = await _channel.invokeMethod(
         'queryGroupAttributes', {'keys': keys, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupAttributesQueriedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMGroupAttributesQueriedResult(resultMap);
   }
 
   @override
@@ -528,8 +516,7 @@ class ZIMImpl implements ZIM {
       String groupID) async {
     Map resultMap = await _channel
         .invokeMethod('queryGroupAllAttributes', {'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupAttributesQueriedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMGroupAttributesQueriedResult(resultMap);
   }
 
   @override
@@ -537,8 +524,7 @@ class ZIMImpl implements ZIM {
       int role, String forUserID, String groupID) async {
     Map resultMap = await _channel.invokeMethod('setGroupMemberRole',
         {'role': role, 'forUserID': forUserID, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupMemberRoleUpdatedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMGroupMemberRoleUpdatedResult(resultMap);
   }
 
   @override
@@ -546,8 +532,7 @@ class ZIMImpl implements ZIM {
       String nickname, String forUserID, String groupID) async {
     Map resultMap = await _channel.invokeMethod('setGroupMemberNickname',
         {'nickname': nickname, 'forUserID': forUserID, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupMemberNicknameUpdatedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMGroupMemberNicknameUpdatedResult(resultMap);
   }
 
   @override
@@ -555,8 +540,7 @@ class ZIMImpl implements ZIM {
       String userID, String groupID) async {
     Map resultMap = await _channel.invokeMethod(
         'queryGroupMemberInfo', {'userID': userID, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupMemberInfoQueriedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMGroupMemberInfoQueriedResult(resultMap);
   }
 
   @override
@@ -564,14 +548,13 @@ class ZIMImpl implements ZIM {
       String groupID) async {
     Map resultMap = await _channel
         .invokeMethod('queryGroupMemberCount', {'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupMemberCountQueriedResultMapToObject(
-        resultMap);
+    return ZIMConverter.oZIMGroupMemberCountQueriedResult(resultMap);
   }
 
   @override
   Future<ZIMGroupListQueriedResult> queryGroupList() async {
     Map resultMap = await _channel.invokeMethod('queryGroupList');
-    return ZIMConverter.cnvZIMGroupListQueriedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupListQueriedResult(resultMap);
   }
 
   @override
@@ -579,10 +562,9 @@ class ZIMImpl implements ZIM {
       String groupID, ZIMGroupMemberQueryConfig config) async {
     Map resultMap = await _channel.invokeMethod('queryGroupMemberList', {
       'groupID': groupID,
-      'config': ZIMConverter.cnvZIMGroupMemberQueryConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMGroupMemberQueryConfig(config)
     });
-    return ZIMConverter.cnvZIMGroupMemberListQueriedResultMapToResult(
-        resultMap);
+    return ZIMConverter.oZIMGroupMemberListQueriedResult(resultMap);
   }
 
   @override
@@ -590,9 +572,9 @@ class ZIMImpl implements ZIM {
       List<String> invitees, ZIMCallInviteConfig config) async {
     Map resultMap = await _channel.invokeMethod('callInvite', {
       'invitees': invitees,
-      'config': ZIMConverter.cnvZIMCallInviteConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMCallInviteConfig(config)
     });
-    return ZIMConverter.cnvZIMCallInvitationSentResultMapToObject(resultMap);
+    return ZIMConverter.oZIMCallInvitationSentResult(resultMap);
   }
 
   @override
@@ -601,9 +583,9 @@ class ZIMImpl implements ZIM {
     Map resultMap = await _channel.invokeMethod('callCancel', {
       'invitees': invitees,
       'callID': callID,
-      'config': ZIMConverter.cnvZIMCallCancelConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMCallCancelConfig(config)
     });
-    return ZIMConverter.cnvZIMCallCancelSentResultMapToObject(resultMap);
+    return ZIMConverter.oZIMCallCancelSentResult(resultMap);
   }
 
   @override
@@ -611,9 +593,9 @@ class ZIMImpl implements ZIM {
       String callID, ZIMCallAcceptConfig config) async {
     Map resultMap = await _channel.invokeMethod('callAccept', {
       'callID': callID,
-      'config': ZIMConverter.cnvZIMCallAcceptConfigObjectToMap(config)
+      'config': ZIMConverter.mZIMCallAcceptConfig(config)
     });
-    return ZIMConverter.cnvZIMCallAcceptanceSentResultMapToObject(resultMap);
+    return ZIMConverter.oZIMCallAcceptanceSentResult(resultMap);
   }
 
   @override
@@ -623,15 +605,15 @@ class ZIMImpl implements ZIM {
       'callID': callID,
       'config': ZIMConverter.cnvZIMCallRejectConfigObjectToMap(config)
     });
-    return ZIMConverter.cnvZIMCallRejectionSentResultMapToObject(resultMap);
+    return ZIMConverter.oZIMCallRejectionSentResult(resultMap);
   }
 
-    @override
+  @override
   Future<ZIMUserAvatarUrlUpdatedResult> updateUserAvatarUrl(
       String userAvatarUrl) async {
     Map resultMap = await _channel
         .invokeMethod('updateUserAvatarUrl', {'userAvatarUrl': userAvatarUrl});
-    return ZIMConverter.cnvZIMUserAvatarUrlUpdatedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMUserAvatarUrlUpdatedResult(resultMap);
   }
 
   @override
@@ -639,6 +621,6 @@ class ZIMImpl implements ZIM {
       String groupAvatarUrl, String groupID) async {
     Map resultMap = await _channel.invokeMethod('updateGroupAvatarUrl',
         {'groupAvatarUrl': groupAvatarUrl, 'groupID': groupID});
-    return ZIMConverter.cnvZIMGroupAvatarUrlUpdatedResultMapToObject(resultMap);
+    return ZIMConverter.oZIMGroupAvatarUrlUpdatedResult(resultMap);
   }
 }

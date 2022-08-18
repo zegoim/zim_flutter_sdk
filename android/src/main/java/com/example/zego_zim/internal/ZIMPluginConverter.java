@@ -63,38 +63,38 @@ import im.zego.zim.enums.ZIMMessageType;
 
 public class ZIMPluginConverter {
 
-    static public ZIMAppConfig cnvZIMAppConfigDicToObject(HashMap<String,Object> configMap){
+    static public ZIMAppConfig oZIMAppConfig(HashMap<String,Object> configMap){
         ZIMAppConfig config = new ZIMAppConfig();
         config.appID = ZIMPluginCommonTools.safeGetLongValue(configMap.get("appID"));
         config.appSign = (String)(configMap.get("appSign"));
         return config;
     }
 
-    static public ZIMUsersInfoQueryConfig cnvZIMUsersInfoQueryConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMUsersInfoQueryConfig oZIMUsersInfoQueryConfig(HashMap<String,Object> configMap){
         ZIMUsersInfoQueryConfig config = new ZIMUsersInfoQueryConfig();
         config.isQueryFromServer = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isQueryFromServer"));
         return config;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMConversationChangeInfoListObjectToList(ArrayList<ZIMConversationChangeInfo> conversationChangeInfoList) {
+    static public ArrayList<HashMap<String,Object>> mZIMConversationChangeInfoList(ArrayList<ZIMConversationChangeInfo> conversationChangeInfoList) {
         ArrayList<HashMap<String,Object>> conversationChangeInfoBasicList = new ArrayList<>();
         for (ZIMConversationChangeInfo conversationChangeInfo:
              conversationChangeInfoList) {
-            conversationChangeInfoBasicList.add(cnvZIMConversationChangeInfoObjectToMap(conversationChangeInfo));
+            conversationChangeInfoBasicList.add(mZIMConversationChangeInfo(conversationChangeInfo));
         }
         return conversationChangeInfoBasicList;
     }
 
-    static public HashMap<String,Object> cnvZIMConversationChangeInfoObjectToMap(ZIMConversationChangeInfo conversationChangeInfo){
+    static public HashMap<String,Object> mZIMConversationChangeInfo(ZIMConversationChangeInfo conversationChangeInfo){
         HashMap<String,Object> conversationChangeInfoMap = new HashMap<>();
         conversationChangeInfoMap.put("event",conversationChangeInfo.event.value());
 
 
-        conversationChangeInfoMap.put("conversation",cnvZIMConversationObjectToMap(conversationChangeInfo.conversation));
+        conversationChangeInfoMap.put("conversation", mZIMConversation(conversationChangeInfo.conversation));
         return conversationChangeInfoMap;
     }
 
-    static public HashMap<String,Object> cnvZIMConversationObjectToMap(ZIMConversation conversation){
+    static public HashMap<String,Object> mZIMConversation(ZIMConversation conversation){
         HashMap<String,Object> conversationMap = new HashMap<>();
         conversationMap.put("conversationID",conversation.conversationID);
         conversationMap.put("conversationName",conversation.conversationName);
@@ -104,7 +104,7 @@ public class ZIMPluginConverter {
         conversationMap.put("orderKey",conversation.orderKey);
         conversationMap.put("notificationStatus",conversation.notificationStatus.value());
         if(conversation.lastMessage != null){
-            conversationMap.put("lastMessage",cnvZIMMessageObjectToMap(conversation.lastMessage));
+            conversationMap.put("lastMessage", mZIMMessage(conversation.lastMessage));
         }
         else {
             conversationMap.put("lastMessage",null);
@@ -116,7 +116,7 @@ public class ZIMPluginConverter {
 //        ArrayList
 //    }
 
-    static public HashMap<String,Object> cnvZIMMessageObjectToMap(ZIMMessage message){
+    static public HashMap<String,Object> mZIMMessage(ZIMMessage message){
         HashMap<String,Object> messageMap = new HashMap<>();
         messageMap.put("type",message.getType().value());
         messageMap.put("messageID",message.getMessageID());
@@ -184,7 +184,7 @@ public class ZIMPluginConverter {
         return messageMap;
     }
 
-    static public ZIMMessage cnvZIMMessageMapToObject(HashMap<String,Object> messageMap){
+    static public ZIMMessage oZIMMessage(HashMap<String,Object> messageMap){
         if(messageMap == null){
             return null;
         }
@@ -391,81 +391,81 @@ public class ZIMPluginConverter {
         return message;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMMessageListObjectToBasic(ArrayList<ZIMMessage> messageList){
+    static public ArrayList<HashMap<String,Object>> mZIMMessageList(ArrayList<ZIMMessage> messageList){
         ArrayList<HashMap<String,Object>> messageBasicList = new ArrayList<>();
         for (ZIMMessage message:messageList
              ) {
-            messageBasicList.add(cnvZIMMessageObjectToMap(message));
+            messageBasicList.add(mZIMMessage(message));
         }
         return messageBasicList;
     }
 
-    static public ArrayList<ZIMMessage> cnvBasicListToZIMMessageList(ArrayList<HashMap<String,Object>> basicList){
+    static public ArrayList<ZIMMessage> oZIMMessageList(ArrayList<HashMap<String,Object>> basicList){
         ArrayList<ZIMMessage> messageList = new ArrayList<>();
         for (HashMap<String,Object> messageHashMap:basicList
              ) {
-            messageList.add(cnvZIMMessageMapToObject(messageHashMap));
+            messageList.add(oZIMMessage(messageHashMap));
         }
         return messageList;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMUserInfoListObjectToBasic(ArrayList<ZIMUserInfo> userList){
+    static public ArrayList<HashMap<String,Object>> mZIMUserInfoList(ArrayList<ZIMUserInfo> userList){
         ArrayList<HashMap<String,Object>> userInfoBasicList = new ArrayList<>();
         for (ZIMUserInfo userInfo:userList) {
-            userInfoBasicList.add(cnvZIMUserInfoObjectToMap(userInfo));
+            userInfoBasicList.add(mZIMUserInfo(userInfo));
         }
         return userInfoBasicList;
     }
 
-    static public HashMap<String,Object> cnvZIMUserFullInfoObjectToBasic(ZIMUserFullInfo userFullInfo){
+    static public HashMap<String,Object> mZIMUserFullInfo(ZIMUserFullInfo userFullInfo){
         HashMap<String,Object> userFullInfoMap = new HashMap<>();
         userFullInfoMap.put("userAvatarUrl",userFullInfo.userAvatarUrl);
         userFullInfoMap.put("extendedData",userFullInfo.extendedData);
-        HashMap<String,Object> baseInfoMap = cnvZIMUserInfoObjectToMap(userFullInfo.baseInfo);
+        HashMap<String,Object> baseInfoMap = mZIMUserInfo(userFullInfo.baseInfo);
         userFullInfoMap.put("baseInfo",baseInfoMap);
         return  userFullInfoMap;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMUserFullInfoListToBasicList(ArrayList<ZIMUserFullInfo> userFullInfoList){
+    static public ArrayList<HashMap<String,Object>> mZIMUserFullInfoList(ArrayList<ZIMUserFullInfo> userFullInfoList){
         ArrayList<HashMap<String,Object>> userFullInfoBasicList = new ArrayList<>();
         for (ZIMUserFullInfo userFullInfo:userFullInfoList
              ) {
-            userFullInfoBasicList.add(cnvZIMUserFullInfoObjectToBasic(userFullInfo));
+            userFullInfoBasicList.add(mZIMUserFullInfo(userFullInfo));
         }
         return userFullInfoBasicList;
     }
 
-    static public HashMap<String,Object> cnvZIMUserInfoObjectToMap(ZIMUserInfo userInfo){
+    static public HashMap<String,Object> mZIMUserInfo(ZIMUserInfo userInfo){
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("userName",userInfo.userName);
         return userInfoMap;
     }
 
-    static public HashMap<String,Object> cnvZIMErrorUserInfoObjectToMap(ZIMErrorUserInfo errorUserInfo){
+    static public HashMap<String,Object> mZIMErrorUserInfo(ZIMErrorUserInfo errorUserInfo){
         HashMap<String,Object> errorUserInfoMap = new HashMap<>();
         errorUserInfoMap.put("userID",errorUserInfo.userID);
         errorUserInfoMap.put("reason",errorUserInfo.reason);
         return errorUserInfoMap;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMErrorUserInfoListObjectToBasic(ArrayList<ZIMErrorUserInfo> errorUserList){
+    static public ArrayList<HashMap<String,Object>> mZIMErrorUserInfoList(ArrayList<ZIMErrorUserInfo> errorUserList){
         ArrayList<HashMap<String,Object>> errorUserInfoBasicList = new ArrayList<>();
         for (ZIMErrorUserInfo errorUserInfo:errorUserList) {
-            errorUserInfoBasicList.add(cnvZIMErrorUserInfoObjectToMap(errorUserInfo));
+            errorUserInfoBasicList.add(mZIMErrorUserInfo(errorUserInfo));
         }
         return errorUserInfoBasicList;
     }
 
-    static public ZIMConversationQueryConfig cnvZIMConversationQueryConfigMapToObject(HashMap<String,Object> resultMap){
+    static public ZIMConversationQueryConfig oZIMConversationQueryConfig(HashMap<String,Object> resultMap){
         ZIMConversationQueryConfig queryConfig = new ZIMConversationQueryConfig();
         queryConfig.count = ZIMPluginCommonTools.safeGetIntValue(resultMap.get("count"));
-        queryConfig.nextConversation = cnvZIMConversationMapToObject(ZIMPluginCommonTools.safeGetHashMap(resultMap.get("nextConversation")));
+        queryConfig.nextConversation = oZIMConversation(ZIMPluginCommonTools.safeGetHashMap(resultMap.get("nextConversation")));
 
         return queryConfig;
     }
 
-    static public ZIMConversation cnvZIMConversationMapToObject(HashMap<String,Object> resultMap){
+    static public ZIMConversation oZIMConversation(HashMap<String,Object> resultMap){
         if(resultMap == null) return null;
         ZIMConversation conversation = new ZIMConversation();
         conversation.conversationID = (String) resultMap.get("conversationID");
@@ -476,35 +476,35 @@ public class ZIMPluginConverter {
         conversation.orderKey = ZIMPluginCommonTools.safeGetLongValue(resultMap.get("orderKey"));
         conversation.notificationStatus = ZIMConversationNotificationStatus.getZIMConversationNotificationStatus(ZIMPluginCommonTools.safeGetIntValue(resultMap.get("notificationStatus")));
         if(resultMap.get("lastMessage") != null) {
-            conversation.lastMessage = cnvZIMMessageMapToObject((ZIMPluginCommonTools.safeGetHashMap(resultMap.get("lastMessage"))));
+            conversation.lastMessage = oZIMMessage((ZIMPluginCommonTools.safeGetHashMap(resultMap.get("lastMessage"))));
         }else{
             conversation.lastMessage = null;
         }
         return conversation;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMConversationListObjectToBasic(ArrayList<ZIMConversation> conversationList){
+    static public ArrayList<HashMap<String,Object>> mZIMConversationList(ArrayList<ZIMConversation> conversationList){
         ArrayList<HashMap<String,Object>> conversationBasicList = new ArrayList<>();
         for (ZIMConversation conversation:
              conversationList) {
-            conversationBasicList.add(cnvZIMConversationObjectToMap(conversation));
+            conversationBasicList.add(mZIMConversation(conversation));
         }
         return conversationBasicList;
     }
 
-    static public ZIMMessageDeleteConfig cnvZIMMessageDeleteConfigBasicToObject(HashMap<String,Object> configMap){
+    static public ZIMMessageDeleteConfig oZIMMessageDeleteConfig(HashMap<String,Object> configMap){
         ZIMMessageDeleteConfig config = new ZIMMessageDeleteConfig();
         config.isAlsoDeleteServerMessage = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoDeleteServerMessage"));
         return config;
     }
 
-    static public ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigBasicToObject(HashMap<String,Object> configMap){
+    static public ZIMConversationDeleteConfig oZIMConversationDeleteConfig(HashMap<String,Object> configMap){
         ZIMConversationDeleteConfig config = new ZIMConversationDeleteConfig();
         config.isAlsoDeleteServerConversation =  ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoDeleteServerConversation"));
         return config;
     }
 
-    static public ZIMPushConfig cnvZIMPushConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMPushConfig oZIMPushConfig(HashMap<String,Object> configMap){
         if(configMap == null){
             return null;
         }
@@ -515,56 +515,56 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ZIMMessageSendConfig cnvZIMMessageSendConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMMessageSendConfig oZIMMessageSendConfig(HashMap<String,Object> configMap){
         ZIMMessageSendConfig config = new ZIMMessageSendConfig();
         config.priority = ZIMMessagePriority.getZIMMessagePriority(ZIMPluginCommonTools.safeGetIntValue(configMap.get("priority")));
-        config.pushConfig = cnvZIMPushConfigMapToObject(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         return config;
     }
 
-    static public ZIMMessageQueryConfig cnvZIMMessageQueryConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMMessageQueryConfig oZIMMessageQueryConfig(HashMap<String,Object> configMap){
         ZIMMessageQueryConfig config = new ZIMMessageQueryConfig();
-        config.nextMessage = cnvZIMMessageMapToObject(ZIMPluginCommonTools.safeGetHashMap(configMap.get("nextMessage")));
+        config.nextMessage = oZIMMessage(ZIMPluginCommonTools.safeGetHashMap(configMap.get("nextMessage")));
         config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
         config.reverse = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("reverse"));
         return config;
     }
 
-    static public ZIMRoomInfo cnvZIMRoomInfoMapToObejct(HashMap<String,Object> configMap){
+    static public ZIMRoomInfo oZIMRoomInfo(HashMap<String,Object> configMap){
         ZIMRoomInfo roomInfo = new ZIMRoomInfo();
         roomInfo.roomID = (String) configMap.get("roomID");
         roomInfo.roomName = (String) configMap.get("roomName");
         return roomInfo;
     }
 
-    static public HashMap<String,Object> cnvZIMRoomInfoObjectToMap(ZIMRoomInfo roomInfo){
+    static public HashMap<String,Object> mZIMRoomInfo(ZIMRoomInfo roomInfo){
         HashMap<String,Object> roomInfoMap = new  HashMap<>();
         roomInfoMap.put("roomID",roomInfo.roomID);
         roomInfoMap.put("roomName",roomInfo.roomName);
         return roomInfoMap;
     }
 
-    static public ZIMRoomAdvancedConfig cnvZIMRoomAdvancedConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMRoomAdvancedConfig oZIMRoomAdvancedConfig(HashMap<String,Object> configMap){
         ZIMRoomAdvancedConfig config = new ZIMRoomAdvancedConfig();
         if(configMap.get("roomAttributes") != null) config.roomAttributes = (HashMap<String, String>) configMap.get("roomAttributes");
         config.roomDestroyDelayTime = ZIMPluginCommonTools.safeGetIntValue(configMap.get("roomDestroyDelayTime"));
         return config;
     }
 
-    static public HashMap<String,Object> cnvZIMRoomFullInfoObjectToMap(ZIMRoomFullInfo fullInfo){
+    static public HashMap<String,Object> mZIMRoomFullInfo(ZIMRoomFullInfo fullInfo){
         HashMap<String,Object> fullInfoMap = new HashMap<>();
-        fullInfoMap.put("baseInfo",cnvZIMRoomInfoObjectToMap(fullInfo.baseInfo));
+        fullInfoMap.put("baseInfo", mZIMRoomInfo(fullInfo.baseInfo));
         return fullInfoMap;
     }
 
-    static public ZIMRoomMemberQueryConfig cnvZIMRoomMemberQueryConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMRoomMemberQueryConfig oZIMRoomMemberQueryConfig(HashMap<String,Object> configMap){
         ZIMRoomMemberQueryConfig config = new ZIMRoomMemberQueryConfig();
         config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
         config.nextFlag = (String) configMap.get("nextFlag");
         return config;
     }
 
-    static public ZIMRoomAttributesSetConfig cnvZIMRoomAttributesSetConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMRoomAttributesSetConfig oZIMRoomAttributesSetConfig(HashMap<String,Object> configMap){
         if(configMap == null){
             return null;
         }
@@ -575,7 +575,7 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ZIMRoomAttributesDeleteConfig cnvZIMRoomAttributesDeleteConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMRoomAttributesDeleteConfig oZIMRoomAttributesDeleteConfig(HashMap<String,Object> configMap){
         if(configMap == null){
             return null;
         }
@@ -584,7 +584,7 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ZIMRoomAttributesBatchOperationConfig cnvZIMRoomAttributesBatchOperationConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMRoomAttributesBatchOperationConfig oZIMRoomAttributesBatchOperationConfig(HashMap<String,Object> configMap){
         if(configMap == null){
             return null;
         }
@@ -595,7 +595,7 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ZIMGroupInfo cnvZIMGroupInfoMapToObject(HashMap<String,Object> infoMap){
+    static public ZIMGroupInfo oZIMGroupInfo(HashMap<String,Object> infoMap){
         ZIMGroupInfo groupInfo = new ZIMGroupInfo();
         groupInfo.groupID = (String) infoMap.get("groupID");
         groupInfo.groupName = (String) infoMap.get("groupName");
@@ -603,7 +603,7 @@ public class ZIMPluginConverter {
         return groupInfo;
     }
 
-    static public HashMap<String,Object> cnvZIMGroupInfoObjectToMap(ZIMGroupInfo groupInfo){
+    static public HashMap<String,Object> mZIMGroupInfo(ZIMGroupInfo groupInfo){
         HashMap<String,Object> groupInfoMap = new HashMap<>();
         groupInfoMap.put("groupID",groupInfo.groupID);
         groupInfoMap.put("groupName",groupInfo.groupName);
@@ -611,16 +611,16 @@ public class ZIMPluginConverter {
         return groupInfoMap;
     }
 
-    static public HashMap<String,Object> cnvZIMGroupFullInfoObjectToMap(ZIMGroupFullInfo groupFullInfo){
+    static public HashMap<String,Object> mZIMGroupFullInfo(ZIMGroupFullInfo groupFullInfo){
         HashMap<String,Object> groupFullInfoMap = new HashMap<>();
         groupFullInfoMap.put("groupNotice",groupFullInfo.groupNotice);
         groupFullInfoMap.put("groupAttributes",groupFullInfo.groupAttributes);
         groupFullInfoMap.put("notificationStatus",groupFullInfo.notificationStatus.value());
-        groupFullInfoMap.put("baseInfo",cnvZIMGroupInfoObjectToMap(groupFullInfo.baseInfo));
+        groupFullInfoMap.put("baseInfo", mZIMGroupInfo(groupFullInfo.baseInfo));
         return groupFullInfoMap;
     }
 
-    static public HashMap<String,Object> cnvZIMGroupMemberInfoObjectToMap(ZIMGroupMemberInfo groupMemberInfo){
+    static public HashMap<String,Object> mZIMGroupMemberInfo(ZIMGroupMemberInfo groupMemberInfo){
         HashMap<String,Object> groupMemberInfoMap = new HashMap<>();
         groupMemberInfoMap.put("memberNickname",groupMemberInfo.memberNickname);
         groupMemberInfoMap.put("memberRole",groupMemberInfo.memberRole);
@@ -630,142 +630,142 @@ public class ZIMPluginConverter {
         return groupMemberInfoMap;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMGroupMemberInfoListToBasicList(ArrayList<ZIMGroupMemberInfo> groupMemberInfoList){
+    static public ArrayList<HashMap<String,Object>> mZIMGroupMemberInfoList(ArrayList<ZIMGroupMemberInfo> groupMemberInfoList){
         ArrayList<HashMap<String,Object>> basicList = new ArrayList<>();
         for (ZIMGroupMemberInfo groupMemberInfo:
              groupMemberInfoList) {
-            basicList.add(cnvZIMGroupMemberInfoObjectToMap(groupMemberInfo));
+            basicList.add(mZIMGroupMemberInfo(groupMemberInfo));
         }
         return basicList;
     }
 
-    static public HashMap<String,Object> cnvZIMGroupAdvancedConfigObjectToMap(ZIMGroupAdvancedConfig config){
+    static public HashMap<String,Object> mZIMGroupAdvancedConfig(ZIMGroupAdvancedConfig config){
         HashMap<String,Object> configMap = new HashMap<>();
         configMap.put("groupNotice",config.groupNotice);
         configMap.put("groupAttributes",config.groupAttributes);
         return configMap;
     }
 
-    static public ZIMGroupAdvancedConfig cnvZIMGroupAdvancedConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMGroupAdvancedConfig oZIMGroupAdvancedConfig(HashMap<String,Object> configMap){
         ZIMGroupAdvancedConfig config = new ZIMGroupAdvancedConfig();
         Object attributesObj = configMap.get("groupAttributes");
         if(attributesObj instanceof HashMap<?,?>){
-            config.groupAttributes = (HashMap<String,String>) attributesObj;
+            config.groupAttributes = (HashMap<String, String>) attributesObj;
         }
         config.groupNotice = (String) configMap.get("groupNotice");
         return config;
     }
 
-    static public HashMap<String,Object> cnvZIMGroupObjectToMap(ZIMGroup zimGroup){
+    static public HashMap<String,Object> mZIMGroup(ZIMGroup zimGroup){
         HashMap<String,Object> zimGroupMap = new  HashMap<>();
-        zimGroupMap.put("baseInfo",cnvZIMGroupInfoObjectToMap(zimGroup.baseInfo));
+        zimGroupMap.put("baseInfo", mZIMGroupInfo(zimGroup.baseInfo));
         zimGroupMap.put("notificationStatus",zimGroup.notificationStatus.value());
         return zimGroupMap;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMGroupListToBasicList(ArrayList<ZIMGroup> groupList){
+    static public ArrayList<HashMap<String,Object>> mZIMGroupList(ArrayList<ZIMGroup> groupList){
         ArrayList<HashMap<String,Object>> basicGroupList = new ArrayList<>();
         for (ZIMGroup zimGroup:
              groupList) {
-            basicGroupList.add(cnvZIMGroupObjectToMap(zimGroup));
+            basicGroupList.add(mZIMGroup(zimGroup));
         }
         return basicGroupList;
     }
 
-    static public ZIMGroupMemberQueryConfig cnvZIMGroupMemberQueryConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMGroupMemberQueryConfig oZIMGroupMemberQueryConfig(HashMap<String,Object> configMap){
         ZIMGroupMemberQueryConfig config = new ZIMGroupMemberQueryConfig();
         config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
         config.nextFlag = ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
         return config;
     }
 
-    static public ZIMCallInviteConfig cnvZIMCallInviteConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMCallInviteConfig oZIMCallInviteConfig(HashMap<String,Object> configMap){
         ZIMCallInviteConfig config = new ZIMCallInviteConfig();
         config.timeout = ZIMPluginCommonTools.safeGetIntValue(configMap.get("timeout"));
         config.extendedData = (String) configMap.get("extendedData");
         return config;
     }
 
-    static public HashMap<String,Object> cnvZIMCallUserInfoObjectToMap(ZIMCallUserInfo userInfo){
+    static public HashMap<String,Object> mZIMCallUserInfo(ZIMCallUserInfo userInfo){
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("state",userInfo.state.value());
         return userInfoMap;
     }
 
-    static public ArrayList<HashMap<String ,Object>> cnvZIMCallUserInfoListToBasicList(ArrayList<ZIMCallUserInfo> callUserInfoList){
+    static public ArrayList<HashMap<String ,Object>> mZIMCallUserInfoList(ArrayList<ZIMCallUserInfo> callUserInfoList){
         ArrayList<HashMap<String ,Object>> basicUserInfoList = new ArrayList<>();
         for (ZIMCallUserInfo callUserInfo :
                 callUserInfoList) {
-            basicUserInfoList.add(cnvZIMCallUserInfoObjectToMap(callUserInfo));
+            basicUserInfoList.add(mZIMCallUserInfo(callUserInfo));
         }
         return basicUserInfoList;
     }
 
-    static public HashMap<String,Object> cnvZIMCallInvitationSentInfoObjectToMap(ZIMCallInvitationSentInfo info){
+    static public HashMap<String,Object> mZIMCallInvitationSentInfo(ZIMCallInvitationSentInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
-        infoMap.put("errorInvitees",cnvZIMCallUserInfoListToBasicList(info.errorInvitees));
+        infoMap.put("errorInvitees", mZIMCallUserInfoList(info.errorInvitees));
         return infoMap;
     }
 
-    static public ZIMCallCancelConfig cnvZIMCallCancelConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMCallCancelConfig oZIMCallCancelConfig(HashMap<String,Object> configMap){
         ZIMCallCancelConfig config = new ZIMCallCancelConfig();
         config.extendedData = (String) configMap.get("extendedData");
         return config;
     }
 
-    static public ZIMCallAcceptConfig cnvZIMCallAcceptConfigMapToObject(HashMap<String,Object> configMap){
+    static public ZIMCallAcceptConfig oZIMCallAcceptConfig(HashMap<String,Object> configMap){
         ZIMCallAcceptConfig config = new ZIMCallAcceptConfig();
         config.extendedData = (String) configMap.get("extendedData");
         return config;
     }
 
-    static public ZIMCallRejectConfig cnvZIMCallRejectConfigMapToObject(HashMap<String,Object> configMap) {
+    static public ZIMCallRejectConfig oZIMCallRejectConfig(HashMap<String,Object> configMap) {
         ZIMCallRejectConfig config = new ZIMCallRejectConfig();
         config.extendedData = (String) configMap.get("extendedData");
         return config;
     }
 
-    static public HashMap<String,Object> cnvZIMRoomAttributesUpdateInfoObjectToMap(ZIMRoomAttributesUpdateInfo info){
+    static public HashMap<String,Object> mZIMRoomAttributesUpdateInfo(ZIMRoomAttributesUpdateInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("action",info.action.value());
         infoMap.put("roomAttributes",info.roomAttributes);
         return infoMap;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMRoomAttributesUpdateInfoListToBasicList(ArrayList<ZIMRoomAttributesUpdateInfo> infos){
+    static public ArrayList<HashMap<String,Object>> mZIMRoomAttributesUpdateInfoList(ArrayList<ZIMRoomAttributesUpdateInfo> infos){
         ArrayList<HashMap<String,Object>> basicInfoList = new ArrayList<>();
         for (ZIMRoomAttributesUpdateInfo info:
              infos) {
-            basicInfoList.add(cnvZIMRoomAttributesUpdateInfoObjectToMap(info));
+            basicInfoList.add(mZIMRoomAttributesUpdateInfo(info));
         }
         return basicInfoList;
     }
 
-    static public HashMap<String,Object> cnvZIMGroupOperatedInfoObjectToMap(ZIMGroupOperatedInfo info){
+    static public HashMap<String,Object> mZIMGroupOperatedInfo(ZIMGroupOperatedInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
-        infoMap.put("operatedUserInfo",cnvZIMGroupMemberInfoObjectToMap(info.operatedUserInfo));
+        infoMap.put("operatedUserInfo", mZIMGroupMemberInfo(info.operatedUserInfo));
         return infoMap;
     }
 
-    static public HashMap<String,Object> cnvZIMGroupAttributesUpdateInfoObjectToMap(ZIMGroupAttributesUpdateInfo info){
+    static public HashMap<String,Object> mZIMGroupAttributesUpdateInfo(ZIMGroupAttributesUpdateInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("action",info.action.value());
         infoMap.put("groupAttributes",info.groupAttributes);
         return infoMap;
     }
 
-    static public ArrayList<HashMap<String,Object>> cnvZIMGroupAttributesUpdateInfoListToBasicList(ArrayList<ZIMGroupAttributesUpdateInfo> infoList){
+    static public ArrayList<HashMap<String,Object>> mZIMGroupAttributesUpdateInfoList(ArrayList<ZIMGroupAttributesUpdateInfo> infoList){
         ArrayList<HashMap<String,Object>> basicList = new ArrayList<>();
         for (ZIMGroupAttributesUpdateInfo info :
                 infoList) {
-            basicList.add(cnvZIMGroupAttributesUpdateInfoObjectToMap(info));
+            basicList.add(mZIMGroupAttributesUpdateInfo(info));
         }
         return basicList;
     }
 
-    static public HashMap<String,Object> cnvZIMCallInvitationReceivedInfoObjectToMap(ZIMCallInvitationReceivedInfo info){
+    static public HashMap<String,Object> mZIMCallInvitationReceivedInfo(ZIMCallInvitationReceivedInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
         infoMap.put("inviter",info.inviter);
@@ -773,21 +773,21 @@ public class ZIMPluginConverter {
         return infoMap;
     }
 
-    static public HashMap<String,Object> cnvZIMCallInvitationCancelledInfoObjectToMap(ZIMCallInvitationCancelledInfo info){
+    static public HashMap<String,Object> mZIMCallInvitationCancelledInfo(ZIMCallInvitationCancelledInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("inviter",info.inviter);
         infoMap.put("extendedData",info.extendedData);
         return infoMap;
     }
 
-    static public HashMap<String,Object> cnvZIMCallInvitationAcceptedInfoObjectToMap(ZIMCallInvitationAcceptedInfo info){
+    static public HashMap<String,Object> mZIMCallInvitationAcceptedInfo(ZIMCallInvitationAcceptedInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("invitee",info.invitee);
         infoMap.put("extendedData",info.extendedData);
         return infoMap;
     }
 
-    static public HashMap<String,Object> cnvZIMCallInvitationRejectedInfoObjectToMap(ZIMCallInvitationRejectedInfo info){
+    static public HashMap<String,Object> mZIMCallInvitationRejectedInfo(ZIMCallInvitationRejectedInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("invitee",info.invitee);
         infoMap.put("extendedData",info.extendedData);

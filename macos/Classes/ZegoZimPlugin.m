@@ -37,7 +37,6 @@ static ZegoZimPlugin *instance;
 
 - (FlutterError* _Nullable)onListenWithArguments:(id _Nullable)arguments
                                        eventSink:(FlutterEventSink)events {
-    //self.events = events;
     [[ZIMMethodHandler sharedInstance] setEventSinks:events];
     [[ZIMEventHandler sharedInstance] setEventSinks:events];
     return nil;

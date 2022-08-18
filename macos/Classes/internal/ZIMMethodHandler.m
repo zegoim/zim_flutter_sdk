@@ -13,12 +13,9 @@
 #import "NSObject+safeInvoke.h"
 #import "ZIMEventHandler.h"
 
-
 static ZIM *zim;
 
 @interface ZIMMethodHandler()
-
-//@property (nonatomic, strong) ZIM *zim;
 
 @property (nonatomic, strong) FlutterEventSink events;
 
@@ -44,8 +41,10 @@ static ZIM *zim;
 }
 
 - (void)create:(FlutterMethodCall *)call result:(FlutterResult)result {
-    unsigned int AppID = [[call.arguments objectForKey:@"appID"] unsignedIntValue];
-    zim = [ZIM createWithAppID:AppID];
+    NSDictionary *appConfigDic = [call.arguments objectForKey:@"config"];
+    ZIMAppConfig *appConfig = [ZIMPluginConverter oZIMAppConfig:appConfigDic];
+    [ZIM createWithAppConfig:appConfig];
+    zim = [ZIM getInstance];
     [zim setEventHandler:[ZIMEventHandler sharedInstance]];
     result(nil);
 }
@@ -127,6 +126,18 @@ static ZIM *zim;
     }];
 }
 
+-(void)updateUserAvatarUrl:(FlutterMethodCall *)call result:(FlutterResult)result{
+    NSString *updateUserAvatarUrl = [call.arguments objectForKey:@"userAvatarUrl"];
+    [zim updateUserAvatarUrl:updateUserAvatarUrl callback:^(NSString * _Nonnull userAvatarUrl, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSDictionary *resultDic = @{@"userAvatarUrl":userAvatarUrl};
+            result(resultDic);
+        }else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
 - (void)updateUserExtendedData:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *updateUserExtendedData = [call.arguments objectForKey:@"updateUserExtendedData"];
     [zim updateUserExtendedData:updateUserExtendedData callback:^(NSString * _Nonnull extendedData, ZIMError * _Nonnull errorInfo) {
@@ -141,11 +152,12 @@ static ZIM *zim;
 
 - (void)queryUsersInfo:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
-    [zim queryUsersInfo:userIDs callback:^(NSArray<ZIMUserInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+    ZIMUserInfoQueryConfig *config = [ZIMPluginConverter oZIMUserInfoQueryConfig:[call.arguments objectForKey:@"config"]];
+    [zim queryUsersInfo:userIDs config:config callback:^(NSArray<ZIMUserFullInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableArray *userListBasic = [[NSMutableArray alloc] init];
             for (ZIMUserFullInfo *userFullInfo in userList) {
-                NSDictionary *userFullInfoDic = [ZIMPluginConverter cnvZIMUserFullInfoObjectToBasic:userFullInfo];
+                NSDictionary *userFullInfoDic = [ZIMPluginConverter mZIMUserFullInfo:userFullInfo];
                 [userListBasic addObject:userFullInfoDic];
             }
             NSMutableArray *errorUserListBasic = [[NSMutableArray alloc] init];
@@ -166,10 +178,10 @@ static ZIM *zim;
     NSDictionary *configDic = [call.arguments objectForKey:@"config"];
     ZIMConversationQueryConfig *config = [[ZIMConversationQueryConfig alloc] init];
     config.count = ((NSNumber *)[configDic objectForKey:@"count"]).unsignedIntValue;
-    config.nextConversation = [ZIMPluginConverter cnvZIMConversationDicToObject:(NSDictionary *)[configDic objectForKey:@"nextConversation"]];
+    config.nextConversation = [ZIMPluginConverter oZIMConversation:(NSDictionary *)[configDic objectForKey:@"nextConversation"]];
     [zim queryConversationListWithConfig:config callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo)  {
         if(errorInfo.code == 0){
-            NSArray *conversationBasicList = [ZIMPluginConverter cnvZIMConversationListObjectToBasic:conversationList];
+            NSArray *conversationBasicList = [ZIMPluginConverter mZIMConversationList:conversationList];
             NSDictionary *resultDic = @{@"conversationList":conversationBasicList};
             result(resultDic);
         }
@@ -182,7 +194,7 @@ static ZIM *zim;
 - (void)deleteConversation:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *conversationID = [call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
-    ZIMConversationDeleteConfig *deleteConfig = [ZIMPluginConverter cnvZIMConversationDeleteConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMConversationDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMConversationDeleteConfig:[call.arguments objectForKey:@"config"]];
     [zim deleteConversation:conversationID conversationType:conversationType config:deleteConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType]};
@@ -225,12 +237,12 @@ static ZIM *zim;
 }
 
 - (void)sendPeerMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMMessage *message = [ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments objectForKey:@"message"]];
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
     NSString *toUserID = (NSString *)[call.arguments objectForKey:@"toUserID"];
-    ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter cnvZIMMessageSendConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter oZIMMessageSendConfig:[call.arguments objectForKey:@"config"]];
     [zim sendPeerMessage:message toUserID:toUserID config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+            NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
             NSDictionary *resultDic = @{@"message":messageDic};
             result(resultDic);
         }
@@ -241,12 +253,12 @@ static ZIM *zim;
 }
 
 - (void)sendRoomMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMMessage *message = [ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments objectForKey:@"message"]];
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
     NSString *toRoomID = (NSString *)[call.arguments objectForKey:@"toRoomID"];
-    ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter cnvZIMMessageSendConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter oZIMMessageSendConfig:[call.arguments objectForKey:@"config"]];
     [zim sendRoomMessage:message toRoomID:toRoomID config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+            NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
             NSDictionary *resultDic = @{@"message":messageDic};
             result(resultDic);
         }
@@ -257,12 +269,12 @@ static ZIM *zim;
 }
 
 - (void)sendGroupMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMMessage *message = [ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments safeObjectForKey:@"message"]];
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     NSString *toGroupID = (NSString *)[call.arguments objectForKey:@"toGroupID"];
-    ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter cnvZIMMessageSendConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter oZIMMessageSendConfig:[call.arguments objectForKey:@"config"]];
     [zim sendGroupMesage:message toGroupID:toGroupID config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+            NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
             NSDictionary *resultDic = @{@"message":messageDic};
             result(resultDic);
         }
@@ -273,16 +285,16 @@ static ZIM *zim;
 }
 
 - (void)sendMediaMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments safeObjectForKey:@"message"]];
+    ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     NSString *toConversationID = [call.arguments safeObjectForKey:@"toConversationID"];
     int conversationType = ((NSNumber *)[call.arguments safeObjectForKey:@"conversationType"]).intValue;
-    ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter cnvZIMMessageSendConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+    ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter oZIMMessageSendConfig:[call.arguments safeObjectForKey:@"config"]];
     NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
     [zim sendMediaMessage:message toConversationID:toConversationID conversationType:conversationType config:sendConfig progress:^(ZIMMessage * _Nonnull message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
         if(progressID == nil){
             return;
         }
-        NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+        NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
         
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
         [resultDic safeSetObject:@"uploadMediaProgress" forKey:@"method"];
@@ -294,7 +306,7 @@ static ZIM *zim;
     } callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
-            NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+            NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
             [resultMtDic safeSetObject:messageDic forKey:@"message"];
             result(resultMtDic);
         }
@@ -305,7 +317,7 @@ static ZIM *zim;
 }
 
 - (void)downloadMediaFile:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter cnvZIMMessageDicToObject:[call.arguments safeObjectForKey:@"message"]];
+    ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     int fileType = ((NSNumber *)[call.arguments safeObjectForKey:@"fileType"]).intValue;
     NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
 
@@ -313,7 +325,7 @@ static ZIM *zim;
         if(progressID == nil){
             return;
         }
-        NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+        NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
         
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
         [resultDic safeSetObject:@"downloadMediaFileProgress" forKey:@"method"];
@@ -325,7 +337,7 @@ static ZIM *zim;
     } callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
-            NSDictionary *messageDic = [ZIMPluginConverter cnvZIMMessageObjectToDic:message];
+            NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
             [resultMtDic safeSetObject:messageDic forKey:@"message"];
             result(resultMtDic);
         }
@@ -338,10 +350,10 @@ static ZIM *zim;
 - (void)queryHistoryMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
-    ZIMMessageQueryConfig *queryConfig = [ZIMPluginConverter cnvZIMMessageQueryConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMMessageQueryConfig *queryConfig = [ZIMPluginConverter oZIMMessageQueryConfig:[call.arguments objectForKey:@"config"]];
     [zim queryHistoryMessageByConversationID:conversationID conversationType:conversationType config:queryConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, NSArray<ZIMMessage *> * _Nonnull messageList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSArray *MsgDicList = [ZIMPluginConverter cnvZIMMessageListToDicList:messageList];
+            NSArray *MsgDicList = [ZIMPluginConverter mZIMMessageList:messageList];
             
             NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType],@"messageList":MsgDicList};
             result(resultDic);
@@ -355,7 +367,7 @@ static ZIM *zim;
 - (void)deleteAllMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
-    ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter cnvZIMMessageDeleteConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMMessageDeleteConfig:[call.arguments objectForKey:@"config"]];
     [zim deleteAllMessageByConversationID:conversationID conversationType:conversationType config:deleteConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType]};
@@ -368,10 +380,10 @@ static ZIM *zim;
 }
 
 - (void)deleteMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
-    NSArray *messageList = [ZIMPluginConverter cnvBasicListToZIMMessageList:[call.arguments objectForKey:@"messageList"]];
+    NSArray *messageList = [ZIMPluginConverter oZIMMessageList:[call.arguments objectForKey:@"messageList"]];
     NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
-    ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter cnvZIMMessageDeleteConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMMessageDeleteConfig:[call.arguments objectForKey:@"config"]];
     [zim deleteMessages:messageList conversationID:conversationID conversationType:conversationType config:deleteConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType]};
@@ -384,11 +396,11 @@ static ZIM *zim;
 }
 
 - (void)enterRoom:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMRoomInfo *roomInfo = [ZIMPluginConverter cnvZIMRoomInfoBasicToObject:[call.arguments objectForKey:@"roomInfo"]];
-    ZIMRoomAdvancedConfig *config = [ZIMPluginConverter cnvZIMRoomAdvancedConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMRoomInfo *roomInfo = [ZIMPluginConverter oZIMRoomInfo:[call.arguments objectForKey:@"roomInfo"]];
+    ZIMRoomAdvancedConfig *config = [ZIMPluginConverter oZIMRoomAdvancedConfig:[call.arguments objectForKey:@"config"]];
     [zim enterRoom:roomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *roomInfoDic = [ZIMPluginConverter cnvZIMRoomFullInfoObjectToDic:roomInfo];
+            NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
             NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
             result(resultDic);
         }
@@ -399,11 +411,11 @@ static ZIM *zim;
 }
 
 - (void)createRoom:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMRoomInfo *roomInfo = [ZIMPluginConverter cnvZIMRoomInfoBasicToObject:[call.arguments objectForKey:@"roomInfo"]];
+    ZIMRoomInfo *roomInfo = [ZIMPluginConverter oZIMRoomInfo:[call.arguments objectForKey:@"roomInfo"]];
     
     [zim createRoom:roomInfo callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *roomInfoDic = [ZIMPluginConverter cnvZIMRoomFullInfoObjectToDic:roomInfo];
+            NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
             NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
             result(resultDic);
         }
@@ -414,12 +426,12 @@ static ZIM *zim;
 }
 
 - (void)createRoomWithConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMRoomInfo *roomInfo = [ZIMPluginConverter cnvZIMRoomInfoBasicToObject:[call.arguments objectForKey:@"roomInfo"]];
-    ZIMRoomAdvancedConfig *config = [ZIMPluginConverter cnvZIMRoomAdvancedConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMRoomInfo *roomInfo = [ZIMPluginConverter oZIMRoomInfo:[call.arguments objectForKey:@"roomInfo"]];
+    ZIMRoomAdvancedConfig *config = [ZIMPluginConverter oZIMRoomAdvancedConfig:[call.arguments objectForKey:@"config"]];
     
     [zim createRoom:roomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *roomInfoDic = [ZIMPluginConverter cnvZIMRoomFullInfoObjectToDic:roomInfo];
+            NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
             NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
             result(resultDic);
         }
@@ -433,7 +445,7 @@ static ZIM *zim;
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     [zim joinRoom:roomID callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *roomInfoDic = [ZIMPluginConverter cnvZIMRoomFullInfoObjectToDic:roomInfo];
+            NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
             NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
             result(resultDic);
         }
@@ -459,10 +471,10 @@ static ZIM *zim;
 - (void)queryRoomMemberList:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     
-    ZIMRoomMemberQueryConfig *config = [ZIMPluginConverter cnvZIMRoomMemberQueryConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMRoomMemberQueryConfig *config = [ZIMPluginConverter oZIMRoomMemberQueryConfig:[call.arguments objectForKey:@"config"]];
     [zim queryRoomMemberListByRoomID:roomID config:config callback:^(NSString * _Nonnull roomID, NSArray<ZIMUserInfo *> * _Nonnull memberList, NSString * _Nonnull nextFlag, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSArray *basicMemberList = [ZIMPluginConverter cnvZIMUserInfoListTobasicList:memberList];
+            NSArray *basicMemberList = [ZIMPluginConverter mZIMUserInfoList:memberList];
             NSDictionary *resultDic = @{@"roomID":roomID,@"memberList":basicMemberList,@"nextFlag":nextFlag};
             result(resultDic);
         }
@@ -489,7 +501,7 @@ static ZIM *zim;
 - (void)setRoomAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     NSDictionary<NSString *,NSString *> *roomAttributes = [call.arguments objectForKey:@"roomAttributes"];
-    ZIMRoomAttributesSetConfig *setConfig = [ZIMPluginConverter cnvZIMRoomAttributesSetConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMRoomAttributesSetConfig *setConfig = [ZIMPluginConverter oZIMRoomAttributesSetConfig:[call.arguments objectForKey:@"config"]];
     [zim setRoomAttributes:roomAttributes roomID:roomID config:setConfig callback:^(NSString * _Nonnull roomID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *resultDic = @{@"roomID":roomID,@"errorKeys":errorKeys};
@@ -504,7 +516,7 @@ static ZIM *zim;
 - (void)deleteRoomAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     NSArray<NSString *> *keys = [call.arguments objectForKey:@"keys"];
-    ZIMRoomAttributesDeleteConfig *config = [ZIMPluginConverter cnvZIMRoomAttributesDeleteConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMRoomAttributesDeleteConfig *config = [ZIMPluginConverter oZIMRoomAttributesDeleteConfig:[call.arguments objectForKey:@"config"]];
     [zim deleteRoomAttributesByKeys:keys roomID:roomID config:config callback:^(NSString * _Nonnull roomID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *resultDic = @{@"roomID":roomID,@"errorKeys":errorKeys};
@@ -518,7 +530,7 @@ static ZIM *zim;
 
 - (void)beginRoomAttributesBatchOperation:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
-    ZIMRoomAttributesBatchOperationConfig *config = [ZIMPluginConverter cnvZIMRoomAttributesBatchOperationConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMRoomAttributesBatchOperationConfig *config = [ZIMPluginConverter oZIMRoomAttributesBatchOperationConfig:[call.arguments objectForKey:@"config"]];
     
     [zim beginRoomAttributesBatchOperationWithRoomID:roomID config:config];
     result(nil);
@@ -553,13 +565,13 @@ static ZIM *zim;
 }
 
 - (void)createGroup:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMGroupInfo *groupInfo = [ZIMPluginConverter cnvZIMGroupInfoDicToObject:[call.arguments objectForKey:@"groupInfo"]];
+    ZIMGroupInfo *groupInfo = [ZIMPluginConverter oZIMGroupInfo:[call.arguments objectForKey:@"groupInfo"]];
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
     [zim createGroup:groupInfo userIDs:userIDs callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSArray *basicUserList = [ZIMPluginConverter cnvZIMGroupMemberInfoListToBasicList:userList];
-            NSArray *basicErrorUserList = [ZIMPluginConverter cnvZIMErrorUserInfoListToBasicList:errorUserList];
-            NSDictionary *groupInfoDic = [ZIMPluginConverter cnvZIMGroupFullInfoObjectToDic:groupInfo];
+            NSArray *basicUserList = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
+            NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
+            NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
             NSDictionary *resultDic = @{@"groupInfo":groupInfoDic,@"userList":basicUserList,@"errorUserList":basicErrorUserList};
             result(resultDic);
         }
@@ -570,15 +582,15 @@ static ZIM *zim;
 }
 
 - (void)createGroupWithConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
-    ZIMGroupInfo *groupInfo = [ZIMPluginConverter cnvZIMGroupInfoDicToObject:[call.arguments objectForKey:@"groupInfo"]];
+    ZIMGroupInfo *groupInfo = [ZIMPluginConverter oZIMGroupInfo:[call.arguments objectForKey:@"groupInfo"]];
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
     
-    ZIMGroupAdvancedConfig *config = [ZIMPluginConverter cnvZIMGroupAdvancedConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    ZIMGroupAdvancedConfig *config = [ZIMPluginConverter oZIMGroupAdvancedConfig:[call.arguments objectForKey:@"config"]];
     [zim createGroup:groupInfo userIDs:userIDs config:config callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSArray *basicUserList = [ZIMPluginConverter cnvZIMGroupMemberInfoListToBasicList:userList];
-            NSArray *basicErrorUserList = [ZIMPluginConverter cnvZIMErrorUserInfoListToBasicList:errorUserList];
-            NSDictionary *groupInfoDic = [ZIMPluginConverter cnvZIMGroupFullInfoObjectToDic:groupInfo];
+            NSArray *basicUserList = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
+            NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
+            NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
             NSDictionary *resultDic = @{@"groupInfo":groupInfoDic,@"userList":basicUserList,@"errorUserList":basicErrorUserList};
             result(resultDic);
         }
@@ -592,7 +604,7 @@ static ZIM *zim;
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim joinGroup:groupID callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *groupInfoDic = [ZIMPluginConverter cnvZIMGroupFullInfoObjectToDic:groupInfo];
+            NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
             NSDictionary *resultDic = @{@"groupInfo":groupInfoDic};
             result(resultDic);
         }
@@ -633,8 +645,8 @@ static ZIM *zim;
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim inviteUsersIntoGroup:userIDs groupID:groupID callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSArray *basicUserList = [ZIMPluginConverter cnvZIMGroupMemberInfoListToBasicList:userList];
-            NSArray *basicErrorUserList = [ZIMPluginConverter cnvZIMErrorUserInfoListToBasicList:errorUserList];
+            NSArray *basicUserList = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
+            NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
 
             NSDictionary *resultDic = @{@"groupID":groupID,@"userList":basicUserList,@"errorUserList":basicErrorUserList};
             result(resultDic);
@@ -652,7 +664,7 @@ static ZIM *zim;
         if(errorInfo.code == 0){
             
             
-            NSArray *basicErrorUserList = [ZIMPluginConverter cnvZIMErrorUserInfoListToBasicList:errorUserList];
+            NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
             NSDictionary *resultDic = @{@"groupID":groupID,@"kickedUserIDList":kickedUserIDList,@"errorUserList":basicErrorUserList};
             result(resultDic);
             
@@ -691,6 +703,21 @@ static ZIM *zim;
     }];
 }
 
+- (void)updateGroupAvatarUrl:(FlutterMethodCall *)call
+                      result:(FlutterResult)result{
+    NSString *groupAvatarUrl = [call.arguments objectForKey:@"groupAvatarUrl"];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    [zim updateGroupAvatarUrl:groupAvatarUrl groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupAvatarUrl, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSDictionary *resultDic = @{@"groupID":groupID,@"groupAvatarUrl":groupAvatarUrl};
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
 - (void)updateGroupNotice:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *groupNotice = [call.arguments objectForKey:@"groupNotice"];
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
@@ -709,7 +736,7 @@ static ZIM *zim;
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim queryGroupInfoByGroupID:groupID callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *groupInfoDic = [ZIMPluginConverter cnvZIMGroupFullInfoObjectToDic:groupInfo];
+            NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
             result(resultMtDic);
@@ -825,7 +852,7 @@ static ZIM *zim;
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
     [zim queryGroupMemberInfoByUserID:userID groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupMemberInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *userInfoDic = [ZIMPluginConverter cnvZIMGroupMemberInfoObjectToDic:userInfo];
+            NSDictionary *userInfoDic = [ZIMPluginConverter mZIMGroupMemberInfo:userInfo];
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:userInfoDic forKey:@"userInfo"];
             [resultMtDic safeSetObject:groupID forKey:@"groupID"];
@@ -840,7 +867,7 @@ static ZIM *zim;
 - (void)queryGroupList:(FlutterMethodCall *)call result:(FlutterResult)result {
     [zim queryGroupList:^(NSArray<ZIMGroup *> * _Nonnull groupList, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
-            NSArray *basicGroupList = [ZIMPluginConverter cnvZIMGroupListToBasicList:groupList];
+            NSArray *basicGroupList = [ZIMPluginConverter mZIMGroupList:groupList];
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:basicGroupList forKey:@"groupList"];
             result(resultMtDic);
@@ -853,10 +880,10 @@ static ZIM *zim;
 
 - (void)queryGroupMemberList:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
-    ZIMGroupMemberQueryConfig *config = [ZIMPluginConverter cnvZIMGroupMemberQueryConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+    ZIMGroupMemberQueryConfig *config = [ZIMPluginConverter oZIMGroupMemberQueryConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim queryGroupMemberListByGroupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSArray *basicUserList = [ZIMPluginConverter cnvZIMGroupMemberInfoListToBasicList:userList];
+            NSArray *basicUserList = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
             
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:groupID forKey:@"groupID"];
@@ -887,12 +914,12 @@ static ZIM *zim;
 
 - (void)callInvite:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
-    ZIMCallInviteConfig *config = [ZIMPluginConverter cnvZIMCallInviteConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+    ZIMCallInviteConfig *config = [ZIMPluginConverter oZIMCallInviteConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim callInviteWithInvitees:invitees config:config callback:^(NSString * _Nonnull callID, ZIMCallInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:callID forKey:@"callID"];
-            NSDictionary *infoDic = [ZIMPluginConverter cnvZIMCallInvitationSentInfoObjectToDic:info];
+            NSDictionary *infoDic = [ZIMPluginConverter mZIMCallInvitationSentInfo:info];
             [resultMtDic safeSetObject:infoDic forKey:@"info"];
             result(resultMtDic);
         }
@@ -905,7 +932,7 @@ static ZIM *zim;
 - (void)callCancel:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
-    ZIMCallCancelConfig *config = [ZIMPluginConverter cnvZIMCallCancelConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+    ZIMCallCancelConfig *config = [ZIMPluginConverter oZIMCallCancelConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim callCancelWithInvitees:invitees callID:callID config:config callback:^(NSString * _Nonnull callID, NSArray<NSString *> * _Nonnull errorInvitees, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
@@ -921,7 +948,7 @@ static ZIM *zim;
 
 - (void)callAccept:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
-    ZIMCallAcceptConfig *config = [ZIMPluginConverter cnvZIMCallAcceptConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+    ZIMCallAcceptConfig *config = [ZIMPluginConverter oZIMCallAcceptConfig:[call.arguments safeObjectForKey:@"config"]];
     
     [zim callAcceptWithCallID:callID config:config callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -937,7 +964,7 @@ static ZIM *zim;
 
 - (void)callReject:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
-    ZIMCallRejectConfig *config = [ZIMPluginConverter cnvZIMCallRejectConfigDicToObject:[call.arguments safeObjectForKey:@"config"]];
+    ZIMCallRejectConfig *config = [ZIMPluginConverter oZIMCallRejectConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim callRejectWithCallID:callID config:config callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];

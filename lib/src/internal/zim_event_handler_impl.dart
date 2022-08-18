@@ -45,7 +45,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       case 'onConversationChanged':
         if (ZIMEventHandler.onConversationChanged == null) return;
         List<ZIMConversationChangeInfo> conversationChangeInfoList =
-            ZIMConverter.cnvZIMConversationChangeInfoListBasicToObject(
+            ZIMConverter.oZIMConversationChangeInfoList(
                 map['conversationChangeInfoList']);
 
         ZIMEventHandler.onConversationChanged!(conversationChangeInfoList);
@@ -59,31 +59,31 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       case 'onReceivePeerMessage':
         if (ZIMEventHandler.onReceivePeerMessage == null) return;
         List<ZIMMessage> messageList =
-            ZIMConverter.cnvZIMMessageListMapToObject(map['messageList']);
+            ZIMConverter.oZIMMessageList(map['messageList']);
         ZIMEventHandler.onReceivePeerMessage!(messageList, map['fromUserID']);
         break;
       case 'onReceiveRoomMessage':
         if (ZIMEventHandler.onReceiveRoomMessage == null) return;
         List<ZIMMessage> messageList =
-            ZIMConverter.cnvZIMMessageListMapToObject(map['messageList']);
+            ZIMConverter.oZIMMessageList(map['messageList']);
         ZIMEventHandler.onReceiveRoomMessage!(messageList, map['fromRoomID']);
         break;
       case 'onReceiveGroupMessage':
         if (ZIMEventHandler.onReceiveGroupMessage == null) return;
         List<ZIMMessage> messageList =
-            ZIMConverter.cnvZIMMessageListMapToObject(map['messageList']);
+            ZIMConverter.oZIMMessageList(map['messageList']);
         ZIMEventHandler.onReceiveGroupMessage!(messageList, map['fromGroupID']);
         break;
       case 'onRoomMemberJoined':
         if (ZIMEventHandler.onRoomMemberJoined == null) return;
         List<ZIMUserInfo> memberList =
-            ZIMConverter.cnvZIMUserInfoListBasicToObject(map['memberList']);
+            ZIMConverter.oZIMUserInfoList(map['memberList']);
         ZIMEventHandler.onRoomMemberJoined!(memberList, map['roomID']);
         break;
       case 'onRoomMemberLeft':
         if (ZIMEventHandler.onRoomMemberLeft == null) return;
         List<ZIMUserInfo> memberList =
-            ZIMConverter.cnvZIMUserInfoListBasicToObject(map['memberList']);
+            ZIMConverter.oZIMUserInfoList(map['memberList']);
         ZIMEventHandler.onRoomMemberLeft!(memberList, map['roomID']);
         break;
       case 'onRoomStateChanged':
@@ -98,8 +98,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (ZIMEventHandler.onRoomAttributesUpdated == null) return;
 
         ZIMEventHandler.onRoomAttributesUpdated!(
-            ZIMConverter.cnvZIMRoomAttributesUpdateInfoMapToObject(
-                map['updateInfo']),
+            ZIMConverter.oZIMRoomAttributesUpdateInfo(map['updateInfo']),
             map['roomID']);
 
         break;
@@ -107,8 +106,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (ZIMEventHandler.onRoomAttributesBatchUpdated == null) return;
 
         ZIMEventHandler.onRoomAttributesBatchUpdated!(
-            ZIMConverter.cnvZIMRoomAttributesUpdateInfoListBasicToObject(
-                map['updateInfo']),
+            ZIMConverter.oZIMRoomAttributesUpdateInfoList(map['updateInfo']),
             map['roomID']);
         break;
 
@@ -118,17 +116,15 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMEventHandler.onGroupStateChanged!(
             ZIMGroupStateExtension.mapValue[map['state']]!,
             ZIMGroupEventExtension.mapValue[map['event']]!,
-            ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
-                map['operatedInfo']),
-            ZIMConverter.cnvZIMGroupFullInfoMapToObject(map['groupInfo'])!);
+            ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
+            ZIMConverter.oZIMGroupFullInfo(map['groupInfo'])!);
         break;
       case 'onGroupNameUpdated':
         if (ZIMEventHandler.onGroupNameUpdated == null) return;
 
         ZIMEventHandler.onGroupNameUpdated!(
             map['groupName'],
-            ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
-                map['operatedInfo']),
+            ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
             map['groupID']);
         break;
       case 'onGroupNoticeUpdated':
@@ -136,23 +132,22 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
 
         ZIMEventHandler.onGroupNoticeUpdated!(
             map['groupNotice'],
-            ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
-                map['operatedInfo']),
+            ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
             map['groupID']);
         break;
       case 'onGroupAvatarUrlUpdated':
         if (ZIMEventHandler.onGroupAvatarUrlUpdated == null) return;
-        ZIMEventHandler.onGroupAvatarUrlUpdated!(map['groupAvatarUrl'], ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
-                map['operatedInfo']),map['groupID']);
+        ZIMEventHandler.onGroupAvatarUrlUpdated!(
+            map['groupAvatarUrl'],
+            ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
+            map['groupID']);
         break;
       case 'onGroupAttributesUpdated':
         if (ZIMEventHandler.onGroupAttributesUpdated == null) return;
 
         ZIMEventHandler.onGroupAttributesUpdated!(
-            ZIMConverter.cnvBasicListToZIMGroupAttributesUpdateInfoList(
-                map['updateInfo']),
-            ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
-                map['operatedInfo']),
+            ZIMConverter.oZIMGroupAttributesUpdateInfoList(map['updateInfo']),
+            ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
             map['groupID']);
         break;
       case 'onGroupMemberStateChanged':
@@ -161,50 +156,44 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMEventHandler.onGroupMemberStateChanged!(
             ZIMGroupMemberStateExtension.mapValue[map['state']]!,
             ZIMGroupMemberEventExtension.mapValue[map['event']]!,
-            ZIMConverter.cnvBasicListToZIMGroupMemberInfoList(map['userList']),
-            ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
-                map['operatedInfo']),
+            ZIMConverter.oZIMGroupMemberInfoList(map['userList']),
+            ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
             map['groupID']);
         break;
       case 'onGroupMemberInfoUpdated':
         if (ZIMEventHandler.onGroupMemberInfoUpdated == null) return;
 
         ZIMEventHandler.onGroupMemberInfoUpdated!(
-            ZIMConverter.cnvBasicListToZIMGroupMemberInfoList(map['userInfo']),
-            ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
-                map['operatedInfo']),
+            ZIMConverter.oZIMGroupMemberInfoList(map['userInfo']),
+            ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
             map['groupID']);
         break;
       case 'onCallInvitationReceived':
         if (ZIMEventHandler.onCallInvitationReceived == null) return;
 
         ZIMEventHandler.onCallInvitationReceived!(
-            ZIMConverter.cnvZIMCallInvitationReceivedInfoMapToObject(
-                map['info']),
+            ZIMConverter.oZIMCallInvitationReceivedInfo(map['info']),
             map['callID']);
         break;
       case 'onCallInvitationCancelled':
         if (ZIMEventHandler.onCallInvitationCancelled == null) return;
 
         ZIMEventHandler.onCallInvitationCancelled!(
-            ZIMConverter.cnvZIMCallInvitationCancelledInfoMapToObject(
-                map['info']),
+            ZIMConverter.oZIMCallInvitationCancelledInfo(map['info']),
             map['callID']);
         break;
       case 'onCallInvitationAccepted':
         if (ZIMEventHandler.onCallInvitationAccepted == null) return;
 
         ZIMEventHandler.onCallInvitationAccepted!(
-            ZIMConverter.cnvZIMCallInvitationAcceptedInfoMapToObject(
-                map['info']),
+            ZIMConverter.oZIMCallInvitationAcceptedInfo(map['info']),
             map['callID']);
         break;
       case 'onCallInvitationRejected':
         if (ZIMEventHandler.onCallInvitationRejected == null) return;
 
         ZIMEventHandler.onCallInvitationRejected!(
-            ZIMConverter.cnvZIMCallInvitationRejectedInfoMapToObject(
-                map['info']),
+            ZIMConverter.oZIMCallInvitationRejectedInfo(map['info']),
             map['callID']);
         break;
       case 'onCallInvitationTimeout':
@@ -220,8 +209,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'downloadMediaFileProgress':
         int progressID = map['progressID'];
-        ZIMMessage message =
-            ZIMConverter.cnvZIMMessageMapToObject(map['message']);
+        ZIMMessage message = ZIMConverter.oZIMMessage(map['message']);
         int currentFileSize = map['currentFileSize'];
         int totalFileSize = map['totalFileSize'];
         ZIMMediaDownloadingProgress? progress =
@@ -232,8 +220,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'uploadMediaProgress':
         int progressID = map['progressID'];
-        ZIMMessage message =
-            ZIMConverter.cnvZIMMessageMapToObject(map['message']);
+        ZIMMessage message = ZIMConverter.oZIMMessage(map['message']);
         int currentFileSize = map['currentFileSize'];
         int totalFileSize = map['totalFileSize'];
         ZIMMediaUploadingProgress? progress =

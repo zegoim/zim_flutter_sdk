@@ -77,7 +77,7 @@ conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeIn
     if(_events == nil){
         return;
     }
-    NSArray *basicList = [ZIMPluginConverter cnvConversationChangeInfoListToBasicList:conversationChangeInfoList];
+    NSArray *basicList = [ZIMPluginConverter mConversationChangeInfoList:conversationChangeInfoList];
     NSDictionary *resultDic = @{@"method":@"onConversationChanged",@"conversationChangeInfoList":basicList};
     _events(resultDic);
 }
@@ -99,7 +99,7 @@ conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount
     if(_events == nil){
         return;
     }
-    NSArray *basicMessageList = [ZIMPluginConverter cnvZIMMessageListToDicList:messageList];
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
     NSDictionary *resultDic = @{@"method":@"onReceivePeerMessage",@"messageList":basicMessageList,@"fromUserID":fromUserID};
     _events(resultDic);
 }
@@ -110,7 +110,7 @@ conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount
     if(_events == nil){
         return;
     }
-    NSArray *basicMessageList = [ZIMPluginConverter cnvZIMMessageListToDicList:messageList];
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
     NSDictionary *resultDic = @{@"method":@"onReceiveRoomMessage",@"messageList":basicMessageList,@"fromRoomID":fromRoomID};
     _events(resultDic);
 }
@@ -121,7 +121,7 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSArray *basicMessageList = [ZIMPluginConverter cnvZIMMessageListToDicList:messageList];
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
     NSDictionary *resultDic = @{@"method":@"onReceiveGroupMessage",@"messageList":basicMessageList,@"fromGroupID":fromGroupID};
     _events(resultDic);
 }
@@ -133,7 +133,7 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSArray *basicMemberList = [ZIMPluginConverter cnvZIMUserInfoListTobasicList:memberList];
+    NSArray *basicMemberList = [ZIMPluginConverter mZIMUserInfoList:memberList];
     NSDictionary *resultDic = @{@"method":@"onRoomMemberJoined",@"roomID":roomID,@"memberList":basicMemberList};
     _events(resultDic);
 }
@@ -144,7 +144,7 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSArray *basicMemberList = [ZIMPluginConverter cnvZIMUserInfoListTobasicList:memberList];
+    NSArray *basicMemberList = [ZIMPluginConverter mZIMUserInfoList:memberList];
     NSDictionary *resultDic = @{@"method":@"onRoomMemberLeft",@"roomID":roomID,@"memberList":basicMemberList};
     _events(resultDic);
 }
@@ -178,7 +178,7 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSDictionary *updateInfoDic = [ZIMPluginConverter cnvZIMRoomAttributesUpdateInfoObjectToDic:updateInfo];
+    NSDictionary *updateInfoDic = [ZIMPluginConverter mZIMRoomAttributesUpdateInfo:updateInfo];
     NSDictionary *resultDic = @{@"method":@"onRoomAttributesUpdated",@"updateInfo":updateInfoDic,@"roomID":roomID};
     _events(resultDic);
 }
@@ -189,7 +189,7 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSArray *basicUpdateInfoList = [ZIMPluginConverter cnvZIMRoomAttributesUpdateInfoListToBasicList:updateInfo];
+    NSArray *basicUpdateInfoList = [ZIMPluginConverter mZIMRoomAttributesUpdateInfoList:updateInfo];
     NSDictionary *resultDic = @{@"method":@"onRoomAttributesBatchUpdated",@"updateInfo":basicUpdateInfoList,@"roomID":roomID};
     _events(resultDic);
 }
@@ -205,9 +205,9 @@ fromGroupID:(NSString *)fromGroupID{
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)state] forKey:@"state"];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)event] forKey:@"event"];
-    NSDictionary *operatedInfoDic = [ZIMPluginConverter cnvZIMGroupOperatedInfoObjectToDic:operatedInfo];
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
-    NSDictionary *groupInfoDic = [ZIMPluginConverter cnvZIMGroupFullInfoObjectToDic:groupInfo];
+    NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
     [resultDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
     [resultDic safeSetObject:@"onGroupStateChanged" forKey:@"method"];
     _events(resultDic);
@@ -220,7 +220,7 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSDictionary *operatedInfoDic = [ZIMPluginConverter cnvZIMGroupOperatedInfoObjectToDic:operatedInfo];
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupName forKey:@"groupName"];
@@ -236,12 +236,28 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSDictionary *operatedInfoDic = [ZIMPluginConverter cnvZIMGroupOperatedInfoObjectToDic:operatedInfo];
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupNotice forKey:@"groupNotice"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
     [resultDic safeSetObject:@"onGroupNoticeUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    groupAvatarUrlUpdated:(NSString *)groupAvatarUrl
+             operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+    groupID:(NSString *)groupID{
+    if(_events == nil){
+        return;
+    }
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
+    [resultDic safeSetObject:groupAvatarUrl forKey:@"groupAvatarUrl"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:@"onGroupAvatarUrlUpdated" forKey:@"method"];
     _events(resultDic);
 }
 
@@ -252,8 +268,8 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSDictionary *operatedInfoDic = [ZIMPluginConverter cnvZIMGroupOperatedInfoObjectToDic:operatedInfo];
-    NSArray *updateInfoArr = [ZIMPluginConverter cnvZIMGroupAttributesUpdateInfoListToBasicList:updateInfo];
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
+    NSArray *updateInfoArr = [ZIMPluginConverter mZIMGroupAttributesUpdateInfoList:updateInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
@@ -271,8 +287,8 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSDictionary *operatedInfoDic = [ZIMPluginConverter cnvZIMGroupOperatedInfoObjectToDic:operatedInfo];
-    NSArray *userListArr = [ZIMPluginConverter cnvZIMGroupMemberInfoListToBasicList:userList];
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
+    NSArray *userListArr = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
@@ -290,11 +306,11 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
-    NSDictionary *operatedInfoDic = [ZIMPluginConverter cnvZIMGroupOperatedInfoObjectToDic:operatedInfo];
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
-    NSArray *basicUserInfoList = [ZIMPluginConverter cnvZIMGroupMemberInfoListToBasicList:userInfo];
+    NSArray *basicUserInfoList = [ZIMPluginConverter mZIMGroupMemberInfoList:userInfo];
     [resultDic safeSetObject:basicUserInfoList forKey:@"userInfo"];
     [resultDic safeSetObject:@"onGroupMemberInfoUpdated" forKey:@"method"];
     _events(resultDic);

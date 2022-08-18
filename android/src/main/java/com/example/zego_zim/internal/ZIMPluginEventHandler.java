@@ -80,7 +80,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onConversationChanged");
-        resultMap.put("conversationChangeInfoList",ZIMPluginConverter.cnvZIMConversationChangeInfoListObjectToList(conversationChangeInfoList));
+        resultMap.put("conversationChangeInfoList",ZIMPluginConverter.mZIMConversationChangeInfoList(conversationChangeInfoList));
         mysink.success(resultMap);
     }
 
@@ -102,7 +102,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onReceivePeerMessage");
-        resultMap.put("messageList",ZIMPluginConverter.cnvZIMMessageListObjectToBasic(messageList));
+        resultMap.put("messageList",ZIMPluginConverter.mZIMMessageList(messageList));
         resultMap.put("fromUserID",fromUserID);
 
         mysink.success(resultMap);
@@ -115,7 +115,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onReceiveRoomMessage");
-        resultMap.put("messageList",ZIMPluginConverter.cnvZIMMessageListObjectToBasic(messageList));
+        resultMap.put("messageList",ZIMPluginConverter.mZIMMessageList(messageList));
         resultMap.put("fromRoomID",fromRoomID);
 
         mysink.success(resultMap);
@@ -128,7 +128,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onReceiveGroupMessage");
-        resultMap.put("messageList",ZIMPluginConverter.cnvZIMMessageListObjectToBasic(messageList));
+        resultMap.put("messageList",ZIMPluginConverter.mZIMMessageList(messageList));
         resultMap.put("fromGroupID",fromGroupID);
 
         mysink.success(resultMap);
@@ -141,7 +141,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onRoomMemberJoined");
-        resultMap.put("memberList",ZIMPluginConverter.cnvZIMUserInfoListObjectToBasic(memberList));
+        resultMap.put("memberList",ZIMPluginConverter.mZIMUserInfoList(memberList));
         resultMap.put("roomID",roomID);
 
         mysink.success(resultMap);
@@ -154,7 +154,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onRoomMemberLeft");
-        resultMap.put("memberList",ZIMPluginConverter.cnvZIMUserInfoListObjectToBasic(memberList));
+        resultMap.put("memberList",ZIMPluginConverter.mZIMUserInfoList(memberList));
         resultMap.put("roomID",roomID);
 
         mysink.success(resultMap);
@@ -183,7 +183,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onRoomAttributesUpdated");
-        resultMap.put("updateInfo",ZIMPluginConverter.cnvZIMRoomAttributesUpdateInfoObjectToMap(info));
+        resultMap.put("updateInfo",ZIMPluginConverter.mZIMRoomAttributesUpdateInfo(info));
         resultMap.put("roomID",roomID);
 
         mysink.success(resultMap);
@@ -196,7 +196,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onRoomAttributesBatchUpdated");
-        resultMap.put("updateInfo",ZIMPluginConverter.cnvZIMRoomAttributesUpdateInfoListToBasicList(infos));
+        resultMap.put("updateInfo",ZIMPluginConverter.mZIMRoomAttributesUpdateInfoList(infos));
         resultMap.put("roomID",roomID);
 
         mysink.success(resultMap);
@@ -211,8 +211,8 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("method","onGroupStateChanged");
         resultMap.put("state",state.value());
         resultMap.put("event",event.value());
-        resultMap.put("operatedInfo",ZIMPluginConverter.cnvZIMGroupOperatedInfoObjectToMap(operatedInfo));
-        resultMap.put("groupInfo",ZIMPluginConverter.cnvZIMGroupFullInfoObjectToMap(groupInfo));
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
+        resultMap.put("groupInfo",ZIMPluginConverter.mZIMGroupFullInfo(groupInfo));
         mysink.success(resultMap);
     }
 
@@ -224,7 +224,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onGroupNameUpdated");
         resultMap.put("groupName",groupName);
-        resultMap.put("operatedInfo",ZIMPluginConverter.cnvZIMGroupOperatedInfoObjectToMap(operatedInfo));
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         resultMap.put("groupID",groupID);
         mysink.success(resultMap);
     }
@@ -237,7 +237,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onGroupNoticeUpdated");
         resultMap.put("groupNotice",groupNotice);
-        resultMap.put("operatedInfo",ZIMPluginConverter.cnvZIMGroupOperatedInfoObjectToMap(operatedInfo));
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         resultMap.put("groupID",groupID);
         mysink.success(resultMap);
     }
@@ -251,7 +251,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("method","onGroupAvatarUrlUpdated");
         resultMap.put("groupID",groupID);
         resultMap.put("groupAvatarUrl",groupAvatarUrl);
-        resultMap.put("operatedInfo",ZIMPluginConverter.cnvZIMGroupOperatedInfoObjectToMap(operatedInfo));
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         mysink.success(resultMap);
     }
 
@@ -262,8 +262,8 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onGroupAttributesUpdated");
-        resultMap.put("updateInfo",ZIMPluginConverter.cnvZIMGroupAttributesUpdateInfoListToBasicList(infos));
-        resultMap.put("operatedInfo",ZIMPluginConverter.cnvZIMGroupOperatedInfoObjectToMap(operatedInfo));
+        resultMap.put("updateInfo",ZIMPluginConverter.mZIMGroupAttributesUpdateInfoList(infos));
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         resultMap.put("groupID",groupID);
         mysink.success(resultMap);
     }
@@ -277,8 +277,8 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("method","onGroupMemberStateChanged");
         resultMap.put("state",state.value());
         resultMap.put("event",event.value());
-        resultMap.put("userList",ZIMPluginConverter.cnvZIMGroupMemberInfoListToBasicList(userList));
-        resultMap.put("operatedInfo",ZIMPluginConverter.cnvZIMGroupOperatedInfoObjectToMap(operatedInfo));
+        resultMap.put("userList",ZIMPluginConverter.mZIMGroupMemberInfoList(userList));
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         resultMap.put("groupID",groupID);
         mysink.success(resultMap);
     }
@@ -290,8 +290,8 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onGroupMemberInfoUpdated");
-        resultMap.put("userList",ZIMPluginConverter.cnvZIMGroupMemberInfoListToBasicList(userList));
-        resultMap.put("operatedInfo",ZIMPluginConverter.cnvZIMGroupOperatedInfoObjectToMap(operatedInfo));
+        resultMap.put("userList",ZIMPluginConverter.mZIMGroupMemberInfoList(userList));
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         resultMap.put("groupID",groupID);
         mysink.success(resultMap);
     }
@@ -303,7 +303,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallInvitationReceived");
-        resultMap.put("info",ZIMPluginConverter.cnvZIMCallInvitationReceivedInfoObjectToMap(info));
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationReceivedInfo(info));
         resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
@@ -315,7 +315,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallInvitationCancelled");
-        resultMap.put("info",ZIMPluginConverter.cnvZIMCallInvitationCancelledInfoObjectToMap(info));
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationCancelledInfo(info));
         resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
@@ -327,7 +327,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallInvitationAccepted");
-        resultMap.put("info",ZIMPluginConverter.cnvZIMCallInvitationAcceptedInfoObjectToMap(info));
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationAcceptedInfo(info));
         resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
@@ -339,7 +339,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallInvitationRejected");
-        resultMap.put("info",ZIMPluginConverter.cnvZIMCallInvitationRejectedInfoObjectToMap(info));
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationRejectedInfo(info));
         resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
