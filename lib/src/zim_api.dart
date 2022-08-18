@@ -31,8 +31,8 @@ abstract class ZIM {
   /// You need to create and initialize an ZIM instance before calling any other function.
   /// The SDK supports the creation of multiple ZIM instances.
   ///
-  /// [appID] Application ID issued by ZEGO for developers, please contact ZEGO technical support to apply
-  Future<void> create(int appID);
+  /// [ZIMAppConfig] appID and appSign issued by ZEGO for developers, Please apply at the ZEGO console.
+  Future<void> create(ZIMAppConfig config);
 
   /// Destroy the ZIM instance.
   ///
@@ -91,9 +91,13 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// [userIDs] userID list.
-  // Future<ZIMUsersInfoQueriedResult> queryUsersInfo(List<String> userIDs);
+  Future<ZIMUsersInfoQueriedResult> queryUsersInfo(
+      List<String> userIDs, ZIMUserInfoQueryConfig config);
 
   Future<ZIMUserNameUpdatedResult> updateUserName(String userName);
+
+  Future<ZIMUserAvatarUrlUpdatedResult> updateUserAvatarUrl(
+      String userAvatarUrl);
 
   Future<ZIMUserExtendedDataUpdatedResult> updateUserExtendedData(
       String extendedData);
@@ -675,6 +679,8 @@ abstract class ZIM {
   Future<ZIMGroupNameUpdatedResult> updateGroupName(
       String groupName, String groupID);
 
+  Future<ZIMGroupAvatarUrlUpdatedResult> updateGroupAvatarUrl(
+      String groupAvatarUrl, String groupID);
   /// Available since: 2.1.5 and above.
   ///
   /// Description: When a group is created, users can use this method to update the group bulletin.

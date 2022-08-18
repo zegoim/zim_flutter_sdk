@@ -27,8 +27,9 @@ class ZIMImpl implements ZIM {
   }
 
   @override
-  Future<void> create(int appID) async {
-    return await _channel.invokeMethod("create", {"appID": appID});
+  Future<void> create(ZIMAppConfig config) async {
+    return await _channel.invokeMethod("create",
+        {"appConfig": ZIMConverter.cnvZIMAppConfigObjectToMap(config)});
   }
 
   @override
@@ -69,14 +70,17 @@ class ZIMImpl implements ZIM {
 
   @override
   Future<ZIMTokenRenewedResult> renewToken(String token) async {
-    Map resultMap = await _channel.invokeMethod('renewToken', {'token':token});
+    Map resultMap = await _channel.invokeMethod('renewToken', {'token': token});
     return ZIMConverter.cnvTokenRenewedMapToObject(resultMap);
   }
 
   @override
-  Future<ZIMUsersInfoQueriedResult> queryUsersInfo(List<String> userIDs) async {
-    Map resultMap =
-        await _channel.invokeMethod('queryUsersInfo', {'userIDs': userIDs});
+  Future<ZIMUsersInfoQueriedResult> queryUsersInfo(
+      List<String> userIDs, ZIMUserInfoQueryConfig config) async {
+    Map resultMap = await _channel.invokeMethod('queryUsersInfo', {
+      'userIDs': userIDs,
+      'config': ZIMConverter.cnvZIMUserInfoQueryConfigObjectToMap(config)
+    });
 
     return ZIMConverter.cnvZIMUsersInfoQueriedMapToObject(resultMap);
   }
@@ -620,5 +624,21 @@ class ZIMImpl implements ZIM {
       'config': ZIMConverter.cnvZIMCallRejectConfigObjectToMap(config)
     });
     return ZIMConverter.cnvZIMCallRejectionSentResultMapToObject(resultMap);
+  }
+
+    @override
+  Future<ZIMUserAvatarUrlUpdatedResult> updateUserAvatarUrl(
+      String userAvatarUrl) async {
+    Map resultMap = await _channel
+        .invokeMethod('updateUserAvatarUrl', {'userAvatarUrl': userAvatarUrl});
+    return ZIMConverter.cnvZIMUserAvatarUrlUpdatedResultMapToObject(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupAvatarUrlUpdatedResult> updateGroupAvatarUrl(
+      String groupAvatarUrl, String groupID) async {
+    Map resultMap = await _channel.invokeMethod('updateGroupAvatarUrl',
+        {'groupAvatarUrl': groupAvatarUrl, 'groupID': groupID});
+    return ZIMConverter.cnvZIMGroupAvatarUrlUpdatedResultMapToObject(resultMap);
   }
 }

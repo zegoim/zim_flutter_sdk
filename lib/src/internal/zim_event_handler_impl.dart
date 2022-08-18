@@ -140,6 +140,11 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
                 map['operatedInfo']),
             map['groupID']);
         break;
+      case 'onGroupAvatarUrlUpdated':
+        if (ZIMEventHandler.onGroupAvatarUrlUpdated == null) return;
+        ZIMEventHandler.onGroupAvatarUrlUpdated!(map['groupAvatarUrl'], ZIMConverter.cnvZIMGroupOperatedInfoMapToObject(
+                map['operatedInfo']),map['groupID']);
+        break;
       case 'onGroupAttributesUpdated':
         if (ZIMEventHandler.onGroupAttributesUpdated == null) return;
 

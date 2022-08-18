@@ -327,6 +327,18 @@ class ZIMCacheConfig {
   ZIMCacheConfig();
 }
 
+class ZIMAppConfig {
+  int appID = 0;
+  String appSign = '';
+  ZIMAppConfig();
+}
+
+class ZIMUserInfoQueryConfig {
+  bool isQueryFromServer = false;
+  ZIMUserInfoQueryConfig();
+}
+
+
 /// Description:Offline push configuration.
 class ZIMPushConfig {
   /// Description: Used to set the push title.
@@ -369,6 +381,7 @@ class ZIMUserInfo {
 
 class ZIMUserFullInfo {
   ZIMUserInfo baseInfo = ZIMUserInfo();
+  String userAvatarUrl = '';
   String extendedData = '';
 }
 
@@ -431,6 +444,12 @@ class ZIMImageMessage extends ZIMMediaMessage {
   String thumbnailLocalPath = '';
   String largeImageDownloadUrl = '';
   String largeImageLocalPath = '';
+  int originalImageWidth = 0;
+  int originalImageHeight = 0;
+  int largeImageWidth = 0;
+  int largeImageHeight = 0;
+  int thumbnailWidth = 0;
+  int thumbnailHeight = 0;
   ZIMImageMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.image;
   }
@@ -454,7 +473,8 @@ class ZIMVideoMessage extends ZIMMediaMessage {
   int videoDuration = 0;
   String videoFirstFrameDownloadUrl = '';
   String videoFirstFrameLocalPath = '';
-
+  int videoFirstFrameWidth = 0;
+  int videoFirstFrameHeight = 0;
   ZIMVideoMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.video;
   }
@@ -463,6 +483,7 @@ class ZIMVideoMessage extends ZIMMediaMessage {
 class ZIMConversation {
   String conversationID = '';
   String conversationName = '';
+  String conversationAvatarUrl = '';
   ZIMConversationType type = ZIMConversationType.peer;
   ZIMConversationNotificationStatus notificationStatus =
       ZIMConversationNotificationStatus.notify;
@@ -592,6 +613,9 @@ class ZIMGroupInfo {
 
   /// Description: Group name.
   String groupName = "";
+
+  /// Description: Group avatar url.
+  String groupAvatarUrl = "";
 }
 
 /// Description: complete group information.
@@ -629,6 +653,8 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
 
   /// Description: group role.
   int memberRole = ZIMGroupMemberRole.member;
+  /// Description: group member avatar url.
+  String memberAvatarUrl = "";
 }
 
 /// Information that the group has operated on.
@@ -783,6 +809,11 @@ class ZIMUsersInfoQueriedResult {
 class ZIMUserNameUpdatedResult {
   String userName;
   ZIMUserNameUpdatedResult({required this.userName});
+}
+
+class ZIMUserAvatarUrlUpdatedResult {
+  String userAvatarUrl;
+  ZIMUserAvatarUrlUpdatedResult({required this.userAvatarUrl});
 }
 
 class ZIMUserExtendedDataUpdatedResult {
@@ -1151,6 +1182,12 @@ class ZIMGroupOwnerTransferredResult {
   String toUserID;
   ZIMGroupOwnerTransferredResult(
       {required this.groupID, required this.toUserID});
+}
+class ZIMGroupAvatarUrlUpdatedResult {
+  String groupID;
+  String groupAvatarUrl;
+  ZIMGroupAvatarUrlUpdatedResult(
+      {required this.groupID, required this.groupAvatarUrl});
 }
 
 /// Description: Return result of group name update operation.

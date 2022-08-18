@@ -41,8 +41,10 @@ static ZIM *zim;
 }
 
 - (void)create:(FlutterMethodCall *)call result:(FlutterResult)result {
-    unsigned int AppID = [[call.arguments objectForKey:@"appID"] unsignedIntValue];
-    zim = [ZIM createWithAppID:AppID];
+    NSDictionary *appConfigDic = [call.arguments objectForKey:@"config"];
+    ZIMAppConfig *appConfig = [ZIMPluginConverter cnvZIMAppConfigDicToObject:appConfigDic];
+    [ZIM createWithAppConfig:appConfig];
+    zim = [ZIM getInstance];
     [zim setEventHandler:[ZIMEventHandler sharedInstance]];
     result(nil);
 }
@@ -124,6 +126,18 @@ static ZIM *zim;
     }];
 }
 
+-(void)updateUserAvatarUrl:(FlutterMethodCall *)call result:(FlutterResult)result{
+    NSString *updateUserAvatarUrl = [call.arguments objectForKey:@"userAvatarUrl"];
+    [zim updateUserAvatarUrl:updateUserAvatarUrl callback:^(NSString * _Nonnull userAvatarUrl, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSDictionary *resultDic = @{@"userAvatarUrl":userAvatarUrl};
+            result(resultDic);
+        }else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
 - (void)updateUserExtendedData:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *updateUserExtendedData = [call.arguments objectForKey:@"updateUserExtendedData"];
     [zim updateUserExtendedData:updateUserExtendedData callback:^(NSString * _Nonnull extendedData, ZIMError * _Nonnull errorInfo) {
@@ -138,7 +152,8 @@ static ZIM *zim;
 
 - (void)queryUsersInfo:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
-    [zim queryUsersInfo:userIDs callback:^(NSArray<ZIMUserInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+    ZIMUserInfoQueryConfig *config = [ZIMPluginConverter cnvZIMUserInfoQueryConfigDicToObject:[call.arguments objectForKey:@"config"]];
+    [zim queryUsersInfo:userIDs config:config callback:^(NSArray<ZIMUserFullInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableArray *userListBasic = [[NSMutableArray alloc] init];
             for (ZIMUserFullInfo *userFullInfo in userList) {
@@ -680,6 +695,21 @@ static ZIM *zim;
     [zim updateGroupName:groupName groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupName, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *resultDic = @{@"groupID":groupID,@"groupName":groupName};
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)updateGroupAvatarUrl:(FlutterMethodCall *)call
+                      result:(FlutterResult)result{
+    NSString *groupAvatarUrl = [call.arguments objectForKey:@"groupAvatarUrl"];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    [zim updateGroupAvatarUrl:groupAvatarUrl groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupAvatarUrl, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSDictionary *resultDic = @{@"groupID":groupID,@"groupAvatarUrl":groupAvatarUrl};
             result(resultDic);
         }
         else{

@@ -246,6 +246,22 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 - (void)zim:(ZIM *)zim
+    groupAvatarUrlUpdated:(NSString *)groupAvatarUrl
+             operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+    groupID:(NSString *)groupID{
+    if(_events == nil){
+        return;
+    }
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter cnvZIMGroupOperatedInfoObjectToDic:operatedInfo];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
+    [resultDic safeSetObject:groupAvatarUrl forKey:@"groupAvatarUrl"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:@"onGroupAvatarUrlUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
     groupAttributesUpdated:(NSArray<ZIMGroupAttributesUpdateInfo *> *)updateInfo
               operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
     groupID:(NSString *)groupID{
@@ -299,6 +315,8 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:@"onGroupMemberInfoUpdated" forKey:@"method"];
     _events(resultDic);
 }
+
+
 
 - (void)zim:(ZIM *)zim
     callInvitationReceived:(ZIMCallInvitationReceivedInfo *)info

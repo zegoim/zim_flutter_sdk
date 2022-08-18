@@ -6,6 +6,10 @@
 #import "NSObject+safeInvoke.h"
 @interface ZIMPluginConverter:NSObject
 
++(nullable ZIMAppConfig*)cnvZIMAppConfigDicToObject:(nullable NSDictionary *)configDic;
+
++(nullable ZIMUserInfoQueryConfig*)cnvZIMUserInfoQueryConfigDicToObject:(nullable NSDictionary *)configDic;
+
 +(nullable NSDictionary *)cnvZIMErrorObjectToDic:(nullable ZIMError *)errorInfo;
 
 

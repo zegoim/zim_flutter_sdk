@@ -34,6 +34,7 @@ class ZIMConverter {
     userFullInfo.baseInfo =
         cnvZIMUserInfoMapToObject(userFullInfoBasicMap['baseInfo']);
     userFullInfo.extendedData = userFullInfoBasicMap['extendedData'];
+    userFullInfo.userAvatarUrl = userFullInfoBasicMap['userAvatarUrl'];
     return userFullInfo;
   }
 
@@ -89,6 +90,7 @@ class ZIMConverter {
     Map conversationMap = {};
     conversationMap['conversationID'] = conversation.conversationID;
     conversationMap['conversationName'] = conversation.conversationName;
+    conversationMap['conversationAvatarUrl'] = conversation.conversationAvatarUrl;
     conversationMap['type'] =
         ZIMConversationTypeExtension.valueMap[conversation.type];
     conversationMap['notificationStatus'] =
@@ -107,6 +109,7 @@ class ZIMConverter {
     ZIMConversation conversation = ZIMConversation();
     conversation.conversationID = resultMap['conversationID'];
     conversation.conversationName = resultMap['conversationName'];
+    conversation.conversationAvatarUrl = resultMap['conversationAvatarUrl'];
     conversation.type =
         ZIMConversationTypeExtension.mapValue[resultMap['type']]!;
     conversation.unreadMessageCount = resultMap['unreadMessageCount'];
@@ -168,14 +171,20 @@ class ZIMConverter {
         messageMap['thumbnailLocalPath'] = message.thumbnailLocalPath;
         messageMap['largeImageDownloadUrl'] = message.largeImageDownloadUrl;
         messageMap['largeImageLocalPath'] = message.largeImageLocalPath;
+        messageMap['originalImageHeight'] = message.originalImageHeight;
+        messageMap['originalImageWidth'] = message.originalImageWidth;
+        messageMap['largeImageHeight'] = message.largeImageHeight;
+        messageMap['largeImageWidth'] = message.largeImageWidth;
+        messageMap['thumbnailHeight'] = message.thumbnailHeight;
+        messageMap['thumbnailWidth'] = message.thumbnailWidth;
         break;
       case ZIMMessageType.video:
         message as ZIMVideoMessage;
         messageMap['videoDuration'] = message.videoDuration;
-        messageMap['videoFirstFrameDownloadUrl'] =
-            message.videoFirstFrameDownloadUrl;
-        messageMap['videoFirstFrameLocalPath'] =
-            message.videoFirstFrameLocalPath;
+        messageMap['videoFirstFrameDownloadUrl'] = message.videoFirstFrameDownloadUrl;
+        messageMap['videoFirstFrameLocalPath'] = message.videoFirstFrameLocalPath;
+        messageMap['videoFirstFrameHeight'] = message.videoFirstFrameHeight;
+        messageMap['videoFirstFrameWidth'] = message.videoFirstFrameWidth;
         break;
       default:
         break;
@@ -207,6 +216,12 @@ class ZIMConverter {
         message.thumbnailLocalPath = resultMap['thumbnailLocalPath'];
         message.largeImageDownloadUrl = resultMap['largeImageDownloadUrl'];
         message.largeImageLocalPath = resultMap['largeImageLocalPath'];
+        message.originalImageHeight = resultMap['originalImageHeight'];
+        message.originalImageWidth = resultMap['originalImageWidth'];
+        message.largeImageHeight = resultMap['largeImageHeight'];
+        message.largeImageWidth = resultMap['largeImageWidth'];
+        message.thumbnailHeight = resultMap['thumbnailHeight'];
+        message.thumbnailWidth = resultMap['thumbnailWidth'];
         break;
       case ZIMMessageType.file:
         message = ZIMFileMessage(resultMap['fileLocalPath']);
@@ -225,6 +240,8 @@ class ZIMConverter {
             resultMap['videoFirstFrameDownloadUrl'];
         message.videoFirstFrameLocalPath =
             resultMap['videoFirstFrameLocalPath'];
+        message.videoFirstFrameHeight = resultMap['videoFirstFrameHeight'];
+        message.videoFirstFrameWidth = resultMap['videoFirstFrameWidth'];
         break;
       default:
         message = ZIMMessage();
@@ -587,6 +604,7 @@ class ZIMConverter {
     Map groupInfoMap = {};
     groupInfoMap['groupID'] = groupInfo.groupID;
     groupInfoMap['groupName'] = groupInfo.groupName;
+    groupInfoMap['groupAvatarUrl'] = groupInfo.groupAvatarUrl;
     return groupInfoMap;
   }
 
@@ -597,6 +615,7 @@ class ZIMConverter {
     ZIMGroupInfo groupInfo = ZIMGroupInfo();
     groupInfo.groupID = groupInfoMap['groupID'];
     groupInfo.groupName = groupInfoMap['groupName'];
+    groupInfo.groupAvatarUrl = groupInfoMap['groupAvatarUrl'];
     return groupInfo;
   }
 
@@ -742,6 +761,7 @@ class ZIMConverter {
 
     groupMemberInfo.memberRole = memberInfoMap['memberRole'];
     groupMemberInfo.memberNickname = memberInfoMap['memberNickname'];
+    groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'];
     return groupMemberInfo;
   }
 
@@ -947,5 +967,33 @@ class ZIMConverter {
       Map resultMap) {
     return ZIMMediaDownloadedResult(
         message: cnvZIMMessageMapToObject(resultMap['message']));
+  }
+
+
+  static Map cnvZIMAppConfigObjectToMap(ZIMAppConfig config) {
+    Map configMap = {};
+    configMap['appID'] = config.appID;
+    configMap['appSign'] = config.appSign;
+    return configMap;
+  }
+
+  static Map cnvZIMUserInfoQueryConfigObjectToMap(
+      ZIMUserInfoQueryConfig config) {
+    Map configMap = {};
+    configMap['isQueryFromServer'] = config.isQueryFromServer;
+    return configMap;
+  }
+
+  static ZIMUserAvatarUrlUpdatedResult
+      cnvZIMUserAvatarUrlUpdatedResultMapToObject(Map resultMap) {
+    return ZIMUserAvatarUrlUpdatedResult(
+        userAvatarUrl: resultMap['userAvatarUrl']);
+  }
+
+  static ZIMGroupAvatarUrlUpdatedResult
+      cnvZIMGroupAvatarUrlUpdatedResultMapToObject(Map resultMap) {
+    return ZIMGroupAvatarUrlUpdatedResult(
+        groupID: resultMap['groupID'],
+        groupAvatarUrl: resultMap['groupAvatarUrl']);
   }
 }

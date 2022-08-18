@@ -29,6 +29,7 @@ import im.zego.zim.callback.ZIMConversationNotificationStatusSetCallback;
 import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesQueriedCallback;
+import im.zego.zim.callback.ZIMGroupAvatarUrlUpdatedCallback;
 import im.zego.zim.callback.ZIMGroupCreatedCallback;
 import im.zego.zim.callback.ZIMGroupDismissedCallback;
 import im.zego.zim.callback.ZIMGroupInfoQueriedCallback;
@@ -62,10 +63,12 @@ import im.zego.zim.callback.ZIMRoomLeftCallback;
 import im.zego.zim.callback.ZIMRoomMemberQueriedCallback;
 import im.zego.zim.callback.ZIMRoomOnlineMemberCountQueriedCallback;
 import im.zego.zim.callback.ZIMTokenRenewedCallback;
+import im.zego.zim.callback.ZIMUserAvatarUrlUpdatedCallback;
 import im.zego.zim.callback.ZIMUserExtendedDataUpdatedCallback;
 import im.zego.zim.callback.ZIMUserNameUpdatedCallback;
 import im.zego.zim.callback.ZIMUsersInfoQueriedCallback;
 import im.zego.zim.callback.ZIMCallCancelSentCallback;
+import im.zego.zim.entity.ZIMAppConfig;
 import im.zego.zim.entity.ZIMCacheConfig;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
 import im.zego.zim.entity.ZIMCallCancelConfig;
@@ -99,6 +102,7 @@ import im.zego.zim.entity.ZIMRoomInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
 import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
+import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
 import im.zego.zim.enums.ZIMErrorCode;
@@ -114,17 +118,16 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class ZIMPluginMethodHandler {
     private static ZIM zim;
 
-    private static Application application = null;
-
 
     public static void getVersion(MethodCall call,Result result){
         result.success(ZIM.getVersion());
     }
 
     public static void create(MethodCall call, Result result, FlutterPlugin.FlutterPluginBinding binding,ZIMPluginEventHandler eventHandler){
-        long appID = ZIMPluginCommonTools.safeGetLongValue(call.argument("appID"));
-        application = (Application)binding.getApplicationContext();
-        zim = ZIM.create(appID,application);
+
+        Application application = (Application) binding.getApplicationContext();
+        ZIMAppConfig appConfig = ZIMPluginConverter.cnvZIMAppConfigDicToObject(Objects.requireNonNull(call.argument("config")));
+        zim = ZIM.create(appConfig, application);
         zim.setEventHandler(eventHandler);
         result.success(null);
     }
@@ -206,9 +209,9 @@ public class ZIMPluginMethodHandler {
 
     public static void queryUsersInfo(MethodCall call, Result result){
         ArrayList<String> userIDs = call.argument("userIDs");
+        ZIMUsersInfoQueryConfig config = ZIMPluginConverter.cnvZIMUsersInfoQueryConfigMapToObject(Objects.requireNonNull(call.argument("config")));
 
-        zim.queryUsersInfo(userIDs, new ZIMUsersInfoQueriedCallback() {
-
+        zim.queryUsersInfo(userIDs, config, new ZIMUsersInfoQueriedCallback() {
             @Override
             public void onUsersInfoQueried(ArrayList<ZIMUserFullInfo> userList, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
@@ -241,6 +244,23 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+
+    public static void updateUserAvatarUrl(MethodCall call, Result result){
+        String userAvatarUrl = call.argument("userAvatarUrl");
+        zim.updateUserAvatarUrl(userAvatarUrl, new ZIMUserAvatarUrlUpdatedCallback() {
+            @Override
+            public void onUserAvatarUrlUpdated(String userAvatarUrl, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("userAvatarUrl",userAvatarUrl);
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
 
     public static void updateUserExtendedData(MethodCall call ,Result result){
         String extendedData = call.argument("extendedData");
@@ -937,6 +957,26 @@ public class ZIMPluginMethodHandler {
 
                     resultMap.put("groupID",groupID);
                     resultMap.put("groupName",groupName);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void updateGroupAvatarUrl(MethodCall call,Result result){
+        String groupAvatarUrl = call.argument("groupAvatarUrl");
+        String groupID = call.argument("groupID");
+        zim.updateGroupAvatarUrl(groupAvatarUrl, groupID, new ZIMGroupAvatarUrlUpdatedCallback() {
+            @Override
+            public void onGroupAvatarUrlUpdated(String groupID, String groupAvatarUrl, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+
+                    resultMap.put("groupID",groupID);
+                    resultMap.put("groupAvatarUrl",groupAvatarUrl);
                     result.success(resultMap);
                 }
                 else {

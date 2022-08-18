@@ -171,6 +171,9 @@ class ZIMEventHandler {
           String groupName, ZIMGroupOperatedInfo operatedInfo, String groupID)?
       onGroupNameUpdated;
 
+
+  static void Function(String groupAvatarUrl, ZIMGroupOperatedInfo operatedInfo,
+      String groupID)? onGroupAvatarUrlUpdated;
   /// Description: Group bulletin Change notification callback.
   ///
   /// Use cases: If a group bulletin changes, you need to synchronize the latest bulletin content.

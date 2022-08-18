@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import im.zego.zim.entity.ZIMAppConfig;
 import im.zego.zim.entity.ZIMAudioMessage;
 import im.zego.zim.entity.ZIMBarrageMessage;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
@@ -51,6 +52,7 @@ import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
 import im.zego.zim.entity.ZIMTextMessage;
 import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
+import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
 import im.zego.zim.entity.ZIMVideoMessage;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
@@ -60,6 +62,19 @@ import im.zego.zim.enums.ZIMMessageSentStatus;
 import im.zego.zim.enums.ZIMMessageType;
 
 public class ZIMPluginConverter {
+
+    static public ZIMAppConfig cnvZIMAppConfigDicToObject(HashMap<String,Object> configMap){
+        ZIMAppConfig config = new ZIMAppConfig();
+        config.appID = ZIMPluginCommonTools.safeGetLongValue(configMap.get("appID"));
+        config.appSign = (String)(configMap.get("appSign"));
+        return config;
+    }
+
+    static public ZIMUsersInfoQueryConfig cnvZIMUsersInfoQueryConfigMapToObject(HashMap<String,Object> configMap){
+        ZIMUsersInfoQueryConfig config = new ZIMUsersInfoQueryConfig();
+        config.isQueryFromServer = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isQueryFromServer"));
+        return config;
+    }
 
     static public ArrayList<HashMap<String,Object>> cnvZIMConversationChangeInfoListObjectToList(ArrayList<ZIMConversationChangeInfo> conversationChangeInfoList) {
         ArrayList<HashMap<String,Object>> conversationChangeInfoBasicList = new ArrayList<>();
@@ -83,6 +98,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> conversationMap = new HashMap<>();
         conversationMap.put("conversationID",conversation.conversationID);
         conversationMap.put("conversationName",conversation.conversationName);
+        conversationMap.put("conversationAvatarUrl",conversation.conversationAvatarUrl);
         conversationMap.put("type",conversation.type.value());
         conversationMap.put("unreadMessageCount",conversation.unreadMessageCount);
         conversationMap.put("orderKey",conversation.orderKey);
@@ -132,12 +148,20 @@ public class ZIMPluginConverter {
                 messageMap.put("thumbnailLocalPath",((ZIMImageMessage) message).getThumbnailLocalPath() != null ? ((ZIMImageMessage) message).getThumbnailLocalPath() : "");
                 messageMap.put("largeImageDownloadUrl",((ZIMImageMessage) message).getLargeImageDownloadUrl() != null ? ((ZIMImageMessage) message).getLargeImageDownloadUrl() : "");
                 messageMap.put("largeImageLocalPath",((ZIMImageMessage) message).getLargeImageLocalPath() != null ? ((ZIMImageMessage) message).getLargeImageLocalPath() : "");
+                messageMap.put("originalImageHeight",((ZIMImageMessage) message).getOriginalImageHeight());
+                messageMap.put("originalImageWidth",((ZIMImageMessage) message).getOriginalImageWidth());
+                messageMap.put("largeImageHeight",((ZIMImageMessage) message).getLargeImageHeight());
+                messageMap.put("largeImageWidth",((ZIMImageMessage) message).getLargeImageWidth());
+                messageMap.put("thumbnailHeight",((ZIMImageMessage) message).getThumbnailHeight());
+                messageMap.put("thumbnailWidth",((ZIMImageMessage) message).getThumbnailWidth());
                 break;
             case VIDEO:
                 assert message instanceof ZIMVideoMessage;
                 messageMap.put("videoDuration",((ZIMVideoMessage) message).getVideoDuration());
                 messageMap.put("videoFirstFrameDownloadUrl",((ZIMVideoMessage) message).getVideoFirstFrameDownloadUrl());
                 messageMap.put("videoFirstFrameLocalPath",((ZIMVideoMessage) message).getVideoFirstFrameLocalPath());
+                messageMap.put("videoFirstFrameHeight",((ZIMVideoMessage) message).getVideoFirstFrameHeight());
+                messageMap.put("videoFirstFrameWidth",((ZIMVideoMessage) message).getVideoFirstFrameWidth());
                 break;
             case AUDIO:
                 assert message instanceof ZIMAudioMessage;
@@ -193,6 +217,37 @@ public class ZIMPluginConverter {
                     largeImageLocalPathField.setAccessible(true);
                     largeImageLocalPathField.set(message,messageMap.get("largeImageLocalPath"));
                     largeImageLocalPathField.setAccessible(false);
+
+                    Field originalImageHeightField = ZIMImageMessage.class.getDeclaredField("originalImageHeight");
+                    originalImageHeightField.setAccessible(true);
+                    originalImageHeightField.set(message,messageMap.get("originalImageHeight"));
+                    originalImageHeightField.setAccessible(false);
+
+                    Field originalImageWidthField = ZIMImageMessage.class.getDeclaredField("originalImageWidth");
+                    originalImageWidthField.setAccessible(true);
+                    originalImageWidthField.set(message,messageMap.get("originalImageWidth"));
+                    originalImageWidthField.setAccessible(false);
+
+                    Field largeImageHeightField = ZIMImageMessage.class.getDeclaredField("largeImageHeight");
+                    largeImageHeightField.setAccessible(true);
+                    largeImageHeightField.set(message,messageMap.get("largeImageHeight"));
+                    largeImageHeightField.setAccessible(false);
+
+                    Field largeImageWidthField = ZIMImageMessage.class.getDeclaredField("largeImageWidth");
+                    largeImageWidthField.setAccessible(true);
+                    largeImageWidthField.set(message,messageMap.get("largeImageWidth"));
+                    largeImageWidthField.setAccessible(false);
+
+                    Field thumbnailHeightField = ZIMImageMessage.class.getDeclaredField("thumbnailHeight");
+                    thumbnailHeightField.setAccessible(true);
+                    thumbnailHeightField.set(message,messageMap.get("thumbnailHeight"));
+                    thumbnailHeightField.setAccessible(false);
+
+                    Field thumbnailWidthField = ZIMImageMessage.class.getDeclaredField("thumbnailWidth");
+                    thumbnailWidthField.setAccessible(true);
+                    thumbnailWidthField.set(message,messageMap.get("thumbnailWidth"));
+                    thumbnailWidthField.setAccessible(false);
+
                 }
                 catch (NoSuchFieldException e) {
                     e.printStackTrace();
@@ -216,6 +271,16 @@ public class ZIMPluginConverter {
                     videoFirstFrameLocalPathField.setAccessible(true);
                     videoFirstFrameLocalPathField.set(message,messageMap.get("videoFirstFrameLocalPath"));
                     videoFirstFrameLocalPathField.setAccessible(false);
+
+                    Field videoFirstFrameHeightField = ZIMVideoMessage.class.getDeclaredField("videoFirstFrameHeight");
+                    videoFirstFrameHeightField.setAccessible(true);
+                    videoFirstFrameHeightField.set(message,messageMap.get("videoFirstFrameHeight"));
+                    videoFirstFrameHeightField.setAccessible(false);
+
+                    Field videoFirstFrameWidthField = ZIMVideoMessage.class.getDeclaredField("videoFirstFrameWidth");
+                    videoFirstFrameWidthField.setAccessible(true);
+                    videoFirstFrameWidthField.set(message,messageMap.get("videoFirstFrameWidth"));
+                    videoFirstFrameWidthField.setAccessible(false);
                 }
                 catch (NoSuchFieldException e) {
                     e.printStackTrace();
@@ -354,6 +419,7 @@ public class ZIMPluginConverter {
 
     static public HashMap<String,Object> cnvZIMUserFullInfoObjectToBasic(ZIMUserFullInfo userFullInfo){
         HashMap<String,Object> userFullInfoMap = new HashMap<>();
+        userFullInfoMap.put("userAvatarUrl",userFullInfo.userAvatarUrl);
         userFullInfoMap.put("extendedData",userFullInfo.extendedData);
         HashMap<String,Object> baseInfoMap = cnvZIMUserInfoObjectToMap(userFullInfo.baseInfo);
         userFullInfoMap.put("baseInfo",baseInfoMap);
@@ -404,6 +470,7 @@ public class ZIMPluginConverter {
         ZIMConversation conversation = new ZIMConversation();
         conversation.conversationID = (String) resultMap.get("conversationID");
         conversation.conversationName = (String) resultMap.get("conversationName");
+        conversation.conversationAvatarUrl = (String) resultMap.get("conversationAvatarUrl");
         conversation.type = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(resultMap.get("type")));
         conversation.unreadMessageCount = ZIMPluginCommonTools.safeGetIntValue(resultMap.get("unreadMessageCount"));
         conversation.orderKey = ZIMPluginCommonTools.safeGetLongValue(resultMap.get("orderKey"));
@@ -532,6 +599,7 @@ public class ZIMPluginConverter {
         ZIMGroupInfo groupInfo = new ZIMGroupInfo();
         groupInfo.groupID = (String) infoMap.get("groupID");
         groupInfo.groupName = (String) infoMap.get("groupName");
+        groupInfo.groupAvatarUrl = (String) infoMap.get("groupAvatarUrl");
         return groupInfo;
     }
 
@@ -539,6 +607,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> groupInfoMap = new HashMap<>();
         groupInfoMap.put("groupID",groupInfo.groupID);
         groupInfoMap.put("groupName",groupInfo.groupName);
+        groupInfoMap.put("groupAvatarUrl",groupInfo.groupAvatarUrl);
         return groupInfoMap;
     }
 
@@ -557,6 +626,7 @@ public class ZIMPluginConverter {
         groupMemberInfoMap.put("memberRole",groupMemberInfo.memberRole);
         groupMemberInfoMap.put("userID",groupMemberInfo.userID);
         groupMemberInfoMap.put("userName",groupMemberInfo.userName);
+        groupMemberInfoMap.put("memberAvatarUrl",groupMemberInfo.memberAvatarUrl);
         return groupMemberInfoMap;
     }
 

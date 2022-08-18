@@ -243,6 +243,19 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onGroupAvatarUrlUpdated(ZIM zim, String groupAvatarUrl, ZIMGroupOperatedInfo operatedInfo, String groupID) {
+        if(mysink == null){
+            return;
+        }
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onGroupAvatarUrlUpdated");
+        resultMap.put("groupID",groupID);
+        resultMap.put("groupAvatarUrl",groupAvatarUrl);
+        resultMap.put("operatedInfo",ZIMPluginConverter.cnvZIMGroupOperatedInfoObjectToMap(operatedInfo));
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onGroupAttributesUpdated(ZIM zim, ArrayList<ZIMGroupAttributesUpdateInfo> infos, ZIMGroupOperatedInfo operatedInfo, String groupID) {
         if(mysink == null){
             return;
