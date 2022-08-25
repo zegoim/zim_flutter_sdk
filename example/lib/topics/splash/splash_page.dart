@@ -29,7 +29,7 @@ class _myState extends State<SplashPage> {
 
   //倒计时
   void _startCountDown() async {
-    await ZIM.getInstance().create(2845718148);
+    await ZIM.getInstance().create(KeyCenter.appID);
     log('create');
     final prefs = await SharedPreferences.getInstance();
     final String? userID = prefs.getString('userID');
