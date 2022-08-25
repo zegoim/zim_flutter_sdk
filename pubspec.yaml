@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  js: ^0.6.3
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +45,12 @@ flutter:
         pluginClass: ZegoZimPlugin
       macos:
         pluginClass: ZegoZimPlugin
+      web:
+        pluginClass: ZegoZimPlugin
+        fileName: zego_zim_web.dart
+  assets:
+    - assets/index.js
+
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
