@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) FlutterEventSink events;
 
+
+
 @end
 
 
@@ -41,22 +43,27 @@ extendedData:(NSDictionary *)extendedData{
     if(_events == nil){
         return;
     }
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onConnectionStateChanged" forKey:@"method"];
+    [resultDic safeSetObject:[_engineEventMap objectForKey:zim] forKey:@"zim"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)state] forKey:@"state"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)event] forKey:@"event"];
     NSString *json = @"{}";
     if(extendedData != nil){
+        
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:extendedData options:NSJSONWritingPrettyPrinted error:nil];
-        NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        NSString *extendedjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        json = [extendedjson stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     }
-    NSDictionary *resultDic = @{@"method":@"onConnectionStateChanged",@"state":[NSNumber numberWithInt:(int)state],@"event":[NSNumber numberWithInt:(int)event]};
-    NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] initWithDictionary:resultDic];
-    [resultMtDic safeSetObject:json forKey:@"extendedData"];
-    _events(resultMtDic);
+    [resultDic safeSetObject:json forKey:@"extendedData"];
+    _events(resultDic);
 }
 
 - (void)zim:(ZIM *)zim errorInfo:(ZIMError *)errorInfo{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
     
     NSDictionary *resultDic = @{@"method":@"onError",@"code":[NSNumber numberWithInt:(int)errorInfo.code],@"message":errorInfo.message};
     _events(resultDic);
@@ -66,6 +73,7 @@ extendedData:(NSDictionary *)extendedData{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
     
     NSDictionary *resultDic = @{@"method":@"onTokenWillExpire",@"second":[NSNumber numberWithUnsignedInt:second]};
     _events(resultDic);
@@ -390,5 +398,12 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 
+#pragma mark - Getter
+- (NSMapTable *)engineEventMap {
+    if (!_engineEventMap) {
+        _engineEventMap = [NSMapTable mapTableWithKeyOptions:NSMapTableWeakMemory valueOptions:NSMapTableWeakMemory];
+    }
+    return _engineEventMap;
+}
 
 @end

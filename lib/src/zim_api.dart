@@ -1,9 +1,9 @@
-import 'internal/zim_impl.dart';
+import 'internal/zim_manager.dart';
 import 'zim_defines.dart';
 
 abstract class ZIM {
-  static ZIM getInstance() {
-    return ZIMImpl.getInstance();
+  static ZIM? getInstance() {
+    return ZIMManager.getInstance();
   }
 
   /// Gets the SDK's version number.
@@ -22,27 +22,20 @@ abstract class ZIM {
   /// When to call : It can be called at any time.
   ///
   /// @return SDK version.
-  Future<String> getVersion();
-
-//MARK: - Main
-
-  /// Create a ZIM instance.
-  ///
-  /// You need to create and initialize an ZIM instance before calling any other function.
-  /// The SDK supports the creation of multiple ZIM instances.
-  ///
-  /// [ZIMAppConfig] appID and appSign issued by ZEGO for developers, Please apply at the ZEGO console.
-  Future<void> create(ZIMAppConfig config);
-
-  /// Destroy the ZIM instance.
-  ///
-  /// Used to release resources used by ZIM.
-  Future<void> destroy();
+  static Future<String> getVersion() async {
+    return await ZIMManager.getVersion();
+  }
 
   /// Set log related configuration.
   ///
   /// [config] Log configuration object.
-  Future<void> setLogConfig(ZIMLogConfig config);
+  static setLogConfig(ZIMLogConfig config) {
+    ZIMManager.setLogConfig(config);
+  }
+
+  /// Set cache related configuration.
+  ///
+  /// [config] Log configuration object.
 
   /// Supported version: 2.1.5 and above.
   ///
@@ -64,7 +57,25 @@ abstract class ZIM {
   /// Platform difference: The default path varies with platforms. Please refer to the default value.
   ///
   /// [config] Cache configuration object.
-  Future<void> setCacheConfig(ZIMCacheConfig config);
+  static setCacheConfig(ZIMCacheConfig config) {
+    ZIMManager.setCacheConfig(config);
+  }
+//MARK: - Main
+
+  /// Create a ZIM instance.
+  ///
+  /// You need to create and initialize an ZIM instance before calling any other function.
+  /// The SDK supports the creation of multiple ZIM instances.
+  ///
+  /// [ZIMAppConfig] appID and appSign issued by ZEGO for developers, Please apply at the ZEGO console.
+  static ZIM? create(ZIMAppConfig config) {
+    return ZIMManager.createEngine(config);
+  }
+
+  /// Destroy the ZIM instance.
+  ///
+  /// Used to release resources used by ZIM.
+  destroy();
 
   /// Login, you must log in before using all functions.
   /// [userInfo] Unique ID used to identify the user. Note that the userID must be unique under the same appID, otherwise mutual kicks out will occur.
@@ -72,7 +83,7 @@ abstract class ZIM {
   Future<void> login(ZIMUserInfo userInfo, String token);
 
   /// Log out of ZIM service.
-  Future<void> logout();
+  logout();
 
   /// Upload log and call after setting up log path.
   ///
@@ -130,7 +141,7 @@ abstract class ZIM {
   /// When to call /Trigger: his parameter is invoked when a session needs to be deleted and can be invoked after a ZIM instance is created. The call takes effect after login and becomes invalid after logout.
   ///
   /// [conversationID] conversationID.
-  /// [onversationType] conversationtype.
+  /// [conversationType] conversationtype.
   /// [config] delete the session's configuration.
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
@@ -145,9 +156,9 @@ abstract class ZIM {
   ///
   /// Restrictions: Valid after login, invalid after logout.
   ///
-  /// Impacts on other APIs: Calling this method will trigger a total readings not updated callback [conversationTotalUnreadMessageCountUpdated], would trigger a session to update callbacks [conversationChanged].
+  /// Impacts on other APIs: Calling this method will trigger a total readings not updated callback [onConversationTotalUnreadMessageCountUpdated], would trigger a session to update callbacks [onConversationChanged].
   ///
-  /// Related callbacks:[ZIMConversationUnreadMessageCountClearedCallback].
+  /// Related callbacks:[ZIMConversationUnreadMessageCountClearedResult].
   ///
   /// Related APIs:[conversationTotalUnreadMessageCountUpdated]、[conversationChanged].
   ///
@@ -270,7 +281,7 @@ abstract class ZIM {
   /// [message] The message to be sent.
   /// [toConversationID] The ID of the conversation which will receive the message.
   /// [conversationType] The type of the conversation which will receive the message.
-  /// [onfig] Related configuration for sending single chat messages.
+  /// [config] Related configuration for sending single chat messages.
   /// [progress] Callback of the progress.
   Future<ZIMMessageSentResult> sendMediaMessage(
       ZIMMediaMessage message,
@@ -672,7 +683,7 @@ abstract class ZIM {
   ///
   /// Restrictions: Group members and group owners can change the group name. The maximum length of the name is 100 bytes.
   ///
-  /// Related APIs: Through the callback [ZIMGroupNameUpdatedCallback] can get the result of the change of name, through [onGroupNoticeUpdated] can get update group name information.
+  /// Related APIs: Through the callback [ZIMGroupNameUpdatedResult] can get the result of the change of name, through [onGroupNoticeUpdated] can get update group name information.
   ///
   /// [groupName] The updated group name.
   /// [groupID] The group ID whose group name will be updated.
@@ -681,6 +692,7 @@ abstract class ZIM {
 
   Future<ZIMGroupAvatarUrlUpdatedResult> updateGroupAvatarUrl(
       String groupAvatarUrl, String groupID);
+
   /// Available since: 2.1.5 and above.
   ///
   /// Description: When a group is created, users can use this method to update the group bulletin.
@@ -857,7 +869,6 @@ abstract class ZIM {
   /// [config] Group member query configuration.
   Future<ZIMGroupMemberListQueriedResult> queryGroupMemberList(
       String groupID, ZIMGroupMemberQueryConfig config);
-
 
   Future<ZIMGroupMemberCountQueriedResult> queryGroupMemberCount(
       String groupID);

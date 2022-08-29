@@ -1,0 +1,60 @@
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+import 'package:zego_zim/src/internal/zim_converter.dart';
+import 'package:zego_zim/src/internal/zim_engine.dart';
+import 'package:zego_zim/src/internal/zim_event_handler_impl.dart';
+import 'package:zego_zim/zego_zim.dart';
+
+class ZIMManager {
+  static const MethodChannel channel = MethodChannel('zego_zim_plugin');
+  static StreamSubscription<dynamic>? streamSubscription;
+
+  static int handleSequence = 0;
+
+  static Map<int, ZIMEngine> engineMap = {};
+
+  static ZIMEngine? instanceEngine;
+
+  static ZIMEngine? getInstance() {
+    return instanceEngine;
+  }
+
+  static Future<String> getVersion() async {
+    return await channel.invokeMethod('getVersion');
+  }
+
+  static setLogConfig(ZIMLogConfig config) {
+    channel.invokeMethod(
+        'setLogConfig', {'logPath': config.logPath, 'logSize': config.logSize});
+  }
+
+  static setCacheConfig(ZIMCacheConfig config) {
+    channel.invokeMethod('setCacheConfig', {'cachePath': config.cachePath});
+  }
+
+  static ZIMEngine? createEngine(ZIMAppConfig config) {
+    ZIMEventHandlerImpl.registerEventHandler();
+    if (ZIMManager.engineMap.isNotEmpty) {
+      return null;
+    }
+    String handle = generateHandle();
+
+    channel.invokeMethod("create", {
+      "handle": handle,
+      "config": ZIMConverter.mZIMAppConfig(config)
+    });
+    ZIMEngine engine = ZIMEngine(
+        handle: handle,
+        channel: channel,
+        appID: config.appID,
+        appSign: config.appSign);
+    if (instanceEngine == null) ZIMManager.instanceEngine = engine;
+    return engine;
+  }
+
+  static String generateHandle() {
+    handleSequence = handleSequence + 1;
+    return '$handleSequence';
+  }
+}
