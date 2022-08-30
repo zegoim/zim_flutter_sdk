@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZIMEventHandler : NSObject<ZIMEventHandler>
 
+@property (nonatomic, strong) NSMapTable<ZIM *, NSString *> *engineEventMap;
+
 + (instancetype)sharedInstance;
 - (void)setEventSinks:(nullable FlutterEventSink)sink;
 

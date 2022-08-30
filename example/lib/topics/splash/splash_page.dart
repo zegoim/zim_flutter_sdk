@@ -83,7 +83,7 @@ class _myState extends State<SplashPage> {
       try {
         String token = await TokenPlugin.makeToken(userInfo.userID);
 
-        await ZIM.getInstance().login(userInfo, token);
+        await ZIM.getInstance()!.login(userInfo, token);
         log('success');
         _countTimer?.cancel();
         _countTimer = null;

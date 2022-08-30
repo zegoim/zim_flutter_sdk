@@ -18,11 +18,11 @@
     return config;
 }
 
-+(nullable ZIMUserInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic{
++(nullable ZIMUsersInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
-    ZIMUserInfoQueryConfig *config = [[ZIMUserInfoQueryConfig alloc] init];
+    ZIMUsersInfoQueryConfig *config = [[ZIMUsersInfoQueryConfig alloc] init];
     config.isQueryFromServer = [[configDic safeObjectForKey:@"isQueryFromServer"] boolValue];
     return config;
 }
@@ -179,8 +179,8 @@
             ((ZIMVideoMessage *)msg).videoDuration = ((NSNumber *)[messageDic safeObjectForKey:@"videoDuration"]).unsignedIntValue;
             [((ZIMVideoMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"videoFirstFrameDownloadUrl"] forKey:@"videoFirstFrameDownloadUrl"];
             [((ZIMVideoMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"videoFirstFrameLocalPath"] forKey:@"videoFirstFrameLocalPath"];
-            [((ZIMVideoMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"videoFirstFrameHeight"] forKey:@"videoFirstFrameHeight"];
-            [((ZIMVideoMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"videoFirstFrameWidth"] forKey:@"videoFirstFrameWidth"];
+            CGSize size = CGSizeMake([[messageDic safeObjectForKey:@"videoFirstFrameWidth"] doubleValue], [[messageDic safeObjectForKey:@"videoFirstFrameHeight"] doubleValue]);
+            [((ZIMVideoMessage *)msg) safeSetValue:@(size) forKey:@"videoFirstFrameSize"];
             break;
         }
         case ZIMMessageTypeImage:{
@@ -189,12 +189,9 @@
             [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"thumbnailLocalPath"] forKey:@"thumbnailLocalPath"];
             [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"largeImageDownloadUrl"] forKey:@"largeImageDownloadUrl"];
             [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"largeImageLocalPath"] forKey:@"largeImageLocalPath"];
-            [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"originalImageHeight"] forKey:@"originalImageHeight"];
-                        [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"originalImageWidth"] forKey:@"originalImageWidth"];
-            [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"largeImageHeight"] forKey:@"largeImageHeight"];
-            [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"largeImageWidth"] forKey:@"largeImageWidth"];
-            [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"thumbnailHeight"] forKey:@"thumbnailHeight"];
-            [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"thumbnailWidth"] forKey:@"thumbnailWidth"];
+            [((ZIMImageMessage *)msg) safeSetValue:@(CGSizeMake([[messageDic safeObjectForKey:@"originalImageWidth"] doubleValue], [[messageDic safeObjectForKey:@"originalImageHeight"] doubleValue])) forKey:@"originalImageSize"];
+            [((ZIMImageMessage *)msg) safeSetValue:@(CGSizeMake([[messageDic safeObjectForKey:@"largeImageWidth"] doubleValue], [[messageDic safeObjectForKey:@"largeImageHeight"] doubleValue])) forKey:@"largeImageSize"];
+            [((ZIMImageMessage *)msg) safeSetValue:@(CGSizeMake([[messageDic safeObjectForKey:@"thumbnailWidth"] doubleValue], [[messageDic safeObjectForKey:@"thumbnailHeight"] doubleValue])) forKey:@"thumbnailSize"];
             break;
         }
         default:
@@ -529,14 +526,8 @@
     [memberInfoDic safeSetObject:[NSNumber numberWithInt:memberInfo.memberRole] forKey:@"memberRole"];
     [memberInfoDic safeSetObject:memberInfo.userID forKey:@"userID"];
     [memberInfoDic safeSetObject:memberInfo.userName forKey:@"userName"];
-    [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl forKey:@"memberAvatarUrl"];
+    [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl ? memberInfo.memberAvatarUrl : @"" forKey:@"memberAvatarUrl"];
     return memberInfoDic;
-    
-    
-    
-    
-    
-    
 }
 
 +(nullable NSArray *)mZIMGroupMemberInfoList:(nullable NSArray<ZIMGroupMemberInfo *> *)memberInfoList{
@@ -658,6 +649,10 @@
     NSMutableDictionary *operatedInfoDic = [[NSMutableDictionary alloc] init];
     NSDictionary *operatedUserInfoDic = [ZIMPluginConverter mZIMGroupMemberInfo:operatedInfo.operatedUserInfo];
     [operatedInfoDic safeSetObject:operatedUserInfoDic forKey:@"operatedUserInfo"];
+    [operatedInfoDic safeSetObject:operatedInfo.userID forKey:@"userID"];
+    [operatedInfoDic safeSetObject:operatedInfo.userName forKey:@"userName"];
+    [operatedInfoDic safeSetObject:operatedInfo.memberNickname forKey:@"memberNickname"];
+    [operatedInfoDic safeSetObject:@(operatedInfo.memberRole) forKey:@"memberRole"];
     return operatedInfoDic;
 }
 

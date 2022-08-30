@@ -179,7 +179,7 @@
             ((ZIMVideoMessage *)msg).videoDuration = ((NSNumber *)[messageDic safeObjectForKey:@"videoDuration"]).unsignedIntValue;
             [((ZIMVideoMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"videoFirstFrameDownloadUrl"] forKey:@"videoFirstFrameDownloadUrl"];
             [((ZIMVideoMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"videoFirstFrameLocalPath"] forKey:@"videoFirstFrameLocalPath"];
-            [((ZIMVideoMessage *)msg) safeSetValue:[NSNumber valueWithCGSize:CGSizeMake([[messageDic safeObjectForKey:@"videoFirstFrameWidth"] doubleValue], [[messageDic safeObjectForKey:@"videoFirstFrameHeight"] doubleValue])] forKey:@"videoFirstFrameSize"];
+            [((ZIMVideoMessage *)msg) safeSetValue:@(CGSizeMake([[messageDic safeObjectForKey:@"videoFirstFrameWidth"] doubleValue], [[messageDic safeObjectForKey:@"videoFirstFrameHeight"] doubleValue])) forKey:@"videoFirstFrameSize"];
             break;
         }
         case ZIMMessageTypeImage:{
@@ -188,9 +188,9 @@
             [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"thumbnailLocalPath"] forKey:@"thumbnailLocalPath"];
             [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"largeImageDownloadUrl"] forKey:@"largeImageDownloadUrl"];
             [((ZIMImageMessage *)msg) safeSetValue:[messageDic safeObjectForKey:@"largeImageLocalPath"] forKey:@"largeImageLocalPath"];
-            [((ZIMImageMessage *)msg) safeSetValue:[NSNumber valueWithCGSize:CGSizeMake([[messageDic safeObjectForKey:@"originalImageWidth"] doubleValue], [[messageDic safeObjectForKey:@"originalImageHeight"] doubleValue])] forKey:@"originalImageSize"];
-            [((ZIMImageMessage *)msg) safeSetValue:[NSNumber valueWithCGSize:CGSizeMake([[messageDic safeObjectForKey:@"largeImageWidth"] doubleValue], [[messageDic safeObjectForKey:@"largeImageHeight"] doubleValue])] forKey:@"largeImageSize"];
-            [((ZIMImageMessage *)msg) safeSetValue:[NSNumber valueWithCGSize:CGSizeMake([[messageDic safeObjectForKey:@"thumbnailWidth"] doubleValue], [[messageDic safeObjectForKey:@"thumbnailHeight"] doubleValue])] forKey:@"thumbnailSize"];
+            [((ZIMImageMessage *)msg) safeSetValue:@(CGSizeMake([[messageDic safeObjectForKey:@"originalImageWidth"] doubleValue], [[messageDic safeObjectForKey:@"originalImageHeight"] doubleValue])) forKey:@"originalImageSize"];
+            [((ZIMImageMessage *)msg) safeSetValue:@(CGSizeMake([[messageDic safeObjectForKey:@"largeImageWidth"] doubleValue], [[messageDic safeObjectForKey:@"largeImageHeight"] doubleValue])) forKey:@"largeImageSize"];
+            [((ZIMImageMessage *)msg) safeSetValue:@(CGSizeMake([[messageDic safeObjectForKey:@"thumbnailWidth"] doubleValue], [[messageDic safeObjectForKey:@"thumbnailHeight"] doubleValue])) forKey:@"thumbnailSize"];
             break;
         }
         default:

@@ -13,11 +13,11 @@
 #import "NSObject+safeInvoke.h"
 #import "ZIMEventHandler.h"
 
-static ZIM *zim;
-
 @interface ZIMMethodHandler()
 
 @property (nonatomic, strong) FlutterEventSink events;
+
+@property(nonatomic, strong)NSMutableDictionary<NSString *,ZIM *> *engineMap;
 
 @end
 
@@ -41,17 +41,32 @@ static ZIM *zim;
 }
 
 - (void)create:(FlutterMethodCall *)call result:(FlutterResult)result {
+    ZIM *oldZIM = [ZIM getInstance];
+    if(oldZIM){
+        [oldZIM destroy];
+    }
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    
     NSDictionary *appConfigDic = [call.arguments objectForKey:@"config"];
     ZIMAppConfig *appConfig = [ZIMPluginConverter oZIMAppConfig:appConfigDic];
-    [ZIM createWithAppConfig:appConfig];
-    zim = [ZIM getInstance];
-    [zim setEventHandler:[ZIMEventHandler sharedInstance]];
+    ZIM *zim = [ZIM createWithAppConfig:appConfig];
+    if(zim){
+        [self.engineMap safeSetObject:zim forKey:handle];
+        [[ZIMEventHandler sharedInstance].engineEventMap setObject:handle forKey:zim];
+        [zim setEventHandler:[ZIMEventHandler sharedInstance]];
+    }
     result(nil);
 }
 
 - (void)destroy:(FlutterMethodCall *)call result:(FlutterResult)result {
-    [zim destroy];
-    zim = nil;
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(zim) {
+        [zim destroy];
+        [self.engineMap removeObjectForKey:handle];
+        [[ZIMEventHandler sharedInstance].engineEventMap removeObjectForKey:zim];
+    }
+    
     result(nil);
 }
 
@@ -71,6 +86,13 @@ static ZIM *zim;
 }
 
 - (void)login:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMUserInfo *userInfo = [[ZIMUserInfo alloc] init];
     userInfo.userID = [call.arguments objectForKey:@"userID"];
     userInfo.userName = [call.arguments objectForKey:@"userName"];
@@ -86,11 +108,25 @@ static ZIM *zim;
 }
 
 - (void)logout:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     [zim logout];
     result(nil);
 }
 
 - (void)uploadLog:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     [zim uploadLog:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             result(nil);
@@ -102,6 +138,13 @@ static ZIM *zim;
 }
 
 - (void)renewToken:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *token = [call.arguments objectForKey:@"token"];
     [zim renewToken:token callback:^(NSString * _Nonnull token, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -115,6 +158,13 @@ static ZIM *zim;
 }
 
 - (void)updateUserName:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *userName = [call.arguments objectForKey:@"userName"];
     [zim updateUserName:userName callback:^(NSString * _Nonnull userName, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -127,6 +177,13 @@ static ZIM *zim;
 }
 
 -(void)updateUserAvatarUrl:(FlutterMethodCall *)call result:(FlutterResult)result{
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *updateUserAvatarUrl = [call.arguments objectForKey:@"userAvatarUrl"];
     [zim updateUserAvatarUrl:updateUserAvatarUrl callback:^(NSString * _Nonnull userAvatarUrl, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -139,6 +196,13 @@ static ZIM *zim;
 }
 
 - (void)updateUserExtendedData:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *updateUserExtendedData = [call.arguments objectForKey:@"updateUserExtendedData"];
     [zim updateUserExtendedData:updateUserExtendedData callback:^(NSString * _Nonnull extendedData, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -151,8 +215,15 @@ static ZIM *zim;
 }
 
 - (void)queryUsersInfo:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
-    ZIMUserInfoQueryConfig *config = [ZIMPluginConverter oZIMUserInfoQueryConfig:[call.arguments objectForKey:@"config"]];
+    ZIMUsersInfoQueryConfig *config = [ZIMPluginConverter oZIMUserInfoQueryConfig:[call.arguments objectForKey:@"config"]];
     [zim queryUsersInfo:userIDs config:config callback:^(NSArray<ZIMUserFullInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableArray *userListBasic = [[NSMutableArray alloc] init];
@@ -175,6 +246,13 @@ static ZIM *zim;
 }
 
 - (void)queryConversationList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSDictionary *configDic = [call.arguments objectForKey:@"config"];
     ZIMConversationQueryConfig *config = [[ZIMConversationQueryConfig alloc] init];
     config.count = ((NSNumber *)[configDic objectForKey:@"count"]).unsignedIntValue;
@@ -192,6 +270,13 @@ static ZIM *zim;
 }
 
 - (void)deleteConversation:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *conversationID = [call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
     ZIMConversationDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMConversationDeleteConfig:[call.arguments objectForKey:@"config"]];
@@ -207,6 +292,13 @@ static ZIM *zim;
 }
 
 - (void)clearConversationUnreadMessageCount:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
     [zim clearConversationUnreadMessageCount:conversationID conversationType:conversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
@@ -221,6 +313,13 @@ static ZIM *zim;
 }
 
 - (void)setConversationNotificationStatus:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     int status = ((NSNumber *)[call.arguments objectForKey:@"status"]).intValue;
     NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
@@ -237,6 +336,13 @@ static ZIM *zim;
 }
 
 - (void)sendPeerMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
     NSString *toUserID = (NSString *)[call.arguments objectForKey:@"toUserID"];
     ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter oZIMMessageSendConfig:[call.arguments objectForKey:@"config"]];
@@ -253,6 +359,13 @@ static ZIM *zim;
 }
 
 - (void)sendRoomMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
     NSString *toRoomID = (NSString *)[call.arguments objectForKey:@"toRoomID"];
     ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter oZIMMessageSendConfig:[call.arguments objectForKey:@"config"]];
@@ -269,6 +382,13 @@ static ZIM *zim;
 }
 
 - (void)sendGroupMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     NSString *toGroupID = (NSString *)[call.arguments objectForKey:@"toGroupID"];
     ZIMMessageSendConfig *sendConfig = [ZIMPluginConverter oZIMMessageSendConfig:[call.arguments objectForKey:@"config"]];
@@ -285,6 +405,13 @@ static ZIM *zim;
 }
 
 - (void)sendMediaMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     NSString *toConversationID = [call.arguments safeObjectForKey:@"toConversationID"];
     int conversationType = ((NSNumber *)[call.arguments safeObjectForKey:@"conversationType"]).intValue;
@@ -317,6 +444,13 @@ static ZIM *zim;
 }
 
 - (void)downloadMediaFile:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     int fileType = ((NSNumber *)[call.arguments safeObjectForKey:@"fileType"]).intValue;
     NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
@@ -348,6 +482,13 @@ static ZIM *zim;
 }
 
 - (void)queryHistoryMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
     ZIMMessageQueryConfig *queryConfig = [ZIMPluginConverter oZIMMessageQueryConfig:[call.arguments objectForKey:@"config"]];
@@ -365,6 +506,13 @@ static ZIM *zim;
 }
 
 - (void)deleteAllMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
     ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMMessageDeleteConfig:[call.arguments objectForKey:@"config"]];
@@ -380,6 +528,13 @@ static ZIM *zim;
 }
 
 - (void)deleteMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSArray *messageList = [ZIMPluginConverter oZIMMessageList:[call.arguments objectForKey:@"messageList"]];
     NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
     int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
@@ -396,6 +551,13 @@ static ZIM *zim;
 }
 
 - (void)enterRoom:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMRoomInfo *roomInfo = [ZIMPluginConverter oZIMRoomInfo:[call.arguments objectForKey:@"roomInfo"]];
     ZIMRoomAdvancedConfig *config = [ZIMPluginConverter oZIMRoomAdvancedConfig:[call.arguments objectForKey:@"config"]];
     [zim enterRoom:roomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
@@ -411,6 +573,13 @@ static ZIM *zim;
 }
 
 - (void)createRoom:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMRoomInfo *roomInfo = [ZIMPluginConverter oZIMRoomInfo:[call.arguments objectForKey:@"roomInfo"]];
     
     [zim createRoom:roomInfo callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
@@ -426,6 +595,13 @@ static ZIM *zim;
 }
 
 - (void)createRoomWithConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMRoomInfo *roomInfo = [ZIMPluginConverter oZIMRoomInfo:[call.arguments objectForKey:@"roomInfo"]];
     ZIMRoomAdvancedConfig *config = [ZIMPluginConverter oZIMRoomAdvancedConfig:[call.arguments objectForKey:@"config"]];
     
@@ -442,6 +618,13 @@ static ZIM *zim;
 }
 
 - (void)joinRoom:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     [zim joinRoom:roomID callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -456,6 +639,13 @@ static ZIM *zim;
 }
 
 - (void)leaveRoom:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     [zim leaveRoom:roomID callback:^(NSString * _Nonnull roomID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -469,6 +659,13 @@ static ZIM *zim;
 }
 
 - (void)queryRoomMemberList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     
     ZIMRoomMemberQueryConfig *config = [ZIMPluginConverter oZIMRoomMemberQueryConfig:[call.arguments objectForKey:@"config"]];
@@ -485,6 +682,13 @@ static ZIM *zim;
 }
 
 - (void)queryRoomOnlineMemberCount:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     
     [zim queryRoomOnlineMemberCountByRoomID:roomID callback:^(NSString * _Nonnull roomID, unsigned int count, ZIMError * _Nonnull errorInfo) {
@@ -499,6 +703,13 @@ static ZIM *zim;
 }
 
 - (void)setRoomAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     NSDictionary<NSString *,NSString *> *roomAttributes = [call.arguments objectForKey:@"roomAttributes"];
     ZIMRoomAttributesSetConfig *setConfig = [ZIMPluginConverter oZIMRoomAttributesSetConfig:[call.arguments objectForKey:@"config"]];
@@ -514,6 +725,13 @@ static ZIM *zim;
 }
 
 - (void)deleteRoomAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     NSArray<NSString *> *keys = [call.arguments objectForKey:@"keys"];
     ZIMRoomAttributesDeleteConfig *config = [ZIMPluginConverter oZIMRoomAttributesDeleteConfig:[call.arguments objectForKey:@"config"]];
@@ -529,6 +747,13 @@ static ZIM *zim;
 }
 
 - (void)beginRoomAttributesBatchOperation:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     ZIMRoomAttributesBatchOperationConfig *config = [ZIMPluginConverter oZIMRoomAttributesBatchOperationConfig:[call.arguments objectForKey:@"config"]];
     
@@ -537,6 +762,13 @@ static ZIM *zim;
 }
 
 - (void)endRoomAttributesBatchOperation:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     
     [zim endRoomAttributesBatchOperationWithRoomID:roomID callback:^(NSString * _Nonnull roomID, ZIMError * _Nonnull errorInfo) {
@@ -551,6 +783,13 @@ static ZIM *zim;
 }
 
 - (void)queryRoomAllAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     
     [zim queryRoomAllAttributesByRoomID:roomID callback:^(NSString * _Nonnull roomID, NSDictionary<NSString *,NSString *> * _Nonnull roomAttributes, ZIMError * _Nonnull errorInfo) {
@@ -565,6 +804,13 @@ static ZIM *zim;
 }
 
 - (void)createGroup:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMGroupInfo *groupInfo = [ZIMPluginConverter oZIMGroupInfo:[call.arguments objectForKey:@"groupInfo"]];
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
     [zim createGroup:groupInfo userIDs:userIDs callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
@@ -582,6 +828,13 @@ static ZIM *zim;
 }
 
 - (void)createGroupWithConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMGroupInfo *groupInfo = [ZIMPluginConverter oZIMGroupInfo:[call.arguments objectForKey:@"groupInfo"]];
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
     
@@ -601,6 +854,13 @@ static ZIM *zim;
 }
 
 - (void)joinGroup:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim joinGroup:groupID callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -615,6 +875,13 @@ static ZIM *zim;
 }
 
 - (void)dismissGroup:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim dismissGroup:groupID callback:^(NSString * _Nonnull groupID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -628,6 +895,13 @@ static ZIM *zim;
 }
 
 - (void)leaveGroup:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim leaveGroup:groupID callback:^(NSString * _Nonnull groupID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -641,6 +915,13 @@ static ZIM *zim;
 }
 
 - (void)inviteUsersIntoGroup:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSArray *userIDs = [call.arguments objectForKey:@"userIDs"];
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim inviteUsersIntoGroup:userIDs groupID:groupID callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
@@ -658,6 +939,13 @@ static ZIM *zim;
 }
 
 - (void)kickGroupMembers:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSArray *userIDs = [call.arguments objectForKey:@"userIDs"];
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim kickGroupMembers:userIDs groupID:groupID callback:^(NSString * _Nonnull groupID, NSArray<NSString *> * _Nonnull kickedUserIDList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
@@ -676,6 +964,13 @@ static ZIM *zim;
 }
 
 - (void)transferGroupOwner:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *userID = [call.arguments objectForKey:@"toUserID"];
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim transferGroupOwnerToUserID:userID groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull toUserID, ZIMError * _Nonnull errorInfo) {
@@ -690,6 +985,13 @@ static ZIM *zim;
 }
 
 - (void)updateGroupName:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupName = [call.arguments objectForKey:@"groupName"];
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim updateGroupName:groupName groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupName, ZIMError * _Nonnull errorInfo) {
@@ -705,6 +1007,13 @@ static ZIM *zim;
 
 - (void)updateGroupAvatarUrl:(FlutterMethodCall *)call
                       result:(FlutterResult)result{
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupAvatarUrl = [call.arguments objectForKey:@"groupAvatarUrl"];
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim updateGroupAvatarUrl:groupAvatarUrl groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupAvatarUrl, ZIMError * _Nonnull errorInfo) {
@@ -719,6 +1028,13 @@ static ZIM *zim;
 }
 
 - (void)updateGroupNotice:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupNotice = [call.arguments objectForKey:@"groupNotice"];
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim updateGroupNotice:groupNotice groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupNotice, ZIMError * _Nonnull errorInfo) {
@@ -733,6 +1049,13 @@ static ZIM *zim;
 }
 
 - (void)queryGroupInfo:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim queryGroupInfoByGroupID:groupID callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -748,6 +1071,13 @@ static ZIM *zim;
 }
 
 - (void)setGroupAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     NSDictionary *groupAttributes = [call.arguments objectForKey:@"groupAttributes"];
     [zim setGroupAttributes:groupAttributes groupID:groupID callback:^(NSString * _Nonnull groupID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {
@@ -764,6 +1094,13 @@ static ZIM *zim;
 }
 
 - (void)deleteGroupAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
     NSArray *keys = [call.arguments safeObjectForKey:@"keys"];
     [zim deleteGroupAttributesByKeys:keys groupID:groupID callback:^(NSString * _Nonnull groupID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {
@@ -780,6 +1117,13 @@ static ZIM *zim;
 }
 
 - (void)queryGroupAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
     NSArray *keys = [call.arguments safeObjectForKey:@"keys"];
     [zim queryGroupAttributesByKeys:keys groupID:groupID callback:^(NSString * _Nonnull groupID, NSDictionary<NSString *,NSString *> * _Nonnull groupAttributes, ZIMError * _Nonnull errorInfo) {
@@ -796,6 +1140,13 @@ static ZIM *zim;
 }
 
 - (void)queryGroupAllAttributes:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
     [zim queryGroupAllAttributesByGroupID:groupID callback:^(NSString * _Nonnull groupID, NSDictionary<NSString *,NSString *> * _Nonnull groupAttributes, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -811,6 +1162,13 @@ static ZIM *zim;
 }
 
 - (void)setGroupMemberRole:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     ZIMGroupMemberRole role = ((NSNumber *)[call.arguments safeObjectForKey:@"role"]).intValue;
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
 
@@ -830,6 +1188,13 @@ static ZIM *zim;
 }
 
 - (void)setGroupMemberNickname:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *nickname = [call.arguments safeObjectForKey:@"nickname"];
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
     NSString *forUserID = [call.arguments safeObjectForKey:@"forUserID"];
@@ -848,6 +1213,13 @@ static ZIM *zim;
 }
 
 - (void)queryGroupMemberInfo:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *userID = [call.arguments safeObjectForKey:@"userID"];
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
     [zim queryGroupMemberInfoByUserID:userID groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupMemberInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
@@ -865,6 +1237,13 @@ static ZIM *zim;
 }
 
 - (void)queryGroupList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     [zim queryGroupList:^(NSArray<ZIMGroup *> * _Nonnull groupList, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSArray *basicGroupList = [ZIMPluginConverter mZIMGroupList:groupList];
@@ -879,6 +1258,13 @@ static ZIM *zim;
 }
 
 - (void)queryGroupMemberList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
     ZIMGroupMemberQueryConfig *config = [ZIMPluginConverter oZIMGroupMemberQueryConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim queryGroupMemberListByGroupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
@@ -898,6 +1284,13 @@ static ZIM *zim;
 }
 
 - (void)queryGroupMemberCount:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
     [zim queryGroupMemberCountByGroupID:groupID callback:^(NSString * _Nonnull groupID, unsigned int count, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -913,6 +1306,13 @@ static ZIM *zim;
 }
 
 - (void)callInvite:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
     ZIMCallInviteConfig *config = [ZIMPluginConverter oZIMCallInviteConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim callInviteWithInvitees:invitees config:config callback:^(NSString * _Nonnull callID, ZIMCallInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
@@ -930,6 +1330,13 @@ static ZIM *zim;
 }
 
 - (void)callCancel:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     ZIMCallCancelConfig *config = [ZIMPluginConverter oZIMCallCancelConfig:[call.arguments safeObjectForKey:@"config"]];
@@ -947,6 +1354,13 @@ static ZIM *zim;
 }
 
 - (void)callAccept:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     ZIMCallAcceptConfig *config = [ZIMPluginConverter oZIMCallAcceptConfig:[call.arguments safeObjectForKey:@"config"]];
     
@@ -963,6 +1377,13 @@ static ZIM *zim;
 }
 
 - (void)callReject:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     ZIMCallRejectConfig *config = [ZIMPluginConverter oZIMCallRejectConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim callRejectWithCallID:callID config:config callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
@@ -977,6 +1398,12 @@ static ZIM *zim;
     }];
 }
 
-
+#pragma mark - Getter
+- (NSMutableDictionary *)engineMap {
+    if (!_engineMap) {
+        _engineMap = [[NSMutableDictionary alloc] init];
+    }
+    return _engineMap;
+}
 @end
 

@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) FlutterEventSink events;
 
+
+
 @end
 
 
@@ -41,24 +43,29 @@ extendedData:(NSDictionary *)extendedData{
     if(_events == nil){
         return;
     }
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onConnectionStateChanged" forKey:@"method"];
+    [resultDic safeSetObject:[_engineEventMap objectForKey:zim] forKey:@"handle"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)state] forKey:@"state"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)event] forKey:@"event"];
     NSString *json = @"{}";
     if(extendedData != nil){
+        
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:extendedData options:NSJSONWritingPrettyPrinted error:nil];
-        NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        NSString *extendedjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        json = [extendedjson stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     }
-    NSDictionary *resultDic = @{@"method":@"onConnectionStateChanged",@"state":[NSNumber numberWithInt:(int)state],@"event":[NSNumber numberWithInt:(int)event]};
-    NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] initWithDictionary:resultDic];
-    [resultMtDic safeSetObject:json forKey:@"extendedData"];
-    _events(resultMtDic);
+    [resultDic safeSetObject:json forKey:@"extendedData"];
+    _events(resultDic);
 }
 
 - (void)zim:(ZIM *)zim errorInfo:(ZIMError *)errorInfo{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
     
-    NSDictionary *resultDic = @{@"method":@"onError",@"code":[NSNumber numberWithInt:(int)errorInfo.code],@"message":errorInfo.message};
+    NSDictionary *resultDic = @{@"method":@"onError", @"handle": handle, @"code":[NSNumber numberWithInt:(int)errorInfo.code],@"message":errorInfo.message};
     _events(resultDic);
 }
 
@@ -66,8 +73,9 @@ extendedData:(NSDictionary *)extendedData{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
     
-    NSDictionary *resultDic = @{@"method":@"onTokenWillExpire",@"second":[NSNumber numberWithUnsignedInt:second]};
+    NSDictionary *resultDic = @{@"method":@"onTokenWillExpire",@"handle": handle, @"second":[NSNumber numberWithUnsignedInt:second]};
     _events(resultDic);
 }
 
@@ -77,8 +85,10 @@ conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeIn
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSArray *basicList = [ZIMPluginConverter mConversationChangeInfoList:conversationChangeInfoList];
-    NSDictionary *resultDic = @{@"method":@"onConversationChanged",@"conversationChangeInfoList":basicList};
+    NSDictionary *resultDic = @{@"method":@"onConversationChanged", @"handle": handle, @"conversationChangeInfoList":basicList};
     _events(resultDic);
 }
 
@@ -87,7 +97,9 @@ conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount
     if(_events == nil){
         return;
     }
-    NSDictionary *resultDic = @{@"method":@"onConversationTotalUnreadMessageCountUpdated",@"totalUnreadMessageCount":[NSNumber numberWithUnsignedInt:totalUnreadMessageCount]};
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSDictionary *resultDic = @{@"method":@"onConversationTotalUnreadMessageCountUpdated",@"handle": handle, @"totalUnreadMessageCount":[NSNumber numberWithUnsignedInt:totalUnreadMessageCount]};
     _events(resultDic);
 }
 
@@ -99,8 +111,10 @@ conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
-    NSDictionary *resultDic = @{@"method":@"onReceivePeerMessage",@"messageList":basicMessageList,@"fromUserID":fromUserID};
+    NSDictionary *resultDic = @{@"method":@"onReceivePeerMessage", @"handle": handle, @"messageList":basicMessageList,@"fromUserID":fromUserID};
     _events(resultDic);
 }
 
@@ -110,8 +124,10 @@ conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
-    NSDictionary *resultDic = @{@"method":@"onReceiveRoomMessage",@"messageList":basicMessageList,@"fromRoomID":fromRoomID};
+    NSDictionary *resultDic = @{@"method":@"onReceiveRoomMessage",@"handle": handle, @"messageList":basicMessageList,@"fromRoomID":fromRoomID};
     _events(resultDic);
 }
 
@@ -121,8 +137,10 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
-    NSDictionary *resultDic = @{@"method":@"onReceiveGroupMessage",@"messageList":basicMessageList,@"fromGroupID":fromGroupID};
+    NSDictionary *resultDic = @{@"method":@"onReceiveGroupMessage",@"handle": handle, @"messageList":basicMessageList,@"fromGroupID":fromGroupID};
     _events(resultDic);
 }
 
@@ -133,8 +151,10 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSArray *basicMemberList = [ZIMPluginConverter mZIMUserInfoList:memberList];
-    NSDictionary *resultDic = @{@"method":@"onRoomMemberJoined",@"roomID":roomID,@"memberList":basicMemberList};
+    NSDictionary *resultDic = @{@"method":@"onRoomMemberJoined",@"handle": handle, @"roomID":roomID,@"memberList":basicMemberList};
     _events(resultDic);
 }
 
@@ -144,8 +164,10 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSArray *basicMemberList = [ZIMPluginConverter mZIMUserInfoList:memberList];
-    NSDictionary *resultDic = @{@"method":@"onRoomMemberLeft",@"roomID":roomID,@"memberList":basicMemberList};
+    NSDictionary *resultDic = @{@"method":@"onRoomMemberLeft",@"handle": handle, @"roomID":roomID,@"memberList":basicMemberList};
     _events(resultDic);
 }
 
@@ -157,8 +179,11 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:@"onRoomStateChanged" forKey:@"method"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)state] forKey:@"state"];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)event] forKey:@"event"];
     [resultDic safeSetObject:roomID forKey:@"roomID"];
@@ -178,8 +203,10 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSDictionary *updateInfoDic = [ZIMPluginConverter mZIMRoomAttributesUpdateInfo:updateInfo];
-    NSDictionary *resultDic = @{@"method":@"onRoomAttributesUpdated",@"updateInfo":updateInfoDic,@"roomID":roomID};
+    NSDictionary *resultDic = @{@"method":@"onRoomAttributesUpdated",@"handle": handle, @"updateInfo":updateInfoDic,@"roomID":roomID};
     _events(resultDic);
 }
 
@@ -189,8 +216,10 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSArray *basicUpdateInfoList = [ZIMPluginConverter mZIMRoomAttributesUpdateInfoList:updateInfo];
-    NSDictionary *resultDic = @{@"method":@"onRoomAttributesBatchUpdated",@"updateInfo":basicUpdateInfoList,@"roomID":roomID};
+    NSDictionary *resultDic = @{@"method":@"onRoomAttributesBatchUpdated",@"handle": handle, @"updateInfo":basicUpdateInfoList,@"roomID":roomID};
     _events(resultDic);
 }
 
@@ -202,6 +231,8 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)state] forKey:@"state"];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)event] forKey:@"event"];
@@ -209,6 +240,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
     [resultDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupStateChanged" forKey:@"method"];
     _events(resultDic);
 }
@@ -220,11 +252,14 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupName forKey:@"groupName"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupNameUpdated" forKey:@"method"];
     _events(resultDic);
 }
@@ -236,11 +271,14 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupNotice forKey:@"groupNotice"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupNoticeUpdated" forKey:@"method"];
     _events(resultDic);
 }
@@ -252,11 +290,14 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupAvatarUrl forKey:@"groupAvatarUrl"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupAvatarUrlUpdated" forKey:@"method"];
     _events(resultDic);
 }
@@ -268,12 +309,15 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSArray *updateInfoArr = [ZIMPluginConverter mZIMGroupAttributesUpdateInfoList:updateInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
     [resultDic safeSetObject:updateInfoArr forKey:@"updateInfo"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupAttributesUpdated" forKey:@"method"];
     _events(resultDic);
 }
@@ -287,6 +331,8 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSArray *userListArr = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
@@ -295,6 +341,7 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:userListArr forKey:@"userList"];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)state] forKey:@"state"];
     [resultDic safeSetObject:[NSNumber numberWithInt:(int)event] forKey:@"event"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupMemberStateChanged" forKey:@"method"];
     _events(resultDic);
 }
@@ -306,19 +353,27 @@ fromGroupID:(NSString *)fromGroupID{
     if(_events == nil){
         return;
     }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
     [resultDic safeSetObject:groupID forKey:@"groupID"];
     NSArray *basicUserInfoList = [ZIMPluginConverter mZIMGroupMemberInfoList:userInfo];
     [resultDic safeSetObject:basicUserInfoList forKey:@"userInfo"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupMemberInfoUpdated" forKey:@"method"];
     _events(resultDic);
 }
 
+
+
 - (void)zim:(ZIM *)zim
     callInvitationReceived:(ZIMCallInvitationReceivedInfo *)info
      callID:(NSString *)callID{
+    
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *callInvitationReceivedInfoDic = [[NSMutableDictionary alloc] init];
     [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
@@ -326,6 +381,7 @@ fromGroupID:(NSString *)fromGroupID{
     [callInvitationReceivedInfoDic safeSetObject:info.extendedData forKey:@"extendedData"];
     [resultDic safeSetObject:@"onCallInvitationReceived" forKey:@"method"];
     [resultDic safeSetObject:callInvitationReceivedInfoDic forKey:@"info"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:callID forKey:@"callID"];
     _events(resultDic);
 }
@@ -333,6 +389,9 @@ fromGroupID:(NSString *)fromGroupID{
 - (void)zim:(ZIM *)zim
     callInvitationCancelled:(ZIMCallInvitationCancelledInfo *)info
      callID:(NSString *)callID{
+    
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     [infoDic safeSetObject:info.inviter forKey:@"inviter"];
@@ -340,12 +399,16 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:@"onCallInvitationCancelled" forKey:@"method"];
     [resultDic safeSetObject:infoDic forKey:@"info"];
     [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }
 
 - (void)zim:(ZIM *)zim
     callInvitationAccepted:(ZIMCallInvitationAcceptedInfo *)info
      callID:(NSString *)callID{
+    
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     [infoDic safeSetObject:info.invitee forKey:@"invitee"];
@@ -353,12 +416,17 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:@"onCallInvitationAccepted" forKey:@"method"];
     [resultDic safeSetObject:infoDic forKey:@"info"];
     [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    
     _events(resultDic);
 }
 
 - (void)zim:(ZIM *)zim
     callInvitationRejected:(ZIMCallInvitationRejectedInfo *)info
      callID:(NSString *)callID{
+    
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     [infoDic safeSetObject:info.invitee forKey:@"invitee"];
@@ -366,27 +434,43 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:@"onCallInvitationRejected" forKey:@"method"];
     [resultDic safeSetObject:infoDic forKey:@"info"];
     [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }
 
 - (void)zim:(ZIM *)zim callInvitationTimeout:(NSString *)callID{
+    
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:@"onCallInvitationTimeout" forKey:@"method"];
     [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }
 
 - (void)zim:(ZIM *)zim
     callInviteesAnsweredTimeout:(NSArray<NSString *> *)invitees
      callID:(NSString *)callID{
+    
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:@"onCallInviteesAnsweredTimeout" forKey:@"method"];
     [resultDic safeSetObject:callID forKey:@"callID"];
     [resultDic safeSetObject:invitees forKey:@"invitees"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
     
 }
 
 
+#pragma mark - Getter
+- (NSMapTable *)engineEventMap {
+    if (!_engineEventMap) {
+        _engineEventMap = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory valueOptions:NSMapTableStrongMemory];
+    }
+    return _engineEventMap;
+}
 
 @end
