@@ -29,7 +29,7 @@ class ClearChatLogsItemState extends State<ClearChatLogsItem> {
         children: [
           TextButton(
             onPressed: () {
-              ZIM.getInstance().deleteAllMessage(widget.conversationID,
+              ZIM.getInstance()!.deleteAllMessage(widget.conversationID,
                   widget.conversationType, ZIMMessageDeleteConfig());
               Navigator.pop(context);
               Navigator.pop(context);

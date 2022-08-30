@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                     showLoadingDialog();
                     String token = await TokenPlugin.makeToken(userInfo.userID);
 
-                    await ZIM.getInstance().login(userInfo, token);
+                    await ZIM.getInstance()!.login(userInfo, token);
                     Navigator.of(context).pop;
                     log('success');
                     UserModel.shared().userInfo = userInfo;

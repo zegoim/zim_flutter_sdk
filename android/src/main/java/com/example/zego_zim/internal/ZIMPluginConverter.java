@@ -746,6 +746,10 @@ public class ZIMPluginConverter {
     static public HashMap<String,Object> mZIMGroupOperatedInfo(ZIMGroupOperatedInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("operatedUserInfo", mZIMGroupMemberInfo(info.operatedUserInfo));
+        infoMap.put("userID", info.userID);
+        infoMap.put("userName", info.userName);
+        infoMap.put("memberNickname", info.memberNickname);
+        infoMap.put("memberRole", info.memberRole);
         return infoMap;
     }
 

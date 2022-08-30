@@ -65,7 +65,7 @@ class GroupSetPageNameItemState extends State<GroupSetPageNameItem> {
                             log('start');
                             ZIMGroupNameUpdatedResult result = await ZIM
                                 .getInstance()
-                                .updateGroupName(
+                                !.updateGroupName(
                                     widget.newGroupName, widget.groupID);
                           } on PlatformException catch (onError) {}
                           Navigator.pop(context);

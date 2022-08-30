@@ -47,7 +47,7 @@ class ConverListState extends State<ConverList> {
     }
     try {
       ZIMConversationListQueriedResult result =
-          await ZIM.getInstance().queryConversationList(queryConfig);
+          await ZIM.getInstance()!.queryConversationList(queryConfig);
       widget._converList.addAll(result.conversationList);
       List<ConverListCell> newConverWidgetList = [];
       for (ZIMConversation newConversation in result.conversationList) {
@@ -62,7 +62,7 @@ class ConverListState extends State<ConverList> {
   }
 
   registerConverUpdate() {
-    ZIMEventHandler.onConversationChanged = (conversationChangeInfoList) {
+    ZIMEventHandler.onConversationChanged = (zim, conversationChangeInfoList) {
       for (ZIMConversationChangeInfo changeInfo in conversationChangeInfoList) {
         switch (changeInfo.event) {
           case ZIMConversationEvent.added:

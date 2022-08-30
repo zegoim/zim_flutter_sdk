@@ -39,7 +39,7 @@ public class TokenPlugin implements FlutterPlugin, MethodCallHandler {
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
 
         if(call.method.equals("makeToken")){
-            long appID = Objects.requireNonNull(call.argument("appID"));
+            long appID = safeGetLongValue(Objects.requireNonNull(call.argument("appID")));
             String userID = call.argument("userID");
             String secret = call.argument("secret");
             TokenServerAssistant.TokenInfo tokenInfo = null;
@@ -53,6 +53,18 @@ public class TokenPlugin implements FlutterPlugin, MethodCallHandler {
             HashMap<String,String> resultMap = new HashMap<String,String>();
             resultMap.put("token",tokenInfo.data.toString());
             result.success(resultMap);
+        }
+    }
+
+    static public long safeGetLongValue(Object longObject){
+        if( longObject instanceof Integer){
+            return ((Integer) longObject).longValue();
+        }
+        if( longObject   != null){
+            return (Long)longObject;
+        }
+        else{
+            return 0;
         }
     }
 }

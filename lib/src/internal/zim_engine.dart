@@ -4,6 +4,8 @@ import 'zim_common_data.dart';
 import 'zim_converter.dart';
 import '../zim_api.dart';
 import '../zim_defines.dart';
+import 'zim_manager.dart';
+import 'zim_event_handler_impl.dart';
 import 'zim_defines_extension.dart';
 
 class ZIMEngine implements ZIM {
@@ -19,7 +21,11 @@ class ZIMEngine implements ZIM {
 
   @override
   destroy() {
-    channel.invokeMethod("destroy");
+    if(ZIMManager.destroyEngine(handle)) {
+      channel.invokeMethod("destroy", {"handle": handle});
+      // TODO: Remove another map
+      ZIMEventHandlerImpl.unregisterEventHandler();
+    }
   }
 
   @override
@@ -282,7 +288,7 @@ class ZIMEngine implements ZIM {
     Map resultMap;
     if (config == null) {
       resultMap = await channel.invokeMethod(
-          'createRoom', {'roomInfo': ZIMConverter.mZIMRoomInfo(roomInfo)});
+          'createRoom', {'handle': handle, 'roomInfo': ZIMConverter.mZIMRoomInfo(roomInfo)});
     } else {
       resultMap = await channel.invokeMethod('createRoomWithConfig', {
         'handle': handle,

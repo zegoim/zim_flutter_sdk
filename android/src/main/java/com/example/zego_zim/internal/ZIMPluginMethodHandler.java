@@ -100,8 +100,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 public class ZIMPluginMethodHandler {
-    private static ZIM zim;
-
+    private static HashMap<String, ZIM> engineMap = new HashMap<>();
 
     public static void getVersion(MethodCall call,Result result){
         result.success(ZIM.getVersion());
@@ -109,15 +108,33 @@ public class ZIMPluginMethodHandler {
 
     public static void create(MethodCall call, Result result, FlutterPlugin.FlutterPluginBinding binding,ZIMPluginEventHandler eventHandler){
 
+        ZIM oldZIM = ZIM.getInstance();
+        if(oldZIM != null) {
+            oldZIM.destroy();
+        }
+
+        String handle = call.argument("handle");
         Application application = (Application) binding.getApplicationContext();
         ZIMAppConfig appConfig = ZIMPluginConverter.oZIMAppConfig(Objects.requireNonNull(call.argument("config")));
-        zim = ZIM.create(appConfig, application);
-        zim.setEventHandler(eventHandler);
+        ZIM zim = ZIM.create(appConfig, application);
+        if(zim != null) {
+            engineMap.put(handle, zim);
+            ZIMPluginEventHandler.engineMapForCallback.put(zim, handle);
+            zim.setEventHandler(eventHandler);
+        }
+
         result.success(null);
     }
 
     public static void destroy(MethodCall call, Result result){
-        zim.destroy();
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim != null) {
+            zim.destroy();
+            engineMap.remove(handle);
+            ZIMPluginEventHandler.engineMapForCallback.remove(zim);
+        }
+
         result.success(null);
     }
 
@@ -138,6 +155,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void login(MethodCall call ,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String token = call.argument("token");
         ZIMUserInfo userInfo = new ZIMUserInfo();
         userInfo.userID = call.argument("userID");
@@ -155,6 +179,12 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void uploadLog(MethodCall call ,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
 
         zim.uploadLog(new ZIMLogUploadedCallback() {
             @Override
@@ -169,13 +199,26 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void logout(MethodCall call ,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         zim.logout();
         result.success(null);
     }
 
     public static void renewToken(MethodCall call, Result result){
-        String token = call.argument("token");
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
 
+        String token = call.argument("token");
         zim.renewToken(token, new ZIMTokenRenewedCallback() {
             @Override
             public void onTokenRenewed(String token, ZIMError errorInfo) {
@@ -192,6 +235,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryUsersInfo(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ArrayList<String> userIDs = call.argument("userIDs");
         ZIMUsersInfoQueryConfig config = ZIMPluginConverter.oZIMUsersInfoQueryConfig(Objects.requireNonNull(call.argument("config")));
 
@@ -212,6 +262,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void updateUserName(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String userName = call.argument("userName");
         zim.updateUserName(userName, new ZIMUserNameUpdatedCallback() {
             @Override
@@ -230,6 +287,13 @@ public class ZIMPluginMethodHandler {
 
 
     public static void updateUserAvatarUrl(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String userAvatarUrl = call.argument("userAvatarUrl");
         zim.updateUserAvatarUrl(userAvatarUrl, new ZIMUserAvatarUrlUpdatedCallback() {
             @Override
@@ -247,6 +311,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void updateUserExtendedData(MethodCall call ,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String extendedData = call.argument("extendedData");
         zim.updateUserExtendedData(extendedData, new ZIMUserExtendedDataUpdatedCallback() {
             @Override
@@ -264,6 +335,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryConversationList(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         HashMap<String,Object> configMap = Objects.requireNonNull((call.argument("config")));
         ZIMConversationQueryConfig config = ZIMPluginConverter.oZIMConversationQueryConfig(configMap);
 
@@ -284,6 +362,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void deleteConversation(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMConversationDeleteConfig config = ZIMPluginConverter.oZIMConversationDeleteConfig(Objects.requireNonNull(call.argument("config")));
@@ -304,6 +389,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void clearConversationUnreadMessageCount(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         zim.clearConversationUnreadMessageCount(conversationID, conversationType, new ZIMConversationUnreadMessageCountClearedCallback() {
@@ -323,6 +415,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void setConversationNotificationStatus(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMConversationNotificationStatus status = ZIMConversationNotificationStatus.getZIMConversationNotificationStatus(ZIMPluginCommonTools.safeGetIntValue(call.argument("status")));
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
@@ -343,6 +442,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void sendPeerMessage(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMMessage message = ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
         String toUserID = (String) Objects.requireNonNull(call.argument("toUserID"));
         ZIMMessageSendConfig config = ZIMPluginConverter.oZIMMessageSendConfig(Objects.requireNonNull(call.argument("config")));
@@ -363,6 +469,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void sendGroupMessage(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMMessage message = ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
         String toGroupID = (String) Objects.requireNonNull(call.argument("toGroupID"));
         ZIMMessageSendConfig config = ZIMPluginConverter.oZIMMessageSendConfig(Objects.requireNonNull(call.argument("config")));
@@ -383,6 +496,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void sendRoomMessage(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMMessage message = ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
         String toRoomID = (String) Objects.requireNonNull(call.argument("toRoomID"));
         ZIMMessageSendConfig config = ZIMPluginConverter.oZIMMessageSendConfig(Objects.requireNonNull(call.argument("config")));
@@ -403,6 +523,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void downloadMediaFile(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMMediaMessage mediaMessage = (ZIMMediaMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
         ZIMMediaFileType fileType = ZIMMediaFileType.getZIMMediaFileType(ZIMPluginCommonTools.safeGetIntValue(call.argument("fileType")));
         Integer progressID = call.argument("progressID");
@@ -438,6 +565,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void sendMediaMessage(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMMediaMessage mediaMessage = (ZIMMediaMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
         String toConversationID = call.argument("toConversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
@@ -476,6 +610,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryHistoryMessage(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMMessageQueryConfig config = ZIMPluginConverter.oZIMMessageQueryConfig(Objects.requireNonNull(call.argument("config")));
@@ -498,6 +639,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void deleteAllMessage(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMMessageDeleteConfig config = ZIMPluginConverter.oZIMMessageDeleteConfig(Objects.requireNonNull(call.argument("config")));
@@ -519,6 +667,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void deleteMessages(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ArrayList<ZIMMessage> messageList = ZIMPluginConverter.oZIMMessageList(Objects.requireNonNull(call.argument("messageList")));
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
@@ -541,6 +696,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void createRoom(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMRoomInfo roomInfo = ZIMPluginConverter.oZIMRoomInfo(Objects.requireNonNull(call.argument("roomInfo")));
 
         zim.createRoom(roomInfo, new ZIMRoomCreatedCallback() {
@@ -561,6 +723,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void createRoomWithConfig(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMRoomInfo roomInfo = ZIMPluginConverter.oZIMRoomInfo(Objects.requireNonNull(call.argument("roomInfo")));
         ZIMRoomAdvancedConfig config = ZIMPluginConverter.oZIMRoomAdvancedConfig(Objects.requireNonNull(ZIMPluginCommonTools.safeGetHashMap(call.argument("config"))));
 
@@ -582,6 +751,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void enterRoom(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMRoomInfo roomInfo = ZIMPluginConverter.oZIMRoomInfo(Objects.requireNonNull(call.argument("roomInfo")));
         ZIMRoomAdvancedConfig config = ZIMPluginConverter.oZIMRoomAdvancedConfig(Objects.requireNonNull(ZIMPluginCommonTools.safeGetHashMap(call.argument("config"))));
         zim.enterRoom(roomInfo, config, new ZIMRoomEnteredCallback() {
@@ -601,6 +777,13 @@ public class ZIMPluginMethodHandler {
     };
 
     public static void joinRoom(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String roomID = call.argument("roomID");
         zim.joinRoom(roomID, new ZIMRoomJoinedCallback() {
             @Override
@@ -619,6 +802,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void leaveRoom(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String roomID = call.argument("roomID");
         zim.leaveRoom(roomID, new ZIMRoomLeftCallback() {
             @Override
@@ -636,6 +826,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryRoomMemberList(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String roomID = call.argument("roomID");
         ZIMRoomMemberQueryConfig config = ZIMPluginConverter.oZIMRoomMemberQueryConfig(Objects.requireNonNull(ZIMPluginCommonTools.safeGetHashMap(call.argument("config"))));
 
@@ -658,6 +855,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryRoomOnlineMemberCount(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String roomID = call.argument("roomID");
 
         zim.queryRoomOnlineMemberCount(roomID, new ZIMRoomOnlineMemberCountQueriedCallback() {
@@ -677,6 +881,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void setRoomAttributes(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         HashMap<String,String> roomAttributes = call.argument("roomAttributes");
         String roomID = call.argument("roomID");
         ZIMRoomAttributesSetConfig config = ZIMPluginConverter.oZIMRoomAttributesSetConfig(call.argument("config"));
@@ -697,6 +908,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void deleteRoomAttributes(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         List<String> keys = call.argument("keys");
         String roomID = call.argument("roomID");
         ZIMRoomAttributesDeleteConfig config = ZIMPluginConverter.oZIMRoomAttributesDeleteConfig(call.argument("config"));
@@ -718,6 +936,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void beginRoomAttributesBatchOperation(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String roomID = call.argument("roomID");
         ZIMRoomAttributesBatchOperationConfig config = ZIMPluginConverter.oZIMRoomAttributesBatchOperationConfig(call.argument("config"));
         zim.beginRoomAttributesBatchOperation(roomID,config);
@@ -725,6 +950,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void endRoomAttributesBatchOperation(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String roomID = call.argument("roomID");
         zim.endRoomAttributesBatchOperation(roomID, new ZIMRoomAttributesBatchOperatedCallback() {
             @Override
@@ -742,6 +974,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryRoomAllAttributes(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String roomID = call.argument("roomID");
         zim.queryRoomAllAttributes(roomID, new ZIMRoomAttributesQueriedCallback() {
             @Override
@@ -760,6 +999,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void createGroup(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMGroupInfo groupInfo = ZIMPluginConverter.oZIMGroupInfo(Objects.requireNonNull(call.argument("groupInfo")));
         ArrayList<String> userIDs = call.argument("userIDs");
 
@@ -785,6 +1031,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void createGroupWithConfig(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ZIMGroupInfo groupInfo = ZIMPluginConverter.oZIMGroupInfo(Objects.requireNonNull(call.argument("groupInfo")));
         ArrayList<String> userIDs = call.argument("userIDs");
         ZIMGroupAdvancedConfig config = ZIMPluginConverter.oZIMGroupAdvancedConfig(Objects.requireNonNull(call.argument("config")));
@@ -810,6 +1063,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void dismissGroup(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupID = call.argument("groupID");
         zim.dismissGroup(groupID, new ZIMGroupDismissedCallback() {
             @Override
@@ -827,6 +1087,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void joinGroup(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupID = call.argument("groupID");
         zim.joinGroup(groupID, new ZIMGroupJoinedCallback() {
             @Override
@@ -845,6 +1112,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void leaveGroup(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupID = call.argument("groupID");
         zim.leaveGroup(groupID, new ZIMGroupLeftCallback() {
             @Override
@@ -862,9 +1136,15 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void inviteUsersIntoGroup(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ArrayList<String> userIDs = call.argument("userIDs");
         String groupID = call.argument("groupID");
-
         zim.inviteUsersIntoGroup(userIDs, groupID, new ZIMGroupUsersInvitedCallback() {
             @Override
             public void onGroupUsersInvited(String groupID, ArrayList<ZIMGroupMemberInfo> userList, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
@@ -886,6 +1166,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void kickGroupMembers(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ArrayList<String> userIDs = call.argument("userIDs");
         String groupID = call.argument("groupID");
 
@@ -909,6 +1196,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void transferGroupOwner(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String toUserID = call.argument("toUserID");
         String groupID = call.argument("groupID");
 
@@ -930,6 +1224,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void updateGroupName (MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupName = call.argument("groupName");
         String groupID = call.argument("groupID");
 
@@ -951,6 +1252,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void updateGroupAvatarUrl(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupAvatarUrl = call.argument("groupAvatarUrl");
         String groupID = call.argument("groupID");
         zim.updateGroupAvatarUrl(groupAvatarUrl, groupID, new ZIMGroupAvatarUrlUpdatedCallback() {
@@ -971,6 +1279,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void updateGroupNotice(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupNotice = call.argument("groupNotice");
         String groupID = call.argument("groupID");
 
@@ -994,6 +1309,13 @@ public class ZIMPluginMethodHandler {
 
 
     public static void queryGroupInfo(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupID = call.argument("groupID");
 
         zim.queryGroupInfo(groupID, new ZIMGroupInfoQueriedCallback() {
@@ -1013,6 +1335,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void setGroupAttributes(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupID = call.argument("groupID");
         HashMap<String ,String> groupAttributes = call.argument("groupAttributes");
 
@@ -1033,6 +1362,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void deleteGroupAttributes(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ArrayList<String> keys = call.argument("keys");
         String groupID = call.argument("groupID");
 
@@ -1053,6 +1389,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryGroupAttributes(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ArrayList<String> keys = call.argument("keys");
         String groupID = call.argument("groupID");
 
@@ -1073,6 +1416,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryGroupAllAttributes(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupID = call.argument("groupID");
 
         zim.queryGroupAllAttributes(groupID, new ZIMGroupAttributesQueriedCallback() {
@@ -1092,6 +1442,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void setGroupMemberRole(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         int role = ZIMPluginCommonTools.safeGetIntValue(call.argument("role"));
         String forUserID = call.argument("forUserID");
         String groupID = call.argument("groupID");
@@ -1114,6 +1471,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void setGroupMemberNickname(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String nickname = call.argument("nickname");
         String forUserID = call.argument("forUserID");
         String groupID = call.argument("groupID");
@@ -1136,6 +1500,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryGroupMemberInfo(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String userID = call.argument("userID");
         String groupID = call.argument("groupID");
 
@@ -1157,6 +1528,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryGroupList(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         zim.queryGroupList(new ZIMGroupListQueriedCallback() {
             @Override
             public void onGroupListQueried(ArrayList<ZIMGroup> groupList, ZIMError errorInfo) {
@@ -1174,6 +1552,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryGroupMemberList(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupID = call.argument("groupID");
         ZIMGroupMemberQueryConfig config = ZIMPluginConverter.oZIMGroupMemberQueryConfig(Objects.requireNonNull(call.argument("config")));
         zim.queryGroupMemberList(groupID, config, new ZIMGroupMemberListQueriedCallback() {
@@ -1195,6 +1580,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void queryGroupMemberCount(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String groupID = call.argument("groupID");
         zim.queryGroupMemberCount(groupID, new ZIMGroupMemberCountQueriedCallback() {
             @Override
@@ -1213,6 +1605,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void callInvite(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ArrayList<String> invitees = call.argument("invitees");
         ZIMCallInviteConfig config = ZIMPluginConverter.oZIMCallInviteConfig(Objects.requireNonNull(call.argument("config")));
 
@@ -1234,6 +1633,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void callCancel(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         ArrayList<String> invitees = call.argument("invitees");
         ZIMCallCancelConfig config = ZIMPluginConverter.oZIMCallCancelConfig(Objects.requireNonNull(call.argument("config")));
         String callID = call.argument("callID");
@@ -1255,6 +1661,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void callAccept(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String callID = call.argument("callID");
         ZIMCallAcceptConfig config = ZIMPluginConverter.oZIMCallAcceptConfig(Objects.requireNonNull(call.argument("config")));
 
@@ -1275,6 +1688,13 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void callReject(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
         String callID = call.argument("callID");
         ZIMCallRejectConfig config = ZIMPluginConverter.oZIMCallRejectConfig(Objects.requireNonNull(call.argument("config")));
 

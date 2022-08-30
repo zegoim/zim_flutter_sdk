@@ -39,7 +39,7 @@ class MsgConverter {
           break;
         case ZIMMessageType.video:
           if ((message as ZIMVideoMessage).fileLocalPath == '') {
-            ZIM.getInstance().downloadMediaFile(
+            ZIM.getInstance()!.downloadMediaFile(
                 message,
                 ZIMMediaFileType.originalFile,
                 (message, currentFileSize, totalFileSize) {});

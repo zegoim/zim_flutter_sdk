@@ -785,7 +785,11 @@ class ZIMConverter {
 
   static ZIMGroupOperatedInfo oZIMGroupOperatedInfo(Map resultMap) {
     ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(
-        operatedUserInfo: oZIMGroupMemberInfo(resultMap['operatedUserInfo']));
+        operatedUserInfo: oZIMGroupMemberInfo(resultMap['operatedUserInfo']),
+        userID: resultMap['userID'],
+        userName: resultMap['userName'],
+        memberNickname: resultMap['memberNickname'],
+        memberRole: resultMap['memberRole']);
     return info;
   }
 

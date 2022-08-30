@@ -23,7 +23,7 @@ import '../../../items/msg_items/msg_list.dart';
 
 class PeerChatPage extends StatefulWidget {
   PeerChatPage({required this.conversationID, required this.conversationName}) {
-    ZIM.getInstance().clearConversationUnreadMessageCount(
+    ZIM.getInstance()!.clearConversationUnreadMessageCount(
         conversationID, ZIMConversationType.peer);
     clearUnReadMessage();
   }
@@ -39,7 +39,7 @@ class PeerChatPage extends StatefulWidget {
   bool queryHistoryMsgComplete = false;
 
   clearUnReadMessage() {
-    ZIM.getInstance().clearConversationUnreadMessageCount(
+    ZIM.getInstance()!.clearConversationUnreadMessageCount(
         conversationID, ZIMConversationType.peer);
   }
 
@@ -147,7 +147,7 @@ class _MyPageState extends State<PeerChatPage> {
     try {
       ZIMMessageSentResult result = await ZIM
           .getInstance()
-          .sendPeerMessage(textMessage, widget.conversationID, sendConfig);
+          !.sendPeerMessage(textMessage, widget.conversationID, sendConfig);
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == textMessage);
       widget._historyZIMMessageList[index] = result.message;
@@ -186,7 +186,7 @@ class _MyPageState extends State<PeerChatPage> {
     });
     try {
       log(mediaMessage.fileLocalPath);
-      ZIMMessageSentResult result = await ZIM.getInstance().sendMediaMessage(
+      ZIMMessageSentResult result = await ZIM.getInstance()!.sendMediaMessage(
           mediaMessage,
           widget.conversationID,
           ZIMConversationType.peer,
@@ -230,7 +230,7 @@ class _MyPageState extends State<PeerChatPage> {
     try {
       ZIMMessageQueriedResult result = await ZIM
           .getInstance()
-          .queryHistoryMessage(
+          !.queryHistoryMessage(
               widget.conversationID, ZIMConversationType.peer, queryConfig);
       if (result.messageList.length < 20) {
         widget.queryHistoryMsgComplete = true;
@@ -251,7 +251,7 @@ class _MyPageState extends State<PeerChatPage> {
 
 
   registerZIMEvent() {
-    ZIMEventHandler.onReceivePeerMessage = (messageList, fromUserID) {
+    ZIMEventHandler.onReceivePeerMessage = (zim, messageList, fromUserID) {
       if (fromUserID != widget.conversationID) {
         return;
       }
@@ -272,7 +272,7 @@ class _MyPageState extends State<PeerChatPage> {
               ReceiveImageMsgCell resultCell;
               ZIM
                   .getInstance()
-                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                  !.downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveImageMsgCell(
@@ -296,7 +296,7 @@ class _MyPageState extends State<PeerChatPage> {
               ReceiveVideoMsgCell resultCell;
               ZIM
                   .getInstance()
-                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                  !.downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveVideoMsgCell(

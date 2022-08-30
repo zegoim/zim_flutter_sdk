@@ -42,7 +42,7 @@ class ReceiveVideoeMsgCellState extends State<ReceiveVideoMsgCell> {
     if (widget.message.fileLocalPath == '') {
       ZIMMediaDownloadedResult result = await ZIM
           .getInstance()
-          .downloadMediaFile(widget.message, ZIMMediaFileType.originalFile,
+          !.downloadMediaFile(widget.message, ZIMMediaFileType.originalFile,
               (message, currentFileSize, totalFileSize) {});
       setState(() {
         widget.message = result.message as ZIMVideoMessage;

@@ -32,7 +32,7 @@ class _myState extends State<SplashPage> {
     ZIMAppConfig appConfig = ZIMAppConfig();
     appConfig.appID = KeyCenter.appID;
     appConfig.appSign = KeyCenter.secret;
-    ZIM zim = ZIM.create(appConfig);
+    ZIM zim = ZIM.create(appConfig)!;
     
     log('create');
     final prefs = await SharedPreferences.getInstance();
@@ -46,9 +46,9 @@ class _myState extends State<SplashPage> {
           _countTimer = null;
 
           if (userID != null && userID != '' && isResetZIM == false) {
-            await ZIM.getInstance().destroy();
+            ZIM.getInstance()!.destroy();
             log('destory');
-            await ZIM.getInstance().create(appConfig);
+            ZIM.create(appConfig);
             log('create');
             isResetZIM = true;
           }

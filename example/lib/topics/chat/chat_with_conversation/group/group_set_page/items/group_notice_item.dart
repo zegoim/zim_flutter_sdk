@@ -64,7 +64,7 @@ class GroupSetPageNoticeItemState extends State<GroupSetPageNoticeItem> {
                         onPressed: () async {
                           ZIMGroupNoticeUpdatedResult result = await ZIM
                               .getInstance()
-                              .updateGroupNotice(
+                              !.updateGroupNotice(
                                   widget.newGroupNotice, widget.groupID);
                           Navigator.pop(context);
                         },

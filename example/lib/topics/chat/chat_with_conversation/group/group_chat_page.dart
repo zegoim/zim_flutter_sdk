@@ -20,17 +20,17 @@ import '../../../items/msg_items/uploading_progress_model.dart';
 class GroupChatPage extends StatefulWidget {
   GroupChatPage(
       {required this.conversationID, required this.conversationName}) {
-    ZIM.getInstance().clearConversationUnreadMessageCount(
+    ZIM.getInstance()!.clearConversationUnreadMessageCount(
         conversationID, ZIMConversationType.group);
 
     ZIM
         .getInstance()
-        .queryGroupMemberInfo(
+        !.queryGroupMemberInfo(
             UserModel.shared().userInfo!.userID, conversationID)
         .then((value) => {myGroupMemberInfo = value.userInfo});
     ZIM
         .getInstance()
-        .queryGroupInfo(conversationID)
+        !.queryGroupInfo(conversationID)
         .then((value) => {myGroupFullInfo = value.groupInfo});
   }
   String conversationID;
@@ -158,8 +158,7 @@ class GroupChatPageState extends State<GroupChatPage> {
     ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
     try {
       ZIMMessageSentResult result = await ZIM
-          .getInstance()
-          .sendGroupMessage(textMessage, widget.conversationID, sendConfig);
+          .getInstance()!.sendGroupMessage(textMessage, widget.conversationID, sendConfig);
       widget._historyZIMMessageList.add(result.message);
       SendTextMsgCell cell =
           SendTextMsgCell(message: (result.message as ZIMTextMessage));
@@ -186,7 +185,7 @@ class GroupChatPageState extends State<GroupChatPage> {
     });
     try {
       log(mediaMessage.fileLocalPath);
-      ZIMMessageSentResult result = await ZIM.getInstance().sendMediaMessage(
+      ZIMMessageSentResult result = await ZIM.getInstance()!.sendMediaMessage(
           mediaMessage,
           widget.conversationID,
           ZIMConversationType.group,
@@ -229,7 +228,7 @@ class GroupChatPageState extends State<GroupChatPage> {
     try {
       ZIMMessageQueriedResult result = await ZIM
           .getInstance()
-          .queryHistoryMessage(
+          !.queryHistoryMessage(
               widget.conversationID, ZIMConversationType.group, queryConfig);
       if (result.messageList.length < 20) {
         widget.queryHistoryMsgComplete = true;
@@ -248,7 +247,7 @@ class GroupChatPageState extends State<GroupChatPage> {
   }
 
   registerZIMEvent() {
-    ZIMEventHandler.onReceiveGroupMessage = (messageList, fromUserID) {
+    ZIMEventHandler.onReceiveGroupMessage = (zim, messageList, fromUserID) {
       if (fromUserID != widget.conversationID) {
         return;
       }
@@ -265,7 +264,7 @@ class GroupChatPageState extends State<GroupChatPage> {
               ReceiveImageMsgCell resultCell;
               ZIM
                   .getInstance()
-                  .downloadMediaFile(message, ZIMMediaFileType.largeImage,
+                  !.downloadMediaFile(message, ZIMMediaFileType.largeImage,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveImageMsgCell(
@@ -289,7 +288,7 @@ class GroupChatPageState extends State<GroupChatPage> {
               ReceiveVideoMsgCell resultCell;
               ZIM
                   .getInstance()
-                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                  !.downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveVideoMsgCell(

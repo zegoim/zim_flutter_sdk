@@ -660,9 +660,15 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
 /// Information that the group has operated on.
 class ZIMGroupOperatedInfo {
   /// Description: Group member information.
+  /// @Deprecated
   ZIMGroupMemberInfo operatedUserInfo;
 
-  ZIMGroupOperatedInfo({required this.operatedUserInfo});
+  String userID = '';
+  String userName = '';
+  String memberNickname = '';
+  int memberRole = ZIMGroupMemberRole.member;
+
+  ZIMGroupOperatedInfo({required this.operatedUserInfo, required this.userID, required this.userName, required this.memberNickname, required this.memberRole});
 }
 
 /// group member query configuration.
@@ -1183,12 +1189,6 @@ class ZIMGroupOwnerTransferredResult {
   ZIMGroupOwnerTransferredResult(
       {required this.groupID, required this.toUserID});
 }
-class ZIMGroupAvatarUrlUpdatedResult {
-  String groupID;
-  String groupAvatarUrl;
-  ZIMGroupAvatarUrlUpdatedResult(
-      {required this.groupID, required this.groupAvatarUrl});
-}
 
 /// Description: Return result of group name update operation.
 ///
@@ -1201,15 +1201,31 @@ class ZIMGroupNameUpdatedResult {
   String groupID;
   String groupName;
   ZIMGroupNameUpdatedResult({required this.groupID, required this.groupName});
+
+
 }
 
-/// Description: Return result of group name update operation.
+/// Description: Return result of group avatar url update operation.
 ///
-/// Use cases: After a group name update operation is performed, the success or failure can be determined by this callback.
+/// Use cases: After a group avatar url update operation is performed, the success or failure can be determined by this callback.
 ///
-/// When to call /Trigger: The result of the group name update operation is returned.
+/// When to call /Trigger: The result of the group avatar url update operation is returned.
 ///
-/// Related API:[updateGroupName], the group name is updated.
+/// Related API:[updateGroupAvatarUrl], the group name is updated.
+class ZIMGroupAvatarUrlUpdatedResult {
+  String groupID;
+  String groupAvatarUrl;
+  ZIMGroupAvatarUrlUpdatedResult(
+      {required this.groupID, required this.groupAvatarUrl});
+}
+
+/// Description: Return result of group notice update operation.
+///
+/// Use cases: After a group notice update operation is performed, the success or failure can be determined by this callback.
+///
+/// When to call /Trigger: The result of the group notice update operation is returned.
+///
+/// Related API:[updateGroupNotice], the group notice is updated.
 class ZIMGroupNoticeUpdatedResult {
   String groupID;
   String groupNotice;

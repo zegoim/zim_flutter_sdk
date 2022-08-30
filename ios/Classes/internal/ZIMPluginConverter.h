@@ -8,7 +8,7 @@
 
 +(nullable ZIMAppConfig*)oZIMAppConfig:(nullable NSDictionary *)configDic;
 
-+(nullable ZIMUserInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic;
++(nullable ZIMUsersInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic;
 
 +(nullable NSDictionary *)mZIMErrorObject:(nullable ZIMError *)errorInfo;
 

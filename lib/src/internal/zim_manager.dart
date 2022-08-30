@@ -12,7 +12,7 @@ class ZIMManager {
 
   static int handleSequence = 0;
 
-  static Map<int, ZIMEngine> engineMap = {};
+  static Map<String, ZIMEngine> engineMap = {};
 
   static ZIMEngine? instanceEngine;
 
@@ -38,6 +38,7 @@ class ZIMManager {
     if (ZIMManager.engineMap.isNotEmpty) {
       return null;
     }
+
     String handle = generateHandle();
 
     channel.invokeMethod("create", {
@@ -49,8 +50,27 @@ class ZIMManager {
         channel: channel,
         appID: config.appID,
         appSign: config.appSign);
-    if (instanceEngine == null) ZIMManager.instanceEngine = engine;
+
+    engineMap[handle] = engine;
+
+    if (instanceEngine == null) {
+      ZIMManager.instanceEngine = engine;
+    }
+
     return engine;
+  }
+
+  static bool destroyEngine(String handle) {
+
+    if(engineMap.containsKey(handle)) {
+      //engine.destroy();
+      engineMap.remove(handle);
+      instanceEngine = null;
+
+      return true;
+    }
+
+    return false;
   }
 
   static String generateHandle() {

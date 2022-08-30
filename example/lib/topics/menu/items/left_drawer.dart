@@ -56,7 +56,7 @@ class Left_drawer extends StatelessWidget {
                     title: const Text('logout'),
                     onTap: () async {
                       try {
-                        await ZIM.getInstance().logout();
+                        await ZIM.getInstance()!.logout();
                         UserModel.release();
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.setString('userID', '');

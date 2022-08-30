@@ -18,11 +18,11 @@
     return config;
 }
 
-+(nullable ZIMUserInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic{
++(nullable ZIMUsersInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
-    ZIMUserInfoQueryConfig *config = [[ZIMUserInfoQueryConfig alloc] init];
+    ZIMUsersInfoQueryConfig *config = [[ZIMUsersInfoQueryConfig alloc] init];
     config.isQueryFromServer = [[configDic safeObjectForKey:@"isQueryFromServer"] boolValue];
     return config;
 }
@@ -525,14 +525,8 @@
     [memberInfoDic safeSetObject:[NSNumber numberWithInt:memberInfo.memberRole] forKey:@"memberRole"];
     [memberInfoDic safeSetObject:memberInfo.userID forKey:@"userID"];
     [memberInfoDic safeSetObject:memberInfo.userName forKey:@"userName"];
-    [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl forKey:@"memberAvatarUrl"];
+    [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl ? memberInfo.memberAvatarUrl : @"" forKey:@"memberAvatarUrl"];
     return memberInfoDic;
-    
-    
-    
-    
-    
-    
 }
 
 +(nullable NSArray *)mZIMGroupMemberInfoList:(nullable NSArray<ZIMGroupMemberInfo *> *)memberInfoList{
@@ -654,6 +648,10 @@
     NSMutableDictionary *operatedInfoDic = [[NSMutableDictionary alloc] init];
     NSDictionary *operatedUserInfoDic = [ZIMPluginConverter mZIMGroupMemberInfo:operatedInfo.operatedUserInfo];
     [operatedInfoDic safeSetObject:operatedUserInfoDic forKey:@"operatedUserInfo"];
+    [operatedInfoDic safeSetObject:operatedInfo.userID forKey:@"userID"];
+    [operatedInfoDic safeSetObject:operatedInfo.userName forKey:@"userName"];
+    [operatedInfoDic safeSetObject:operatedInfo.memberNickname forKey:@"memberNickname"];
+    [operatedInfoDic safeSetObject:@(operatedInfo.memberRole) forKey:@"memberRole"];
     return operatedInfoDic;
 }
 

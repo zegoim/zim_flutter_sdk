@@ -43,7 +43,7 @@ class GroupListState extends State<GroupList> {
     List<GroupListCell> groupWidgetList = [];
     try {
       ZIMGroupListQueriedResult result =
-          await ZIM.getInstance().queryGroupList();
+          await ZIM.getInstance()!.queryGroupList();
       widget._groupList = result.groupList;
       for (ZIMGroup group in widget._groupList) {
         GroupListCell cell = GroupListCell(zimGroup: group);
