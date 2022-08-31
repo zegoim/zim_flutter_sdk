@@ -26,6 +26,9 @@ public:
     void clearEventSink();
     void sendEvent(FTMap retMap);
 
+public:
+    std::unordered_map<ZIM*, std::string> engineEventMap;
+
 protected:
     void onError(ZIM* zim, const ZIMError& errorInfo);
 
@@ -77,6 +80,10 @@ protected:
         const ZIMGroupFullInfo& groupInfo);
 
     void onGroupNameUpdated(ZIM* zim, const std::string& groupName,
+        const ZIMGroupOperatedInfo& operatedInfo,
+        const std::string& groupID);
+
+    void onGroupAvatarUrlUpdated(ZIM* zim, const std::string& groupAvatarUrl,
         const ZIMGroupOperatedInfo& operatedInfo,
         const std::string& groupID);
 

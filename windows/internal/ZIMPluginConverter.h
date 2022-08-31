@@ -74,7 +74,49 @@ struct ZIM_FriendlyGet_fileSize {
     typedef long long ZIMMediaMessage::* type;
 };
 
+struct ZIM_FriendlyGet_largeImageLocalPath {
+    typedef std::string ZIMImageMessage::* type;
+};
 
+struct ZIM_FriendlyGet_thumbnailLocalPath {
+    typedef std::string ZIMImageMessage::* type;
+};
+
+struct ZIM_FriendlyGet_videoFirstFrameLocalPath {
+    typedef std::string ZIMVideoMessage::* type;
+};
+
+struct ZIM_FriendlyGet_originalImageWidth {
+    typedef unsigned int ZIMImageMessage::* type;
+};
+
+struct ZIM_FriendlyGet_originalImageHeight {
+    typedef unsigned int ZIMImageMessage::* type;
+};
+
+struct ZIM_FriendlyGet_largeImageWidth {
+    typedef unsigned int ZIMImageMessage::* type;
+};
+
+struct ZIM_FriendlyGet_largeImageHeight {
+    typedef unsigned int ZIMImageMessage::* type;
+};
+
+struct ZIM_FriendlyGet_thumbnailWidth {
+    typedef unsigned int ZIMImageMessage::* type;
+};
+
+struct ZIM_FriendlyGet_thumbnailHeight {
+    typedef unsigned int ZIMImageMessage::* type;
+};
+
+struct ZIM_FriendlyGet_videoFirstFrameWidth {
+    typedef unsigned int ZIMVideoMessage::* type;
+};
+
+struct ZIM_FriendlyGet_videoFirstFrameHeight {
+    typedef unsigned int ZIMVideoMessage::* type;
+};
 
 
 class ZIMPluginConverter

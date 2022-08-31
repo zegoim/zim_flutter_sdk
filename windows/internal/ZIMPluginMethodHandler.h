@@ -38,6 +38,8 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void updateUserName(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void updateUserAvatarUrl(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void updateUserExtendedData(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryUsersInfo(flutter::EncodableMap& argument,
@@ -108,6 +110,8 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void updateGroupName(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void updateGroupAvatarUrl(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void updateGroupNotice(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryGroupInfo(flutter::EncodableMap& argument,
@@ -145,5 +149,5 @@ public:
 private:
     ZIMPluginMethodHandler() = default;
 private:
-    ZIM* zim = nullptr;
+    std::unordered_map<std::string, ZIM*> engineMap;
 };

@@ -134,6 +134,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "updateUserName") {
         ZIMPluginMethodHandler::getInstance().updateUserName(argument, std::move(result));
     }
+    else if (method_call.method_name() == "updateUserAvatarUrl") {
+        ZIMPluginMethodHandler::getInstance().updateUserAvatarUrl(argument, std::move(result));
+    }
     else if (method_call.method_name() == "updateUserExtendedData") {
         ZIMPluginMethodHandler::getInstance().updateUserExtendedData(argument, std::move(result));
     }
@@ -238,6 +241,9 @@ void ZegoZimPlugin::HandleMethodCall(
     }
     else if (method_call.method_name() == "updateGroupName") {
         ZIMPluginMethodHandler::getInstance().updateGroupName(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "updateGroupAvatarUrl") {
+        ZIMPluginMethodHandler::getInstance().updateGroupAvatarUrl(argument, std::move(result));
     }
     else if (method_call.method_name() == "updateGroupNotice") {
         ZIMPluginMethodHandler::getInstance().updateGroupNotice(argument, std::move(result));
