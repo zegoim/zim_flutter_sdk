@@ -383,6 +383,7 @@ class ZIMUserFullInfo {
   ZIMUserInfo baseInfo = ZIMUserInfo();
   String userAvatarUrl = '';
   String extendedData = '';
+  ZIMUserFullInfo();
 }
 
 class ZIMMessage {
@@ -490,20 +491,24 @@ class ZIMConversation {
   int unreadMessageCount = 0;
   ZIMMessage? lastMessage;
   int orderKey = 0;
+  ZIMConversation();
 }
 
 class ZIMConversationQueryConfig {
   ZIMConversation? nextConversation;
   int count = 0;
+  ZIMConversationQueryConfig();
 }
 
 class ZIMConversationDeleteConfig {
   bool isAlsoDeleteServerConversation = false;
+  ZIMConversationDeleteConfig();
 }
 
 class ZIMConversationChangeInfo {
   ZIMConversationEvent event = ZIMConversationEvent.added;
   ZIMConversation? conversation;
+  ZIMConversationChangeInfo();
 }
 
 class ZIMRoomInfo {
@@ -529,12 +534,14 @@ class ZIMMessageQueryConfig {
 
   /// Description: Indicates whether the query is in reverse order. The default value is NO.
   bool reverse = false;
+  ZIMMessageQueryConfig();
 }
 
 /// Delete message configuration.
 class ZIMMessageDeleteConfig {
   /// Description: Whether to remove flags for server messages. The default value is YES.
   bool isAlsoDeleteServerMessage = false;
+  ZIMMessageDeleteConfig();
 }
 
 /// Configuration for querying member.
@@ -548,6 +555,7 @@ class ZIMRoomMemberQueryConfig {
   ///
   /// Caution: To obtain messages in pages to reduce overhead, it is recommended to obtain within 100 messages at a time.
   int count = 0;
+  ZIMRoomMemberQueryConfig();
 }
 
 /// Room advanced config.
@@ -555,6 +563,7 @@ class ZIMRoomAdvancedConfig {
   /// Description: Room attributes of a room.
   Map<String, String> roomAttributes = {};
   int roomDestroyDelayTime = 0;
+  ZIMRoomAdvancedConfig();
 }
 
 /// The behavior attribute set by the room attribute.
@@ -567,6 +576,7 @@ class ZIMRoomAttributesSetConfig {
 
   /// Description: Whether to update the owner of the room attribute involved.
   bool isUpdateOwner = false;
+  ZIMRoomAttributesSetConfig();
 }
 
 /// The behavior attribute set by the room attribute.
@@ -579,11 +589,13 @@ class ZIMRoomAttributesBatchOperationConfig {
 
   /// Description: Whether to update the owner of the room attribute involved.
   bool isUpdateOwner = false;
+  ZIMRoomAttributesBatchOperationConfig();
 }
 
 class ZIMRoomAttributesDeleteConfig {
   /// Description: Whether the operation is mandatory, that is, the property of the room whose owner is another user can be deleted.
   bool isForce = false;
+  ZIMRoomAttributesDeleteConfig();
 }
 
 /// Notice of Room Attribute Change.
@@ -604,6 +616,7 @@ class ZIMErrorUserInfo {
 
   /// Description: Description Reason for the query failure.
   int reason = 0;
+  ZIMErrorUserInfo();
 }
 
 /// group information.
@@ -616,6 +629,7 @@ class ZIMGroupInfo {
 
   /// Description: Group avatar url.
   String groupAvatarUrl = "";
+  ZIMGroupInfo();
 }
 
 /// Description: complete group information.
@@ -644,6 +658,7 @@ class ZIMGroup {
   /// Description: group DND status.
   ZIMGroupMessageNotificationStatus notificationStatus =
       ZIMGroupMessageNotificationStatus.notify;
+  ZIMGroup();
 }
 
 /// Group member information.
@@ -655,6 +670,7 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
   int memberRole = ZIMGroupMemberRole.member;
   /// Description: group member avatar url.
   String memberAvatarUrl = "";
+  ZIMGroupMemberInfo();
 }
 
 /// Information that the group has operated on.
@@ -678,12 +694,14 @@ class ZIMGroupMemberQueryConfig {
 
   /// Description: nextFlag.
   int nextFlag = 0;
+  ZIMGroupMemberQueryConfig();
 }
 
 /// Group advanced configuration.
 class ZIMGroupAdvancedConfig {
   String groupNotice = "";
   Map<String, String>? groupAttributes;
+  ZIMGroupAdvancedConfig();
 }
 
 /// Group attribute update information.
@@ -693,6 +711,7 @@ class ZIMGroupAttributesUpdateInfo {
 
   /// Description: group properties.
   Map<String, String>? groupAttributes;
+  ZIMGroupAttributesUpdateInfo();
 }
 
 /// Call invitation user information.
@@ -702,6 +721,7 @@ class ZIMCallUserInfo {
 
   /// Description:  user status.
   ZIMCallUserState state = ZIMCallUserState.accepted;
+  ZIMCallUserInfo();
 }
 
 /// The behavior property of the Send Call Invitation setting.
@@ -711,24 +731,28 @@ class ZIMCallInviteConfig {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInviteConfig();
 }
 
 /// Behavior property that cancels the call invitation setting.
 class ZIMCallCancelConfig {
   /// Description: Extended field.
   String extendedData = "";
+  ZIMCallCancelConfig();
 }
 
 /// Behavior property that accept the call invitation setting.
 class ZIMCallAcceptConfig {
   /// Description: Extended field.
   String extendedData = "";
+  ZIMCallAcceptConfig();
 }
 
 /// The behavior property of the reject call invitation setting.
 class ZIMCallRejectConfig {
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallRejectConfig();
 }
 
 /// Call invitation sent message.
@@ -738,6 +762,7 @@ class ZIMCallInvitationSentInfo {
 
   /// Description: User id that has not received a call invitation.
   List<ZIMCallUserInfo> errorInvitees = [];
+  ZIMCallInvitationSentInfo();
 }
 
 /// Information to accept the call invitation.
@@ -750,6 +775,7 @@ class ZIMCallInvitationReceivedInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInvitationReceivedInfo();
 }
 
 /// Cancel the call invitation message.
@@ -759,6 +785,7 @@ class ZIMCallInvitationCancelledInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInvitationCancelledInfo();
 }
 
 /// Accept the call invitation message.
@@ -768,6 +795,7 @@ class ZIMCallInvitationAcceptedInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInvitationAcceptedInfo();
 }
 
 /// Reject the call invitation message.
@@ -777,10 +805,12 @@ class ZIMCallInvitationRejectedInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInvitationRejectedInfo();
 }
 
 class ZIMCallInvitationTimeoutInfo {
   String inviter = "";
+  ZIMCallInvitationTimeoutInfo();
 }
 
 //MARK : Result
