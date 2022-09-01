@@ -2,6 +2,9 @@ import 'internal/zim_manager.dart';
 import 'zim_defines.dart';
 
 abstract class ZIM {
+  /// Get the SDK's instance
+  /// 
+  /// When you need to call [getInstance] to get ZIM instance, Please call [create] first. Otherwise, this API will return null.
   static ZIM? getInstance() {
     return ZIMManager.getInstance();
   }
@@ -102,16 +105,39 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// [userIDs] userID list.
+  /// [config] query config.
   Future<ZIMUsersInfoQueriedResult> queryUsersInfo(
       List<String> userIDs, ZIMUserInfoQueryConfig config);
 
+  /// Available since: 2.2.0 and above.
+  ///
+  /// Description: Through this interface, you can update your user name.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// [userName] the user name you want to update.
   Future<ZIMUserNameUpdatedResult> updateUserName(String userName);
 
+  /// Available since: 2.3.0 and above.
+  ///
+  /// Description: Through this interface, you can update your user avatar url.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// [userAvatarUrl] the user avatar url you want to update.
   Future<ZIMUserAvatarUrlUpdatedResult> updateUserAvatarUrl(
       String userAvatarUrl);
 
+  /// Available since: 2.2.0 and above.
+  ///
+  /// Description: Through this interface, you can update your user extended data.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// [extendedData] the user extended data you want to update.
   Future<ZIMUserExtendedDataUpdatedResult> updateUserExtendedData(
       String extendedData);
+
 //MARK: - Conversation
 
   /// Available since: 2.1.5 and above.
@@ -519,7 +545,7 @@ abstract class ZIM {
   ///
   /// [roomID] ID of the room to operation.
   /// [config] config of the room to turn on the combination of room attributes.
-  Future<void> beginRoomAttributesBatchOperation(
+  void beginRoomAttributesBatchOperation(
       String roomID, ZIMRoomAttributesBatchOperationConfig config);
 
   /// Complete the property operation of the combined room.

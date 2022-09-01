@@ -374,7 +374,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<void> beginRoomAttributesBatchOperation(
+  void beginRoomAttributesBatchOperation(
       String roomID, ZIMRoomAttributesBatchOperationConfig config) async {
     return await channel.invokeMethod('beginRoomAttributesBatchOperation', {
       'handle': handle,
