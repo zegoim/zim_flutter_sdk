@@ -97,6 +97,9 @@
     userInfo.userID = [call.arguments objectForKey:@"userID"];
     userInfo.userName = [call.arguments objectForKey:@"userName"];
     NSString *token = [call.arguments objectForKey:@"token"];
+    if(!token) {
+        token = @"";
+    }
     [zim loginWithUserInfo:userInfo token:token callback:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             result(nil);

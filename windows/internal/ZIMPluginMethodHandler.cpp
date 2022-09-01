@@ -100,7 +100,10 @@ void ZIMPluginMethodHandler::login(flutter::EncodableMap& argument,
     ZIMUserInfo userInfo;
     userInfo.userID = std::get<std::string>(argument[FTValue("userID")]);
     userInfo.userName = std::get<std::string>(argument[FTValue("userName")]);
-    auto token = std::get<std::string>(argument[FTValue("token")]);
+    std::string token;
+    if (std::holds_alternative<std::string>(argument[FTValue("token")])) {
+        token = std::get<std::string>(argument[FTValue("token")]);
+    }
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->login(userInfo, token, [=](const ZIMError& errorInfo) {
