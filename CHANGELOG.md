@@ -46,7 +46,7 @@ ZIMEventHandler.onConnectionStateChanged = (zim, state, event, extendedData) {
 };
 ```
 
-#### 4. Remove unnecessary Future return values ​​from some APIs, so you don't need to `await` the retuen value. It contains [destroy] 、[setLogConfig]、[setCacheConfig]、[beginRoomAttributesBatchOperation].
+#### 4. Remove unnecessary Future return values ​​from some APIs, so you don't need to `await` the retuen value. It contains [destroy] 、[logout]、[setLogConfig]、[setCacheConfig]、[beginRoomAttributesBatchOperation].
 
 * old version usage:
 ```dart
@@ -56,11 +56,15 @@ await ZIM.getInstance().setLogConfig(config);
 await ZIM.getInstance().setCacheConfig(config);
 ......
 
+await ZIM.getInstance().beginRoomAttributesBatchOperation(roomID, config);
+......
+
+await ZIM.getInstance().logout();
+......
+
 await ZIM.getInstance().destroy();
 ......
 
-await ZIM.getInstance().beginRoomAttributesBatchOperation(roomID, config);
-......
 
 ```
 
@@ -73,11 +77,15 @@ ZIM.setLogConfig(config);
 ZIM.setCacheConfig(config);
 ......
 
+ZIM.getInstance()!.beginRoomAttributesBatchOperation(roomID, config);
+......
+
+ZIM.getInstance()!.logout();
+......
+
 ZIM.getInstance()!.destroy();
 ......
 
-ZIM.getInstance()!.beginRoomAttributesBatchOperation(roomID, config);
-......
 
 ```
 
