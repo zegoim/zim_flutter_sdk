@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zim_example/topics/items/dia_log_items/error_dia_log.dart';
-import 'package:zego_zim_example/topics/items/dia_log_items/token_dia_log.dart';
 import 'package:zego_zim_example/topics/items/key_center/04_token_plugin/04_token_plugin.dart';
 import 'package:zego_zim_example/topics/login/user_model.dart';
 import 'package:zego_zim_example/topics/menu/menu_page.dart';
@@ -200,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       showLoadingDialog();
 
-      await ZIM.getInstance()!.login(userInfo, token);
+      await ZIM.getInstance()!.login(userInfo);
       Navigator.of(context).pop;
       log('success');
       UserModel.shared().userInfo = userInfo;

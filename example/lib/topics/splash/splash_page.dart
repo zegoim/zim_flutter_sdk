@@ -31,7 +31,7 @@ class _myState extends State<SplashPage> {
   void _startCountDown() async {
     ZIMAppConfig appConfig = ZIMAppConfig();
     appConfig.appID = KeyCenter.appID;
-    appConfig.appSign = KeyCenter.secret;
+    appConfig.appSign = KeyCenter.appSign;
     ZIM zim = ZIM.create(appConfig)!;
     
     log('create');
