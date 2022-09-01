@@ -64,9 +64,13 @@ class GroupSetPageNameItemState extends State<GroupSetPageNameItem> {
                           try {
                             log('start');
                             ZIMGroupNameUpdatedResult result = await ZIM
-                                .getInstance()
-                                !.updateGroupName(
+                                .getInstance()!
+                                .updateGroupName(
                                     widget.newGroupName, widget.groupID);
+                            
+                            setState(() {
+                              widget.groupName = result.groupName;
+                            });
                           } on PlatformException catch (onError) {}
                           Navigator.pop(context);
                         },
@@ -79,7 +83,7 @@ class GroupSetPageNameItemState extends State<GroupSetPageNameItem> {
 
   @override
   void initState() {
-   // queryGroupInfo();
+    // queryGroupInfo();
     // registerZIMEvent();
 
     super.initState();
