@@ -13,7 +13,7 @@ public class MainActivity extends FlutterActivity {
     private static final String TAG = "ActivityPluginRegistrant";
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
-        super.configureFlutterEngine(flutterEngine);
+        //super.configureFlutterEngine(flutterEngine);
         GeneratedPluginRegistrant.registerWith(flutterEngine);
         try {
             flutterEngine.getPlugins().add(new TokenPlugin());

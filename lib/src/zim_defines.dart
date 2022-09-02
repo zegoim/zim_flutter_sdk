@@ -1,4 +1,7 @@
+import 'dart:ffi';
 import 'dart:typed_data';
+
+import 'package:zego_zim/zego_zim.dart';
 
 /// Connection state.
 ///
@@ -324,6 +327,18 @@ class ZIMCacheConfig {
   ZIMCacheConfig();
 }
 
+class ZIMAppConfig {
+  int appID = 0;
+  String appSign = '';
+  ZIMAppConfig();
+}
+
+class ZIMUserInfoQueryConfig {
+  bool isQueryFromServer = false;
+  ZIMUserInfoQueryConfig();
+}
+
+
 /// Description:Offline push configuration.
 class ZIMPushConfig {
   /// Description: Used to set the push title.
@@ -362,6 +377,13 @@ class ZIMUserInfo {
   /// User name, a string with a maximum length of 64 bytes or less.
   String userName = '';
   ZIMUserInfo();
+}
+
+class ZIMUserFullInfo {
+  ZIMUserInfo baseInfo = ZIMUserInfo();
+  String userAvatarUrl = '';
+  String extendedData = '';
+  ZIMUserFullInfo();
 }
 
 class ZIMMessage {
@@ -423,6 +445,12 @@ class ZIMImageMessage extends ZIMMediaMessage {
   String thumbnailLocalPath = '';
   String largeImageDownloadUrl = '';
   String largeImageLocalPath = '';
+  int originalImageWidth = 0;
+  int originalImageHeight = 0;
+  int largeImageWidth = 0;
+  int largeImageHeight = 0;
+  int thumbnailWidth = 0;
+  int thumbnailHeight = 0;
   ZIMImageMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.image;
   }
@@ -446,7 +474,8 @@ class ZIMVideoMessage extends ZIMMediaMessage {
   int videoDuration = 0;
   String videoFirstFrameDownloadUrl = '';
   String videoFirstFrameLocalPath = '';
-
+  int videoFirstFrameWidth = 0;
+  int videoFirstFrameHeight = 0;
   ZIMVideoMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.video;
   }
@@ -455,26 +484,31 @@ class ZIMVideoMessage extends ZIMMediaMessage {
 class ZIMConversation {
   String conversationID = '';
   String conversationName = '';
+  String conversationAvatarUrl = '';
   ZIMConversationType type = ZIMConversationType.peer;
   ZIMConversationNotificationStatus notificationStatus =
       ZIMConversationNotificationStatus.notify;
   int unreadMessageCount = 0;
   ZIMMessage? lastMessage;
   int orderKey = 0;
+  ZIMConversation();
 }
 
 class ZIMConversationQueryConfig {
   ZIMConversation? nextConversation;
   int count = 0;
+  ZIMConversationQueryConfig();
 }
 
 class ZIMConversationDeleteConfig {
   bool isAlsoDeleteServerConversation = false;
+  ZIMConversationDeleteConfig();
 }
 
 class ZIMConversationChangeInfo {
   ZIMConversationEvent event = ZIMConversationEvent.added;
   ZIMConversation? conversation;
+  ZIMConversationChangeInfo();
 }
 
 class ZIMRoomInfo {
@@ -500,12 +534,14 @@ class ZIMMessageQueryConfig {
 
   /// Description: Indicates whether the query is in reverse order. The default value is NO.
   bool reverse = false;
+  ZIMMessageQueryConfig();
 }
 
 /// Delete message configuration.
 class ZIMMessageDeleteConfig {
   /// Description: Whether to remove flags for server messages. The default value is YES.
   bool isAlsoDeleteServerMessage = false;
+  ZIMMessageDeleteConfig();
 }
 
 /// Configuration for querying member.
@@ -519,6 +555,7 @@ class ZIMRoomMemberQueryConfig {
   ///
   /// Caution: To obtain messages in pages to reduce overhead, it is recommended to obtain within 100 messages at a time.
   int count = 0;
+  ZIMRoomMemberQueryConfig();
 }
 
 /// Room advanced config.
@@ -526,6 +563,7 @@ class ZIMRoomAdvancedConfig {
   /// Description: Room attributes of a room.
   Map<String, String> roomAttributes = {};
   int roomDestroyDelayTime = 0;
+  ZIMRoomAdvancedConfig();
 }
 
 /// The behavior attribute set by the room attribute.
@@ -538,6 +576,7 @@ class ZIMRoomAttributesSetConfig {
 
   /// Description: Whether to update the owner of the room attribute involved.
   bool isUpdateOwner = false;
+  ZIMRoomAttributesSetConfig();
 }
 
 /// The behavior attribute set by the room attribute.
@@ -550,11 +589,13 @@ class ZIMRoomAttributesBatchOperationConfig {
 
   /// Description: Whether to update the owner of the room attribute involved.
   bool isUpdateOwner = false;
+  ZIMRoomAttributesBatchOperationConfig();
 }
 
 class ZIMRoomAttributesDeleteConfig {
   /// Description: Whether the operation is mandatory, that is, the property of the room whose owner is another user can be deleted.
   bool isForce = false;
+  ZIMRoomAttributesDeleteConfig();
 }
 
 /// Notice of Room Attribute Change.
@@ -575,6 +616,7 @@ class ZIMErrorUserInfo {
 
   /// Description: Description Reason for the query failure.
   int reason = 0;
+  ZIMErrorUserInfo();
 }
 
 /// group information.
@@ -584,6 +626,10 @@ class ZIMGroupInfo {
 
   /// Description: Group name.
   String groupName = "";
+
+  /// Description: Group avatar url.
+  String groupAvatarUrl = "";
+  ZIMGroupInfo();
 }
 
 /// Description: complete group information.
@@ -612,6 +658,7 @@ class ZIMGroup {
   /// Description: group DND status.
   ZIMGroupMessageNotificationStatus notificationStatus =
       ZIMGroupMessageNotificationStatus.notify;
+  ZIMGroup();
 }
 
 /// Group member information.
@@ -621,14 +668,23 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
 
   /// Description: group role.
   int memberRole = ZIMGroupMemberRole.member;
+  /// Description: group member avatar url.
+  String memberAvatarUrl = "";
+  ZIMGroupMemberInfo();
 }
 
 /// Information that the group has operated on.
 class ZIMGroupOperatedInfo {
   /// Description: Group member information.
+  /// @Deprecated
   ZIMGroupMemberInfo operatedUserInfo;
 
-  ZIMGroupOperatedInfo({required this.operatedUserInfo});
+  String userID = '';
+  String userName = '';
+  String memberNickname = '';
+  int memberRole = ZIMGroupMemberRole.member;
+
+  ZIMGroupOperatedInfo({required this.operatedUserInfo, required this.userID, required this.userName, required this.memberNickname, required this.memberRole});
 }
 
 /// group member query configuration.
@@ -638,12 +694,14 @@ class ZIMGroupMemberQueryConfig {
 
   /// Description: nextFlag.
   int nextFlag = 0;
+  ZIMGroupMemberQueryConfig();
 }
 
 /// Group advanced configuration.
 class ZIMGroupAdvancedConfig {
   String groupNotice = "";
   Map<String, String>? groupAttributes;
+  ZIMGroupAdvancedConfig();
 }
 
 /// Group attribute update information.
@@ -653,6 +711,7 @@ class ZIMGroupAttributesUpdateInfo {
 
   /// Description: group properties.
   Map<String, String>? groupAttributes;
+  ZIMGroupAttributesUpdateInfo();
 }
 
 /// Call invitation user information.
@@ -662,6 +721,7 @@ class ZIMCallUserInfo {
 
   /// Description:  user status.
   ZIMCallUserState state = ZIMCallUserState.accepted;
+  ZIMCallUserInfo();
 }
 
 /// The behavior property of the Send Call Invitation setting.
@@ -671,24 +731,28 @@ class ZIMCallInviteConfig {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInviteConfig();
 }
 
 /// Behavior property that cancels the call invitation setting.
 class ZIMCallCancelConfig {
   /// Description: Extended field.
   String extendedData = "";
+  ZIMCallCancelConfig();
 }
 
 /// Behavior property that accept the call invitation setting.
 class ZIMCallAcceptConfig {
   /// Description: Extended field.
   String extendedData = "";
+  ZIMCallAcceptConfig();
 }
 
 /// The behavior property of the reject call invitation setting.
 class ZIMCallRejectConfig {
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallRejectConfig();
 }
 
 /// Call invitation sent message.
@@ -698,6 +762,7 @@ class ZIMCallInvitationSentInfo {
 
   /// Description: User id that has not received a call invitation.
   List<ZIMCallUserInfo> errorInvitees = [];
+  ZIMCallInvitationSentInfo();
 }
 
 /// Information to accept the call invitation.
@@ -710,6 +775,7 @@ class ZIMCallInvitationReceivedInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInvitationReceivedInfo();
 }
 
 /// Cancel the call invitation message.
@@ -719,6 +785,7 @@ class ZIMCallInvitationCancelledInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInvitationCancelledInfo();
 }
 
 /// Accept the call invitation message.
@@ -728,6 +795,7 @@ class ZIMCallInvitationAcceptedInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInvitationAcceptedInfo();
 }
 
 /// Reject the call invitation message.
@@ -737,10 +805,12 @@ class ZIMCallInvitationRejectedInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+  ZIMCallInvitationRejectedInfo();
 }
 
 class ZIMCallInvitationTimeoutInfo {
   String inviter = "";
+  ZIMCallInvitationTimeoutInfo();
 }
 
 //MARK : Result
@@ -766,10 +836,25 @@ class ZIMTokenRenewedResult {
 /// [userList]  List of the userInfo queried.
 /// [errorUserList] Failed to query the userInfo list.
 class ZIMUsersInfoQueriedResult {
-  List<ZIMUserInfo> userList;
+  List<ZIMUserFullInfo> userList;
   List<ZIMErrorUserInfo> errorUserList;
   ZIMUsersInfoQueriedResult(
       {required this.userList, required this.errorUserList});
+}
+
+class ZIMUserNameUpdatedResult {
+  String userName;
+  ZIMUserNameUpdatedResult({required this.userName});
+}
+
+class ZIMUserAvatarUrlUpdatedResult {
+  String userAvatarUrl;
+  ZIMUserAvatarUrlUpdatedResult({required this.userAvatarUrl});
+}
+
+class ZIMUserExtendedDataUpdatedResult {
+  String extendedData;
+  ZIMUserExtendedDataUpdatedResult({required this.extendedData});
 }
 
 /// Available since: 2.0.0 and above.
@@ -1041,8 +1126,8 @@ class ZIMRoomAttributesQueriedResult {
 /// [errorUserList] errorUserList.
 class ZIMGroupCreatedResult {
   ZIMGroupFullInfo groupInfo;
-  List<String> userList;
-  List<String> errorUserList;
+  List<ZIMGroupMemberInfo> userList;
+  List<ZIMErrorUserInfo> errorUserList;
   ZIMGroupCreatedResult(
       {required this.groupInfo,
       required this.userList,
@@ -1146,15 +1231,31 @@ class ZIMGroupNameUpdatedResult {
   String groupID;
   String groupName;
   ZIMGroupNameUpdatedResult({required this.groupID, required this.groupName});
+
+
 }
 
-/// Description: Return result of group name update operation.
+/// Description: Return result of group avatar url update operation.
 ///
-/// Use cases: After a group name update operation is performed, the success or failure can be determined by this callback.
+/// Use cases: After a group avatar url update operation is performed, the success or failure can be determined by this callback.
 ///
-/// When to call /Trigger: The result of the group name update operation is returned.
+/// When to call /Trigger: The result of the group avatar url update operation is returned.
 ///
-/// Related API:[updateGroupName], the group name is updated.
+/// Related API:[updateGroupAvatarUrl], the group name is updated.
+class ZIMGroupAvatarUrlUpdatedResult {
+  String groupID;
+  String groupAvatarUrl;
+  ZIMGroupAvatarUrlUpdatedResult(
+      {required this.groupID, required this.groupAvatarUrl});
+}
+
+/// Description: Return result of group notice update operation.
+///
+/// Use cases: After a group notice update operation is performed, the success or failure can be determined by this callback.
+///
+/// When to call /Trigger: The result of the group notice update operation is returned.
+///
+/// Related API:[updateGroupNotice], the group notice is updated.
 class ZIMGroupNoticeUpdatedResult {
   String groupID;
   String groupNotice;
@@ -1271,6 +1372,13 @@ class ZIMGroupMemberListQueriedResult {
   int nextFlag;
   ZIMGroupMemberListQueriedResult(
       {required this.groupID, required this.userList, required this.nextFlag});
+}
+
+class ZIMGroupMemberCountQueriedResult {
+  String groupID;
+  int count;
+  ZIMGroupMemberCountQueriedResult(
+      {required this.groupID, required this.count});
 }
 
 /// Supported version: 2.0.0.

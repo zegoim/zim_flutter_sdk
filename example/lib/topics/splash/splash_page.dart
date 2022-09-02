@@ -29,7 +29,11 @@ class _myState extends State<SplashPage> {
 
   //倒计时
   void _startCountDown() async {
-    await ZIM.getInstance().create(KeyCenter.appID);
+    ZIMAppConfig appConfig = ZIMAppConfig();
+    appConfig.appID = KeyCenter.appID;
+    appConfig.appSign = KeyCenter.appSign;
+    ZIM zim = ZIM.create(appConfig)!;
+    
     log('create');
     final prefs = await SharedPreferences.getInstance();
     final String? userID = prefs.getString('userID');
@@ -42,9 +46,9 @@ class _myState extends State<SplashPage> {
           _countTimer = null;
 
           if (userID != null && userID != '' && isResetZIM == false) {
-            await ZIM.getInstance().destroy();
+            ZIM.getInstance()!.destroy();
             log('destory');
-            await ZIM.getInstance().create(KeyCenter.appID);
+            ZIM.create(appConfig);
             log('create');
             isResetZIM = true;
           }
@@ -79,7 +83,7 @@ class _myState extends State<SplashPage> {
       try {
         String token = await TokenPlugin.makeToken(userInfo.userID);
 
-        await ZIM.getInstance().login(userInfo, token);
+        await ZIM.getInstance()!.login(userInfo, token);
         log('success');
         _countTimer?.cancel();
         _countTimer = null;
@@ -163,7 +167,7 @@ class _myState extends State<SplashPage> {
       // });
     }
   }
-  
+
   @override
   void dispose() {
     // TODO: implement dispose

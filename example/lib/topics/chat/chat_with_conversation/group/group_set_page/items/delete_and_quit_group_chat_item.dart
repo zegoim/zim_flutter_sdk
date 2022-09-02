@@ -34,9 +34,9 @@ class DeleteAndQuitGroupChatItemState
               try {
                 ZIM
                     .getInstance()
-                    .leaveGroup(widget.groupID)
+                    !.leaveGroup(widget.groupID)
                     .then((value) => {
-                      ZIM.getInstance().deleteConversation(widget.groupID, ZIMConversationType.group, deleteConfig)
+                      ZIM.getInstance()!.deleteConversation(widget.groupID, ZIMConversationType.group, deleteConfig)
                     });
                 
                 Navigator.pop(context);

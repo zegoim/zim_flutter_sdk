@@ -85,7 +85,7 @@ class _MenuPageState extends State<MenuPage> {
                       });
                       await ZIM
                           .getInstance()
-                          .login(UserModel.shared().userInfo!, token);
+                          !.login(UserModel.shared().userInfo!, token);
                       setState(() {
                         widget.isConnecting = false;
                         widget.isDisConnected = false;
@@ -167,13 +167,13 @@ class _MenuPageState extends State<MenuPage> {
 
   registerZIMEvent() {
     ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated =
-        (totalUnreadMessageCount) {
+        (zim, totalUnreadMessageCount) {
       setState(() {
         widget.totalUnreadMsg = totalUnreadMessageCount;
       });
     };
 
-    ZIMEventHandler.onConnectionStateChanged = (state, event, extendedData) {
+    ZIMEventHandler.onConnectionStateChanged = (zim, state, event, extendedData) {
       switch (state) {
         case ZIMConnectionState.connected:
           setState(() {

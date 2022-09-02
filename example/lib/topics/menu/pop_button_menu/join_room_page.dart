@@ -72,7 +72,7 @@ class _PageState extends State<JoinRoomPage> {
                       onPressed: (() async {
                         FocusScope.of(context).requestFocus(FocusNode());
                         try {
-                          ZIMRoomJoinedResult result = await ZIM.getInstance().joinRoom(targetRoomID);
+                          ZIMRoomJoinedResult result = await ZIM.getInstance()!.joinRoom(targetRoomID);
 
                           Navigator.pop(context);
                           Navigator.push(context,

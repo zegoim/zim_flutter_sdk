@@ -72,16 +72,20 @@ class _PageState extends State<CreatePeerPage> {
                       onPressed: (() async {
                         FocusScope.of(context).requestFocus(FocusNode());
                         try {
-                          ZIMUsersInfoQueriedResult result = await ZIM
-                              .getInstance()
-                              .queryUsersInfo([targetUserID]);
+                          // ZIMUsersInfoQueriedResult result = await ZIM
+                          //     .getInstance()
+                          //     .queryUsersInfo([targetUserID]);
                           Navigator.pop(context);
                           Navigator.push(context,
                               MaterialPageRoute(builder: ((context) {
+                            // return PeerChatPage(
+                            //     conversationID: result.userList.first.baseInfo.userID,
+                            //     conversationName:
+                            //         result.userList.first.baseInfo.userID);
                             return PeerChatPage(
-                                conversationID: result.userList.first.userID,
+                                conversationID: targetUserID,
                                 conversationName:
-                                    result.userList.first.userID);
+                                    targetUserID);
                           })));
                         } on PlatformException catch (onError) {
                           ErrorDiaLog.showFailedDialog(

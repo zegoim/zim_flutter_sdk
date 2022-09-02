@@ -6,94 +6,101 @@
 #import "NSObject+safeInvoke.h"
 @interface ZIMPluginConverter:NSObject
 
-+(nullable NSDictionary *)cnvZIMErrorObjectToDic:(nullable ZIMError *)errorInfo;
++(nullable ZIMAppConfig*)oZIMAppConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSDictionary *)cnvZIMUserInfoObjectToBasic:(nullable ZIMUserInfo *)userInfo;
++(nullable ZIMUsersInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSArray *)cnvZIMUserInfoListTobasicList:(nullable NSArray<ZIMUserInfo *> *)userInfoList;
++(nullable NSDictionary *)mZIMErrorObject:(nullable ZIMError *)errorInfo;
 
-+(nullable ZIMConversation *)cnvZIMConversationDicToObject:(nullable NSDictionary *)conversationDic;
 
-+(nullable ZIMMessage *)cnvZIMMessageDicToObject:(nullable NSDictionary *)messageDic;
++(nullable NSDictionary *)mZIMUserFullInfo:(nullable ZIMUserFullInfo *)userFullInfo;
 
-+(nullable NSDictionary *)cnvZIMMessageObjectToDic:(nullable ZIMMessage *)message;
++(nullable NSDictionary *)mZIMUserInfo:(nullable ZIMUserInfo *)userInfo;
 
-+(nullable NSArray *)cnvZIMConversationListObjectToBasic:(nullable NSArray<ZIMConversation *> *)conversationList;
++(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList;
 
-+(nullable ZIMConversationDeleteConfig *)cnvZIMConversationDeleteConfigDicToObject:(nullable NSMutableDictionary *)configDic;
++(nullable ZIMConversation *)oZIMConversation:(nullable NSDictionary *)conversationDic;
 
-+(nullable NSArray *)cnvConversationChangeInfoListToBasicList:(nullable NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList;
++(nullable ZIMMessage *)oZIMMessage:(nullable NSDictionary *)messageDic;
 
-+(nullable ZIMMessageSendConfig *)cnvZIMMessageSendConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable NSDictionary *)mZIMMessage:(nullable ZIMMessage *)message;
 
-+(nullable ZIMMessageQueryConfig *)cnvZIMMessageQueryConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable NSArray *)mZIMConversationList:(nullable NSArray<ZIMConversation *> *)conversationList;
 
-+(nullable NSArray *)cnvZIMMessageListToDicList:(nullable NSArray<ZIMMessage *>*)messageList;
++(nullable ZIMConversationDeleteConfig *)oZIMConversationDeleteConfig:(nullable NSMutableDictionary *)configDic;
 
-+(nullable NSArray<ZIMMessage *>*)cnvBasicListToZIMMessageList:(nullable NSArray *)basicList;
++(nullable NSArray *)mConversationChangeInfoList:(nullable NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList;
 
-+(nullable ZIMMessageDeleteConfig *)cnvZIMMessageDeleteConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable ZIMMessageSendConfig *)oZIMMessageSendConfig:(nullable NSDictionary *)configDic;
 
-+(nullable ZIMRoomInfo *)cnvZIMRoomInfoBasicToObject:(nullable NSDictionary *)roomInfoDic;
++(nullable ZIMMessageQueryConfig *)oZIMMessageQueryConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSDictionary *)cnvZIMRoomInfoObjectToBasic:(nullable ZIMRoomInfo *)roomInfo;
++(nullable NSArray *)mZIMMessageList:(nullable NSArray<ZIMMessage *>*)messageList;
 
-+(nullable NSDictionary *)cnvZIMRoomFullInfoObjectToDic:(nullable ZIMRoomFullInfo *)roomFullInfo;
++(nullable NSArray<ZIMMessage *>*)oZIMMessageList:(nullable NSArray *)basicList;
 
-+(nullable ZIMRoomAdvancedConfig *)cnvZIMRoomAdvancedConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable ZIMMessageDeleteConfig *)oZIMMessageDeleteConfig:(nullable NSDictionary *)configDic;
 
-+(nullable ZIMRoomMemberQueryConfig *)cnvZIMRoomMemberQueryConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable ZIMRoomInfo *)oZIMRoomInfo:(nullable NSDictionary *)roomInfoDic;
 
-+(nullable ZIMRoomAttributesSetConfig *)cnvZIMRoomAttributesSetConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable NSDictionary *)mZIMRoomInfo:(nullable ZIMRoomInfo *)roomInfo;
 
-+(nullable ZIMRoomAttributesDeleteConfig *)cnvZIMRoomAttributesDeleteConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable NSDictionary *)mZIMRoomFullInfo:(nullable ZIMRoomFullInfo *)roomFullInfo;
 
-+(nullable ZIMRoomAttributesBatchOperationConfig *)cnvZIMRoomAttributesBatchOperationConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable ZIMRoomAdvancedConfig *)oZIMRoomAdvancedConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSDictionary *)cnvZIMRoomAttributesUpdateInfoObjectToDic:(nullable ZIMRoomAttributesUpdateInfo *)updateInfo;
++(nullable ZIMRoomMemberQueryConfig *)oZIMRoomMemberQueryConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSArray *)cnvZIMRoomAttributesUpdateInfoListToBasicList:(nullable NSArray<ZIMRoomAttributesUpdateInfo *> *)updateInfoList;
++(nullable ZIMRoomAttributesSetConfig *)oZIMRoomAttributesSetConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSDictionary *)cnvZIMGroupInfoObjectToDic:(nullable ZIMGroupInfo *)groupInfo;
++(nullable ZIMRoomAttributesDeleteConfig *)oZIMRoomAttributesDeleteConfig:(nullable NSDictionary *)configDic;
 
-+(nullable ZIMGroupInfo *)cnvZIMGroupInfoDicToObject:(nullable NSDictionary *)groupInfoDic;
++(nullable ZIMRoomAttributesBatchOperationConfig *)oZIMRoomAttributesBatchOperationConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSDictionary *)cnvZIMGroupMemberInfoObjectToDic:(nullable ZIMGroupMemberInfo *)memberInfo;
++(nullable NSDictionary *)mZIMRoomAttributesUpdateInfo:(nullable ZIMRoomAttributesUpdateInfo *)updateInfo;
 
-+(nullable NSArray *)cnvZIMGroupMemberInfoListToBasicList:(nullable NSArray<ZIMGroupMemberInfo *> *)memberInfoList;
++(nullable NSArray *)mZIMRoomAttributesUpdateInfoList:(nullable NSArray<ZIMRoomAttributesUpdateInfo *> *)updateInfoList;
 
-+(nullable NSDictionary *)cnvZIMErrorUserInfoToDic:(nullable ZIMErrorUserInfo *)errorUserInfo;
++(nullable NSDictionary *)mZIMGroupInfo:(nullable ZIMGroupInfo *)groupInfo;
 
-+(nullable NSArray *)cnvZIMErrorUserInfoListToBasicList:(nullable NSArray<ZIMErrorUserInfo *> *)errorUserInfoList;
++(nullable ZIMGroupInfo *)oZIMGroupInfo:(nullable NSDictionary *)groupInfoDic;
 
-+(nullable NSDictionary *)cnvZIMGroupFullInfoObjectToDic:(nullable ZIMGroupFullInfo *)groupFullInfo;
++(nullable NSDictionary *)mZIMGroupMemberInfo:(nullable ZIMGroupMemberInfo *)memberInfo;
 
-+(nullable NSDictionary *)cnvZIMGroupAdvancedConfigObjectToDic:(nullable ZIMGroupAdvancedConfig *)config;
++(nullable NSArray *)mZIMGroupMemberInfoList:(nullable NSArray<ZIMGroupMemberInfo *> *)memberInfoList;
 
-+(nullable ZIMGroupAdvancedConfig *)cnvZIMGroupAdvancedConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable NSDictionary *)mZIMErrorUserInfo:(nullable ZIMErrorUserInfo *)errorUserInfo;
 
-+(nullable NSDictionary*)cnvZIMGroupObjectToDic:(nullable ZIMGroup *)group;
++(nullable NSArray *)mZIMErrorUserInfoList:(nullable NSArray<ZIMErrorUserInfo *> *)errorUserInfoList;
 
-+(nullable NSArray*)cnvZIMGroupListToBasicList:(nullable NSArray<ZIMGroup *> *)groupList;
++(nullable NSDictionary *)mZIMGroupFullInfo:(nullable ZIMGroupFullInfo *)groupFullInfo;
 
-+(nullable NSDictionary *)cnvZIMGroupMemberQueryConfigObjectToDic:(nullable ZIMGroupMemberQueryConfig *)config;
++(nullable NSDictionary *)mZIMGroupAdvancedConfig:(nullable ZIMGroupAdvancedConfig *)config;
 
-+(nullable ZIMGroupMemberQueryConfig *)cnvZIMGroupMemberQueryConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable ZIMGroupAdvancedConfig *)oZIMGroupAdvancedConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSDictionary *)cnvZIMGroupOperatedInfoObjectToDic:(nullable ZIMGroupOperatedInfo *)operatedInfo;
++(nullable NSDictionary*)mZIMGroup:(nullable ZIMGroup *)group;
 
-+(nullable NSDictionary *)cnvZIMGroupAttributesUpdateInfoObjectToDic:(nullable ZIMGroupAttributesUpdateInfo *)updateInfo;
++(nullable NSArray*)mZIMGroupList:(nullable NSArray<ZIMGroup *> *)groupList;
 
-+(nullable NSArray *)cnvZIMGroupAttributesUpdateInfoListToBasicList:(nullable NSArray<ZIMGroupAttributesUpdateInfo *> *)updateInfoList;
++(nullable NSDictionary *)mZIMGroupMemberQueryConfig:(nullable ZIMGroupMemberQueryConfig *)config;
 
-+(nullable ZIMCallInviteConfig *)cnvZIMCallInviteConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable ZIMGroupMemberQueryConfig *)oZIMGroupMemberQueryConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSDictionary *)cnvZIMCallInvitationSentInfoObjectToDic:(nullable ZIMCallInvitationSentInfo *)info;
++(nullable NSDictionary *)mZIMGroupOperatedInfo:(nullable ZIMGroupOperatedInfo *)operatedInfo;
 
-+(nullable ZIMCallCancelConfig *)cnvZIMCallCancelConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable NSDictionary *)mZIMGroupAttributesUpdateInfo:(nullable ZIMGroupAttributesUpdateInfo *)updateInfo;
 
-+(nullable ZIMCallAcceptConfig *)cnvZIMCallAcceptConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable NSArray *)mZIMGroupAttributesUpdateInfoList:(nullable NSArray<ZIMGroupAttributesUpdateInfo *> *)updateInfoList;
 
-+(nullable ZIMCallRejectConfig *)cnvZIMCallRejectConfigDicToObject:(nullable NSDictionary *)configDic;
++(nullable ZIMCallInviteConfig *)oZIMCallInviteConfig:(nullable NSDictionary *)configDic;
+
++(nullable NSDictionary *)mZIMCallInvitationSentInfo:(nullable ZIMCallInvitationSentInfo *)info;
+
++(nullable ZIMCallCancelConfig *)oZIMCallCancelConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMCallAcceptConfig *)oZIMCallAcceptConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMCallRejectConfig *)oZIMCallRejectConfig:(nullable NSDictionary *)configDic;
 
 @end

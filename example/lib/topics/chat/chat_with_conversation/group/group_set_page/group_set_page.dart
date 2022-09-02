@@ -90,7 +90,7 @@ class GroupSetPageState extends State<GroupSetPage> {
   }
 
   registerZIMEvent() {
-    ZIMEventHandler.onGroupNameUpdated = (groupName, operatedInfo, groupID) {
+    ZIMEventHandler.onGroupNameUpdated = (zim, groupName, operatedInfo, groupID) {
       if (groupID != widget.myGroupFullInfo.baseInfo.groupID) {
         return;
       }
@@ -100,7 +100,7 @@ class GroupSetPageState extends State<GroupSetPage> {
     };
 
     ZIMEventHandler.onGroupNoticeUpdated =
-        (groupNotice, operatedInfo, groupID) {
+        (zim, groupNotice, operatedInfo, groupID) {
       if (groupID != widget.myGroupFullInfo.baseInfo.groupID) {
         return;
       }

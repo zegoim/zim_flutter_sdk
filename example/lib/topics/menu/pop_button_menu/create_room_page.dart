@@ -98,7 +98,7 @@ class _PageState extends State<CreateRoomPage> {
                           ZIMRoomInfo roomInfo = ZIMRoomInfo();
                           roomInfo.roomID = targetRoomID;
                           roomInfo.roomName = targetRoomName;
-                          await ZIM.getInstance().createRoom(roomInfo);
+                          await ZIM.getInstance()!.createRoom(roomInfo);
                           Navigator.pop(context);
                           Navigator.push(context,
                               MaterialPageRoute(builder: ((context) {

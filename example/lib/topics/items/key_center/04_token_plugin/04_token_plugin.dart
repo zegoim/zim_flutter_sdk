@@ -8,7 +8,7 @@ class TokenPlugin {
     Map resultMap = await _channel.invokeMethod('makeToken', {
       "appID":KeyCenter.appID,
       "userID":userID,
-      "secret":KeyCenter.secret,
+      "secret":'',
     });
     return resultMap['token'];
   }
