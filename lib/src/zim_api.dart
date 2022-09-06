@@ -3,7 +3,7 @@ import 'zim_defines.dart';
 
 abstract class ZIM {
   /// Get the SDK's instance
-  /// 
+  ///
   /// When you need to call [getInstance] to get ZIM instance, Please call [create] first. Otherwise, this API will return null.
   static ZIM? getInstance() {
     return ZIMManager.getInstance();

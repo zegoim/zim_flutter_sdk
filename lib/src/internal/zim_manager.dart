@@ -41,10 +41,9 @@ class ZIMManager {
 
     String handle = generateHandle();
 
-    channel.invokeMethod("create", {
-      "handle": handle,
-      "config": ZIMConverter.mZIMAppConfig(config)
-    });
+    channel.invokeMethod("create",
+        {"handle": handle, "config": ZIMConverter.mZIMAppConfig(config)});
+        
     ZIMEngine engine = ZIMEngine(
         handle: handle,
         channel: channel,
@@ -61,8 +60,7 @@ class ZIMManager {
   }
 
   static bool destroyEngine(String handle) {
-
-    if(engineMap.containsKey(handle)) {
+    if (engineMap.containsKey(handle)) {
       //engine.destroy();
       engineMap.remove(handle);
       instanceEngine = null;

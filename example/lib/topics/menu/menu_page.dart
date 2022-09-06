@@ -11,7 +11,7 @@ import 'package:zego_zim_example/topics/menu/items/group_list.dart';
 import 'package:zego_zim_example/topics/menu/items/left_drawer.dart';
 import 'package:zego_zim_example/topics/menu/pop_button_menu/pop_button_menu.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:html';
 
 class MenuPage extends StatefulWidget {
   int totalUnreadMsg = 0;
@@ -56,7 +56,7 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   void initState() {
-    registerZIMEvent();
+    // registerZIMEvent();
     super.initState();
   }
 
@@ -84,8 +84,8 @@ class _MenuPageState extends State<MenuPage> {
                         widget.isDisConnected = false;
                       });
                       await ZIM
-                          .getInstance()
-                          !.login(UserModel.shared().userInfo!, token);
+                          .getInstance()!
+                          .login(UserModel.shared().userInfo!, token);
                       setState(() {
                         widget.isConnecting = false;
                         widget.isDisConnected = false;
@@ -166,6 +166,7 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   registerZIMEvent() {
+    window.console.error("111111111");
     ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated =
         (zim, totalUnreadMessageCount) {
       setState(() {
@@ -173,7 +174,8 @@ class _MenuPageState extends State<MenuPage> {
       });
     };
 
-    ZIMEventHandler.onConnectionStateChanged = (zim, state, event, extendedData) {
+    ZIMEventHandler.onConnectionStateChanged =
+        (zim, state, event, extendedData) {
       switch (state) {
         case ZIMConnectionState.connected:
           setState(() {

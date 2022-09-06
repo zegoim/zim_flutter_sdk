@@ -8,6 +8,7 @@ import 'package:zego_zim_example/topics/items/dia_log_items/error_dia_log.dart';
 import 'package:zego_zim_example/topics/items/key_center/04_token_plugin/04_token_plugin.dart';
 import 'package:zego_zim_example/topics/login/user_model.dart';
 import 'package:zego_zim_example/topics/menu/menu_page.dart';
+import 'dart:html';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -198,8 +199,7 @@ class _LoginPageState extends State<LoginPage> {
   login(String token) async {
     try {
       showLoadingDialog();
-
-      await ZIM.getInstance()!.login(userInfo);
+      await ZIM.getInstance()!.login(userInfo, token);
       Navigator.of(context).pop;
       log('success');
       UserModel.shared().userInfo = userInfo;

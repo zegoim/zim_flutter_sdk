@@ -11,6 +11,7 @@ import 'package:zego_zim_example/topics/menu/menu_page.dart';
 
 import '../items/key_center/04_token_plugin/04_token_plugin.dart';
 import '../login/user_model.dart';
+import 'dart:html';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -32,9 +33,8 @@ class _myState extends State<SplashPage> {
     ZIMAppConfig appConfig = ZIMAppConfig();
     appConfig.appID = KeyCenter.appID;
     appConfig.appSign = KeyCenter.appSign;
-    ZIM zim = ZIM.create(appConfig)!;
-    
-    log('create');
+    ZIM.create(appConfig)!;
+
     final prefs = await SharedPreferences.getInstance();
     final String? userID = prefs.getString('userID');
     final String? userName = prefs.getString('userName');
@@ -44,12 +44,11 @@ class _myState extends State<SplashPage> {
         if (_countDown < 1) {
           _countTimer?.cancel();
           _countTimer = null;
-
           if (userID != null && userID != '' && isResetZIM == false) {
             ZIM.getInstance()!.destroy();
-            log('destory');
+            window.console.warn('destory');
             ZIM.create(appConfig);
-            log('create');
+            window.console.warn('create');
             isResetZIM = true;
           }
           Navigator.pushAndRemoveUntil(

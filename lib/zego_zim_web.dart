@@ -42,12 +42,11 @@ class ZegoZimPlugin {
       _eventListener(event);
     });*/
 
-    var element = ScriptElement()
-      ..src =
-          'assets/packages/zego_zim/assets/index.js'
-      ..type = 'application/javascript';
+    // var element = ScriptElement()
+    //   ..src = 'assets/packages/zego_zim/assets/index.js'
+    //   ..type = 'application/javascript';
 
-    document.body!.append(element);
+    // document.body!.append(element);
   }
 
   Future<dynamic> handleMethodCall(MethodCall call) async {
@@ -55,34 +54,46 @@ class ZegoZimPlugin {
       case 'getVersion':
         return getVersion();
       case 'create':
-        return create(call.arguments['appConfig']);
+        return create(call.arguments['config']);
       case 'destroy':
         return destroy();
       case 'login':
-        return login(call.arguments['userInfo'], call.arguments['token']);
+        return login(call.arguments['userID'], call.arguments['userName'],
+            call.arguments['token']);
     }
   }
 
-  static void _eventListener(dynamic event) {
-  }
+  static void _eventListener(dynamic event) {}
 
   static String getVersion() {
     return ZIM.getVersion();
   }
 
   static Future<void> create(dynamic appConfig) async {
-    ZIM.create(appConfig);
+    ZIMAppConfig _appConfig = ZIMAppConfig(appID: appConfig["appID"]);
+
+    ZIM.create(_appConfig);
+    return Future.value();
   }
 
   static Future<void> destroy() async {
     ZIM.destroy();
+
+    return Future.value();
   }
 
-  static Future<void> login(dynamic userInfo, String token) async {
-    if(ZIM.getInstance() == null) {
+  static Future<void> login(
+      String userID, String userName, String token) async {
+    ;
+
+    ZIMUserInfo _userInfo = ZIMUserInfo(userID: userID, userName: userName);
+
+    if (ZIM.getInstance() == null) {
       return Future.value();
     }
-    dynamic result = await handleThenable(ZIM.getInstance()!.login(userInfo, token));
-    return;
+
+    ZIM.getInstance()!.login(_userInfo, token);
+    return Future.value();
+    ;
   }
 }
