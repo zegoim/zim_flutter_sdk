@@ -56,7 +56,7 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   void initState() {
-    // registerZIMEvent();
+    registerZIMEvent();
     super.initState();
   }
 
@@ -166,7 +166,6 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   registerZIMEvent() {
-    window.console.error("111111111");
     ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated =
         (zim, totalUnreadMessageCount) {
       setState(() {

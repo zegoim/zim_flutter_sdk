@@ -211,7 +211,7 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [groupName] The updated group avatar url.
   /// [operatedInfo] Operation information after the group avatar url is updated.
-  /// [groupID] The groupID where the group avatar url update occurred.  
+  /// [groupID] The groupID where the group avatar url update occurred.
   static void Function(ZIM zim, String groupAvatarUrl, ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupAvatarUrlUpdated;
 
@@ -334,7 +334,7 @@ class ZIMEventHandler {
   /// Note: This callback will not be called if the user is not online.
   ///
   /// Related interface: [callAccept].
-  /// 
+  ///
   /// [zim] ZIM instance.
   /// [info]  Information about the call invitations.
   /// [callID]  callID.
@@ -373,7 +373,7 @@ class ZIMEventHandler {
   /// Restrictions: If the user is not the inviter of the call invitation or is not online, the callback will not be received.
   ///
   /// Related APIs:[callReject].
-  /// 
+  ///
   /// [zim] ZIM instance.
   /// [callID]  callID.
   static void Function(ZIM zim, String callID)? onCallInvitationTimeout;

@@ -43,7 +43,7 @@ class ZIMManager {
 
     channel.invokeMethod("create",
         {"handle": handle, "config": ZIMConverter.mZIMAppConfig(config)});
-        
+
     ZIMEngine engine = ZIMEngine(
         handle: handle,
         channel: channel,

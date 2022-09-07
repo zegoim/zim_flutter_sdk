@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
 import 'package:flutter/services.dart';
 import 'package:zego_zim/src/internal/zim_engine.dart';
 import 'zim_common_data.dart';
