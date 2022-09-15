@@ -34,7 +34,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.zego_zim
+        package: im.zego.zim_flutter
         pluginClass: ZegoZimPlugin
       ios:
         pluginClass: ZegoZimPlugin

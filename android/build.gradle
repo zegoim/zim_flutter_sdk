@@ -1,4 +1,4 @@
-group 'com.example.zego_zim'
+group 'im.zego.zim_flutter'
 version '2.3.3'
 
 buildscript {

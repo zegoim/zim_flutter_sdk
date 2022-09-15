@@ -1,4 +1,4 @@
-package com.example.zego_zim.internal;
+package im.zego.zim_flutter.internal;
 
 
 import java.lang.reflect.Field;
