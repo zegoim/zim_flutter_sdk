@@ -59,7 +59,7 @@ class ZIMEngine implements ZIM {
   Future<ZIMUsersInfoQueriedResult> queryUsersInfo(
       List<String> userIDs, ZIMUserInfoQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryUsersInfo', {
-      'hanlde': handle,
+      'handle': handle,
       'userIDs': userIDs,
       'config': ZIMConverter.mZIMUserInfoQueryConfig(config)
     });

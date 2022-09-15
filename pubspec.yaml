@@ -42,10 +42,6 @@ flutter:
         pluginClass: ZegoZimPlugin
       macos:
         pluginClass: ZegoZimPlugin
-      web:
-        pluginClass: ZegoZimPlugin
-        fileName: zim_web.dart
-
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
