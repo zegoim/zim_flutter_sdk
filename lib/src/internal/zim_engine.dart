@@ -89,7 +89,7 @@ class ZIMEngine implements ZIM {
       'handle': handle,
       'config': ZIMConverter.mZIMConversationQueryConfig(config)
     });
-    return ZIMConverter.oZIMConversationListQueriedResult(resultMap);
+    return ZIMConverter.oZIMConversationListQueriedResult (resultMap);
   }
 
   @override

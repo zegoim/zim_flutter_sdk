@@ -26,7 +26,7 @@ class ZIMManager {
 
   static setLogConfig(ZIMLogConfig config) {
     channel.invokeMethod(
-        'setLogConfig', {'logPath': config.logPath, 'logSize': config.logSize});
+        'setLogConfig', {'logPath': config.logPath, 'logSize': config.logSize, 'logLevel': config.logLevel});
   }
 
   static setCacheConfig(ZIMCacheConfig config) {
@@ -41,9 +41,10 @@ class ZIMManager {
 
     String handle = generateHandle();
 
-    channel.invokeMethod("create",
-        {"handle": handle, "config": ZIMConverter.mZIMAppConfig(config)});
-
+    channel.invokeMethod("create", {
+      "handle": handle,
+      "config": ZIMConverter.mZIMAppConfig(config)
+    });
     ZIMEngine engine = ZIMEngine(
         handle: handle,
         channel: channel,
@@ -60,7 +61,8 @@ class ZIMManager {
   }
 
   static bool destroyEngine(String handle) {
-    if (engineMap.containsKey(handle)) {
+
+    if(engineMap.containsKey(handle)) {
       //engine.destroy();
       engineMap.remove(handle);
       instanceEngine = null;

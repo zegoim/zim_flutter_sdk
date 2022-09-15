@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import 'package:js/js_util.dart' as js;
 import 'dart:js';
 
 import 'package:flutter/services.dart';
@@ -12,11 +13,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:js/js_util.dart';
 import 'package:zego_zim/src/internal/zim_common_data.dart';
+import 'package:zego_zim/src/internal/zim_converter.dart';
 import 'package:zego_zim/src/internal/zim_engine.dart';
 import 'package:zego_zim/src/internal/zim_manager.dart';
 import 'package:zego_zim/src/zim_defines.dart';
 import 'package:zego_zim/src/zim_defines_web.dart';
 import 'package:zego_zim/src/zim_event_handler.dart';
+
 
 
 /// A web implementation of the ZimFlutterSdkPlatform of the ZimFlutterSdk plugin.
@@ -65,7 +68,7 @@ class ZegoZimPlugin {
       case 'destroy':
         return destroy();
       case 'setLogConfig':
-        return setLogConfig(call.arguments["logPath"], call.arguments["logSize"]);
+        return setLogConfig(call.arguments["logLevel"]);
       case 'setCacheConfig':
         return setCacheConfig();
       case 'login':
@@ -125,6 +128,8 @@ class ZegoZimPlugin {
         return sendGroupMessage(call.arguments["message"], call.arguments["toGroupID"], call.arguments["config"]);
       case 'deleteMessages':
         return deleteMessages(call.arguments["messageList"], call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["config"]);
+      case 'deleteAllMessage':
+        return deleteAllMessage(call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["config"]);
       case 'createGroup':
         return createGroup(call.arguments["groupInfo"], call.arguments["userIDs"], call.arguments["config"]);
       case 'joinGroup':
@@ -267,7 +272,7 @@ class ZegoZimPlugin {
   }
 
   static Future<void> create(String handle, dynamic appConfig) async {
-    ZIMAppConfigWeb _appConfig = ZIMAppConfigWeb(appID: appConfig["appID"]);
+    Object _appConfig = mapToJSObj(appConfig);
 
     ZIM? zim = ZIM.create(_appConfig);
 
@@ -288,10 +293,12 @@ class ZegoZimPlugin {
     return Future.value();
   }
 
-  static Future<void> setLogConfig(String logPath, int logSize) {
-    // window.console.warn(config);
+  static Future<void> setLogConfig(int logLevel) {
+    Map config = {
+      "logLevel": logLevel
+    };
 
-    // ZIM.getInstance()?.setLogConfig(config);
+    ZIM.getInstance()?.setLogConfig(mapToJSObj(config));
 
     return Future.value();
   }
@@ -322,15 +329,65 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> queryConversationList(dynamic config) async {
-    final Map<dynamic, dynamic> map = {};
-    map["conversationList"] = [];
-
-    final count = config["count"];
-    final nextConversation = config["nextConversation"];
-
-    ZIMConversationQueryConfigWeb _config = ZIMConversationQueryConfigWeb(count:count, nextConversation: nextConversation);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.queryConversationList(_config));
+
+    Map resultMap = {
+      "conversationList": []
+    };
+
+    result.conversationList.forEach((conversation) {
+      Map _conversation = {
+        "conversationID": conversation.conversationID,
+        "conversationName": conversation.conversationName,
+        "conversationAvatarUrl": conversation.conversationAvatarUrl,
+        "unreadMessageCount": conversation.unreadMessageCount,
+        "orderKey": conversation.orderKey,
+        "lastMessage": {
+          "type": conversation.lastMessage.type,
+          "message": conversation.lastMessage.message,
+          "localMessageID": int.parse(conversation.lastMessage.localMessageID),
+          "messageID": int.parse(conversation.lastMessage.messageID),
+          "senderUserID": conversation.lastMessage.senderUserID,
+          "timestamp": conversation.lastMessage.timestamp,
+          "conversationID": conversation.lastMessage.conversationID,
+          "conversationType": conversation.lastMessage.conversationType,
+          "direction": conversation.lastMessage.direction,
+          "sentStatus": conversation.lastMessage.sentStatus,
+          "orderKey": conversation.lastMessage.orderKey,
+          "conversationSeq": conversation.lastMessage.conversationSeq,
+          "fileLocalPath": conversation.lastMessage.fileLocalPath,
+
+          "thumbnailDownloadUrl": conversation.lastMessage.thumbnailDownloadUrl,
+          "thumbnailLocalPath": conversation.lastMessage.thumbnailLocalPath,
+          "largeImageDownloadUrl": conversation.lastMessage.largeImageDownloadUrl,
+          "largeImageLocalPath": conversation.lastMessage.largeImageLocalPath,
+          "originalImageHeight": conversation.lastMessage.originalImageHeight,
+          "originalImageWidth": conversation.lastMessage.originalImageWidth,
+          "largeImageHeight": conversation.lastMessage.largeImageHeight,
+          "largeImageWidth": conversation.lastMessage.largeImageWidth,
+          "thumbnailHeight": conversation.lastMessage.thumbnailHeight,
+          "thumbnailWidth": conversation.lastMessage.thumbnailWidth,
+
+          "audioDuration": conversation.lastMessage.audioDuration,
+          "videoDuration": conversation.lastMessage.videoDuration,
+          "videoFirstFrameDownloadUrl": conversation.lastMessage.videoFirstFrameDownloadUrl,
+          "videoFirstFrameLocalPath": conversation.lastMessage.videoFirstFrameLocalPath,
+          "videoFirstFrameHeight": conversation.lastMessage.videoFirstFrameHeight,
+          "videoFirstFrameWidth": conversation.lastMessage.videoFirstFrameWidth,
+
+          "fileDownloadUrl": conversation.lastMessage.fileDownloadUrl,
+          "fileUID": conversation.lastMessage.fileUID,
+          "fileName": conversation.lastMessage.fileName,
+          "fileSize": conversation.lastMessage.fileSize
+        }
+      };
+
+
+
+      resultMap["conversationList"].add(_conversation);
+    });
 
     return Future.value({
       "conversationList": result.conversationList
@@ -365,8 +422,7 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic,dynamic>> queryUsersInfo(dynamic userIDs, dynamic config) async {
-    window.console.warn(userIDs);
-    ZIMUsersInfoQueryConfigWeb _config = ZIMUsersInfoQueryConfigWeb(isQueryFromServer: config["isQueryFromServer"]);
+    Object _config = mapToJSObj(config);
 
     var _result = await promiseToFuture(ZIM.getInstance()!.queryUsersInfo(userIDs, _config));
 
@@ -377,109 +433,107 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> clearConversationUnreadMessageCount(String conversationID, int conversationType) async {
-    Map result = await promiseToFuture(ZIM.getInstance()!.clearConversationUnreadMessageCount(conversationID, conversationType));
+    final result = await promiseToFuture(ZIM.getInstance()!.clearConversationUnreadMessageCount(conversationID, conversationType));
 
-    window.console.error(result);
-
-    return result;
+    return {
+      "conversationID": result.conversationID,
+      "conversationType": result.conversationType
+    };
   }
 
   Future<Map<dynamic, dynamic>> queryHistoryMessage(String conversationID, int conversationType, dynamic config) async {
-    var nextMessage = config["nextMessage"];
-    var count = config["count"];
-    var reverse = config["reverse"];
-    var result = {};
 
-    try {
-      ZIMMessageQueryConfigWeb _config = ZIMMessageQueryConfigWeb(nextMessage: nextMessage, count: count, reverse: reverse);
 
-      final _result = await promiseToFuture(ZIM.getInstance()!.queryHistoryMessage(conversationID, conversationType, _config));
+    Object _config = mapToJSObj(config);
 
-      result = {
-        "conversationID": _result.conversationID,
-        "conversationType": _result.conversationType,
-        "messageList": []
-      };
+    final _result = await promiseToFuture(ZIM.getInstance()!.queryHistoryMessage(conversationID, conversationType, _config));
 
-      _result.messageList.forEach((messageObj)  {
-        result["messageList"].add({
-          "localMessageID": messageObj.localMessageID,
-          "messageID": messageObj.messageID,
-          "senderUserID": messageObj.senderUserID,
-          "timestamp": messageObj.timestamp,
-          "conversationID": messageObj.conversationID,
-          "conversationType": messageObj.conversationType,
-          "direction": messageObj.direction,
-          "sentStatus": messageObj.sentStatus,
-          "orderKey": messageObj.orderKey,
-          "conversationSeq": messageObj.conversationSeq
-        });
+    final resultMap = {
+      "conversationID": _result.conversationID,
+      "conversationType": _result.conversationType,
+      "messageList": []
+    };
+
+    _result.messageList.forEach((messageObj)  {
+      resultMap["messageList"].add({
+        "type": messageObj.type,
+        "message": messageObj.message,
+        "localMessageID": int.parse(messageObj.localMessageID),
+        "messageID": int.parse(messageObj.messageID),
+        "senderUserID": messageObj.senderUserID,
+        "timestamp": messageObj.timestamp,
+        "conversationID": messageObj.conversationID,
+        "conversationType": messageObj.conversationType,
+        "direction": messageObj.direction,
+        "sentStatus": messageObj.sentStatus,
+        "orderKey": messageObj.orderKey,
+        "conversationSeq": messageObj.conversationSeq,
+        "fileLocalPath": messageObj.fileLocalPath,
+
+        "thumbnailDownloadUrl": messageObj.thumbnailDownloadUrl,
+        "thumbnailLocalPath": messageObj.thumbnailLocalPath,
+        "largeImageDownloadUrl": messageObj.largeImageDownloadUrl,
+        "largeImageLocalPath": messageObj.largeImageLocalPath,
+        "originalImageHeight": messageObj.originalImageHeight,
+        "originalImageWidth": messageObj.originalImageWidth,
+        "largeImageHeight": messageObj.largeImageHeight,
+        "largeImageWidth": messageObj.largeImageWidth,
+        "thumbnailHeight": messageObj.thumbnailHeight,
+        "thumbnailWidth": messageObj.thumbnailWidth,
+
+        "audioDuration": messageObj.audioDuration,
+        "videoDuration": messageObj.videoDuration,
+        "videoFirstFrameDownloadUrl": messageObj.videoFirstFrameDownloadUrl,
+        "videoFirstFrameLocalPath": messageObj.videoFirstFrameLocalPath,
+        "videoFirstFrameHeight": messageObj.videoFirstFrameHeight,
+        "videoFirstFrameWidth": messageObj.videoFirstFrameWidth,
+
+        "fileDownloadUrl": messageObj.fileDownloadUrl,
+        "fileUID": messageObj.fileUID,
+        "fileName": messageObj.fileName,
+        "fileSize": messageObj.fileSize
       });
-    } on PlatformException catch (error) {
-      result = {};
-    }
+    });
 
-    return result;
+
+    return resultMap;
   }
 
   Future<Map<dynamic, dynamic>> createRoom(dynamic roomInfo, dynamic config) async {
-    var result = {};
-    var _result;
-    final roomID = roomInfo["roomID"];
-    final roomName = roomInfo["roomName"];
 
-    ZIMRoomInfoWeb _roomInfo = ZIMRoomInfoWeb(roomID: roomID, roomName: roomName);
+    Object _roomInfo = mapToJSObj(roomInfo);
+    Object _config = mapToJSObj(config);
 
-    if (config != null) {
-      final roomAttributes = config["roomAttributes"];
-      final roomDestroyDelayTime = config["roomDestroyDelayTime"];
+    final result = await promiseToFuture(ZIM.getInstance()!.createRoom(_roomInfo, _config));
 
-      ZIMRoomAdvancedConfigWeb _config = ZIMRoomAdvancedConfigWeb(roomAttributes: roomAttributes, roomDestroyDelayTime: roomDestroyDelayTime);
-      _result = await promiseToFuture(ZIM.getInstance()!.createRoom(_roomInfo, _config));
-    } else {
-      _result = await promiseToFuture(ZIM.getInstance()!.createRoom(_roomInfo, null));
-    }
-
-    result = {
+    final resultMap = {
       "roomInfo": {
         "baseInfo": {
-          "roomID": _result.roomInfo.baseInfo.roomID,
-          "roomName":  _result.roomInfo.baseInfo.roomName
+          "roomID": result.roomInfo.baseInfo.roomID,
+          "roomName":  result.roomInfo.baseInfo.roomName
         }
       }
     };
 
-    return result;
+    return resultMap;
   }
 
   Future<Map<dynamic, dynamic>> enterRoom(dynamic roomInfo, dynamic config) async {
-    var result = {};
-    var _result;
-    final roomID = roomInfo["roomID"];
-    final roomName = roomInfo["roomName"];
+    Object _roomInfo = mapToJSObj(roomInfo);
+    Object _config = mapToJSObj(config);
 
-    ZIMRoomInfoWeb _roomInfo = ZIMRoomInfoWeb(roomID: roomID,roomName: roomName);
+    final result = await promiseToFuture(ZIM.getInstance()!.enterRoom(_roomInfo, _config));
 
-    if (config != null) {
-      final roomAttributes = config["roomAttributes"];
-      final roomDestroyDelayTime = config["roomDestroyDelayTime"];
-
-      ZIMRoomAdvancedConfigWeb _config = ZIMRoomAdvancedConfigWeb(roomAttributes: roomAttributes, roomDestroyDelayTime: roomDestroyDelayTime);
-      _result = await promiseToFuture(ZIM.getInstance()!.enterRoom(_roomInfo, _config));
-    } else {
-      _result = await promiseToFuture(ZIM.getInstance()!.enterRoom(_roomInfo, null));
-    }
-
-    result = {
+    final resultMap = {
       "roomInfo": {
         "baseInfo": {
-          "roomID": _result.roomInfo.baseInfo.roomID,
-          "roomName":  _result.roomInfo.baseInfo.roomName
+          "roomID": result.roomInfo.baseInfo.roomID,
+          "roomName":  result.roomInfo.baseInfo.roomName
         }
       }
     };
 
-    return result;
+    return resultMap;
    }
 
   Future<Map<dynamic, dynamic>> joinRoom(String roomID) async {
@@ -504,9 +558,7 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> queryRoomMemberList(String roomID, dynamic config) async {
-    final count = config["count"];
-    final nextFlag = config["nextFlag"];
-    ZIMRoomMemberQueryConfigWeb _config = ZIMRoomMemberQueryConfigWeb(count: count, nextFlag: nextFlag);
+    Object _config = mapToJSObj(config);
 
     final _result = await promiseToFuture(ZIM.getInstance()!.queryRoomMemberList(roomID, _config));
 
@@ -539,35 +591,33 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> queryRoomAllAttributes(String roomID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.queryRoomAllAttributes(roomID));
 
+    String attr = ZIM.toJSON(result.roomAttributes);
+
     return {
       "roomID": result.roomID,
-      "roomAttributes": result.roomAttributes
+      "roomAttributes": jsonDecode(attr)
     };
   }
 
   Future<Map<dynamic, dynamic>> setRoomAttributes(Map roomAttributes, String roomID, dynamic config) async {
-    final isDeleteAfterOwnerLeft = config["isDeleteAfterOwnerLeft"];
-    final isForce = config["isForce"];
-    final isUpdateOwner = config["isUpdateOwner"];
-    ZIMRoomAttributesSetConfigWeb _config = ZIMRoomAttributesSetConfigWeb(isDeleteAfterOwnerLeft: isDeleteAfterOwnerLeft, isForce: isForce, isUpdateOwner: isUpdateOwner);
+    Object _config = mapToJSObj(config);
 
-    final _result = await promiseToFuture(ZIM.getInstance()!.setRoomAttributes(roomAttributes, roomID, _config));
+    final result = await promiseToFuture(ZIM.getInstance()!.setRoomAttributes(roomAttributes, roomID, _config));
 
-    final result = {
-      "roomID": _result.roomID,
+    final resultMap = {
+      "roomID": result.roomID,
       "errorKeys": []
     };
 
-    _result.errorKeys.forEach((error) {
-      result["errorKeys"].add(error);
+    result.errorKeys.forEach((error) {
+      resultMap["errorKeys"].add(error);
     });
 
-    return result;
+    return resultMap;
   }
 
   Future<Map<dynamic, dynamic>> deleteRoomAttributes(dynamic keys, String roomID, dynamic config) async {
-    final isForce = config["isForce"];
-    ZIMRoomAttributesDeleteConfigWeb _config = ZIMRoomAttributesDeleteConfigWeb(isForce: isForce);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.deleteRoomAttributes(keys, roomID, _config));
 
@@ -578,10 +628,7 @@ class ZegoZimPlugin {
   }
 
   Future<void> beginRoomAttributesBatchOperation(String roomID, dynamic config) async {
-    final isForce = config["isForce"];
-    final isDeleteAfterOwnerLeft = config["isDeleteAfterOwnerLeft"];
-    final isUpdateOwner = config["isDeleteAfterOwnerLeft"];
-    ZIMRoomAttributesBatchOperationConfigWeb _config = ZIMRoomAttributesBatchOperationConfigWeb(isForce: isForce, isDeleteAfterOwnerLeft: isDeleteAfterOwnerLeft, isUpdateOwner: isUpdateOwner);
+    Object _config = mapToJSObj(config);
 
     await promiseToFuture(ZIM.getInstance()!.beginRoomAttributesBatchOperation(roomID, _config));
 
@@ -597,19 +644,10 @@ class ZegoZimPlugin {
     };
   }
 
-  Future<Map<dynamic, dynamic>> sendMediaMessage(dynamic message,String toConversationID, dynamic conversationType, dynamic config, int progressID) async {
-    ZIMMediaMessageBaseWeb _message = ZIMMediaMessageBaseWeb(
-      type: message["type"],
-      fileLocalPath: message["fileLocalPath"],
-      fileDownloadUrl: message["fileDownloadUrl"],
-      fileName: message["fileName"],
-      fileSize: message["fileSize"]
-    );
+  Future<Map<dynamic, dynamic>> sendMediaMessage(dynamic message, String toConversationID, dynamic conversationType, dynamic config, int progressID) async {
+    Object _message = mapToJSObj(message);
 
-    ZIMPushConfigWeb _pushConfig = ZIMPushConfigWeb(content: config["pushConfig"]["content"], title: config["pushConfig"]["title"], extendedData: config["pushConfig"]["extendedData"]);
-
-
-    ZIMMessageSendConfigWeb _config = ZIMMessageSendConfigWeb(priority: config["priority"], pushConfig: _pushConfig);
+    Object _config = mapToJSObj(config);
 
     ZIMMediaDownloadingProgress? progress = ZIMCommonData.mediaDownloadingProgressMap[progressID];
 
@@ -632,25 +670,7 @@ class ZegoZimPlugin {
       }
     })));
 
-    final _result = result["message"];
-
-    ZIMMessage _zimMessage = ZIMMessage();
-    _zimMessage.conversationID = _result.conversationID;
-    _zimMessage.conversationSeq = _result.conversationSeq;
-    _zimMessage.messageID = _result.messageID;
-    _zimMessage.senderUserID = _result.senderUserID;
-    _zimMessage.timestamp = _result.timestamp;
-    _zimMessage.orderKey = _result.orderKey;
-    _zimMessage.localMessageID = _result.localMessageID;
-    _zimMessage.type = ZIMMessageType.values[_result.type];
-    _zimMessage.direction = ZIMMessageDirection.values[_result.direction];
-    _zimMessage.sentStatus = ZIMMessageSentStatus.values[_result.sendStatus];
-    _zimMessage.conversationType = ZIMConversationType.values[_result.conversationType];
-
-
-    return {
-      "message": _zimMessage
-    };
+    return handleSendMessageResult(result);
   }
 
   Future<Map<dynamic, dynamic>> downloadMediaFile(dynamic message, dynamic fileType, int progressID) async {
@@ -659,130 +679,61 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> sendPeerMessage(dynamic message, String toUserID, dynamic config) async  {
-    ZIMMessageBaseWeb _message = ZIMMessageBaseWeb(message: message["message"], type: message["type"]);
-    ZIMPushConfigWeb _pushConfig = ZIMPushConfigWeb(content: config["pushConfig"]["content"], title: config["pushConfig"]["title"], extendedData: config["pushConfig"]["extendedData"]);
-
-    ZIMMessageSendConfigWeb _config = ZIMMessageSendConfigWeb(priority: config["priority"], pushConfig: _pushConfig);
+    Object _message = mapToJSObj(message);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.sendPeerMessage(_message, toUserID, _config));
 
-    final _result = result["message"];
-
-    ZIMMessage _zimMessage = ZIMMessage();
-    _zimMessage.conversationID = _result.conversationID;
-    _zimMessage.conversationSeq = _result.conversationSeq;
-    _zimMessage.messageID = _result.messageID;
-    _zimMessage.senderUserID = _result.senderUserID;
-    _zimMessage.timestamp = _result.timestamp;
-    _zimMessage.orderKey = _result.orderKey;
-    _zimMessage.localMessageID = _result.localMessageID;
-    _zimMessage.type = ZIMMessageType.values[_result.type];
-    _zimMessage.direction = ZIMMessageDirection.values[_result.direction];
-    _zimMessage.sentStatus = ZIMMessageSentStatus.values[_result.sendStatus];
-    _zimMessage.conversationType = ZIMConversationType.values[_result.conversationType];
-
-
-    return {
-      "message": _zimMessage
-    };
+    return handleSendMessageResult(result);
   }
 
   Future <Map<dynamic, dynamic>> sendRoomMessage(dynamic message, String toRoomID, dynamic config) async {
-    ZIMMessageBaseWeb _message = ZIMMessageBaseWeb(message: message["message"], type: message["type"]);
-    ZIMPushConfigWeb _pushConfig = ZIMPushConfigWeb(content: config["pushConfig"]["content"], title: config["pushConfig"]["title"], extendedData: config["pushConfig"]["extendedData"]);
-
-    ZIMMessageSendConfigWeb _config = ZIMMessageSendConfigWeb(priority: config["priority"], pushConfig: _pushConfig);
+    Object _message = mapToJSObj(message);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.sendRoomMessage(_message, toRoomID, _config));
 
-    final _result = result["message"];
-
-    ZIMMessage _zimMessage = ZIMMessage();
-    _zimMessage.conversationID = _result.conversationID;
-    _zimMessage.conversationSeq = _result.conversationSeq;
-    _zimMessage.messageID = _result.messageID;
-    _zimMessage.senderUserID = _result.senderUserID;
-    _zimMessage.timestamp = _result.timestamp;
-    _zimMessage.orderKey = _result.orderKey;
-    _zimMessage.localMessageID = _result.localMessageID;
-    _zimMessage.type = ZIMMessageType.values[_result.type];
-    _zimMessage.direction = ZIMMessageDirection.values[_result.direction];
-    _zimMessage.sentStatus = ZIMMessageSentStatus.values[_result.sendStatus];
-    _zimMessage.conversationType = ZIMConversationType.values[_result.conversationType];
-
-
-    return {
-      "message": _zimMessage
-    };
+    return handleSendMessageResult(result);
   }
 
   Future <Map<dynamic, dynamic>> sendGroupMessage(dynamic message, String toGroupID, dynamic config) async {
-    ZIMMessageBaseWeb _message = ZIMMessageBaseWeb(message: message["message"], type: message["type"]);
-    ZIMPushConfigWeb _pushConfig = ZIMPushConfigWeb(content: config["pushConfig"]["content"], title: config["pushConfig"]["title"], extendedData: config["pushConfig"]["extendedData"]);
-
-    ZIMMessageSendConfigWeb _config = ZIMMessageSendConfigWeb(priority: config["priority"], pushConfig: _pushConfig);
+    Object _message = mapToJSObj(message);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.sendGroupMessage(_message, toGroupID, _config));
 
-    final _result = result["message"];
-
-    ZIMMessage _zimMessage = ZIMMessage();
-    _zimMessage.conversationID = _result.conversationID;
-    _zimMessage.conversationSeq = _result.conversationSeq;
-    _zimMessage.messageID = _result.messageID;
-    _zimMessage.senderUserID = _result.senderUserID;
-    _zimMessage.timestamp = _result.timestamp;
-    _zimMessage.orderKey = _result.orderKey;
-    _zimMessage.localMessageID = _result.localMessageID;
-    _zimMessage.type = ZIMMessageType.values[_result.type];
-    _zimMessage.direction = ZIMMessageDirection.values[_result.direction];
-    _zimMessage.sentStatus = ZIMMessageSentStatus.values[_result.sendStatus];
-    _zimMessage.conversationType = ZIMConversationType.values[_result.conversationType];
-
-
-    return {
-      "message": _zimMessage
-    };
+    return handleSendMessageResult(result);
   }
 
   Future <Map<dynamic, dynamic>> deleteMessages(dynamic messageList, String conversationID, dynamic conversationType, dynamic config) async {
-    ZIMMessageDeleteConfigWeb _config = ZIMMessageDeleteConfigWeb(isAlsoDeleteServerMessage: config["isAlsoDeleteServerMessage"]);
+    Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.deleteMessages(messageList, conversationID, conversationType, config));
+    final result = await promiseToFuture(ZIM.getInstance()!.deleteMessages(messageList, conversationID, conversationType, _config));
 
     return {
-      conversationID: result.conversationID,
-      conversationType: result.conversationType
+      "conversationID": result.conversationID,
+      "conversationType": result.conversationType
     };
   }
 
   Future <Map<dynamic, dynamic>> deleteAllMessage(String conversationID, dynamic conversationType, dynamic config) async {
-    ZIMMessageDeleteConfigWeb _config = ZIMMessageDeleteConfigWeb(isAlsoDeleteServerMessage: config["isAlsoDeleteServerMessage"]);
+    Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.deleteAllMessage(conversationID, conversationType, config));
+    final result = await promiseToFuture(ZIM.getInstance()!.deleteAllMessage(conversationID, conversationType, _config));
 
     return {
-      conversationID: result.conversationID,
-      conversationType: result.conversationType
+      "conversationID": result.conversationID,
+      "conversationType": result.conversationType
     };
   }
 
   Future <Map<dynamic, dynamic>> createGroup(dynamic groupInfo, dynamic userIDs, dynamic config) async {
-    final groupID = groupInfo["groupID"];
-    final groupAvatarUrl = groupInfo["groupAvatarUrl"];
-    final groupName = groupInfo["groupName"];
-    ZIMGroupInfoWeb _groupInfo = ZIMGroupInfoWeb(groupID: groupID, groupAvatarUrl: groupAvatarUrl, groupName: groupName);
-    ZIMGroupAdvancedConfigWeb? _config;
-
-    if (config != null) {
-      final groupNotice = config["groupNotice"];
-      final groupAttributes = config["groupAttributes"];
-      _config = ZIMGroupAdvancedConfigWeb(groupAttributes: groupAttributes, groupNotice: groupNotice);
-    }
+    Object _groupInfo = mapToJSObj(groupInfo);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.createGroup(_groupInfo, userIDs, _config));
 
-    jsonDecode(JsObject.fromBrowserObject(result.groupInfo.groupAttributes).toString());
+    String attr = ZIM.toJSON(result.groupInfo.groupAttributes);
 
     Map resultMap = {
       "groupInfo": {
@@ -792,7 +743,7 @@ class ZegoZimPlugin {
           "groupAvatarUrl": result.groupInfo.baseInfo.groupAvatarUrl
         },
         "groupNotice": result.groupInfo.groupNotice,
-        "groupAttributes": {}
+        "groupAttributes": jsonDecode(attr)
       },
       "userList": [],
       "errorUserList": []
@@ -820,6 +771,9 @@ class ZegoZimPlugin {
 
   Future <Map<dynamic, dynamic>> joinGroup(String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.joinGroup(groupID));
+
+    String attr = ZIM.toJSON(result.groupInfo.groupAttributes);
+
     return {
       "groupInfo": {
         "baseInfo": {
@@ -827,8 +781,8 @@ class ZegoZimPlugin {
           "groupName": result.groupInfo.baseInfo.groupName,
           "groupAvatarUrl": result.groupInfo.baseInfo.groupAvatarUrl
         },
-        "groupNotice": result.groupInfo.groupNotice,
-        "groupAttributes": result.groupInfo.groupAttributes
+        "groupNotice": result.groupInfo.groupNotice is String ? result.groupInfo.groupNotice : "",
+        "groupAttributes": jsonDecode(attr)
       }
     };
   }
@@ -936,7 +890,7 @@ class ZegoZimPlugin {
   Future <Map<dynamic, dynamic>> queryGroupInfo(String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.queryGroupInfo(groupID));
 
-    window.console.warn(JsObject.fromBrowserObject(result.groupInfo.groupAttributes));
+    String attr = ZIM.toJSON(result.groupInfo.groupAttributes);
 
     return {
       "groupInfo": {
@@ -946,7 +900,7 @@ class ZegoZimPlugin {
           "groupAvatarUrl": result.groupInfo.baseInfo.groupAvatarUrl is String? result.groupInfo.baseInfo.groupAvatarUrl : ""
         },
         "groupNotice": result.groupInfo.groupNotice is String? result.groupInfo.groupNotice : "",
-        "groupAttributes": {}
+        "groupAttributes": jsonDecode(attr)
       }
     };
   }
@@ -954,9 +908,23 @@ class ZegoZimPlugin {
   Future <Map<dynamic, dynamic>> queryGroupList() async {
     final result = await promiseToFuture(ZIM.getInstance()!.queryGroupList());
 
-    return {
-      "groupList": result.groupList
+    Map resultMap = {
+      "groupList": []
     };
+
+    result.groupList.forEach((group) {
+      resultMap["groupList"].add({
+        "baseInfo": {
+          "groupID": group.baseInfo.groupID,
+          "groupName": group.baseInfo.groupName,
+          "groupAvatarUrl": group.baseInfo.groupAvatarUrl is String ? group.baseInfo.groupAvatarUrl : ""
+        },
+        "notificationStatus": group.notificationStatus
+      });
+    });
+
+
+    return resultMap;
   }
 
   Future <Map<dynamic, dynamic>> setGroupAttributes(Map<dynamic, dynamic> groupAttributes, String groupID) async {
@@ -980,18 +948,22 @@ class ZegoZimPlugin {
   Future <Map<dynamic, dynamic>> queryGroupAttributes(List<String> keys, String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.queryGroupAttributes(keys, groupID));
 
+    String attr = ZIM.toJSON(result.groupAttributes);
+
     return {
       "groupID": result.groupID,
-      "groupAttributes": JsObject.fromBrowserObject(result.groupAttributes)
+      "groupAttributes": jsonDecode(attr)
     };
   }
 
   Future <Map<dynamic, dynamic>> queryGroupAllAttributes(String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.queryGroupAllAttributes(groupID));
 
+    String attr = ZIM.toJSON(result.groupAttributes);
+
     return {
       "groupID": result.groupID,
-      "groupAttributes": result.groupAttributes
+      "groupAttributes": jsonDecode(attr)
     };
   }
 
@@ -1031,14 +1003,7 @@ class ZegoZimPlugin {
   }
 
   Future <Map<dynamic, dynamic>> queryGroupMemberList(String groupID, dynamic config) async {
-    ZIMGroupMemberQueryConfigWeb? _config;
-
-    if (config != null) {
-      final count = config["count"];
-      final nextFlag = config["nextFlag"];
-
-      _config = ZIMGroupMemberQueryConfigWeb(count: count,nextFlag: nextFlag);
-    }
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.queryGroupMemberList(groupID, _config));
 
@@ -1062,11 +1027,7 @@ class ZegoZimPlugin {
   }
 
   Future <Map<dynamic, dynamic>> deleteConversation(String conversationID,dynamic conversationType, dynamic config) async {
-    ZIMConversationDeleteConfigWeb? _config;
-    if (config != null) {
-      bool isAlsoDeleteServerConversation = config["isAlsoDeleteServerConversation"];
-      _config = ZIMConversationDeleteConfigWeb(isAlsoDeleteServerConversation: isAlsoDeleteServerConversation);
-    }
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.deleteConversation(conversationID, conversationType, _config));
 
@@ -1086,12 +1047,7 @@ class ZegoZimPlugin {
   }
 
   Future <Map<dynamic, dynamic>> callInvite(List<String> invitees, dynamic config) async {
-    ZIMCallInviteConfigWeb? _config;
-
-    if (config != null) {
-      final extendedData = config["extendedData"];
-      ZIMCallInviteConfigWeb _config = ZIMCallInviteConfigWeb(extendedData: extendedData);
-    }
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.callInvite(invitees, _config));
 
@@ -1114,8 +1070,7 @@ class ZegoZimPlugin {
   }
 
   Future <Map<dynamic, dynamic>> callCancel(List<String> invitees, String callID, dynamic config) async {
-    final extendedData = config["extendedData"];
-    ZIMCallCancelConfigWeb _config = ZIMCallCancelConfigWeb(extendedData: extendedData);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.callCancel(invitees, callID, _config));
 
@@ -1128,8 +1083,7 @@ class ZegoZimPlugin {
   }
 
   Future <Map<dynamic, dynamic>> callAccept(String callID, dynamic config) async {
-    final extendedData = config["extendedData"];
-    ZIMCallAcceptConfigWeb _config = ZIMCallAcceptConfigWeb(extendedData: extendedData);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.callAccept(callID, _config));
 
@@ -1139,8 +1093,7 @@ class ZegoZimPlugin {
   }
 
   Future <Map<dynamic, dynamic>> callReject(String callID, dynamic config) async {
-    final extendedData = config["extendedData"];
-    ZIMCallRejectConfigWeb _config = ZIMCallRejectConfigWeb(extendedData: extendedData);
+    Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.callReject(callID, _config));
 
@@ -1168,9 +1121,10 @@ class ZegoZimPlugin {
   static void errorHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onError == null) return;
 
+    final code = data["code"];
+    final message = data["message"];
 
-    ZIMEventHandler.onError!(zim, ZIMError(code: data["code"], message: data["message"]));
-
+    ZIMEventHandler.onError!(zim, ZIMError(code: code, message: message));
 
   }
 
@@ -1186,24 +1140,11 @@ class ZegoZimPlugin {
   static void receiveRoomMessageHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onReceiveRoomMessage == null) return;
 
-    List<ZIMMessage> messageList = [];
     final fromConversationID =  data["fromConversationID"];
 
-    data["messageList"].forEach((msg)  {
-      ZIMMessage zMsg = ZIMMessage();
-      zMsg.localMessageID = msg.localMessageID;
-      zMsg.messageID = msg.messageID;
-      zMsg.senderUserID = msg.senderUserID;
-      zMsg.timestamp = msg.timestamp;
-      zMsg.conversationID = msg.conversationID;
-      zMsg.conversationType = ZIMConversationType.values[msg.conversationType];
-      zMsg.direction = ZIMMessageDirection.values[msg.direction];
-      zMsg.sentStatus = ZIMMessageSentStatus.values[msg.sentStatus];
-      zMsg.orderKey = msg.orderKey;
-      zMsg.conversationSeq = msg.conversationSeq;
-
-      messageList.add(zMsg);
-    });
+    handleReceiveMessage(data['messageList']);
+    List<ZIMMessage> messageList =
+            ZIMConverter.oZIMMessageList(data['messageList']);
 
     ZIMEventHandler.onReceiveRoomMessage!(zim, messageList, fromConversationID);
 
@@ -1231,10 +1172,10 @@ class ZegoZimPlugin {
     String roomID = data["roomID"];
 
     infos.forEach((info) {
-
+        String roomAttributes = ZIM.toJSON(info.roomAttributes);
         ZIMRoomAttributesUpdateAction action = ZIMRoomAttributesUpdateAction.values[info.action];
 
-        ZIMEventHandler.onRoomAttributesUpdated!(zim, ZIMRoomAttributesUpdateInfo(action: action, roomAttributes: info.roomAttributes), roomID);
+        ZIMEventHandler.onRoomAttributesUpdated!(zim, ZIMRoomAttributesUpdateInfo(action: action, roomAttributes: jsonDecode(roomAttributes)), roomID);
 
     });
 
@@ -1249,9 +1190,11 @@ class ZegoZimPlugin {
     List<ZIMRoomAttributesUpdateInfo> list = [];
 
     infos.forEach((info) {
+      String roomAttributes = ZIM.toJSON(info.roomAttributes);
+
       ZIMRoomAttributesUpdateAction action = ZIMRoomAttributesUpdateAction.values[info.action];
 
-      list.add(ZIMRoomAttributesUpdateInfo(action: action, roomAttributes: info.roomAttributes));
+      list.add(ZIMRoomAttributesUpdateInfo(action: action, roomAttributes: jsonDecode(roomAttributes)));
 
     });
 
@@ -1297,55 +1240,23 @@ class ZegoZimPlugin {
   static void receivePeerMessageHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onReceivePeerMessage == null) return;
 
-    final messageList = data["memberList"];
     String fromConversationID = data["fromConversationID"];
-    List<ZIMMessage> list = [];
+    handleReceiveMessage(data["messageList"]);
+    List<ZIMMessage> messageList =
+            ZIMConverter.oZIMMessageList(data['messageList']);
 
-    messageList.forEach((message) {
-      ZIMMessage msg = ZIMMessage();
-      msg.type = ZIMMessageType.values[message.type];
-      msg.messageID = message.messageID;
-      msg.localMessageID = message.localMessageID;
-      msg.senderUserID = message.senderUserID;
-      msg.conversationID = message.conversationID;
-      msg.direction = ZIMMessageDirection.values[message.direction];
-      msg.sentStatus = ZIMMessageSentStatus.values[message.sentStatus];
-      msg.conversationType = ZIMConversationType.values[message.conversationType];
-      msg.timestamp = message.timestamp;
-      msg.conversationSeq = message.conversationSeq;
-      msg.orderKey = message.orderKey;
-
-      list.add(msg);
-    });
-
-    ZIMEventHandler.onReceivePeerMessage!(zim, list, fromConversationID);
+    ZIMEventHandler.onReceivePeerMessage!(zim, messageList, fromConversationID);
   }
 
   static void receiveGroupMessageHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onReceiveGroupMessage == null) return;
 
-    final messageList = data["memberList"];
     String fromConversationID = data["fromConversationID"];
-    List<ZIMMessage> list = [];
+    handleReceiveMessage(data["messageList"]);
+    List<ZIMMessage> messageList =
+            ZIMConverter.oZIMMessageList(data['messageList']);
 
-    messageList.forEach((message) {
-      ZIMMessage msg = ZIMMessage();
-      msg.type = ZIMMessageType.values[message.type];
-      msg.messageID = message.messageID;
-      msg.localMessageID = message.localMessageID;
-      msg.senderUserID = message.senderUserID;
-      msg.conversationID = message.conversationID;
-      msg.direction = ZIMMessageDirection.values[message.direction];
-      msg.sentStatus = ZIMMessageSentStatus.values[message.sentStatus];
-      msg.conversationType = ZIMConversationType.values[message.conversationType];
-      msg.timestamp = message.timestamp;
-      msg.conversationSeq = message.conversationSeq;
-      msg.orderKey = message.orderKey;
-
-      list.add(msg);
-    });
-
-    ZIMEventHandler.onReceiveGroupMessage!(zim, list, fromConversationID);
+    ZIMEventHandler.onReceiveGroupMessage!(zim, messageList, fromConversationID);
   }
 
   static void groupStateChangedHandle(ZIMEngine zim, dynamic data) {
@@ -1353,33 +1264,8 @@ class ZegoZimPlugin {
 
     final state = ZIMGroupState.values[data["state"]];
     final event = ZIMGroupEvent.values[data["event"]];
-    final groupID = data["groupID"];
-    final userID = data["operatedInfo"].userID;
-    final userName = data["operatedInfo"].userID;
-    final memberNickname = data["operatedInfo"].memberNickname;
-    final memberRole = data["operatedInfo"].memberRole;
 
-    ZIMGroupMemberInfo operatedUserInfo = ZIMGroupMemberInfo();
-
-    operatedUserInfo.userID = data["operatedInfo"].operatedUserInfo.userID;
-    operatedUserInfo.userName = data["operatedInfo"].operatedUserInfo.userName;
-    operatedUserInfo.memberRole = data["operatedInfo"].operatedUserInfo.memberRole;
-    operatedUserInfo.memberNickname = data["operatedInfo"].operatedUserInfo.memberNickname;
-    operatedUserInfo.memberAvatarUrl = data["operatedInfo"].operatedUserInfo.memberAvatarUrl;
-
-    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(operatedUserInfo: operatedUserInfo, userID: userID,userName: userName, memberNickname: memberNickname, memberRole: memberRole);
-
-    ZIMGroupInfo baseInfo = ZIMGroupInfo();
-    baseInfo.groupID = data["groupInfo"].baseInfo.groupID;
-    baseInfo.groupName = data["groupInfo"].baseInfo.groupName;
-    baseInfo.groupAvatarUrl = data["groupInfo"].baseInfo.groupAvatarUrl;
-
-    ZIMGroupFullInfo fullInfo = ZIMGroupFullInfo(baseInfo: baseInfo);
-    fullInfo.groupNotice = data["groupInfo"].groupNotice;
-    fullInfo.groupAttributes = data["groupInfo"].groupAttributes;
-    fullInfo.notificationStatus = ZIMGroupMessageNotificationStatus.values[data["groupInfo"].notificationStatus];
-
-    ZIMEventHandler.onGroupStateChanged!(zim, state, event, info, fullInfo);
+    ZIMEventHandler.onGroupStateChanged!(zim, state, event, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), ZIMConverter.oZIMGroupFullInfo(data['groupInfo'])!);
   }
 
   static void groupNameUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1387,22 +1273,8 @@ class ZegoZimPlugin {
 
     final groupName = data["groupName"];
     final groupID = data["groupID"];
-    final userID = data["operatedInfo"].userID;
-    final userName = data["operatedInfo"].userID;
-    final memberNickname = data["operatedInfo"].memberNickname;
-    final memberRole = data["operatedInfo"].memberRole;
 
-    ZIMGroupMemberInfo operatedUserInfo = ZIMGroupMemberInfo();
-
-    operatedUserInfo.userID = data["operatedInfo"].operatedUserInfo.userID;
-    operatedUserInfo.userName = data["operatedInfo"].operatedUserInfo.userName;
-    operatedUserInfo.memberRole = data["operatedInfo"].operatedUserInfo.memberRole;
-    operatedUserInfo.memberNickname = data["operatedInfo"].operatedUserInfo.memberNickname;
-    operatedUserInfo.memberAvatarUrl = data["operatedInfo"].operatedUserInfo.memberAvatarUrl;
-
-    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(operatedUserInfo: operatedUserInfo, userID: userID,userName: userName, memberNickname: memberNickname, memberRole: memberRole);
-
-    ZIMEventHandler.onGroupNameUpdated!(zim, groupName, info, groupID);
+    ZIMEventHandler.onGroupNameUpdated!(zim, groupName, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupAvatarUrlUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1410,48 +1282,17 @@ class ZegoZimPlugin {
 
     final groupAvatarUrl = data["groupAvatarUrl"];
     final groupID = data["groupID"];
-    final userID = data["operatedInfo"].userID;
-    final userName = data["operatedInfo"].userID;
-    final memberNickname = data["operatedInfo"].memberNickname;
-    final memberRole = data["operatedInfo"].memberRole;
 
-    ZIMGroupMemberInfo operatedUserInfo = ZIMGroupMemberInfo();
-
-    operatedUserInfo.userID = data["operatedInfo"].operatedUserInfo.userID;
-    operatedUserInfo.userName = data["operatedInfo"].operatedUserInfo.userName;
-    operatedUserInfo.memberRole = data["operatedInfo"].operatedUserInfo.memberRole;
-    operatedUserInfo.memberNickname = data["operatedInfo"].operatedUserInfo.memberNickname;
-    operatedUserInfo.memberAvatarUrl = data["operatedInfo"].operatedUserInfo.memberAvatarUrl;
-
-    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(operatedUserInfo: operatedUserInfo, userID: userID,userName: userName, memberNickname: memberNickname, memberRole: memberRole);
-
-
-    ZIMEventHandler.onGroupAvatarUrlUpdated!(zim, groupAvatarUrl, info, groupID);
+    ZIMEventHandler.onGroupAvatarUrlUpdated!(zim, groupAvatarUrl, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupNoticeUpdatedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupNoticeUpdated == null) return;
 
-
     final groupNotice = data["groupNotice"];
     final groupID = data["groupID"];
-    final userID = data["operatedInfo"].userID;
-    final userName = data["operatedInfo"].userID;
-    final memberNickname = data["operatedInfo"].memberNickname;
-    final memberRole = data["operatedInfo"].memberRole;
 
-    ZIMGroupMemberInfo operatedUserInfo = ZIMGroupMemberInfo();
-
-    operatedUserInfo.userID = data["operatedInfo"].operatedUserInfo.userID;
-    operatedUserInfo.userName = data["operatedInfo"].operatedUserInfo.userName;
-    operatedUserInfo.memberRole = data["operatedInfo"].operatedUserInfo.memberRole;
-    operatedUserInfo.memberNickname = data["operatedInfo"].operatedUserInfo.memberNickname;
-    operatedUserInfo.memberAvatarUrl = data["operatedInfo"].operatedUserInfo.memberAvatarUrl;
-
-    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(operatedUserInfo: operatedUserInfo, userID: userID,userName: userName, memberNickname: memberNickname, memberRole: memberRole);
-
-
-    ZIMEventHandler.onGroupNoticeUpdated!(zim, groupNotice, info, groupID);
+    ZIMEventHandler.onGroupNoticeUpdated!(zim, groupNotice, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupAttributesUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1468,24 +1309,8 @@ class ZegoZimPlugin {
     });
 
     final groupID = data["groupID"];
-    final userID = data["operatedInfo"].userID;
-    final userName = data["operatedInfo"].userID;
-    final memberNickname = data["operatedInfo"].memberNickname;
-    final memberRole = data["operatedInfo"].memberRole;
 
-    ZIMGroupMemberInfo operatedUserInfo = ZIMGroupMemberInfo();
-
-    operatedUserInfo.userID = data["operatedInfo"].operatedUserInfo.userID;
-    operatedUserInfo.userName = data["operatedInfo"].operatedUserInfo.userName;
-    operatedUserInfo.memberRole = data["operatedInfo"].operatedUserInfo.memberRole;
-    operatedUserInfo.memberNickname = data["operatedInfo"].operatedUserInfo.memberNickname;
-    operatedUserInfo.memberAvatarUrl = data["operatedInfo"].operatedUserInfo.memberAvatarUrl;
-
-    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(operatedUserInfo: operatedUserInfo, userID: userID,userName: userName, memberNickname: memberNickname, memberRole: memberRole);
-
-
-
-    ZIMEventHandler.onGroupAttributesUpdated!(zim, list, info, groupID);
+    ZIMEventHandler.onGroupAttributesUpdated!(zim, list, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupMemberStateChangedHandle(ZIMEngine zim, dynamic data) {
@@ -1494,73 +1319,16 @@ class ZegoZimPlugin {
     final groupID = data["groupID"];
     ZIMGroupMemberState state = ZIMGroupMemberState.values[data["state"]];
     ZIMGroupMemberEvent event = ZIMGroupMemberEvent.values[data["event"]];
-    List<dynamic> userList = data["userList"];
-    List<ZIMGroupMemberInfo> list = [];
 
-    userList.forEach((user) {
-      ZIMGroupMemberInfo info = ZIMGroupMemberInfo();
-      info.userID = user.userID;
-      info.userName = user.userName;
-      info.memberRole = user.memberRole;
-      info.memberNickname = user.memberNickname;
-      info.memberAvatarUrl = user.memberAvatarUrl;
-
-      list.add(info);
-    });
-
-    final userID = data["operatedInfo"].userID;
-    final userName = data["operatedInfo"].userID;
-    final memberNickname = data["operatedInfo"].memberNickname;
-    final memberRole = data["operatedInfo"].memberRole;
-
-    ZIMGroupMemberInfo operatedUserInfo = ZIMGroupMemberInfo();
-
-    operatedUserInfo.userID = data["operatedInfo"].operatedUserInfo.userID;
-    operatedUserInfo.userName = data["operatedInfo"].operatedUserInfo.userName;
-    operatedUserInfo.memberRole = data["operatedInfo"].operatedUserInfo.memberRole;
-    operatedUserInfo.memberNickname = data["operatedInfo"].operatedUserInfo.memberNickname;
-    operatedUserInfo.memberAvatarUrl = data["operatedInfo"].operatedUserInfo.memberAvatarUrl;
-
-    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(operatedUserInfo: operatedUserInfo, userID: userID,userName: userName, memberNickname: memberNickname, memberRole: memberRole);
-
-
-    ZIMEventHandler.onGroupMemberStateChanged!(zim, state, event, list, info, groupID);
+    ZIMEventHandler.onGroupMemberStateChanged!(zim, state, event, ZIMConverter.oZIMGroupMemberInfoList(data['userList']), ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupMemberInfoUpdatedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupMemberInfoUpdated == null) return;
 
-    List<dynamic> userList = data["userList"];
-    List<ZIMGroupMemberInfo> list = [];
-
-    userList.forEach((user) {
-      ZIMGroupMemberInfo info = ZIMGroupMemberInfo();
-      info.userID = user.userID;
-      info.userName = user.userName;
-      info.memberRole = user.memberRole;
-      info.memberNickname = user.memberNickname;
-      info.memberAvatarUrl = user.memberAvatarUrl;
-
-      list.add(info);
-    });
-
     final groupID = data["groupID"];
-    final userID = data["operatedInfo"].userID;
-    final userName = data["operatedInfo"].userID;
-    final memberNickname = data["operatedInfo"].memberNickname;
-    final memberRole = data["operatedInfo"].memberRole;
 
-    ZIMGroupMemberInfo operatedUserInfo = ZIMGroupMemberInfo();
-
-    operatedUserInfo.userID = data["operatedInfo"].operatedUserInfo.userID;
-    operatedUserInfo.userName = data["operatedInfo"].operatedUserInfo.userName;
-    operatedUserInfo.memberRole = data["operatedInfo"].operatedUserInfo.memberRole;
-    operatedUserInfo.memberNickname = data["operatedInfo"].operatedUserInfo.memberNickname;
-    operatedUserInfo.memberAvatarUrl = data["operatedInfo"].operatedUserInfo.memberAvatarUrl;
-
-    ZIMGroupOperatedInfo info = ZIMGroupOperatedInfo(operatedUserInfo: operatedUserInfo, userID: userID,userName: userName, memberNickname: memberNickname, memberRole: memberRole);
-
-    ZIMEventHandler.onGroupMemberInfoUpdated!(zim, list, info, groupID);
+    ZIMEventHandler.onGroupMemberInfoUpdated!(zim, ZIMConverter.oZIMGroupMemberInfoList(data['userList']), ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void callInvitationReceivedHandle (ZIMEngine zim, dynamic data) {
@@ -1628,40 +1396,14 @@ class ZegoZimPlugin {
   static void conversationChangedHandle (ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConversationChanged == null) return;
 
-    List<ZIMConversationChangeInfo> list = [];
     List<dynamic> infoList = data["infoList"];
 
-    infoList.forEach((info) {
-      ZIMConversationChangeInfo changeInfo = ZIMConversationChangeInfo();
-      ZIMConversation conversation = ZIMConversation();
-      conversation.conversationID = info.conversation.conversationID;
-      conversation.conversationName = info.conversation.conversationName;
-      conversation.conversationAvatarUrl = info.conversation.conversationAvatarUrl;
-      conversation.type = ZIMConversationType.values[info.conversation.type];
-      conversation.unreadMessageCount = info.conversation.unreadMessageCount;
-      conversation.orderKey = info.conversation.orderKey;
-      conversation.notificationStatus = ZIMConversationNotificationStatus.values[info.conversation.notificationStatus];
-      final lastMessage = ZIMMessage();
+    handleConversationList(infoList);
 
-      lastMessage.localMessageID = info.conversation.lastMessage.localMessageID;
-      lastMessage.messageID = info.conversation.lastMessage.messageID;
-      lastMessage.senderUserID = info.conversation.lastMessage.senderUserID;
-      lastMessage.timestamp = info.conversation.lastMessage.timestamp;
-      lastMessage.conversationID = info.conversation.lastMessage.conversationID;
-      lastMessage.conversationType = ZIMConversationType.values[info.conversation.lastMessage.conversationType];
-      lastMessage.direction = ZIMMessageDirection.values[info.conversation.lastMessage.direction];
-      lastMessage.sentStatus = ZIMMessageSentStatus.values[info.conversation.lastMessage.sentStatus];
-      lastMessage.orderKey = info.conversation.lastMessage.orderKey;
-      lastMessage.conversationSeq = info.conversation.lastMessage.conversationSeq;
+     List<ZIMConversationChangeInfo> conversationChangeInfoList =
+            ZIMConverter.oZIMConversationChangeInfoList(infoList);
 
-      conversation.lastMessage = lastMessage;
-
-      changeInfo.conversation = conversation;
-      changeInfo.event = ZIMConversationEvent.values[info.event];
-    });
-
-
-    ZIMEventHandler.onConversationChanged!(zim, list);
+    ZIMEventHandler.onConversationChanged!(zim, conversationChangeInfoList);
   }
 
   static void conversationTotalUnreadMessageCountUpdatedHandle (ZIMEngine zim, dynamic data) {
@@ -1672,4 +1414,81 @@ class ZegoZimPlugin {
     ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated!(zim, count);
   }
 
+  static Map handleSendMessageResult(dynamic result) {
+    return {
+      "message": {
+        "type": result.message.type,
+        "message": result.message.message,
+        "localMessageID": int.parse(result.message.localMessageID),
+        "messageID": int.parse(result.message.messageID),
+        "senderUserID": result.message.senderUserID,
+        "timestamp": result.message.timestamp,
+        "conversationID": result.message.conversationID,
+        "conversationType": result.message.conversationType,
+        "direction": result.message.direction,
+        "sentStatus": result.message.sentStatus,
+        "orderKey": result.message.orderKey,
+        "conversationSeq": result.message.conversationSeq,
+        "fileLocalPath": result.message.fileLocalPath,
+
+        "thumbnailDownloadUrl": result.message.thumbnailDownloadUrl,
+        "thumbnailLocalPath": result.message.thumbnailLocalPath,
+        "largeImageDownloadUrl": result.message.largeImageDownloadUrl,
+        "largeImageLocalPath": result.message.largeImageLocalPath,
+        "originalImageHeight": result.message.originalImageHeight,
+        "originalImageWidth": result.message.originalImageWidth,
+        "largeImageHeight": result.message.largeImageHeight,
+        "largeImageWidth": result.message.largeImageWidth,
+        "thumbnailHeight": result.message.thumbnailHeight,
+        "thumbnailWidth": result.message.thumbnailWidth,
+
+        "audioDuration": result.message.audioDuration,
+        "videoDuration": result.message.videoDuration,
+        "videoFirstFrameDownloadUrl": result.message.videoFirstFrameDownloadUrl,
+        "videoFirstFrameLocalPath": result.message.videoFirstFrameLocalPath,
+        "videoFirstFrameHeight": result.message.videoFirstFrameHeight,
+        "videoFirstFrameWidth": result.message.videoFirstFrameWidth,
+
+        "fileDownloadUrl": result.message.fileDownloadUrl,
+        "fileUID": result.message.fileUID,
+        "fileName": result.message.fileName,
+        "fileSize": result.message.fileSize
+      }
+    };
+  }
+
+  static void handleReceiveMessage(List<dynamic> messageList) {
+    messageList.forEach((msgMap) {
+      msgMap["messageID"] = int.parse(msgMap["messageID"]);
+      msgMap["localMessageID"] =  msgMap["localMessageID"] is String ? int.parse(msgMap["localMessageID"]) : 0;
+      msgMap["orderKey"] = msgMap["orderKey"] is int ?  msgMap["orderKey"] : 0;
+     });
+
+  }
+
+  static void handleConversationList(List<dynamic> infoList) {
+    infoList.forEach((info) {
+      final infoConversation = info["conversation"];
+      final infoConversationLastMessage = infoConversation["lastMessage"];
+      infoConversationLastMessage["localMessageID"] = infoConversationLastMessage["localMessageID"] is String? int.parse(infoConversationLastMessage["localMessageID"]) : 0;
+      infoConversationLastMessage["messageID"] = infoConversationLastMessage["messageID"] is String ? int.parse(infoConversationLastMessage["messageID"]) : infoConversationLastMessage["messageID"] ;
+      infoConversationLastMessage["orderKey"] = infoConversationLastMessage["orderKey"] is int ? infoConversationLastMessage["orderKey"] : 0;
+      infoConversationLastMessage["conversationSeq"] = infoConversationLastMessage["conversationSeq"] is int ? infoConversationLastMessage["conversationSeq"] : int.parse(infoConversationLastMessage["conversationSeq"]);
+    });
+  }
+
+  static Object mapToJSObj(Map<dynamic,dynamic>? a){
+  var object = js.newObject();
+
+  if (a == null) {
+    return object;
+  }
+
+  a.forEach((k, v) {
+    var key = k;
+    var value = v;
+    js.setProperty(object, key, value);
+  });
+  return object;
+}
 }

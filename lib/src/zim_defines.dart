@@ -318,6 +318,8 @@ class ZIMLogConfig {
 
   /// The maximum log file size (Bytes). The default maximum size is 5MB (5 * 1024 * 1024 Bytes)
   int logSize = 0;
+
+  int? logLevel = 0;
   ZIMLogConfig();
 }
 

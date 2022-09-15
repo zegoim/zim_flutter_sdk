@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,7 +73,6 @@ class _MyPageState extends State<PeerChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    window.console.warn("111111");
     return Scaffold(
       appBar: AppBar(
         title: Text(

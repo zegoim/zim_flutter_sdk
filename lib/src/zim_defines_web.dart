@@ -6,6 +6,7 @@ import 'package:zego_zim/src/internal/zim_utils_web.dart';
 
 @JS()
 class ZIM {
+  external static toJSON(dynamic);
   external static setEventHandler(Function handler);
   external static String getVersion();
   external static ZIM? create(dynamic appConfig);
@@ -19,26 +20,26 @@ class ZIM {
   external PromiseJsImpl<dynamic> updateUserName(String userName);
   external PromiseJsImpl<dynamic> updateUserAvatarUrl(String userAvatarUrl);
   external PromiseJsImpl<dynamic> updateUserExtendedData(String extendedData);
-  external PromiseJsImpl<dynamic> queryUsersInfo(dynamic userIDs, ZIMUsersInfoQueryConfigWeb config);
-  external PromiseJsImpl<dynamic> createRoom(ZIMRoomInfoWeb roomInfo, ZIMRoomAdvancedConfigWeb? config);
-  external PromiseJsImpl<dynamic> enterRoom(ZIMRoomInfoWeb roomInfo, ZIMRoomAdvancedConfigWeb? config);
+  external PromiseJsImpl<dynamic> queryUsersInfo(dynamic userIDs, Object config);
+  external PromiseJsImpl<dynamic> createRoom(Object roomInfo, Object? config);
+  external PromiseJsImpl<dynamic> enterRoom(Object roomInfo, Object? config);
   external PromiseJsImpl<dynamic> joinRoom(String roomID);
   external PromiseJsImpl<dynamic> leaveRoom(String roomID);
-  external PromiseJsImpl<dynamic> queryRoomMemberList(String roomID, ZIMRoomMemberQueryConfigWeb config);
+  external PromiseJsImpl<dynamic> queryRoomMemberList(String roomID, Object config);
   external PromiseJsImpl<dynamic> queryRoomOnlineMemberCount(String roomID);
   external PromiseJsImpl<dynamic> queryRoomAllAttributes(String roomID);
-  external PromiseJsImpl<dynamic> setRoomAttributes(dynamic roomAttributes, String roomID, ZIMRoomAttributesSetConfigWeb config);
-  external PromiseJsImpl<dynamic> deleteRoomAttributes(dynamic keys, String roomID, ZIMRoomAttributesDeleteConfigWeb config);
-  external PromiseJsImpl<dynamic> beginRoomAttributesBatchOperation(String roomID, ZIMRoomAttributesBatchOperationConfigWeb config);
+  external PromiseJsImpl<dynamic> setRoomAttributes(dynamic roomAttributes, String roomID, Object config);
+  external PromiseJsImpl<dynamic> deleteRoomAttributes(dynamic keys, String roomID, Object config);
+  external PromiseJsImpl<dynamic> beginRoomAttributesBatchOperation(String roomID, Object config);
   external PromiseJsImpl<dynamic> endRoomAttributesBatchOperation(String roomID);
-  external PromiseJsImpl<dynamic> sendMediaMessage(ZIMMediaMessageBaseWeb message, String toConversationID, dynamic conversationType, ZIMMessageSendConfigWeb config, dynamic progress);
-  external PromiseJsImpl<dynamic> queryHistoryMessage(String conversationID, int conversationType, ZIMMessageQueryConfigWeb config);
-  external PromiseJsImpl<dynamic> sendPeerMessage(ZIMMessageBaseWeb message, String toUserID, ZIMMessageSendConfigWeb config);
-  external PromiseJsImpl<dynamic> sendRoomMessage(ZIMMessageBaseWeb message, String toRoomID, ZIMMessageSendConfigWeb config);
-  external PromiseJsImpl<dynamic> sendGroupMessage(ZIMMessageBaseWeb message, String toGroupID, ZIMMessageSendConfigWeb config);
-  external PromiseJsImpl<dynamic> deleteMessages(dynamic messageList, String conversationID, dynamic conversationType, ZIMMessageDeleteConfigWeb config);
-  external PromiseJsImpl<dynamic> deleteAllMessage(String conversationID, dynamic conversationType, ZIMMessageDeleteConfigWeb config);
-  external PromiseJsImpl<dynamic> createGroup(ZIMGroupInfoWeb groupInfo, dynamic serIDs, ZIMGroupAdvancedConfigWeb? config);
+  external PromiseJsImpl<dynamic> sendMediaMessage(Object message, String toConversationID, dynamic conversationType, Object config, dynamic progress);
+  external PromiseJsImpl<dynamic> queryHistoryMessage(String conversationID, int conversationType, Object config);
+  external PromiseJsImpl<dynamic> sendPeerMessage(Object message, String toUserID, Object config);
+  external PromiseJsImpl<dynamic> sendRoomMessage(Object message, String toRoomID, Object config);
+  external PromiseJsImpl<dynamic> sendGroupMessage(Object message, String toGroupID, Object config);
+  external PromiseJsImpl<dynamic> deleteMessages(dynamic messageList, String conversationID, dynamic conversationType, Object config);
+  external PromiseJsImpl<dynamic> deleteAllMessage(String conversationID, dynamic conversationType, Object config);
+  external PromiseJsImpl<dynamic> createGroup(Object groupInfo, dynamic serIDs, Object? config);
   external PromiseJsImpl<dynamic> joinGroup(String groupID);
   external PromiseJsImpl<dynamic> leaveGroup(String groupID);
   external PromiseJsImpl<dynamic> dismissGroup(String groupID);
@@ -57,15 +58,15 @@ class ZIM {
   external PromiseJsImpl<dynamic> setGroupMemberRole(int role, String forUserID, String groupID);
   external PromiseJsImpl<dynamic> setGroupMemberNickname(String nickname, String forUserID, String groupID);
   external PromiseJsImpl<dynamic> queryGroupMemberInfo(String userID, String groupID);
-  external PromiseJsImpl<dynamic> queryGroupMemberList(String groupID, ZIMGroupMemberQueryConfigWeb? config);
-  external PromiseJsImpl<dynamic> queryConversationList(ZIMConversationQueryConfigWeb config);
-  external PromiseJsImpl<dynamic> deleteConversation(String conversationID, dynamic conversationType, ZIMConversationDeleteConfigWeb? config);
+  external PromiseJsImpl<dynamic> queryGroupMemberList(String groupID, Object? config);
+  external PromiseJsImpl<dynamic> queryConversationList(Object config);
+  external PromiseJsImpl<dynamic> deleteConversation(String conversationID, dynamic conversationType, Object? config);
   external PromiseJsImpl<dynamic> clearConversationUnreadMessageCount(String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> setConversationNotificationStatus(dynamic status, String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> callInvite(List<String> invitees, ZIMCallInviteConfigWeb? config);
-  external PromiseJsImpl<dynamic> callCancel(List<String> invitees, String callID, ZIMCallCancelConfigWeb config);
-  external PromiseJsImpl<dynamic> callAccept(String callID, ZIMCallAcceptConfigWeb config);
-  external PromiseJsImpl<dynamic> callReject(String callID, ZIMCallRejectConfigWeb config);
+  external PromiseJsImpl<dynamic> callInvite(List<String> invitees, Object? config);
+  external PromiseJsImpl<dynamic> callCancel(List<String> invitees, String callID, Object config);
+  external PromiseJsImpl<dynamic> callAccept(String callID, Object config);
+  external PromiseJsImpl<dynamic> callReject(String callID, Object config);
 }
 
 @JS()
