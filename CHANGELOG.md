@@ -1,3 +1,7 @@
+## 2.3.3
+
+- Release version, update native SDK dependency version to 2.3.3
+
 ## 2.3.0
 
 ### 1. Feature

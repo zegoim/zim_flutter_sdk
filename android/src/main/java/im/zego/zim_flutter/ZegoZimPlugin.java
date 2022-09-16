@@ -1,8 +1,8 @@
-package com.example.zego_zim;
+package im.zego.zim_flutter;
 
 import androidx.annotation.NonNull;
 
-import com.example.zego_zim.internal.ZIMPluginEventHandler;
+import im.zego.zim_flutter.internal.ZIMPluginEventHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,7 +33,7 @@ public class ZegoZimPlugin implements FlutterPlugin, MethodCallHandler,EventChan
 
   public ZegoZimPlugin() {
     try{
-      this.manager = Class.forName("com.example.zego_zim.internal.ZIMPluginMethodHandler");
+      this.manager = Class.forName("im.zego.zim_flutter.internal.ZIMPluginMethodHandler");
     }catch (ClassNotFoundException e){
       throw new RuntimeException(e);
     }
