@@ -1,4 +1,20 @@
+## 2.3.3
+
+- Release version, update native SDK dependency version to 2.3.3
+
 ## 2.3.0
+
+### 1. Feature
+
+1. Support hot reload and hot restart.
+2. Support the setting of user avatars, group avatars and the acquisition of conversation avatars.
+3. Support to obtain the width and height information of the original image, large image and thumbnail of the image message.
+
+### 2. Support for more platforms
+
+* Since 2.3.0, ZIM has supported the use of macOS and Windows platforms. However, it is currently in the **Beta** version, and developers are advised to use it carefully.
+
+### 3. API Refactoring
 
 > 💥 Please note to developers that there are breaking changes starting from version 2.3.0, so please read the following guidelines when upgrading from the old version to the new version.
 
