@@ -1069,18 +1069,8 @@ class ZegoZimPlugin {
 
     Map resultMap = {
       "callID": result.callID,
-      "info": {
-        "timeout": result.timeout,
-        "errorInvitees": []
-      }
+      "errorInvitees": result.errorInvitees
     };
-
-    result.errorInvitees.forEach((invite) {
-      resultMap["info"]["errorInvitees"].add({
-        "userID": invite.userID,
-        "state": invite.state is int ? invite.state : invite.userState
-      });
-    });
 
     return resultMap;
   }
