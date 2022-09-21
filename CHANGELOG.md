@@ -1,3 +1,7 @@
+## 2.3.4
+
+- fix web platform type check compatibility issues
+
 ## 2.3.3
 
 - Release version, update native SDK dependency version to 2.3.3
@@ -113,7 +117,7 @@ ZIM.getInstance()!.destroy();
 ## 2.2.1
 
 - fixd renewtoken method pass token param error
- 
+
 ## 2.2.0
 
 - Release version, update native SDK dependency version to 2.2.1

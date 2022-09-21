@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
@@ -424,12 +423,11 @@ class ZegoZimPlugin {
   Future<Map<dynamic,dynamic>> queryUsersInfo(dynamic userIDs, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    var _result = await promiseToFuture(ZIM.getInstance()!.queryUsersInfo(userIDs, _config));
+    final result = await promiseToFuture(ZIM.getInstance()!.queryUsersInfo(userIDs, _config));
+    String queriedResult = ZIM.toJSON(result);
+    Map resultMap = jsonDecode(queriedResult);
 
-    return {
-      "userList": _result.userList,
-      "errorUserList": _result.errorUserList
-    };
+    return resultMap;
   }
 
   Future<Map<dynamic, dynamic>> clearConversationUnreadMessageCount(String conversationID, int conversationType) async {
@@ -506,14 +504,9 @@ class ZegoZimPlugin {
 
     final result = await promiseToFuture(ZIM.getInstance()!.createRoom(_roomInfo, _config));
 
-    final resultMap = {
-      "roomInfo": {
-        "baseInfo": {
-          "roomID": result.roomInfo.baseInfo.roomID,
-          "roomName":  result.roomInfo.baseInfo.roomName
-        }
-      }
-    };
+    String roomResult = ZIM.toJSON(result);
+
+    final resultMap = jsonDecode(roomResult);
 
     return resultMap;
   }
@@ -602,7 +595,7 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> setRoomAttributes(Map roomAttributes, String roomID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.setRoomAttributes(roomAttributes, roomID, _config));
+    final result = await promiseToFuture(ZIM.getInstance()!.setRoomAttributes(mapToJSObj(roomAttributes), roomID, _config));
 
     final resultMap = {
       "roomID": result.roomID,
@@ -762,7 +755,7 @@ class ZegoZimPlugin {
     result.errorUserList.forEach((user){
       resultMap["errorUserList"].add({
         "userID": user.userID,
-        "reason": user.userID
+        "reason": user.reason
       });
     });
 
@@ -803,7 +796,7 @@ class ZegoZimPlugin {
     };
   }
 
-  Future <Map<dynamic, dynamic>> inviteUsersIntoGroup(List<String> userIDs, String groupID) async {
+  Future <Map<dynamic, dynamic>> inviteUsersIntoGroup(dynamic userIDs, String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.inviteUsersIntoGroup(userIDs, groupID));
 
     final resultMap = {
@@ -832,7 +825,7 @@ class ZegoZimPlugin {
     return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> kickGroupMembers(List<String> userIDs, String groupID) async {
+  Future <Map<dynamic, dynamic>> kickGroupMembers(dynamic userIDs, String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.kickGroupMembers(userIDs, groupID));
 
     final resultMap = {
@@ -936,7 +929,7 @@ class ZegoZimPlugin {
     };
   }
 
-  Future <Map<dynamic, dynamic>> deleteGroupAttributes(List<String> keys, String groupID) async {
+  Future <Map<dynamic, dynamic>> deleteGroupAttributes(dynamic keys, String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.deleteGroupAttributes(keys, groupID));
 
     return {
@@ -945,7 +938,7 @@ class ZegoZimPlugin {
     };
   }
 
-  Future <Map<dynamic, dynamic>> queryGroupAttributes(List<String> keys, String groupID) async {
+  Future <Map<dynamic, dynamic>> queryGroupAttributes(dynamic keys, String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.queryGroupAttributes(keys, groupID));
 
     String attr = ZIM.toJSON(result.groupAttributes);
@@ -1046,7 +1039,7 @@ class ZegoZimPlugin {
     };
   }
 
-  Future <Map<dynamic, dynamic>> callInvite(List<String> invitees, dynamic config) async {
+  Future <Map<dynamic, dynamic>> callInvite(dynamic invitees, dynamic config) async {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.callInvite(invitees, _config));
@@ -1062,22 +1055,32 @@ class ZegoZimPlugin {
     result.errorInvitees.forEach((invite) {
       resultMap["info"]["errorInvitees"].add({
         "userID": invite.userID,
-        "state": invite.state
+        "state": invite.state is int ? invite.state : invite.userState
       });
     });
 
     return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> callCancel(List<String> invitees, String callID, dynamic config) async {
+  Future <Map<dynamic, dynamic>> callCancel(dynamic invitees, String callID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.callCancel(invitees, callID, _config));
 
     Map resultMap = {
       "callID": result.callID,
-      "errorInvitees": result.errorInvitees
+      "info": {
+        "timeout": result.timeout,
+        "errorInvitees": []
+      }
     };
+
+    result.errorInvitees.forEach((invite) {
+      resultMap["info"]["errorInvitees"].add({
+        "userID": invite.userID,
+        "state": invite.state is int ? invite.state : invite.userState
+      });
+    });
 
     return resultMap;
   }
@@ -1387,7 +1390,7 @@ class ZegoZimPlugin {
   static void callInviteesAnsweredTimeoutHandle (ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;
 
-    List<String> invitees = data["invitees"];
+    dynamic invitees = data["invitees"];
     String callID = data["callID"];
 
     ZIMEventHandler.onCallInviteesAnsweredTimeout!(zim, invitees, callID);
