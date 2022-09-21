@@ -43,8 +43,8 @@ class ZIM {
   external PromiseJsImpl<dynamic> joinGroup(String groupID);
   external PromiseJsImpl<dynamic> leaveGroup(String groupID);
   external PromiseJsImpl<dynamic> dismissGroup(String groupID);
-  external PromiseJsImpl<dynamic> inviteUsersIntoGroup(List<String> userIDs, String groupID);
-  external PromiseJsImpl<dynamic> kickGroupMembers(List<String> userIDs, String groupID);
+  external PromiseJsImpl<dynamic> inviteUsersIntoGroup(dynamic userIDs, String groupID);
+  external PromiseJsImpl<dynamic> kickGroupMembers(dynamic userIDs, String groupID);
   external PromiseJsImpl<dynamic> transferGroupOwner(String toUserID, String groupID);
   external PromiseJsImpl<dynamic> updateGroupName(String groupName, String groupID);
   external PromiseJsImpl<dynamic> updateGroupAvatarUrl(String groupAvatarUrl, String groupID);
@@ -52,8 +52,8 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryGroupInfo(String groupID);
   external PromiseJsImpl<dynamic> queryGroupList();
   external PromiseJsImpl<dynamic> setGroupAttributes(Map groupAttributes,String groupID);
-  external PromiseJsImpl<dynamic> deleteGroupAttributes(List<String> keys, String groupID);
-  external PromiseJsImpl<dynamic> queryGroupAttributes(List<String> keys, String groupID);
+  external PromiseJsImpl<dynamic> deleteGroupAttributes(dynamic keys, String groupID);
+  external PromiseJsImpl<dynamic> queryGroupAttributes(dynamic keys, String groupID);
   external PromiseJsImpl<dynamic> queryGroupAllAttributes(String groupID);
   external PromiseJsImpl<dynamic> setGroupMemberRole(int role, String forUserID, String groupID);
   external PromiseJsImpl<dynamic> setGroupMemberNickname(String nickname, String forUserID, String groupID);
@@ -63,8 +63,8 @@ class ZIM {
   external PromiseJsImpl<dynamic> deleteConversation(String conversationID, dynamic conversationType, Object? config);
   external PromiseJsImpl<dynamic> clearConversationUnreadMessageCount(String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> setConversationNotificationStatus(dynamic status, String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> callInvite(List<String> invitees, Object? config);
-  external PromiseJsImpl<dynamic> callCancel(List<String> invitees, String callID, Object config);
+  external PromiseJsImpl<dynamic> callInvite(dynamic invitees, Object? config);
+  external PromiseJsImpl<dynamic> callCancel(dynamic invitees, String callID, Object config);
   external PromiseJsImpl<dynamic> callAccept(String callID, Object config);
   external PromiseJsImpl<dynamic> callReject(String callID, Object config);
 }
