@@ -206,7 +206,7 @@
         return;
     }
     
-    NSString *updateUserExtendedData = [call.arguments objectForKey:@"updateUserExtendedData"];
+    NSString *updateUserExtendedData = [call.arguments objectForKey:@"extendedData"];
     [zim updateUserExtendedData:updateUserExtendedData callback:^(NSString * _Nonnull extendedData, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *resultDic = @{@"extendedData":extendedData};
