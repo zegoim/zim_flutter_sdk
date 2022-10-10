@@ -75,6 +75,8 @@ protected:
             const std::vector<ZIMRoomAttributesUpdateInfo>& updateInfos,
             const std::string& roomID);
 
+    void onRoomMemberAttributesUpdated(ZIM* zim, const std::vector<ZIMRoomMemberAttributesUpdateInfo>& infos,ZIMRoomOperatedInfo operatedInfo, const std::string& roomID);
+
     void onGroupStateChanged(ZIM* zim, ZIMGroupState state, ZIMGroupEvent event,
         const ZIMGroupOperatedInfo& operatedInfo,
         const ZIMGroupFullInfo& groupInfo);

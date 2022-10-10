@@ -221,6 +221,19 @@ abstract class ZIM {
           String conversationID,
           ZIMConversationType conversationType);
 
+  Future<ZIMMessageSentResult> sendMessage(
+      ZIMMessage message,
+      String toConversationID,
+      ZIMConversationType conversationType,
+      ZIMMessageSendConfig config,
+      [ZIMMessageSendNotification? notification]);
+
+
+  Future<ZIMMessageInsertedResult> insertMessageToLocalDB(
+      ZIMMessage message,
+      String conversationID,
+      ZIMConversationType conversationType,
+      String senderUserID);
 //MARK: -Message
 
   /// Available since: 2.1.5 and above.
@@ -314,7 +327,7 @@ abstract class ZIM {
       String toConversationID,
       ZIMConversationType conversationType,
       ZIMMessageSendConfig config,
-      ZIMMediaUploadingProgress? progress);
+      ZIMMediaMessageSendNotification? notification);
 
   /// Download media message content.
   ///
@@ -569,6 +582,18 @@ abstract class ZIM {
   /// [roomID] ID of the room to queried.
   Future<ZIMRoomAttributesQueriedResult> queryRoomAllAttributes(String roomID);
 
+  Future<ZIMRoomMembersAttributesOperatedResult> setRoomMembersAttributes(
+      Map<String, String> attributes,
+      List<String> userIDs,
+      String roomID,
+      ZIMRoomMemberAttributesSetConfig config);
+
+  Future<ZIMRoomMembersAttributesQueriedResult> queryRoomMembersAttributes(
+      List<String> userIDs, String roomID);
+
+  Future<ZIMRoomMemberAttributesListQueriedResult>
+      queryRoomMemberAttributesList(
+          String roomID, ZIMRoomMemberAttributesQueryConfig config);
 //MARK: - Group
 
   /// Available since: 2.1.5 and above.

@@ -102,7 +102,8 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.file: 12,
     ZIMMessageType.audio: 13,
     ZIMMessageType.video: 14,
-    ZIMMessageType.barrage: 20
+    ZIMMessageType.barrage: 20,
+    ZIMMessageType.system:30
   };
   static const mapValue = {
     0: ZIMMessageType.unknown,
@@ -112,7 +113,8 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     12: ZIMMessageType.file,
     13: ZIMMessageType.audio,
     14: ZIMMessageType.video,
-    20: ZIMMessageType.barrage
+    20: ZIMMessageType.barrage,
+    30: ZIMMessageType.system
   };
 
   int get value => valueMap[this] ?? -1;

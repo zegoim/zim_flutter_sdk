@@ -141,6 +141,9 @@ public:
     static FTMap cnvZIMRoomFullInfoToMap(const ZIMRoomFullInfo& roomInfo);
     static FTMap cnvZIMRoomAttributesUpdateInfoToMap(const ZIMRoomAttributesUpdateInfo& updateInfo);
     static FTArray cnvZIMRoomAttributesUpdateInfoListToArray(const std::vector<ZIMRoomAttributesUpdateInfo>& updateInfoList);
+    static FTMap cnvZIMRoomMemberAttributesInfoToMap(const ZIMRoomMemberAttributesInfo& info);
+    static FTMap cnvZIMRoomMemberAttributesOperatedInfoToMap(const ZIMRoomMemberAttributesOperatedInfo& info);
+    static FTMap cnvZIMRoomMemberAttributesUpdateInfoToMap(const ZIMRoomMemberAttributesUpdateInfo& info);
     static FTArray cnvZIMGroupMemberInfoListToArray(const std::vector<ZIMGroupMemberInfo>& memberList);
     static FTMap cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& groupInfo);
     static FTMap cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& memberInfo);
@@ -164,6 +167,8 @@ public:
     static ZIMRoomAttributesSetConfig cnvZIMRoomAttributesSetConfigToObject(FTMap configMap);
     static ZIMRoomAttributesDeleteConfig cnvZIMRoomAttributesDeleteConfigToObject(FTMap configMap);
     static ZIMRoomAttributesBatchOperationConfig cnvZIMRoomAttributesBatchOperationConfigToObject(FTMap configMap);
+    static ZIMRoomMemberAttributesSetConfig cnvZIMRoomMemberAttributesSetConfigToObject(FTMap configMap);
+    static ZIMRoomMemberAttributesQueryConfig cnvZIMRoomMemberAttributesQueryConfigToObject(FTMap configMap);
     static ZIMGroupInfo cnvZIMGroupInfoToObject(FTMap infoMap);
     static ZIMGroupAdvancedConfig cnvZIMGroupAdvancedConfigToObject(FTMap configMap);
     static ZIMGroupMemberQueryConfig cnvZIMGroupMemberQueryConfigToObject(FTMap configMap);

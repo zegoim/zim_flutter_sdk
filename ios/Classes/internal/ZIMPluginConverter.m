@@ -193,6 +193,11 @@
             [((ZIMImageMessage *)msg) safeSetValue:@(CGSizeMake([[messageDic safeObjectForKey:@"thumbnailWidth"] doubleValue], [[messageDic safeObjectForKey:@"thumbnailHeight"] doubleValue])) forKey:@"thumbnailSize"];
             break;
         }
+        case ZIMMessageTypeSystem:{
+            msg = [[ZIMSystemMessage alloc] init];
+            ((ZIMSystemMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
+            break;
+        }
         default:
             break;
     }
@@ -207,7 +212,7 @@
     [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"timestamp"]  forKey:@"timestamp"];
     [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"conversationSeq"]  forKey:@"conversationSeq"];
     [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"orderKey"]  forKey:@"orderKey"];
-    
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isUserInserted"] forKey:@"isUserInserted"];
     if([msg isKindOfClass:[ZIMMediaMessage class]]){
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileLocalPath"]  forKey:@"fileLocalPath"];
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileDownloadUrl"] forKey:@"fileDownloadUrl"];
@@ -233,7 +238,7 @@
     [messageDic safeSetObject:message.conversationID forKey:@"conversationID"];
     [messageDic safeSetObject:[NSNumber numberWithInt:(int)message.direction] forKey:@"direction"];
     [messageDic safeSetObject:[NSNumber numberWithInt:(int)message.sentStatus] forKey:@"sentStatus"];
-
+    [messageDic safeSetObject:[NSNumber numberWithBool:message.isUserInserted] forKey:@"isUserInserted"];
     [messageDic safeSetObject:[NSNumber numberWithInt:(int)message.conversationType] forKey:@"conversationType"];
 
     [messageDic safeSetObject:[NSNumber numberWithUnsignedLongLong:message.timestamp] forKey:@"timestamp"];
@@ -300,6 +305,10 @@
             ZIMAudioMessage *audioMsg = (ZIMAudioMessage *)message;
             [messageDic safeSetObject:[NSNumber numberWithUnsignedInt:audioMsg.audioDuration] forKey:@"audioDuration"];
             break;
+        }
+        case ZIMMessageTypeSystem:{
+            ZIMSystemMessage *sysMsg = (ZIMSystemMessage *)message;
+            [messageDic safeSetObject:sysMsg.message forKey:@"message"];
         }
         default:
             break;
@@ -745,5 +754,62 @@
     config.extendedData = [configDic safeObjectForKey:@"extendedData"];
     return config;
 }
++(nullable ZIMRoomMemberAttributesSetConfig *)oZIMRoomMemberAttributesSetConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMRoomMemberAttributesSetConfig *setConfig = [[ZIMRoomMemberAttributesSetConfig alloc] init];
+    setConfig.isDeleteAfterOwnerLeft = [configDic safeObjectForKey: @"isDeleteAfterOwnerLeft"];
+    return setConfig;
+}
 
++(nullable NSDictionary*)mZIMRoomMemberAttributesInfo:(nullable ZIMRoomMemberAttributesInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.attributes forKey:@"attributes"];
+    [infoDic safeSetObject:info.userID forKey:@"userID"];
+    return infoDic;
+}
+
++(nullable NSDictionary*)mZIMRoomMemberAttributesOperatedInfo:(nullable ZIMRoomMemberAttributesOperatedInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.errorKeys forKey:@"errorKeys"];
+    NSDictionary *attributesInfoDic = [ZIMPluginConverter mZIMRoomMemberAttributesInfo:info.attributesInfo];
+    [infoDic safeSetObject:attributesInfoDic forKey:@"attributesInfo"];
+    return infoDic;
+}
+
++(nullable ZIMRoomMemberAttributesQueryConfig *)oZIMRoomMemberAttributesQueryConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMRoomMemberAttributesQueryConfig *queryConfig = [[ZIMRoomMemberAttributesQueryConfig alloc] init];
+    queryConfig.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
+    queryConfig.nextFlag = [configDic safeObjectForKey:@"nextFlag"];
+    return queryConfig;
+    
+}
+
++(nullable NSDictionary *)mZIMRoomMemberAttributesUpdateInfo:(nullable ZIMRoomMemberAttributesUpdateInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.attributesInfo forKey:@"attributesInfo"];
+    return infoDic;
+}
+
++(nullable NSDictionary *)mZIMRoomOperatedInfo:(nullable ZIMRoomOperatedInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.userID forKey:@"userID"];
+    return infoDic;
+}
 @end

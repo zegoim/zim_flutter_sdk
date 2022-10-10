@@ -21,7 +21,7 @@ class ZIMEngine implements ZIM {
 
   @override
   destroy() {
-    if(ZIMManager.destroyEngine(handle)) {
+    if (ZIMManager.destroyEngine(handle)) {
       channel.invokeMethod("destroy", {"handle": handle});
       // TODO: Remove another map
       ZIMEventHandlerImpl.unregisterEventHandler();
@@ -89,7 +89,7 @@ class ZIMEngine implements ZIM {
       'handle': handle,
       'config': ZIMConverter.mZIMConversationQueryConfig(config)
     });
-    return ZIMConverter.oZIMConversationListQueriedResult (resultMap);
+    return ZIMConverter.oZIMConversationListQueriedResult(resultMap);
   }
 
   @override
@@ -180,8 +180,7 @@ class ZIMEngine implements ZIM {
       ZIMMediaFileType fileType, ZIMMediaDownloadingProgress? progress) async {
     Map resultMap;
     if (progress != null) {
-      int progressID = ZIMCommonData.progressSequence + 1;
-      ZIMCommonData.progressSequence = ZIMCommonData.progressSequence + 1;
+      int progressID = ZIMCommonData.getSequence();
       ZIMCommonData.mediaDownloadingProgressMap[progressID] = progress;
       resultMap = await channel.invokeMethod('downloadMediaFile', {
         'handle': handle,
@@ -206,12 +205,22 @@ class ZIMEngine implements ZIM {
       String toConversationID,
       ZIMConversationType conversationType,
       ZIMMessageSendConfig config,
-      ZIMMediaUploadingProgress? progress) async {
+      ZIMMediaMessageSendNotification? notification) async {
     Map resultMap;
-    if (progress != null) {
-      int progressID = ZIMCommonData.progressSequence + 1;
-      ZIMCommonData.progressSequence = ZIMCommonData.progressSequence + 1;
-      ZIMCommonData.mediaUploadingProgressMap[progressID] = progress;
+    int messageID = ZIMCommonData.getSequence();
+    int? progressID;
+    int? messageAttachedCallbackID;
+    if (notification?.onMediaUploadingProgress != null) {
+      progressID = ZIMCommonData.getSequence();
+      ZIMCommonData.mediaUploadingProgressMap[progressID] =
+          notification!.onMediaUploadingProgress!;
+    }
+    if (notification?.onMessageAttached != null) {
+      messageAttachedCallbackID = ZIMCommonData.getSequence();
+      ZIMCommonData.zimMessageAttachedCallbackMap[messageAttachedCallbackID] =
+          notification!.onMessageAttached!;
+    }
+    try {
       resultMap = await channel.invokeMethod('sendMediaMessage', {
         'handle': handle,
         'message': ZIMConverter.mZIMMessage(message),
@@ -219,20 +228,23 @@ class ZIMEngine implements ZIM {
         'conversationType':
             ZIMConversationTypeExtension.valueMap[conversationType],
         'config': ZIMConverter.mZIMMessageSendConfig(config),
-        'progressID': progressID
+        'messageID': messageID,
+        'progressID': progressID,
+        'messageAttachedCallbackID': messageAttachedCallbackID
       });
+      return ZIMConverter.oZIMMessageSentResult(resultMap);
+    } on PlatformException catch (e) {
+      resultMap = e.details;
+      ZIMMessageSentResult result =
+          ZIMConverter.oZIMMessageSentResult(resultMap);
+      result.message.sentStatus = ZIMMessageSentStatus.failed;
+      throw PlatformException(code: e.code, message: e.message);
+    } finally {
       ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
-    } else {
-      resultMap = await channel.invokeMethod('sendMediaMessage', {
-        'handle': handle,
-        'message': ZIMConverter.mZIMMessage(message),
-        'toConversationID': toConversationID,
-        'conversationType':
-            ZIMConversationTypeExtension.valueMap[conversationType],
-        'config': ZIMConverter.mZIMMessageSendConfig(config)
-      });
+      ZIMCommonData.messsageMap.remove(messageID);
+      ZIMCommonData.zimMessageAttachedCallbackMap
+          .remove(messageAttachedCallbackID);
     }
-    return ZIMConverter.oZIMMessageSentResult(resultMap);
   }
 
   @override
@@ -287,8 +299,8 @@ class ZIMEngine implements ZIM {
       [ZIMRoomAdvancedConfig? config]) async {
     Map resultMap;
     if (config == null) {
-      resultMap = await channel.invokeMethod(
-          'createRoom', {'handle': handle, 'roomInfo': ZIMConverter.mZIMRoomInfo(roomInfo)});
+      resultMap = await channel.invokeMethod('createRoom',
+          {'handle': handle, 'roomInfo': ZIMConverter.mZIMRoomInfo(roomInfo)});
     } else {
       resultMap = await channel.invokeMethod('createRoomWithConfig', {
         'handle': handle,
@@ -567,14 +579,16 @@ class ZIMEngine implements ZIM {
 
   @override
   Future<ZIMGroupListQueriedResult> queryGroupList() async {
-    Map resultMap = await channel.invokeMethod('queryGroupList', {'handle':handle});
+    Map resultMap =
+        await channel.invokeMethod('queryGroupList', {'handle': handle});
     return ZIMConverter.oZIMGroupListQueriedResult(resultMap);
   }
 
   @override
   Future<ZIMGroupMemberListQueriedResult> queryGroupMemberList(
       String groupID, ZIMGroupMemberQueryConfig config) async {
-    Map resultMap = await channel.invokeMethod('queryGroupMemberList', {'handle':handle,
+    Map resultMap = await channel.invokeMethod('queryGroupMemberList', {
+      'handle': handle,
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupMemberQueryConfig(config)
     });
@@ -584,7 +598,8 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMCallInvitationSentResult> callInvite(
       List<String> invitees, ZIMCallInviteConfig config) async {
-    Map resultMap = await channel.invokeMethod('callInvite', {'handle':handle,
+    Map resultMap = await channel.invokeMethod('callInvite', {
+      'handle': handle,
       'invitees': invitees,
       'config': ZIMConverter.mZIMCallInviteConfig(config)
     });
@@ -594,7 +609,8 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMCallCancelSentResult> callCancel(
       List<String> invitees, String callID, ZIMCallCancelConfig config) async {
-    Map resultMap = await channel.invokeMethod('callCancel', {'handle':handle,
+    Map resultMap = await channel.invokeMethod('callCancel', {
+      'handle': handle,
       'invitees': invitees,
       'callID': callID,
       'config': ZIMConverter.mZIMCallCancelConfig(config)
@@ -605,7 +621,8 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMCallAcceptanceSentResult> callAccept(
       String callID, ZIMCallAcceptConfig config) async {
-    Map resultMap = await channel.invokeMethod('callAccept', {'handle':handle,
+    Map resultMap = await channel.invokeMethod('callAccept', {
+      'handle': handle,
       'callID': callID,
       'config': ZIMConverter.mZIMCallAcceptConfig(config)
     });
@@ -615,7 +632,8 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config) async {
-    Map resultMap = await channel.invokeMethod('callReject', {'handle':handle,
+    Map resultMap = await channel.invokeMethod('callReject', {
+      'handle': handle,
       'callID': callID,
       'config': ZIMConverter.cnvZIMCallRejectConfigObjectToMap(config)
     });
@@ -625,16 +643,124 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMUserAvatarUrlUpdatedResult> updateUserAvatarUrl(
       String userAvatarUrl) async {
-    Map resultMap = await channel
-        .invokeMethod('updateUserAvatarUrl', {'handle':handle,'userAvatarUrl': userAvatarUrl});
+    Map resultMap = await channel.invokeMethod('updateUserAvatarUrl',
+        {'handle': handle, 'userAvatarUrl': userAvatarUrl});
     return ZIMConverter.oZIMUserAvatarUrlUpdatedResult(resultMap);
   }
 
   @override
   Future<ZIMGroupAvatarUrlUpdatedResult> updateGroupAvatarUrl(
       String groupAvatarUrl, String groupID) async {
-    Map resultMap = await channel.invokeMethod('updateGroupAvatarUrl',
-        {'handle':handle,'groupAvatarUrl': groupAvatarUrl, 'groupID': groupID});
+    Map resultMap = await channel.invokeMethod('updateGroupAvatarUrl', {
+      'handle': handle,
+      'groupAvatarUrl': groupAvatarUrl,
+      'groupID': groupID
+    });
     return ZIMConverter.oZIMGroupAvatarUrlUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMRoomMemberAttributesListQueriedResult>
+      queryRoomMemberAttributesList(
+          String roomID, ZIMRoomMemberAttributesQueryConfig config) async {
+    Map resultMap =
+        await channel.invokeMethod('queryRoomMemberAttributesList', {
+      'handle': handle,
+      'roomID': roomID,
+      'config': ZIMConverter.mZIMRoomMemberAttributesQueryConfig(config)
+    });
+    return ZIMConverter.oZIMRoomMemberAttributesListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMRoomMembersAttributesQueriedResult> queryRoomMembersAttributes(
+      List<String> userIDs, String roomID) async {
+    Map resultMap = await channel.invokeMethod('queryRoomMembersAttributes',
+        {'handle': handle, 'roomID': roomID, 'userIDs': userIDs});
+    return ZIMConverter.oZIMRoomMembersAttributesQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMRoomMembersAttributesOperatedResult> setRoomMembersAttributes(
+      Map<String, String> attributes,
+      List<String> userIDs,
+      String roomID,
+      ZIMRoomMemberAttributesSetConfig config) async {
+    Map resultMap = await channel.invokeMethod('setRoomMemberAttributes', {
+      'handle': handle,
+      'attributes': attributes,
+      'roomID': roomID,
+      'userIDs': userIDs,
+      'config': ZIMConverter.mZIMRoomMemberAttributesSetConfig(config)
+    });
+    return ZIMConverter.oZIMRoomMembersAttributesOperatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageSentResult> sendMessage(
+      ZIMMessage message,
+      String toConversationID,
+      ZIMConversationType conversationType,
+      ZIMMessageSendConfig config,
+      [ZIMMessageSendNotification? notification]) async {
+    int messageID = ZIMCommonData.getSequence();
+    ZIMCommonData.messsageMap[messageID] = message;
+    int? messageAttachedCallbackID;
+    if (notification?.onMessageAttached != null) {
+      messageAttachedCallbackID = ZIMCommonData.getSequence();
+      ZIMCommonData.zimMessageAttachedCallbackMap[messageAttachedCallbackID] =
+          notification!.onMessageAttached!;
+    }
+    try {
+      Map resultMap = await channel.invokeMethod('sendMessage', {
+        'handle': handle,
+        'message': ZIMConverter.mZIMMessage(message),
+        'toConversationID': toConversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType],
+        'config': ZIMConverter.mZIMMessageSendConfig(config),
+        'messageAttachedCallbackID': messageAttachedCallbackID,
+        'messageID': messageID
+      });
+      return ZIMConverter.oZIMMessageSentResult(resultMap);
+    } on PlatformException catch (e) {
+      Map resultMap = e.details;
+      ZIMMessageSentResult result =
+          ZIMConverter.oZIMMessageSentResult(resultMap);
+      result.message.sentStatus = ZIMMessageSentStatus.failed;
+      throw PlatformException(code: e.code, message: e.message);
+    } finally {
+      ZIMCommonData.messsageMap.remove(messageID);
+      ZIMCommonData.zimMessageAttachedCallbackMap
+          .remove(messageAttachedCallbackID);
+    }
+  }
+
+  @override
+  Future<ZIMMessageInsertedResult> insertMessageToLocalDB(
+      ZIMMessage message,
+      String conversationID,
+      ZIMConversationType conversationType,
+      String senderUserID) async {
+    int messageID = ZIMCommonData.getSequence();
+    ZIMCommonData.messsageMap[messageID] = message;
+    try {
+      Map resultMap = await channel.invokeMethod('insertMessageToLocalDB', {
+        'handle': handle,
+        'message': ZIMConverter.mZIMMessage(message),
+        'messageID': messageID,
+        'conversationID': conversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType],
+        'senderUserID': senderUserID
+      });
+      return ZIMConverter.oZIMMessageInsertedResult(resultMap);
+    } on PlatformException catch (e) {
+      ZIMMessageInsertedResult result =
+          ZIMConverter.oZIMMessageInsertedResult(e.details);
+      throw PlatformException(code: e.code, message: e.message);
+    } finally {
+      ZIMCommonData.messsageMap.remove(messageID);
+    }
   }
 }

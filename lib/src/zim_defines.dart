@@ -185,7 +185,9 @@ enum ZIMMessageType {
   /// Description: Video message.
   ///
   /// Use cases: For sending video messages, only ".mp4", ".mov" video types are supported. After sending the video message, the server will generate the first frame of the video file.
-  video
+  video,
+
+  system
 }
 
 enum ZIMMediaFileType {
@@ -339,7 +341,6 @@ class ZIMUserInfoQueryConfig {
   ZIMUserInfoQueryConfig();
 }
 
-
 /// Description:Offline push configuration.
 class ZIMPushConfig {
   /// Description: Used to set the push title.
@@ -361,6 +362,16 @@ class ZIMMessageSendConfig {
   /// Enumeration value used to set message priority. The default value is Low.
   ZIMMessagePriority priority = ZIMMessagePriority.low;
   ZIMMessageSendConfig();
+}
+
+class ZIMMessageSendNotification {
+  ZIMMessageAttachedCallback? onMessageAttached;
+  ZIMMessageSendNotification({this.onMessageAttached});
+}
+
+class ZIMMediaMessageSendNotification {
+  ZIMMessageAttachedCallback? onMessageAttached;
+  ZIMMediaUploadingProgress? onMediaUploadingProgress;
 }
 
 /// User information object.
@@ -399,6 +410,7 @@ class ZIMMessage {
   int timestamp = 0;
   int conversationSeq = 0;
   int orderKey = 0;
+  bool isUserInserted = false;
 }
 
 class ZIMTextMessage extends ZIMMessage {
@@ -441,6 +453,8 @@ typedef ZIMMediaUploadingProgress = void Function(
 typedef ZIMMediaDownloadingProgress = void Function(
     ZIMMessage message, int currentFileSize, int totalFileSize);
 
+typedef ZIMMessageAttachedCallback = void Function(ZIMMessage message);
+
 class ZIMImageMessage extends ZIMMediaMessage {
   String thumbnailDownloadUrl = '';
   String thumbnailLocalPath = '';
@@ -479,6 +493,13 @@ class ZIMVideoMessage extends ZIMMediaMessage {
   int videoFirstFrameHeight = 0;
   ZIMVideoMessage(String fileLocalPath) : super(fileLocalPath: fileLocalPath) {
     super.type = ZIMMessageType.video;
+  }
+}
+
+class ZIMSystemMessage extends ZIMMessage {
+  String message = '';
+  ZIMSystemMessage({required this.message}) {
+    super.type = ZIMMessageType.text;
   }
 }
 
@@ -521,6 +542,33 @@ class ZIMRoomInfo {
 class ZIMRoomFullInfo {
   ZIMRoomInfo baseInfo;
   ZIMRoomFullInfo({required this.baseInfo});
+}
+
+class ZIMRoomMemberAttributesSetConfig {
+  bool isDeleteAfterOwnerLeft = true;
+}
+
+class ZIMRoomMemberAttributesQueryConfig {
+  String nextFlag = '';
+  int count = 0;
+}
+
+class ZIMRoomMemberAttributesInfo {
+  String userID = '';
+  Map<String, String> attributes = {};
+}
+
+class ZIMRoomMemberAttributesUpdateInfo {
+  ZIMRoomMemberAttributesInfo attributesInfo = ZIMRoomMemberAttributesInfo();
+}
+
+class ZIMRoomMemberAttributesOperatedInfo {
+  ZIMRoomMemberAttributesInfo attributesInfo = ZIMRoomMemberAttributesInfo();
+  List<String> errorKeys = [];
+}
+
+class ZIMRoomOperatedInfo {
+  String userID = '';
 }
 
 /// Example Query message configuration.
@@ -669,6 +717,7 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
 
   /// Description: group role.
   int memberRole = ZIMGroupMemberRole.member;
+
   /// Description: group member avatar url.
   String memberAvatarUrl = "";
   ZIMGroupMemberInfo();
@@ -685,7 +734,12 @@ class ZIMGroupOperatedInfo {
   String memberNickname = '';
   int memberRole = ZIMGroupMemberRole.member;
 
-  ZIMGroupOperatedInfo({required this.operatedUserInfo, required this.userID, required this.userName, required this.memberNickname, required this.memberRole});
+  ZIMGroupOperatedInfo(
+      {required this.operatedUserInfo,
+      required this.userID,
+      required this.userName,
+      required this.memberNickname,
+      required this.memberRole});
 }
 
 /// group member query configuration.
@@ -944,6 +998,11 @@ class ZIMMessageSentResult {
   ZIMMessageSentResult({required this.message});
 }
 
+class ZIMMessageInsertedResult {
+  ZIMMessage message;
+  ZIMMessageInsertedResult({required this.message});
+}
+
 /// Supported versions: 2.1.0 and above.
 ///
 /// Detail description: The progress callback for downloading media messages.
@@ -1114,6 +1173,23 @@ class ZIMRoomAttributesQueriedResult {
       {required this.roomID, required this.roomAttributes});
 }
 
+class ZIMRoomMembersAttributesOperatedResult {
+  String roomID = '';
+  List<ZIMRoomMemberAttributesOperatedInfo> infos = [];
+  List<String> errorUserList = [];
+}
+
+class ZIMRoomMembersAttributesQueriedResult {
+  String roomID = '';
+  List<ZIMRoomMemberAttributesInfo> infos = [];
+}
+
+class ZIMRoomMemberAttributesListQueriedResult {
+  String roomID = '';
+  List<ZIMRoomMemberAttributesInfo> infos = [];
+  String nextFlag = '';
+}
+
 /// Description: Returns the result of the group creation operation.
 ///
 /// Use cases: After a group creation operation is performed, the success or failure can be determined by this callback.
@@ -1232,8 +1308,6 @@ class ZIMGroupNameUpdatedResult {
   String groupID;
   String groupName;
   ZIMGroupNameUpdatedResult({required this.groupID, required this.groupName});
-
-
 }
 
 /// Description: Return result of group avatar url update operation.
