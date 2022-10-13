@@ -372,6 +372,7 @@ class ZIMMessageSendNotification {
 class ZIMMediaMessageSendNotification {
   ZIMMessageAttachedCallback? onMessageAttached;
   ZIMMediaUploadingProgress? onMediaUploadingProgress;
+  ZIMMediaMessageSendNotification({this.onMessageAttached,this.onMediaUploadingProgress});
 }
 
 /// User information object.
