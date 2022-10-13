@@ -228,23 +228,23 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
             (map['invitees'] as List).cast<String>(), map['callID']);
         break;
       case 'downloadMediaFileProgress':
-        int progressID = map['progressID'];
+        int? progressID = map['progressID'];
         ZIMMessage message = ZIMConverter.oZIMMessage(map['message']);
         int currentFileSize = map['currentFileSize'];
         int totalFileSize = map['totalFileSize'];
         ZIMMediaDownloadingProgress? progress =
-            ZIMCommonData.mediaDownloadingProgressMap[progressID];
+            ZIMCommonData.mediaDownloadingProgressMap[progressID??0];
         if (progress != null) {
           progress(message, currentFileSize, totalFileSize);
         }
         break;
       case 'uploadMediaProgress':
-        int progressID = map['progressID'];
+        int? progressID = map['progressID'];
         ZIMMessage message = ZIMConverter.oZIMMessage(map['message']);
         int currentFileSize = map['currentFileSize'];
         int totalFileSize = map['totalFileSize'];
         ZIMMediaUploadingProgress? progress =
-            ZIMCommonData.mediaUploadingProgressMap[progressID];
+            ZIMCommonData.mediaUploadingProgressMap[progressID??0];
         if (progress != null) {
           progress(message, currentFileSize, totalFileSize);
         }
