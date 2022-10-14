@@ -114,6 +114,7 @@ class ZIM {
       Object notification);
   external PromiseJsImpl<dynamic> insertMessageToLocalDB(Object message,
       String conversationID, dynamic conversationType, String senderUserID);
+  external PromiseJsImpl<dynamic> setRoomMembersAttributes(dynamic attributes, dynamic userIDs, String roomID, Object config);
 }
 
 @JS()
