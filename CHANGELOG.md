@@ -1,3 +1,38 @@
+## 2.4.0
+
+### 1. Feature
+
+1、Now when sendMessage sendMediaMessage API is used, the object passed in is the same address as the object for result.
+2、Support insert message in local DataBase.
+3、Support set and query room member attributes like room attributes.
+
+### 2. API Refactoring
+> 💥 Please note to developers that there are breaking changes starting from version 2.4.0, so please read the following guidelines when upgrading from the old version to the new version.
+
+sendMediaMessage have a breaking changed.
+
+* old version usage:
+```dart
+Future<ZIMMessageSentResult> sendMediaMessage(
+      ZIMMediaMessage message,
+      String toConversationID,
+      ZIMConversationType conversationType,
+      ZIMMessageSendConfig config,
+      ZIMMediaUploadingProgress? progress);
+      ZIMMediaMessageSendNotification? notification);
+```
+
+* new version usage:
+```dart
+  Future<ZIMMessageSentResult> sendMediaMessage(
+      ZIMMediaMessage message,
+      String toConversationID,
+      ZIMConversationType conversationType,
+      ZIMMessageSendConfig config,
+      ZIMMediaMessageSendNotification? notification);
+```
+
+
 ## 2.3.4
 
 - fix web platform type check compatibility issues
