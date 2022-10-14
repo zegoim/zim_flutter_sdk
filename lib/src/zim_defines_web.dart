@@ -20,53 +20,100 @@ class ZIM {
   external PromiseJsImpl<dynamic> updateUserName(String userName);
   external PromiseJsImpl<dynamic> updateUserAvatarUrl(String userAvatarUrl);
   external PromiseJsImpl<dynamic> updateUserExtendedData(String extendedData);
-  external PromiseJsImpl<dynamic> queryUsersInfo(dynamic userIDs, Object config);
+  external PromiseJsImpl<dynamic> queryUsersInfo(
+      dynamic userIDs, Object config);
   external PromiseJsImpl<dynamic> createRoom(Object roomInfo, Object? config);
   external PromiseJsImpl<dynamic> enterRoom(Object roomInfo, Object? config);
   external PromiseJsImpl<dynamic> joinRoom(String roomID);
   external PromiseJsImpl<dynamic> leaveRoom(String roomID);
-  external PromiseJsImpl<dynamic> queryRoomMemberList(String roomID, Object config);
+  external PromiseJsImpl<dynamic> queryRoomMemberList(
+      String roomID, Object config);
   external PromiseJsImpl<dynamic> queryRoomOnlineMemberCount(String roomID);
   external PromiseJsImpl<dynamic> queryRoomAllAttributes(String roomID);
-  external PromiseJsImpl<dynamic> setRoomAttributes(dynamic roomAttributes, String roomID, Object config);
-  external PromiseJsImpl<dynamic> deleteRoomAttributes(dynamic keys, String roomID, Object config);
-  external PromiseJsImpl<dynamic> beginRoomAttributesBatchOperation(String roomID, Object config);
-  external PromiseJsImpl<dynamic> endRoomAttributesBatchOperation(String roomID);
-  external PromiseJsImpl<dynamic> sendMediaMessage(Object message, String toConversationID, dynamic conversationType, Object config, dynamic progress);
-  external PromiseJsImpl<dynamic> queryHistoryMessage(String conversationID, int conversationType, Object config);
-  external PromiseJsImpl<dynamic> sendPeerMessage(Object message, String toUserID, Object config);
-  external PromiseJsImpl<dynamic> sendRoomMessage(Object message, String toRoomID, Object config);
-  external PromiseJsImpl<dynamic> sendGroupMessage(Object message, String toGroupID, Object config);
-  external PromiseJsImpl<dynamic> deleteMessages(dynamic messageList, String conversationID, dynamic conversationType, Object config);
-  external PromiseJsImpl<dynamic> deleteAllMessage(String conversationID, dynamic conversationType, Object config);
-  external PromiseJsImpl<dynamic> createGroup(Object groupInfo, dynamic serIDs, Object? config);
+  external PromiseJsImpl<dynamic> setRoomAttributes(
+      dynamic roomAttributes, String roomID, Object config);
+  external PromiseJsImpl<dynamic> deleteRoomAttributes(
+      dynamic keys, String roomID, Object config);
+  external PromiseJsImpl<dynamic> beginRoomAttributesBatchOperation(
+      String roomID, Object config);
+  external PromiseJsImpl<dynamic> endRoomAttributesBatchOperation(
+      String roomID);
+  external PromiseJsImpl<dynamic> sendMediaMessage(
+      Object message,
+      String toConversationID,
+      dynamic conversationType,
+      Object config,
+      dynamic notification);
+  external PromiseJsImpl<dynamic> queryHistoryMessage(
+      String conversationID, int conversationType, Object config);
+  external PromiseJsImpl<dynamic> sendPeerMessage(
+      Object message, String toUserID, Object config);
+  external PromiseJsImpl<dynamic> sendRoomMessage(
+      Object message, String toRoomID, Object config);
+  external PromiseJsImpl<dynamic> sendGroupMessage(
+      Object message, String toGroupID, Object config);
+  external PromiseJsImpl<dynamic> deleteMessages(dynamic messageList,
+      String conversationID, dynamic conversationType, Object config);
+  external PromiseJsImpl<dynamic> deleteAllMessage(
+      String conversationID, dynamic conversationType, Object config);
+  external PromiseJsImpl<dynamic> createGroup(
+      Object groupInfo, dynamic serIDs, Object? config);
   external PromiseJsImpl<dynamic> joinGroup(String groupID);
   external PromiseJsImpl<dynamic> leaveGroup(String groupID);
   external PromiseJsImpl<dynamic> dismissGroup(String groupID);
-  external PromiseJsImpl<dynamic> inviteUsersIntoGroup(dynamic userIDs, String groupID);
-  external PromiseJsImpl<dynamic> kickGroupMembers(dynamic userIDs, String groupID);
-  external PromiseJsImpl<dynamic> transferGroupOwner(String toUserID, String groupID);
-  external PromiseJsImpl<dynamic> updateGroupName(String groupName, String groupID);
-  external PromiseJsImpl<dynamic> updateGroupAvatarUrl(String groupAvatarUrl, String groupID);
-  external PromiseJsImpl<dynamic> updateGroupNotice(String groupNotice, String groupID);
+  external PromiseJsImpl<dynamic> inviteUsersIntoGroup(
+      dynamic userIDs, String groupID);
+  external PromiseJsImpl<dynamic> kickGroupMembers(
+      dynamic userIDs, String groupID);
+  external PromiseJsImpl<dynamic> transferGroupOwner(
+      String toUserID, String groupID);
+  external PromiseJsImpl<dynamic> updateGroupName(
+      String groupName, String groupID);
+  external PromiseJsImpl<dynamic> updateGroupAvatarUrl(
+      String groupAvatarUrl, String groupID);
+  external PromiseJsImpl<dynamic> updateGroupNotice(
+      String groupNotice, String groupID);
   external PromiseJsImpl<dynamic> queryGroupInfo(String groupID);
   external PromiseJsImpl<dynamic> queryGroupList();
-  external PromiseJsImpl<dynamic> setGroupAttributes(Map groupAttributes,String groupID);
-  external PromiseJsImpl<dynamic> deleteGroupAttributes(dynamic keys, String groupID);
-  external PromiseJsImpl<dynamic> queryGroupAttributes(dynamic keys, String groupID);
+  external PromiseJsImpl<dynamic> setGroupAttributes(
+      Map groupAttributes, String groupID);
+  external PromiseJsImpl<dynamic> deleteGroupAttributes(
+      dynamic keys, String groupID);
+  external PromiseJsImpl<dynamic> queryGroupAttributes(
+      dynamic keys, String groupID);
   external PromiseJsImpl<dynamic> queryGroupAllAttributes(String groupID);
-  external PromiseJsImpl<dynamic> setGroupMemberRole(int role, String forUserID, String groupID);
-  external PromiseJsImpl<dynamic> setGroupMemberNickname(String nickname, String forUserID, String groupID);
-  external PromiseJsImpl<dynamic> queryGroupMemberInfo(String userID, String groupID);
-  external PromiseJsImpl<dynamic> queryGroupMemberList(String groupID, Object? config);
+  external PromiseJsImpl<dynamic> setGroupMemberRole(
+      int role, String forUserID, String groupID);
+  external PromiseJsImpl<dynamic> setGroupMemberNickname(
+      String nickname, String forUserID, String groupID);
+  external PromiseJsImpl<dynamic> queryGroupMemberInfo(
+      String userID, String groupID);
+  external PromiseJsImpl<dynamic> queryGroupMemberList(
+      String groupID, Object? config);
   external PromiseJsImpl<dynamic> queryConversationList(Object config);
-  external PromiseJsImpl<dynamic> deleteConversation(String conversationID, dynamic conversationType, Object? config);
-  external PromiseJsImpl<dynamic> clearConversationUnreadMessageCount(String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> setConversationNotificationStatus(dynamic status, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> deleteConversation(
+      String conversationID, dynamic conversationType, Object? config);
+  external PromiseJsImpl<dynamic> clearConversationUnreadMessageCount(
+      String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> setConversationNotificationStatus(
+      dynamic status, String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> callInvite(dynamic invitees, Object? config);
-  external PromiseJsImpl<dynamic> callCancel(dynamic invitees, String callID, Object config);
+  external PromiseJsImpl<dynamic> callCancel(
+      dynamic invitees, String callID, Object config);
   external PromiseJsImpl<dynamic> callAccept(String callID, Object config);
   external PromiseJsImpl<dynamic> callReject(String callID, Object config);
+  external PromiseJsImpl<dynamic> queryRoomMemberAttributesList(
+      String roomID, Object config);
+  external PromiseJsImpl<dynamic> queryRoomMembersAttributes(
+      dynamic userIDs, String roomID);
+  external PromiseJsImpl<dynamic> sendMessage(
+      Object message,
+      String toConversationID,
+      dynamic conversationType,
+      dynamic config,
+      Object notification);
+  external PromiseJsImpl<dynamic> insertMessageToLocalDB(Object message,
+      String conversationID, dynamic conversationType, String senderUserID);
 }
 
 @JS()
@@ -94,11 +141,11 @@ class ZIMUserInfoWeb {
   external String get userName;
 }
 
-
 @JS()
 @anonymous
 class ZIMConversationQueryConfigWeb {
-  external factory ZIMConversationQueryConfigWeb({dynamic nextConversation, int count});
+  external factory ZIMConversationQueryConfigWeb(
+      {dynamic nextConversation, int count});
 
   external dynamic get nextConversation;
   external int get count;
@@ -124,7 +171,8 @@ class ZIMRoomInfoWeb {
 @JS()
 @anonymous
 class ZIMRoomAdvancedConfigWeb {
-  external factory ZIMRoomAdvancedConfigWeb({dynamic roomAttributes, int roomDestroyDelayTime});
+  external factory ZIMRoomAdvancedConfigWeb(
+      {dynamic roomAttributes, int roomDestroyDelayTime});
 
   external dynamic get roomAttributes;
   external int get roomDestroyDelayTime;
@@ -139,11 +187,11 @@ class ZIMRoomMemberQueryConfigWeb {
   external int get roomDestroyDelayTime;
 }
 
-
 @JS()
 @anonymous
 class ZIMRoomAttributesSetConfigWeb {
-  external factory ZIMRoomAttributesSetConfigWeb({bool isForce, bool isUpdateOwner, bool isDeleteAfterOwnerLeft});
+  external factory ZIMRoomAttributesSetConfigWeb(
+      {bool isForce, bool isUpdateOwner, bool isDeleteAfterOwnerLeft});
 
   external bool get isForce;
   external bool get isUpdateOwner;
@@ -161,7 +209,8 @@ class ZIMRoomAttributesDeleteConfigWeb {
 @JS()
 @anonymous
 class ZIMRoomAttributesBatchOperationConfigWeb {
-  external factory ZIMRoomAttributesBatchOperationConfigWeb({bool isForce, bool isUpdateOwner, bool isDeleteAfterOwnerLeft});
+  external factory ZIMRoomAttributesBatchOperationConfigWeb(
+      {bool isForce, bool isUpdateOwner, bool isDeleteAfterOwnerLeft});
 
   external bool get isForce;
   external bool get isUpdateOwner;
@@ -171,7 +220,12 @@ class ZIMRoomAttributesBatchOperationConfigWeb {
 @JS()
 @anonymous
 class ZIMMediaMessageBaseWeb {
-  external factory ZIMMediaMessageBaseWeb({dynamic type, dynamic fileLocalPath, String? fileDownloadUrl, String? fileName, int? fileSize });
+  external factory ZIMMediaMessageBaseWeb(
+      {dynamic type,
+      dynamic fileLocalPath,
+      String? fileDownloadUrl,
+      String? fileName,
+      int? fileSize});
 
   external dynamic get type;
   external dynamic get fileLocalPath;
@@ -183,7 +237,8 @@ class ZIMMediaMessageBaseWeb {
 @JS()
 @anonymous
 class ZIMMessageSendConfigWeb {
-  external factory ZIMMessageSendConfigWeb({dynamic priority, ZIMPushConfigWeb pushConfig});
+  external factory ZIMMessageSendConfigWeb(
+      {dynamic priority, ZIMPushConfigWeb pushConfig});
 
   external dynamic get priority;
   external ZIMPushConfigWeb get pushConfig;
@@ -192,7 +247,8 @@ class ZIMMessageSendConfigWeb {
 @JS()
 @anonymous
 class ZIMPushConfigWeb {
-  external factory ZIMPushConfigWeb({String title, String content, String extendedData});
+  external factory ZIMPushConfigWeb(
+      {String title, String content, String extendedData});
 
   external String get title;
   external String get content;
@@ -202,7 +258,8 @@ class ZIMPushConfigWeb {
 @JS()
 @anonymous
 class ZIMMessageQueryConfigWeb {
-  external factory ZIMMessageQueryConfigWeb({dynamic nextMessage, int count, bool reverse});
+  external factory ZIMMessageQueryConfigWeb(
+      {dynamic nextMessage, int count, bool reverse});
 
   external dynamic get nextMessage;
   external int get count;
@@ -229,7 +286,8 @@ class ZIMMessageDeleteConfigWeb {
 @JS()
 @anonymous
 class ZIMGroupInfoWeb {
-  external factory ZIMGroupInfoWeb({String groupID, String groupName, String groupAvatarUrl});
+  external factory ZIMGroupInfoWeb(
+      {String groupID, String groupName, String groupAvatarUrl});
 
   external String get groupID;
   external String get groupName;
@@ -239,7 +297,8 @@ class ZIMGroupInfoWeb {
 @JS()
 @anonymous
 class ZIMGroupAdvancedConfigWeb {
-  external factory ZIMGroupAdvancedConfigWeb({String groupNotice, dynamic groupAttributes});
+  external factory ZIMGroupAdvancedConfigWeb(
+      {String groupNotice, dynamic groupAttributes});
 
   external String get groupNotice;
   external dynamic get groupAttributes;
@@ -257,7 +316,8 @@ class ZIMGroupMemberQueryConfigWeb {
 @JS()
 @anonymous
 class ZIMConversationDeleteConfigWeb {
-  external factory ZIMConversationDeleteConfigWeb({bool isAlsoDeleteServerConversation});
+  external factory ZIMConversationDeleteConfigWeb(
+      {bool isAlsoDeleteServerConversation});
 
   external bool get isAlsoDeleteServerConversation;
 }
@@ -294,15 +354,3 @@ class ZIMCallRejectConfigWeb {
 
   external String get extendedData;
 }
-
-
-
-
-
-
-
-
-
-
-
-

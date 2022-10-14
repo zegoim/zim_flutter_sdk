@@ -248,28 +248,29 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
             .zimMessageAttachedCallbackMap[messageAttachedCallbackID];
         if (onMessageAttached != null) {
           ZIMMessage message =
-            ZIMConverter.oZIMMessage(map['message'], map['messageID']);
+              ZIMConverter.oZIMMessage(map['message'], map['messageID']);
           onMessageAttached(message);
         }
         break;
       case 'downloadMediaFileProgress':
-        int progressID = map['progressID'];
+        int? progressID = map['progressID'];
         ZIMMessage message = ZIMConverter.oZIMMessage(map['message']);
         int currentFileSize = map['currentFileSize'];
         int totalFileSize = map['totalFileSize'];
         ZIMMediaDownloadingProgress? progress =
-            ZIMCommonData.mediaDownloadingProgressMap[progressID];
+            ZIMCommonData.mediaDownloadingProgressMap[progressID ?? 0];
         if (progress != null) {
           progress(message, currentFileSize, totalFileSize);
         }
         break;
       case 'uploadMediaProgress':
         int progressID = map['progressID'];
-        ZIMMessage message = ZIMConverter.oZIMMessage(map['message'],map['messageID']);
+        ZIMMessage message =
+            ZIMConverter.oZIMMessage(map['message'], map['messageID']);
         int currentFileSize = map['currentFileSize'];
         int totalFileSize = map['totalFileSize'];
         ZIMMediaUploadingProgress? progress =
-            ZIMCommonData.mediaUploadingProgressMap[progressID];
+            ZIMCommonData.mediaUploadingProgressMap[progressID ?? 0];
         if (progress != null) {
           progress(message, currentFileSize, totalFileSize);
         }

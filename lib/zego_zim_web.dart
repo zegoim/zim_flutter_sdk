@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
+import 'dart:js_util';
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
-import 'package:js/js_util.dart' as js;
+import 'dart:js_util' as js;
 import 'dart:js';
 
 import 'package:flutter/services.dart';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:js/js_util.dart';
 import 'package:zego_zim/src/internal/zim_common_data.dart';
 import 'package:zego_zim/src/internal/zim_converter.dart';
 import 'package:zego_zim/src/internal/zim_engine.dart';
@@ -19,8 +20,6 @@ import 'package:zego_zim/src/zim_defines.dart';
 import 'package:zego_zim/src/zim_defines_web.dart';
 import 'package:zego_zim/src/zim_event_handler.dart';
 
-
-
 /// A web implementation of the ZimFlutterSdkPlatform of the ZimFlutterSdk plugin.
 class ZegoZimPlugin {
   /// Constructs a ZegoZimPluginWeb
@@ -28,7 +27,7 @@ class ZegoZimPlugin {
 
   static Map<String, ZIM> handleMap = {};
 
-  static final StreamController _evenController = StreamController();
+  static final StreamController _evenController = StreamController.broadcast();
 
   static void registerWith(Registrar registrar) {
     //ZimFlutterSdkPlatform.instance = ZimFlutterSdkWeb();
@@ -39,9 +38,7 @@ class ZegoZimPlugin {
     );
 
     final eventChannel = PluginEventChannel(
-        'zim_event_handler',
-        const StandardMethodCodec(),
-        registrar);
+        'zim_event_handler', const StandardMethodCodec(), registrar);
 
     final pluginInstance = ZegoZimPlugin();
     channel.setMethodCallHandler(pluginInstance.handleMethodCall);
@@ -84,17 +81,21 @@ class ZegoZimPlugin {
       case 'leaveRoom':
         return leaveRoom(call.arguments["roomID"]);
       case 'queryRoomMemberList':
-        return queryRoomMemberList(call.arguments["roomID"], call.arguments["config"]);
+        return queryRoomMemberList(
+            call.arguments["roomID"], call.arguments["config"]);
       case 'queryRoomOnlineMemberCount':
         return queryRoomOnlineMemberCount(call.arguments["roomID"]);
       case 'queryRoomAllAttributes':
         return queryRoomAllAttributes(call.arguments["roomID"]);
       case 'setRoomAttributes':
-        return setRoomAttributes(call.arguments["roomAttributes"], call.arguments["roomID"], call.arguments["config"]);
+        return setRoomAttributes(call.arguments["roomAttributes"],
+            call.arguments["roomID"], call.arguments["config"]);
       case 'deleteRoomAttributes':
-        return deleteRoomAttributes(call.arguments["keys"], call.arguments["roomID"], call.arguments["config"]);
+        return deleteRoomAttributes(call.arguments["keys"],
+            call.arguments["roomID"], call.arguments["config"]);
       case 'beginRoomAttributesBatchOperation':
-        return beginRoomAttributesBatchOperation(call.arguments["roomID"], call.arguments["config"]);
+        return beginRoomAttributesBatchOperation(
+            call.arguments["roomID"], call.arguments["config"]);
       case 'endRoomAttributesBatchOperation':
         return endRoomAttributesBatchOperation(call.arguments["roomID"]);
       case 'createRoomWithConfig':
@@ -102,7 +103,8 @@ class ZegoZimPlugin {
       case 'renewToken':
         return renewToken(call.arguments["token"]);
       case 'queryUsersInfo':
-        return queryUsersInfo(call.arguments["userIDs"], call.arguments["config"]);
+        return queryUsersInfo(
+            call.arguments["userIDs"], call.arguments["config"]);
       case 'queryConversationList':
         return queryConversationList(call.arguments["config"]);
       case 'updateUserName':
@@ -112,25 +114,45 @@ class ZegoZimPlugin {
       case 'updateUserExtendedData':
         return updateUserExtendedData(call.arguments["extendedData"]);
       case 'clearConversationUnreadMessageCount':
-        return clearConversationUnreadMessageCount(call.arguments["conversationID"], call.arguments["conversationType"]);
+        return clearConversationUnreadMessageCount(
+            call.arguments["conversationID"],
+            call.arguments["conversationType"]);
       case 'queryHistoryMessage':
-        return queryHistoryMessage(call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["config"]);
+        return queryHistoryMessage(call.arguments["conversationID"],
+            call.arguments["conversationType"], call.arguments["config"]);
       case 'sendMediaMessage':
-        return sendMediaMessage(call.arguments["message"], call.arguments["toConversationID"], call.arguments["conversationType"], call.arguments["config"], call.arguments["progressID"]);
+        return sendMediaMessage(
+            call.arguments["message"],
+            call.arguments["toConversationID"],
+            call.arguments["conversationType"],
+            call.arguments["config"],
+            call.arguments["messageID"],
+            call.arguments["progressID"],
+            call.arguments["messageAttachedCallbackID"]);
       case 'downloadMediaFile':
-        return downloadMediaFile(call.arguments["message"], call.arguments["fileType"], call.arguments["progressID"]);
+        return downloadMediaFile(call.arguments["message"],
+            call.arguments["fileType"], call.arguments["progressID"]);
       case 'sendPeerMessage':
-        return sendPeerMessage(call.arguments["message"], call.arguments["toUserID"], call.arguments["config"]);
+        return sendPeerMessage(call.arguments["message"],
+            call.arguments["toUserID"], call.arguments["config"]);
       case 'sendRoomMessage':
-        return sendRoomMessage(call.arguments["message"], call.arguments["toRoomID"], call.arguments["config"]);
+        return sendRoomMessage(call.arguments["message"],
+            call.arguments["toRoomID"], call.arguments["config"]);
       case 'sendGroupMessage':
-        return sendGroupMessage(call.arguments["message"], call.arguments["toGroupID"], call.arguments["config"]);
+        return sendGroupMessage(call.arguments["message"],
+            call.arguments["toGroupID"], call.arguments["config"]);
       case 'deleteMessages':
-        return deleteMessages(call.arguments["messageList"], call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["config"]);
+        return deleteMessages(
+            call.arguments["messageList"],
+            call.arguments["conversationID"],
+            call.arguments["conversationType"],
+            call.arguments["config"]);
       case 'deleteAllMessage':
-        return deleteAllMessage(call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["config"]);
+        return deleteAllMessage(call.arguments["conversationID"],
+            call.arguments["conversationType"], call.arguments["config"]);
       case 'createGroup':
-        return createGroup(call.arguments["groupInfo"], call.arguments["userIDs"], call.arguments["config"]);
+        return createGroup(call.arguments["groupInfo"],
+            call.arguments["userIDs"], call.arguments["config"]);
       case 'joinGroup':
         return joinGroup(call.arguments["groupID"]);
       case 'leaveGroup':
@@ -138,65 +160,103 @@ class ZegoZimPlugin {
       case 'dismissGroup':
         return dismissGroup(call.arguments["groupID"]);
       case 'inviteUsersIntoGroup':
-        return inviteUsersIntoGroup(call.arguments["userIDs"], call.arguments["groupID"]);
+        return inviteUsersIntoGroup(
+            call.arguments["userIDs"], call.arguments["groupID"]);
       case 'kickGroupMembers':
-        return kickGroupMembers(call.arguments["userIDs"], call.arguments["groupID"]);
+        return kickGroupMembers(
+            call.arguments["userIDs"], call.arguments["groupID"]);
       case 'transferGroupOwner':
-        return transferGroupOwner(call.arguments["toUserID"], call.arguments["groupID"]);
+        return transferGroupOwner(
+            call.arguments["toUserID"], call.arguments["groupID"]);
       case 'updateGroupName':
-        return updateGroupName(call.arguments["groupName"], call.arguments["groupID"]);
+        return updateGroupName(
+            call.arguments["groupName"], call.arguments["groupID"]);
       case 'updateGroupAvatarUrl':
-        return updateGroupAvatarUrl(call.arguments["groupAvatarUrl"], call.arguments["groupID"]);
+        return updateGroupAvatarUrl(
+            call.arguments["groupAvatarUrl"], call.arguments["groupID"]);
       case 'updateGroupNotice':
-        return updateGroupNotice(call.arguments["groupNotice"], call.arguments["groupID"]);
+        return updateGroupNotice(
+            call.arguments["groupNotice"], call.arguments["groupID"]);
       case 'queryGroupInfo':
         return queryGroupInfo(call.arguments["groupID"]);
       case 'queryGroupList':
         return queryGroupList();
       case 'setGroupAttributes':
-        return setGroupAttributes(call.arguments["groupAttributes"], call.arguments["groupID"]);
+        return setGroupAttributes(
+            call.arguments["groupAttributes"], call.arguments["groupID"]);
       case 'deleteGroupAttributes':
-        return deleteGroupAttributes(call.arguments["keys"], call.arguments["groupID"]);
+        return deleteGroupAttributes(
+            call.arguments["keys"], call.arguments["groupID"]);
       case 'queryGroupAttributes':
-        return queryGroupAttributes(call.arguments["keys"], call.arguments["groupID"]);
+        return queryGroupAttributes(
+            call.arguments["keys"], call.arguments["groupID"]);
       case 'queryGroupAllAttributes':
         return queryGroupAllAttributes(call.arguments["groupID"]);
       case 'setGroupMemberRole':
-        return setGroupMemberRole(call.arguments["role"], call.arguments["forUserID"], call.arguments["groupID"]);
+        return setGroupMemberRole(call.arguments["role"],
+            call.arguments["forUserID"], call.arguments["groupID"]);
       case 'setGroupMemberNickname':
-        return setGroupMemberNickname(call.arguments["nickname"], call.arguments["forUserID"], call.arguments["groupID"]);
+        return setGroupMemberNickname(call.arguments["nickname"],
+            call.arguments["forUserID"], call.arguments["groupID"]);
       case 'queryGroupMemberInfo':
-        return queryGroupMemberInfo(call.arguments["userID"], call.arguments["groupID"]);
+        return queryGroupMemberInfo(
+            call.arguments["userID"], call.arguments["groupID"]);
       case 'queryGroupMemberList':
-        return queryGroupMemberList(call.arguments["groupID"], call.arguments["config"]);
+        return queryGroupMemberList(
+            call.arguments["groupID"], call.arguments["config"]);
       case 'deleteConversation':
-        return deleteConversation(call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["config"]);
+        return deleteConversation(call.arguments["conversationID"],
+            call.arguments["conversationType"], call.arguments["config"]);
       case 'setConversationNotificationStatus':
-        return setConversationNotificationStatus(call.arguments["status"], call.arguments["conversationID"], call.arguments["conversationType"]);
+        return setConversationNotificationStatus(
+            call.arguments["status"],
+            call.arguments["conversationID"],
+            call.arguments["conversationType"]);
       case 'callInvite':
         return callInvite(call.arguments["invitees"], call.arguments["config"]);
       case 'callCancel':
-        return callCancel(call.arguments["invitees"], call.arguments["callID"], call.arguments["config"]);
+        return callCancel(call.arguments["invitees"], call.arguments["callID"],
+            call.arguments["config"]);
       case 'callAccept':
         return callAccept(call.arguments["callID"], call.arguments["config"]);
       case 'callReject':
         return callReject(call.arguments["callID"], call.arguments["config"]);
+      case 'queryRoomMemberAttributesList':
+        return queryRoomMemberAttributesList(
+            call.arguments["roomID"], call.arguments["config"]);
+      case 'queryRoomMembersAttributes':
+        return queryRoomMembersAttributes(
+            call.arguments["userIDs"], call.arguments["roomID"]);
+      case 'sendMessage':
+        return sendMessage(
+            call.arguments["message"],
+            call.arguments["toConversationID"],
+            call.arguments["conversationType"],
+            call.arguments["config"],
+            call.arguments["messageAttachedCallbackID"],
+            call.arguments["messageID"]);
+      case 'insertMessageToLocalDB':
+        return insertMessageToLocalDB(
+            call.arguments["message"],
+            call.arguments["messageID"],
+            call.arguments["conversationID"],
+            call.arguments["conversationType"],
+            call.arguments["senderUserID"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
-          details:
-              'zim for web doesn\'t implement \'${call.method}\'',
+          details: 'zim for web doesn\'t implement \'${call.method}\'',
         );
     }
   }
 
   static void _eventListener(dynamic event) {
     final data = json.decode(event["data"]);
-    ZIM zim = event["zim"];
-    ZIMEngine? _zim = ZIMManager.engineMap[getHandle(zim)];
+    String handle = event["handle"];
+    ZIMEngine? _zim = ZIMManager.engineMap[handle];
 
     if (_zim != null) {
-      switch(event["ev"]) {
+      switch (event["ev"]) {
         case "connectionStateChanged":
           return connectionStateChangedHandle(_zim, data);
         case "error":
@@ -251,8 +311,6 @@ class ZegoZimPlugin {
           return conversationTotalUnreadMessageCountUpdatedHandle(_zim, data);
       }
     }
-
-
   }
 
   static String getHandle(ZIM zim) {
@@ -277,11 +335,13 @@ class ZegoZimPlugin {
 
     if (zim != null) {
       handleMap[handle] = zim;
+    } else if (handleMap.isNotEmpty) {
+      handleMap[handle] = handleMap.values.first;
     }
 
-    ZIM.setEventHandler(
-      allowInterop((dynamic zim, event, String data) {
-        _evenController.add({'zim': zim, 'ev': event, 'data': data});
+    ZIM.setEventHandler(allowInterop((dynamic zim, event, String data) {
+      String handle = getHandle(zim);
+      _evenController.add({'handle': handle, 'ev': event, 'data': data});
     }));
     return Future.value();
   }
@@ -293,9 +353,7 @@ class ZegoZimPlugin {
   }
 
   static Future<void> setLogConfig(int logLevel) {
-    Map config = {
-      "logLevel": logLevel
-    };
+    Map config = {"logLevel": logLevel};
 
     ZIM.getInstance()?.setLogConfig(mapToJSObj(config));
 
@@ -306,9 +364,9 @@ class ZegoZimPlugin {
     return;
   }
 
-  Future<void> login( String userID, String userName, String token) async {
-
-    ZIMUserInfoWeb _userInfo = ZIMUserInfoWeb(userID: userID, userName: userName);
+  Future<void> login(String userID, String userName, String token) async {
+    ZIMUserInfoWeb _userInfo =
+        ZIMUserInfoWeb(userID: userID, userName: userName);
 
     if (ZIM.getInstance() == null) {
       return Future.value();
@@ -330,769 +388,684 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> queryConversationList(dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.queryConversationList(_config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryConversationList(_config));
 
-    Map resultMap = {
-      "conversationList": []
-    };
+    Map resultMap = jsObjectToMap(result);
 
-    result.conversationList.forEach((conversation) {
-      Map _conversation = {
-        "conversationID": conversation.conversationID,
-        "conversationName": conversation.conversationName,
-        "conversationAvatarUrl": conversation.conversationAvatarUrl,
-        "unreadMessageCount": conversation.unreadMessageCount,
-        "orderKey": conversation.orderKey,
-        "lastMessage": {
-          "type": conversation.lastMessage.type,
-          "message": conversation.lastMessage.message,
-          "localMessageID": int.parse(conversation.lastMessage.localMessageID),
-          "messageID": int.parse(conversation.lastMessage.messageID),
-          "senderUserID": conversation.lastMessage.senderUserID,
-          "timestamp": conversation.lastMessage.timestamp,
-          "conversationID": conversation.lastMessage.conversationID,
-          "conversationType": conversation.lastMessage.conversationType,
-          "direction": conversation.lastMessage.direction,
-          "sentStatus": conversation.lastMessage.sentStatus,
-          "orderKey": conversation.lastMessage.orderKey,
-          "conversationSeq": conversation.lastMessage.conversationSeq,
-          "fileLocalPath": conversation.lastMessage.fileLocalPath,
-
-          "thumbnailDownloadUrl": conversation.lastMessage.thumbnailDownloadUrl,
-          "thumbnailLocalPath": conversation.lastMessage.thumbnailLocalPath,
-          "largeImageDownloadUrl": conversation.lastMessage.largeImageDownloadUrl,
-          "largeImageLocalPath": conversation.lastMessage.largeImageLocalPath,
-          "originalImageHeight": conversation.lastMessage.originalImageHeight,
-          "originalImageWidth": conversation.lastMessage.originalImageWidth,
-          "largeImageHeight": conversation.lastMessage.largeImageHeight,
-          "largeImageWidth": conversation.lastMessage.largeImageWidth,
-          "thumbnailHeight": conversation.lastMessage.thumbnailHeight,
-          "thumbnailWidth": conversation.lastMessage.thumbnailWidth,
-
-          "audioDuration": conversation.lastMessage.audioDuration,
-          "videoDuration": conversation.lastMessage.videoDuration,
-          "videoFirstFrameDownloadUrl": conversation.lastMessage.videoFirstFrameDownloadUrl,
-          "videoFirstFrameLocalPath": conversation.lastMessage.videoFirstFrameLocalPath,
-          "videoFirstFrameHeight": conversation.lastMessage.videoFirstFrameHeight,
-          "videoFirstFrameWidth": conversation.lastMessage.videoFirstFrameWidth,
-
-          "fileDownloadUrl": conversation.lastMessage.fileDownloadUrl,
-          "fileUID": conversation.lastMessage.fileUID,
-          "fileName": conversation.lastMessage.fileName,
-          "fileSize": conversation.lastMessage.fileSize
-        }
-      };
-
-
-
-      resultMap["conversationList"].add(_conversation);
+    resultMap["conversationList"].forEach((conversation) {
+      var index = resultMap["conversationList"].indexOf(conversation);
+      resultMap["conversationList"][index]["lastMessage"]["localMessageID"] =
+          int.parse(resultMap["conversationList"][index]["lastMessage"]
+              ["localMessageID"]);
+      resultMap["conversationList"][index]["lastMessage"]["messageID"] =
+          int.parse(
+              resultMap["conversationList"][index]["lastMessage"]["messageID"]);
     });
-
-    return Future.value({
-      "conversationList": result.conversationList
-    });
-  }
-
-  Future<Map<dynamic, dynamic>> updateUserAvatarUrl(String userAvatarUrl)async {
-    final result = await promiseToFuture(ZIM.getInstance()!.updateUserAvatarUrl(userAvatarUrl));
-
-    return Future.value({"userAvatarUrl": result.userAvatarUrl});
-  }
-
-  Future<Map<dynamic,dynamic>> updateUserName(String userName) async {
-
-    final result = await promiseToFuture(ZIM.getInstance()!.updateUserName(userName));
-
-    return {"userName": result.userName};
-  }
-
-  Future<Map<dynamic,dynamic>> updateUserExtendedData(String extendedData) async {
-
-    final result = await promiseToFuture(ZIM.getInstance()!.updateUserExtendedData(extendedData));
-
-    return {"extendedData": result.extendedData};
-  }
-
-  Future<Map<dynamic,dynamic>> renewToken(String token) async {
-
-    var _result = await promiseToFuture(ZIM.getInstance()!.renewToken(token));
-
-    return {"token": _result.token};
-  }
-
-  Future<Map<dynamic,dynamic>> queryUsersInfo(dynamic userIDs, dynamic config) async {
-    Object _config = mapToJSObj(config);
-
-    final result = await promiseToFuture(ZIM.getInstance()!.queryUsersInfo(userIDs, _config));
-    String queriedResult = ZIM.toJSON(result);
-    Map resultMap = jsonDecode(queriedResult);
 
     return resultMap;
   }
 
-  Future<Map<dynamic, dynamic>> clearConversationUnreadMessageCount(String conversationID, int conversationType) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.clearConversationUnreadMessageCount(conversationID, conversationType));
+  Future<Map<dynamic, dynamic>> updateUserAvatarUrl(
+      String userAvatarUrl) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.updateUserAvatarUrl(userAvatarUrl));
 
-    return {
-      "conversationID": result.conversationID,
-      "conversationType": result.conversationType
-    };
+    return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryHistoryMessage(String conversationID, int conversationType, dynamic config) async {
+  Future<Map<dynamic, dynamic>> updateUserName(String userName) async {
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.updateUserName(userName));
 
+    return jsObjectToMap(result);
+  }
 
+  Future<Map<dynamic, dynamic>> updateUserExtendedData(
+      String extendedData) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.updateUserExtendedData(extendedData));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> renewToken(String token) async {
+    var result = await promiseToFuture(ZIM.getInstance()!.renewToken(token));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryUsersInfo(
+      dynamic userIDs, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final _result = await promiseToFuture(ZIM.getInstance()!.queryHistoryMessage(conversationID, conversationType, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryUsersInfo(userIDs, _config));
 
-    final resultMap = {
-      "conversationID": _result.conversationID,
-      "conversationType": _result.conversationType,
-      "messageList": []
-    };
+    return jsObjectToMap(result);
+  }
 
-    _result.messageList.forEach((messageObj)  {
-      resultMap["messageList"].add({
-        "type": messageObj.type,
-        "message": messageObj.message,
-        "localMessageID": int.parse(messageObj.localMessageID),
-        "messageID": int.parse(messageObj.messageID),
-        "senderUserID": messageObj.senderUserID,
-        "timestamp": messageObj.timestamp,
-        "conversationID": messageObj.conversationID,
-        "conversationType": messageObj.conversationType,
-        "direction": messageObj.direction,
-        "sentStatus": messageObj.sentStatus,
-        "orderKey": messageObj.orderKey,
-        "conversationSeq": messageObj.conversationSeq,
-        "fileLocalPath": messageObj.fileLocalPath,
+  Future<Map<dynamic, dynamic>> clearConversationUnreadMessageCount(
+      String conversationID, int conversationType) async {
+    final result = await promiseToFuture(ZIM
+        .getInstance()!
+        .clearConversationUnreadMessageCount(conversationID, conversationType));
 
-        "thumbnailDownloadUrl": messageObj.thumbnailDownloadUrl,
-        "thumbnailLocalPath": messageObj.thumbnailLocalPath,
-        "largeImageDownloadUrl": messageObj.largeImageDownloadUrl,
-        "largeImageLocalPath": messageObj.largeImageLocalPath,
-        "originalImageHeight": messageObj.originalImageHeight,
-        "originalImageWidth": messageObj.originalImageWidth,
-        "largeImageHeight": messageObj.largeImageHeight,
-        "largeImageWidth": messageObj.largeImageWidth,
-        "thumbnailHeight": messageObj.thumbnailHeight,
-        "thumbnailWidth": messageObj.thumbnailWidth,
+    return jsObjectToMap(result);
+  }
 
-        "audioDuration": messageObj.audioDuration,
-        "videoDuration": messageObj.videoDuration,
-        "videoFirstFrameDownloadUrl": messageObj.videoFirstFrameDownloadUrl,
-        "videoFirstFrameLocalPath": messageObj.videoFirstFrameLocalPath,
-        "videoFirstFrameHeight": messageObj.videoFirstFrameHeight,
-        "videoFirstFrameWidth": messageObj.videoFirstFrameWidth,
+  Future<Map<dynamic, dynamic>> queryHistoryMessage(
+      String conversationID, int conversationType, dynamic config) async {
+    Object _config = mapToJSObj(config);
 
-        "fileDownloadUrl": messageObj.fileDownloadUrl,
-        "fileUID": messageObj.fileUID,
-        "fileName": messageObj.fileName,
-        "fileSize": messageObj.fileSize
-      });
+    final result = await promiseToFuture(ZIM
+        .getInstance()!
+        .queryHistoryMessage(conversationID, conversationType, _config));
+
+    final resultMap = jsObjectToMap(result);
+
+    resultMap["messageList"].forEach((message) {
+      var index = resultMap["messageList"].indexOf(message);
+      resultMap["messageList"][index]["localMessageID"] =
+          int.parse(resultMap["messageList"][index]["localMessageID"]);
+      resultMap["messageList"][index]["messageID"] =
+          int.parse(resultMap["messageList"][index]["messageID"]);
     });
-
 
     return resultMap;
   }
 
-  Future<Map<dynamic, dynamic>> createRoom(dynamic roomInfo, dynamic config) async {
-
+  Future<Map<dynamic, dynamic>> createRoom(
+      dynamic roomInfo, dynamic config) async {
     Object _roomInfo = mapToJSObj(roomInfo);
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.createRoom(_roomInfo, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.createRoom(_roomInfo, _config));
 
-    String roomResult = ZIM.toJSON(result);
-
-    final resultMap = jsonDecode(roomResult);
-
-    return resultMap;
+    return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> enterRoom(dynamic roomInfo, dynamic config) async {
+  Future<Map<dynamic, dynamic>> enterRoom(
+      dynamic roomInfo, dynamic config) async {
     Object _roomInfo = mapToJSObj(roomInfo);
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.enterRoom(_roomInfo, _config));
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.enterRoom(_roomInfo, _config));
 
-    final resultMap = {
-      "roomInfo": {
-        "baseInfo": {
-          "roomID": result.roomInfo.baseInfo.roomID,
-          "roomName":  result.roomInfo.baseInfo.roomName
-        }
-      }
-    };
-
-    return resultMap;
-   }
+    return jsObjectToMap(result);
+  }
 
   Future<Map<dynamic, dynamic>> joinRoom(String roomID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.joinRoom(roomID));
 
-    return {
-      "roomInfo":{
-        "baseInfo": {
-          "roomID": result.roomInfo.baseInfo.roomID,
-          "roomName": result.roomInfo.baseInfo.roomName
-        }
-      }
-    };
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> leaveRoom(String roomID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.leaveRoom(roomID));
 
-    return {
-      "roomID": result.roomID
-    };
+    return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryRoomMemberList(String roomID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> queryRoomMemberList(
+      String roomID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final _result = await promiseToFuture(ZIM.getInstance()!.queryRoomMemberList(roomID, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryRoomMemberList(roomID, _config));
 
-    final result = {
-      "roomID": _result.roomID,
-      "nextFlag": _result.nextFlag,
-      "memberList": []
-    };
-
-    _result.memberList.forEach((member) {
-      result["memberList"].add({
-        "userID": member.userID,
-        "userName": member.userName
-      });
-    });
-
-
-    return result;
+    return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryRoomOnlineMemberCount(String roomID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryRoomOnlineMemberCount(roomID));
+  Future<Map<dynamic, dynamic>> queryRoomOnlineMemberCount(
+      String roomID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryRoomOnlineMemberCount(roomID));
 
-    return {
-      "roomID": result.roomID,
-      "count": result.count
-    };
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> queryRoomAllAttributes(String roomID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryRoomAllAttributes(roomID));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryRoomAllAttributes(roomID));
 
-    String attr = ZIM.toJSON(result.roomAttributes);
-
-    return {
-      "roomID": result.roomID,
-      "roomAttributes": jsonDecode(attr)
-    };
+    return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> setRoomAttributes(Map roomAttributes, String roomID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> setRoomAttributes(
+      Map roomAttributes, String roomID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.setRoomAttributes(mapToJSObj(roomAttributes), roomID, _config));
+    final result = await promiseToFuture(ZIM
+        .getInstance()!
+        .setRoomAttributes(mapToJSObj(roomAttributes), roomID, _config));
 
-    final resultMap = {
-      "roomID": result.roomID,
-      "errorKeys": []
-    };
-
-    result.errorKeys.forEach((error) {
-      resultMap["errorKeys"].add(error);
-    });
-
-    return resultMap;
+    return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> deleteRoomAttributes(dynamic keys, String roomID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> deleteRoomAttributes(
+      dynamic keys, String roomID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.deleteRoomAttributes(keys, roomID, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.deleteRoomAttributes(keys, roomID, _config));
 
-    return {
-      "roomID": result.roomID,
-      "errorKeys": result.errorKeys
-    };
+    return jsObjectToMap(result);
   }
 
-  Future<void> beginRoomAttributesBatchOperation(String roomID, dynamic config) async {
+  Future<void> beginRoomAttributesBatchOperation(
+      String roomID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    await promiseToFuture(ZIM.getInstance()!.beginRoomAttributesBatchOperation(roomID, _config));
+    await promiseToFuture(
+        ZIM.getInstance()!.beginRoomAttributesBatchOperation(roomID, _config));
 
     return;
   }
 
-  Future<Map<dynamic, dynamic>> endRoomAttributesBatchOperation(String roomID) async {
+  Future<Map<dynamic, dynamic>> endRoomAttributesBatchOperation(
+      String roomID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.endRoomAttributesBatchOperation(roomID));
 
-    final result = await promiseToFuture(ZIM.getInstance()!.endRoomAttributesBatchOperation(roomID));
-
-    return {
-      "roomID": result.roomID
-    };
+    return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> sendMediaMessage(dynamic message, String toConversationID, dynamic conversationType, dynamic config, int progressID) async {
+  Future<Map<dynamic, dynamic>> sendMediaMessage(
+      dynamic message,
+      String toConversationID,
+      dynamic conversationType,
+      dynamic config,
+      int messageID,
+      int progressID,
+      int messageAttachedCallbackID) async {
     Object _message = mapToJSObj(message);
 
     Object _config = mapToJSObj(config);
 
-    ZIMMediaDownloadingProgress? progress = ZIMCommonData.mediaDownloadingProgressMap[progressID];
+    Map notification = {
+      "onMessageAttached":
+          allowInterop((message, currentFileSize, totalFileSize) {
+        ZIMMessageAttachedCallback? callback = ZIMCommonData
+            .zimMessageAttachedCallbackMap[messageAttachedCallbackID];
 
-    final result = await promiseToFuture(ZIM.getInstance()!.sendMediaMessage(_message, toConversationID, conversationType, _config, allowInterop((message, currentFileSize, totalFileSize) {
-      ZIMMessage zimMessage = ZIMMessage();
-      zimMessage.conversationID = message.conversationID;
-      zimMessage.conversationSeq = message.conversationSeq;
-      zimMessage.messageID = message.messageID;
-      zimMessage.senderUserID = message.senderUserID;
-      zimMessage.timestamp = message.timestamp;
-      zimMessage.orderKey = message.orderKey;
-      zimMessage.localMessageID = message.localMessageID;
-      zimMessage.type = ZIMMessageType.values[message.type];
-      zimMessage.direction = ZIMMessageDirection.values[message.direction];
-      zimMessage.sentStatus = ZIMMessageSentStatus.values[message.sendStatus];
-      zimMessage.conversationType = ZIMConversationType.values[message.conversationType];
+        if (callback != null) {
+          ZIMMessage zimMessage = getZIMMessage(message);
+          callback(zimMessage);
+        }
+      }),
+      "onMediaUploadingProgress":
+          allowInterop((message, currentFileSize, totalFileSize) {
+        ZIMMediaDownloadingProgress? progress =
+            ZIMCommonData.mediaDownloadingProgressMap[progressID];
 
-      if (progress != null) {
-        progress(zimMessage ,currentFileSize, totalFileSize);
-      }
-    })));
+        if (progress != null) {
+          ZIMMessage zimMessage = getZIMMessage(message);
+          progress(zimMessage, currentFileSize, totalFileSize);
+        }
+      })
+    };
+
+    ZIMMediaDownloadingProgress? progress =
+        ZIMCommonData.mediaDownloadingProgressMap[progressID];
+
+    final result = await promiseToFuture(ZIM.getInstance()!.sendMediaMessage(
+        _message,
+        toConversationID,
+        conversationType,
+        _config,
+        mapToJSObj(notification)));
 
     return handleSendMessageResult(result);
   }
 
-  Future<Map<dynamic, dynamic>> downloadMediaFile(dynamic message, dynamic fileType, int progressID) async {
-
+  Future<Map<dynamic, dynamic>> downloadMediaFile(
+      dynamic message, dynamic fileType, int progressID) async {
     return {};
   }
 
-  Future<Map<dynamic, dynamic>> sendPeerMessage(dynamic message, String toUserID, dynamic config) async  {
+  Future<Map<dynamic, dynamic>> sendPeerMessage(
+      dynamic message, String toUserID, dynamic config) async {
     Object _message = mapToJSObj(message);
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.sendPeerMessage(_message, toUserID, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.sendPeerMessage(_message, toUserID, _config));
 
     return handleSendMessageResult(result);
   }
 
-  Future <Map<dynamic, dynamic>> sendRoomMessage(dynamic message, String toRoomID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> sendRoomMessage(
+      dynamic message, String toRoomID, dynamic config) async {
     Object _message = mapToJSObj(message);
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.sendRoomMessage(_message, toRoomID, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.sendRoomMessage(_message, toRoomID, _config));
 
     return handleSendMessageResult(result);
   }
 
-  Future <Map<dynamic, dynamic>> sendGroupMessage(dynamic message, String toGroupID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> sendGroupMessage(
+      dynamic message, String toGroupID, dynamic config) async {
     Object _message = mapToJSObj(message);
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.sendGroupMessage(_message, toGroupID, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.sendGroupMessage(_message, toGroupID, _config));
 
     return handleSendMessageResult(result);
   }
 
-  Future <Map<dynamic, dynamic>> deleteMessages(dynamic messageList, String conversationID, dynamic conversationType, dynamic config) async {
+  Future<Map<dynamic, dynamic>> deleteMessages(dynamic messageList,
+      String conversationID, dynamic conversationType, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.deleteMessages(messageList, conversationID, conversationType, _config));
+    final result = await promiseToFuture(ZIM.getInstance()!.deleteMessages(
+        messageList, conversationID, conversationType, _config));
 
-    return {
-      "conversationID": result.conversationID,
-      "conversationType": result.conversationType
-    };
+    return jsObjectToMap(result);
   }
 
-  Future <Map<dynamic, dynamic>> deleteAllMessage(String conversationID, dynamic conversationType, dynamic config) async {
+  Future<Map<dynamic, dynamic>> deleteAllMessage(
+      String conversationID, dynamic conversationType, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.deleteAllMessage(conversationID, conversationType, _config));
+    final result = await promiseToFuture(ZIM
+        .getInstance()!
+        .deleteAllMessage(conversationID, conversationType, _config));
 
-    return {
-      "conversationID": result.conversationID,
-      "conversationType": result.conversationType
-    };
+    return jsObjectToMap(result);
   }
 
-  Future <Map<dynamic, dynamic>> createGroup(dynamic groupInfo, dynamic userIDs, dynamic config) async {
+  Future<Map<dynamic, dynamic>> createGroup(
+      dynamic groupInfo, dynamic userIDs, dynamic config) async {
     Object _groupInfo = mapToJSObj(groupInfo);
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.createGroup(_groupInfo, userIDs, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.createGroup(_groupInfo, userIDs, _config));
 
-    String attr = ZIM.toJSON(result.groupInfo.groupAttributes);
+    Map resultMap = jsObjectToMap(result);
 
-    Map resultMap = {
-      "groupInfo": {
-        "baseInfo": {
-          "groupID": result.groupInfo.baseInfo.groupID,
-          "groupName": result.groupInfo.baseInfo.groupName,
-          "groupAvatarUrl": result.groupInfo.baseInfo.groupAvatarUrl
-        },
-        "groupNotice": result.groupInfo.groupNotice,
-        "groupAttributes": jsonDecode(attr)
-      },
-      "userList": [],
-      "errorUserList": []
-    };
-
-    result.userList.forEach((user){
-      resultMap["userList"].add({
-        "userID": user.userID,
-        "userName": user.userName,
-        "memberRole": user.memberRole,
-        "memberNickname": user.memberNickname is String ? user.memberNickname : "",
-        "memberAvatarUrl": user.memberAvatarUrl is String ? user.memberAvatarUrl : ""
-      });
-    });
-
-    result.errorUserList.forEach((user){
-      resultMap["errorUserList"].add({
-        "userID": user.userID,
-        "reason": user.reason
-      });
+    resultMap["userList"].forEach((user) {
+      var index = resultMap["userList"].indexOf(user);
+      resultMap["userList"][index]["memberNickname"] =
+          resultMap["userList"][index]["memberNickname"] is String
+              ? resultMap["userList"][index]["memberNickname"]
+              : "";
+      resultMap["userList"][index]["memberAvatarUrl"] =
+          resultMap["userList"][index]["memberAvatarUrl"] is String
+              ? resultMap["userList"][index]["memberAvatarUrl"]
+              : "";
     });
 
     return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> joinGroup(String groupID) async {
+  Future<Map<dynamic, dynamic>> joinGroup(String groupID) async {
     final result = await promiseToFuture(ZIM.getInstance()!.joinGroup(groupID));
 
-    String attr = ZIM.toJSON(result.groupInfo.groupAttributes);
+    Map resultMap = jsObjectToMap(result);
 
-    return {
-      "groupInfo": {
-        "baseInfo": {
-          "groupID": result.groupInfo.baseInfo.groupID,
-          "groupName": result.groupInfo.baseInfo.groupName,
-          "groupAvatarUrl": result.groupInfo.baseInfo.groupAvatarUrl
-        },
-        "groupNotice": result.groupInfo.groupNotice is String ? result.groupInfo.groupNotice : "",
-        "groupAttributes": jsonDecode(attr)
-      }
-    };
+    resultMap["groupInfo"]["groupNotice"] =
+        resultMap["groupInfo"]["groupNotice"] is String
+            ? resultMap["groupInfo"]["groupNotice"]
+            : "";
+
+    return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> leaveGroup(String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.leaveGroup(groupID));
+  Future<Map<dynamic, dynamic>> leaveGroup(String groupID) async {
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.leaveGroup(groupID));
 
-    return {
-      "groupID": result.groupID
-    };
+    return jsObjectToMap(result);
   }
 
-  Future <Map<dynamic, dynamic>> dismissGroup(String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.dismissGroup(groupID));
+  Future<Map<dynamic, dynamic>> dismissGroup(String groupID) async {
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.dismissGroup(groupID));
 
-    return {
-      "groupID": result.groupID
-    };
+    return jsObjectToMap(result);
   }
 
-  Future <Map<dynamic, dynamic>> inviteUsersIntoGroup(dynamic userIDs, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.inviteUsersIntoGroup(userIDs, groupID));
+  Future<Map<dynamic, dynamic>> inviteUsersIntoGroup(
+      dynamic userIDs, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.inviteUsersIntoGroup(userIDs, groupID));
 
-    final resultMap = {
-      "groupID": result.groupID,
-      "userList": [],
-      "errorUserList": []
-    };
+    Map resultMap = jsObjectToMap(result);
 
-    result.userList.forEach((user){
-      resultMap["userList"].add({
-        "userID": user.userID,
-        "userName": user.userName,
-        "memberRole": user.memberRole,
-        "memberNickname": user.memberNickname is String ? user.memberNickname : "",
-        "memberAvatarUrl": user.memberAvatarUrl is String ? user.memberAvatarUrl : ""
-      });
-    });
-
-    result.errorUserList.forEach((user){
-      resultMap["errorUserList"].add({
-        "userID": user.userID,
-        "reason": user.userID
-      });
+    resultMap["userList"].forEach((user) {
+      var index = resultMap["userList"].indexOf(user);
+      resultMap["userList"][index]["memberNickname"] =
+          isString(resultMap["userList"][index]["memberNickname"]);
+      resultMap["userList"][index]["memberAvatarUrl"] =
+          isString(resultMap["userList"][index]["memberAvatarUrl"]);
     });
 
     return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> kickGroupMembers(dynamic userIDs, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.kickGroupMembers(userIDs, groupID));
+  Future<Map<dynamic, dynamic>> kickGroupMembers(
+      dynamic userIDs, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.kickGroupMembers(userIDs, groupID));
 
-    final resultMap = {
-      "groupID": result.groupID,
-      "kickedUserIDList": result.kickedUserIDList,
-      "errorUserList": []
-    };
+    return jsObjectToMap(result);
+  }
 
-    result.errorUserList.forEach((user){
-      resultMap["errorUserList"].add({
-        "userID": user.userID,
-        "reason": user.userID
-      });
-    });
+  Future<Map<dynamic, dynamic>> transferGroupOwner(
+      String toUserID, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.transferGroupOwner(toUserID, groupID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateGroupName(
+      String groupName, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.updateGroupName(groupName, groupID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateGroupAvatarUrl(
+      String groupAvatarUrl, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.updateGroupAvatarUrl(groupAvatarUrl, groupID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateGroupNotice(
+      String groupNotice, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.updateGroupNotice(groupNotice, groupID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryGroupInfo(String groupID) async {
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.queryGroupInfo(groupID));
+
+    Map resultMap = jsObjectToMap(result);
+
+    resultMap["groupInfo"]["baseInfo"]["groupAvatarUrl"] =
+        isString(resultMap["groupInfo"]["baseInfo"]["groupAvatarUrl"]);
+    resultMap["groupInfo"]["groupNotice"] =
+        isString(resultMap["groupInfo"]["groupNotice"]);
 
     return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> transferGroupOwner(String toUserID, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.transferGroupOwner(toUserID, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "toUserID": result.toUserID
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> updateGroupName(String groupName, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.updateGroupName(groupName, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "groupName": result.groupName
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> updateGroupAvatarUrl(String groupAvatarUrl, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.updateGroupAvatarUrl(groupAvatarUrl, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "groupAvatarUrl": result.groupAvatarUrl
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> updateGroupNotice(String groupNotice, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.updateGroupNotice(groupNotice, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "groupNotice": result.groupNotice
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> queryGroupInfo(String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupInfo(groupID));
-
-    String attr = ZIM.toJSON(result.groupInfo.groupAttributes);
-
-    return {
-      "groupInfo": {
-        "baseInfo": {
-          "groupID": result.groupInfo.baseInfo.groupID,
-          "groupName": result.groupInfo.baseInfo.groupName,
-          "groupAvatarUrl": result.groupInfo.baseInfo.groupAvatarUrl is String? result.groupInfo.baseInfo.groupAvatarUrl : ""
-        },
-        "groupNotice": result.groupInfo.groupNotice is String? result.groupInfo.groupNotice : "",
-        "groupAttributes": jsonDecode(attr)
-      }
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> queryGroupList() async {
+  Future<Map<dynamic, dynamic>> queryGroupList() async {
     final result = await promiseToFuture(ZIM.getInstance()!.queryGroupList());
 
-    Map resultMap = {
-      "groupList": []
-    };
+    Map resultMap = jsObjectToMap(result);
 
-    result.groupList.forEach((group) {
-      resultMap["groupList"].add({
-        "baseInfo": {
-          "groupID": group.baseInfo.groupID,
-          "groupName": group.baseInfo.groupName,
-          "groupAvatarUrl": group.baseInfo.groupAvatarUrl is String ? group.baseInfo.groupAvatarUrl : ""
-        },
-        "notificationStatus": group.notificationStatus
-      });
-    });
-
-
-    return resultMap;
-  }
-
-  Future <Map<dynamic, dynamic>> setGroupAttributes(Map<dynamic, dynamic> groupAttributes, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.setGroupAttributes(groupAttributes, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "errorKeys": result.errorKeys
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> deleteGroupAttributes(dynamic keys, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.deleteGroupAttributes(keys, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "errorKeys": result.errorKeys
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> queryGroupAttributes(dynamic keys, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupAttributes(keys, groupID));
-
-    String attr = ZIM.toJSON(result.groupAttributes);
-
-    return {
-      "groupID": result.groupID,
-      "groupAttributes": jsonDecode(attr)
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> queryGroupAllAttributes(String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupAllAttributes(groupID));
-
-    String attr = ZIM.toJSON(result.groupAttributes);
-
-    return {
-      "groupID": result.groupID,
-      "groupAttributes": jsonDecode(attr)
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> setGroupMemberRole(int role, String forUserID, String groupID,) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.setGroupMemberRole(role, forUserID, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "forUserID": result.forUserID,
-      "role": result.role
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> setGroupMemberNickname(String nickname, String forUserID, String groupID,) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.setGroupMemberNickname(nickname, forUserID, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "forUserID": result.forUserID,
-      "nickname": result.nickname
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> queryGroupMemberInfo(String userID, String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupMemberInfo(userID, groupID));
-
-    return {
-      "groupID": result.groupID,
-      "userInfo": {
-        "userID": result.userInfo.userID,
-        "userName": result.userInfo.userName,
-        "memberRole": result.userInfo.memberRole,
-        "memberNickname": result.userInfo.memberNickname is String? result.userInfo.memberNickname : "",
-        "memberAvatarUrl": result.userInfo.memberAvatarUrl is String? result.userInfo.memberAvatarUrl : ""
-      }
-    };
-  }
-
-  Future <Map<dynamic, dynamic>> queryGroupMemberList(String groupID, dynamic config) async {
-    Object _config = mapToJSObj(config);
-
-    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupMemberList(groupID, _config));
-
-    Map resultMap = {
-      "groupID": result.groupID,
-      "nextFlag": result.nextFlag,
-      "userList": []
-    };
-
-    result.userList.forEach((user) {
-      resultMap["userList"].add({
-        "userID": user.userID,
-        "userName": user.userName,
-        "memberRole": user.memberRole,
-        "memberNickname": user.memberNickname is String ? user.memberNickname : "",
-        "memberAvatarUrl": user.memberAvatarUrl is String ? user.memberAvatarUrl : ""
-      });
+    resultMap["groupList"].forEach((group) {
+      var index = resultMap["groupList"].indexOf(group);
+      resultMap["groupList"][index]["baseInfo"]["groupAvatarUrl"] =
+          isString(resultMap["groupList"][index]["baseInfo"]["groupAvatarUrl"]);
     });
 
     return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> deleteConversation(String conversationID,dynamic conversationType, dynamic config) async {
-    Object _config = mapToJSObj(config);
+  Future<Map<dynamic, dynamic>> setGroupAttributes(
+      Map<dynamic, dynamic> groupAttributes, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.setGroupAttributes(groupAttributes, groupID));
 
-    final result = await promiseToFuture(ZIM.getInstance()!.deleteConversation(conversationID, conversationType, _config));
-
-    return {
-      "conversationID": result.conversationID,
-      "conversationType": result.conversationType
-    };
+    return jsObjectToMap(result);
   }
 
-  Future <Map<dynamic, dynamic>> setConversationNotificationStatus(dynamic status, String conversationID, dynamic conversationType) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.setConversationNotificationStatus(status, conversationID, conversationType));
+  Future<Map<dynamic, dynamic>> deleteGroupAttributes(
+      dynamic keys, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.deleteGroupAttributes(keys, groupID));
 
-    return {
-      "conversationID": result.conversationID,
-      "conversationType": result.conversationType
-    };
+    return jsObjectToMap(result);
   }
 
-  Future <Map<dynamic, dynamic>> callInvite(dynamic invitees, dynamic config) async {
+  Future<Map<dynamic, dynamic>> queryGroupAttributes(
+      dynamic keys, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryGroupAttributes(keys, groupID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryGroupAllAttributes(String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryGroupAllAttributes(groupID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> setGroupMemberRole(
+    int role,
+    String forUserID,
+    String groupID,
+  ) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.setGroupMemberRole(role, forUserID, groupID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> setGroupMemberNickname(
+    String nickname,
+    String forUserID,
+    String groupID,
+  ) async {
+    final result = await promiseToFuture(ZIM
+        .getInstance()!
+        .setGroupMemberNickname(nickname, forUserID, groupID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryGroupMemberInfo(
+      String userID, String groupID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryGroupMemberInfo(userID, groupID));
+
+    Map resultMap = jsObjectToMap(result);
+
+    resultMap["userInfo"]["memberNickname"] =
+        isString(resultMap["userInfo"]["memberNickname"]);
+    resultMap["userInfo"]["memberAvatarUrl"] =
+        isString(resultMap["userInfo"]["memberAvatarUrl"]);
+
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> queryGroupMemberList(
+      String groupID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.callInvite(invitees, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryGroupMemberList(groupID, _config));
+
+    Map resultMap = jsObjectToMap(result);
+
+    resultMap["userList"].forEach((user) {
+      var index = resultMap["userList"].indexOf(user);
+      resultMap["userList"][index]["memberNickname"] =
+          isString(resultMap["userList"][index]["memberNickname"]);
+      resultMap["userList"][index]["memberAvatarUrl"] =
+          isString(resultMap["userList"][index]["memberAvatarUrl"]);
+    });
+
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> deleteConversation(
+      String conversationID, dynamic conversationType, dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    final result = await promiseToFuture(ZIM
+        .getInstance()!
+        .deleteConversation(conversationID, conversationType, _config));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> setConversationNotificationStatus(
+      dynamic status, String conversationID, dynamic conversationType) async {
+    final result = await promiseToFuture(ZIM
+        .getInstance()!
+        .setConversationNotificationStatus(
+            status, conversationID, conversationType));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> callInvite(
+      dynamic invitees, dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.callInvite(invitees, _config));
+
+    Map _resultMap = jsObjectToMap(result);
 
     Map resultMap = {
-      "callID": result.callID,
-      "info": {
-        "timeout": result.timeout,
-        "errorInvitees": []
-      }
+      "callID": _resultMap["callID"],
+      "info": {"timeout": _resultMap["timeout"], "errorInvitees": []}
     };
 
-    result.errorInvitees.forEach((invite) {
+    _resultMap["errorInvitees"].forEach((invite) {
       resultMap["info"]["errorInvitees"].add({
-        "userID": invite.userID,
-        "state": invite.state is int ? invite.state : invite.userState
+        "userID": invite["userID"],
+        "state": invite["state"] is int ? invite["state"] : invite["userState"]
       });
     });
 
     return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> callCancel(dynamic invitees, String callID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> callCancel(
+      dynamic invitees, String callID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.callCancel(invitees, callID, _config));
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.callCancel(invitees, callID, _config));
+
+    Map _resultMap = jsObjectToMap(result);
 
     Map resultMap = {
-      "callID": result.callID,
-      "errorInvitees": result.errorInvitees
+      "callID": _resultMap["callID"],
+      "info": {"timeout": _resultMap["timeout"], "errorInvitees": []}
     };
+
+    _resultMap["errorInvitees"].forEach((invite) {
+      resultMap["info"]["errorInvitees"].add({
+        "userID": invite["userID"],
+        "state": invite["state"] is int ? invite["state"] : invite["userState"]
+      });
+    });
 
     return resultMap;
   }
 
-  Future <Map<dynamic, dynamic>> callAccept(String callID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> callAccept(
+      String callID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.callAccept(callID, _config));
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.callAccept(callID, _config));
 
-    return {
-      "callID": result.callID
-    };
+    return jsObjectToMap(result);
   }
 
-  Future <Map<dynamic, dynamic>> callReject(String callID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> callReject(
+      String callID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.callReject(callID, _config));
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.callReject(callID, _config));
 
-    return {
-      "callID": result.callID
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryRoomMemberAttributesList(
+      String roomID, dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryRoomMemberAttributesList(roomID, _config));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryRoomMembersAttributes(
+      dynamic userIDs, String roomID) async {
+    final result = await promiseToFuture(
+        ZIM.getInstance()!.queryRoomMembersAttributes(userIDs, roomID));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> sendMessage(
+      dynamic message,
+      String toConversationID,
+      dynamic conversationType,
+      dynamic config,
+      int? messageAttachedCallbackID,
+      int messageID) async {
+    final _message = mapToJSObj(message);
+    final _config = mapToJSObj(config);
+
+    Map notification = {
+      "onMessageAttached": allowInterop((message) {
+        ZIMMessageAttachedCallback? callback = ZIMCommonData
+            .zimMessageAttachedCallbackMap[messageAttachedCallbackID];
+
+        if (callback != null) {
+          ZIMMessage zimMessage = getZIMMessage(message);
+
+          callback(zimMessage);
+        }
+      })
     };
+
+    final result = await promiseToFuture(ZIM.getInstance()!.sendMessage(
+        _message,
+        toConversationID,
+        conversationType,
+        _config,
+        mapToJSObj(notification)));
+
+    Map resultMap = jsObjectToMap(result);
+    resultMap["messageID"] = messageID;
+
+    return jsObjectToMap(resultMap);
+  }
+
+  Future<Map<dynamic, dynamic>> insertMessageToLocalDB(
+      dynamic message,
+      int messageID,
+      String conversationID,
+      dynamic conversationType,
+      String senderUserID) async {
+    Object _message = mapToJSObj(message);
+    final result = await promiseToFuture(ZIM
+        .getInstance()!
+        .insertMessageToLocalDB(
+            _message, conversationID, conversationType, senderUserID));
+
+    Map resultMap = jsObjectToMap(result);
+    resultMap["messageID"] = messageID;
+
+    return jsObjectToMap(resultMap);
   }
 
   static void connectionStateChangedHandle(ZIMEngine zim, dynamic data) {
@@ -1104,11 +1077,11 @@ class ZegoZimPlugin {
       extendedData = json.decode(data["extendedData"]);
     }
 
-
     ZIMConnectionState? _state = ZIMConnectionState.values[data["state"]];
     ZIMConnectionEvent? _event = ZIMConnectionEvent.values[data["event"]];
 
-    ZIMEventHandler.onConnectionStateChanged!(zim, _state, _event, extendedData);
+    ZIMEventHandler.onConnectionStateChanged!(
+        zim, _state, _event, extendedData);
   }
 
   static void errorHandle(ZIMEngine zim, dynamic data) {
@@ -1118,7 +1091,6 @@ class ZegoZimPlugin {
     final message = data["message"];
 
     ZIMEventHandler.onError!(zim, ZIMError(code: code, message: message));
-
   }
 
   static void tokenWillExpireHandle(ZIMEngine zim, dynamic data) {
@@ -1127,20 +1099,18 @@ class ZegoZimPlugin {
     final second = data["second"];
 
     ZIMEventHandler.onTokenWillExpire!(zim, second);
-
   }
 
   static void receiveRoomMessageHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onReceiveRoomMessage == null) return;
 
-    final fromConversationID =  data["fromConversationID"];
+    final fromConversationID = data["fromConversationID"];
 
     handleReceiveMessage(data['messageList']);
     List<ZIMMessage> messageList =
-            ZIMConverter.oZIMMessageList(data['messageList']);
+        ZIMConverter.oZIMMessageList(data['messageList']);
 
     ZIMEventHandler.onReceiveRoomMessage!(zim, messageList, fromConversationID);
-
   }
 
   static void roomStateChangedHandle(ZIMEngine zim, dynamic data) {
@@ -1155,7 +1125,8 @@ class ZegoZimPlugin {
     ZIMRoomState _state = ZIMRoomState.values[data["state"]];
     ZIMRoomEvent _event = ZIMRoomEvent.values[data["event"]];
 
-    ZIMEventHandler.onRoomStateChanged!(zim, _state, _event, extendedData, data["roomID"]);
+    ZIMEventHandler.onRoomStateChanged!(
+        zim, _state, _event, extendedData, data["roomID"]);
   }
 
   static void roomAttributesUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1165,13 +1136,16 @@ class ZegoZimPlugin {
     String roomID = data["roomID"];
 
     infos.forEach((info) {
-        String roomAttributes = ZIM.toJSON(info.roomAttributes);
-        ZIMRoomAttributesUpdateAction action = ZIMRoomAttributesUpdateAction.values[info.action];
+      Map infoMap = jsObjectToMap(info);
+      ZIMRoomAttributesUpdateAction action =
+          ZIMRoomAttributesUpdateAction.values[infoMap["action"]];
 
-        ZIMEventHandler.onRoomAttributesUpdated!(zim, ZIMRoomAttributesUpdateInfo(action: action, roomAttributes: jsonDecode(roomAttributes)), roomID);
-
+      ZIMEventHandler.onRoomAttributesUpdated!(
+          zim,
+          ZIMRoomAttributesUpdateInfo(
+              action: action, roomAttributes: infoMap["roomAttributes"]),
+          roomID);
     });
-
   }
 
   static void roomAttributesBatchUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1183,12 +1157,13 @@ class ZegoZimPlugin {
     List<ZIMRoomAttributesUpdateInfo> list = [];
 
     infos.forEach((info) {
-      String roomAttributes = ZIM.toJSON(info.roomAttributes);
+      Map infoMap = jsObjectToMap(info);
 
-      ZIMRoomAttributesUpdateAction action = ZIMRoomAttributesUpdateAction.values[info.action];
+      ZIMRoomAttributesUpdateAction action =
+          ZIMRoomAttributesUpdateAction.values[infoMap["action"]];
 
-      list.add(ZIMRoomAttributesUpdateInfo(action: action, roomAttributes: jsonDecode(roomAttributes)));
-
+      list.add(ZIMRoomAttributesUpdateInfo(
+          action: action, roomAttributes: infoMap["roomAttributes"]));
     });
 
     ZIMEventHandler.onRoomAttributesBatchUpdated!(zim, list, roomID);
@@ -1202,9 +1177,10 @@ class ZegoZimPlugin {
     List<ZIMUserInfo> list = [];
 
     memberList.forEach((member) {
+      Map memberMap = jsObjectToMap(member);
       ZIMUserInfo userInfo = ZIMUserInfo();
-      userInfo.userID = member.userID;
-      userInfo.userName = member.userName;
+      userInfo.userID = memberMap["userID"];
+      userInfo.userName = memberMap["userName"];
 
       list.add(userInfo);
     });
@@ -1220,9 +1196,10 @@ class ZegoZimPlugin {
     List<ZIMUserInfo> list = [];
 
     memberList.forEach((member) {
+      Map memberMap = jsObjectToMap(member);
       ZIMUserInfo userInfo = ZIMUserInfo();
-      userInfo.userID = member.userID;
-      userInfo.userName = member.userName;
+      userInfo.userID = memberMap["userID"];
+      userInfo.userName = memberMap["userName"];
 
       list.add(userInfo);
     });
@@ -1236,7 +1213,7 @@ class ZegoZimPlugin {
     String fromConversationID = data["fromConversationID"];
     handleReceiveMessage(data["messageList"]);
     List<ZIMMessage> messageList =
-            ZIMConverter.oZIMMessageList(data['messageList']);
+        ZIMConverter.oZIMMessageList(data['messageList']);
 
     ZIMEventHandler.onReceivePeerMessage!(zim, messageList, fromConversationID);
   }
@@ -1247,9 +1224,10 @@ class ZegoZimPlugin {
     String fromConversationID = data["fromConversationID"];
     handleReceiveMessage(data["messageList"]);
     List<ZIMMessage> messageList =
-            ZIMConverter.oZIMMessageList(data['messageList']);
+        ZIMConverter.oZIMMessageList(data['messageList']);
 
-    ZIMEventHandler.onReceiveGroupMessage!(zim, messageList, fromConversationID);
+    ZIMEventHandler.onReceiveGroupMessage!(
+        zim, messageList, fromConversationID);
   }
 
   static void groupStateChangedHandle(ZIMEngine zim, dynamic data) {
@@ -1258,7 +1236,12 @@ class ZegoZimPlugin {
     final state = ZIMGroupState.values[data["state"]];
     final event = ZIMGroupEvent.values[data["event"]];
 
-    ZIMEventHandler.onGroupStateChanged!(zim, state, event, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), ZIMConverter.oZIMGroupFullInfo(data['groupInfo'])!);
+    ZIMEventHandler.onGroupStateChanged!(
+        zim,
+        state,
+        event,
+        ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']),
+        ZIMConverter.oZIMGroupFullInfo(data['groupInfo'])!);
   }
 
   static void groupNameUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1267,7 +1250,8 @@ class ZegoZimPlugin {
     final groupName = data["groupName"];
     final groupID = data["groupID"];
 
-    ZIMEventHandler.onGroupNameUpdated!(zim, groupName, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
+    ZIMEventHandler.onGroupNameUpdated!(zim, groupName,
+        ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupAvatarUrlUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1276,7 +1260,8 @@ class ZegoZimPlugin {
     final groupAvatarUrl = data["groupAvatarUrl"];
     final groupID = data["groupID"];
 
-    ZIMEventHandler.onGroupAvatarUrlUpdated!(zim, groupAvatarUrl, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
+    ZIMEventHandler.onGroupAvatarUrlUpdated!(zim, groupAvatarUrl,
+        ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupNoticeUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1285,7 +1270,8 @@ class ZegoZimPlugin {
     final groupNotice = data["groupNotice"];
     final groupID = data["groupID"];
 
-    ZIMEventHandler.onGroupNoticeUpdated!(zim, groupNotice, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
+    ZIMEventHandler.onGroupNoticeUpdated!(zim, groupNotice,
+        ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupAttributesUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1295,15 +1281,17 @@ class ZegoZimPlugin {
     List<dynamic> infoList = data["infoList"];
 
     infoList.forEach((info) {
+      Map infoMap = jsObjectToMap(info);
       ZIMGroupAttributesUpdateInfo atr = ZIMGroupAttributesUpdateInfo();
-      atr.action = ZIMGroupAttributesUpdateAction.values[info.action];
-      atr.groupAttributes = info.groupAttributes;
+      atr.action = ZIMGroupAttributesUpdateAction.values[infoMap["action"]];
+      atr.groupAttributes = infoMap["groupAttributes"];
       list.add(atr);
     });
 
     final groupID = data["groupID"];
 
-    ZIMEventHandler.onGroupAttributesUpdated!(zim, list, ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
+    ZIMEventHandler.onGroupAttributesUpdated!(zim, list,
+        ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
   static void groupMemberStateChangedHandle(ZIMEngine zim, dynamic data) {
@@ -1313,7 +1301,13 @@ class ZegoZimPlugin {
     ZIMGroupMemberState state = ZIMGroupMemberState.values[data["state"]];
     ZIMGroupMemberEvent event = ZIMGroupMemberEvent.values[data["event"]];
 
-    ZIMEventHandler.onGroupMemberStateChanged!(zim, state, event, ZIMConverter.oZIMGroupMemberInfoList(data['userList']), ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
+    ZIMEventHandler.onGroupMemberStateChanged!(
+        zim,
+        state,
+        event,
+        ZIMConverter.oZIMGroupMemberInfoList(data['userList']),
+        ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']),
+        groupID);
   }
 
   static void groupMemberInfoUpdatedHandle(ZIMEngine zim, dynamic data) {
@@ -1321,13 +1315,18 @@ class ZegoZimPlugin {
 
     final groupID = data["groupID"];
 
-    ZIMEventHandler.onGroupMemberInfoUpdated!(zim, ZIMConverter.oZIMGroupMemberInfoList(data['userList']), ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
+    ZIMEventHandler.onGroupMemberInfoUpdated!(
+        zim,
+        ZIMConverter.oZIMGroupMemberInfoList(data['userList']),
+        ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']),
+        groupID);
   }
 
-  static void callInvitationReceivedHandle (ZIMEngine zim, dynamic data) {
+  static void callInvitationReceivedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationReceived == null) return;
 
-    ZIMCallInvitationReceivedInfo receivedInfo = ZIMCallInvitationReceivedInfo ();
+    ZIMCallInvitationReceivedInfo receivedInfo =
+        ZIMCallInvitationReceivedInfo();
     receivedInfo.inviter = data["inviter"];
     receivedInfo.extendedData = data["extendedData"];
     receivedInfo.timeout = data["timeout"];
@@ -1336,10 +1335,11 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInvitationReceived!(zim, receivedInfo, callID);
   }
 
-  static void callInvitationCancelledHandle (ZIMEngine zim, dynamic data) {
+  static void callInvitationCancelledHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationCancelled == null) return;
 
-    ZIMCallInvitationCancelledInfo cancelledInfo = ZIMCallInvitationCancelledInfo ();
+    ZIMCallInvitationCancelledInfo cancelledInfo =
+        ZIMCallInvitationCancelledInfo();
     cancelledInfo.inviter = data["inviter"];
     cancelledInfo.extendedData = data["extendedData"];
     String callID = data["callID"];
@@ -1347,7 +1347,7 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInvitationCancelled!(zim, cancelledInfo, callID);
   }
 
-  static void callInvitationTimeoutHandle (ZIMEngine zim, dynamic data) {
+  static void callInvitationTimeoutHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationTimeout == null) return;
 
     String callID = data["callID"];
@@ -1355,10 +1355,11 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInvitationTimeout!(zim, callID);
   }
 
-  static void callInvitationAcceptedHandle (ZIMEngine zim, dynamic data) {
+  static void callInvitationAcceptedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationAccepted == null) return;
 
-    ZIMCallInvitationAcceptedInfo acceptedInfo = ZIMCallInvitationAcceptedInfo();
+    ZIMCallInvitationAcceptedInfo acceptedInfo =
+        ZIMCallInvitationAcceptedInfo();
     acceptedInfo.invitee = data["invitee"];
     acceptedInfo.extendedData = data["extendedData"];
     String callID = data["callID"];
@@ -1366,10 +1367,11 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInvitationAccepted!(zim, acceptedInfo, callID);
   }
 
-  static void callInvitationRejectedHandle (ZIMEngine zim, dynamic data) {
+  static void callInvitationRejectedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationRejected == null) return;
 
-    ZIMCallInvitationRejectedInfo rejectedInfo = ZIMCallInvitationRejectedInfo();
+    ZIMCallInvitationRejectedInfo rejectedInfo =
+        ZIMCallInvitationRejectedInfo();
     rejectedInfo.invitee = data["invitee"];
     rejectedInfo.extendedData = data["extendedData"];
     String callID = data["callID"];
@@ -1377,7 +1379,7 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInvitationRejected!(zim, rejectedInfo, callID);
   }
 
-  static void callInviteesAnsweredTimeoutHandle (ZIMEngine zim, dynamic data) {
+  static void callInviteesAnsweredTimeoutHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;
 
     dynamic invitees = data["invitees"];
@@ -1386,21 +1388,23 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInviteesAnsweredTimeout!(zim, invitees, callID);
   }
 
-  static void conversationChangedHandle (ZIMEngine zim, dynamic data) {
+  static void conversationChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConversationChanged == null) return;
 
     List<dynamic> infoList = data["infoList"];
 
     handleConversationList(infoList);
 
-     List<ZIMConversationChangeInfo> conversationChangeInfoList =
-            ZIMConverter.oZIMConversationChangeInfoList(infoList);
+    List<ZIMConversationChangeInfo> conversationChangeInfoList =
+        ZIMConverter.oZIMConversationChangeInfoList(infoList);
 
     ZIMEventHandler.onConversationChanged!(zim, conversationChangeInfoList);
   }
 
-  static void conversationTotalUnreadMessageCountUpdatedHandle (ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated == null) return;
+  static void conversationTotalUnreadMessageCountUpdatedHandle(
+      ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated == null)
+      return;
 
     int count = data["totalUnreadMessageCount"];
 
@@ -1408,80 +1412,95 @@ class ZegoZimPlugin {
   }
 
   static Map handleSendMessageResult(dynamic result) {
-    return {
-      "message": {
-        "type": result.message.type,
-        "message": result.message.message,
-        "localMessageID": int.parse(result.message.localMessageID),
-        "messageID": int.parse(result.message.messageID),
-        "senderUserID": result.message.senderUserID,
-        "timestamp": result.message.timestamp,
-        "conversationID": result.message.conversationID,
-        "conversationType": result.message.conversationType,
-        "direction": result.message.direction,
-        "sentStatus": result.message.sentStatus,
-        "orderKey": result.message.orderKey,
-        "conversationSeq": result.message.conversationSeq,
-        "fileLocalPath": result.message.fileLocalPath,
+    Map resultMap = jsObjectToMap(result);
+    resultMap["message"]["localMessageID"] =
+        int.parse(resultMap["message"]["localMessageID"]);
+    resultMap["message"]["messageID"] =
+        int.parse(resultMap["message"]["messageID"]);
 
-        "thumbnailDownloadUrl": result.message.thumbnailDownloadUrl,
-        "thumbnailLocalPath": result.message.thumbnailLocalPath,
-        "largeImageDownloadUrl": result.message.largeImageDownloadUrl,
-        "largeImageLocalPath": result.message.largeImageLocalPath,
-        "originalImageHeight": result.message.originalImageHeight,
-        "originalImageWidth": result.message.originalImageWidth,
-        "largeImageHeight": result.message.largeImageHeight,
-        "largeImageWidth": result.message.largeImageWidth,
-        "thumbnailHeight": result.message.thumbnailHeight,
-        "thumbnailWidth": result.message.thumbnailWidth,
-
-        "audioDuration": result.message.audioDuration,
-        "videoDuration": result.message.videoDuration,
-        "videoFirstFrameDownloadUrl": result.message.videoFirstFrameDownloadUrl,
-        "videoFirstFrameLocalPath": result.message.videoFirstFrameLocalPath,
-        "videoFirstFrameHeight": result.message.videoFirstFrameHeight,
-        "videoFirstFrameWidth": result.message.videoFirstFrameWidth,
-
-        "fileDownloadUrl": result.message.fileDownloadUrl,
-        "fileUID": result.message.fileUID,
-        "fileName": result.message.fileName,
-        "fileSize": result.message.fileSize
-      }
-    };
+    return resultMap;
   }
 
   static void handleReceiveMessage(List<dynamic> messageList) {
     messageList.forEach((msgMap) {
       msgMap["messageID"] = int.parse(msgMap["messageID"]);
-      msgMap["localMessageID"] =  msgMap["localMessageID"] is String ? int.parse(msgMap["localMessageID"]) : 0;
-      msgMap["orderKey"] = msgMap["orderKey"] is int ?  msgMap["orderKey"] : 0;
-     });
-
+      msgMap["localMessageID"] = msgMap["localMessageID"] is String
+          ? int.parse(msgMap["localMessageID"])
+          : 0;
+      msgMap["orderKey"] = msgMap["orderKey"] is int ? msgMap["orderKey"] : 0;
+    });
   }
 
   static void handleConversationList(List<dynamic> infoList) {
     infoList.forEach((info) {
       final infoConversation = info["conversation"];
       final infoConversationLastMessage = infoConversation["lastMessage"];
-      infoConversationLastMessage["localMessageID"] = infoConversationLastMessage["localMessageID"] is String? int.parse(infoConversationLastMessage["localMessageID"]) : 0;
-      infoConversationLastMessage["messageID"] = infoConversationLastMessage["messageID"] is String ? int.parse(infoConversationLastMessage["messageID"]) : infoConversationLastMessage["messageID"] ;
-      infoConversationLastMessage["orderKey"] = infoConversationLastMessage["orderKey"] is int ? infoConversationLastMessage["orderKey"] : 0;
-      infoConversationLastMessage["conversationSeq"] = infoConversationLastMessage["conversationSeq"] is int ? infoConversationLastMessage["conversationSeq"] : int.parse(infoConversationLastMessage["conversationSeq"]);
+
+      if (infoConversationLastMessage != null) {
+        infoConversationLastMessage["localMessageID"] =
+            infoConversationLastMessage["localMessageID"] is String
+                ? int.parse(infoConversationLastMessage["localMessageID"])
+                : 0;
+        infoConversationLastMessage["messageID"] =
+            infoConversationLastMessage["messageID"] is String
+                ? int.parse(infoConversationLastMessage["messageID"])
+                : infoConversationLastMessage["messageID"];
+        infoConversationLastMessage["orderKey"] =
+            infoConversationLastMessage["orderKey"] is int
+                ? infoConversationLastMessage["orderKey"]
+                : 0;
+        infoConversationLastMessage["conversationSeq"] =
+            infoConversationLastMessage["conversationSeq"] is int
+                ? infoConversationLastMessage["conversationSeq"]
+                : int.parse(infoConversationLastMessage["conversationSeq"]);
+      }
     });
   }
 
-  static Object mapToJSObj(Map<dynamic,dynamic>? a){
-  var object = js.newObject();
+  static Object mapToJSObj(Map<dynamic, dynamic>? a) {
+    var object = js.newObject();
 
-  if (a == null) {
+    if (a == null) {
+      return object;
+    }
+
+    a.forEach((k, v) {
+      var key = k;
+      var value = v;
+      js.setProperty(object, key, value);
+    });
     return object;
   }
 
-  a.forEach((k, v) {
-    var key = k;
-    var value = v;
-    js.setProperty(object, key, value);
-  });
-  return object;
-}
+  static Map jsObjectToMap(dynamic obj) {
+    String resultStr = ZIM.toJSON(obj);
+
+    Map resultMap = jsonDecode(resultStr);
+
+    return resultMap;
+  }
+
+  static String isString(param) {
+    return param is String ? param : "";
+  }
+
+  ZIMMessage getZIMMessage(Object messageObj) {
+    Map messageMap = jsObjectToMap(messageObj);
+    ZIMMessage zimMessage = ZIMMessage();
+    zimMessage.conversationID = messageMap["conversationID"];
+    zimMessage.conversationSeq = messageMap["conversationSeq"];
+    zimMessage.messageID = int.parse(messageMap["messageID"]);
+    zimMessage.senderUserID = messageMap["senderUserID"];
+    zimMessage.timestamp = messageMap["timestamp"];
+    zimMessage.orderKey = messageMap["orderKey"];
+    zimMessage.localMessageID = int.parse(messageMap["localMessageID"]);
+    zimMessage.type = ZIMMessageType.values[messageMap["type"]];
+    zimMessage.direction = ZIMMessageDirection.values[messageMap["direction"]];
+    zimMessage.sentStatus =
+        ZIMMessageSentStatus.values[messageMap["sentStatus"]];
+    zimMessage.conversationType =
+        ZIMConversationType.values[messageMap["conversationType"]];
+
+    return zimMessage;
+  }
 }
