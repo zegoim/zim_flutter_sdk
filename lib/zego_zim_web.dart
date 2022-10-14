@@ -242,6 +242,8 @@ class ZegoZimPlugin {
             call.arguments["conversationID"],
             call.arguments["conversationType"],
             call.arguments["senderUserID"]);
+      case 'setRoomMembersAttributes':
+        return setRoomMembersAttributes(call.arguments["attributes"], call.arguments["roomID"], call.arguments["userIDs"], call.arguments["config"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -401,6 +403,8 @@ class ZegoZimPlugin {
       resultMap["conversationList"][index]["lastMessage"]["messageID"] =
           int.parse(
               resultMap["conversationList"][index]["lastMessage"]["messageID"]);
+      resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] =
+          resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] is bool ? resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] : false;
     });
 
     return resultMap;
@@ -470,6 +474,8 @@ class ZegoZimPlugin {
           int.parse(resultMap["messageList"][index]["localMessageID"]);
       resultMap["messageList"][index]["messageID"] =
           int.parse(resultMap["messageList"][index]["messageID"]);
+      resultMap["messageList"][index]["isUserInserted"] =
+          resultMap["messageList"][index]["isUserInserted"] is bool ? resultMap["messageList"][index]["isUserInserted"] : false;
     });
 
     return resultMap;
@@ -1044,10 +1050,10 @@ class ZegoZimPlugin {
         _config,
         mapToJSObj(notification)));
 
-    Map resultMap = jsObjectToMap(result);
+    Map resultMap = handleSendMessageResult(result);
     resultMap["messageID"] = messageID;
 
-    return jsObjectToMap(resultMap);
+    return resultMap;
   }
 
   Future<Map<dynamic, dynamic>> insertMessageToLocalDB(
@@ -1062,10 +1068,19 @@ class ZegoZimPlugin {
         .insertMessageToLocalDB(
             _message, conversationID, conversationType, senderUserID));
 
-    Map resultMap = jsObjectToMap(result);
+    Map resultMap = handleSendMessageResult(result);
     resultMap["messageID"] = messageID;
 
-    return jsObjectToMap(resultMap);
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> setRoomMembersAttributes(Map attributes, String roomID, dynamic userIDs, dynamic config) async {
+    final _attributes = mapToJSObj(attributes);
+    final _config = mapToJSObj(config);
+
+    final result = await promiseToFuture(ZIM.getInstance()!.setRoomMembersAttributes(_attributes, userIDs, roomID, _config));
+
+    return jsObjectToMap(result);
   }
 
   static void connectionStateChangedHandle(ZIMEngine zim, dynamic data) {
@@ -1417,6 +1432,8 @@ class ZegoZimPlugin {
         int.parse(resultMap["message"]["localMessageID"]);
     resultMap["message"]["messageID"] =
         int.parse(resultMap["message"]["messageID"]);
+    resultMap["message"]["isUserInserted"] =
+          resultMap["message"]["isUserInserted"] is bool ? resultMap["message"]["isUserInserted"] : false;
 
     return resultMap;
   }
@@ -1428,6 +1445,7 @@ class ZegoZimPlugin {
           ? int.parse(msgMap["localMessageID"])
           : 0;
       msgMap["orderKey"] = msgMap["orderKey"] is int ? msgMap["orderKey"] : 0;
+      msgMap["isUserInserted"] = msgMap["isUserInserted"] is bool ? msgMap["isUserInserted"] : false;
     });
   }
 
@@ -1453,6 +1471,10 @@ class ZegoZimPlugin {
             infoConversationLastMessage["conversationSeq"] is int
                 ? infoConversationLastMessage["conversationSeq"]
                 : int.parse(infoConversationLastMessage["conversationSeq"]);
+        infoConversationLastMessage["isUserInserted"] =
+            infoConversationLastMessage["isUserInserted"] is bool
+                ? infoConversationLastMessage["isUserInserted"]
+                : false;
       }
     });
   }
@@ -1500,6 +1522,8 @@ class ZegoZimPlugin {
         ZIMMessageSentStatus.values[messageMap["sentStatus"]];
     zimMessage.conversationType =
         ZIMConversationType.values[messageMap["conversationType"]];
+    zimMessage.isUserInserted =
+        messageMap["isUserInserted"] is bool ? messageMap["isUserInserted"] : false;
 
     return zimMessage;
   }
