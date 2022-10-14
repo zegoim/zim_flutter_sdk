@@ -218,7 +218,7 @@ void ZIMPluginEventHandler::onRoomMemberAttributesUpdated(ZIM* zim, const std::v
         retMap[FTValue("handle")] = FTValue(handle);
         retMap[FTValue("roomID")] = FTValue(roomID);
         FTArray infosModel;
-        for(ZIMRoomMemberAttributesUpdateInfo &info:infos){                
+        for(ZIMRoomMemberAttributesUpdateInfo info:infos){                
             FTMap infoModel = ZIMPluginConverter::cnvZIMRoomMemberAttributesUpdateInfoToMap(info);
             infosModel.emplace_back(infoModel);
         }

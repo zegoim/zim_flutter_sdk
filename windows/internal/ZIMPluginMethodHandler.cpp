@@ -277,7 +277,7 @@ void ZIMPluginMethodHandler::queryUsersInfo(flutter::EncodableMap& argument,
     config.isQueryFromServer = std::get<bool>(configMap[FTValue("isQueryFromServer")]);
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->queryUsersInfos(userIDsVec, config, [=](const std::vector<ZIMUserFullInfo>& userList,
+    zim->queryUsersInfo(userIDsVec, config, [=](const std::vector<ZIMUserFullInfo>& userList,
         const std::vector<ZIMErrorUserInfo>& errorUserList, const ZIMError& errorInfo) {
         if (errorInfo.code == 0) {
             FTArray userFullInfoArray;
@@ -430,7 +430,7 @@ void ZIMPluginMethodHandler::setConversationNotificationStatus(flutter::Encodabl
     });
 }
 
-void insertMessageToLocalDB(flutter::EncodableMap& argument,
+void ZIMPluginMethodHandler::insertMessageToLocalDB(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
     auto zim = this->engineMap[handle];
@@ -443,8 +443,8 @@ void insertMessageToLocalDB(flutter::EncodableMap& argument,
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
     auto senderUserID = std::get<std::string>(argument[FTValue("senderUserID")]);
-
-    zim->insertMessageToLocalDB(std::static_pointer_cast<zim::ZIMMessage>(messagePtr),conversationID, type, sender_user_id,[=](const std::shared_ptr<zim::ZIMMessage> &message,const zim::ZIMError &errorInfo) { 
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->insertMessageToLocalDB(std::static_pointer_cast<zim::ZIMMessage>(messagePtr),conversationID, (ZIMConversationType)conversationType, senderUserID,[=](const std::shared_ptr<zim::ZIMMessage> &message,const zim::ZIMError &errorInfo) {
         FTMap retMap;
         auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
         retMap[FTValue("message")] = messageMap;
@@ -457,8 +457,7 @@ void insertMessageToLocalDB(flutter::EncodableMap& argument,
         }
     });
 }
-
-void sendMessage(flutter::EncodableMap& argument,
+void ZIMPluginMethodHandler::sendMessage(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
     auto zim = this->engineMap[handle];
@@ -494,10 +493,10 @@ void sendMessage(flutter::EncodableMap& argument,
         onMessageAttachedMap[FTValue("message")] = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
         ZIMPluginEventHandler::getInstance()->sendEvent(onMessageAttachedMap);
     });
-
-    zim_->sendMessage(messagePtr, toConversationID, conversationType, config, notification,
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->sendMessage(messagePtr, toConversationID, (ZIMConversationType)conversationType, config, notification,
                     [=](const std::shared_ptr<zim::ZIMMessage> &message,
-                              const zim::ZIMError &errorInfo) { 
+                              const zim::ZIMError &errorInfo) {
         FTMap retMap;
         auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
         retMap[FTValue("message")] = messageMap;
@@ -665,7 +664,7 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
 
 
     auto notification = std::make_shared<zim::ZIMMediaMessageSendNotification>(
-            [=](const std::shared_ptr<zim::ZIMMessage> &message) { 
+            [=](const std::shared_ptr<zim::ZIMMessage> &message) {
                 FTMap onMessageAttachedMap;
                 onMessageAttachedMap[FTValue("method")] = FTValue("onMessageAttached");
                 onMessageAttachedMap[FTValue("messageAttachedCallbackID")] = FTValue(messageAttachedCallbackID);
@@ -675,7 +674,7 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
             },
             [=](const std::shared_ptr<zim::ZIMMediaMessage> &message,
                 unsigned long long currentFileSize,
-                unsigned long long totalFileSize) { 
+                unsigned long long totalFileSize) {
                 FTMap progressRetMap;
                 progressRetMap[FTValue("method")] = FTValue("uploadMediaProgress");
                 progressRetMap[FTValue("progressID")] = FTValue(progressID);
@@ -686,7 +685,7 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
             }
     );
 
-    zim_->sendMediaMessage(mediaMessagePtr, toConversationID, (ZIMConversationType)conversationType,
+    zim->sendMediaMessage(mediaMessagePtr, toConversationID, (ZIMConversationType)conversationType,
     config,notification,[=](const std::shared_ptr<zim::ZIMMessage> &message, const zim::ZIMError &errorInfo) {
         FTMap retMap;
         auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
@@ -1187,7 +1186,7 @@ void ZIMPluginMethodHandler::queryRoomAllAttributes(flutter::EncodableMap& argum
     });
 }
 
-void setRoomMembersAttributes(flutter::EncodableMap& argument,
+void ZIMPluginMethodHandler::setRoomMembersAttributes(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
     auto zim = this->engineMap[handle];
@@ -1199,13 +1198,13 @@ void setRoomMembersAttributes(flutter::EncodableMap& argument,
     auto attributes = ZIMPluginConverter::cnvFTMapToSTLMap(std::get<FTMap>(argument[FTValue("attributes")]));
     auto userIDs = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(argument[FTValue("userIDs")]));
     auto config = ZIMPluginConverter::cnvZIMRoomMemberAttributesSetConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
-   
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->setRoomMembersAttributes(attributes, userIDs, roomID, config, [=](const std::string &roomID, const std::vector<ZIMRoomMemberAttributesOperatedInfo> &infos,const std::vector<std::string> &errorUserList, const ZIMError &errorInfo){
          if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("roomID")] = FTValue(roomID);
             FTArray infosModel;
-            for(ZIMRoomMemberAttributesOperatedInfo &info :infos){
+            for(ZIMRoomMemberAttributesOperatedInfo info :infos){
                 FTMap infoModel = ZIMPluginConverter::cnvZIMRoomMemberAttributesOperatedInfoToMap(info);
                 infosModel.emplace_back(infoModel);
             }
@@ -1218,7 +1217,7 @@ void setRoomMembersAttributes(flutter::EncodableMap& argument,
         }
     });
 }
-void queryRoomMembersAttributes(flutter::EncodableMap& argument,
+void ZIMPluginMethodHandler::queryRoomMembersAttributes(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
     auto zim = this->engineMap[handle];
@@ -1228,12 +1227,13 @@ void queryRoomMembersAttributes(flutter::EncodableMap& argument,
     }
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
     auto userIDs = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(argument[FTValue("userIDs")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->queryRoomMembersAttributes(userIDs, roomID, [=](const std::string &roomID, const std::vector<ZIMRoomMemberAttributesInfo> &infos,const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("roomID")] = FTValue(roomID);
             FTArray infosModel;
-            for(ZIMRoomMemberAttributesInfo &info :infos){
+            for(ZIMRoomMemberAttributesInfo info :infos){
                 FTMap infoModel = ZIMPluginConverter::cnvZIMRoomMemberAttributesInfoToMap(info);
                 infosModel.emplace_back(infoModel);
             }
@@ -1245,7 +1245,7 @@ void queryRoomMembersAttributes(flutter::EncodableMap& argument,
         }
     });
 }
-void queryRoomMemberAttributesList(flutter::EncodableMap& argument,
+void  ZIMPluginMethodHandler::queryRoomMemberAttributesList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
     auto zim = this->engineMap[handle];
@@ -1255,12 +1255,13 @@ void queryRoomMemberAttributesList(flutter::EncodableMap& argument,
     }
     auto config = ZIMPluginConverter::cnvZIMRoomMemberAttributesQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->queryRoomMemberAttributesList(roomID, config, [=](const std::string &roomID, const std::vector<ZIMRoomMemberAttributesInfo> &infos,const std::string &nextFlag, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("roomID")] = FTValue(roomID);
             FTArray infosModel;
-            for(ZIMRoomMemberAttributesInfo &info :infos){
+            for(ZIMRoomMemberAttributesInfo info :infos){
                 FTMap infoModel = ZIMPluginConverter::cnvZIMRoomMemberAttributesInfoToMap(info);
                 infosModel.emplace_back(infoModel);
             }

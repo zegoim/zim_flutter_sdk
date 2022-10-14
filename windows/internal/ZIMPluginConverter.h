@@ -62,6 +62,10 @@ struct ZIM_FriendlyGet_orderKey {
     typedef long long ZIMMessage::* type;
 };
 
+struct ZIM_FriendlyGet_isUserInserted {
+    typedef bool ZIMMessage::* type;
+};
+
 struct ZIM_FriendlyGet_fileUID {
     typedef std::string ZIMMediaMessage::* type;
 };
