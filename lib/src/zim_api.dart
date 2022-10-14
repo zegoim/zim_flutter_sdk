@@ -582,15 +582,64 @@ abstract class ZIM {
   /// [roomID] ID of the room to queried.
   Future<ZIMRoomAttributesQueriedResult> queryRoomAllAttributes(String roomID);
 
+
+  /// Supported Versions: 2.4.0 and above.
+  ///
+  /// Detail description: Call this API to set room user properties of members in the room.
+  ///
+  /// Business scenario: If you need to set a level for members in the room, you can use this interface to set a state.
+  ///
+  /// Default: [ZIMRoomMemberAttributesSetConfig] Default constructor isDeleteAfterOwnerLeft is true.
+  ///
+  /// Call timing/Notification timing: After logging in and calling in the relevant room.
+  ///
+  /// Usage limit: background limit, default 20
+  ///
+  ///
+  /// Related interfaces: [queryRoomMembersAttributes], [queryRoomMemberAttributesList].
+  /// [attributes] Room member attributes to be set.
+  /// [userIDs] A list of userIDs to set.
+  /// [roomID] Room ID.
+  /// [config] Behavior configuration of the operation.
   Future<ZIMRoomMembersAttributesOperatedResult> setRoomMembersAttributes(
       Map<String, String> attributes,
       List<String> userIDs,
       String roomID,
       ZIMRoomMemberAttributesSetConfig config);
 
+  /// Available since:2.4.0 or later.
+  ///
+  /// Description:Call this API to batch query the room user attributes of the members in the room.
+  ///
+  /// Use cases:Use this interface when you need to specify that you want to query some room users.
+  ///
+  /// Restrictions:The maximum call frequency is 5 times within 30 seconds by default, and the maximum query time is 100 people.
+  ///
+  ///
+  /// Related APIs: [setRoomMembersAttributes]、[queryRoomMemberAttributesList]
+  ///
+  /// Runtime lifecycle: It is available after logging in and joining the corresponding room, but unavailable after leaving the corresponding room.
+  ///
+  /// [userIDs] A list of userIDs to query.
+  /// [roomID]  Room ID.
   Future<ZIMRoomMembersAttributesQueriedResult> queryRoomMembersAttributes(
       List<String> userIDs, String roomID);
 
+  /// Available since:2.4.0 or later.
+  ///
+  /// Description:Call the API to paginate the room user properties that have room property members in the room.
+  ///
+  /// Use cases:This interface is used when you need to query all room users.
+  ///
+  /// Restrictions:The maximum call frequency is 5 times within 30 seconds by default, and the maximum query time is 100 people.
+  ///
+  ///
+  /// Related APIs: [setRoomMembersAttributes]、[queryRoomMembersAttributes]
+  ///
+  /// Runtime lifecycle: It is available after logging in and joining the corresponding room, but unavailable after leaving the corresponding room.
+  ///
+  /// [roomID]  Room ID.
+  /// [config]  Behavior configuration of the operation.
   Future<ZIMRoomMemberAttributesListQueriedResult>
       queryRoomMemberAttributesList(
           String roomID, ZIMRoomMemberAttributesQueryConfig config);

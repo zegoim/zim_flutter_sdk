@@ -136,7 +136,7 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [state] The current room connection state after changed.
   /// [event] The event that caused the room connection state to change.
-  /// [xtendedData] Extra information when the event occurs, a standard JSON string.
+  /// [extendedData] Extra information when the event occurs, a standard JSON string.
   static void Function(ZIM zim, ZIMRoomState state, ZIMRoomEvent event,
       Map extendedData, String roomID)? onRoomStateChanged;
 
@@ -166,6 +166,16 @@ class ZIMEventHandler {
           ZIM zim, List<ZIMRoomAttributesUpdateInfo> updateInfo, String roomID)?
       onRoomAttributesBatchUpdated;
 
+  /// event callback when room user property update.
+  ///
+  /// Available since:  2.4.0.
+  ///
+  /// Description: This callback will be received when a user's property in the room is changed.
+  ///
+  /// @param zim ZIM instance.
+  /// [infos]  The infos of the room member attributes changed.
+  /// [operatedInfo] Room operation information.
+  /// [roomID] Room ID.
   static void Function(
     ZIM zim,List<ZIMRoomMemberAttributesUpdateInfo> updateInfo,ZIMRoomOperatedInfo operatedInfo, String roomID
   )? onRoomMemberAttributesUpdated;
