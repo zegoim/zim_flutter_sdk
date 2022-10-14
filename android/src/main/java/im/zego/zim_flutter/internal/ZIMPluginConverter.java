@@ -640,7 +640,7 @@ public class ZIMPluginConverter {
         }
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("errorKeys",info.errorKeys);
-        infoMap.put("attributes",mZIMRoomMemberAttributesInfo(info.attributesInfo));
+        infoMap.put("attributesInfo",mZIMRoomMemberAttributesInfo(info.attributesInfo));
         return infoMap;
     }
 

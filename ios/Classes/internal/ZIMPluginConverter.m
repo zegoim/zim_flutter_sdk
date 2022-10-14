@@ -800,7 +800,7 @@
         return nil;
     }
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
-    [infoDic safeSetObject:info.attributesInfo forKey:@"attributesInfo"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMRoomMemberAttributesInfo:info.attributesInfo] forKey:@"attributesInfo"];
     return infoDic;
 }
 

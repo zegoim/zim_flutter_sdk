@@ -596,8 +596,8 @@ public class ZIMPluginMethodHandler {
         }
         ZIMMessage message = (ZIMMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
         String toConversationID = Objects.requireNonNull(call.argument("toConversationID"));
-        String messageAttachedCallbackID = call.argument("messageAttachedCallbackID");
-        String messageID = Objects.requireNonNull(call.argument("messageID"));
+        Integer messageAttachedCallbackID = call.argument("messageAttachedCallbackID");
+        Integer messageID = Objects.requireNonNull(call.argument("messageID"));
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         ZIMMessageSendConfig config = ZIMPluginConverter.oZIMMessageSendConfig(Objects.requireNonNull(call.argument("config")));
         zim.sendMessage(message, toConversationID, conversationType, config, new ZIMMessageSentCallback() {
