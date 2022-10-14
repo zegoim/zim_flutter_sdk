@@ -588,7 +588,7 @@ class ZIMConverter {
       Map map) {
     ZIMRoomMemberAttributesUpdateInfo updateInfo =
         ZIMRoomMemberAttributesUpdateInfo();
-    updateInfo.attributesInfo = oZIMRoomMemberAttributesInfo(map['attributes']);
+    updateInfo.attributesInfo = oZIMRoomMemberAttributesInfo(map['attributesInfo']);
     return updateInfo;
   }
 

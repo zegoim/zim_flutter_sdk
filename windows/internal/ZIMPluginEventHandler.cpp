@@ -223,6 +223,7 @@ void ZIMPluginEventHandler::onRoomMemberAttributesUpdated(ZIM* zim, const std::v
             infosModel.emplace_back(infoModel);
         }
         retMap[FTValue("infos")] = FTValue(infosModel);
+        retMap[FTValue("operatedInfo")] = FTValue(ZIMPluginConverter::cnvZIMRoomOperatedInfoToMap(operatedInfo));
         eventSink_->Success(retMap);
     }
 }

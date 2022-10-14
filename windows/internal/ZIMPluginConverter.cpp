@@ -559,6 +559,12 @@ FTMap ZIMPluginConverter::cnvZIMRoomMemberAttributesUpdateInfoToMap(const ZIMRoo
 	return infoMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMRoomOperatedInfoToMap(const ZIMRoomOperatedInfo& info){
+    FTMap infoMap;
+	infoMap[FTValue("userID")] = info.userID;
+    return infoMap;
+}
+
 FTMap ZIMPluginConverter::cnvZIMGroupInfoToMap(const ZIMGroupInfo& groupInfo) {
 	FTMap groupInfoMap;
 	groupInfoMap[FTValue("groupID")] = groupInfo.groupID;

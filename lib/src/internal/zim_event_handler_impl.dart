@@ -122,7 +122,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onRoomMemberAttributesUpdated':
         if (ZIMEventHandler.onRoomMemberAttributesUpdated == null) return;
-        List<Map> infosMap = map['infos'];
+        List<Map> infosMap = (map['infos'] as List).cast<Map>();
         List<ZIMRoomMemberAttributesUpdateInfo> infoList = [];
         for (Map updateInfoMap in infosMap) {
           infoList.add(

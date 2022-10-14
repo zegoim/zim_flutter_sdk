@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:zego_zim/zego_zim.dart';
-
 /// Connection state.
 ///
 /// Description: The state machine that identifies the current connection state.
@@ -500,7 +498,7 @@ class ZIMVideoMessage extends ZIMMediaMessage {
 class ZIMSystemMessage extends ZIMMessage {
   String message = '';
   ZIMSystemMessage({required this.message}) {
-    super.type = ZIMMessageType.text;
+    super.type = ZIMMessageType.system;
   }
 }
 

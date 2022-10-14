@@ -148,6 +148,7 @@ public:
     static FTMap cnvZIMRoomMemberAttributesInfoToMap(const ZIMRoomMemberAttributesInfo& info);
     static FTMap cnvZIMRoomMemberAttributesOperatedInfoToMap(const ZIMRoomMemberAttributesOperatedInfo& info);
     static FTMap cnvZIMRoomMemberAttributesUpdateInfoToMap(const ZIMRoomMemberAttributesUpdateInfo& info);
+    static FTMap cnvZIMRoomOperatedInfoToMap(const ZIMRoomOperatedInfo& info);
     static FTArray cnvZIMGroupMemberInfoListToArray(const std::vector<ZIMGroupMemberInfo>& memberList);
     static FTMap cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& groupInfo);
     static FTMap cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& memberInfo);
