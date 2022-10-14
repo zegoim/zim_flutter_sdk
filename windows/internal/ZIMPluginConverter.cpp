@@ -548,7 +548,7 @@ FTMap ZIMPluginConverter::cnvZIMRoomMemberAttributesInfoToMap(const ZIMRoomMembe
 FTMap ZIMPluginConverter::cnvZIMRoomMemberAttributesOperatedInfoToMap(const ZIMRoomMemberAttributesOperatedInfo& info){
 	FTMap infoMap;
 	infoMap[FTValue("attributesInfo")] = ZIMPluginConverter::cnvZIMRoomMemberAttributesInfoToMap(info.attributesInfo);
-	infoMap[FTValue("errorkeys")] = ZIMPluginConverter::cnvStlVectorToFTArray(info.errorKeys);
+	infoMap[FTValue("errorKeys")] = ZIMPluginConverter::cnvStlVectorToFTArray(info.errorKeys);
 	return infoMap;
 }
 
