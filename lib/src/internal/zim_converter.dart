@@ -980,7 +980,7 @@ class ZIMConverter {
   static ZIMRoomMemberAttributesInfo oZIMRoomMemberAttributesInfo(Map map) {
     ZIMRoomMemberAttributesInfo info = ZIMRoomMemberAttributesInfo();
     info.userID = map['userID'];
-    info.attributes = map['attributes'];
+    info.attributes = (map['attributes'] as Map).cast<String,String>();
     return info;
   }
 
@@ -988,7 +988,7 @@ class ZIMConverter {
       oZIMRoomMemberAttributesOperatedInfo(Map map) {
     ZIMRoomMemberAttributesOperatedInfo info =
         ZIMRoomMemberAttributesOperatedInfo();
-    info.errorKeys = map['errorKeys'];
+    info.errorKeys = (map['errorKeys'] as List).cast<String>();
     info.attributesInfo = oZIMRoomMemberAttributesInfo(map['attributesInfo']);
     return info;
   }
@@ -997,8 +997,9 @@ class ZIMConverter {
       oZIMRoomMembersAttributesOperatedResult(Map resultMap) {
     ZIMRoomMembersAttributesOperatedResult result =
         ZIMRoomMembersAttributesOperatedResult();
+
     result.roomID = resultMap['roomID'];
-    result.errorUserList = resultMap['errorUserList'];
+    result.errorUserList = (resultMap['errorUserList'] as List).cast<String>();
     result.infos = [];
     for (Map infoMap in resultMap['infos']) {
       ZIMRoomMemberAttributesOperatedInfo operatedInfo =

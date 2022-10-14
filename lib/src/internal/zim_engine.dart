@@ -686,7 +686,7 @@ class ZIMEngine implements ZIM {
       List<String> userIDs,
       String roomID,
       ZIMRoomMemberAttributesSetConfig config) async {
-    Map resultMap = await channel.invokeMethod('setRoomMemberAttributes', {
+    Map resultMap = await channel.invokeMethod('setRoomMembersAttributes', {
       'handle': handle,
       'attributes': attributes,
       'roomID': roomID,
