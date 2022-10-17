@@ -185,14 +185,12 @@ class GroupChatPageState extends State<GroupChatPage> {
     });
     try {
       log(mediaMessage.fileLocalPath);
-      ZIMMessageSentResult result = await ZIM.getInstance()!.sendMediaMessage(
-          mediaMessage,
-          widget.conversationID,
-          ZIMConversationType.group,
-          ZIMMessageSendConfig(), (message, currentFileSize, totalFileSize) {
-        uploadingprogressModel.uploadingprogress!(
+      ZIMMediaMessageSendNotification notification = ZIMMediaMessageSendNotification(onMediaUploadingProgress: (message, currentFileSize, totalFileSize) {
+            uploadingprogressModel.uploadingprogress!(
             message, currentFileSize, totalFileSize);
-      });
+      },);
+      ZIMMessageSentResult result = await ZIM.getInstance()!.sendMediaMessage(mediaMessage, widget.conversationID, ZIMConversationType.group, ZIMMessageSendConfig(), notification);
+
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == mediaMessage);
       Widget resultCell = MsgConverter.sendMediaMessageCellFactory(

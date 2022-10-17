@@ -1,3 +1,5 @@
+import 'package:zego_zim/src/zim_event_handler.dart';
+
 import 'internal/zim_manager.dart';
 import 'zim_defines.dart';
 
@@ -51,7 +53,7 @@ abstract class ZIM {
   ///
   /// Call timing: It must be called before [create].
   ///
-  /// Note: If the developer calls after [create], the SDK saves the configuration until it takes effect the next time [Create] is invoked.
+  /// Note: If the developer calls after [create], the SDK saves the configuration until it takes effect the next time [create] is invoked.
   ///
   /// Related callbacks: In addition to getting the login result in the callback parameter, the developer will also receive the [onConnectionStateChanged] callback during the login request and after the login is successful/failed to determine the current user's login status.
   ///
@@ -70,7 +72,7 @@ abstract class ZIM {
   /// You need to create and initialize an ZIM instance before calling any other function.
   /// The SDK supports the creation of multiple ZIM instances.
   ///
-  /// [ZIMAppConfig] appID and appSign issued by ZEGO for developers, Please apply at the ZEGO console.
+  /// [config] appID and appSign issued by ZEGO for developers, Please apply at the ZEGO console.
   static ZIM? create(ZIMAppConfig config) {
     return ZIMManager.createEngine(config);
   }
@@ -167,7 +169,7 @@ abstract class ZIM {
   /// When to call /Trigger: his parameter is invoked when a session needs to be deleted and can be invoked after a ZIM instance is created. The call takes effect after login and becomes invalid after logout.
   ///
   /// [conversationID] conversationID.
-  /// [conversationType] conversationtype.
+  /// [conversationType] conversation type.
   /// [config] delete the session's configuration.
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
@@ -182,11 +184,11 @@ abstract class ZIM {
   ///
   /// Restrictions: Valid after login, invalid after logout.
   ///
-  /// Impacts on other APIs: Calling this method will trigger a total readings not updated callback [onConversationTotalUnreadMessageCountUpdated], would trigger a session to update callbacks [onConversationChanged].
+  /// Impacts on other APIs: Calling this method will trigger a total readings not updated callback [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated], would trigger a session to update callbacks [ZIMEventHandler.onConversationChanged].
   ///
   /// Related callbacks:[ZIMConversationUnreadMessageCountClearedResult].
   ///
-  /// Related APIs:[conversationTotalUnreadMessageCountUpdated]、[conversationChanged].
+  /// Related APIs:[ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated]、[ZIMEventHandler.onConversationChanged].
   ///
   /// [conversationID] conversationID.
   /// [conversationType] conversation type.
@@ -206,11 +208,11 @@ abstract class ZIM {
   ///
   /// Restrictions:  Valid after login, invalid after logout.
   ///
-  /// Impacts on other APIs: After the DND state is enabled, receiving messages is not triggered [conversationTotalUnreadMessageCountUpdated].
+  /// Impacts on other APIs: After the DND state is enabled, receiving messages is not triggered [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated].
   ///
-  /// Related callbacks: [ZIMConversationNotificationStatusSetCallback].
+  /// Related callbacks: [ZIMConversationNotificationStatusSetResult].
   ///
-  /// Related APIs: [conversationTotalUnreadMessageCountUpdated].
+  /// Related APIs: [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated].
   ///
   /// [status] the session notification state.
   /// [conversationID]  conversationID.
@@ -221,32 +223,74 @@ abstract class ZIM {
           String conversationID,
           ZIMConversationType conversationType);
 
-//MARK: -Message
+  /// Supported versions: 2.4.0 and above.
+  ///
+  /// Detailed description: This method can be used to send messages in single chat, room and group chat.
+  ///
+  /// Business scenario: When you need to send message to the target user, target message room, and target group chat after logging in, send it through this interface.
+  ///
+  /// Call timing: It can be called after login.
+  ///
+  /// Usage limit: no more than 10/s, available after login, unavailable after logout.
+  ///
+  /// Related callback: [ZIMMessageSentResult], [ZIMMessageSendNotification], [ZIMEventHandler.onReceivePeerMessage], [ZIMEventHandler.onReceiveRoomMessage], [ZIMEventHandler.onReceiveGroupMessage], [ZIMEventHandler.onConversationChanged], [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated].
+  ///
+  /// Related interfaces: [queryHistoryMessage], [deleteAllMessage], [deleteMessages],[sendMediaMessage].
+  Future<ZIMMessageSentResult> sendMessage(
+      ZIMMessage message,
+      String toConversationID,
+      ZIMConversationType conversationType,
+      ZIMMessageSendConfig config,
+      [ZIMMessageSendNotification? notification]);
 
+  /// Supported Versions: 2.4.0 and above.
+  ///
+  /// Detail description: This method can insert a message directly to the local DB on the client side.
+  ///
+  /// Business scenario: The developer can combine the system message type, and convert the callback notification (for example, invite someone into the group, remove someone from the group, etc.) to the system message type on the client side and insert it into the local DB to achieve the effect of the system prompt .
+  ///
+  /// Call timing/Notification timing: It can be called after login.
+  ///
+  /// Usage Restrictions: Currently, only chat and group messages can be inserted. Room messages cannot be inserted.
+  ///
+  /// Related callback: [ZIMMessageInsertedResult].
+  ///
+  /// Related interfaces: [queryHistoryMessage], [deleteAllMessage], [deleteMessages].
+  Future<ZIMMessageInsertedResult> insertMessageToLocalDB(
+      ZIMMessage message,
+      String conversationID,
+      ZIMConversationType conversationType,
+      String senderUserID);
+//MARK: -Message
+  /// deprecated: This API has been deprecated since 2.4.0, please use [sendMessage] instead.
+  ///
   /// Available since: 2.1.5 and above.
 
-  /// Description: After this function is called, a message is sent to the specified user. At the same time, a [ZIMMessageSentCallback] callback is received, which can be used to determine whether the message is sent successfully.
+  /// Description: After this function is called, a message is sent to the specified user. At the same time, a [ZIMMessageSentResult] callback is received, which can be used to determine whether the message is sent successfully.
 
   /// Use cases: This function is used in 1V1 chat scenarios.
 
   /// Call timing/Notification timing: Can be invoked after login.
 
-  /// Caution: Be aware of the [ZIMMessageSentCallback] callback when sending. This callback can be used to determine if the send fails for some reason.Pushconfig Is required only when the offline push function is required.
+  /// Caution: Be aware of the [ZIMMessageSentResult] callback when sending. This callback can be used to determine if the send fails for some reason.PushConfig Is required only when the offline push function is required.
 
   /// Usage limit: no more than 10 /s, available after login, unavailable after logout.
 
-  /// Scope of influence: Using this method triggers the [receivePeerMessage] callback of the message receiver and the [onConversationChanged] callback of the sender and receiver. If message DND is not set for the session where the message is sent, Triggers [conversationTotalUnreadMessageCountUpdated] callback.
+  /// Scope of influence: Using this method triggers the [ZIMEventHandler.onReceivePeerMessage] callback of the message receiver and the [ZIMEventHandler.onConversationChanged] callback of the sender and receiver. If message DND is not set for the session where the message is sent, Triggers [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] callback.
 
-  /// Related callbacks:[ZIMMessageSentCallback]、[receivePeerMessage]、[onConversationChanged]、[conversationTotalUnreadMessageCountUpdated]。
+  /// Related callbacks:[ZIMMessageSentResult]、[ZIMEventHandler.onReceivePeerMessage]、[ZIMEventHandler.onConversationChanged]、[ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated].
 
-  /// Related API: [queryHistoryMessage]、[deleteMessageByConversationID]、[deleteMessage]
+  /// Related API: [queryHistoryMessage]、[deleteAllMessage]、[deleteMessages]
   ///
   /// [message] The message to be sent.
   /// [toUserID] The ID of the user who will receive the message.
   /// [config] Related configuration for sending single chat messages.
+  ///
   Future<ZIMMessageSentResult> sendPeerMessage(
       ZIMMessage message, String toUserID, ZIMMessageSendConfig config);
 
+  /// deprecated: This API has been deprecated since 2.4.0, please use [sendMessage] instead.
+  ///
   /// Supported versions: 2.1.5 and above.
 
   /// Detail description: This interface is called when a group chat message needs to be sent.
@@ -257,13 +301,13 @@ abstract class ZIM {
 
   /// Usage limit: 10 times/s, available after login, unavailable after logout.
 
-  /// Note: pushconfig only needs to be filled in when you need to use the offline push function. The properties in ZIMMessage are read-only and do not need to be modified.
+  /// Note: pushConfig only needs to be filled in when you need to use the offline push function. The properties in ZIMMessage are read-only and do not need to be modified.
 
   /// Scope of influence: Using this method will trigger the receivePeerMessage callback of the message receiver, and will trigger the onConversationChanged callback of the sender and receiver. If the session where the message is located does not have message DND set, the conversationTotalUnreadMessageCountUpdated callback will be triggered.
 
-  /// Related callbacks: [ZIMMessageSentCallback], [receiveGroupMessage], [onConversationChanged], [conversationTotalUnreadMessageCountUpdated].
+  /// Related callbacks: [ZIMMessageSentResult], [ZIMEventHandler.onReceiveGroupMessage], [ZIMEventHandler.onConversationChanged], [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated].
 
-  /// Related interfaces: [queryHistoryMessage], [deleteMessageByConversationID], [deleteMessage]
+  /// Related interfaces: [queryHistoryMessage], [deleteMessages], [deleteAllMessage]
   ///
   /// [message] The message to be sent.
   /// [toGroupID] The ID of the user who will receive the message.
@@ -271,11 +315,13 @@ abstract class ZIM {
   Future<ZIMMessageSentResult> sendGroupMessage(
       ZIMMessage message, String toGroupID, ZIMMessageSendConfig config);
 
+  /// deprecated: This API has been deprecated since 2.4.0, please use [sendMessage] instead.
+  ///
   /// Send room messages.
   ///
   /// Available since: 2.1.5 or above
   ///
-  /// Description: When this function is called, the message will be sent in the room. At the same time, the [ZIMMessageSentCallback] callback will be received, which can be used to determine whether the message was sent successfully.
+  /// Description: When this function is called, the message will be sent in the room. At the same time, the [ZIMMessageSentResult] callback will be received, which can be used to determine whether the message was sent successfully.
   ///
   /// Use Cases: This feature is required for scenarios where multiple people in the room are chatting.
   ///
@@ -296,11 +342,13 @@ abstract class ZIM {
   ///
   /// Usage limit: no more than 10/s, available after login, unavailable after logout.
   ///
-  /// Impact: [onReceivePeerMessage]/[ReceiveGroupMessage] sessions and session-scoped [onReceiveGroupMessage] sessions did not fire message receiver's [ConversationR] fires [onversationTotalUnreadMessageCountUpdated] objection.
+  /// Impact: [ZIMEventHandler.onReceivePeerMessage]、[ZIMEventHandler.onReceiveGroupMessage] sessions and session-scoped [ZIMEventHandler.onReceiveGroupMessage] sessions did not fire message receiver's [ZIMEventHandler.onConversationChanged] fires [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] objection.
   ///
-  /// Note: Only required if you need to use the threaded update feature when pushing configuration. Push notifications are not supported, nor are [onContationChanged] and [ConTotalUnreadMessageCountUpdated] supported if media messages are broadcast to the world.
+  /// Note: Have a breaking change in version 2.4.0 of this interface,see changelog for details.Only required if you need to use the threaded update feature when pushing configuration. Push notifications are not supported, nor are [ZIMEventHandler.onConversationChanged] and [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] supported if media messages are broadcast to the world.
   ///
-  /// Related: [ZIMMessageSentCallback], [ZIMMediaUploadingProgress], [onReceivePeMessage], [onReceiveRoomMessage], [onReceiveGroupMessage], [onConversationChanged], [onConversationTotalUnreadMessageCountUpdated].
+  ///
+  ///
+  /// Related: [ZIMMessageSentResult], [ZIMMediaUploadingProgress], [ZIMEventHandler.onReceivePeerMessage], [ZIMEventHandler.onReceiveRoomMessage], [ZIMEventHandler.onReceiveGroupMessage], [ZIMEventHandler.onConversationChanged], [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated].
   ///
   /// Related interfaces: [queryHistoryMessage], [deleteAllMessage], [deleteMessages]
   ///
@@ -308,13 +356,13 @@ abstract class ZIM {
   /// [toConversationID] The ID of the conversation which will receive the message.
   /// [conversationType] The type of the conversation which will receive the message.
   /// [config] Related configuration for sending single chat messages.
-  /// [progress] Callback of the progress.
+  /// [notification] Relevant notifications when sending media messages, including upload progress, etc.
   Future<ZIMMessageSentResult> sendMediaMessage(
       ZIMMediaMessage message,
       String toConversationID,
       ZIMConversationType conversationType,
       ZIMMessageSendConfig config,
-      ZIMMediaUploadingProgress? progress);
+      ZIMMediaMessageSendNotification? notification);
 
   /// Download media message content.
   ///
@@ -361,9 +409,9 @@ abstract class ZIM {
   ///
   /// Note: The impact of deleting messages is limited to this account, and messages from other accounts will not be deleted.
   ///
-  /// Scope of influence: The [conversationChanged] callback is triggered, and if there are unread messages, the [conversationTotalUnreadMessageCountUpdated] callback is triggered.
+  /// Scope of influence: The [conversationChanged] callback is triggered, and if there are unread messages, the [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] callback is triggered.
   ///
-  /// Related callback: [ZIMMessageDeletedCallback].
+  /// Related callback: [ZIMMessageDeletedResult].
   ///
   /// [conversationID] The session ID of the message to be deleted.
   /// [conversationType]  conversation type.
@@ -383,7 +431,7 @@ abstract class ZIM {
 
   /// Restrictions: Effective after login, invalid after logout.
 
-  /// Scope of influence: If the deleted message is the latest message of the session, the [conversationChanged] callback will be triggered, and if the message is unread, the [conversationTotalUnreadMessageCountUpdated] callback will be triggered.
+  /// Scope of influence: If the deleted message is the latest message of the session, the [ZIMEventHandler..onConversationChanged] callback will be triggered, and if the message is unread, the [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] callback will be triggered.
   ///
   /// [messageList] List of deleted messages.
   /// [conversationID] conversation ID.
@@ -409,7 +457,7 @@ abstract class ZIM {
   ///
   /// Caution: When everyone leaves the room, the room will be automatically destroyed.
   ///
-  /// Related callbacks: The result of the room creation can be obtained through the [ZIMRoomCreatedCallback] callback.
+  /// Related callbacks: The result of the room creation can be obtained through the [ZIMRoomCreatedResult] callback.
   ///
   /// Related APIs: You can join the room through [joinRoom] and leave the room with [leaveRoom].
   ///
@@ -430,7 +478,7 @@ abstract class ZIM {
   ///
   /// Caution: When everyone leaves the room, the room will be automatically destroyed.
   ///
-  /// Related callbacks: The result of joining the room can be obtained through the [ZIMRoomJoinedCallback] callback.
+  /// Related callbacks: The result of joining the room can be obtained through the [ZIMRoomJoinedResult] callback.
   ///
   /// Related APIs: You can create a room with [createRoom] and leave the room with [leaveRoom].
   ///
@@ -447,7 +495,7 @@ abstract class ZIM {
 
   /// Note: When everyone leaves the room, the room will be automatically destroyed, and a user can be in a maximum of 5 rooms at the same time. [enterRoom] is equivalent to [createRoom] or [joinRoom], so you only need to choose one of the APIs.
 
-  /// Related callbacks: The result of entering the room can be obtained through the [onRoomEntered] callback.
+  /// Related callbacks: The result of entering the room can be obtained through the [ZIMRoomEnteredResult] callback.
 
   /// Related interface: You can enter the room through [enterRoom], and leave the room through [leaveRoom].
   Future<ZIMRoomEnteredResult> enterRoom(
@@ -465,7 +513,7 @@ abstract class ZIM {
   ///
   /// Caution: If the current user is not in this room, the exit fails. When everyone leaves the room, the room will be automatically destroyed.
   ///
-  /// Related callbacks: The result of leaving the room can be obtained through the [ZIMRoomLeftCallback] callback.
+  /// Related callbacks: The result of leaving the room can be obtained through the [ZIMRoomLeftResult] callback.
   ///
   /// Related APIs: You can create a room through [createRoom] and join a room with [joinRoom].
   ///
@@ -484,7 +532,7 @@ abstract class ZIM {
   ///
   /// Caution: If the user is not currently in this room, the query fails.
   ///
-  /// Related callbacks: Through the [ZIMRoomMemberQueriedCallback] callback, you can get the result of querying the room member list.
+  /// Related callbacks: Through the [ZIMRoomMemberQueriedResult] callback, you can get the result of querying the room member list.
   ///
   /// Related APIs: You can check the online number of people in the room through [queryRoomOnlineMemberCount].
   ///
@@ -505,7 +553,7 @@ abstract class ZIM {
   ///
   /// Caution: If the user is not currently in this room, the query will fail.
   ///
-  /// Related APIs: the room member can be inquired through [queryRoomMember].
+  /// Related APIs: the room member can be inquired through [queryRoomMemberList].
   ///
   ///[roomID] ID of the room to query.
   Future<ZIMRoomOnlineMemberCountQueriedResult> queryRoomOnlineMemberCount(
@@ -569,6 +617,67 @@ abstract class ZIM {
   /// [roomID] ID of the room to queried.
   Future<ZIMRoomAttributesQueriedResult> queryRoomAllAttributes(String roomID);
 
+
+  /// Supported Versions: 2.4.0 and above.
+  ///
+  /// Detail description: Call this API to set room user properties of members in the room.
+  ///
+  /// Business scenario: If you need to set a level for members in the room, you can use this interface to set a state.
+  ///
+  /// Default: [ZIMRoomMemberAttributesSetConfig] Default constructor isDeleteAfterOwnerLeft is true.
+  ///
+  /// Call timing/Notification timing: After logging in and calling in the relevant room.
+  ///
+  /// Usage limit: background limit, default 20
+  ///
+  ///
+  /// Related interfaces: [queryRoomMembersAttributes], [queryRoomMemberAttributesList].
+  /// [attributes] Room member attributes to be set.
+  /// [userIDs] A list of userIDs to set.
+  /// [roomID] Room ID.
+  /// [config] Behavior configuration of the operation.
+  Future<ZIMRoomMembersAttributesOperatedResult> setRoomMembersAttributes(
+      Map<String, String> attributes,
+      List<String> userIDs,
+      String roomID,
+      ZIMRoomMemberAttributesSetConfig config);
+
+  /// Available since:2.4.0 or later.
+  ///
+  /// Description:Call this API to batch query the room user attributes of the members in the room.
+  ///
+  /// Use cases:Use this interface when you need to specify that you want to query some room users.
+  ///
+  /// Restrictions:The maximum call frequency is 5 times within 30 seconds by default, and the maximum query time is 100 people.
+  ///
+  ///
+  /// Related APIs: [setRoomMembersAttributes]、[queryRoomMemberAttributesList]
+  ///
+  /// Runtime lifecycle: It is available after logging in and joining the corresponding room, but unavailable after leaving the corresponding room.
+  ///
+  /// [userIDs] A list of userIDs to query.
+  /// [roomID]  Room ID.
+  Future<ZIMRoomMembersAttributesQueriedResult> queryRoomMembersAttributes(
+      List<String> userIDs, String roomID);
+
+  /// Available since:2.4.0 or later.
+  ///
+  /// Description:Call the API to paginate the room user properties that have room property members in the room.
+  ///
+  /// Use cases:This interface is used when you need to query all room users.
+  ///
+  /// Restrictions:The maximum call frequency is 5 times within 30 seconds by default, and the maximum query time is 100 people.
+  ///
+  ///
+  /// Related APIs: [setRoomMembersAttributes]、[queryRoomMembersAttributes]
+  ///
+  /// Runtime lifecycle: It is available after logging in and joining the corresponding room, but unavailable after leaving the corresponding room.
+  ///
+  /// [roomID]  Room ID.
+  /// [config]  Behavior configuration of the operation.
+  Future<ZIMRoomMemberAttributesListQueriedResult>
+      queryRoomMemberAttributesList(
+          String roomID, ZIMRoomMemberAttributesQueryConfig config);
 //MARK: - Group
 
   /// Available since: 2.1.5 and above.
@@ -601,7 +710,7 @@ abstract class ZIM {
   ///
   /// Caution: A non-group owner cannot dissolve a group.
   ///
-  /// Impacts on other APIs: Through callback can get [ZIMGroupDismissedCallback] dissolution results of the room, through [onGroupStateChanged] listen callback can get the room status.
+  /// Impacts on other APIs: Through callback can get [ZIMGroupDismissedResult] dissolution results of the room, through [ZIMEventHandler.onGroupStateChanged] listen callback can get the room status.
   ///
   /// Related callbacks: You can use [createGroup] to create a group, [joinGroup] to join a group, and [leaveGroup] to leave a group.
   ///
@@ -618,7 +727,7 @@ abstract class ZIM {
   ///
   /// Caution: Available after login, unavailable after logout. If you have joined a group, the join succeeds. A group is limited to 500 people and fails to join when it is full.
   ///
-  /// Related callbacks: To get the result of joining the room, call [ZIMGroupJoinedCallback].
+  /// Related callbacks: To get the result of joining the room, call [ZIMGroupJoinedResult].
   ///
   /// Related APIs: You can use [createGroup] to create a group, [leaveGroup] to leave a group, or [dismissGroup] to dismiss a group.
   ///
@@ -654,7 +763,7 @@ abstract class ZIM {
   ///
   /// Caution: This interface does not require the peer's consent or the peer's online status. The service layer determines the number of invited users.
   ///
-  /// Related callbacks: Through the callback [ZIMGroupUserInvitedCallback] can add multiple users into the group's results.
+  /// Related callbacks: Through the callback [ZIMGroupUsersInvitedResult] can add multiple users into the group's results.
   ///
   /// Related APIs: KickGroupMember can be used to kick a target user out of the group.
   /// [groupID] The ID of the group that will invite users to the group.
@@ -674,7 +783,7 @@ abstract class ZIM {
   ///
   /// Caution: This interface does not require the peer's consent or the peer's online status. It cannot accept group-related callbacks after being kicked out. History messages and sessions remain after being kicked out and can still enter the group.
   ///
-  /// Related callbacks: Through the callback [ZIMGroupMemberKickedCallback] can get the user kicked out the results of the group.
+  /// Related callbacks: Through the callback [ZIMGroupMemberKickedResult] can get the user kicked out the results of the group.
   ///
   /// Related APIs: You can invite a target user into a group through [inviteUsersIntoGroup].
   ///
@@ -693,7 +802,7 @@ abstract class ZIM {
   ///
   /// Restrictions: You cannot transfer a group owner if you are not a group owner.
   ///
-  /// Related APIs: Through the callback [ZIMGroupOwnerTransferredCallback] can get the result of the transfer of the group manager.
+  /// Related APIs: Through the callback [ZIMGroupOwnerTransferredResult] can get the result of the transfer of the group manager.
   /// [toUserID] The converted group owner ID.
   /// [groupID] The group ID of the group owner to be replaced.
   Future<ZIMGroupOwnerTransferredResult> transferGroupOwner(
@@ -709,7 +818,7 @@ abstract class ZIM {
   ///
   /// Restrictions: Group members and group owners can change the group name. The maximum length of the name is 100 bytes.
   ///
-  /// Related APIs: Through the callback [ZIMGroupNameUpdatedResult] can get the result of the change of name, through [onGroupNoticeUpdated] can get update group name information.
+  /// Related APIs: Through the callback [ZIMGroupNameUpdatedResult] can get the result of the change of name, through [ZIMEventHandler.onGroupNoticeUpdated] can get update group name information.
   ///
   /// [groupName] The updated group name.
   /// [groupID] The group ID whose group name will be updated.
@@ -742,7 +851,7 @@ abstract class ZIM {
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   ///
-  /// Related callbacks: Through the callback [ZIMGroupInfoQueriedCallback] can query the result of the group information.
+  /// Related callbacks: Through the callback [ZIMGroupInfoQueriedResult] can query the result of the group information.
   ///
   /// [groupID] The group ID of the group information to be queried.
   Future<ZIMGroupInfoQueriedResult> queryGroupInfo(String groupID);
@@ -757,9 +866,9 @@ abstract class ZIM {
   ///
   /// Restrictions: Only group members can set group properties.
   ///
-  /// Related callbacks: Through the callback [ZIMGroupAttributesOperatedCallback] can get the result of the set of properties.
+  /// Related callbacks: Through the callback [ZIMGroupAttributesOperatedResult] can get the result of the set of properties.
   ///
-  /// Related APIs: [deleteGroupAttributes] can be used to deleteGroupAttributes, [queryGroupAttributes] can be used to queryGroupAttributes, [queryAllGroupAttributes] can be used to queryAllGroupAttributes.
+  /// Related APIs: [deleteGroupAttributes] can be used to deleteGroupAttributes, [queryGroupAttributes] can be used to queryGroupAttributes, [queryGroupAllAttributes] can be used to queryAllGroupAttributes.
   ///
   /// [groupAttributes] group properties.
   /// [groupID] groupID.
@@ -776,9 +885,9 @@ abstract class ZIM {
   ///
   /// Restrictions: Only group members can delete group attributes.
   ///
-  /// Related callbacks: Through the callback [ZIMGroupAttributesOperatedCallback] can delete the result of the group of attributes.
+  /// Related callbacks: Through the callback [ZIMGroupAttributesOperatedResult] can delete the result of the group of attributes.
   ///
-  /// Related APIs: You can use [setGroupAttributes] to setGroupAttributes, [queryGroupAttributes] to queryGroupAttributes, and [queryAllGroupAttributes] to queryAllGroupAttributes.
+  /// Related APIs: You can use [setGroupAttributes] to setGroupAttributes, [queryGroupAttributes] to queryGroupAttributes, and [queryGroupAllAttributes] to queryAllGroupAttributes.
   ///
   /// [groupID]  The group ID of the group attribute to be deleted.
   /// [keys] The key of the group attribute to delete.
@@ -795,7 +904,7 @@ abstract class ZIM {
   ///
   /// Restrictions: Available after login, unavailable after logout.
   ///
-  /// Related APIs: [queryAllGroupAttributes] Queries all group attributes.
+  /// Related APIs: [queryGroupAllAttributes] Queries all group attributes.
   ///
   ///  [keys] The key of the group attribute to be queried.
   ///  [groupID] The group ID of the group attribute to be queried.
@@ -810,7 +919,7 @@ abstract class ZIM {
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   ///
-  /// Related callbacks: Through callback can get query [ZIMGroupAttributesQuriedCallback] all the results of the group of attributes.
+  /// Related callbacks: Through callback can get query [ZIMGroupAttributesQueriedResult] all the results of the group of attributes.
   ///
   /// Related APIs: [queryGroupAttributes] Queries the attributes of the specified group.
   ///

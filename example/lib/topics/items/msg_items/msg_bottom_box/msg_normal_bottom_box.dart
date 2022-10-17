@@ -172,7 +172,8 @@ class _WidgetState extends State<MsgNormalBottomBox> {
                 height: 250,
                 width: double.infinity,
                 child: EmojiPicker(
-                    onEmojiSelected: (Category category, Emoji emoji) {
+
+                    onEmojiSelected: (Category? category, Emoji emoji) {
                       _onEmojiSelected(emoji);
                     },
                     onBackspacePressed: _onBackspacePressed,
@@ -188,7 +189,6 @@ class _WidgetState extends State<MsgNormalBottomBox> {
                         indicatorColor: Colors.blue,
                         iconColor: Colors.grey,
                         iconColorSelected: Colors.blue,
-                        progressIndicatorColor: Colors.blue,
                         backspaceColor: Colors.blue,
                         skinToneDialogBgColor: Colors.white,
                         skinToneIndicatorColor: Colors.grey,
