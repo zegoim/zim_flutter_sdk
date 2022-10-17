@@ -8,9 +8,8 @@ class ZIMEventHandler {
   /// [state] The current connection state after changed.
   /// [event] The event that caused the connection state to change.
   /// [extendedData] Extra information when the event occurs, a standard JSON format data.
-  static void Function(ZIM zim,
-          ZIMConnectionState state, ZIMConnectionEvent event, Map extendedData)?
-      onConnectionStateChanged;
+  static void Function(ZIM zim, ZIMConnectionState state,
+      ZIMConnectionEvent event, Map extendedData)? onConnectionStateChanged;
 
 /* Main */
 
@@ -35,8 +34,8 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [conversationChangeInfoList] conversation list
-  static void Function(ZIM zim,
-          List<ZIMConversationChangeInfo> conversationChangeInfoList)?
+  static void Function(
+          ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList)?
       onConversationChanged;
 
   /// The callback for conversation total unread message count changed.
@@ -44,7 +43,7 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [totalUnreadMessageCount] total unread message count
-  static void Function(ZIM zim,int totalUnreadMessageCount)?
+  static void Function(ZIM zim, int totalUnreadMessageCount)?
       onConversationTotalUnreadMessageCountUpdated;
 
 /* Message */
@@ -56,7 +55,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromUserID] The user ID of the message sender.
-  static void Function(ZIM zim, List<ZIMMessage> messageList, String fromUserID)?
+  static void Function(
+          ZIM zim, List<ZIMMessage> messageList, String fromUserID)?
       onReceivePeerMessage;
 
   /// The callback for receiving room message.
@@ -66,7 +66,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromRoomID] ID of the room where the message was received.
-  static void Function(ZIM zim, List<ZIMMessage> messageList, String fromRoomID)?
+  static void Function(
+          ZIM zim, List<ZIMMessage> messageList, String fromRoomID)?
       onReceiveRoomMessage;
 
   /// The callback for receiving group message.
@@ -76,7 +77,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromGroupID] ID of the group where the message was received.
-  static void Function(ZIM zim, List<ZIMMessage> messageList, String fromGroupID)?
+  static void Function(
+          ZIM zim, List<ZIMMessage> messageList, String fromGroupID)?
       onReceiveGroupMessage;
 
 /* Room */
@@ -134,9 +136,9 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [state] The current room connection state after changed.
   /// [event] The event that caused the room connection state to change.
-  /// [xtendedData] Extra information when the event occurs, a standard JSON string.
-  static void Function(ZIM zim, ZIMRoomState state, ZIMRoomEvent event, Map extendedData,
-      String roomID)? onRoomStateChanged;
+  /// [extendedData] Extra information when the event occurs, a standard JSON string.
+  static void Function(ZIM zim, ZIMRoomState state, ZIMRoomEvent event,
+      Map extendedData, String roomID)? onRoomStateChanged;
 
   /// event callback when the room attributes changes.
   ///
@@ -147,7 +149,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [updateInfo] The info of the room attributes changed.
   /// [roomID] The ID of the room where this event occurred.
-  static void Function(ZIM zim, ZIMRoomAttributesUpdateInfo updateInfo, String roomID)?
+  static void Function(
+          ZIM zim, ZIMRoomAttributesUpdateInfo updateInfo, String roomID)?
       onRoomAttributesUpdated;
 
   /// event callback when the room attributes changes.
@@ -159,10 +162,23 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [updateInfo] The infos of the room attributes changed.
   /// [roomID] The ID of the room where this event occurred.
-  static void Function(ZIM zim,
-          List<ZIMRoomAttributesUpdateInfo> updateInfo, String roomID)?
+  static void Function(
+          ZIM zim, List<ZIMRoomAttributesUpdateInfo> updateInfo, String roomID)?
       onRoomAttributesBatchUpdated;
 
+  /// event callback when room user property update.
+  ///
+  /// Available since:  2.4.0.
+  ///
+  /// Description: This callback will be received when a user's property in the room is changed.
+  ///
+  /// @param zim ZIM instance.
+  /// [infos]  The infos of the room member attributes changed.
+  /// [operatedInfo] Room operation information.
+  /// [roomID] Room ID.
+  static void Function(
+    ZIM zim,List<ZIMRoomMemberAttributesUpdateInfo> infos,ZIMRoomOperatedInfo operatedInfo, String roomID
+  )? onRoomMemberAttributesUpdated;
 /* Group */
 
   /// Description: allback notification of group status change.
@@ -178,7 +194,8 @@ class ZIMEventHandler {
   /// [event] Group related events.
   /// [operatedInfo] Group information that has been operated.
   /// [groupInfo]  The groupInfowhere the group state change occurred.
-  static void Function(ZIM zim,
+  static void Function(
+      ZIM zim,
       ZIMGroupState state,
       ZIMGroupEvent event,
       ZIMGroupOperatedInfo operatedInfo,
@@ -196,9 +213,8 @@ class ZIMEventHandler {
   /// [groupName] The updated group name.
   /// [operatedInfo] Operation information after the group name is updated.
   /// [groupID] The groupID where the group name update occurred.
-  static void Function(ZIM zim,
-          String groupName, ZIMGroupOperatedInfo operatedInfo, String groupID)?
-      onGroupNameUpdated;
+  static void Function(ZIM zim, String groupName,
+      ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupNameUpdated;
 
   /// Description: Group avatar url change notification callback.
   ///
@@ -212,7 +228,10 @@ class ZIMEventHandler {
   /// [groupName] The updated group avatar url.
   /// [operatedInfo] Operation information after the group avatar url is updated.
   /// [groupID] The groupID where the group avatar url update occurred.
-  static void Function(ZIM zim, String groupAvatarUrl, ZIMGroupOperatedInfo operatedInfo,
+  static void Function(
+      ZIM zim,
+      String groupAvatarUrl,
+      ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupAvatarUrlUpdated;
 
   /// Description: Group bulletin Change notification callback.
@@ -227,8 +246,8 @@ class ZIMEventHandler {
   /// [groupNotice] Updated group announcement.
   /// [operatedInfo] The group announces the updated operation information.
   /// [groupID] The groupID where the group announcement update occurred.
-  static void Function(ZIM zim, String groupNotice, ZIMGroupOperatedInfo operatedInfo,
-      String groupID)? onGroupNoticeUpdated;
+  static void Function(ZIM zim, String groupNotice,
+      ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupNoticeUpdated;
 
   /// Description: Group attribute change notification callback.
   ///
@@ -242,7 +261,8 @@ class ZIMEventHandler {
   /// [operatedInfo] Operation information after the group attribute is updated.
   /// [updateInfo] Information after group attribute update.
   /// [groupID] The groupID for sending group attribute updates.
-  static void Function(ZIM zim,
+  static void Function(
+      ZIM zim,
       List<ZIMGroupAttributesUpdateInfo> updateInfo,
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupAttributesUpdated;
@@ -261,7 +281,8 @@ class ZIMEventHandler {
   /// [userList] Updated member information.
   /// [operatedInfo] Updated operational information.
   /// [groupID] The groupID where the member state change occurred.
-  static void Function(ZIM zim,
+  static void Function(
+      ZIM zim,
       ZIMGroupMemberState state,
       ZIMGroupMemberEvent event,
       List<ZIMGroupMemberInfo> userList,
@@ -280,7 +301,8 @@ class ZIMEventHandler {
   /// [operatedInfo] Updated member information.
   /// [userInfo] userInfo.
   /// [groupID] groupID.
-  static void Function(ZIM zim,
+  static void Function(
+      ZIM zim,
       List<ZIMGroupMemberInfo> userInfo,
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupMemberInfoUpdated;
@@ -302,7 +324,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [info] Information about received call invitations.
   /// [callID] Received CallID.
-  static void Function(ZIM zim, ZIMCallInvitationReceivedInfo info, String callID)?
+  static void Function(
+          ZIM zim, ZIMCallInvitationReceivedInfo info, String callID)?
       onCallInvitationReceived;
 
   /// Supported versions: 2.0.0 and above.
@@ -320,7 +343,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [info]  Information about canceled call invitations.
   /// [callID] Cancelled callID.
-  static void Function(ZIM zim, ZIMCallInvitationCancelledInfo info, String callID)?
+  static void Function(
+          ZIM zim, ZIMCallInvitationCancelledInfo info, String callID)?
       onCallInvitationCancelled;
 
   /// Supported versions: 2.0.0 and above.
@@ -338,7 +362,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [info]  Information about the call invitations.
   /// [callID]  callID.
-  static void Function(ZIM zim, ZIMCallInvitationAcceptedInfo info, String callID)?
+  static void Function(
+          ZIM zim, ZIMCallInvitationAcceptedInfo info, String callID)?
       onCallInvitationAccepted;
 
   /// Available since: 2.0.0 and above.
@@ -357,7 +382,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [info]  Information about the call invitations.
   /// [callID]  callID.
-  static void Function(ZIM zim, ZIMCallInvitationRejectedInfo info, String callID)?
+  static void Function(
+          ZIM zim, ZIMCallInvitationRejectedInfo info, String callID)?
       onCallInvitationRejected;
 
   /// Available since: 2.0.0 and above.

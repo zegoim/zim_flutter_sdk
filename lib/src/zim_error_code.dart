@@ -59,7 +59,13 @@ class ZIMErrorCode {
       6000336;
   static const int roomModuleTheTotalLengthOfRoomAttributesValueExceedsLimit =
       6000337;
-
+  static const int roomModuleRoomMemberAttributesCommonError = 6000350;
+  static const int roomModuleRoomMemberAttributesKVExceedsLimit = 6000351;
+  static const int roomModuleRoomMemberAttributesKeyExceedsLimit = 6000352;
+  static const int roomModuleRoomMemberAttributesValueExceedsLimit = 6000353;
+  static const int
+      roomModuleRoomMemberAttributesSetRoomUserAttributesCountExceedLimit =
+      6000357;
   static const int zpnsModulePushIDInvalid = 6000401;
 
   static const int groupModuleCommonError = 6000501;

@@ -224,6 +224,23 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 - (void)zim:(ZIM *)zim
+    roomMemberAttributesUpdated:(NSArray<ZIMRoomMemberAttributesUpdateInfo *> *)infos
+                   operatedInfo:(ZIMRoomOperatedInfo *)operatedInfo
+     roomID:(NSString *)roomID{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableArray *infosModel = [[NSMutableArray alloc] init];
+    for (ZIMRoomMemberAttributesUpdateInfo *updateInfo in infos) {
+        [infosModel safeAddObject:[ZIMPluginConverter mZIMRoomMemberAttributesUpdateInfo:updateInfo]];
+    }
+    NSDictionary *operatedInfoModel = [ZIMPluginConverter mZIMRoomOperatedInfo:operatedInfo];
+    NSDictionary *resultDic = @{@"method":@"onRoomMemberAttributesUpdated",@"handle": handle, @"infos":infosModel,@"roomID":roomID,@"operatedInfo":operatedInfoModel};
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
     groupStateChanged:(ZIMGroupState)state
                 event:(ZIMGroupEvent)event
          operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo

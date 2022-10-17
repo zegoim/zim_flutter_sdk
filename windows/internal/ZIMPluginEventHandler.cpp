@@ -210,6 +210,24 @@ void ZIMPluginEventHandler::onRoomAttributesBatchUpdated(ZIM* zim,
     }
 }
 
+void ZIMPluginEventHandler::onRoomMemberAttributesUpdated(ZIM* zim, const std::vector<ZIMRoomMemberAttributesUpdateInfo>& infos,ZIMRoomOperatedInfo operatedInfo, const std::string& roomID){
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onRoomMemberAttributesUpdated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("roomID")] = FTValue(roomID);
+        FTArray infosModel;
+        for(ZIMRoomMemberAttributesUpdateInfo info:infos){                
+            FTMap infoModel = ZIMPluginConverter::cnvZIMRoomMemberAttributesUpdateInfoToMap(info);
+            infosModel.emplace_back(infoModel);
+        }
+        retMap[FTValue("infos")] = FTValue(infosModel);
+        retMap[FTValue("operatedInfo")] = FTValue(ZIMPluginConverter::cnvZIMRoomOperatedInfoToMap(operatedInfo));
+        eventSink_->Success(retMap);
+    }
+}
+
 void ZIMPluginEventHandler::onGroupStateChanged(ZIM* zim, ZIMGroupState state, ZIMGroupEvent event,
     const ZIMGroupOperatedInfo& operatedInfo,
     const ZIMGroupFullInfo& groupInfo) {

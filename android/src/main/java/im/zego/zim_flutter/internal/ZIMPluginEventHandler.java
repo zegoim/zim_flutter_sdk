@@ -19,6 +19,8 @@ import im.zego.zim.entity.ZIMGroupMemberInfo;
 import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMRoomAttributesUpdateInfo;
+import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
+import im.zego.zim.entity.ZIMRoomOperatedInfo;
 import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.enums.ZIMConnectionEvent;
 import im.zego.zim.enums.ZIMConnectionState;
@@ -252,6 +254,27 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("updateInfo",ZIMPluginConverter.mZIMRoomAttributesUpdateInfoList(infos));
         resultMap.put("roomID",roomID);
 
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onRoomMemberAttributesUpdated(ZIM zim, ArrayList<ZIMRoomMemberAttributesUpdateInfo> infos, ZIMRoomOperatedInfo operatedInfo, String roomID) {
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onRoomMemberAttributesUpdated");
+        resultMap.put("handle",handle);
+        ArrayList<HashMap<String,Object>> infosModel = new ArrayList<>();
+        for (ZIMRoomMemberAttributesUpdateInfo updateInfo:
+             infos) {
+            infosModel.add(ZIMPluginConverter.mZIMRoomMemberAttributesUpdateInfo(updateInfo));
+        }
+        resultMap.put("infos",infosModel);
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMRoomOperatedInfo(operatedInfo));
+        resultMap.put("roomID",roomID);
         mysink.success(resultMap);
     }
 
