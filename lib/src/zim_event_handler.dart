@@ -177,7 +177,7 @@ class ZIMEventHandler {
   /// [operatedInfo] Room operation information.
   /// [roomID] Room ID.
   static void Function(
-    ZIM zim,List<ZIMRoomMemberAttributesUpdateInfo> updateInfo,ZIMRoomOperatedInfo operatedInfo, String roomID
+    ZIM zim,List<ZIMRoomMemberAttributesUpdateInfo> infos,ZIMRoomOperatedInfo operatedInfo, String roomID
   )? onRoomMemberAttributesUpdated;
 /* Group */
 
