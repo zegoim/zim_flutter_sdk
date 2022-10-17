@@ -1,6 +1,6 @@
 name: zego_zim
 description: ZEGO ZIM Flutter SDK is a flutter plugin wrapper based on ZIM native Android / iOS SDK.
-version: 2.3.4
+version: 2.4.0
 homepage: https://zego.im
 
 environment:
