@@ -235,7 +235,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("timestamp")] = FTValue((int64_t)message->getTimestamp());
 	messageMap[FTValue("conversationSeq")] = FTValue(message->getConversationSeq());
 	messageMap[FTValue("orderKey")] = FTValue(message->getOrderKey());
-	messageMap[FTValue("isUserInserted")] = FTValue(message->getIsUserInserted());
+	messageMap[FTValue("isUserInserted")] = FTValue(message->isUserInserted());
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
