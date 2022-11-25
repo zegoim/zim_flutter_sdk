@@ -244,6 +244,18 @@ class ZegoZimPlugin {
             call.arguments["senderUserID"]);
       case 'setRoomMembersAttributes':
         return setRoomMembersAttributes(call.arguments["attributes"], call.arguments["roomID"], call.arguments["userIDs"], call.arguments["config"]);
+      case 'sendConversationMessageReceiptRead':
+        return sendConversationMessageReceiptRead(call.arguments["conversationID"], call.arguments["conversationType"]);
+      case 'sendMessageReceiptsRead':
+        return sendMessageReceiptsRead(call.arguments["messageList"], call.arguments["conversationID"], call.arguments["conversationType"]);
+      case 'queryMessageReceiptsInfo':
+        return queryMessageReceiptsInfo(call.arguments["messageList"], call.arguments["conversationID"], call.arguments["conversationType"]);
+      case 'queryGroupMessageReceiptReadMemberList':
+        return queryGroupMessageReceiptReadMemberList(call.arguments["message"], call.arguments["groupID"], call.arguments["config"]);
+      case 'queryGroupMessageReceiptUnreadMemberList':
+        return queryGroupMessageReceiptUnreadMemberList(call.arguments["message"], call.arguments["groupID"], call.arguments["config"]);
+      case 'revokeMessage':
+        return revokeMessage(call.arguments["message"], call.arguments["config"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -311,6 +323,12 @@ class ZegoZimPlugin {
           return conversationChangedHandle(_zim, data);
         case "conversationTotalUnreadMessageCountUpdated":
           return conversationTotalUnreadMessageCountUpdatedHandle(_zim, data);
+        case "conversationMessageReceiptChanged":
+          return conversationMessageReceiptChangedHandle(_zim, data);
+        case "messageReceiptChanged":
+          return messageReceiptChangedHandle(_zim, data);
+        case "messageRevokeReceived":
+          return messageRevokeReceivedHandle(_zim, data);
       }
     }
   }
@@ -1083,6 +1101,54 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
+  Future<Map<dynamic, dynamic>> sendConversationMessageReceiptRead(String conversationID, dynamic conversationType) async {
+
+    final result = await promiseToFuture(ZIM.getInstance()!.sendConversationMessageReceiptRead(conversationID, conversationType));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> sendMessageReceiptsRead(dynamic messageList, String conversationID, dynamic conversationType) async {
+
+    final result = await promiseToFuture(ZIM.getInstance()!.sendMessageReceiptsRead(messageList, conversationID, conversationType));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryMessageReceiptsInfo(dynamic messageList, String conversationID, dynamic conversationType) async {
+
+    final result = await promiseToFuture(ZIM.getInstance()!.queryMessageReceiptsInfo(messageList, conversationID, conversationType));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryGroupMessageReceiptReadMemberList(dynamic message, String groupID, dynamic config) async {
+    final _message = mapToJSObj(message);
+    final _config = mapToJSObj(config);
+
+    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupMessageReceiptReadMemberList(_message, groupID, _config));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryGroupMessageReceiptUnreadMemberList(dynamic message, String groupID, dynamic config) async {
+    final _message = mapToJSObj(message);
+    final _config = mapToJSObj(config);
+
+    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupMessageReceiptUnreadMemberList(_message, groupID, _config));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> revokeMessage(dynamic message, dynamic config) async {
+    final _message = mapToJSObj(message);
+    final _config = mapToJSObj(config);
+
+    final result = await promiseToFuture(ZIM.getInstance()!.revokeMessage(_message, _config));
+
+    return jsObjectToMap(result);
+  }
+
   static void connectionStateChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConnectionStateChanged == null) return;
 
@@ -1418,12 +1484,31 @@ class ZegoZimPlugin {
 
   static void conversationTotalUnreadMessageCountUpdatedHandle(
       ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated == null)
+    if (ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated == null) {
       return;
+    }
 
     int count = data["totalUnreadMessageCount"];
 
     ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated!(zim, count);
+  }
+
+  static void messageReceiptChangedHandle(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onMessageReceiptChanged == null) {
+    //   return;
+    // }
+  }
+
+  static void conversationMessageReceiptChangedHandle(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onConversationMessageReceiptChange == null) {
+    //   return;
+    // }
+  }
+
+  static void messageRevokeReceivedHandle(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onMessageRevokeReceived == null) {
+    //   return;
+    // }
   }
 
   static Map handleSendMessageResult(dynamic result) {

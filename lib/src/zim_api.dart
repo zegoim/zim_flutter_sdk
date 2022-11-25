@@ -1070,4 +1070,23 @@ abstract class ZIM {
   /// [config] Related configuration for rejecting call invitations.
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config);
+
+
+  Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
+      String conversationID, ZIMConversationType conversationType);
+
+  Future<ZIMMessageReceiptsReadSentResult> sendMessageReceiptsRead(
+      List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
+
+  Future<ZIMMessageReceiptsInfoQueriedResult> queryMessageReceiptsInfo(
+      List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
+
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList (
+      ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
+
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList (
+      ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
+
+  Future<ZIMMessageRevokedResult> revokeMessage (
+       ZIMMessage message, ZIMMessageRevokeConfig config);
 }

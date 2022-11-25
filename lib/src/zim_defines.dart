@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
 /// Connection state.
@@ -185,7 +186,9 @@ enum ZIMMessageType {
   /// Use cases: For sending video messages, only ".mp4", ".mov" video types are supported. After sending the video message, the server will generate the first frame of the video file.
   video,
 
-  system
+  system,
+
+  revoke
 }
 
 enum ZIMMediaFileType {
@@ -200,6 +203,20 @@ enum ZIMMediaFileType {
 
   /// The type of the first frame of the video. After calling [downloadMediaFile], the SDK will update the videoFirstFrameLocalPath property in [ZIMVideoMessage].
   videoFirstFrame
+}
+
+enum ZIMRevokeType {
+  twoWay,
+  oneWay,
+}
+
+enum ZIMMessageRevokeStatus {
+  unknown,
+  selfRevoke,
+  systemRevoke,
+  serviceAPIRevoke,
+  groupAdminRevoke,
+  groupOwnerRevoke,
 }
 
 /// Room attributes update action.
@@ -282,6 +299,8 @@ enum ZIMGroupAttributesUpdateAction { set, delete }
 
 enum ZIMGroupMessageNotificationStatus { notify, doNotDisturb }
 
+enum ZIMMessageReceiptStatus { none, processing, done, expired, failed }
+
 enum ZIMCallUserState {
   inviting,
   accepted,
@@ -360,6 +379,18 @@ class ZIMMessageSendConfig {
   /// Enumeration value used to set message priority. The default value is Low.
   ZIMMessagePriority priority = ZIMMessagePriority.low;
   ZIMMessageSendConfig();
+}
+
+class ZIMGroupMessageReceiptMemberQueryConfig {
+  int nextFlag = 0;
+  int count = 0;
+
+  ZIMGroupMessageReceiptMemberQueryConfig();
+}
+
+class ZIMMessageRevokeConfig {
+  String? revokeExtendedData;
+  ZIMPushConfig? pushConfig;
 }
 
 class ZIMMessageSendNotification {
@@ -444,6 +475,25 @@ class ZIMMediaMessage extends ZIMMessage {
   String fileName = '';
   int fileSize = 0;
   ZIMMediaMessage({required this.fileLocalPath});
+}
+
+class ZIMRevokeMessage extends ZIMMessage {
+  ZIMRevokeType revokeType;
+  ZIMMessageRevokeStatus revokeStatus;
+  int revokeTimestamp;
+  String operatedUserID;
+  String revokeExtendedData;
+  ZIMMessageType originalMessageType;
+  String originalTextMessageContent;
+
+  ZIMRevokeMessage({
+    required this.revokeType,
+    required this.revokeStatus,
+    required this.revokeTimestamp,
+    required this.operatedUserID,
+    required this.revokeExtendedData,
+    required this.originalMessageType,
+    required this.originalTextMessageContent});
 }
 
 typedef ZIMMediaUploadingProgress = void Function(
@@ -865,6 +915,23 @@ class ZIMCallInvitationRejectedInfo {
 class ZIMCallInvitationTimeoutInfo {
   String inviter = "";
   ZIMCallInvitationTimeoutInfo();
+}
+
+class ZIMMessageReceiptInfo {
+  String conversationID;
+  ZIMConversationType conversationType;
+  String  messageID;
+  ZIMMessageReceiptStatus status;
+  Int  readMemberCount;
+  Int  unreadMemberCount;
+
+  ZIMMessageReceiptInfo({
+    required this.conversationID,
+    required this.conversationType,
+    required this.messageID,
+    required this.status,
+    required this.readMemberCount,
+    required this.unreadMemberCount});
 }
 
 //MARK : Result
@@ -1511,4 +1578,39 @@ class ZIMCallAcceptanceSentResult {
 class ZIMCallRejectionSentResult {
   String callID;
   ZIMCallRejectionSentResult({required this.callID});
+}
+
+class ZIMConversationMessageReceiptReadSentResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  ZIMConversationMessageReceiptReadSentResult(
+      {required this.conversationID, required this.conversationType});
+}
+
+class ZIMMessageReceiptsReadSentResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  List<String> errorMessageIDs;
+  ZIMMessageReceiptsReadSentResult(
+      {required this.conversationID, required this.conversationType, required this.errorMessageIDs});
+}
+
+class ZIMMessageReceiptsInfoQueriedResult {
+  List<ZIMMessageReceiptInfo> infos;
+  List<String> errorMessageIDs;
+  ZIMMessageReceiptsInfoQueriedResult(
+      {required this.infos, required this.errorMessageIDs});
+}
+
+class ZIMGroupMessageReceiptMemberListQueriedResult {
+  String groupID;
+  Int nextFlag;
+  List<ZIMGroupMemberInfo> userList;
+  ZIMGroupMessageReceiptMemberListQueriedResult(
+      {required this.groupID, required this.nextFlag, required this.userList});
+}
+
+class ZIMMessageRevokedResult {
+  ZIMRevokeMessage message;
+  ZIMMessageRevokedResult({required this.message});
 }

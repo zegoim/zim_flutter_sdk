@@ -328,3 +328,57 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
 
   int get value => valueMap[this] ?? -1;
 }
+
+extension ZIMMessageReceiptStatusExtension on ZIMMessageReceiptStatus {
+  static const valueMap = {
+    ZIMMessageReceiptStatus.none: 0,
+    ZIMMessageReceiptStatus.processing: 1,
+    ZIMMessageReceiptStatus.done: 2,
+    ZIMMessageReceiptStatus.expired: 3,
+    ZIMMessageReceiptStatus.failed: 4
+  };
+  static const mapValue = {
+    0: ZIMMessageReceiptStatus.none,
+    1: ZIMMessageReceiptStatus.processing,
+    2: ZIMMessageReceiptStatus.done,
+    3: ZIMMessageReceiptStatus.expired,
+    4: ZIMMessageReceiptStatus.failed,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMRevokeTypeExtension on ZIMRevokeType {
+  static const valueMap = {
+    ZIMRevokeType.twoWay: 0,
+    ZIMRevokeType.oneWay: 1,
+  };
+  static const mapValue = {
+    0: ZIMRevokeType.twoWay,
+    1: ZIMRevokeType.oneWay,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMMessageRevokeStatusExtension on ZIMMessageRevokeStatus {
+  static const valueMap = {
+    ZIMMessageRevokeStatus.unknown: -1,
+    ZIMMessageRevokeStatus.selfRevoke: 0,
+    ZIMMessageRevokeStatus.systemRevoke: 1,
+    ZIMMessageRevokeStatus.serviceAPIRevoke: 2,
+    ZIMMessageRevokeStatus.groupAdminRevoke: 3,
+    ZIMMessageRevokeStatus.groupOwnerRevoke: 4
+  };
+  static const mapValue = {
+    -1: ZIMMessageRevokeStatus.unknown,
+    0: ZIMMessageRevokeStatus.selfRevoke,
+    1: ZIMMessageRevokeStatus.systemRevoke,
+    2: ZIMMessageRevokeStatus.serviceAPIRevoke,
+    3: ZIMMessageRevokeStatus.groupAdminRevoke,
+    4: ZIMMessageRevokeStatus.groupOwnerRevoke,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+

@@ -763,4 +763,87 @@ class ZIMEngine implements ZIM {
       ZIMCommonData.messsageMap.remove(messageID);
     }
   }
+
+  @override
+  Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
+      String conversationID,
+      ZIMConversationType conversationType) async {
+      Map resultMap = await channel.invokeMethod('sendConversationMessageReceiptRead', {
+        'handle': handle,
+        'conversationID': conversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType]
+      });
+      return ZIMConverter.oZIMConversationMessageReceiptReadSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageReceiptsReadSentResult> sendMessageReceiptsRead(
+      List<ZIMMessage> messageList,
+      String conversationID,
+      ZIMConversationType conversationType) async {
+      Map resultMap = await channel.invokeMethod('sendMessageReceiptsRead', {
+        'handle': handle,
+        'messageList': messageList,
+        'conversationID': conversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType]
+      });
+      return ZIMConverter.oZIMMessageReceiptReadSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageReceiptsInfoQueriedResult> queryMessageReceiptsInfo(
+      List<ZIMMessage> messageList,
+      String conversationID,
+      ZIMConversationType conversationType) async {
+      Map resultMap = await channel.invokeMethod('queryMessageReceiptsInfo', {
+        'handle': handle,
+        'messageList': messageList,
+        'conversationID': conversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType]
+      });
+      return ZIMConverter.oZIMMessageReceiptsInfoQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList(
+      ZIMMessage message,
+      String groupID,
+      ZIMGroupMessageReceiptMemberQueryConfig config) async {
+      Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptReadMemberList', {
+        'handle': handle,
+        'message': message,
+        'groupID': groupID,
+        'config':config
+      });
+      return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList(
+      ZIMMessage message,
+      String groupID,
+      ZIMGroupMessageReceiptMemberQueryConfig config) async {
+      Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptUnreadMemberList', {
+        'handle': handle,
+        'message': message,
+        'groupID': groupID,
+        'config':config
+      });
+      return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageRevokedResult> revokeMessage(
+      ZIMMessage message,
+      ZIMMessageRevokeConfig config) async {
+      Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptUnreadMemberList', {
+        'handle': handle,
+        'message': message,
+        'config':config
+      });
+      return ZIMConverter.oZIMMessageRevokedResult(resultMap);
+  }
 }
