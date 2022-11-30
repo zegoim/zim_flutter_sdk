@@ -421,4 +421,13 @@ class ZIMEventHandler {
   /// [callID] callID.
   static void Function(ZIM zim, List<String> invitees, String callID)?
       onCallInviteesAnsweredTimeout;
+
+  static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
+      onMessageReceiptChanged;
+
+  static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
+      onConversationMessageReceiptChange;
+
+  static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
+      onMessageRevokeReceived;
 }

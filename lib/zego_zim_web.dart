@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:zego_zim/src/internal/zim_common_data.dart';
 import 'package:zego_zim/src/internal/zim_converter.dart';
+import 'package:zego_zim/src/internal/zim_defines_extension.dart';
 import 'package:zego_zim/src/internal/zim_engine.dart';
 import 'package:zego_zim/src/internal/zim_manager.dart';
 import 'package:zego_zim/src/zim_defines.dart';
@@ -1494,21 +1495,56 @@ class ZegoZimPlugin {
   }
 
   static void messageReceiptChangedHandle(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onMessageReceiptChanged == null) {
-    //   return;
-    // }
+    if (ZIMEventHandler.onMessageReceiptChanged == null) {
+      return;
+    }
+
+    final _infos = data["infos"];
+    List<ZIMMessageReceiptInfo> infos = [];
+
+    _infos.forEach((map) {
+      ZIMMessageReceiptInfo info = ZIMConverter.oReceiptsInfo(map);
+
+      _infos.add(info);
+    });
+
+    ZIMEventHandler.onMessageReceiptChanged!(zim, infos);
+
   }
 
   static void conversationMessageReceiptChangedHandle(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onConversationMessageReceiptChange == null) {
-    //   return;
-    // }
+    if (ZIMEventHandler.onConversationMessageReceiptChange == null) {
+      return;
+    }
+
+    final _infos = data["infos"];
+    List<ZIMMessageReceiptInfo> infos = [];
+
+    _infos.forEach((map) {
+      ZIMMessageReceiptInfo info = ZIMConverter.oReceiptsInfo(map);
+
+      _infos.add(info);
+    });
+
+    ZIMEventHandler.onConversationMessageReceiptChange!(zim, infos);
   }
 
   static void messageRevokeReceivedHandle(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onMessageRevokeReceived == null) {
-    //   return;
-    // }
+    if (ZIMEventHandler.onMessageRevokeReceived == null) {
+      return;
+    }
+    final _messageList = data["messageList"];
+    List<ZIMRevokeMessage> messageList = [];
+
+    handleReceiveMessage(_messageList);
+
+    _messageList.forEach((map) {
+      ZIMRevokeMessage message = ZIMConverter.oRevokeMessage(map);
+
+      messageList.add(message);
+    });
+
+    ZIMEventHandler.onMessageRevokeReceived!(zim, messageList);
   }
 
   static Map handleSendMessageResult(dynamic result) {

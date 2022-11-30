@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
 /// Connection state.
@@ -922,8 +921,8 @@ class ZIMMessageReceiptInfo {
   ZIMConversationType conversationType;
   String  messageID;
   ZIMMessageReceiptStatus status;
-  Int  readMemberCount;
-  Int  unreadMemberCount;
+  int  readMemberCount;
+  int  unreadMemberCount;
 
   ZIMMessageReceiptInfo({
     required this.conversationID,
@@ -1604,7 +1603,7 @@ class ZIMMessageReceiptsInfoQueriedResult {
 
 class ZIMGroupMessageReceiptMemberListQueriedResult {
   String groupID;
-  Int nextFlag;
+  int nextFlag;
   List<ZIMGroupMemberInfo> userList;
   ZIMGroupMessageReceiptMemberListQueriedResult(
       {required this.groupID, required this.nextFlag, required this.userList});

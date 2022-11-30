@@ -1093,6 +1093,11 @@ class ZIMConverter {
 
   static ZIMMessageRevokedResult oZIMMessageRevokedResult(Map resultMap) {
     Map message = resultMap['message'];
+    ZIMRevokeMessage revokeMessage = oRevokeMessage(message);
+    return ZIMMessageRevokedResult(message: revokeMessage);
+  }
+
+  static ZIMRevokeMessage oRevokeMessage(Map message) {
     ZIMRevokeMessage revokeMessage = ZIMRevokeMessage(
       revokeType: ZIMRevokeTypeExtension.mapValue[message['revokeType']]!,
       revokeStatus: ZIMMessageRevokeStatusExtension.mapValue[message['revokeStatus']]!,
@@ -1102,6 +1107,7 @@ class ZIMConverter {
       originalMessageType: ZIMMessageTypeExtension.mapValue[message['originalMessageType']]!,
       originalTextMessageContent: message['originalTextMessageContent']
       );
-    return ZIMMessageRevokedResult(message: revokeMessage);
+
+    return revokeMessage;
   }
 }
