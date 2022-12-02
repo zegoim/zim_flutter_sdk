@@ -149,8 +149,12 @@ class _MyPageState extends State<PeerChatPage> {
           textMessage,
           widget.conversationID,
           ZIMConversationType.peer,
-          sendConfig, ZIMMessageSendNotification(onMessageAttached: ((message) {
+          sendConfig, ZIMMessageSendNotification(onMessageAttached: ((message) async {
       })));
+
+      ZIMMessageRevokeConfig config = ZIMMessageRevokeConfig();
+      ZIMMessageRevokedResult _result = await ZIM.getInstance()!.revokeMessage(result.message, config);
+
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == textMessage);
       widget._historyZIMMessageList[index] = result.message;

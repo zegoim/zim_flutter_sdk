@@ -256,6 +256,7 @@ class ZegoZimPlugin {
       case 'queryGroupMessageReceiptUnreadMemberList':
         return queryGroupMessageReceiptUnreadMemberList(call.arguments["message"], call.arguments["groupID"], call.arguments["config"]);
       case 'revokeMessage':
+        window.console.error("revokeMessage");
         return revokeMessage(call.arguments["message"], call.arguments["config"]);
       default:
         throw PlatformException(

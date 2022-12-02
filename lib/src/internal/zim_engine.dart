@@ -839,10 +839,10 @@ class ZIMEngine implements ZIM {
   Future<ZIMMessageRevokedResult> revokeMessage(
       ZIMMessage message,
       ZIMMessageRevokeConfig config) async {
-      Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptUnreadMemberList', {
+      Map resultMap = await channel.invokeMethod('revokeMessage', {
         'handle': handle,
-        'message': message,
-        'config':config
+        'message': ZIMConverter.mZIMMessage(message),
+        'config':ZIMConverter.mZIMMessageRevokeConfig(config)
       });
       return ZIMConverter.oZIMMessageRevokedResult(resultMap);
   }

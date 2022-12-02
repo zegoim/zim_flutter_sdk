@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +34,7 @@ class _myState extends State<SplashPage> {
     appConfig.appID = KeyCenter.appID;
     appConfig.appSign = KeyCenter.appSign;
     ZIM zim = ZIM.create(appConfig)!;
-    
+
     log('create');
     final prefs = await SharedPreferences.getInstance();
     final String? userID = prefs.getString('userID');
