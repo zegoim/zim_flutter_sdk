@@ -111,7 +111,9 @@ enum ZIMRoomEvent {
   enterFailed,
 
   /// Description: user was kicked out of the room.
-  kickedOut
+  kickedOut,
+
+  connectTimeout
 }
 
 /// The priority of the message.
@@ -205,6 +207,7 @@ enum ZIMMediaFileType {
 }
 
 enum ZIMRevokeType {
+  unknown,
   twoWay,
   oneWay,
 }
@@ -377,6 +380,9 @@ class ZIMMessageSendConfig {
 
   /// Enumeration value used to set message priority. The default value is Low.
   ZIMMessagePriority priority = ZIMMessagePriority.low;
+
+  bool hasReceipt = false;
+
   ZIMMessageSendConfig();
 }
 
@@ -477,22 +483,17 @@ class ZIMMediaMessage extends ZIMMessage {
 }
 
 class ZIMRevokeMessage extends ZIMMessage {
-  ZIMRevokeType revokeType;
-  ZIMMessageRevokeStatus revokeStatus;
-  int revokeTimestamp;
-  String operatedUserID;
-  String revokeExtendedData;
-  ZIMMessageType originalMessageType;
-  String originalTextMessageContent;
+  ZIMRevokeType revokeType = ZIMRevokeType.unknown;
+  ZIMMessageRevokeStatus revokeStatus = ZIMMessageRevokeStatus.unknown;
+  int revokeTimestamp = 0;
+  String operatedUserID = "";
+  String revokeExtendedData = "";
+  ZIMMessageType originalMessageType = ZIMMessageType.unknown;
+  String originalTextMessageContent = "";
 
-  ZIMRevokeMessage({
-    required this.revokeType,
-    required this.revokeStatus,
-    required this.revokeTimestamp,
-    required this.operatedUserID,
-    required this.revokeExtendedData,
-    required this.originalMessageType,
-    required this.originalTextMessageContent});
+  ZIMRevokeMessage() {
+    super.type = ZIMMessageType.revoke;
+  }
 }
 
 typedef ZIMMediaUploadingProgress = void Function(

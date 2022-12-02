@@ -62,6 +62,7 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     ZIMRoomEvent.activeEnter: 6,
     ZIMRoomEvent.enterFailed: 7,
     ZIMRoomEvent.kickedOut: 8,
+    ZIMRoomEvent.connectTimeout: 9
   };
   static const mapValue = {
     0: ZIMRoomEvent.success,
@@ -73,6 +74,7 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     6: ZIMRoomEvent.activeEnter,
     7: ZIMRoomEvent.enterFailed,
     8: ZIMRoomEvent.kickedOut,
+    9: ZIMRoomEvent.connectTimeout
   };
 
   int get value => valueMap[this] ?? -1;
@@ -103,7 +105,8 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.audio: 13,
     ZIMMessageType.video: 14,
     ZIMMessageType.barrage: 20,
-    ZIMMessageType.system:30
+    ZIMMessageType.system:30,
+    ZIMMessageType.revoke:31
   };
   static const mapValue = {
     0: ZIMMessageType.unknown,
@@ -114,7 +117,8 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     13: ZIMMessageType.audio,
     14: ZIMMessageType.video,
     20: ZIMMessageType.barrage,
-    30: ZIMMessageType.system
+    30: ZIMMessageType.system,
+    31: ZIMMessageType.revoke
   };
 
   int get value => valueMap[this] ?? -1;
@@ -350,10 +354,12 @@ extension ZIMMessageReceiptStatusExtension on ZIMMessageReceiptStatus {
 
 extension ZIMRevokeTypeExtension on ZIMRevokeType {
   static const valueMap = {
+    ZIMRevokeType.unknown: -1,
     ZIMRevokeType.twoWay: 0,
     ZIMRevokeType.oneWay: 1,
   };
   static const mapValue = {
+    -1:ZIMRevokeType.unknown,
     0: ZIMRevokeType.twoWay,
     1: ZIMRevokeType.oneWay,
   };

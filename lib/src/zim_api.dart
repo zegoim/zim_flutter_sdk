@@ -223,6 +223,9 @@ abstract class ZIM {
           String conversationID,
           ZIMConversationType conversationType);
 
+
+  Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
+      String conversationID, ZIMConversationType conversationType);
   /// Supported versions: 2.4.0 and above.
   ///
   /// Detailed description: This method can be used to send messages in single chat, room and group chat.
@@ -443,6 +446,21 @@ abstract class ZIM {
       ZIMConversationType conversationType,
       ZIMMessageDeleteConfig config);
 
+
+  Future<ZIMMessageReceiptsReadSentResult> sendMessageReceiptsRead(
+      List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
+
+  Future<ZIMMessageReceiptsInfoQueriedResult> queryMessageReceiptsInfo(
+      List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
+
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList (
+      ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
+
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList (
+      ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
+
+  Future<ZIMMessageRevokedResult> revokeMessage (
+      ZIMMessage message, ZIMMessageRevokeConfig config);
 //MARK: - Room
 
   /// Create a room.
@@ -1072,21 +1090,7 @@ abstract class ZIM {
       String callID, ZIMCallRejectConfig config);
 
 
-  Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
-      String conversationID, ZIMConversationType conversationType);
 
-  Future<ZIMMessageReceiptsReadSentResult> sendMessageReceiptsRead(
-      List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
 
-  Future<ZIMMessageReceiptsInfoQueriedResult> queryMessageReceiptsInfo(
-      List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
 
-  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList (
-      ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
-
-  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList (
-      ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
-
-  Future<ZIMMessageRevokedResult> revokeMessage (
-       ZIMMessage message, ZIMMessageRevokeConfig config);
 }

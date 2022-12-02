@@ -246,6 +246,17 @@ class ZIMConverter {
       case ZIMMessageType.system:
         message ??= ZIMSystemMessage(message: resultMap['message']);
         break;
+      case ZIMMessageType.revoke:
+        message ??= ZIMRevokeMessage();
+        message as ZIMRevokeMessage;
+        message.revokeType = ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']]!;
+        message.revokeStatus = ZIMMessageRevokeStatusExtension.mapValue[resultMap['revokeStatus']]!;
+        message.revokeTimestamp = resultMap['revokeTimestamp'];
+        message.operatedUserID = resultMap['operatedUserID'];
+        message.revokeExtendedData = resultMap['revokeExtendedData'];
+        message.originalMessageType = ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']]!;
+        message.originalTextMessageContent = resultMap['originalTextMessageContent'];
+        break;
       default:
         message ??= ZIMMessage();
         break;
@@ -368,6 +379,7 @@ class ZIMConverter {
     sendConfigMap['pushConfig'] = mZIMPushConfig(sendConfig.pushConfig);
     sendConfigMap['priority'] =
         ZIMMessagePriorityExtension.valueMap[sendConfig.priority];
+    sendConfigMap['hasReceipt'] = sendConfig.hasReceipt;
     return sendConfigMap;
   }
 
@@ -1092,22 +1104,9 @@ class ZIMConverter {
   }
 
   static ZIMMessageRevokedResult oZIMMessageRevokedResult(Map resultMap) {
-    Map message = resultMap['message'];
-    ZIMRevokeMessage revokeMessage = oRevokeMessage(message);
+    Map messageMap = resultMap['message'];
+    ZIMMessage  revokeMessage = oZIMMessage(messageMap);
+    revokeMessage as ZIMRevokeMessage;
     return ZIMMessageRevokedResult(message: revokeMessage);
-  }
-
-  static ZIMRevokeMessage oRevokeMessage(Map message) {
-    ZIMRevokeMessage revokeMessage = ZIMRevokeMessage(
-      revokeType: ZIMRevokeTypeExtension.mapValue[message['revokeType']]!,
-      revokeStatus: ZIMMessageRevokeStatusExtension.mapValue[message['revokeStatus']]!,
-      revokeTimestamp: message['revokeTimestamp'],
-      operatedUserID: message['operatedUserID'],
-      revokeExtendedData: message['revokeExtendedData'],
-      originalMessageType: ZIMMessageTypeExtension.mapValue[message['originalMessageType']]!,
-      originalTextMessageContent: message['originalTextMessageContent']
-      );
-
-    return revokeMessage;
   }
 }
