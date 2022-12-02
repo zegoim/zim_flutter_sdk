@@ -61,6 +61,12 @@ protected:
     void onConversationTotalUnreadMessageCountUpdated(ZIM* zim,
             unsigned int totalUnreadMessageCount);
 
+    void onConversationMessageReceiptChanged(ZIM* zim,const std::vector<ZIMMessageReceiptInfo>& infos);
+
+    void onMessageReceiptChanged(ZIM* zim,const std::vector<ZIMMessageReceiptInfo>& infos);
+
+    void onMessageRevokeReceived(ZIM* zim, const std::vector<std::shared_ptr<ZIMRevokeMessage>>& messageList);
+
     void onRoomMemberJoined(ZIM* zim, const std::vector<ZIMUserInfo>& memberList,
         const std::string& roomID);
 

@@ -141,6 +141,8 @@ public:
     static FTArray cnvZIMConversationChangeInfoListToArray(const std::vector<ZIMConversationChangeInfo> &convInfoList);
     static flutter::EncodableValue cnvZIMMessageObjectToMap(ZIMMessage* message);
     static FTArray cnvZIMMessageListToArray(const std::vector<std::shared_ptr<ZIMMessage>>& messageList);
+    static FTMap cnvZIMMessageReceiptInfoToMap(const ZIMMessageReceiptInfo& messageReceiptInfo);
+    static FTArray cnvZIMMessageReceiptInfoListToArray(const std::vector<ZIMMessageReceiptInfo>& infos);
     static FTMap cnvZIMRoomInfoToMap(const ZIMRoomInfo& roomInfo);
     static FTMap cnvZIMRoomFullInfoToMap(const ZIMRoomFullInfo& roomInfo);
     static FTMap cnvZIMRoomAttributesUpdateInfoToMap(const ZIMRoomAttributesUpdateInfo& updateInfo);
@@ -150,6 +152,7 @@ public:
     static FTMap cnvZIMRoomMemberAttributesUpdateInfoToMap(const ZIMRoomMemberAttributesUpdateInfo& info);
     static FTMap cnvZIMRoomOperatedInfoToMap(const ZIMRoomOperatedInfo& info);
     static FTArray cnvZIMGroupMemberInfoListToArray(const std::vector<ZIMGroupMemberInfo>& memberList);
+    static FTMap cnvZIMGroupMessageReceiptMemberQueryConfigToMap(const ZIMGroupMessageReceiptMemberQueryConfig& config);
     static FTMap cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& groupInfo);
     static FTMap cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& memberInfo);
     static FTMap cnvZIMGroupInfoToMap(const ZIMGroupInfo& groupInfo);
@@ -177,10 +180,11 @@ public:
     static ZIMGroupInfo cnvZIMGroupInfoToObject(FTMap infoMap);
     static ZIMGroupAdvancedConfig cnvZIMGroupAdvancedConfigToObject(FTMap configMap);
     static ZIMGroupMemberQueryConfig cnvZIMGroupMemberQueryConfigToObject(FTMap configMap);
-
+    static ZIMGroupMessageReceiptMemberQueryConfig cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(FTMap configMap);
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
+    static FTArray cnvStlVectorToFTArray(std::vector<long long>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
 };
