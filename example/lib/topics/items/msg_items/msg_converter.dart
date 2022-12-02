@@ -17,11 +17,11 @@ class MsgConverter {
     for (ZIMMessage message in messageList) {
       var cell;
       switch (message.type) {
-        case ZIMMessageType.text:
+        case (ZIMMessageType.text):
           if (message.senderUserID == UserModel.shared().userInfo!.userID) {
             cell = SendTextMsgCell(message: (message as ZIMTextMessage));
           } else {
-            cell = ReceiceTextMsgCell(message: (message as ZIMTextMessage));
+            cell = ReceiveTextMsgCell(message: (message as ZIMTextMessage));
           }
           break;
         case ZIMMessageType.image:
@@ -52,6 +52,15 @@ class MsgConverter {
             cell = ReceiveVideoMsgCell(
                 message: message,
                 downloadingProgressModel: null);
+          }
+          break;
+        case ZIMMessageType.revoke:
+          ZIMTextMessage textMessage = ZIMTextMessage(message: "");
+          textMessage.sentStatus = ZIMMessageSentStatus.success;
+          if (message.senderUserID == UserModel.shared().userInfo!.userID) {
+            cell = SendTextMsgCell(message: textMessage);
+          } else {
+            cell = ReceiveTextMsgCell(message: textMessage);
           }
           break;
         default:
