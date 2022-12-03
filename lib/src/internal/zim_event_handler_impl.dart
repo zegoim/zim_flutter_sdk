@@ -264,7 +264,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         }
         break;
       case 'uploadMediaProgress':
-        int progressID = map['progressID'];
+        int? progressID = map['progressID'];
         ZIMMessage message =
             ZIMConverter.oZIMMessage(map['message'], map['messageID']);
         int currentFileSize = map['currentFileSize'];
