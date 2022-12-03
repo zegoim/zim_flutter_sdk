@@ -15,6 +15,7 @@ import im.zego.zim.callback.ZIMCallInvitationSentCallback;
 import im.zego.zim.callback.ZIMCallRejectionSentCallback;
 import im.zego.zim.callback.ZIMConversationDeletedCallback;
 import im.zego.zim.callback.ZIMConversationListQueriedCallback;
+import im.zego.zim.callback.ZIMConversationMessageReceiptReadSentCallback;
 import im.zego.zim.callback.ZIMConversationNotificationStatusSetCallback;
 import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
@@ -32,6 +33,7 @@ import im.zego.zim.callback.ZIMGroupMemberKickedCallback;
 import im.zego.zim.callback.ZIMGroupMemberListQueriedCallback;
 import im.zego.zim.callback.ZIMGroupMemberNicknameUpdatedCallback;
 import im.zego.zim.callback.ZIMGroupMemberRoleUpdatedCallback;
+import im.zego.zim.callback.ZIMGroupMessageReceiptMemberListQueriedCallback;
 import im.zego.zim.callback.ZIMGroupNameUpdatedCallback;
 import im.zego.zim.callback.ZIMGroupNoticeUpdatedCallback;
 import im.zego.zim.callback.ZIMGroupOwnerTransferredCallback;
@@ -43,6 +45,9 @@ import im.zego.zim.callback.ZIMMediaMessageSentCallback;
 import im.zego.zim.callback.ZIMMessageDeletedCallback;
 import im.zego.zim.callback.ZIMMessageInsertedCallback;
 import im.zego.zim.callback.ZIMMessageQueriedCallback;
+import im.zego.zim.callback.ZIMMessageReceiptsInfoQueriedCallback;
+import im.zego.zim.callback.ZIMMessageReceiptsReadSentCallback;
+import im.zego.zim.callback.ZIMMessageRevokedCallback;
 import im.zego.zim.callback.ZIMMessageSentCallback;
 import im.zego.zim.callback.ZIMRoomAttributesBatchOperatedCallback;
 import im.zego.zim.callback.ZIMRoomAttributesOperatedCallback;
@@ -79,11 +84,14 @@ import im.zego.zim.entity.ZIMGroupFullInfo;
 import im.zego.zim.entity.ZIMGroupInfo;
 import im.zego.zim.entity.ZIMGroupMemberInfo;
 import im.zego.zim.entity.ZIMGroupMemberQueryConfig;
+import im.zego.zim.entity.ZIMGroupMessageReceiptMemberQueryConfig;
 import im.zego.zim.entity.ZIMLogConfig;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
+import im.zego.zim.entity.ZIMMessageReceiptInfo;
+import im.zego.zim.entity.ZIMMessageRevokeConfig;
 import im.zego.zim.entity.ZIMMessageSendConfig;
 import im.zego.zim.entity.ZIMRoomAdvancedConfig;
 import im.zego.zim.entity.ZIMRoomAttributesBatchOperationConfig;
@@ -106,10 +114,10 @@ import im.zego.zim.enums.ZIMMediaFileType;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.Result;
+@SuppressWarnings({"unused","deprecation"})
 
 public class ZIMPluginMethodHandler {
-    private static HashMap<String, ZIM> engineMap = new HashMap<>();
-
+    private static final HashMap<String, ZIM> engineMap = new HashMap<>();
     public static void getVersion(MethodCall call,Result result){
         result.success(ZIM.getVersion());
     }
@@ -440,6 +448,167 @@ public class ZIMPluginMethodHandler {
                     HashMap<String,Object> resultMap = new HashMap<>();
                     resultMap.put("conversationID",conversationID);
                     resultMap.put("conversationType",conversationType.value());
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void sendConversationMessageReceiptRead(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        String conversationID = Objects.requireNonNull(call.argument("conversationID"));
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
+        zim.sendConversationMessageReceiptRead(conversationID, conversationType, new ZIMConversationMessageReceiptReadSentCallback() {
+            @Override
+            public void onConversationMessageReceiptReadSent(String conversationID, ZIMConversationType conversationType, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("conversationID",conversationID);
+                    resultMap.put("conversationType",conversationType.value());
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void sendMessageReceiptsRead(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        String conversationID = Objects.requireNonNull(call.argument("conversationID"));
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
+        ArrayList<ZIMMessage> messageList = ZIMPluginConverter.oZIMMessageList(Objects.requireNonNull(call.argument("messageList")));
+        zim.sendMessageReceiptsRead(messageList, conversationID, conversationType, new ZIMMessageReceiptsReadSentCallback() {
+            @Override
+            public void onMessageReceiptsReadSent(String conversationID, ZIMConversationType conversationType, ArrayList<Long> errorMessageIDs, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("conversationID",conversationID);
+                    resultMap.put("conversationType",conversationType.value());
+                    resultMap.put("errorMessageIDs",errorMessageIDs);
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryMessageReceiptsInfo(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        String conversationID = Objects.requireNonNull(call.argument("conversationID"));
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
+        ArrayList<ZIMMessage> messageList = ZIMPluginConverter.oZIMMessageList(Objects.requireNonNull(call.argument("messageList")));
+        zim.queryMessageReceiptsInfo(messageList, conversationID, conversationType, new ZIMMessageReceiptsInfoQueriedCallback() {
+            @Override
+            public void onMessageReceiptsInfoQueried(ArrayList<ZIMMessageReceiptInfo> infos, ArrayList<Long> errorMessageIDs, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    ArrayList<HashMap<String,Object>> infosModel= new ArrayList<>();
+                    for (ZIMMessageReceiptInfo info:infos
+                         ) {
+                        infosModel.add(ZIMPluginConverter.mZIMMessageReceiptInfo(info));
+                    }
+                    resultMap.put("infos",infosModel);
+                    resultMap.put("errorMessageIDs",errorMessageIDs);
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryGroupMessageReceiptReadMemberList(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMMessage message = ZIMPluginConverter.oZIMMessage(call.argument("message"));
+        String groupID = call.argument("groupID");
+        ZIMGroupMessageReceiptMemberQueryConfig config = ZIMPluginConverter.oZIMGroupMessageReceiptMemberQueryConfig(Objects.requireNonNull(call.argument("config")));
+        zim.queryGroupMessageReceiptReadMemberList(message, groupID, config, new ZIMGroupMessageReceiptMemberListQueriedCallback() {
+            @Override
+            public void onGroupMessageReceiptMemberListQueried(String groupID, ArrayList<ZIMGroupMemberInfo> userList, int nextFlag, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("userList",ZIMPluginConverter.mZIMGroupMemberInfoList(userList));
+                    resultMap.put("nextFlag",nextFlag);
+                    resultMap.put("groupID",groupID);
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryGroupMessageReceiptUnreadMemberList(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMMessage message = ZIMPluginConverter.oZIMMessage(call.argument("message"));
+        String groupID = call.argument("groupID");
+        ZIMGroupMessageReceiptMemberQueryConfig config = ZIMPluginConverter.oZIMGroupMessageReceiptMemberQueryConfig(Objects.requireNonNull(call.argument("config")));
+        zim.queryGroupMessageReceiptUnreadMemberList(message, groupID, config, new ZIMGroupMessageReceiptMemberListQueriedCallback() {
+            @Override
+            public void onGroupMessageReceiptMemberListQueried(String groupID, ArrayList<ZIMGroupMemberInfo> userList, int nextFlag, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("userList",ZIMPluginConverter.mZIMGroupMemberInfoList(userList));
+                    resultMap.put("nextFlag",nextFlag);
+                    resultMap.put("groupID",groupID);
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void revokeMessage(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMMessage message = ZIMPluginConverter.oZIMMessage(call.argument("message"));
+        ZIMMessageRevokeConfig revokeConfig = ZIMPluginConverter.oZIMMessageRevokeConfig(Objects.requireNonNull(call.argument("config")));
+        zim.revokeMessage(message, revokeConfig, new ZIMMessageRevokedCallback() {
+            @Override
+            public void onMessageRevoked(ZIMMessage message, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("message",ZIMPluginConverter.mZIMMessage(message));
                     result.success(resultMap);
                 }
                 else{
@@ -1901,7 +2070,6 @@ public class ZIMPluginMethodHandler {
 
         String callID = call.argument("callID");
         ZIMCallRejectConfig config = ZIMPluginConverter.oZIMCallRejectConfig(Objects.requireNonNull(call.argument("config")));
-
         zim.callReject(callID, config, new ZIMCallRejectionSentCallback() {
             @Override
             public void onCallRejectionSent(String callID, ZIMError errorInfo) {
