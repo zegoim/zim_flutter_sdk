@@ -275,6 +275,27 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           progress(message, currentFileSize, totalFileSize);
         }
         break;
+      case 'onMessageRevokeReceived':
+        if (ZIMEventHandler.onMessageRevokeReceived == null) return;
+        List<ZIMRevokeMessage> messageList = ZIMConverter.oZIMMessageList(map['messageList']) as List<ZIMRevokeMessage>;
+        ZIMEventHandler.onMessageRevokeReceived!(zim!,messageList);
+        break;
+      case 'onMessageReceiptChanged':
+        if (ZIMEventHandler.onMessageReceiptChanged == null) return;
+        List<ZIMMessageReceiptInfo> infos = [];
+        for(Map infoModel in map['infos']){
+          infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
+        }
+        ZIMEventHandler.onMessageReceiptChanged!(zim!,infos);
+        break;
+      case 'onConversationMessageReceiptChange':
+        if (ZIMEventHandler.onConversationMessageReceiptChange == null) return;
+        List<ZIMMessageReceiptInfo> infos = [];
+        for(Map infoModel in map['infos']){
+          infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
+        }
+        ZIMEventHandler.onConversationMessageReceiptChange!(zim!,infos);
+        break;
       default:
         break;
     }

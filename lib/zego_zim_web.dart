@@ -1504,7 +1504,7 @@ class ZegoZimPlugin {
     List<ZIMMessageReceiptInfo> infos = [];
 
     _infos.forEach((map) {
-      ZIMMessageReceiptInfo info = ZIMConverter.oReceiptsInfo(map);
+      ZIMMessageReceiptInfo info = ZIMConverter.oZIMMessageReceiptInfo(map);
 
       _infos.add(info);
     });
@@ -1522,7 +1522,7 @@ class ZegoZimPlugin {
     List<ZIMMessageReceiptInfo> infos = [];
 
     _infos.forEach((map) {
-      ZIMMessageReceiptInfo info = ZIMConverter.oReceiptsInfo(map);
+      ZIMMessageReceiptInfo info = ZIMConverter.oZIMMessageReceiptInfo(map);
 
       _infos.add(info);
     });
@@ -1540,7 +1540,7 @@ class ZegoZimPlugin {
     handleReceiveMessage(_messageList);
 
     _messageList.forEach((map) {
-      ZIMRevokeMessage message = ZIMConverter.oRevokeMessage(map);
+      ZIMRevokeMessage message = ZIMConverter.oZIMMessage(map) as ZIMRevokeMessage;
 
       messageList.add(message);
     });

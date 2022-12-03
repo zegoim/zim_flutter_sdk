@@ -185,6 +185,16 @@ class ZIMConverter {
         message as ZIMSystemMessage;
         messageMap['message'] = message.message;
         break;
+      case ZIMMessageType.revoke:
+        message as ZIMRevokeMessage;
+        messageMap['revokeType'] = ZIMRevokeTypeExtension.valueMap[message.revokeType];
+        messageMap['revokeTimestamp'] = message.revokeTimestamp;
+        messageMap['originalMessageType'] = ZIMMessageTypeExtension.valueMap[message.originalMessageType];
+        messageMap['revokeStatus'] = ZIMMessageRevokeStatusExtension.valueMap[message.revokeStatus];
+        messageMap['operatedUserID'] = message.operatedUserID;
+        messageMap['originalTextMessageContent'] = message.originalTextMessageContent;
+        messageMap['revokeExtendedData'] = message.revokeExtendedData;
+        break;
       default:
         break;
     }
@@ -388,7 +398,8 @@ class ZIMConverter {
     Map pushConfigMap = {};
     pushConfigMap['title'] = pushConfig.title;
     pushConfigMap['content'] = pushConfig.content;
-    pushConfigMap['extendedData'] = pushConfig.extendedData;
+    pushConfigMap['payload'] = pushConfig.payload;
+    pushConfigMap['resourcesID'] = pushConfig.resourcesID;
     return pushConfigMap;
   }
 
@@ -853,7 +864,8 @@ class ZIMConverter {
   static Map mZIMCallInviteConfig(ZIMCallInviteConfig config) {
     Map configMap = {};
     configMap['timeout'] = config.timeout;
-    configMap['extendedData'] = config.extendedData;
+    configMap['payload'] = config.payload;
+    configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
     return configMap;
   }
 
@@ -1076,13 +1088,13 @@ class ZIMConverter {
 
     List<ZIMMessageReceiptInfo> infos = [];
     for (Map info in infosBasic) {
-      infos.add(oReceiptsInfo(info));
+      infos.add(oZIMMessageReceiptInfo(info));
     }
     return ZIMMessageReceiptsInfoQueriedResult(
         errorMessageIDs: resultMap['errorMessageIDs'], infos: infos);
   }
 
-  static ZIMMessageReceiptInfo oReceiptsInfo(Map infoMap) {
+  static ZIMMessageReceiptInfo oZIMMessageReceiptInfo(Map infoMap) {
     ZIMMessageReceiptInfo receiptInfo = ZIMMessageReceiptInfo(
       conversationID: infoMap['conversationID'],
       conversationType: infoMap['conversationType'],
@@ -1105,23 +1117,11 @@ class ZIMConverter {
 
   static ZIMMessageRevokedResult oZIMMessageRevokedResult(Map resultMap) {
     Map messageMap = resultMap['message'];
-    ZIMRevokeMessage  revokeMessage = oRevokeMessage(messageMap);
+    ZIMRevokeMessage  revokeMessage = oZIMMessage(messageMap) as ZIMRevokeMessage;
     return ZIMMessageRevokedResult(message: revokeMessage);
   }
 
-  static ZIMRevokeMessage oRevokeMessage(Map message) {
-    ZIMRevokeMessage revokeMessage = ZIMRevokeMessage();
-      revokeMessage.revokeType = ZIMRevokeTypeExtension.mapValue[message['revokeType']]!;
-      revokeMessage.revokeStatus = ZIMMessageRevokeStatusExtension.mapValue[message['revokeStatus']]!;
-      revokeMessage.revokeTimestamp = message['revokeTimestamp'];
-      revokeMessage.operatedUserID = message['operatedUserID'];
-      revokeMessage.revokeExtendedData = message['revokeExtendedData'];
-      revokeMessage.originalMessageType = ZIMMessageTypeExtension.mapValue[message['originalMessageType']]!;
-      revokeMessage.originalTextMessageContent = message['originalTextMessageContent'];
 
-
-    return revokeMessage;
-  }
 
   static Map mZIMMessageRevokeConfig(ZIMMessageRevokeConfig config) {
     Map revokeConfig = {};

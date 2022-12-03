@@ -369,7 +369,10 @@ class ZIMPushConfig {
   String content = '';
 
   /// Description: This parameter is used to set the pass-through field of offline push.
-  String extendedData = '';
+  String payload = '';
+
+  String resourcesID = '';
+
   ZIMPushConfig();
 }
 
@@ -834,7 +837,10 @@ class ZIMCallInviteConfig {
   int timeout = 0;
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
-  String extendedData = "";
+  String payload = "";
+
+  ZIMPushConfig? pushConfig;
+
   ZIMCallInviteConfig();
 }
 
