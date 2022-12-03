@@ -1514,7 +1514,7 @@ class ZegoZimPlugin {
   }
 
   static void conversationMessageReceiptChangedHandle(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onConversationMessageReceiptChange == null) {
+    if (ZIMEventHandler.onConversationMessageReceiptChanged == null) {
       return;
     }
 
@@ -1527,7 +1527,7 @@ class ZegoZimPlugin {
       _infos.add(info);
     });
 
-    ZIMEventHandler.onConversationMessageReceiptChange!(zim, infos);
+    ZIMEventHandler.onConversationMessageReceiptChanged!(zim, infos);
   }
 
   static void messageRevokeReceivedHandle(ZIMEngine zim, dynamic data) {

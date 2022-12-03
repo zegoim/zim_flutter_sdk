@@ -178,7 +178,7 @@ fromGroupID:(NSString *)fromGroupID{
     }
     NSString *handle = [_engineEventMap objectForKey:zim];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-    [resultDic safeSetObject:@"onConversationMessageReceiptChange" forKey:@"method"];
+    [resultDic safeSetObject:@"onConversationMessageReceiptChanged" forKey:@"method"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     NSMutableArray *infosModel = [[NSMutableArray alloc] init];
     for (ZIMMessageReceiptInfo *info in infos) {

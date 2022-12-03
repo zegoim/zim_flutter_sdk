@@ -816,7 +816,7 @@ class ZIMEngine implements ZIM {
         'handle': handle,
         'message': message,
         'groupID': groupID,
-        'config':config
+        'config':ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
       });
       return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(resultMap);
   }

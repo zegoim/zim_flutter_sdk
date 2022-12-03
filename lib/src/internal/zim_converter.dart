@@ -1121,6 +1121,13 @@ class ZIMConverter {
     return ZIMMessageRevokedResult(message: revokeMessage);
   }
 
+  static Map mZIMGroupMessageReceiptMemberQueryConfig(ZIMGroupMessageReceiptMemberQueryConfig config){
+    Map configMap = {};
+    configMap['nextFlag'] = config.nextFlag;
+    configMap['count'] = config.count;
+    return configMap;
+  }
+
 
 
   static Map mZIMMessageRevokeConfig(ZIMMessageRevokeConfig config) {

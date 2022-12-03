@@ -289,12 +289,12 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMEventHandler.onMessageReceiptChanged!(zim!,infos);
         break;
       case 'onConversationMessageReceiptChange':
-        if (ZIMEventHandler.onConversationMessageReceiptChange == null) return;
+        if (ZIMEventHandler.onConversationMessageReceiptChanged == null) return;
         List<ZIMMessageReceiptInfo> infos = [];
         for(Map infoModel in map['infos']){
           infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
         }
-        ZIMEventHandler.onConversationMessageReceiptChange!(zim!,infos);
+        ZIMEventHandler.onConversationMessageReceiptChanged!(zim!,infos);
         break;
       default:
         break;

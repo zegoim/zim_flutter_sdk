@@ -426,7 +426,7 @@ class ZIMEventHandler {
       onMessageReceiptChanged;
 
   static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
-      onConversationMessageReceiptChange;
+      onConversationMessageReceiptChanged;
 
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
       onMessageRevokeReceived;
