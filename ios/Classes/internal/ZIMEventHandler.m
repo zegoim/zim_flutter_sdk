@@ -144,6 +144,51 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim messageRevokeReceived:(NSArray<ZIMRevokeMessage *> *)messageList{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMMessageList:messageList] forKey:@"messageList"];
+    [resultDic safeSetObject:@"onMessageRevokeReceived" forKey:@"method"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim messageReceiptChanged:(NSArray<ZIMMessageReceiptInfo *> *)infos{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onMessageReceiptChanged" forKey:@"method"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    NSMutableArray *infosModel = [[NSMutableArray alloc] init];
+    for (ZIMMessageReceiptInfo *info in infos) {
+        [infosModel safeAddObject:[ZIMPluginConverter mZIMMessageReceiptInfo:info]];
+    }
+    [resultDic safeSetObject:infosModel forKey:@"infos"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim conversationMessageReceiptChanged:(NSArray<ZIMMessageReceiptInfo *> *)infos{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onConversationMessageReceiptChange" forKey:@"method"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    NSMutableArray *infosModel = [[NSMutableArray alloc] init];
+    for (ZIMMessageReceiptInfo *info in infos) {
+        [infosModel safeAddObject:[ZIMPluginConverter mZIMMessageReceiptInfo:info]];
+    }
+    [resultDic safeSetObject:infosModel forKey:@"infos"];
+    _events(resultDic);
+}
+
+
 // MARK: Room
 - (void)zim:(ZIM *)zim
     roomMemberJoined:(NSArray<ZIMUserInfo *> *)memberList
