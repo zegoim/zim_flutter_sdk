@@ -1136,11 +1136,4 @@ class ZIMConverter {
     revokeConfig['revokeExtendedData'] = config.revokeExtendedData;
     return revokeConfig;
   }
-
-  static Map mZIMGroupMessageReceiptMemberQueryConfig(ZIMGroupMessageReceiptMemberQueryConfig config) {
-    Map queryConfig = {};
-    queryConfig['nextFlag'] = config.nextFlag;
-    queryConfig['count'] = config.count;
-    return queryConfig;
-  }
 }
