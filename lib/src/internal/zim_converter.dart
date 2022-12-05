@@ -296,7 +296,7 @@ class ZIMConverter {
     message.conversationSeq = resultMap['conversationSeq'];
     message.orderKey = resultMap['orderKey'];
     message.isUserInserted = resultMap['isUserInserted'];
-    message.receiptStatus = resultMap['receiptStatus'];
+    message.receiptStatus = ZIMMessageReceiptStatusExtension.mapValue[resultMap['receiptStatus']]!;
     if (message is ZIMMediaMessage) {
       message.fileLocalPath = resultMap['fileLocalPath'];
       message.fileDownloadUrl = resultMap['fileDownloadUrl'];
