@@ -148,7 +148,7 @@ void ZIMPluginEventHandler::onConversationMessageReceiptChanged(ZIM * zim,const 
         FTMap infoModel = ZIMPluginConverter::cnvZIMMessageReceiptInfoToMap(info);
         infosModel.emplace_back(infoModel);
     }
-    retMap[FTValue("infos")] = FTValue(infosModel);
+    retMap[FTValue("infos")] = infosModel;
     eventSink_->Success(retMap);
 }
 
@@ -165,7 +165,7 @@ void ZIMPluginEventHandler::onMessageReceiptChanged(ZIM* zim,const std::vector<Z
         FTMap infoModel = ZIMPluginConverter::cnvZIMMessageReceiptInfoToMap(info);
         infosModel.emplace_back(infoModel);
     }
-    retMap[FTValue("infos")] = FTValue(infosModel);
+    retMap[FTValue("infos")] = infosModel;
     eventSink_->Success(retMap);
 }
 
@@ -177,7 +177,12 @@ void ZIMPluginEventHandler::onMessageRevokeReceived(ZIM* zim, const std::vector<
     retMap[FTValue("method")] = FTValue("onMessageRevokeReceived");
     auto handle = this->engineEventMap[zim];
     retMap[FTValue("handle")] = FTValue(handle);
-    retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+    std::vector<std::shared_ptr<ZIMMessage>> dstMessageList;
+    for (auto& message : messageList) {
+        std::shared_ptr<ZIMMessage> dstMessage = message;
+        dstMessageList.emplace_back(dstMessage);
+    }
+    retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(dstMessageList);
     eventSink_->Success(retMap);       
 }
 

@@ -122,6 +122,37 @@ struct ZIM_FriendlyGet_videoFirstFrameHeight {
     typedef unsigned int ZIMVideoMessage::* type;
 };
 
+struct ZIM_FriendlyGet_revokeType {
+    typedef ZIMRevokeType ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_revokeTimestamp {
+    typedef unsigned long long ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_originalMessageType {
+    typedef ZIMMessageType ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_revokeStatus {
+    typedef ZIMMessageRevokeStatus ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_operatedUserID {
+    typedef std::string ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_originalTextMessageContent {
+    typedef std::string ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_revokeExtendedData {
+    typedef std::string ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_receiptStatus {
+    typedef ZIMMessageReceiptStatus ZIMMessage::* type;
+};
 
 class ZIMPluginConverter
 {
@@ -185,6 +216,6 @@ public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
-    static FTArray cnvStlVectorToFTArray(std::vector<long long>& vec);
+    static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
 };

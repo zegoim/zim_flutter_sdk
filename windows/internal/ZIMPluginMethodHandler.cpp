@@ -441,6 +441,7 @@ void ZIMPluginMethodHandler::sendConversationMessageReceiptRead(flutter::Encodab
     }
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->sendConversationMessageReceiptRead(conversationID, (ZIMConversationType)conversationType, [=](const std::string &conversationID, ZIMConversationType conversationType,const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -469,14 +470,15 @@ void ZIMPluginMethodHandler::revokeMessage(flutter::EncodableMap& argument,std::
     ZIMMessageRevokeConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
-        config.pushConfig = nullptr;
+        config.config = nullptr;
     }
     else {
         pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
-        config.pushConfig = pushConfigPtr.get();
+        config.config = pushConfigPtr.get();
     }
     auto revokeExtendedData = std::get<std::string>(argument[FTValue("revokeExtendedData")]);
     config.revokeExtendedData = revokeExtendedData;
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->revokeMessage(messagePtr, config, [=](const std::shared_ptr<ZIMMessage> &message, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -951,11 +953,13 @@ void ZIMPluginMethodHandler::sendMessageReceiptsRead(flutter::EncodableMap& argu
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->sendMessageReceiptsRead(messageObjectList, conversationID, (ZIMConversationType)conversationType, [=](const std::string &conversationID, ZIMConversationType conversationType,const std::vector<long long> &errorMessageIDs, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("conversationID")] = FTValue(conversationID);
             retMap[FTValue("conversationType")] = FTValue(conversationType);
+
             retMap[FTValue("errorMessageIDs")] = ZIMPluginConverter::cnvStlVectorToFTArray(errorMessageIDs);
             sharedPtrResult->Success(retMap);
         }
@@ -977,6 +981,7 @@ void ZIMPluginMethodHandler::queryMessageReceiptsInfo(flutter::EncodableMap& arg
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->queryMessageReceiptsInfo(messageObjectList, conversationID, (ZIMConversationType)conversationType, [=](const std::vector<ZIMMessageReceiptInfo> &infos, std::vector<long long> errorMessageIDs,const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1001,6 +1006,7 @@ void ZIMPluginMethodHandler::queryGroupMessageReceiptReadMemberList(flutter::Enc
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->queryGroupMessageReceiptReadMemberList(messagePtr, groupID, config, [=](const std::string &groupID, const std::vector<ZIMGroupMemberInfo> &userList, unsigned int nextFlag, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1027,6 +1033,7 @@ void ZIMPluginMethodHandler::queryGroupMessageReceiptUnreadMemberList(flutter::E
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->queryGroupMessageReceiptUnreadMemberList(messagePtr, groupID, config, [=](const std::string &groupID, const std::vector<ZIMGroupMemberInfo> &userList,unsigned int nextFlag, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
