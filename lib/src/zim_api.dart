@@ -224,6 +224,19 @@ abstract class ZIM {
           ZIMConversationType conversationType);
 
 
+  /// Available since: 2.5.0 and above.
+
+  /// Description: Set all received receipts of the conversation to be read.
+      
+  /// Use cases: Set all received receipt messages in the entire conversation to be read, and the sender of the message receipt in the conversation will receive the [onConversationMessageReceiptChanged] callback from ZIMEventHandler.
+      
+  /// When to call: It can be called after login. It is recommended to call before entering the message list page. In the message list page, it is recommended to call [sendMessageReceiptsRead] to batch set the messages that need to be read.
+          
+  /// Caution: Only single chat conversation are allowed.
+      
+  /// Related callback: [ZIMConversationMessageReceiptReadSentResult].
+      
+  /// Related APIs: [sendMessageReceiptsRead], [sendMessage].
   Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
       String conversationID, ZIMConversationType conversationType);
   /// Supported versions: 2.4.0 and above.
@@ -412,7 +425,7 @@ abstract class ZIM {
   ///
   /// Note: The impact of deleting messages is limited to this account, and messages from other accounts will not be deleted.
   ///
-  /// Scope of influence: The [conversationChanged] callback is triggered, and if there are unread messages, the [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] callback is triggered.
+  /// Scope of influence: The [ZIMEventHandler.onConversationChanged] callback is triggered, and if there are unread messages, the [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] callback is triggered.
   ///
   /// Related callback: [ZIMMessageDeletedResult].
   ///
@@ -446,16 +459,69 @@ abstract class ZIM {
       ZIMConversationType conversationType,
       ZIMMessageDeleteConfig config);
 
+  /// Available since: 2.5.0 and above.
 
+  /// Description: This method can set the receipt of a batch of messages to become read.
+      
+  /// Use cases: Developers can use this method to set a batch of messages with receipts that have been read. If the sender is online, it will receive the [onMessageReceiptChanged] callback.
+      
+  /// When to call: Callable after login. It is recommended to set the settings for the messages that need to be read on the message list page. It is not recommended to mix with [sendConversationMessageReceiptRead].
+
+  /// Restrictions: Only support the settings for received messages with receipt status as PROCESSING.
+      
+  /// Related callbacks: [ZIMMessageReceiptsReadSentResult].
+
+  /// Related APIs: [sendMessage].
   Future<ZIMMessageReceiptsReadSentResult> sendMessageReceiptsRead(
       List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
 
+
+  /// Available since: 2.5.0 and above.
+
+  /// Description: This method can query the receipt information of a batch of messages, including the status, the number of unread users and the number of read users.
+      
+  /// Use cases: If you need to query the receipt status of the message, the number of unread users and the number of read users, you can call this interface.
+      
+  /// When to call: Callable after login. If you need to query the detailed member list, you can query through the interface [queryGroupMessageReceiptReadMemberList] or [queryGroupMessageReceiptUnreadMemberList].
+
+  /// Restrictions: Only messages whose statuses are not NONE and UNKNOWN are supported.
+      
+  /// Related callbacks: [ZIMMessageReceiptsInfoQueriedResult].
+
+  /// Related APIs: [queryGroupMessageReceiptReadMemberList] , [queryGroupMessageReceiptUnreadMemberList].
   Future<ZIMMessageReceiptsInfoQueriedResult> queryMessageReceiptsInfo(
       List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
 
+  /// Available since: 2.5.0 and above.
+
+  /// Description: This method can query the specific read member list of a message sent by a group.
+      
+  /// Use cases: Developers can use this method to query the specific read member list of a message they send.
+      
+  /// When to call: Callable after login.
+
+  /// Restrictions: only supports querying the messages sent by the local end, and the receipt status of the messages is not NONE and UNKNOWN. If the user is not in the group, or has been kicked out of the group, the corresponding member list cannot be found.
+      
+  /// Related callbacks: [ZIMGroupMessageReceiptMemberListQueriedResult].
+
+  /// Related APIs: If you need to query the receipt status of a certain message or only need to query the read/unread count, you can query through the interface [queryMessageReceiptsInfo].
   Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList (
       ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
 
+
+  /// Available since: 2.5.0 and above.
+
+  /// Description: This method can query the specific unread member list of a message sent by a group.
+      
+  /// Use cases: Developers can use this method to query the specific unread member list of a message they send.
+      
+  /// When to call: Callable after login.
+
+  /// Restrictions: only supports querying the messages sent by the local end, and the receipt status of the messages is not NONE and UNKNOWN. If the user is not in the group, or has been kicked out of the group, the corresponding member list cannot be found.
+      
+  /// Related callbacks: [ZIMGroupMessageReceiptMemberListQueriedResult].
+
+  /// Related APIs: If you need to query the receipt status of a certain message or only need to query the read/unread count, you can query through the interface [queryMessageReceiptsInfo].
   Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList (
       ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
 

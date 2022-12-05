@@ -91,7 +91,7 @@ class ZIMEventHandler {
   ///
   /// Use cases:When other members in the room join, this callback will be called.
   ///
-  /// When to call:  After creating a ZIM instance through [create], and the user is in a room joined by other members, you can call this interface.
+  /// When to call:  After creating a ZIM instance through [ZIM.create], and the user is in a room joined by other members, you can call this interface.
   ///
   /// Caution: If the user is not currently in this room, this callback will not be called.
   ///
@@ -111,7 +111,7 @@ class ZIMEventHandler {
   ///
   /// Use cases: When other members in the room leave the room, this callback will be called.
   ///
-  /// When to call:  After creating a ZIM instance through [create], and the user is in the same room of other members, you can call this interface.
+  /// When to call:  After creating a ZIM instance through [ZIM.create], and the user is in the same room of other members, you can call this interface.
   ///
   /// Caution:If the user is not currently in this room, this callback will not be called.
   ///
@@ -129,9 +129,9 @@ class ZIMEventHandler {
   ///
   /// Description:event callback when the room connection status changes.
   ///
-  /// When to call::After creating a ZIM instance through [create], you can call this interface.
+  /// When to call::After creating a ZIM instance through [ZIM.create], you can call this interface.
   ///
-  /// Related APIs:through [tokenWillExpire], the callback will be received when the token is about to expire.
+  /// Related APIs:through [onTokenWillExpire], the callback will be received when the token is about to expire.
   ///
   /// [zim] ZIM instance.
   /// [state] The current room connection state after changed.
@@ -187,7 +187,7 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: A notification is triggered when a group is created, joined, left, or dismissed.
   ///
-  /// Related APIs: [createGroup] : creates a group. [joinGroup] : joins a group. [leaveGroup], leave the group. [dismissGroup]; dismiss the group.
+  /// Related APIs: [ZIM.createGroup] : creates a group. [ZIM.joinGroup] : joins a group. [ZIM.leaveGroup], leave the group. [ZIM.dismissGroup]; dismiss the group.
   ///
   /// [zim] ZIM instance.
   /// [state] The status of the group after the change.
@@ -207,7 +207,7 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: The group name is changed. Procedure
   ///
-  /// Related APIs: [updateGroupName] : updates the group name.
+  /// Related APIs: [ZIM.updateGroupName] : updates the group name.
   ///
   /// [zim] ZIM instance.
   /// [groupName] The updated group name.
@@ -222,7 +222,7 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: The group avatar url is changed. Procedure
   ///
-  /// Related APIs: [updateGroupAvatarUrl] : updates the group avatar url.
+  /// Related APIs: [ZIM.updateGroupAvatarUrl] : updates the group avatar url.
   ///
   /// [zim] ZIM instance.
   /// [groupName] The updated group avatar url.
@@ -240,7 +240,7 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: The group bulletin is changed. Procedure
   ///
-  /// Related APIs: [updateGroupNotice], which updates the group notice.
+  /// Related APIs: [ZIM.updateGroupNotice], which updates the group notice.
   ///
   /// [zim] ZIM instance.
   /// [groupNotice] Updated group announcement.
@@ -255,7 +255,7 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: Triggered when group properties are set, updated, or deleted.
   ///
-  /// Impacts on other APIs:  [setGroupAttributes] updates group attributes. [deleteGroupAttributes], delete the group attribute.
+  /// Impacts on other APIs:  [ZIM.setGroupAttributes] updates group attributes. [ZIM.deleteGroupAttributes], delete the group attribute.
   ///
   /// [zim] ZIM instance.
   /// [operatedInfo] Operation information after the group attribute is updated.
@@ -273,7 +273,7 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: Notification is triggered when a group is created, joined, left, or dismissed, or a user is invited to join or kicked out of the group.
   ///
-  /// Related APIs: [createGroup] : creates a group. [joinGroup] : joins a group. [leaveGroup], leave the group. [dismissGroup]; dismiss the group. [intiveUsersIntoGroup], which invites users to join the group. [kickoutGroupMember] kicks the user out of the group.
+  /// Related APIs: [ZIM.createGroup] : creates a group. [ZIM.joinGroup] : joins a group. [ZIM.leaveGroup], leave the group. [ZIM.dismissGroup]; dismiss the group. [ZIM.inviteUsersIntoGroup], which invites users to join the group. [ZIM.kickGroupMembers] kicks the user out of the group.
   ///
   /// [zim] ZIM instance.
   /// [state] Updated membership status.
@@ -295,7 +295,7 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: The result is displayed after the group member information is changed.
   ///
-  /// Related APIs: [setGroupMemberNickname] : updates the nickname of a group member. [setGroupMemberRole] : updates the group member role. [transferGroupOwner], group master transfer.
+  /// Related APIs: [ZIM.setGroupMemberNickname] : updates the nickname of a group member. [ZIM.setGroupMemberRole] : updates the group member role. [ZIM.transferGroupOwner], group master transfer.
   ///
   /// [zim] ZIM instance.
   /// [operatedInfo] Updated member information.
@@ -315,11 +315,11 @@ class ZIMEventHandler {
   ///
   /// Business scenario: The invitee will call this callback after the inviter sends a call invitation.
   ///
-  /// When to call: After creating a ZIM instance through [create].
+  /// When to call: After creating a ZIM instance through [ZIM.create].
   ///
   /// Note: If the user is not in the invitation list or not online, this callback will not be called.
   ///
-  /// Related interface: [callInvite].
+  /// Related interface: [ZIM.callInvite].
   ///
   /// [zim] ZIM instance.
   /// [info] Information about received call invitations.
@@ -334,11 +334,11 @@ class ZIMEventHandler {
   ///
   /// Business scenario: The invitee will call this callback after the inviter cancels the call invitation.
   ///
-  /// When to call: After creating a ZIM instance through [create].
+  /// When to call: After creating a ZIM instance through [ZIM.create].
   ///
   /// Note: If the user is not in the cancel invitation list or is offline, this callback will not be called.
   ///
-  /// Related interface: [callCancel].
+  /// Related interface: [ZIM.callCancel].
   ///
   /// [zim] ZIM instance.
   /// [info]  Information about canceled call invitations.
@@ -353,11 +353,11 @@ class ZIMEventHandler {
   ///
   /// Business scenario: The inviter will receive this callback after the inviter accepts the call invitation.
   ///
-  /// When to call: After creating a ZIM instance through [create].
+  /// When to call: After creating a ZIM instance through [ZIM.create].
   ///
   /// Note: This callback will not be called if the user is not online.
   ///
-  /// Related interface: [callAccept].
+  /// Related interface: [ZIM.callAccept].
   ///
   /// [zim] ZIM instance.
   /// [info]  Information about the call invitations.
@@ -372,13 +372,13 @@ class ZIMEventHandler {
   ///
   /// Use cases: The inviter will receive this callback after the inviter declines the call invitation.
   ///
-  /// Default value: After creating a ZIM instance through [create] and logging in.
+  /// Default value: After creating a ZIM instance through [ZIM.create] and logging in.
   ///
-  /// When to call /Trigger: After creating a ZIM instance through [create] and logging in.
+  /// When to call /Trigger: After creating a ZIM instance through [ZIM.create] and logging in.
   ///
   /// Restrictions: If the user is not the inviter of the call invitation or is not online, the callback will not be received.
   ///
-  /// Related APIs:[callReject].
+  /// Related APIs:[ZIM.callReject].
   /// [zim] ZIM instance.
   /// [info]  Information about the call invitations.
   /// [callID]  callID.
@@ -392,13 +392,13 @@ class ZIMEventHandler {
   ///
   /// Use cases: The inviter will receive this callback after the inviter declines the call invitation.
   ///
-  /// Default value: After creating a ZIM instance through [create] and logging in.
+  /// Default value: After creating a ZIM instance through [ZIM.create] and logging in.
   ///
-  /// When to call /Trigger: After creating a ZIM instance through [create] and logging in.
+  /// When to call /Trigger: After creating a ZIM instance through [ZIM.create] and logging in.
   ///
   /// Restrictions: If the user is not the inviter of the call invitation or is not online, the callback will not be received.
   ///
-  /// Related APIs:[callReject].
+  /// Related APIs:[ZIM.callReject].
   ///
   /// [zim] ZIM instance.
   /// [callID]  callID.
@@ -410,11 +410,11 @@ class ZIMEventHandler {
   ///
   /// Business scenario: The invitee does not respond before the timeout period, and the inviter will receive this callback.
   ///
-  /// When to call: After creating a ZIM instance through [create].
+  /// When to call: After creating a ZIM instance through [ZIM.create].
   ///
   /// Note: If the user is not the inviter who initiated this call invitation or is not online, the callback will not be received.
   ///
-  /// Related interfaces: [callInvite], [callAccept], [callReject].
+  /// Related interfaces: [ZIM.callInvite], [ZIM.callAccept], [ZIM.callReject].
   ///
   /// [zim] ZIM instance.
   /// [invitees]  Timeout invitee ID.
@@ -422,12 +422,34 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<String> invitees, String callID)?
       onCallInviteesAnsweredTimeout;
 
+  /// Available since: 2.5.0 and above.
+
+  /// Description: When the message receiver confirms that the message has been read, the message sender knows through this callback.
+
+  /// Trigger: Trigger a notification when the message receiver has read the message.
+
+  /// Related APIs: triggered when the peer calls via [ZIM.sendMessageReceiptsRead].
   static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
       onMessageReceiptChanged;
 
+  /// Available since: 2.5.0 and above.
+
+  /// Description: When the message receiver has read the session, the message sender knows through this callback.
+
+  /// Trigger: Trigger a notification when the message receiver has read the session.
+
+  /// Related APIs: triggered when the peer calls via [ZIM.sendConversationMessageReceiptRead].
   static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
       onConversationMessageReceiptChanged;
 
+
+  /// Available since: 2.5.0  or above.
+
+  /// Description: This callback is received when some one else sends a message and then revoke.
+
+  /// When to call: This callback occurs when a ZIM instance is created with [ZIM.create] and the other user revoke a message.
+
+  /// Related callbacks:You can revoke message to other members via [ZIM.revokeMessage].
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
       onMessageRevokeReceived;
 }
