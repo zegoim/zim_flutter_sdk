@@ -78,6 +78,29 @@ template struct Rob<ZIM_FriendlyGet_videoFirstFrameWidth, &ZIMVideoMessage::vide
 unsigned int ZIMVideoMessage::* get(ZIM_FriendlyGet_videoFirstFrameHeight);
 template struct Rob<ZIM_FriendlyGet_videoFirstFrameHeight, &ZIMVideoMessage::videoFirstFrameHeight>;
 
+ZIMRevokeType ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeType);
+template struct Rob<ZIM_FriendlyGet_revokeType, &ZIMRevokeMessage::revokeType>;
+
+unsigned long long ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeTimestamp);
+template struct Rob<ZIM_FriendlyGet_revokeTimestamp, &ZIMRevokeMessage::revokeTimestamp>;
+
+ZIMMessageType ZIMRevokeMessage::* get(ZIM_FriendlyGet_originalMessageType);
+template struct Rob<ZIM_FriendlyGet_originalMessageType, &ZIMRevokeMessage::originalMessageType>;
+
+ZIMMessageRevokeStatus ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeStatus);
+template struct Rob<ZIM_FriendlyGet_revokeStatus, &ZIMRevokeMessage::revokeStatus>;
+
+std::string ZIMRevokeMessage::* get(ZIM_FriendlyGet_operatedUserID);
+template struct Rob<ZIM_FriendlyGet_operatedUserID, &ZIMRevokeMessage::operatedUserID>;
+
+std::string ZIMRevokeMessage::* get(ZIM_FriendlyGet_originalTextMessageContent);
+template struct Rob<ZIM_FriendlyGet_originalTextMessageContent, &ZIMRevokeMessage::originalTextMessageContent>;
+
+std::string ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeExtendedData);
+template struct Rob<ZIM_FriendlyGet_revokeExtendedData, &ZIMRevokeMessage::revokeExtendedData>;
+
+ZIMMessageReceiptStatus ZIMMessage::* get(ZIM_FriendlyGet_receiptStatus);
+template struct Rob<ZIM_FriendlyGet_receiptStatus, &ZIMMessage::receiptStatus>;
 
 std::unordered_map<std::string, std::string> ZIMPluginConverter::cnvFTMapToSTLMap(FTMap ftMap) {
 	std::unordered_map<std::string, std::string> stlMap;
@@ -103,7 +126,7 @@ FTMap ZIMPluginConverter::cnvSTLMapToFTMap(const std::unordered_map<std::string,
 	return ftMap;
 }
 
-FTArray ZIMPluginConverter::cnvStlVectorToFTArray(std::vector<long long>& vec) {
+FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<long long>& vec) {
 	FTArray ftArray;
 	for (auto& value : vec) {
 		ftArray.emplace_back(FTValue(value));
@@ -520,22 +543,21 @@ FTArray ZIMPluginConverter::cnvZIMMessageListToArray(const std::vector<std::shar
 
 FTMap ZIMPluginConverter::cnvZIMMessageReceiptInfoToMap(const ZIMMessageReceiptInfo& messageReceiptInfo) {
 	FTMap infoMap;
+
 	infoMap[FTValue("conversationType")] = FTValue(messageReceiptInfo.conversationType);
 	infoMap[FTValue("conversationID")] = FTValue(messageReceiptInfo.conversationID);
-	infoMap[FTValue("messageID")] = FTValue(messageReceiptInfo.messageID);
+	infoMap[FTValue("messageID")] = FTValue((int64_t)messageReceiptInfo.messageID);
 	infoMap[FTValue("status")] = FTValue(messageReceiptInfo.status);
-	infoMap[FTValue("readMemberCount")] = FTValue(messageReceiptInfo.readMemberCount);
-	infoMap[FTValue("unreadMemberCount")] = FTValue(messageReceiptInfo.unreadMemberCount);
+	infoMap[FTValue("readMemberCount")] = FTValue((int32_t)messageReceiptInfo.readMemberCount);
+	infoMap[FTValue("unreadMemberCount")] = FTValue((int32_t)messageReceiptInfo.unreadMemberCount);
 	return infoMap;
 }
 
-FTArray cnvZIMMessageReceiptInfoListToArray(const std::vector<ZIMMessageReceiptInfo>& infos) {
+FTArray ZIMPluginConverter::cnvZIMMessageReceiptInfoListToArray(const std::vector<ZIMMessageReceiptInfo>& infos) {
 	FTArray infosArray;
 	for (auto& info : infos) {
 		auto infoMap = cnvZIMMessageReceiptInfoToMap(info);
-		if (std::holds_alternative<FTMap>(infoMap)) {
-			infosArray.emplace_back(infoMap);
-		}
+		infosArray.emplace_back(infoMap);
 	}
 	return infosArray;
 }
@@ -808,7 +830,7 @@ ZIMGroupAdvancedConfig ZIMPluginConverter::cnvZIMGroupAdvancedConfigToObject(FTM
 	ZIMGroupAdvancedConfig config;
 	config.groupNotice = std::get<std::string>(configMap[FTValue("groupNotice")]);
 	if (std::holds_alternative<std::monostate>(configMap[FTValue("groupAttributes")])) {
-        config.groupAttributes = nullptr;
+        config.groupAttributes = std::unordered_map<std::string, std::string>();
     }else{
 		config.groupAttributes = cnvFTMapToSTLMap(std::get<FTMap>(configMap[FTValue("groupAttributes")]));
 	}
@@ -827,4 +849,5 @@ ZIMGroupMessageReceiptMemberQueryConfig ZIMPluginConverter::cnvZIMGroupMessageRe
 	ZIMGroupMessageReceiptMemberQueryConfig config;
 	config.count = std::get<int32_t>(configMap[FTValue("count")]);
 	config.nextFlag = std::get<int32_t>(configMap[FTValue("nextFlag")]);
+	return config;
 }
