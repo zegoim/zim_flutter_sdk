@@ -784,7 +784,7 @@ class ZIMEngine implements ZIM {
       ZIMConversationType conversationType) async {
       Map resultMap = await channel.invokeMethod('sendMessageReceiptsRead', {
         'handle': handle,
-        'messageList': messageList,
+        'messageList': ZIMConverter.mZIMMessageList(messageList),
         'conversationID': conversationID,
         'conversationType':
             ZIMConversationTypeExtension.valueMap[conversationType]
@@ -799,7 +799,7 @@ class ZIMEngine implements ZIM {
       ZIMConversationType conversationType) async {
       Map resultMap = await channel.invokeMethod('queryMessageReceiptsInfo', {
         'handle': handle,
-        'messageList': messageList,
+        'messageList': ZIMConverter.mZIMMessageList(messageList),
         'conversationID': conversationID,
         'conversationType':
             ZIMConversationTypeExtension.valueMap[conversationType]
@@ -814,7 +814,7 @@ class ZIMEngine implements ZIM {
       ZIMGroupMessageReceiptMemberQueryConfig config) async {
       Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptReadMemberList', {
         'handle': handle,
-        'message': message,
+        'message': ZIMConverter.mZIMMessage(message),
         'groupID': groupID,
         'config':ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
       });
@@ -828,9 +828,9 @@ class ZIMEngine implements ZIM {
       ZIMGroupMessageReceiptMemberQueryConfig config) async {
       Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptUnreadMemberList', {
         'handle': handle,
-        'message': message,
+        'message': ZIMConverter.mZIMMessage(message),
         'groupID': groupID,
-        'config':config
+        'config':ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
       });
       return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(resultMap);
   }
