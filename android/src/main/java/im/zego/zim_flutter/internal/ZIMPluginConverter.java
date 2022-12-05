@@ -787,7 +787,7 @@ public class ZIMPluginConverter {
         groupMemberInfoMap.put("memberRole",groupMemberInfo.memberRole);
         groupMemberInfoMap.put("userID",groupMemberInfo.userID);
         groupMemberInfoMap.put("userName",groupMemberInfo.userName);
-        groupMemberInfoMap.put("memberAvatarUrl",groupMemberInfo.memberAvatarUrl);
+        groupMemberInfoMap.put("memberAvatarUrl",groupMemberInfo.memberAvatarUrl != null?groupMemberInfo.memberAvatarUrl:"");
         return groupMemberInfoMap;
     }
 

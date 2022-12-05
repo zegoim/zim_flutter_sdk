@@ -226,7 +226,7 @@ class ZIMConverter {
         message ??= ZIMBarrageMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.image:
-        message ??= ZIMImageMessage(resultMap['fileLocalPath']);
+        message ??= ZIMImageMessage(resultMap['fileLocalPath'] ?? "");
         message as ZIMImageMessage;
         message.thumbnailDownloadUrl = resultMap['thumbnailDownloadUrl'];
         message.thumbnailLocalPath = resultMap['thumbnailLocalPath'];
@@ -240,16 +240,16 @@ class ZIMConverter {
         message.thumbnailWidth = resultMap['thumbnailWidth'];
         break;
       case ZIMMessageType.file:
-        message ??= ZIMFileMessage(resultMap['fileLocalPath']);
+        message ??= ZIMFileMessage(resultMap['fileLocalPath'] ?? "");
         message as ZIMFileMessage;
         break;
       case ZIMMessageType.audio:
-        message ??= ZIMAudioMessage(resultMap['fileLocalPath']);
+        message ??= ZIMAudioMessage(resultMap['fileLocalPath'] ?? "");
         message as ZIMAudioMessage;
         message.audioDuration = resultMap['audioDuration'];
         break;
       case ZIMMessageType.video:
-        message ??= ZIMVideoMessage(resultMap['fileLocalPath']);
+        message ??= ZIMVideoMessage(resultMap['fileLocalPath'] ?? "");
         message as ZIMVideoMessage;
         message.videoDuration = resultMap['videoDuration'];
         message.videoFirstFrameDownloadUrl =
