@@ -409,7 +409,8 @@ class ZIMMessageSendNotification {
 class ZIMMediaMessageSendNotification {
   ZIMMessageAttachedCallback? onMessageAttached;
   ZIMMediaUploadingProgress? onMediaUploadingProgress;
-  ZIMMediaMessageSendNotification({this.onMessageAttached,this.onMediaUploadingProgress});
+  ZIMMediaMessageSendNotification(
+      {this.onMessageAttached, this.onMediaUploadingProgress});
 }
 
 /// User information object.
@@ -449,6 +450,7 @@ class ZIMMessage {
   int conversationSeq = 0;
   int orderKey = 0;
   bool isUserInserted = false;
+  ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
 }
 
 class ZIMTextMessage extends ZIMMessage {
@@ -926,18 +928,18 @@ class ZIMCallInvitationTimeoutInfo {
 class ZIMMessageReceiptInfo {
   String conversationID;
   ZIMConversationType conversationType;
-  String  messageID;
+  String messageID;
   ZIMMessageReceiptStatus status;
-  int  readMemberCount;
-  int  unreadMemberCount;
+  int readMemberCount;
+  int unreadMemberCount;
 
-  ZIMMessageReceiptInfo({
-    required this.conversationID,
-    required this.conversationType,
-    required this.messageID,
-    required this.status,
-    required this.readMemberCount,
-    required this.unreadMemberCount});
+  ZIMMessageReceiptInfo(
+      {required this.conversationID,
+      required this.conversationType,
+      required this.messageID,
+      required this.status,
+      required this.readMemberCount,
+      required this.unreadMemberCount});
 }
 
 //MARK : Result
@@ -1598,7 +1600,9 @@ class ZIMMessageReceiptsReadSentResult {
   ZIMConversationType conversationType;
   List<String> errorMessageIDs;
   ZIMMessageReceiptsReadSentResult(
-      {required this.conversationID, required this.conversationType, required this.errorMessageIDs});
+      {required this.conversationID,
+      required this.conversationType,
+      required this.errorMessageIDs});
 }
 
 class ZIMMessageReceiptsInfoQueriedResult {
