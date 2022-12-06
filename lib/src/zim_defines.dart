@@ -451,6 +451,7 @@ class ZIMMessage {
   int orderKey = 0;
   bool isUserInserted = false;
   ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
+  String extendedData = "";
 }
 
 class ZIMTextMessage extends ZIMMessage {

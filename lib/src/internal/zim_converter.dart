@@ -132,6 +132,7 @@ class ZIMConverter {
     messageMap['isUserInserted'] = message.isUserInserted;
     messageMap['receiptStatus'] =
         ZIMMessageReceiptStatusExtension.valueMap[message.receiptStatus];
+    messageMap['extendedData'] = message.extendedData;
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -304,7 +305,7 @@ class ZIMConverter {
       message.fileName = resultMap['fileName'];
       message.fileSize = resultMap['fileSize'];
     }
-
+    message.extendedData = resultMap['extendedData'];
     return message;
   }
 
