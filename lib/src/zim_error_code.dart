@@ -37,6 +37,9 @@ class ZIMErrorCode {
   static const int messageModuleIsNotInvitee = 6000274;
   static const int messageModuleCallAlreadyExists = 6000275;
   static const int messageModuleCallDoseNotExist = 6000276;
+  static const int receiptReadError = 6000277;
+  static const int messageExceedsRevokeTime = 6000278;
+  static const int messageHasBeenRevoked = 6000279;
 
   static const int roomModuleCommonError = 6000301;
   static const int roomModuleServerError = 6000302;

@@ -25,6 +25,12 @@
 
 +(nullable NSDictionary *)mZIMMessage:(nullable ZIMMessage *)message;
 
++(nullable NSDictionary *)mZIMMessageReceiptInfo:(nullable ZIMMessageReceiptInfo *)info;
+
++(nullable ZIMGroupMessageReceiptMemberQueryConfig *)oZIMGroupMessageReceiptMemberQueryConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMMessageRevokeConfig *)oZIMMessageRevokeConfig:(nullable NSDictionary *)configDic;
+
 +(nullable NSArray *)mZIMConversationList:(nullable NSArray<ZIMConversation *> *)conversationList;
 
 +(nullable ZIMConversationDeleteConfig *)oZIMConversationDeleteConfig:(nullable NSMutableDictionary *)configDic;

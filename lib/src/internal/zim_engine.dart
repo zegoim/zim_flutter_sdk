@@ -722,7 +722,13 @@ class ZIMEngine implements ZIM {
         'messageAttachedCallbackID': messageAttachedCallbackID,
         'messageID': messageID
       });
-      return ZIMConverter.oZIMMessageSentResult(resultMap);
+      ZIMMessageSentResult result =
+          ZIMConverter.oZIMMessageSentResult(resultMap);
+      // ios 2.5.0 桥层bug 临时规避方法，后续删除
+      if (config.hasReceipt == true) {
+        result.message.receiptStatus = ZIMMessageReceiptStatus.processing;
+      }
+      return result;
     } on PlatformException catch (e) {
       Map resultMap = e.details;
       ZIMMessageSentResult result =
@@ -762,5 +768,88 @@ class ZIMEngine implements ZIM {
     } finally {
       ZIMCommonData.messsageMap.remove(messageID);
     }
+  }
+
+  @override
+  Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
+      String conversationID,
+      ZIMConversationType conversationType) async {
+      Map resultMap = await channel.invokeMethod('sendConversationMessageReceiptRead', {
+        'handle': handle,
+        'conversationID': conversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType]
+      });
+      return ZIMConverter.oZIMConversationMessageReceiptReadSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageReceiptsReadSentResult> sendMessageReceiptsRead(
+      List<ZIMMessage> messageList,
+      String conversationID,
+      ZIMConversationType conversationType) async {
+      Map resultMap = await channel.invokeMethod('sendMessageReceiptsRead', {
+        'handle': handle,
+        'messageList': ZIMConverter.mZIMMessageList(messageList),
+        'conversationID': conversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType]
+      });
+      return ZIMConverter.oZIMMessageReceiptReadSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageReceiptsInfoQueriedResult> queryMessageReceiptsInfo(
+      List<ZIMMessage> messageList,
+      String conversationID,
+      ZIMConversationType conversationType) async {
+      Map resultMap = await channel.invokeMethod('queryMessageReceiptsInfo', {
+        'handle': handle,
+        'messageList': ZIMConverter.mZIMMessageList(messageList),
+        'conversationID': conversationID,
+        'conversationType':
+            ZIMConversationTypeExtension.valueMap[conversationType]
+      });
+      return ZIMConverter.oZIMMessageReceiptsInfoQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList(
+      ZIMMessage message,
+      String groupID,
+      ZIMGroupMessageReceiptMemberQueryConfig config) async {
+      Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptReadMemberList', {
+        'handle': handle,
+        'message': ZIMConverter.mZIMMessage(message),
+        'groupID': groupID,
+        'config':ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
+      });
+      return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList(
+      ZIMMessage message,
+      String groupID,
+      ZIMGroupMessageReceiptMemberQueryConfig config) async {
+      Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptUnreadMemberList', {
+        'handle': handle,
+        'message': ZIMConverter.mZIMMessage(message),
+        'groupID': groupID,
+        'config':ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
+      });
+      return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageRevokedResult> revokeMessage(
+      ZIMMessage message,
+      ZIMMessageRevokeConfig config) async {
+      Map resultMap = await channel.invokeMethod('revokeMessage', {
+        'handle': handle,
+        'message': ZIMConverter.mZIMMessage(message),
+        'config':ZIMConverter.mZIMMessageRevokeConfig(config)
+      });
+      return ZIMConverter.oZIMMessageRevokedResult(resultMap);
   }
 }

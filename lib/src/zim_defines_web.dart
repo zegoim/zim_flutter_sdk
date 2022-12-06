@@ -115,6 +115,12 @@ class ZIM {
   external PromiseJsImpl<dynamic> insertMessageToLocalDB(Object message,
       String conversationID, dynamic conversationType, String senderUserID);
   external PromiseJsImpl<dynamic> setRoomMembersAttributes(dynamic attributes, dynamic userIDs, String roomID, Object config);
+  external PromiseJsImpl<dynamic> sendConversationMessageReceiptRead(String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> sendMessageReceiptsRead(dynamic messageList, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> queryMessageReceiptsInfo(dynamic messageList, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> queryGroupMessageReceiptReadMemberList(dynamic message, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> queryGroupMessageReceiptUnreadMemberList(dynamic message, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> revokeMessage(dynamic message, dynamic config);
 }
 
 @JS()

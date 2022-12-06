@@ -111,7 +111,9 @@ enum ZIMRoomEvent {
   enterFailed,
 
   /// Description: user was kicked out of the room.
-  kickedOut
+  kickedOut,
+
+  connectTimeout
 }
 
 /// The priority of the message.
@@ -185,7 +187,9 @@ enum ZIMMessageType {
   /// Use cases: For sending video messages, only ".mp4", ".mov" video types are supported. After sending the video message, the server will generate the first frame of the video file.
   video,
 
-  system
+  system,
+
+  revoke
 }
 
 enum ZIMMediaFileType {
@@ -200,6 +204,21 @@ enum ZIMMediaFileType {
 
   /// The type of the first frame of the video. After calling [downloadMediaFile], the SDK will update the videoFirstFrameLocalPath property in [ZIMVideoMessage].
   videoFirstFrame
+}
+
+enum ZIMRevokeType {
+  unknown,
+  twoWay,
+  oneWay,
+}
+
+enum ZIMMessageRevokeStatus {
+  unknown,
+  selfRevoke,
+  systemRevoke,
+  serviceAPIRevoke,
+  groupAdminRevoke,
+  groupOwnerRevoke,
 }
 
 /// Room attributes update action.
@@ -282,6 +301,8 @@ enum ZIMGroupAttributesUpdateAction { set, delete }
 
 enum ZIMGroupMessageNotificationStatus { notify, doNotDisturb }
 
+enum ZIMMessageReceiptStatus { none, processing, done, expired, failed }
+
 enum ZIMCallUserState {
   inviting,
   accepted,
@@ -348,7 +369,10 @@ class ZIMPushConfig {
   String content = '';
 
   /// Description: This parameter is used to set the pass-through field of offline push.
-  String extendedData = '';
+  String payload = '';
+
+  String resourcesID = '';
+
   ZIMPushConfig();
 }
 
@@ -359,7 +383,22 @@ class ZIMMessageSendConfig {
 
   /// Enumeration value used to set message priority. The default value is Low.
   ZIMMessagePriority priority = ZIMMessagePriority.low;
+
+  bool hasReceipt = false;
+
   ZIMMessageSendConfig();
+}
+
+class ZIMGroupMessageReceiptMemberQueryConfig {
+  int nextFlag = 0;
+  int count = 0;
+
+  ZIMGroupMessageReceiptMemberQueryConfig();
+}
+
+class ZIMMessageRevokeConfig {
+  String? revokeExtendedData;
+  ZIMPushConfig? pushConfig;
 }
 
 class ZIMMessageSendNotification {
@@ -370,7 +409,8 @@ class ZIMMessageSendNotification {
 class ZIMMediaMessageSendNotification {
   ZIMMessageAttachedCallback? onMessageAttached;
   ZIMMediaUploadingProgress? onMediaUploadingProgress;
-  ZIMMediaMessageSendNotification({this.onMessageAttached,this.onMediaUploadingProgress});
+  ZIMMediaMessageSendNotification(
+      {this.onMessageAttached, this.onMediaUploadingProgress});
 }
 
 /// User information object.
@@ -410,6 +450,7 @@ class ZIMMessage {
   int conversationSeq = 0;
   int orderKey = 0;
   bool isUserInserted = false;
+  ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
 }
 
 class ZIMTextMessage extends ZIMMessage {
@@ -444,6 +485,21 @@ class ZIMMediaMessage extends ZIMMessage {
   String fileName = '';
   int fileSize = 0;
   ZIMMediaMessage({required this.fileLocalPath});
+
+}
+
+class ZIMRevokeMessage extends ZIMMessage {
+  ZIMRevokeType revokeType = ZIMRevokeType.unknown;
+  ZIMMessageRevokeStatus revokeStatus = ZIMMessageRevokeStatus.unknown;
+  int revokeTimestamp = 0;
+  String operatedUserID = "";
+  String revokeExtendedData = "";
+  ZIMMessageType originalMessageType = ZIMMessageType.unknown;
+  String originalTextMessageContent = "";
+
+  ZIMRevokeMessage() {
+    super.type = ZIMMessageType.revoke;
+  }
 }
 
 typedef ZIMMediaUploadingProgress = void Function(
@@ -784,7 +840,10 @@ class ZIMCallInviteConfig {
   int timeout = 0;
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
-  String extendedData = "";
+  String payload = "";
+
+  ZIMPushConfig? pushConfig;
+
   ZIMCallInviteConfig();
 }
 
@@ -865,6 +924,23 @@ class ZIMCallInvitationRejectedInfo {
 class ZIMCallInvitationTimeoutInfo {
   String inviter = "";
   ZIMCallInvitationTimeoutInfo();
+}
+
+class ZIMMessageReceiptInfo {
+  String conversationID;
+  ZIMConversationType conversationType;
+  int messageID;
+  ZIMMessageReceiptStatus status;
+  int readMemberCount;
+  int unreadMemberCount;
+
+  ZIMMessageReceiptInfo(
+      {required this.conversationID,
+      required this.conversationType,
+      required this.messageID,
+      required this.status,
+      required this.readMemberCount,
+      required this.unreadMemberCount});
 }
 
 //MARK : Result
@@ -1511,4 +1587,41 @@ class ZIMCallAcceptanceSentResult {
 class ZIMCallRejectionSentResult {
   String callID;
   ZIMCallRejectionSentResult({required this.callID});
+}
+
+class ZIMConversationMessageReceiptReadSentResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  ZIMConversationMessageReceiptReadSentResult(
+      {required this.conversationID, required this.conversationType});
+}
+
+class ZIMMessageReceiptsReadSentResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  List<int> errorMessageIDs;
+  ZIMMessageReceiptsReadSentResult(
+      {required this.conversationID,
+      required this.conversationType,
+      required this.errorMessageIDs});
+}
+
+class ZIMMessageReceiptsInfoQueriedResult {
+  List<ZIMMessageReceiptInfo> infos;
+  List<int> errorMessageIDs;
+  ZIMMessageReceiptsInfoQueriedResult(
+      {required this.infos, required this.errorMessageIDs});
+}
+
+class ZIMGroupMessageReceiptMemberListQueriedResult {
+  String groupID;
+  int nextFlag;
+  List<ZIMGroupMemberInfo> userList;
+  ZIMGroupMessageReceiptMemberListQueriedResult(
+      {required this.groupID, required this.nextFlag, required this.userList});
+}
+
+class ZIMMessageRevokedResult {
+  ZIMRevokeMessage message;
+  ZIMMessageRevokedResult({required this.message});
 }

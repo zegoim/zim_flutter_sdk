@@ -3,16 +3,16 @@ import 'package:zego_zim/zego_zim.dart';
 
 import '../bubble/text_bubble.dart';
 
-class ReceiceTextMsgCell extends StatefulWidget {
+class ReceiveTextMsgCell extends StatefulWidget {
   ZIMTextMessage message;
 
-  ReceiceTextMsgCell({required this.message});
+  ReceiveTextMsgCell({required this.message});
 
   @override
   State<StatefulWidget> createState() => _MyCellState();
 }
 
-class _MyCellState extends State<ReceiceTextMsgCell> {
+class _MyCellState extends State<ReceiveTextMsgCell> {
   @override
   Widget build(BuildContext context) {
     return Container(

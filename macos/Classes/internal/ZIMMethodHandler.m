@@ -248,6 +248,7 @@
     }];
 }
 
+
 - (void)queryConversationList:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
@@ -524,6 +525,148 @@
         }
         else{
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:resultMtDic]);
+        }
+    }];
+}
+
+- (void)sendConversationMessageReceiptRead:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments safeObjectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    NSString *conversationID = [call.arguments safeObjectForKey:@"conversationID"];
+    ZIMConversationType conversationType = [[call.arguments safeObjectForKey:@"conversationType"] unsignedIntegerValue];
+    [zim sendConversationMessageReceiptRead:conversationID conversationType:conversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            [resultMtDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInteger:conversationType] forKey:@"conversationType"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)sendMessageReceiptsRead:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments safeObjectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    NSArray<ZIMMessage *> *messageList = [ZIMPluginConverter oZIMMessageList:[call.arguments safeObjectForKey:@"messageList"]];
+    NSString *conversationID = [call.arguments safeObjectForKey:@"conversationID"];
+    ZIMConversationType conversationType = [[call.arguments safeObjectForKey:@"conversationType"] unsignedIntegerValue];
+    [zim sendMessageReceiptsRead:messageList conversationID:conversationID conversationType:conversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, NSArray<NSNumber *> * _Nonnull errorMessageIDs, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            [resultMtDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInteger:conversationType] forKey:@"conversationType"];
+            [resultMtDic safeSetObject:errorMessageIDs forKey:@"errorMessageIDs"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)queryMessageReceiptsInfo:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    NSArray<ZIMMessage *> *messageList = [ZIMPluginConverter oZIMMessageList:[call.arguments safeObjectForKey:@"messageList"]];
+    NSString *conversationID = [call.arguments safeObjectForKey:@"conversationID"];
+    ZIMConversationType conversationType = [[call.arguments safeObjectForKey:@"conversationType"] unsignedIntegerValue];
+    [zim queryMessageReceiptsInfoByMessageList:messageList conversationID:conversationID conversationType:conversationType callback:^(NSArray<ZIMMessageReceiptInfo *> * _Nonnull infos, NSArray<NSString *> * _Nonnull errorMessageIDs, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            NSMutableArray *infosModel = [[NSMutableArray alloc] init];
+            for (ZIMMessageReceiptInfo *info in infos) {
+                [infosModel safeAddObject:[ZIMPluginConverter mZIMMessageReceiptInfo:info]];
+            }
+            [resultMtDic safeSetObject:infosModel forKey:@"infos"];
+            [resultMtDic safeSetObject:errorMessageIDs forKey:@"errorMessageIDs"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)queryGroupMessageReceiptReadMemberList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
+    NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
+    ZIMGroupMessageReceiptMemberQueryConfig *queryConfig = [ZIMPluginConverter oZIMGroupMessageReceiptMemberQueryConfig:[call.arguments safeObjectForKey:@"config"]];
+    [zim queryGroupMessageReceiptReadMemberListByMessage:message groupID:groupID config:queryConfig callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            [resultMtDic safeSetObject:[ZIMPluginConverter mZIMGroupMemberInfoList:userList] forKey:@"userList"];
+            [resultMtDic safeSetObject:groupID forKey:@"groupID"];
+            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInt:nextFlag] forKey:@"nextFlag"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)queryGroupMessageReceiptUnreadMemberList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
+    NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
+    ZIMGroupMessageReceiptMemberQueryConfig *queryConfig = [ZIMPluginConverter oZIMGroupMessageReceiptMemberQueryConfig:[call.arguments safeObjectForKey:@"config"]];
+    [zim queryGroupMessageReceiptUnreadMemberListByMessage:message groupID:groupID config:queryConfig callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            [resultMtDic safeSetObject:[ZIMPluginConverter mZIMGroupMemberInfoList:userList] forKey:@"userList"];
+            [resultMtDic safeSetObject:groupID forKey:@"groupID"];
+            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInt:nextFlag] forKey:@"nextFlag"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)revokeMessage:(FlutterMethodCall *)call result:(FlutterResult)result{
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
+    ZIMMessageRevokeConfig *revokeConfig = [ZIMPluginConverter oZIMMessageRevokeConfig:[call.arguments safeObjectForKey:@"config"]];
+    [zim revokeMessage:message config:revokeConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            [resultMtDic safeSetObject:[ZIMPluginConverter mZIMMessage:message] forKey:@"message"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
         }
     }];
 }
@@ -1561,7 +1704,6 @@
         }
     }];
 }
-
 #pragma mark - Getter
 - (NSMutableDictionary *)engineMap {
     if (!_engineMap) {

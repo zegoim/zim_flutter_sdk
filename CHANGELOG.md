@@ -1,3 +1,10 @@
+## 2.5.0
+###1.Feature
+1、Support message return receipt.
+2、Support revoke message.
+3、Now call invite support  offline push(ios、android).
+
+
 ## 2.4.0
 
 ### 1. Feature

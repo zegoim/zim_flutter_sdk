@@ -1,6 +1,7 @@
 package im.zego.zim_flutter.internal;
 
 import java.util.HashMap;
+@SuppressWarnings({"unchecked"})
 
 public class ZIMPluginCommonTools {
     static public int safeGetIntValue(Object intObject){
