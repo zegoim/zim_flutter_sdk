@@ -198,21 +198,32 @@
             ((ZIMSystemMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
             break;
         }
+        case ZIMMessageTypeRevoke:{
+            msg = [[ZIMRevokeMessage alloc] init];
+            [((ZIMRevokeMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"revokeType"]  forKey:@"revokeType"];
+            [((ZIMRevokeMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"revokeTimestamp"]  forKey:@"revokeTimestamp"];
+            [((ZIMRevokeMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"originalMessageType"]  forKey:@"originalMessageType"];
+            [((ZIMRevokeMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"revokeStatus"]  forKey:@"revokeStatus"];
+            [((ZIMRevokeMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"operatedUserID"]  forKey:@"operatedUserID"];
+            [((ZIMRevokeMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"originalTextMessageContent"]  forKey:@"originalTextMessageContent"];
+            [((ZIMRevokeMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"revokeExtendedData"]  forKey:@"revokeExtendedData"];
+        }
         default:
             break;
     }
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"type"]  forKey:@"type"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"messageID"]  forKey:@"messageID"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"localMessageID"]  forKey:@"localMessageID"];
-    [msg safeSetValue:(NSString *)[messageDic objectForKey:@"senderUserID"]  forKey:@"senderUserID"];
-    [msg safeSetValue:(NSString *)[messageDic objectForKey:@"conversationID"] forKey:@"conversationID"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"direction"]  forKey:@"direction"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"sentStatus"]  forKey:@"sentStatus"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"conversationType"]  forKey:@"conversationType"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"timestamp"]  forKey:@"timestamp"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"conversationSeq"]  forKey:@"conversationSeq"];
-    [msg safeSetValue:(NSNumber *)[messageDic objectForKey:@"orderKey"]  forKey:@"orderKey"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"messageID"]  forKey:@"messageID"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"localMessageID"]  forKey:@"localMessageID"];
+    [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"senderUserID"]  forKey:@"senderUserID"];
+    [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"conversationID"] forKey:@"conversationID"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"direction"]  forKey:@"direction"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"sentStatus"]  forKey:@"sentStatus"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"conversationType"]  forKey:@"conversationType"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"timestamp"]  forKey:@"timestamp"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"conversationSeq"]  forKey:@"conversationSeq"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"orderKey"]  forKey:@"orderKey"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isUserInserted"] forKey:@"isUserInserted"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey: @"receiptStatus"] forKey:@"receiptStatus"];
     if([msg isKindOfClass:[ZIMMediaMessage class]]){
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileLocalPath"]  forKey:@"fileLocalPath"];
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileDownloadUrl"] forKey:@"fileDownloadUrl"];
@@ -245,7 +256,7 @@
 
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.conversationSeq] forKey:@"conversationSeq"];
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.orderKey] forKey:@"orderKey"];
-    
+    [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:message.receiptStatus] forKey:@"receiptStatus"];
     if([message isKindOfClass:[ZIMMediaMessage class]]){
         ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
         [messageDic safeSetObject:mediaMsg.fileLocalPath forKey:@"fileLocalPath"];
@@ -310,6 +321,16 @@
             ZIMSystemMessage *sysMsg = (ZIMSystemMessage *)message;
             [messageDic safeSetObject:sysMsg.message forKey:@"message"];
         }
+        case ZIMMessageTypeRevoke:{
+            ZIMRevokeMessage *revokeMsg = (ZIMRevokeMessage *)message;
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:revokeMsg.revokeType] forKey:@"revokeType"];
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:revokeMsg.revokeStatus] forKey:@"revokeStatus"];
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedLongLong:revokeMsg.revokeTimestamp] forKey:@"revokeTimestamp"];
+            [messageDic safeSetObject:revokeMsg.operatedUserID forKey:@"operatedUserID"];
+            [messageDic safeSetObject:revokeMsg.revokeExtendedData forKey:@"revokeExtendedData"];
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:revokeMsg.originalMessageType] forKey:@"originalMessageType"];
+            [messageDic safeSetObject:revokeMsg.originalTextMessageContent forKey:@"originalTextMessageContent"];
+        }
         default:
             break;
     }
@@ -336,6 +357,40 @@
         [messageList addObject:[ZIMPluginConverter oZIMMessage:msgDic]];
     }
     return messageList;
+}
+
++(nullable ZIMMessageRevokeConfig *)oZIMMessageRevokeConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMMessageRevokeConfig *config = [[ZIMMessageRevokeConfig alloc] init];
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
+    config.revokeExtendedData = [configDic safeObjectForKey:@"revokeExtendedData"];
+    return config;
+}
+
++(nullable NSDictionary *)mZIMMessageReceiptInfo:(nullable ZIMMessageReceiptInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoModel = [[NSMutableDictionary alloc] init];
+    [infoModel safeSetObject:info.conversationID forKey:@"conversationID"];
+    [infoModel safeSetObject:[NSNumber numberWithUnsignedInteger:info.conversationType] forKey:@"conversationType"];
+    [infoModel safeSetObject:[NSNumber numberWithLongLong:info.messageID] forKey:@"messageID"];
+    [infoModel safeSetObject:[NSNumber numberWithUnsignedInteger:info.status] forKey:@"status"];
+    [infoModel safeSetObject:[NSNumber numberWithUnsignedInt:info.readMemberCount] forKey:@"readMemberCount"];
+    [infoModel safeSetObject:[NSNumber numberWithUnsignedInt:info.unreadMemberCount] forKey:@"unreadMemberCount"];
+    return infoModel;
+}
+
++(nullable ZIMGroupMessageReceiptMemberQueryConfig *)oZIMGroupMessageReceiptMemberQueryConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupMessageReceiptMemberQueryConfig *queryConfig = [[ZIMGroupMessageReceiptMemberQueryConfig alloc] init];
+    queryConfig.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    queryConfig.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
+    return queryConfig;
 }
 
 +(nullable ZIMMessageDeleteConfig *)oZIMMessageDeleteConfig:(nullable NSDictionary *)configDic{
@@ -372,8 +427,9 @@
         return nil;
     }
     ZIMMessageSendConfig *sendConfig = [[ZIMMessageSendConfig alloc] init];
-    sendConfig.priority = ((NSNumber *)[configDic objectForKey:@"priority"]).intValue;
+    sendConfig.priority = [[configDic objectForKey:@"priority"] unsignedIntegerValue];
     sendConfig.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic objectForKey:@"pushConfig"]];
+    sendConfig.hasReceipt = [[configDic safeObjectForKey:@"hasReceipt"] boolValue];
     return sendConfig;
 }
 
@@ -384,7 +440,8 @@
     ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
     pushConfig.title = (NSString *)[configDic objectForKey:@"title"];
     pushConfig.content = (NSString *)[configDic objectForKey:@"content"];
-    pushConfig.extendedData = (NSString *)[configDic objectForKey:@"extendedData"];
+    pushConfig.payload = (NSString *)[configDic objectForKey:@"payload"];
+    pushConfig.resourcesID = (NSString *)[configDic objectForKey:@"resourcesID"];
     return pushConfig;
 }
 
@@ -715,6 +772,9 @@
     ZIMCallInviteConfig *config = [[ZIMCallInviteConfig alloc] init];
     config.timeout = ((NSNumber *)[configDic safeObjectForKey:@"timeout"]).unsignedIntValue;
     config.extendedData = [configDic safeObjectForKey:@"extendedData"];
+    
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
+    
     return config;
 }
 

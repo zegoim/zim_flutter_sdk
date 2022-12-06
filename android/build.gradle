@@ -1,5 +1,5 @@
 group 'im.zego.zim_flutter'
-version '2.4.0'
+version '2.5.0'
 
 buildscript {
     repositories {
@@ -35,8 +35,10 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
+
+    // tag-add-jni-dir: do not remove me
 }
 dependencies {
     // for other module visit
-    api 'com.github.zegolibrary:zim:2.4.0'
+    api 'com.github.zegolibrary:zim:2.5.0'
 }

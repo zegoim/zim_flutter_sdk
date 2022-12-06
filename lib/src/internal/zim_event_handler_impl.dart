@@ -264,7 +264,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         }
         break;
       case 'uploadMediaProgress':
-        int progressID = map['progressID'];
+        int? progressID = map['progressID'];
         ZIMMessage message =
             ZIMConverter.oZIMMessage(map['message'], map['messageID']);
         int currentFileSize = map['currentFileSize'];
@@ -274,6 +274,27 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (progress != null) {
           progress(message, currentFileSize, totalFileSize);
         }
+        break;
+      case 'onMessageRevokeReceived':
+        if (ZIMEventHandler.onMessageRevokeReceived == null) return;
+        List<ZIMRevokeMessage> messageList = List<ZIMRevokeMessage>.from(ZIMConverter.oZIMMessageList(map['messageList']));
+        ZIMEventHandler.onMessageRevokeReceived!(zim!,messageList);
+        break;
+      case 'onMessageReceiptChanged':
+        if (ZIMEventHandler.onMessageReceiptChanged == null) return;
+        List<ZIMMessageReceiptInfo> infos = [];
+        for(Map infoModel in map['infos']){
+          infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
+        }
+        ZIMEventHandler.onMessageReceiptChanged!(zim!,infos);
+        break;
+      case 'onConversationMessageReceiptChanged':
+        if (ZIMEventHandler.onConversationMessageReceiptChanged == null) return;
+        List<ZIMMessageReceiptInfo> infos = [];
+        for(Map infoModel in map['infos']){
+          infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
+        }
+        ZIMEventHandler.onConversationMessageReceiptChanged!(zim!,infos);
         break;
       default:
         break;

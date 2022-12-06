@@ -33,7 +33,7 @@ class _myState extends State<SplashPage> {
     appConfig.appID = KeyCenter.appID;
     appConfig.appSign = KeyCenter.appSign;
     ZIM zim = ZIM.create(appConfig)!;
-    
+
     log('create');
     final prefs = await SharedPreferences.getInstance();
     final String? userID = prefs.getString('userID');

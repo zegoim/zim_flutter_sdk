@@ -18,6 +18,8 @@ import im.zego.zim.entity.ZIMGroupFullInfo;
 import im.zego.zim.entity.ZIMGroupMemberInfo;
 import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMMessage;
+import im.zego.zim.entity.ZIMMessageReceiptInfo;
+import im.zego.zim.entity.ZIMRevokeMessage;
 import im.zego.zim.entity.ZIMRoomAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomOperatedInfo;
@@ -217,7 +219,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("handle", handle);
         resultMap.put("state",state.value());
         resultMap.put("event",event.value());
-        resultMap.put("extendedData",event.toString());
+        resultMap.put("extendedData",extendedData.toString());
         resultMap.put("roomID",roomID);
 
         mysink.success(resultMap);
@@ -492,6 +494,58 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("handle", handle);
         resultMap.put("invitees",invitees);
         resultMap.put("callID",callID);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onMessageReceiptChanged(ZIM zim, ArrayList<ZIMMessageReceiptInfo> infos) {
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        ArrayList<HashMap<String,Object>> infosModel = new ArrayList<>();
+        for (ZIMMessageReceiptInfo info:infos
+        ) {
+            infosModel.add(ZIMPluginConverter.mZIMMessageReceiptInfo(info));
+        }
+        resultMap.put("infos",infosModel);
+        resultMap.put("method","onMessageReceiptChanged");
+        resultMap.put("handle", handle);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onMessageRevokeReceived(ZIM zim, ArrayList<ZIMRevokeMessage> messageList) {
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        ArrayList<ZIMMessage> tmpMessageList = new ArrayList<>(messageList);
+        resultMap.put("messageList",ZIMPluginConverter.mZIMMessageList(tmpMessageList));
+        resultMap.put("method","onMessageRevokeReceived");
+        resultMap.put("handle", handle);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onConversationMessageReceiptChanged(ZIM zim, ArrayList<ZIMMessageReceiptInfo> infos) {
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String,Object> resultMap = new HashMap<>();
+        ArrayList<HashMap<String,Object>> infosModel = new ArrayList<>();
+        for (ZIMMessageReceiptInfo info:infos
+        ) {
+            infosModel.add(ZIMPluginConverter.mZIMMessageReceiptInfo(info));
+        }
+        resultMap.put("infos",infosModel);
+        resultMap.put("method","onConversationMessageReceiptChanged");
+        resultMap.put("handle", handle);
         mysink.success(resultMap);
     }
 }

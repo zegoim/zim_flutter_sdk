@@ -235,8 +235,8 @@ class RoomChatPageState extends State<RoomChatPage> {
       for (ZIMMessage message in messageList) {
         switch (message.type) {
           case ZIMMessageType.text:
-            ReceiceTextMsgCell cell =
-                ReceiceTextMsgCell(message: (message as ZIMTextMessage));
+            ReceiveTextMsgCell cell =
+                ReceiveTextMsgCell(message: (message as ZIMTextMessage));
             widget._historyMessageWidgetList.add(cell);
             break;
           case ZIMMessageType.image:

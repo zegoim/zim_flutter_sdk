@@ -149,8 +149,9 @@ class _MyPageState extends State<PeerChatPage> {
           textMessage,
           widget.conversationID,
           ZIMConversationType.peer,
-          sendConfig, ZIMMessageSendNotification(onMessageAttached: ((message) {
+          sendConfig, ZIMMessageSendNotification(onMessageAttached: ((message) async {
       })));
+
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == textMessage);
       widget._historyZIMMessageList[index] = result.message;
@@ -267,8 +268,8 @@ class _MyPageState extends State<PeerChatPage> {
       for (ZIMMessage message in messageList) {
         switch (message.type) {
           case ZIMMessageType.text:
-            ReceiceTextMsgCell cell =
-                ReceiceTextMsgCell(message: (message as ZIMTextMessage));
+            ReceiveTextMsgCell cell =
+                ReceiveTextMsgCell(message: (message as ZIMTextMessage));
             widget._historyMessageWidgetList.add(cell);
             break;
           case ZIMMessageType.image:
