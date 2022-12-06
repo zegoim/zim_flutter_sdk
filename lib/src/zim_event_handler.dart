@@ -1,5 +1,4 @@
 import '../zego_zim.dart';
-import 'zim_defines.dart';
 
 class ZIMEventHandler {
   /// The event callback when the connection state changes.

@@ -1089,15 +1089,15 @@ class ZIMConverter {
       oZIMConversationMessageReceiptReadSentResult(Map resultMap) {
     return ZIMConversationMessageReceiptReadSentResult(
         conversationID: resultMap['conversationID'],
-        conversationType: resultMap['conversationType']);
+        conversationType: ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!);
   }
 
   static ZIMMessageReceiptsReadSentResult oZIMMessageReceiptReadSentResult(
       Map resultMap) {
     return ZIMMessageReceiptsReadSentResult(
         conversationID: resultMap['conversationID'],
-        conversationType: resultMap['conversationType'],
-        errorMessageIDs: resultMap['errorMessageIDs']);
+        conversationType: ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!,
+        errorMessageIDs: List.from(resultMap['errorMessageIDs']));
   }
 
   static ZIMMessageReceiptsInfoQueriedResult
@@ -1109,13 +1109,13 @@ class ZIMConverter {
       infos.add(oZIMMessageReceiptInfo(info));
     }
     return ZIMMessageReceiptsInfoQueriedResult(
-        errorMessageIDs: resultMap['errorMessageIDs'], infos: infos);
+        errorMessageIDs: List.from(resultMap['errorMessageIDs']), infos: infos);
   }
 
   static ZIMMessageReceiptInfo oZIMMessageReceiptInfo(Map infoMap) {
     ZIMMessageReceiptInfo receiptInfo = ZIMMessageReceiptInfo(
         conversationID: infoMap['conversationID'],
-        conversationType: infoMap['conversationType'],
+        conversationType: ZIMConversationTypeExtension.mapValue[infoMap['conversationType']]!,
         messageID: infoMap['messageID'],
         status: ZIMMessageReceiptStatusExtension.mapValue[infoMap['status']]!,
         readMemberCount: infoMap['readMemberCount'],
@@ -1131,7 +1131,7 @@ class ZIMConverter {
 
     return ZIMGroupMessageReceiptMemberListQueriedResult(
         groupID: resultMap['groupID'],
-        nextFlag: resultMap['nexFlag'],
+        nextFlag: resultMap['nextFlag'],
         userList: userList);
   }
 
