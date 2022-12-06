@@ -42,18 +42,18 @@ PODS:
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
-  - SDWebImage (5.13.4):
-    - SDWebImage/Core (= 5.13.4)
-  - SDWebImage/Core (5.13.4)
+  - SDWebImage (5.14.2):
+    - SDWebImage/Core (= 5.14.2)
+  - SDWebImage/Core (5.14.2)
   - shared_preferences_ios (0.0.1):
     - Flutter
   - SwiftyGif (5.4.3)
   - video_player_avfoundation (0.0.1):
     - Flutter
-  - zego_zim (2.3.4):
+  - zego_zim (2.5.0):
     - Flutter
-    - ZIM (= 2.4.0)
-  - ZIM (2.4.0)
+    - ZIM (= 2.5.0)
+  - ZIM (2.5.0)
 
 DEPENDENCIES:
   - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
@@ -103,12 +103,12 @@ SPEC CHECKSUMS:
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
-  SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
+  SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
-  zego_zim: d860a94877000d15bf53cc50dc13c83e90c49ffa
-  ZIM: dacf435d3a486bb5ef132b6c8848ad3aced4874e
+  zego_zim: 1206cf1431035721f1e2c673342986ee42a01704
+  ZIM: 98ff6cc7bc28b0c54476ab317dfe1e62f6e90738
 
 PODFILE CHECKSUM: e6e8b6a1c3777d55673d4e1443d337cc6c4c6569
 
