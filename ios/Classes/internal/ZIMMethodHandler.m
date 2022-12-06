@@ -611,7 +611,7 @@
     }
     ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
-    ZIMGroupMessageReceiptMemberQueryConfig *queryConfig = [[ZIMGroupMessageReceiptMemberQueryConfig alloc] init];
+    ZIMGroupMessageReceiptMemberQueryConfig *queryConfig = [ZIMPluginConverter oZIMGroupMessageReceiptMemberQueryConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim queryGroupMessageReceiptReadMemberListByMessage:message groupID:groupID config:queryConfig callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
@@ -635,7 +635,7 @@
     }
     ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
-    ZIMGroupMessageReceiptMemberQueryConfig *queryConfig = [[ZIMGroupMessageReceiptMemberQueryConfig alloc] init];
+    ZIMGroupMessageReceiptMemberQueryConfig *queryConfig = [ZIMPluginConverter oZIMGroupMessageReceiptMemberQueryConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim queryGroupMessageReceiptUnreadMemberListByMessage:message groupID:groupID config:queryConfig callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
