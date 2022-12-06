@@ -722,7 +722,13 @@ class ZIMEngine implements ZIM {
         'messageAttachedCallbackID': messageAttachedCallbackID,
         'messageID': messageID
       });
-      return ZIMConverter.oZIMMessageSentResult(resultMap);
+      ZIMMessageSentResult result =
+          ZIMConverter.oZIMMessageSentResult(resultMap);
+      // ios 2.5.0 桥层bug 临时规避方法，后续删除
+      if (config.hasReceipt == true) {
+        result.message.receiptStatus = ZIMMessageReceiptStatus.processing;
+      }
+      return result;
     } on PlatformException catch (e) {
       Map resultMap = e.details;
       ZIMMessageSentResult result =

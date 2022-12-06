@@ -501,7 +501,7 @@ public class ZIMPluginConverter {
     static public HashMap<String,Object>mZIMMessageReceiptInfo(ZIMMessageReceiptInfo info){
         HashMap<String,Object> infoModel = new HashMap<>();
         infoModel.put("conversationID",info.conversationID);
-        infoModel.put("conversationType",info.conversationType);
+        infoModel.put("conversationType",info.conversationType.value());
         infoModel.put("messageID",info.messageID);
         infoModel.put("status",info.status.value());
         infoModel.put("readMemberCount",info.readMemberCount);
