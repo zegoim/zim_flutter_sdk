@@ -1,4 +1,4 @@
-## 2.5.0 + 1
+## 2.5.0+1
 1、Fixed an extended data property naming error.
 2、Fixed some windows platform convert bug.
 3、zego_zim podspec add a configuration used to make bitcode disabled by default.
