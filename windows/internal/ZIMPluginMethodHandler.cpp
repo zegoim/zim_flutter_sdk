@@ -476,7 +476,7 @@ void ZIMPluginMethodHandler::revokeMessage(flutter::EncodableMap& argument,std::
         pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
         config.config = pushConfigPtr.get();
     }
-    auto revokeExtendedData = std::get<std::string>(argument[FTValue("revokeExtendedData")]);
+    auto revokeExtendedData = std::get<std::string>(configMap[FTValue("revokeExtendedData")]);
     config.revokeExtendedData = revokeExtendedData;
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->revokeMessage(messagePtr, config, [=](const std::shared_ptr<ZIMMessage> &message, const ZIMError &errorInfo){
