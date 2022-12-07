@@ -484,6 +484,7 @@ void ZIMPluginMethodHandler::revokeMessage(flutter::EncodableMap& argument,std::
             FTMap retMap;
             auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
             retMap[FTValue("message")] = messageMap;
+            sharedPtrResult->Success(retMap);
         }
         else {
             sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
