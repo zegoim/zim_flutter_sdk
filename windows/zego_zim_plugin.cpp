@@ -173,6 +173,24 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "sendMediaMessage") {
         ZIMPluginMethodHandler::getInstance().sendMediaMessage(argument, std::move(result));
     }
+    else if (method_call.method_name() == "revokeMessage") {
+        ZIMPluginMethodHandler::getInstance().revokeMessage(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "sendConversationMessageReceiptRead") {
+        ZIMPluginMethodHandler::getInstance().sendConversationMessageReceiptRead(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "sendMessageReceiptsRead") {
+        ZIMPluginMethodHandler::getInstance().sendMessageReceiptsRead(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "queryMessageReceiptsInfo") {
+        ZIMPluginMethodHandler::getInstance().queryMessageReceiptsInfo(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "queryGroupMessageReceiptReadMemberList") {
+        ZIMPluginMethodHandler::getInstance().queryGroupMessageReceiptReadMemberList(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "queryGroupMessageReceiptUnreadMemberList") {
+        ZIMPluginMethodHandler::getInstance().queryGroupMessageReceiptUnreadMemberList(argument, std::move(result));
+    }
     else if (method_call.method_name() == "downloadMediaFile") {
         ZIMPluginMethodHandler::getInstance().downloadMediaFile(argument, std::move(result));
     }
