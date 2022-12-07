@@ -840,7 +840,7 @@ class ZIMCallInviteConfig {
   int timeout = 0;
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
-  String payload = "";
+  String extendedData = "";
 
   ZIMPushConfig? pushConfig;
 

@@ -762,8 +762,6 @@ class ZIMEngine implements ZIM {
       });
       return ZIMConverter.oZIMMessageInsertedResult(resultMap);
     } on PlatformException catch (e) {
-      ZIMMessageInsertedResult result =
-          ZIMConverter.oZIMMessageInsertedResult(e.details);
       throw PlatformException(code: e.code, message: e.message);
     } finally {
       ZIMCommonData.messsageMap.remove(messageID);
