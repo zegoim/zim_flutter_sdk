@@ -876,7 +876,7 @@ class ZIMConverter {
   static Map mZIMCallInviteConfig(ZIMCallInviteConfig config) {
     Map configMap = {};
     configMap['timeout'] = config.timeout;
-    configMap['payload'] = config.payload;
+    configMap['extendedData'] = config.extendedData;
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
     return configMap;
   }
