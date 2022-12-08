@@ -1,3 +1,15 @@
+## 2.5.0+1
+1、Fixed an extended data property naming error.
+2、Fixed some windows platform convert bug.
+3、zego_zim podspec add a configuration used to make bitcode disabled by default.
+
+## 2.5.0
+### 1. Feature
+1、Support message return receipt.
+2、Support revoke message.
+3、Now call invite support  offline push(ios、android).
+
+
 ## 2.4.0
 
 ### 1. Feature

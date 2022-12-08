@@ -277,7 +277,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onMessageRevokeReceived':
         if (ZIMEventHandler.onMessageRevokeReceived == null) return;
-        List<ZIMRevokeMessage> messageList = ZIMConverter.oZIMMessageList(map['messageList']) as List<ZIMRevokeMessage>;
+        List<ZIMRevokeMessage> messageList = List<ZIMRevokeMessage>.from(ZIMConverter.oZIMMessageList(map['messageList']));
         ZIMEventHandler.onMessageRevokeReceived!(zim!,messageList);
         break;
       case 'onMessageReceiptChanged':
@@ -288,7 +288,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         }
         ZIMEventHandler.onMessageReceiptChanged!(zim!,infos);
         break;
-      case 'onConversationMessageReceiptChange':
+      case 'onConversationMessageReceiptChanged':
         if (ZIMEventHandler.onConversationMessageReceiptChanged == null) return;
         List<ZIMMessageReceiptInfo> infos = [];
         for(Map infoModel in map['infos']){

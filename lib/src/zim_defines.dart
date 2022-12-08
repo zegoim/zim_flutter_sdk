@@ -486,6 +486,7 @@ class ZIMMediaMessage extends ZIMMessage {
   String fileName = '';
   int fileSize = 0;
   ZIMMediaMessage({required this.fileLocalPath});
+
 }
 
 class ZIMRevokeMessage extends ZIMMessage {
@@ -840,7 +841,7 @@ class ZIMCallInviteConfig {
   int timeout = 0;
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
-  String payload = "";
+  String extendedData = "";
 
   ZIMPushConfig? pushConfig;
 
@@ -929,7 +930,7 @@ class ZIMCallInvitationTimeoutInfo {
 class ZIMMessageReceiptInfo {
   String conversationID;
   ZIMConversationType conversationType;
-  String messageID;
+  int messageID;
   ZIMMessageReceiptStatus status;
   int readMemberCount;
   int unreadMemberCount;
@@ -1599,7 +1600,7 @@ class ZIMConversationMessageReceiptReadSentResult {
 class ZIMMessageReceiptsReadSentResult {
   String conversationID;
   ZIMConversationType conversationType;
-  List<String> errorMessageIDs;
+  List<int> errorMessageIDs;
   ZIMMessageReceiptsReadSentResult(
       {required this.conversationID,
       required this.conversationType,
@@ -1608,7 +1609,7 @@ class ZIMMessageReceiptsReadSentResult {
 
 class ZIMMessageReceiptsInfoQueriedResult {
   List<ZIMMessageReceiptInfo> infos;
-  List<String> errorMessageIDs;
+  List<int> errorMessageIDs;
   ZIMMessageReceiptsInfoQueriedResult(
       {required this.infos, required this.errorMessageIDs});
 }
