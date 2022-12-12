@@ -15,6 +15,9 @@ template struct Rob<ZIM_FriendlyGet_senderUserID, &ZIMMessage::senderUserID>;
 std::string ZIMMessage::* get(ZIM_FriendlyGet_conversationID);
 template struct Rob<ZIM_FriendlyGet_conversationID, &ZIMMessage::conversationID>;
 
+std::string ZIMMessage::* get(ZIM_FriendlyGet_extendedData);
+template struct Rob<ZIM_FriendlyGet_extendedData, &ZIMMessage::extendedData>;
+
 ZIMConversationType ZIMMessage::* get(ZIM_FriendlyGet_conversationType);
 template struct Rob<ZIM_FriendlyGet_conversationType, &ZIMMessage::conversationType>;
 
@@ -269,6 +272,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("orderKey")] = FTValue(message->getOrderKey());
 	messageMap[FTValue("isUserInserted")] = FTValue(message->isUserInserted());
 	messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
+	messageMap[FTValue("extendedData")] = FTValue(message->extendedData);
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
@@ -455,6 +459,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_msgType()) = msgType;
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_senderUserID()) = std::get<std::string>(messageMap[FTValue("senderUserID")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationID()) = std::get<std::string>(messageMap[FTValue("conversationID")]);
+	(*messagePtr.get()).*get(ZIM_FriendlyGet_extendedData()) = std::get<std::string>(messageMap[FTValue("extendedData")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_direction()) = (ZIMMessageDirection)std::get<int32_t>(messageMap[FTValue("direction")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_sentStatus()) = (ZIMMessageSentStatus)std::get<int32_t>(messageMap[FTValue("sentStatus")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationType()) = (ZIMConversationType)std::get<int32_t>(messageMap[FTValue("conversationType")]);
