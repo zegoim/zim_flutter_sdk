@@ -376,6 +376,16 @@ class ZIMConverter {
     return conversationChangeInfoList;
   }
 
+  static List<ZIMMessageSentStatusChangeInfo> oMessageSentStatusChangeInfoList(
+      List messageSentStatusChangeInfoBasicList) {
+    List<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList = [];
+    for (Map messageSentStatusChangeInfoMap in messageSentStatusChangeInfoBasicList) {
+      messageSentStatusChangeInfoList
+          .add(oZIMMessageSentStatusChangeInfo(messageSentStatusChangeInfoMap));
+    }
+    return messageSentStatusChangeInfoList;
+  }
+
   static ZIMConversationDeletedResult oZIMConversationDeletedResult(
       Map resultMap) {
     return ZIMConversationDeletedResult(
@@ -394,6 +404,18 @@ class ZIMConverter {
     Map conversationMap = conversationChangeInfoMap['conversation'];
     conversationChangeInfo.conversation = oZIMConversation(conversationMap);
     return conversationChangeInfo;
+  }
+
+  static ZIMMessageSentStatusChangeInfo oZIMMessageSentStatusChangeInfo(
+      Map messageSentStatusChangeInfoMap) {
+    ZIMMessageSentStatusChangeInfo messageSentStatusChangeInfo =
+    ZIMMessageSentStatusChangeInfo();
+    messageSentStatusChangeInfo.sentStatus = ZIMMessageSentStatusExtension
+        .mapValue[messageSentStatusChangeInfoMap['sentStatus']]!;
+
+    Map messageMap = messageSentStatusChangeInfoMap['message'];
+    messageSentStatusChangeInfo.message = oZIMMessage(messageMap);
+    return messageSentStatusChangeInfo;
   }
 
   static Map mZIMMessageSendConfig(ZIMMessageSendConfig sendConfig) {

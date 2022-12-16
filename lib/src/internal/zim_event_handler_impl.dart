@@ -55,6 +55,15 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMEventHandler.onConversationChanged!(
             zim!, conversationChangeInfoList);
         break;
+      case 'onMessageSentStatusChanged':
+        if (ZIMEventHandler.onMessageSentStatusChanged == null) return;
+        List<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList =
+            ZIMConverter.oMessageSentStatusChangeInfoList(
+                map['messageSentStatusChangeInfoList']);
+
+        ZIMEventHandler.onMessageSentStatusChanged!(
+            zim!, messageSentStatusChangeInfoList);
+        break;
       case 'onConversationTotalUnreadMessageCountUpdated':
         if (ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated ==
             null) return;

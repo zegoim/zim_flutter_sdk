@@ -19,6 +19,7 @@ import im.zego.zim.entity.ZIMGroupMemberInfo;
 import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
+import im.zego.zim.entity.ZIMMessageSentStatusChangeInfo;
 import im.zego.zim.entity.ZIMRevokeMessage;
 import im.zego.zim.entity.ZIMRoomAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
@@ -87,6 +88,22 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("method","onTokenWillExpire");
         resultMap.put("handle", handle);
         resultMap.put("second",second);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onMessageSentStatusChanged(ZIM zim, ArrayList<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onMessageSentStatusChanged");
+        resultMap.put("handle", handle);
+        resultMap.put("messageSentStatusChangeInfoList",ZIMPluginConverter.mZIMMessageSentStatusChangeInfoList(messageSentStatusChangeInfoList));
+
         mysink.success(resultMap);
     }
 

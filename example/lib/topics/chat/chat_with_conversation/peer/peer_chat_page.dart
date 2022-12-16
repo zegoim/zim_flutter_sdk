@@ -259,6 +259,11 @@ class _MyPageState extends State<PeerChatPage> {
   }
 
   registerZIMEvent() {
+    ZIMEventHandler.onMessageSentStatusChanged = (zim,messageSentStatusChangedInfoList){
+      for (var element in messageSentStatusChangedInfoList) {
+        print("sentStatus:${element.sentStatus},message:${(element.message as ZIMTextMessage).message}");
+      }
+    };
     ZIMEventHandler.onReceivePeerMessage = (zim, messageList, fromUserID) {
       if (fromUserID != widget.conversationID) {
         return;
@@ -329,5 +334,6 @@ class _MyPageState extends State<PeerChatPage> {
 
   unregisterZIMEvent() {
     ZIMEventHandler.onReceivePeerMessage = null;
+    ZIMEventHandler.onMessageSentStatusChanged = null;
   }
 }

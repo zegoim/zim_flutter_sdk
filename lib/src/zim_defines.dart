@@ -589,6 +589,12 @@ class ZIMConversationChangeInfo {
   ZIMConversationChangeInfo();
 }
 
+class ZIMMessageSentStatusChangeInfo {
+  ZIMMessageSentStatus sentStatus = ZIMMessageSentStatus.sending;
+  ZIMMessage? message;
+  ZIMMessageSentStatusChangeInfo();
+}
+
 class ZIMRoomInfo {
   String roomID = '';
   String roomName = '';

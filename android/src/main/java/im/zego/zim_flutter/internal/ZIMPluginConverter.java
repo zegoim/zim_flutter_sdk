@@ -43,6 +43,7 @@ import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageRevokeConfig;
 import im.zego.zim.entity.ZIMMessageSendConfig;
+import im.zego.zim.entity.ZIMMessageSentStatusChangeInfo;
 import im.zego.zim.entity.ZIMPushConfig;
 import im.zego.zim.entity.ZIMRevokeMessage;
 import im.zego.zim.entity.ZIMRoomAdvancedConfig;
@@ -100,6 +101,15 @@ public class ZIMPluginConverter {
         return conversationChangeInfoBasicList;
     }
 
+    static public ArrayList<HashMap<String,Object>> mZIMMessageSentStatusChangeInfoList(ArrayList<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList) {
+        ArrayList<HashMap<String,Object>> messageSentStatusChangeInfoBasicList = new ArrayList<>();
+        for (ZIMMessageSentStatusChangeInfo messageSentStatusChangeInfo:
+                messageSentStatusChangeInfoList) {
+            messageSentStatusChangeInfoBasicList.add(mZIMMessageSentStatusChangInfo(messageSentStatusChangeInfo));
+        }
+        return messageSentStatusChangeInfoBasicList;
+    }
+
     static public HashMap<String,Object> mZIMConversationChangeInfo(ZIMConversationChangeInfo conversationChangeInfo){
         HashMap<String,Object> conversationChangeInfoMap = new HashMap<>();
         conversationChangeInfoMap.put("event",conversationChangeInfo.event.value());
@@ -107,6 +117,14 @@ public class ZIMPluginConverter {
 
         conversationChangeInfoMap.put("conversation", mZIMConversation(conversationChangeInfo.conversation));
         return conversationChangeInfoMap;
+    }
+
+    static public HashMap<String,Object> mZIMMessageSentStatusChangInfo(ZIMMessageSentStatusChangeInfo messageSentStatusChangeInfo){
+        HashMap<String,Object> messageSentStatusChangeInfoMap = new HashMap<>();
+        messageSentStatusChangeInfoMap.put("sentStatus",messageSentStatusChangeInfo.sentStatus.value());
+
+        messageSentStatusChangeInfoMap.put("message", mZIMMessage(messageSentStatusChangeInfo.message));
+        return messageSentStatusChangeInfoMap;
     }
 
     static public HashMap<String,Object> mZIMConversation(ZIMConversation conversation){
