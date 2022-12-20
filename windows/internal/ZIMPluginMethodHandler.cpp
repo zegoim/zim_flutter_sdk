@@ -289,7 +289,7 @@ void ZIMPluginMethodHandler::queryUsersInfo(flutter::EncodableMap& argument,
             FTArray errorUserInfoArray;
             for (auto& errorUserInfo : errorUserList) {
                 auto errorUserInfoMap = ZIMPluginConverter::cnvZIMErrorUserInfoToMap(errorUserInfo);
-                errorUserInfoArray.emplace_back(errorUserInfoArray);
+                errorUserInfoArray.emplace_back(errorUserInfoMap);
             }
 
             FTMap retMap;
