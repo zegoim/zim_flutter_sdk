@@ -38,9 +38,9 @@ struct ZIM_FriendlyGet_conversationID {
     typedef std::string ZIMMessage::* type;
 };
 
-// struct ZIM_FriendlyGet_extendedData {
-//     typedef std::string ZIMMessage::* type;
-// };
+ struct ZIM_FriendlyGet_extendedData {
+     typedef std::string ZIMMessage::* type;
+ };
 
 struct ZIM_FriendlyGet_conversationType {
     typedef ZIMConversationType ZIMMessage::* type;
