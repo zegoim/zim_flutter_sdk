@@ -38,9 +38,9 @@ struct ZIM_FriendlyGet_conversationID {
     typedef std::string ZIMMessage::* type;
 };
 
-struct ZIM_FriendlyGet_extendedData {
-    typedef std::string ZIMMessage::* type;
-};
+// struct ZIM_FriendlyGet_extendedData {
+//     typedef std::string ZIMMessage::* type;
+// };
 
 struct ZIM_FriendlyGet_conversationType {
     typedef ZIMConversationType ZIMMessage::* type;
@@ -174,6 +174,7 @@ public:
     static FTArray cnvZIMConversationListToArray(const std::vector<std::shared_ptr<ZIMConversation>> &converationList);
     static FTMap cnvZIMConversationToMap(const std::shared_ptr<ZIMConversation>& conversation);
     static FTArray cnvZIMConversationChangeInfoListToArray(const std::vector<ZIMConversationChangeInfo> &convInfoList);
+    static FTArray cnvZIMMessageSentStatusChangeInfoListToArray(const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList);
     static flutter::EncodableValue cnvZIMMessageObjectToMap(ZIMMessage* message);
     static FTArray cnvZIMMessageListToArray(const std::vector<std::shared_ptr<ZIMMessage>>& messageList);
     static FTMap cnvZIMMessageReceiptInfoToMap(const ZIMMessageReceiptInfo& messageReceiptInfo);

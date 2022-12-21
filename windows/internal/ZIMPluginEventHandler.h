@@ -58,6 +58,10 @@ protected:
         ZIM* zim,
         const std::vector<ZIMConversationChangeInfo>& conversationChangeInfoList);
 
+    void onMessageSentStatusChanged(
+        ZIM* zim,
+        const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList);
+
     void onConversationTotalUnreadMessageCountUpdated(ZIM* zim,
             unsigned int totalUnreadMessageCount);
 
