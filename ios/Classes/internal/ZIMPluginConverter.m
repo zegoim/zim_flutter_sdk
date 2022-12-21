@@ -127,6 +127,18 @@
     return basicChangeInfoList;
 }
 
++(nullable NSArray *)mMessageSentStatusChangeInfoList:(nullable NSArray<ZIMMessageSentStatusChangeInfo *> *)messageSentStatusChangeInfoList{
+    if(messageSentStatusChangeInfoList == nil || messageSentStatusChangeInfoList == NULL || [messageSentStatusChangeInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicChangeInfoList = [[NSMutableArray alloc] init];
+    for (ZIMMessageSentStatusChangeInfo *changeInfo in messageSentStatusChangeInfoList) {
+        NSDictionary *changeInfoDic = [ZIMPluginConverter mMessageSentStatusChangeInfo:changeInfo];
+        [basicChangeInfoList safeAddObject:changeInfoDic];
+    }
+    return basicChangeInfoList;
+}
+
 +(nullable NSDictionary *)mConversationChangeInfo:(nullable ZIMConversationChangeInfo *)changeInfo{
     if(changeInfo == nil || changeInfo == NULL || [changeInfo isEqual:[NSNull null]]){
         return nil;
@@ -135,6 +147,17 @@
     [changeInfoDic safeSetObject:[NSNumber numberWithInt:(int)changeInfo.event] forKey:@"event"];
     NSDictionary *conversationDic = [ZIMPluginConverter mZIMConversation:changeInfo.conversation];
     [changeInfoDic safeSetObject:conversationDic forKey:@"conversation"];
+    return changeInfoDic;
+}
+
++(nullable NSDictionary *)mMessageSentStatusChangeInfo:(nullable ZIMMessageSentStatusChangeInfo *)changeInfo{
+    if(changeInfo == nil || changeInfo == NULL || [changeInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *changeInfoDic = [[NSMutableDictionary alloc] init];
+    [changeInfoDic safeSetObject:[NSNumber numberWithInt:(int)changeInfo.sentStatus] forKey:@"sentStatus"];
+    NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:changeInfo.message];
+    [changeInfoDic safeSetObject:messageDic forKey:@"message"];
     return changeInfoDic;
 }
 
