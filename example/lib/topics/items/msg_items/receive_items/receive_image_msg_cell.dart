@@ -56,7 +56,7 @@ class ReceiveImageMsgCellState extends State<ReceiveImageMsgCell> {
     // TODO: implement initState
     checkIsdownload();
     super.initState();
-    
+
   }
 
   @override

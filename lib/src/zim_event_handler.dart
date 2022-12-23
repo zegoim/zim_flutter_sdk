@@ -1,5 +1,4 @@
 import '../zego_zim.dart';
-import 'zim_defines.dart';
 
 class ZIMEventHandler {
   /// The event callback when the connection state changes.
@@ -8,9 +7,8 @@ class ZIMEventHandler {
   /// [state] The current connection state after changed.
   /// [event] The event that caused the connection state to change.
   /// [extendedData] Extra information when the event occurs, a standard JSON format data.
-  static void Function(ZIM zim,
-          ZIMConnectionState state, ZIMConnectionEvent event, Map extendedData)?
-      onConnectionStateChanged;
+  static void Function(ZIM zim, ZIMConnectionState state,
+      ZIMConnectionEvent event, Map extendedData)? onConnectionStateChanged;
 
 /* Main */
 
@@ -35,8 +33,8 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [conversationChangeInfoList] conversation list
-  static void Function(ZIM zim,
-          List<ZIMConversationChangeInfo> conversationChangeInfoList)?
+  static void Function(
+          ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList)?
       onConversationChanged;
 
   /// The callback for conversation total unread message count changed.
@@ -44,7 +42,7 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [totalUnreadMessageCount] total unread message count
-  static void Function(ZIM zim,int totalUnreadMessageCount)?
+  static void Function(ZIM zim, int totalUnreadMessageCount)?
       onConversationTotalUnreadMessageCountUpdated;
 
 /* Message */
@@ -56,7 +54,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromUserID] The user ID of the message sender.
-  static void Function(ZIM zim, List<ZIMMessage> messageList, String fromUserID)?
+  static void Function(
+          ZIM zim, List<ZIMMessage> messageList, String fromUserID)?
       onReceivePeerMessage;
 
   /// The callback for receiving room message.
@@ -66,7 +65,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromRoomID] ID of the room where the message was received.
-  static void Function(ZIM zim, List<ZIMMessage> messageList, String fromRoomID)?
+  static void Function(
+          ZIM zim, List<ZIMMessage> messageList, String fromRoomID)?
       onReceiveRoomMessage;
 
   /// The callback for receiving group message.
@@ -76,7 +76,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromGroupID] ID of the group where the message was received.
-  static void Function(ZIM zim, List<ZIMMessage> messageList, String fromGroupID)?
+  static void Function(
+          ZIM zim, List<ZIMMessage> messageList, String fromGroupID)?
       onReceiveGroupMessage;
 
 /* Room */
@@ -89,7 +90,7 @@ class ZIMEventHandler {
   ///
   /// Use cases:When other members in the room join, this callback will be called.
   ///
-  /// When to call:  After creating a ZIM instance through [create], and the user is in a room joined by other members, you can call this interface.
+  /// When to call:  After creating a ZIM instance through [ZIM.create], and the user is in a room joined by other members, you can call this interface.
   ///
   /// Caution: If the user is not currently in this room, this callback will not be called.
   ///
@@ -109,7 +110,7 @@ class ZIMEventHandler {
   ///
   /// Use cases: When other members in the room leave the room, this callback will be called.
   ///
-  /// When to call:  After creating a ZIM instance through [create], and the user is in the same room of other members, you can call this interface.
+  /// When to call:  After creating a ZIM instance through [ZIM.create], and the user is in the same room of other members, you can call this interface.
   ///
   /// Caution:If the user is not currently in this room, this callback will not be called.
   ///
@@ -127,16 +128,16 @@ class ZIMEventHandler {
   ///
   /// Description:event callback when the room connection status changes.
   ///
-  /// When to call::After creating a ZIM instance through [create], you can call this interface.
+  /// When to call::After creating a ZIM instance through [ZIM.create], you can call this interface.
   ///
-  /// Related APIs:through [tokenWillExpire], the callback will be received when the token is about to expire.
+  /// Related APIs:through [onTokenWillExpire], the callback will be received when the token is about to expire.
   ///
   /// [zim] ZIM instance.
   /// [state] The current room connection state after changed.
   /// [event] The event that caused the room connection state to change.
-  /// [xtendedData] Extra information when the event occurs, a standard JSON string.
-  static void Function(ZIM zim, ZIMRoomState state, ZIMRoomEvent event, Map extendedData,
-      String roomID)? onRoomStateChanged;
+  /// [extendedData] Extra information when the event occurs, a standard JSON string.
+  static void Function(ZIM zim, ZIMRoomState state, ZIMRoomEvent event,
+      Map extendedData, String roomID)? onRoomStateChanged;
 
   /// event callback when the room attributes changes.
   ///
@@ -147,7 +148,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [updateInfo] The info of the room attributes changed.
   /// [roomID] The ID of the room where this event occurred.
-  static void Function(ZIM zim, ZIMRoomAttributesUpdateInfo updateInfo, String roomID)?
+  static void Function(
+          ZIM zim, ZIMRoomAttributesUpdateInfo updateInfo, String roomID)?
       onRoomAttributesUpdated;
 
   /// event callback when the room attributes changes.
@@ -159,10 +161,23 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [updateInfo] The infos of the room attributes changed.
   /// [roomID] The ID of the room where this event occurred.
-  static void Function(ZIM zim,
-          List<ZIMRoomAttributesUpdateInfo> updateInfo, String roomID)?
+  static void Function(
+          ZIM zim, List<ZIMRoomAttributesUpdateInfo> updateInfo, String roomID)?
       onRoomAttributesBatchUpdated;
 
+  /// event callback when room user property update.
+  ///
+  /// Available since:  2.4.0.
+  ///
+  /// Description: This callback will be received when a user's property in the room is changed.
+  ///
+  /// @param zim ZIM instance.
+  /// [infos]  The infos of the room member attributes changed.
+  /// [operatedInfo] Room operation information.
+  /// [roomID] Room ID.
+  static void Function(
+    ZIM zim,List<ZIMRoomMemberAttributesUpdateInfo> infos,ZIMRoomOperatedInfo operatedInfo, String roomID
+  )? onRoomMemberAttributesUpdated;
 /* Group */
 
   /// Description: allback notification of group status change.
@@ -171,14 +186,15 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: A notification is triggered when a group is created, joined, left, or dismissed.
   ///
-  /// Related APIs: [createGroup] : creates a group. [joinGroup] : joins a group. [leaveGroup], leave the group. [dismissGroup]; dismiss the group.
+  /// Related APIs: [ZIM.createGroup] : creates a group. [ZIM.joinGroup] : joins a group. [ZIM.leaveGroup], leave the group. [ZIM.dismissGroup]; dismiss the group.
   ///
   /// [zim] ZIM instance.
   /// [state] The status of the group after the change.
   /// [event] Group related events.
   /// [operatedInfo] Group information that has been operated.
   /// [groupInfo]  The groupInfowhere the group state change occurred.
-  static void Function(ZIM zim,
+  static void Function(
+      ZIM zim,
       ZIMGroupState state,
       ZIMGroupEvent event,
       ZIMGroupOperatedInfo operatedInfo,
@@ -190,15 +206,14 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: The group name is changed. Procedure
   ///
-  /// Related APIs: [updateGroupName] : updates the group name.
+  /// Related APIs: [ZIM.updateGroupName] : updates the group name.
   ///
   /// [zim] ZIM instance.
   /// [groupName] The updated group name.
   /// [operatedInfo] Operation information after the group name is updated.
   /// [groupID] The groupID where the group name update occurred.
-  static void Function(ZIM zim,
-          String groupName, ZIMGroupOperatedInfo operatedInfo, String groupID)?
-      onGroupNameUpdated;
+  static void Function(ZIM zim, String groupName,
+      ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupNameUpdated;
 
   /// Description: Group avatar url change notification callback.
   ///
@@ -206,13 +221,16 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: The group avatar url is changed. Procedure
   ///
-  /// Related APIs: [updateGroupAvatarUrl] : updates the group avatar url.
+  /// Related APIs: [ZIM.updateGroupAvatarUrl] : updates the group avatar url.
   ///
   /// [zim] ZIM instance.
   /// [groupName] The updated group avatar url.
   /// [operatedInfo] Operation information after the group avatar url is updated.
-  /// [groupID] The groupID where the group avatar url update occurred.  
-  static void Function(ZIM zim, String groupAvatarUrl, ZIMGroupOperatedInfo operatedInfo,
+  /// [groupID] The groupID where the group avatar url update occurred.
+  static void Function(
+      ZIM zim,
+      String groupAvatarUrl,
+      ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupAvatarUrlUpdated;
 
   /// Description: Group bulletin Change notification callback.
@@ -221,14 +239,14 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: The group bulletin is changed. Procedure
   ///
-  /// Related APIs: [updateGroupNotice], which updates the group notice.
+  /// Related APIs: [ZIM.updateGroupNotice], which updates the group notice.
   ///
   /// [zim] ZIM instance.
   /// [groupNotice] Updated group announcement.
   /// [operatedInfo] The group announces the updated operation information.
   /// [groupID] The groupID where the group announcement update occurred.
-  static void Function(ZIM zim, String groupNotice, ZIMGroupOperatedInfo operatedInfo,
-      String groupID)? onGroupNoticeUpdated;
+  static void Function(ZIM zim, String groupNotice,
+      ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupNoticeUpdated;
 
   /// Description: Group attribute change notification callback.
   ///
@@ -236,13 +254,14 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: Triggered when group properties are set, updated, or deleted.
   ///
-  /// Impacts on other APIs:  [setGroupAttributes] updates group attributes. [deleteGroupAttributes], delete the group attribute.
+  /// Impacts on other APIs:  [ZIM.setGroupAttributes] updates group attributes. [ZIM.deleteGroupAttributes], delete the group attribute.
   ///
   /// [zim] ZIM instance.
   /// [operatedInfo] Operation information after the group attribute is updated.
   /// [updateInfo] Information after group attribute update.
   /// [groupID] The groupID for sending group attribute updates.
-  static void Function(ZIM zim,
+  static void Function(
+      ZIM zim,
       List<ZIMGroupAttributesUpdateInfo> updateInfo,
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupAttributesUpdated;
@@ -253,7 +272,7 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: Notification is triggered when a group is created, joined, left, or dismissed, or a user is invited to join or kicked out of the group.
   ///
-  /// Related APIs: [createGroup] : creates a group. [joinGroup] : joins a group. [leaveGroup], leave the group. [dismissGroup]; dismiss the group. [intiveUsersIntoGroup], which invites users to join the group. [kickoutGroupMember] kicks the user out of the group.
+  /// Related APIs: [ZIM.createGroup] : creates a group. [ZIM.joinGroup] : joins a group. [ZIM.leaveGroup], leave the group. [ZIM.dismissGroup]; dismiss the group. [ZIM.inviteUsersIntoGroup], which invites users to join the group. [ZIM.kickGroupMembers] kicks the user out of the group.
   ///
   /// [zim] ZIM instance.
   /// [state] Updated membership status.
@@ -261,7 +280,8 @@ class ZIMEventHandler {
   /// [userList] Updated member information.
   /// [operatedInfo] Updated operational information.
   /// [groupID] The groupID where the member state change occurred.
-  static void Function(ZIM zim,
+  static void Function(
+      ZIM zim,
       ZIMGroupMemberState state,
       ZIMGroupMemberEvent event,
       List<ZIMGroupMemberInfo> userList,
@@ -274,13 +294,14 @@ class ZIMEventHandler {
   ///
   /// When to call /Trigger: The result is displayed after the group member information is changed.
   ///
-  /// Related APIs: [setGroupMemberNickname] : updates the nickname of a group member. [setGroupMemberRole] : updates the group member role. [transferGroupOwner], group master transfer.
+  /// Related APIs: [ZIM.setGroupMemberNickname] : updates the nickname of a group member. [ZIM.setGroupMemberRole] : updates the group member role. [ZIM.transferGroupOwner], group master transfer.
   ///
   /// [zim] ZIM instance.
   /// [operatedInfo] Updated member information.
   /// [userInfo] userInfo.
   /// [groupID] groupID.
-  static void Function(ZIM zim,
+  static void Function(
+      ZIM zim,
       List<ZIMGroupMemberInfo> userInfo,
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupMemberInfoUpdated;
@@ -293,16 +314,17 @@ class ZIMEventHandler {
   ///
   /// Business scenario: The invitee will call this callback after the inviter sends a call invitation.
   ///
-  /// When to call: After creating a ZIM instance through [create].
+  /// When to call: After creating a ZIM instance through [ZIM.create].
   ///
   /// Note: If the user is not in the invitation list or not online, this callback will not be called.
   ///
-  /// Related interface: [callInvite].
+  /// Related interface: [ZIM.callInvite].
   ///
   /// [zim] ZIM instance.
   /// [info] Information about received call invitations.
   /// [callID] Received CallID.
-  static void Function(ZIM zim, ZIMCallInvitationReceivedInfo info, String callID)?
+  static void Function(
+          ZIM zim, ZIMCallInvitationReceivedInfo info, String callID)?
       onCallInvitationReceived;
 
   /// Supported versions: 2.0.0 and above.
@@ -311,16 +333,17 @@ class ZIMEventHandler {
   ///
   /// Business scenario: The invitee will call this callback after the inviter cancels the call invitation.
   ///
-  /// When to call: After creating a ZIM instance through [create].
+  /// When to call: After creating a ZIM instance through [ZIM.create].
   ///
   /// Note: If the user is not in the cancel invitation list or is offline, this callback will not be called.
   ///
-  /// Related interface: [callCancel].
+  /// Related interface: [ZIM.callCancel].
   ///
   /// [zim] ZIM instance.
   /// [info]  Information about canceled call invitations.
   /// [callID] Cancelled callID.
-  static void Function(ZIM zim, ZIMCallInvitationCancelledInfo info, String callID)?
+  static void Function(
+          ZIM zim, ZIMCallInvitationCancelledInfo info, String callID)?
       onCallInvitationCancelled;
 
   /// Supported versions: 2.0.0 and above.
@@ -329,16 +352,17 @@ class ZIMEventHandler {
   ///
   /// Business scenario: The inviter will receive this callback after the inviter accepts the call invitation.
   ///
-  /// When to call: After creating a ZIM instance through [create].
+  /// When to call: After creating a ZIM instance through [ZIM.create].
   ///
   /// Note: This callback will not be called if the user is not online.
   ///
-  /// Related interface: [callAccept].
-  /// 
+  /// Related interface: [ZIM.callAccept].
+  ///
   /// [zim] ZIM instance.
   /// [info]  Information about the call invitations.
   /// [callID]  callID.
-  static void Function(ZIM zim, ZIMCallInvitationAcceptedInfo info, String callID)?
+  static void Function(
+          ZIM zim, ZIMCallInvitationAcceptedInfo info, String callID)?
       onCallInvitationAccepted;
 
   /// Available since: 2.0.0 and above.
@@ -347,17 +371,18 @@ class ZIMEventHandler {
   ///
   /// Use cases: The inviter will receive this callback after the inviter declines the call invitation.
   ///
-  /// Default value: After creating a ZIM instance through [create] and logging in.
+  /// Default value: After creating a ZIM instance through [ZIM.create] and logging in.
   ///
-  /// When to call /Trigger: After creating a ZIM instance through [create] and logging in.
+  /// When to call /Trigger: After creating a ZIM instance through [ZIM.create] and logging in.
   ///
   /// Restrictions: If the user is not the inviter of the call invitation or is not online, the callback will not be received.
   ///
-  /// Related APIs:[callReject].
+  /// Related APIs:[ZIM.callReject].
   /// [zim] ZIM instance.
   /// [info]  Information about the call invitations.
   /// [callID]  callID.
-  static void Function(ZIM zim, ZIMCallInvitationRejectedInfo info, String callID)?
+  static void Function(
+          ZIM zim, ZIMCallInvitationRejectedInfo info, String callID)?
       onCallInvitationRejected;
 
   /// Available since: 2.0.0 and above.
@@ -366,14 +391,14 @@ class ZIMEventHandler {
   ///
   /// Use cases: The inviter will receive this callback after the inviter declines the call invitation.
   ///
-  /// Default value: After creating a ZIM instance through [create] and logging in.
+  /// Default value: After creating a ZIM instance through [ZIM.create] and logging in.
   ///
-  /// When to call /Trigger: After creating a ZIM instance through [create] and logging in.
+  /// When to call /Trigger: After creating a ZIM instance through [ZIM.create] and logging in.
   ///
   /// Restrictions: If the user is not the inviter of the call invitation or is not online, the callback will not be received.
   ///
-  /// Related APIs:[callReject].
-  /// 
+  /// Related APIs:[ZIM.callReject].
+  ///
   /// [zim] ZIM instance.
   /// [callID]  callID.
   static void Function(ZIM zim, String callID)? onCallInvitationTimeout;
@@ -384,15 +409,46 @@ class ZIMEventHandler {
   ///
   /// Business scenario: The invitee does not respond before the timeout period, and the inviter will receive this callback.
   ///
-  /// When to call: After creating a ZIM instance through [create].
+  /// When to call: After creating a ZIM instance through [ZIM.create].
   ///
   /// Note: If the user is not the inviter who initiated this call invitation or is not online, the callback will not be received.
   ///
-  /// Related interfaces: [callInvite], [callAccept], [callReject].
+  /// Related interfaces: [ZIM.callInvite], [ZIM.callAccept], [ZIM.callReject].
   ///
   /// [zim] ZIM instance.
   /// [invitees]  Timeout invitee ID.
   /// [callID] callID.
   static void Function(ZIM zim, List<String> invitees, String callID)?
       onCallInviteesAnsweredTimeout;
+
+  /// Available since: 2.5.0 and above.
+
+  /// Description: When the message receiver confirms that the message has been read, the message sender knows through this callback.
+
+  /// Trigger: Trigger a notification when the message receiver has read the message.
+
+  /// Related APIs: triggered when the peer calls via [ZIM.sendMessageReceiptsRead].
+  static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
+      onMessageReceiptChanged;
+
+  /// Available since: 2.5.0 and above.
+
+  /// Description: When the message receiver has read the session, the message sender knows through this callback.
+
+  /// Trigger: Trigger a notification when the message receiver has read the session.
+
+  /// Related APIs: triggered when the peer calls via [ZIM.sendConversationMessageReceiptRead].
+  static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
+      onConversationMessageReceiptChanged;
+
+
+  /// Available since: 2.5.0  or above.
+
+  /// Description: This callback is received when some one else sends a message and then revoke.
+
+  /// When to call: This callback occurs when a ZIM instance is created with [ZIM.create] and the other user revoke a message.
+
+  /// Related callbacks:You can revoke message to other members via [ZIM.revokeMessage].
+  static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
+      onMessageRevokeReceived;
 }

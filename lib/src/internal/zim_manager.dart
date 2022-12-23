@@ -8,7 +8,7 @@ import 'package:zego_zim/zego_zim.dart';
 
 class ZIMManager {
   static const MethodChannel channel = MethodChannel('zego_zim_plugin');
-  static StreamSubscription<dynamic>? streamSubscription;
+//  static StreamSubscription<dynamic>? streamSubscription;
 
   static int handleSequence = 0;
 
@@ -26,7 +26,7 @@ class ZIMManager {
 
   static setLogConfig(ZIMLogConfig config) {
     channel.invokeMethod(
-        'setLogConfig', {'logPath': config.logPath, 'logSize': config.logSize});
+        'setLogConfig', {'logPath': config.logPath, 'logSize': config.logSize, 'logLevel': config.logLevel});
   }
 
   static setCacheConfig(ZIMCacheConfig config) {

@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class _WidgetState extends State<MsgNormalBottomBox> {
   String sendTextMessageValue = '';
   final TextEditingController _controller = TextEditingController();
 
-  _onEmojiSelected(Emoji emoji) {
+  _onEmojiSelected(dynamic emoji) {
     _controller
       ..text += emoji.emoji
       ..selection = TextSelection.fromPosition(
@@ -172,7 +172,8 @@ class _WidgetState extends State<MsgNormalBottomBox> {
                 height: 250,
                 width: double.infinity,
                 child: EmojiPicker(
-                    onEmojiSelected: (Category category, Emoji emoji) {
+
+                    onEmojiSelected: (Category? category, Emoji emoji) {
                       _onEmojiSelected(emoji);
                     },
                     onBackspacePressed: _onBackspacePressed,
@@ -188,7 +189,6 @@ class _WidgetState extends State<MsgNormalBottomBox> {
                         indicatorColor: Colors.blue,
                         iconColor: Colors.grey,
                         iconColorSelected: Colors.blue,
-                        progressIndicatorColor: Colors.blue,
                         backspaceColor: Colors.blue,
                         skinToneDialogBgColor: Colors.white,
                         skinToneIndicatorColor: Colors.grey,

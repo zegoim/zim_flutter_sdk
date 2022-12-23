@@ -145,9 +145,13 @@ class _MyPageState extends State<PeerChatPage> {
       widget._historyMessageWidgetList.add(cell);
     });
     try {
-      ZIMMessageSentResult result = await ZIM
-          .getInstance()
-          !.sendPeerMessage(textMessage, widget.conversationID, sendConfig);
+      ZIMMessageSentResult result = await ZIM.getInstance()!.sendMessage(
+          textMessage,
+          widget.conversationID,
+          ZIMConversationType.peer,
+          sendConfig, ZIMMessageSendNotification(onMessageAttached: ((message) async {
+      })));
+
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == textMessage);
       widget._historyZIMMessageList[index] = result.message;
@@ -186,14 +190,19 @@ class _MyPageState extends State<PeerChatPage> {
     });
     try {
       log(mediaMessage.fileLocalPath);
+      ZIMMediaMessageSendNotification notification =
+          ZIMMediaMessageSendNotification(
+        onMediaUploadingProgress: (message, currentFileSize, totalFileSize) {
+          uploadingprogressModel.uploadingprogress!(
+              message, currentFileSize, totalFileSize);
+        },
+      );
       ZIMMessageSentResult result = await ZIM.getInstance()!.sendMediaMessage(
           mediaMessage,
           widget.conversationID,
           ZIMConversationType.peer,
-          ZIMMessageSendConfig(), (message, currentFileSize, totalFileSize) {
-        uploadingprogressModel.uploadingprogress!(
-            message, currentFileSize, totalFileSize);
-      });
+          ZIMMessageSendConfig(),
+          notification);
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == mediaMessage);
       Widget resultCell = MsgConverter.sendMediaMessageCellFactory(
@@ -229,8 +238,8 @@ class _MyPageState extends State<PeerChatPage> {
     }
     try {
       ZIMMessageQueriedResult result = await ZIM
-          .getInstance()
-          !.queryHistoryMessage(
+          .getInstance()!
+          .queryHistoryMessage(
               widget.conversationID, ZIMConversationType.peer, queryConfig);
       if (result.messageList.length < 20) {
         widget.queryHistoryMsgComplete = true;
@@ -249,7 +258,6 @@ class _MyPageState extends State<PeerChatPage> {
     }
   }
 
-
   registerZIMEvent() {
     ZIMEventHandler.onReceivePeerMessage = (zim, messageList, fromUserID) {
       if (fromUserID != widget.conversationID) {
@@ -260,8 +268,8 @@ class _MyPageState extends State<PeerChatPage> {
       for (ZIMMessage message in messageList) {
         switch (message.type) {
           case ZIMMessageType.text:
-            ReceiceTextMsgCell cell =
-                ReceiceTextMsgCell(message: (message as ZIMTextMessage));
+            ReceiveTextMsgCell cell =
+                ReceiveTextMsgCell(message: (message as ZIMTextMessage));
             widget._historyMessageWidgetList.add(cell);
             break;
           case ZIMMessageType.image:
@@ -271,8 +279,8 @@ class _MyPageState extends State<PeerChatPage> {
 
               ReceiveImageMsgCell resultCell;
               ZIM
-                  .getInstance()
-                  !.downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                  .getInstance()!
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveImageMsgCell(
@@ -295,8 +303,8 @@ class _MyPageState extends State<PeerChatPage> {
             if ((message as ZIMVideoMessage).fileLocalPath == "") {
               ReceiveVideoMsgCell resultCell;
               ZIM
-                  .getInstance()
-                  !.downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                  .getInstance()!
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveVideoMsgCell(

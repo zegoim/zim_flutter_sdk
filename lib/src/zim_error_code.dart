@@ -37,6 +37,9 @@ class ZIMErrorCode {
   static const int messageModuleIsNotInvitee = 6000274;
   static const int messageModuleCallAlreadyExists = 6000275;
   static const int messageModuleCallDoseNotExist = 6000276;
+  static const int receiptReadError = 6000277;
+  static const int messageExceedsRevokeTime = 6000278;
+  static const int messageHasBeenRevoked = 6000279;
 
   static const int roomModuleCommonError = 6000301;
   static const int roomModuleServerError = 6000302;
@@ -59,7 +62,13 @@ class ZIMErrorCode {
       6000336;
   static const int roomModuleTheTotalLengthOfRoomAttributesValueExceedsLimit =
       6000337;
-
+  static const int roomModuleRoomMemberAttributesCommonError = 6000350;
+  static const int roomModuleRoomMemberAttributesKVExceedsLimit = 6000351;
+  static const int roomModuleRoomMemberAttributesKeyExceedsLimit = 6000352;
+  static const int roomModuleRoomMemberAttributesValueExceedsLimit = 6000353;
+  static const int
+      roomModuleRoomMemberAttributesSetRoomUserAttributesCountExceedLimit =
+      6000357;
   static const int zpnsModulePushIDInvalid = 6000401;
 
   static const int groupModuleCommonError = 6000501;

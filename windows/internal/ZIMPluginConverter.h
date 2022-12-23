@@ -62,6 +62,10 @@ struct ZIM_FriendlyGet_orderKey {
     typedef long long ZIMMessage::* type;
 };
 
+struct ZIM_FriendlyGet_isUserInserted {
+    typedef bool ZIMMessage::* type;
+};
+
 struct ZIM_FriendlyGet_fileUID {
     typedef std::string ZIMMediaMessage::* type;
 };
@@ -118,6 +122,37 @@ struct ZIM_FriendlyGet_videoFirstFrameHeight {
     typedef unsigned int ZIMVideoMessage::* type;
 };
 
+struct ZIM_FriendlyGet_revokeType {
+    typedef ZIMRevokeType ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_revokeTimestamp {
+    typedef unsigned long long ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_originalMessageType {
+    typedef ZIMMessageType ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_revokeStatus {
+    typedef ZIMMessageRevokeStatus ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_operatedUserID {
+    typedef std::string ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_originalTextMessageContent {
+    typedef std::string ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_revokeExtendedData {
+    typedef std::string ZIMRevokeMessage::* type;
+};
+
+struct ZIM_FriendlyGet_receiptStatus {
+    typedef ZIMMessageReceiptStatus ZIMMessage::* type;
+};
 
 class ZIMPluginConverter
 {
@@ -137,11 +172,18 @@ public:
     static FTArray cnvZIMConversationChangeInfoListToArray(const std::vector<ZIMConversationChangeInfo> &convInfoList);
     static flutter::EncodableValue cnvZIMMessageObjectToMap(ZIMMessage* message);
     static FTArray cnvZIMMessageListToArray(const std::vector<std::shared_ptr<ZIMMessage>>& messageList);
+    static FTMap cnvZIMMessageReceiptInfoToMap(const ZIMMessageReceiptInfo& messageReceiptInfo);
+    static FTArray cnvZIMMessageReceiptInfoListToArray(const std::vector<ZIMMessageReceiptInfo>& infos);
     static FTMap cnvZIMRoomInfoToMap(const ZIMRoomInfo& roomInfo);
     static FTMap cnvZIMRoomFullInfoToMap(const ZIMRoomFullInfo& roomInfo);
     static FTMap cnvZIMRoomAttributesUpdateInfoToMap(const ZIMRoomAttributesUpdateInfo& updateInfo);
     static FTArray cnvZIMRoomAttributesUpdateInfoListToArray(const std::vector<ZIMRoomAttributesUpdateInfo>& updateInfoList);
+    static FTMap cnvZIMRoomMemberAttributesInfoToMap(const ZIMRoomMemberAttributesInfo& info);
+    static FTMap cnvZIMRoomMemberAttributesOperatedInfoToMap(const ZIMRoomMemberAttributesOperatedInfo& info);
+    static FTMap cnvZIMRoomMemberAttributesUpdateInfoToMap(const ZIMRoomMemberAttributesUpdateInfo& info);
+    static FTMap cnvZIMRoomOperatedInfoToMap(const ZIMRoomOperatedInfo& info);
     static FTArray cnvZIMGroupMemberInfoListToArray(const std::vector<ZIMGroupMemberInfo>& memberList);
+    static FTMap cnvZIMGroupMessageReceiptMemberQueryConfigToMap(const ZIMGroupMessageReceiptMemberQueryConfig& config);
     static FTMap cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& groupInfo);
     static FTMap cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& memberInfo);
     static FTMap cnvZIMGroupInfoToMap(const ZIMGroupInfo& groupInfo);
@@ -164,13 +206,16 @@ public:
     static ZIMRoomAttributesSetConfig cnvZIMRoomAttributesSetConfigToObject(FTMap configMap);
     static ZIMRoomAttributesDeleteConfig cnvZIMRoomAttributesDeleteConfigToObject(FTMap configMap);
     static ZIMRoomAttributesBatchOperationConfig cnvZIMRoomAttributesBatchOperationConfigToObject(FTMap configMap);
+    static ZIMRoomMemberAttributesSetConfig cnvZIMRoomMemberAttributesSetConfigToObject(FTMap configMap);
+    static ZIMRoomMemberAttributesQueryConfig cnvZIMRoomMemberAttributesQueryConfigToObject(FTMap configMap);
     static ZIMGroupInfo cnvZIMGroupInfoToObject(FTMap infoMap);
     static ZIMGroupAdvancedConfig cnvZIMGroupAdvancedConfigToObject(FTMap configMap);
     static ZIMGroupMemberQueryConfig cnvZIMGroupMemberQueryConfigToObject(FTMap configMap);
-
+    static ZIMGroupMessageReceiptMemberQueryConfig cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(FTMap configMap);
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
+    static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
 };

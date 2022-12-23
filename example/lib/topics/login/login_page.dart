@@ -198,8 +198,7 @@ class _LoginPageState extends State<LoginPage> {
   login(String token) async {
     try {
       showLoadingDialog();
-
-      await ZIM.getInstance()!.login(userInfo);
+      await ZIM.getInstance()!.login(userInfo, token);
       Navigator.of(context).pop;
       log('success');
       UserModel.shared().userInfo = userInfo;

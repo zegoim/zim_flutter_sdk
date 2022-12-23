@@ -52,32 +52,35 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
             ZIMConverter.oZIMConversationChangeInfoList(
                 map['conversationChangeInfoList']);
 
-        ZIMEventHandler.onConversationChanged!(zim!, conversationChangeInfoList);
+        ZIMEventHandler.onConversationChanged!(
+            zim!, conversationChangeInfoList);
         break;
       case 'onConversationTotalUnreadMessageCountUpdated':
         if (ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated ==
             null) return;
         ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated!(
-            zim!,
-            map['totalUnreadMessageCount']);
+            zim!, map['totalUnreadMessageCount']);
         break;
       case 'onReceivePeerMessage':
         if (ZIMEventHandler.onReceivePeerMessage == null) return;
         List<ZIMMessage> messageList =
             ZIMConverter.oZIMMessageList(map['messageList']);
-        ZIMEventHandler.onReceivePeerMessage!(zim!, messageList, map['fromUserID']);
+        ZIMEventHandler.onReceivePeerMessage!(
+            zim!, messageList, map['fromUserID']);
         break;
       case 'onReceiveRoomMessage':
         if (ZIMEventHandler.onReceiveRoomMessage == null) return;
         List<ZIMMessage> messageList =
             ZIMConverter.oZIMMessageList(map['messageList']);
-        ZIMEventHandler.onReceiveRoomMessage!(zim!, messageList, map['fromRoomID']);
+        ZIMEventHandler.onReceiveRoomMessage!(
+            zim!, messageList, map['fromRoomID']);
         break;
       case 'onReceiveGroupMessage':
         if (ZIMEventHandler.onReceiveGroupMessage == null) return;
         List<ZIMMessage> messageList =
             ZIMConverter.oZIMMessageList(map['messageList']);
-        ZIMEventHandler.onReceiveGroupMessage!(zim!, messageList, map['fromGroupID']);
+        ZIMEventHandler.onReceiveGroupMessage!(
+            zim!, messageList, map['fromGroupID']);
         break;
       case 'onRoomMemberJoined':
         if (ZIMEventHandler.onRoomMemberJoined == null) return;
@@ -117,7 +120,20 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
             ZIMConverter.oZIMRoomAttributesUpdateInfoList(map['updateInfo']),
             map['roomID']);
         break;
-
+      case 'onRoomMemberAttributesUpdated':
+        if (ZIMEventHandler.onRoomMemberAttributesUpdated == null) return;
+        List<Map> infosMap = (map['infos'] as List).cast<Map>();
+        List<ZIMRoomMemberAttributesUpdateInfo> infoList = [];
+        for (Map updateInfoMap in infosMap) {
+          infoList.add(
+              ZIMConverter.oZIMRoomMemberAttributesUpdateInfo(updateInfoMap));
+        }
+        ZIMEventHandler.onRoomMemberAttributesUpdated!(
+            zim!,
+            infoList,
+            ZIMConverter.oZIMRoomOperatedInfo(map['operatedInfo']),
+            map['roomID']);
+        break;
       case 'onGroupStateChanged':
         if (ZIMEventHandler.onGroupStateChanged == null) return;
 
@@ -224,30 +240,61 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;
 
         ZIMEventHandler.onCallInviteesAnsweredTimeout!(
-            zim!,
-            (map['invitees'] as List).cast<String>(), map['callID']);
+            zim!, (map['invitees'] as List).cast<String>(), map['callID']);
+        break;
+      case 'onMessageAttached':
+        int? messageAttachedCallbackID = map['messageAttachedCallbackID'];
+        ZIMMessageAttachedCallback? onMessageAttached = ZIMCommonData
+            .zimMessageAttachedCallbackMap[messageAttachedCallbackID];
+        if (onMessageAttached != null) {
+          ZIMMessage message =
+              ZIMConverter.oZIMMessage(map['message'], map['messageID']);
+          onMessageAttached(message);
+        }
         break;
       case 'downloadMediaFileProgress':
-        int progressID = map['progressID'];
+        int? progressID = map['progressID'];
         ZIMMessage message = ZIMConverter.oZIMMessage(map['message']);
         int currentFileSize = map['currentFileSize'];
         int totalFileSize = map['totalFileSize'];
         ZIMMediaDownloadingProgress? progress =
-            ZIMCommonData.mediaDownloadingProgressMap[progressID];
+            ZIMCommonData.mediaDownloadingProgressMap[progressID ?? 0];
         if (progress != null) {
           progress(message, currentFileSize, totalFileSize);
         }
         break;
       case 'uploadMediaProgress':
-        int progressID = map['progressID'];
-        ZIMMessage message = ZIMConverter.oZIMMessage(map['message']);
+        int? progressID = map['progressID'];
+        ZIMMessage message =
+            ZIMConverter.oZIMMessage(map['message'], map['messageID']);
         int currentFileSize = map['currentFileSize'];
         int totalFileSize = map['totalFileSize'];
         ZIMMediaUploadingProgress? progress =
-            ZIMCommonData.mediaUploadingProgressMap[progressID];
+            ZIMCommonData.mediaUploadingProgressMap[progressID ?? 0];
         if (progress != null) {
           progress(message, currentFileSize, totalFileSize);
         }
+        break;
+      case 'onMessageRevokeReceived':
+        if (ZIMEventHandler.onMessageRevokeReceived == null) return;
+        List<ZIMRevokeMessage> messageList = List<ZIMRevokeMessage>.from(ZIMConverter.oZIMMessageList(map['messageList']));
+        ZIMEventHandler.onMessageRevokeReceived!(zim!,messageList);
+        break;
+      case 'onMessageReceiptChanged':
+        if (ZIMEventHandler.onMessageReceiptChanged == null) return;
+        List<ZIMMessageReceiptInfo> infos = [];
+        for(Map infoModel in map['infos']){
+          infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
+        }
+        ZIMEventHandler.onMessageReceiptChanged!(zim!,infos);
+        break;
+      case 'onConversationMessageReceiptChanged':
+        if (ZIMEventHandler.onConversationMessageReceiptChanged == null) return;
+        List<ZIMMessageReceiptInfo> infos = [];
+        for(Map infoModel in map['infos']){
+          infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
+        }
+        ZIMEventHandler.onConversationMessageReceiptChanged!(zim!,infos);
         break;
       default:
         break;

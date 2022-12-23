@@ -33,6 +33,9 @@ template struct Rob<ZIM_FriendlyGet_timestamp, &ZIMMessage::timestamp>;
 long long ZIMMessage::* get(ZIM_FriendlyGet_orderKey);
 template struct Rob<ZIM_FriendlyGet_orderKey, &ZIMMessage::orderKey>;
 
+bool ZIMMessage::* get(ZIM_FriendlyGet_isUserInserted);
+template struct Rob<ZIM_FriendlyGet_isUserInserted, &ZIMMessage::userInserted>;
+
 std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileUID);
 template struct Rob<ZIM_FriendlyGet_fileUID, &ZIMMediaMessage::fileUID>;
 
@@ -75,6 +78,29 @@ template struct Rob<ZIM_FriendlyGet_videoFirstFrameWidth, &ZIMVideoMessage::vide
 unsigned int ZIMVideoMessage::* get(ZIM_FriendlyGet_videoFirstFrameHeight);
 template struct Rob<ZIM_FriendlyGet_videoFirstFrameHeight, &ZIMVideoMessage::videoFirstFrameHeight>;
 
+ZIMRevokeType ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeType);
+template struct Rob<ZIM_FriendlyGet_revokeType, &ZIMRevokeMessage::revokeType>;
+
+unsigned long long ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeTimestamp);
+template struct Rob<ZIM_FriendlyGet_revokeTimestamp, &ZIMRevokeMessage::revokeTimestamp>;
+
+ZIMMessageType ZIMRevokeMessage::* get(ZIM_FriendlyGet_originalMessageType);
+template struct Rob<ZIM_FriendlyGet_originalMessageType, &ZIMRevokeMessage::originalMessageType>;
+
+ZIMMessageRevokeStatus ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeStatus);
+template struct Rob<ZIM_FriendlyGet_revokeStatus, &ZIMRevokeMessage::revokeStatus>;
+
+std::string ZIMRevokeMessage::* get(ZIM_FriendlyGet_operatedUserID);
+template struct Rob<ZIM_FriendlyGet_operatedUserID, &ZIMRevokeMessage::operatedUserID>;
+
+std::string ZIMRevokeMessage::* get(ZIM_FriendlyGet_originalTextMessageContent);
+template struct Rob<ZIM_FriendlyGet_originalTextMessageContent, &ZIMRevokeMessage::originalTextMessageContent>;
+
+std::string ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeExtendedData);
+template struct Rob<ZIM_FriendlyGet_revokeExtendedData, &ZIMRevokeMessage::revokeExtendedData>;
+
+ZIMMessageReceiptStatus ZIMMessage::* get(ZIM_FriendlyGet_receiptStatus);
+template struct Rob<ZIM_FriendlyGet_receiptStatus, &ZIMMessage::receiptStatus>;
 
 std::unordered_map<std::string, std::string> ZIMPluginConverter::cnvFTMapToSTLMap(FTMap ftMap) {
 	std::unordered_map<std::string, std::string> stlMap;
@@ -98,6 +124,15 @@ FTMap ZIMPluginConverter::cnvSTLMapToFTMap(const std::unordered_map<std::string,
 	}
 
 	return ftMap;
+}
+
+FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<long long>& vec) {
+	FTArray ftArray;
+	for (auto& value : vec) {
+		ftArray.emplace_back(FTValue(value));
+	}
+
+	return ftArray;
 }
 
 FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<std::string>& vec) {
@@ -232,7 +267,8 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("timestamp")] = FTValue((int64_t)message->getTimestamp());
 	messageMap[FTValue("conversationSeq")] = FTValue(message->getConversationSeq());
 	messageMap[FTValue("orderKey")] = FTValue(message->getOrderKey());
-	
+	messageMap[FTValue("isUserInserted")] = FTValue(message->isUserInserted());
+	messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
@@ -287,6 +323,22 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 		messageMap[FTValue("videoFirstFrameLocalPath")] = FTValue(videoMessage->getVideoFirstFrameLocalPath());
 		messageMap[FTValue("videoFirstFrameWidth")] = FTValue((int32_t)videoMessage->getVideoFirstFrameWidth());
 		messageMap[FTValue("videoFirstFrameHeight")] = FTValue((int32_t)videoMessage->getVideoFirstFrameHeight());
+		break;
+	}
+	case ZIM_MESSAGE_TYPE_SYSTEM:{
+		auto systemMessage = (ZIMSystemMessage*)message;
+		messageMap[FTValue("message")] = FTValue(systemMessage->message);
+		break;
+	}
+	case ZIM_MESSAGE_TYPE_REVOKE:{
+		auto revokeMessage = (ZIMRevokeMessage*)message;
+		messageMap[FTValue("revokeType")] = FTValue(revokeMessage->getRevokeType());
+		messageMap[FTValue("revokeStatus")] = FTValue(revokeMessage->getRevokeStatus());
+		messageMap[FTValue("originalMessageType")] = FTValue(revokeMessage->getOriginalMessageType());
+		messageMap[FTValue("revokeTimestamp")] = FTValue((int64_t)revokeMessage->getRevokeTimestamp());
+		messageMap[FTValue("operatedUserID")] = FTValue(revokeMessage->getOperatedUserID());
+		messageMap[FTValue("originalTextMessageContent")] = FTValue(revokeMessage->getOriginalTextMessageContent());
+		messageMap[FTValue("revokeExtendedData")] = FTValue(revokeMessage->getRevokeExtendedData());
 		break;
 	}
 	case ZIM_MESSAGE_TYPE_UNKNOWN:
@@ -356,11 +408,44 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		(*videoMessagePtr.get()).*get(ZIM_FriendlyGet_videoFirstFrameHeight()) = std::get<int32_t>(messageMap[FTValue("videoFirstFrameHeight")]);
 		break;
 	}
-
 	case zim::ZIM_MESSAGE_TYPE_BARRAGE: {
 		messagePtr = std::make_shared<ZIMBarrageMessage>();
 		auto barrageMessage = std::static_pointer_cast<ZIMBarrageMessage>(messagePtr);
 		barrageMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
+		break;
+	}
+	case zim::ZIM_MESSAGE_TYPE_SYSTEM:{
+		messagePtr = std::make_shared<ZIMSystemMessage>();
+		auto systemMessage = std::static_pointer_cast<ZIMSystemMessage>(messagePtr);
+		systemMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
+		break;
+	}
+	case zim::ZIM_MESSAGE_TYPE_REVOKE:{
+		messagePtr = std::make_shared<ZIMRevokeMessage>();
+		auto revokeMessagePtr = std::static_pointer_cast<ZIMRevokeMessage>(messagePtr);
+		if (std::holds_alternative<int32_t>(messageMap[FTValue("revokeType")])) {
+			(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeType()) = (ZIMRevokeType)std::get<int32_t>(messageMap[FTValue("revokeType")]);
+		}else{
+			(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeType()) = (ZIMRevokeType)std::get<int64_t>(messageMap[FTValue("revokeType")]);
+		}
+		if (std::holds_alternative<int32_t>(messageMap[FTValue("revokeTimestamp")])) {
+			(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeTimestamp()) = (unsigned long long)std::get<int32_t>(messageMap[FTValue("revokeTimestamp")]);
+		}else{
+			(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeTimestamp()) = (unsigned long long)std::get<int64_t>(messageMap[FTValue("revokeTimestamp")]);
+		}
+		if (std::holds_alternative<int32_t>(messageMap[FTValue("originalMessageType")])) {
+			(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_originalMessageType()) = (ZIMMessageType)std::get<int32_t>(messageMap[FTValue("originalMessageType")]);
+		}else{
+			(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_originalMessageType()) = (ZIMMessageType)std::get<int64_t>(messageMap[FTValue("originalMessageType")]);
+		}
+		if (std::holds_alternative<int32_t>(messageMap[FTValue("revokeStatus")])) {
+			(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeStatus()) = (ZIMMessageRevokeStatus)std::get<int32_t>(messageMap[FTValue("revokeStatus")]);
+		}else{
+			(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeStatus()) = (ZIMMessageRevokeStatus)std::get<int64_t>(messageMap[FTValue("revokeStatus")]);
+		}
+		(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_operatedUserID()) = std::get<std::string>(messageMap[FTValue("operatedUserID")]);
+		(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_originalTextMessageContent()) = std::get<std::string>(messageMap[FTValue("originalTextMessageContent")]);
+		(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeExtendedData()) = std::get<std::string>(messageMap[FTValue("revokeExtendedData")]);
 		break;
 	}
 	default:
@@ -373,6 +458,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_direction()) = (ZIMMessageDirection)std::get<int32_t>(messageMap[FTValue("direction")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_sentStatus()) = (ZIMMessageSentStatus)std::get<int32_t>(messageMap[FTValue("sentStatus")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationType()) = (ZIMConversationType)std::get<int32_t>(messageMap[FTValue("conversationType")]);
+	(*messagePtr.get()).*get(ZIM_FriendlyGet_isUserInserted()) = (bool)std::get<bool>(messageMap[FTValue("isUserInserted")]);
 
 	if (std::holds_alternative<int32_t>(messageMap[FTValue("messageID")])) {
 		(*messagePtr.get()).*get(ZIM_FriendlyGet_messageID()) = (long long)std::get<int32_t>(messageMap[FTValue("messageID")]);
@@ -409,7 +495,13 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	else {
 		(*messagePtr.get()).*get(ZIM_FriendlyGet_orderKey()) = (long long)std::get<int64_t>(messageMap[FTValue("orderKey")]);
 	}
-	
+
+	if (std::holds_alternative<int32_t>(messageMap[FTValue("receiptStatus")])) {
+		(*messagePtr.get()).*get(ZIM_FriendlyGet_receiptStatus()) = (ZIMMessageReceiptStatus)std::get<int32_t>(messageMap[FTValue("receiptStatus")]);
+	}
+	else {
+		(*messagePtr.get()).*get(ZIM_FriendlyGet_receiptStatus()) = (ZIMMessageReceiptStatus)std::get<int64_t>(messageMap[FTValue("receiptStatus")]);
+	}
 
 	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
@@ -432,8 +524,8 @@ std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMa
 	auto config = std::make_shared<ZIMPushConfig>();
 	config->title = std::get<std::string>(configMap[FTValue("title")]);
 	config->content = std::get<std::string>(configMap[FTValue("content")]);
-	config->extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
-
+	config->payload = std::get<std::string>(configMap[FTValue("payload")]);
+	config->resourcesID = std::get<std::string>(configMap[FTValue("resourcesID")]);
 	return config;
 }
 
@@ -447,6 +539,27 @@ FTArray ZIMPluginConverter::cnvZIMMessageListToArray(const std::vector<std::shar
 	}
 
 	return messageArray;
+}
+
+FTMap ZIMPluginConverter::cnvZIMMessageReceiptInfoToMap(const ZIMMessageReceiptInfo& messageReceiptInfo) {
+	FTMap infoMap;
+
+	infoMap[FTValue("conversationType")] = FTValue(messageReceiptInfo.conversationType);
+	infoMap[FTValue("conversationID")] = FTValue(messageReceiptInfo.conversationID);
+	infoMap[FTValue("messageID")] = FTValue((int64_t)messageReceiptInfo.messageID);
+	infoMap[FTValue("status")] = FTValue(messageReceiptInfo.status);
+	infoMap[FTValue("readMemberCount")] = FTValue((int32_t)messageReceiptInfo.readMemberCount);
+	infoMap[FTValue("unreadMemberCount")] = FTValue((int32_t)messageReceiptInfo.unreadMemberCount);
+	return infoMap;
+}
+
+FTArray ZIMPluginConverter::cnvZIMMessageReceiptInfoListToArray(const std::vector<ZIMMessageReceiptInfo>& infos) {
+	FTArray infosArray;
+	for (auto& info : infos) {
+		auto infoMap = cnvZIMMessageReceiptInfoToMap(info);
+		infosArray.emplace_back(infoMap);
+	}
+	return infosArray;
 }
 
 std::vector<std::shared_ptr<ZIMMessage>> ZIMPluginConverter::cnvZIMMessageArrayToObjectList(FTArray messageArray) {
@@ -503,6 +616,46 @@ FTArray ZIMPluginConverter::cnvZIMRoomAttributesUpdateInfoListToArray(const std:
 	}
 
 	return roomAttrInfoArray;
+}
+
+ZIMRoomMemberAttributesSetConfig ZIMPluginConverter::cnvZIMRoomMemberAttributesSetConfigToObject(FTMap configMap){
+	ZIMRoomMemberAttributesSetConfig config;
+	config.isDeleteAfterOwnerLeft = std::get<bool>(configMap[FTValue("isDeleteAfterOwnerLeft")]);
+	return config;
+}
+
+ZIMRoomMemberAttributesQueryConfig ZIMPluginConverter::cnvZIMRoomMemberAttributesQueryConfigToObject(FTMap configMap){
+	ZIMRoomMemberAttributesQueryConfig config;
+	config.nextFlag = std::get<std::string>(configMap[FTValue("nextFlag")]);
+	config.count = std::get<int32_t>(configMap[FTValue("count")]);
+	return config;
+}
+
+FTMap ZIMPluginConverter::cnvZIMRoomMemberAttributesInfoToMap(const ZIMRoomMemberAttributesInfo& info){
+	FTMap infoMap;
+	infoMap[FTValue("userID")] = info.userID;
+	infoMap[FTValue("attributes")] = cnvSTLMapToFTMap(info.attributes);
+	return infoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMRoomMemberAttributesOperatedInfoToMap(const ZIMRoomMemberAttributesOperatedInfo& info){
+	FTMap infoMap;
+	infoMap[FTValue("attributesInfo")] = ZIMPluginConverter::cnvZIMRoomMemberAttributesInfoToMap(info.attributesInfo);
+	infoMap[FTValue("errorKeys")] = ZIMPluginConverter::cnvStlVectorToFTArray(info.errorKeys);
+	return infoMap;
+}
+
+
+FTMap ZIMPluginConverter::cnvZIMRoomMemberAttributesUpdateInfoToMap(const ZIMRoomMemberAttributesUpdateInfo& info){
+	FTMap infoMap;
+	infoMap[FTValue("attributesInfo")] = ZIMPluginConverter::cnvZIMRoomMemberAttributesInfoToMap(info.attributesInfo);
+	return infoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMRoomOperatedInfoToMap(const ZIMRoomOperatedInfo& info){
+    FTMap infoMap;
+	infoMap[FTValue("userID")] = info.userID;
+    return infoMap;
 }
 
 FTMap ZIMPluginConverter::cnvZIMGroupInfoToMap(const ZIMGroupInfo& groupInfo) {
@@ -676,8 +829,11 @@ ZIMGroupInfo ZIMPluginConverter::cnvZIMGroupInfoToObject(FTMap infoMap) {
 ZIMGroupAdvancedConfig ZIMPluginConverter::cnvZIMGroupAdvancedConfigToObject(FTMap configMap) {
 	ZIMGroupAdvancedConfig config;
 	config.groupNotice = std::get<std::string>(configMap[FTValue("groupNotice")]);
-	config.groupAttributes = cnvFTMapToSTLMap(std::get<FTMap>(configMap[FTValue("groupAttributes")]));
-
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("groupAttributes")])) {
+        config.groupAttributes = std::unordered_map<std::string, std::string>();
+    }else{
+		config.groupAttributes = cnvFTMapToSTLMap(std::get<FTMap>(configMap[FTValue("groupAttributes")]));
+	}
 	return config;
 }
 
@@ -686,5 +842,12 @@ ZIMGroupMemberQueryConfig ZIMPluginConverter::cnvZIMGroupMemberQueryConfigToObje
 	config.count = (unsigned int)std::get<int32_t>(configMap[FTValue("count")]);
 	config.nextFlag = (unsigned int)std::get<int32_t>(configMap[FTValue("nextFlag")]);
 
+	return config;
+}
+
+ZIMGroupMessageReceiptMemberQueryConfig ZIMPluginConverter::cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(FTMap configMap){
+	ZIMGroupMessageReceiptMemberQueryConfig config;
+	config.count = std::get<int32_t>(configMap[FTValue("count")]);
+	config.nextFlag = std::get<int32_t>(configMap[FTValue("nextFlag")]);
 	return config;
 }

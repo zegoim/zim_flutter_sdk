@@ -1,4 +1,4 @@
-package com.example.zego_zim.internal;
+package im.zego.zim_flutter.internal;
 
 
 import java.lang.reflect.Field;
@@ -33,14 +33,18 @@ import im.zego.zim.entity.ZIMGroupFullInfo;
 import im.zego.zim.entity.ZIMGroupInfo;
 import im.zego.zim.entity.ZIMGroupMemberInfo;
 import im.zego.zim.entity.ZIMGroupMemberQueryConfig;
+import im.zego.zim.entity.ZIMGroupMessageReceiptMemberQueryConfig;
 import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMImageMessage;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
+import im.zego.zim.entity.ZIMMessageReceiptInfo;
+import im.zego.zim.entity.ZIMMessageRevokeConfig;
 import im.zego.zim.entity.ZIMMessageSendConfig;
 import im.zego.zim.entity.ZIMPushConfig;
+import im.zego.zim.entity.ZIMRevokeMessage;
 import im.zego.zim.entity.ZIMRoomAdvancedConfig;
 import im.zego.zim.entity.ZIMRoomAttributesBatchOperationConfig;
 import im.zego.zim.entity.ZIMRoomAttributesDeleteConfig;
@@ -48,7 +52,14 @@ import im.zego.zim.entity.ZIMRoomAttributesSetConfig;
 import im.zego.zim.entity.ZIMRoomAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomFullInfo;
 import im.zego.zim.entity.ZIMRoomInfo;
+import im.zego.zim.entity.ZIMRoomMemberAttributesInfo;
+import im.zego.zim.entity.ZIMRoomMemberAttributesOperatedInfo;
+import im.zego.zim.entity.ZIMRoomMemberAttributesQueryConfig;
+import im.zego.zim.entity.ZIMRoomMemberAttributesSetConfig;
+import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
+import im.zego.zim.entity.ZIMRoomOperatedInfo;
+import im.zego.zim.entity.ZIMSystemMessage;
 import im.zego.zim.entity.ZIMTextMessage;
 import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
@@ -58,9 +69,13 @@ import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
 import im.zego.zim.enums.ZIMMessageDirection;
 import im.zego.zim.enums.ZIMMessagePriority;
+import im.zego.zim.enums.ZIMMessageReceiptStatus;
+import im.zego.zim.enums.ZIMMessageRevokeStatus;
 import im.zego.zim.enums.ZIMMessageSentStatus;
 import im.zego.zim.enums.ZIMMessageType;
+import im.zego.zim.enums.ZIMRevokeType;
 
+@SuppressWarnings({"unused","deprecation,unchecked,all"})
 public class ZIMPluginConverter {
 
     static public ZIMAppConfig oZIMAppConfig(HashMap<String,Object> configMap){
@@ -129,6 +144,8 @@ public class ZIMPluginConverter {
         messageMap.put("direction",message.getDirection().value());
         messageMap.put("sentStatus",message.getSentStatus().value());
         messageMap.put("orderKey",message.getOrderKey());
+        messageMap.put("isUserInserted",message.isUserInserted());
+        messageMap.put("receiptStatus",message.getReceiptStatus().value());
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -169,6 +186,20 @@ public class ZIMPluginConverter {
                 break;
             case FILE:
                 assert message instanceof ZIMFileMessage;
+                break;
+            case SYSTEM:
+                assert message instanceof ZIMSystemMessage;
+                messageMap.put("message",((ZIMSystemMessage)message).message);
+                break;
+            case REVOKE:
+                assert message instanceof ZIMRevokeMessage;
+                messageMap.put("revokeType",((ZIMRevokeMessage) message).getRevokeType().value());
+                messageMap.put("revokeStatus",((ZIMRevokeMessage) message).getRevokeStatus().value());
+                messageMap.put("revokeTimestamp",((ZIMRevokeMessage) message).getRevokeTimestamp());
+                messageMap.put("operatedUserID",((ZIMRevokeMessage) message).getOperatedUserID());
+                messageMap.put("revokeExtendedData",((ZIMRevokeMessage) message).getRevokeExtendedData());
+                messageMap.put("originalMessageType",((ZIMRevokeMessage) message).getOriginalMessageType().value());
+                messageMap.put("originalTextMessageContent",((ZIMRevokeMessage) message).getOriginalTextMessageContent());
                 break;
             case UNKNOWN:
             default:
@@ -292,6 +323,55 @@ public class ZIMPluginConverter {
             case AUDIO:
                 message = new ZIMAudioMessage((String) messageMap.get("fileLocalPath"),ZIMPluginCommonTools.safeGetLongValue(messageMap.get("audioDuration")));
                 break;
+            case SYSTEM:
+                message = new ZIMSystemMessage();
+                ((ZIMSystemMessage) message).message = (String) messageMap.get("message");
+                break;
+            case REVOKE:
+                message = new ZIMRevokeMessage();
+                try{
+                    Field revokeTypeField = ZIMRevokeMessage.class.getDeclaredField("revokeType");
+                    revokeTypeField.setAccessible(true);
+                    revokeTypeField.set(message, ZIMRevokeType.getZIMRevokeType(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("revokeType"))));
+                    revokeTypeField.setAccessible(false);
+
+                    Field revokeStatusField = ZIMRevokeMessage.class.getDeclaredField("revokeStatus");
+                    revokeStatusField.setAccessible(true);
+                    revokeStatusField.set(message, ZIMMessageRevokeStatus.getZIMMessageRevokeStatus(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("revokeStatus"))));
+                    revokeStatusField.setAccessible(false);
+
+                    Field originalMessageTypeField = ZIMRevokeMessage.class.getDeclaredField("originalMessageType");
+                    originalMessageTypeField.setAccessible(true);
+                    originalMessageTypeField.set(message, ZIMMessageType.getZIMMessageType(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("originalMessageType"))));
+                    originalMessageTypeField.setAccessible(false);
+
+                    Field revokeTimestampField = ZIMRevokeMessage.class.getDeclaredField("revokeTimestamp");
+                    revokeTimestampField.setAccessible(true);
+                    revokeTimestampField.set(message,messageMap.get("revokeTimestamp"));
+                    revokeTimestampField.setAccessible(false);
+
+                    Field operatedUserIDField = ZIMRevokeMessage.class.getDeclaredField("operatedUserID");
+                    operatedUserIDField.setAccessible(true);
+                    operatedUserIDField.set(message,messageMap.get("operatedUserID"));
+                    operatedUserIDField.setAccessible(false);
+
+                    Field revokeExtendedDataField = ZIMRevokeMessage.class.getDeclaredField("revokeExtendedData");
+                    revokeExtendedDataField.setAccessible(true);
+                    revokeExtendedDataField.set(message,messageMap.get("revokeExtendedData"));
+                    revokeExtendedDataField.setAccessible(false);
+
+                    Field originalTextMessageContentField = ZIMRevokeMessage.class.getDeclaredField("originalTextMessageContent");
+                    originalTextMessageContentField.setAccessible(true);
+                    originalTextMessageContentField.set(message,messageMap.get("originalTextMessageContent"));
+                    originalTextMessageContentField.setAccessible(false);
+                }
+                catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+                catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
             case UNKNOWN:
             default:
                 message = new ZIMMessage(ZIMMessageType.UNKNOWN);
@@ -353,6 +433,15 @@ public class ZIMPluginConverter {
             orderKeyField.set(message,ZIMPluginCommonTools.safeGetLongValue(messageMap.get("orderKey")));
             orderKeyField.setAccessible(false);
 
+            Field isUserInsertedField = ZIMMessage.class.getDeclaredField("isUserInserted");
+            isUserInsertedField.setAccessible(true);
+            isUserInsertedField.set(message,ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isUserInserted")));
+            isUserInsertedField.setAccessible(false);
+
+            Field receiptStatusField = ZIMMessage.class.getDeclaredField("receiptStatus");
+            receiptStatusField.setAccessible(true);
+            receiptStatusField.set(message, ZIMMessageReceiptStatus.getZIMMessageReceiptStatus(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("receiptStatus"))));
+            receiptStatusField.setAccessible(false);
         }
         catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -407,6 +496,17 @@ public class ZIMPluginConverter {
             messageList.add(oZIMMessage(messageHashMap));
         }
         return messageList;
+    }
+
+    static public HashMap<String,Object>mZIMMessageReceiptInfo(ZIMMessageReceiptInfo info){
+        HashMap<String,Object> infoModel = new HashMap<>();
+        infoModel.put("conversationID",info.conversationID);
+        infoModel.put("conversationType",info.conversationType.value());
+        infoModel.put("messageID",info.messageID);
+        infoModel.put("status",info.status.value());
+        infoModel.put("readMemberCount",info.readMemberCount);
+        infoModel.put("unreadMemberCount",info.unreadMemberCount);
+        return infoModel;
     }
 
     static public ArrayList<HashMap<String,Object>> mZIMUserInfoList(ArrayList<ZIMUserInfo> userList){
@@ -511,7 +611,8 @@ public class ZIMPluginConverter {
         ZIMPushConfig config = new ZIMPushConfig();
         config.title = (String) Objects.requireNonNull(configMap.get("title"));
         config.content = (String) Objects.requireNonNull(configMap.get("content"));
-        config.extendedData = (String) configMap.get("extendedData");
+        config.payload = (String) configMap.get("payload");
+        config.resourcesID = (String) configMap.get("resourcesID");
         return config;
     }
 
@@ -519,6 +620,7 @@ public class ZIMPluginConverter {
         ZIMMessageSendConfig config = new ZIMMessageSendConfig();
         config.priority = ZIMMessagePriority.getZIMMessagePriority(ZIMPluginCommonTools.safeGetIntValue(configMap.get("priority")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
+        config.hasReceipt = (boolean) configMap.get("hasReceipt");
         return config;
     }
 
@@ -546,7 +648,9 @@ public class ZIMPluginConverter {
 
     static public ZIMRoomAdvancedConfig oZIMRoomAdvancedConfig(HashMap<String,Object> configMap){
         ZIMRoomAdvancedConfig config = new ZIMRoomAdvancedConfig();
-        if(configMap.get("roomAttributes") != null) config.roomAttributes = (HashMap<String, String>) configMap.get("roomAttributes");
+        if(configMap.get("roomAttributes") != null) {
+            config.roomAttributes = (HashMap<String, String>) configMap.get("roomAttributes");
+        }
         config.roomDestroyDelayTime = ZIMPluginCommonTools.safeGetIntValue(configMap.get("roomDestroyDelayTime"));
         return config;
     }
@@ -595,6 +699,63 @@ public class ZIMPluginConverter {
         return config;
     }
 
+    static public ZIMRoomMemberAttributesSetConfig oZIMRoomMemberAttributesSetConfig(HashMap<String,Object> configMap){
+        if(configMap == null){
+            return null;
+        }
+        ZIMRoomMemberAttributesSetConfig config = new ZIMRoomMemberAttributesSetConfig();
+        config.isDeleteAfterOwnerLeft = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isDeleteAfterOwnerLeft"));
+        return config;
+    }
+
+    static public HashMap<String,Object> mZIMRoomMemberAttributesInfo(ZIMRoomMemberAttributesInfo info){
+        if(info == null){
+            return null;
+        }
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("userID",info.userID);
+        infoMap.put("attributes",info.attributes);
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMRoomMemberAttributesOperatedInfo(ZIMRoomMemberAttributesOperatedInfo info){
+        if(info == null){
+            return null;
+        }
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("errorKeys",info.errorKeys);
+        infoMap.put("attributesInfo",mZIMRoomMemberAttributesInfo(info.attributesInfo));
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMRoomMemberAttributesUpdateInfo(ZIMRoomMemberAttributesUpdateInfo info){
+        if(info == null){
+            return null;
+        }
+        HashMap<String,Object> updateInfoModel = new HashMap<>();
+        updateInfoModel.put("attributesInfo",mZIMRoomMemberAttributesInfo(info.attributesInfo));
+        return updateInfoModel;
+    }
+
+    static public HashMap<String,Object> mZIMRoomOperatedInfo(ZIMRoomOperatedInfo info){
+        if (info == null){
+            return null;
+        }
+        HashMap<String,Object> infoModel = new HashMap<>();
+        infoModel.put("userID",info.userID);
+        return infoModel;
+    }
+
+    static public ZIMRoomMemberAttributesQueryConfig oZIMRoomMemberAttributesQueryConfig(HashMap<String,Object> configMap){
+        if(configMap == null){
+            return null;
+        }
+        ZIMRoomMemberAttributesQueryConfig queryConfig = new ZIMRoomMemberAttributesQueryConfig();
+        queryConfig.count = (Integer) configMap.get("count");
+        queryConfig.nextFlag = (String) configMap.get("nextFlag");
+        return queryConfig;
+    }
+
     static public ZIMGroupInfo oZIMGroupInfo(HashMap<String,Object> infoMap){
         ZIMGroupInfo groupInfo = new ZIMGroupInfo();
         groupInfo.groupID = (String) infoMap.get("groupID");
@@ -626,7 +787,7 @@ public class ZIMPluginConverter {
         groupMemberInfoMap.put("memberRole",groupMemberInfo.memberRole);
         groupMemberInfoMap.put("userID",groupMemberInfo.userID);
         groupMemberInfoMap.put("userName",groupMemberInfo.userName);
-        groupMemberInfoMap.put("memberAvatarUrl",groupMemberInfo.memberAvatarUrl);
+        groupMemberInfoMap.put("memberAvatarUrl",groupMemberInfo.memberAvatarUrl != null?groupMemberInfo.memberAvatarUrl:"");
         return groupMemberInfoMap;
     }
 
@@ -683,6 +844,7 @@ public class ZIMPluginConverter {
         ZIMCallInviteConfig config = new ZIMCallInviteConfig();
         config.timeout = ZIMPluginCommonTools.safeGetIntValue(configMap.get("timeout"));
         config.extendedData = (String) configMap.get("extendedData");
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         return config;
     }
 
@@ -796,5 +958,19 @@ public class ZIMPluginConverter {
         infoMap.put("invitee",info.invitee);
         infoMap.put("extendedData",info.extendedData);
         return infoMap;
+    }
+
+    static public ZIMGroupMessageReceiptMemberQueryConfig oZIMGroupMessageReceiptMemberQueryConfig(HashMap<String,Object> configMap){
+        ZIMGroupMessageReceiptMemberQueryConfig queryConfig = new ZIMGroupMessageReceiptMemberQueryConfig();
+        queryConfig.count = (Integer) configMap.get("count");
+        queryConfig.nextFlag = (Integer) configMap.get("nextFlag");
+        return queryConfig;
+    }
+
+    static public ZIMMessageRevokeConfig oZIMMessageRevokeConfig(HashMap<String,Object> configMap){
+        ZIMMessageRevokeConfig revokeConfig = new ZIMMessageRevokeConfig();
+        revokeConfig.revokeExtendedData = (String) configMap.get("revokeExtendedData");
+        revokeConfig.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
+        return revokeConfig;
     }
 }

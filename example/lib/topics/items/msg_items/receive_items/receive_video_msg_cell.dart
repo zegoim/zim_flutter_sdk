@@ -36,7 +36,7 @@ class ReceiveVideoMsgCell extends StatefulWidget {
 
 
 class ReceiveVideoeMsgCellState extends State<ReceiveVideoMsgCell> {
-  
+
 
   checkIsdownload() async {
     if (widget.message.fileLocalPath == '') {

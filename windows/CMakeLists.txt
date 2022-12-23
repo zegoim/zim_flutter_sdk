@@ -17,10 +17,10 @@ set(PLUGIN_NAME "zego_zim_plugin")
 execute_process(COMMAND python ${CMAKE_CURRENT_LIST_DIR}/download_native_sdk.py)
 
 # Setup deps: native SDK header and link search path
-include_directories(${CMAKE_CURRENT_LIST_DIR}/deps/x64/include)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/deps/release/x64/include)
 
 # It seems that flutter doesn't support windows on x86
-link_directories(${CMAKE_CURRENT_LIST_DIR}/deps/x64)
+link_directories(${CMAKE_CURRENT_LIST_DIR}/deps/release/x64)
 
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
@@ -65,6 +65,6 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ZIM.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
 set(zego_zim_bundled_libraries
-  ${CMAKE_CURRENT_LIST_DIR}/deps/x64/ZIM.dll
+  ${CMAKE_CURRENT_LIST_DIR}/deps/release/x64/ZIM.dll
   PARENT_SCOPE
 )

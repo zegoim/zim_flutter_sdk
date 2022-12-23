@@ -134,6 +134,58 @@ void ZIMPluginEventHandler::onConversationTotalUnreadMessageCountUpdated(ZIM* zi
     }
 }
 
+
+void ZIMPluginEventHandler::onConversationMessageReceiptChanged(ZIM * zim,const std::vector<ZIMMessageReceiptInfo>& infos){
+    if (!eventSink_) {
+        return;
+    }
+    FTMap retMap;
+    retMap[FTValue("method")] = FTValue("onConversationMessageReceiptChanged");
+    auto handle = this->engineEventMap[zim];
+    retMap[FTValue("handle")] = FTValue(handle);
+    FTArray infosModel;
+    for(ZIMMessageReceiptInfo info:infos){                
+        FTMap infoModel = ZIMPluginConverter::cnvZIMMessageReceiptInfoToMap(info);
+        infosModel.emplace_back(infoModel);
+    }
+    retMap[FTValue("infos")] = infosModel;
+    eventSink_->Success(retMap);
+}
+
+void ZIMPluginEventHandler::onMessageReceiptChanged(ZIM* zim,const std::vector<ZIMMessageReceiptInfo>& infos){
+    if (!eventSink_) {
+        return;
+    }
+    FTMap retMap;
+    retMap[FTValue("method")] = FTValue("onMessageReceiptChanged");
+    auto handle = this->engineEventMap[zim];
+    retMap[FTValue("handle")] = FTValue(handle);
+    FTArray infosModel;
+    for(ZIMMessageReceiptInfo info:infos){                
+        FTMap infoModel = ZIMPluginConverter::cnvZIMMessageReceiptInfoToMap(info);
+        infosModel.emplace_back(infoModel);
+    }
+    retMap[FTValue("infos")] = infosModel;
+    eventSink_->Success(retMap);
+}
+
+void ZIMPluginEventHandler::onMessageRevokeReceived(ZIM* zim, const std::vector<std::shared_ptr<ZIMRevokeMessage>>& messageList){
+    if (!eventSink_) {
+        return;
+    }
+    FTMap retMap;
+    retMap[FTValue("method")] = FTValue("onMessageRevokeReceived");
+    auto handle = this->engineEventMap[zim];
+    retMap[FTValue("handle")] = FTValue(handle);
+    std::vector<std::shared_ptr<ZIMMessage>> dstMessageList;
+    for (auto& message : messageList) {
+        std::shared_ptr<ZIMMessage> dstMessage = message;
+        dstMessageList.emplace_back(dstMessage);
+    }
+    retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(dstMessageList);
+    eventSink_->Success(retMap);       
+}
+
 void ZIMPluginEventHandler::onRoomStateChanged(ZIM* zim, ZIMRoomState state, ZIMRoomEvent event,
     const std::string& extendedData,
     const std::string& roomID) {
@@ -206,6 +258,24 @@ void ZIMPluginEventHandler::onRoomAttributesBatchUpdated(ZIM* zim,
         retMap[FTValue("updateInfo")] = ZIMPluginConverter::cnvZIMRoomAttributesUpdateInfoListToArray(updateInfos);
         retMap[FTValue("roomID")] = FTValue(roomID);
 
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onRoomMemberAttributesUpdated(ZIM* zim, const std::vector<ZIMRoomMemberAttributesUpdateInfo>& infos,ZIMRoomOperatedInfo operatedInfo, const std::string& roomID){
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onRoomMemberAttributesUpdated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("roomID")] = FTValue(roomID);
+        FTArray infosModel;
+        for(ZIMRoomMemberAttributesUpdateInfo info:infos){                
+            FTMap infoModel = ZIMPluginConverter::cnvZIMRoomMemberAttributesUpdateInfoToMap(info);
+            infosModel.emplace_back(infoModel);
+        }
+        retMap[FTValue("infos")] = FTValue(infosModel);
+        retMap[FTValue("operatedInfo")] = FTValue(ZIMPluginConverter::cnvZIMRoomOperatedInfoToMap(operatedInfo));
         eventSink_->Success(retMap);
     }
 }

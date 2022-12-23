@@ -132,8 +132,8 @@ class RoomChatPageState extends State<RoomChatPage> {
     ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
     try {
       ZIMMessageSentResult result = await ZIM
-          .getInstance()
-          !.sendRoomMessage(textMessage, widget.roomID, sendConfig);
+          .getInstance()!
+          .sendRoomMessage(textMessage, widget.roomID, sendConfig);
       widget._historyZIMMessageList.add(result.message);
       SendTextMsgCell cell =
           SendTextMsgCell(message: (result.message as ZIMTextMessage));
@@ -160,14 +160,20 @@ class RoomChatPageState extends State<RoomChatPage> {
     });
     try {
       log(mediaMessage.fileLocalPath);
+      ZIMMediaMessageSendNotification notification =
+          ZIMMediaMessageSendNotification(
+        onMessageAttached: (message) {},
+        onMediaUploadingProgress: (message, currentFileSize, totalFileSize) {
+          uploadingprogressModel.uploadingprogress!(
+              message, currentFileSize, totalFileSize);
+        },
+      );
       ZIMMessageSentResult result = await ZIM.getInstance()!.sendMediaMessage(
           mediaMessage,
           widget.roomID,
           ZIMConversationType.room,
-          ZIMMessageSendConfig(), (message, currentFileSize, totalFileSize) {
-        uploadingprogressModel.uploadingprogress!(
-            message, currentFileSize, totalFileSize);
-      });
+          ZIMMessageSendConfig(),
+          notification);
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == mediaMessage);
       Widget resultCell = MsgConverter.sendMediaMessageCellFactory(
@@ -202,8 +208,8 @@ class RoomChatPageState extends State<RoomChatPage> {
     }
     try {
       ZIMMessageQueriedResult result = await ZIM
-          .getInstance()
-          !.queryHistoryMessage(
+          .getInstance()!
+          .queryHistoryMessage(
               widget.roomID, ZIMConversationType.peer, queryConfig);
       if (result.messageList.length < 20) {
         widget.queryHistoryMsgComplete = true;
@@ -229,8 +235,8 @@ class RoomChatPageState extends State<RoomChatPage> {
       for (ZIMMessage message in messageList) {
         switch (message.type) {
           case ZIMMessageType.text:
-            ReceiceTextMsgCell cell =
-                ReceiceTextMsgCell(message: (message as ZIMTextMessage));
+            ReceiveTextMsgCell cell =
+                ReceiveTextMsgCell(message: (message as ZIMTextMessage));
             widget._historyMessageWidgetList.add(cell);
             break;
           case ZIMMessageType.image:
@@ -240,8 +246,8 @@ class RoomChatPageState extends State<RoomChatPage> {
 
               ReceiveImageMsgCell resultCell;
               ZIM
-                  .getInstance()
-                  !.downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                  .getInstance()!
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveImageMsgCell(
@@ -264,8 +270,8 @@ class RoomChatPageState extends State<RoomChatPage> {
             if ((message as ZIMVideoMessage).fileLocalPath == "") {
               ReceiveVideoMsgCell resultCell;
               ZIM
-                  .getInstance()
-                  !.downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                  .getInstance()!
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveVideoMsgCell(

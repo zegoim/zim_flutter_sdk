@@ -10,7 +10,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 
-import com.example.zego_zim.internal.ZIMPluginCommonTools;
+import im.zego.zim_flutter.internal.ZIMPluginCommonTools;
 import com.example.zego_zim_example.src.im.zego.serverassistant.utils.TokenServerAssistant;
 
 import org.json.JSONException;
