@@ -15,8 +15,8 @@ template struct Rob<ZIM_FriendlyGet_senderUserID, &ZIMMessage::senderUserID>;
 std::string ZIMMessage::* get(ZIM_FriendlyGet_conversationID);
 template struct Rob<ZIM_FriendlyGet_conversationID, &ZIMMessage::conversationID>;
 
-std::string ZIMMessage::* get(ZIM_FriendlyGet_extendedData);
-template struct Rob<ZIM_FriendlyGet_extendedData, &ZIMMessage::extendedData>;
+ std::string ZIMMessage::* get(ZIM_FriendlyGet_extendedData);
+ template struct Rob<ZIM_FriendlyGet_extendedData, &ZIMMessage::extendedData>;
 
 ZIMConversationType ZIMMessage::* get(ZIM_FriendlyGet_conversationType);
 template struct Rob<ZIM_FriendlyGet_conversationType, &ZIMMessage::conversationType>;
@@ -251,6 +251,18 @@ FTArray ZIMPluginConverter::cnvZIMConversationChangeInfoListToArray(const std::v
 	}
 
 	return convInfoArray;
+}
+
+FTArray ZIMPluginConverter::cnvZIMMessageSentStatusChangeInfoListToArray(const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList) {
+	FTArray messageSentStatusInfoArray;
+	for (auto& messageSentStatusChangeInfo : messageSentStatusChangeInfoList) {
+		FTMap messageSentStatusChangeInfoMap;
+		messageSentStatusChangeInfoMap[FTValue("sentStatus")] = FTValue(messageSentStatusChangeInfo.sentStatus);
+		messageSentStatusChangeInfoMap[FTValue("message")] = cnvZIMMessageObjectToMap(messageSentStatusChangeInfo.message.get());
+		messageSentStatusInfoArray.emplace_back(messageSentStatusChangeInfoMap);
+	}
+
+	return messageSentStatusInfoArray;
 }
 
 flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage* message) {

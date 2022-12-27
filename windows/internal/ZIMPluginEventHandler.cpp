@@ -121,6 +121,20 @@ void ZIMPluginEventHandler::onConversationChanged(
     }
 }
 
+void ZIMPluginEventHandler::onMessageSentStatusChanged(
+    ZIM* zim,
+    const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onMessageSentStatusChanged");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("messageSentStatusChangeInfoList")] = ZIMPluginConverter::cnvZIMMessageSentStatusChangeInfoListToArray(messageSentStatusChangeInfoList);
+
+        eventSink_->Success(retMap);
+    }
+}
+
 void ZIMPluginEventHandler::onConversationTotalUnreadMessageCountUpdated(ZIM* zim,
     unsigned int totalUnreadMessageCount) {
     if (eventSink_) {
