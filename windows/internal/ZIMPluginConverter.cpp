@@ -257,7 +257,7 @@ FTArray ZIMPluginConverter::cnvZIMMessageSentStatusChangeInfoListToArray(const s
 	FTArray messageSentStatusInfoArray;
 	for (auto& messageSentStatusChangeInfo : messageSentStatusChangeInfoList) {
 		FTMap messageSentStatusChangeInfoMap;
-		messageSentStatusChangeInfoMap[FTValue("sentStatus")] = FTValue(messageSentStatusChangeInfo.sentStatus);
+		messageSentStatusChangeInfoMap[FTValue("status")] = FTValue(messageSentStatusChangeInfo.status);
 		messageSentStatusChangeInfoMap[FTValue("message")] = cnvZIMMessageObjectToMap(messageSentStatusChangeInfo.message.get());
 		messageSentStatusInfoArray.emplace_back(messageSentStatusChangeInfoMap);
 	}
