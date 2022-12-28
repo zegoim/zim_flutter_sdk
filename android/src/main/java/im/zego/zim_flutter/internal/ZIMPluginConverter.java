@@ -121,7 +121,7 @@ public class ZIMPluginConverter {
 
     static public HashMap<String,Object> mZIMMessageSentStatusChangInfo(ZIMMessageSentStatusChangeInfo messageSentStatusChangeInfo){
         HashMap<String,Object> messageSentStatusChangeInfoMap = new HashMap<>();
-        messageSentStatusChangeInfoMap.put("sentStatus",messageSentStatusChangeInfo.sentStatus.value());
+        messageSentStatusChangeInfoMap.put("sentStatus",messageSentStatusChangeInfo.status.value());
 
         messageSentStatusChangeInfoMap.put("message", mZIMMessage(messageSentStatusChangeInfo.message));
         return messageSentStatusChangeInfoMap;
