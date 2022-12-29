@@ -345,6 +345,7 @@
         case ZIMMessageTypeSystem:{
             ZIMSystemMessage *sysMsg = (ZIMSystemMessage *)message;
             [messageDic safeSetObject:sysMsg.message forKey:@"message"];
+            break;
         }
         case ZIMMessageTypeRevoke:{
             ZIMRevokeMessage *revokeMsg = (ZIMRevokeMessage *)message;
