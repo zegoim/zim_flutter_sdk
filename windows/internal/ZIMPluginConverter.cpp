@@ -372,6 +372,46 @@ ZIMConversationDeleteConfig ZIMPluginConverter::cnvZIMConversationDeleteConfigTo
 	return config;
 }
 
+std::shared_ptr<ZIMConversation>  ZIMPluginConverter::cnvZIMConversationToObject(FTMap conversationMap) {
+	std::shared_ptr<ZIMConversation> conversationPtr = std::make_shared<ZIMConversation>();
+
+
+	conversationPtr->conversationID = std::get<std::string>(conversationMap[FTValue("conversationID")]);
+	conversationPtr->conversationName = std::get<std::string>(conversationMap[FTValue("conversationName")]);
+	conversationPtr->conversationAvatarUrl = std::get<std::string>(conversationMap[FTValue("conversationAvatarUrl")]);
+	if (std::holds_alternative<int32_t>(conversationMap[FTValue("type")])) {
+		conversationPtr->type = (ZIMConversationType)std::get<int32_t>(conversationMap[FTValue("type")]);
+	}
+	else {
+		conversationPtr->type = (ZIMConversationType)std::get<int64_t>(conversationMap[FTValue("type")]);
+	}
+	if (std::holds_alternative<int32_t>(conversationMap[FTValue("notificationStatus")])) {
+		conversationPtr->notificationStatus = (ZIMConversationNotificationStatus)std::get<int32_t>(conversationMap[FTValue("notificationStatus")]);
+	}
+	else {
+		conversationPtr->notificationStatus = (ZIMConversationNotificationStatus)std::get<int64_t>(conversationMap[FTValue("notificationStatus")]);
+	}
+	if (std::holds_alternative<int32_t>(conversationMap[FTValue("unreadMessageCount")])) {
+		conversationPtr->unreadMessageCount = (unsigned int)std::get<int32_t>(conversationMap[FTValue("unreadMessageCount")]);
+	}
+	else {
+		conversationPtr->unreadMessageCount = (unsigned int)std::get<int64_t>(conversationMap[FTValue("unreadMessageCount")]);
+	}
+	if (std::holds_alternative<int32_t>(conversationMap[FTValue("orderKey")])) {
+		conversationPtr->orderKey = (long long)std::get<int32_t>(conversationMap[FTValue("orderKey")]);
+	}
+	else {
+		conversationPtr->orderKey = (long long)std::get<int64_t>(conversationMap[FTValue("orderKey")]);
+	}
+	if (std::holds_alternative<std::monostate>(conversationMap[std::get<FTMap>(conversationMap[FTValue("lastMessage")])])) {
+		conversationPtr->lastMessage = nullptr;
+	}
+	else {
+		conversationPtr->lastMessage = cnvZIMMessageToObject(std::get<FTMap>(conversationMap[FTValue("lastMessage")]));
+	}
+	return conversationPtr;
+}
+
 std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap messageMap) {
 	std::shared_ptr<ZIMMessage> messagePtr = nullptr;
 
@@ -591,6 +631,8 @@ std::vector<std::shared_ptr<ZIMMessage>> ZIMPluginConverter::cnvZIMMessageArrayT
 
 	return messageList;
 }
+
+
 
 ZIMRoomInfo ZIMPluginConverter::cnvZIMRoomInfoToObject(FTMap infoMap) {
 	ZIMRoomInfo roomInfo;

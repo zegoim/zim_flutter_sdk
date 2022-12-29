@@ -158,6 +158,7 @@ struct ZIM_FriendlyGet_receiptStatus {
     typedef ZIMMessageReceiptStatus ZIMMessage::* type;
 };
 
+
 class ZIMPluginConverter
 {
 public:
@@ -202,6 +203,7 @@ public:
 
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
+    static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
     static std::shared_ptr<ZIMMessage> cnvZIMMessageToObject(FTMap messageMap);
     static std::shared_ptr<ZIMPushConfig> cnvZIMPushConfigToObject(FTMap configMap);
     static std::vector<std::shared_ptr<ZIMMessage>> cnvZIMMessageArrayToObjectList(FTArray messageArray);
