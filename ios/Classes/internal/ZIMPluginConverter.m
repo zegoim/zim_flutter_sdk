@@ -844,7 +844,7 @@
         return nil;
     }
     ZIMRoomMemberAttributesSetConfig *setConfig = [[ZIMRoomMemberAttributesSetConfig alloc] init];
-    setConfig.isDeleteAfterOwnerLeft = [configDic safeObjectForKey: @"isDeleteAfterOwnerLeft"];
+    setConfig.isDeleteAfterOwnerLeft = [[configDic safeObjectForKey: @"isDeleteAfterOwnerLeft"] boolValue];
     return setConfig;
 }
 
