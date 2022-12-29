@@ -410,7 +410,7 @@ class ZIMConverter {
       Map messageSentStatusChangeInfoMap) {
     ZIMMessageSentStatusChangeInfo messageSentStatusChangeInfo =
     ZIMMessageSentStatusChangeInfo();
-    messageSentStatusChangeInfo.sentStatus = ZIMMessageSentStatusExtension
+    messageSentStatusChangeInfo.status = ZIMMessageSentStatusExtension
         .mapValue[messageSentStatusChangeInfoMap['sentStatus']]!;
 
     Map messageMap = messageSentStatusChangeInfoMap['message'];

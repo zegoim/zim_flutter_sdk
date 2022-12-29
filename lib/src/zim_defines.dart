@@ -590,7 +590,7 @@ class ZIMConversationChangeInfo {
 }
 
 class ZIMMessageSentStatusChangeInfo {
-  ZIMMessageSentStatus sentStatus = ZIMMessageSentStatus.sending;
+  ZIMMessageSentStatus status = ZIMMessageSentStatus.sending;
   ZIMMessage? message;
   ZIMMessageSentStatusChangeInfo();
 }
