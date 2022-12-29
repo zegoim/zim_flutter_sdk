@@ -356,6 +356,7 @@
             [messageDic safeSetObject:revokeMsg.revokeExtendedData forKey:@"revokeExtendedData"];
             [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:revokeMsg.originalMessageType] forKey:@"originalMessageType"];
             [messageDic safeSetObject:revokeMsg.originalTextMessageContent forKey:@"originalTextMessageContent"];
+            break;
         }
         default:
             break;
