@@ -345,6 +345,7 @@
         case ZIMMessageTypeSystem:{
             ZIMSystemMessage *sysMsg = (ZIMSystemMessage *)message;
             [messageDic safeSetObject:sysMsg.message forKey:@"message"];
+            break;
         }
         case ZIMMessageTypeRevoke:{
             ZIMRevokeMessage *revokeMsg = (ZIMRevokeMessage *)message;
@@ -355,6 +356,7 @@
             [messageDic safeSetObject:revokeMsg.revokeExtendedData forKey:@"revokeExtendedData"];
             [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:revokeMsg.originalMessageType] forKey:@"originalMessageType"];
             [messageDic safeSetObject:revokeMsg.originalTextMessageContent forKey:@"originalTextMessageContent"];
+            break;
         }
         default:
             break;
