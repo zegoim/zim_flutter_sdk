@@ -413,7 +413,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onGroupMemberInfoUpdated");
         resultMap.put("handle", handle);
-        resultMap.put("userList",ZIMPluginConverter.mZIMGroupMemberInfoList(userList));
+        resultMap.put("userInfo",ZIMPluginConverter.mZIMGroupMemberInfoList(userList));
         resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         resultMap.put("groupID",groupID);
         mysink.success(resultMap);
