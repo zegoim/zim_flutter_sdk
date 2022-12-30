@@ -318,11 +318,13 @@ void ZIMPluginMethodHandler::queryConversationList(flutter::EncodableMap& argume
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMConversationQueryConfig queryConfig;
     queryConfig.count = std::get<int32_t>(configMap[FTValue("count")]);
-    if (std::holds_alternative<FTMap>(configMap[FTValue("nextConversation")])) {
+
+    if (std::holds_alternative<std::monostate>(configMap[FTValue("nextConversation")])) {
         queryConfig.nextConversation = nullptr;
     }
     else {
-        queryConfig.nextConversation = ZIMPluginConverter::cnvZIMConversationToObject(std::get<FTMap>(configMap[FTValue("nextConversation")]));
+        auto nextConversation = std::get<FTMap>(configMap[FTValue("nextConversation")]);
+        queryConfig.nextConversation = ZIMPluginConverter::cnvZIMConversationToObject(nextConversation);
     }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->queryConversationList(queryConfig, [=](const std::vector<std::shared_ptr<ZIMConversation>>& conversationList,
