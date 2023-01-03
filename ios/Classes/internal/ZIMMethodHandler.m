@@ -247,7 +247,7 @@
             }
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:userListBasic forKey:@"userList"];
-            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserListBasic"];
+            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserList"];
             result(resultDic);
         }
         else{
