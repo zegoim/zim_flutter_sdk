@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:html';
 import 'dart:js_util';
 // In order to *not* need this ignore, consider extracting the "web" version
@@ -330,6 +331,8 @@ class ZegoZimPlugin {
           return messageReceiptChangedHandle(_zim, data);
         case "messageRevokeReceived":
           return messageRevokeReceivedHandle(_zim, data);
+        case "messageSentStatusChanged":
+          return messageSentStatusChangedHandle(_zim, data);
       }
     }
   }
@@ -424,6 +427,8 @@ class ZegoZimPlugin {
               resultMap["conversationList"][index]["lastMessage"]["messageID"]);
       resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] =
           resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] is bool ? resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] : false;
+      resultMap["conversationList"][index]["lastMessage"]["orderKey"] =
+          resultMap["conversationList"][index]["lastMessage"]["orderKey"] is int ? resultMap["conversationList"][index]["lastMessage"]["orderKey"] : 0;
     });
 
     return resultMap;
@@ -1547,6 +1552,17 @@ class ZegoZimPlugin {
     ZIMEventHandler.onMessageRevokeReceived!(zim, messageList);
   }
 
+  static void messageSentStatusChangedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onMessageSentStatusChanged == null) {
+      return;
+    }
+    final _infos = data["infos"];
+    List<ZIMMessageSentStatusChangeInfo> infos = ZIMConverter.oMessageSentStatusChangeInfoList(_infos);
+
+
+    ZIMEventHandler.onMessageSentStatusChanged!(zim, infos);
+  }
+
   static Map handleSendMessageResult(dynamic result) {
     Map resultMap = jsObjectToMap(result);
     resultMap["message"]["localMessageID"] =
@@ -1596,6 +1612,10 @@ class ZegoZimPlugin {
             infoConversationLastMessage["isUserInserted"] is bool
                 ? infoConversationLastMessage["isUserInserted"]
                 : false;
+        infoConversationLastMessage["extendedData"] =
+            infoConversationLastMessage["extendedData"] is String
+                ? infoConversationLastMessage["extendedData"]
+                : "";
       }
     });
   }
@@ -1645,6 +1665,7 @@ class ZegoZimPlugin {
         ZIMConversationType.values[messageMap["conversationType"]];
     zimMessage.isUserInserted =
         messageMap["isUserInserted"] is bool ? messageMap["isUserInserted"] : false;
+    zimMessage.extendedData = messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
 
     return zimMessage;
   }

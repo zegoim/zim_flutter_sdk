@@ -306,7 +306,7 @@ class ZIMConverter {
       message.fileName = resultMap['fileName'];
       message.fileSize = resultMap['fileSize'];
     }
-    message.extendedData = resultMap['extendedData'];
+    message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
     return message;
   }
 
@@ -412,7 +412,7 @@ class ZIMConverter {
     ZIMMessageSentStatusChangeInfo messageSentStatusChangeInfo =
     ZIMMessageSentStatusChangeInfo();
     messageSentStatusChangeInfo.status = ZIMMessageSentStatusExtension
-        .mapValue[messageSentStatusChangeInfoMap['sentStatus']]!;
+        .mapValue[messageSentStatusChangeInfoMap['status']]!;
 
     Map messageMap = messageSentStatusChangeInfoMap['message'];
     messageSentStatusChangeInfo.message = oZIMMessage(messageMap);

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -329,6 +330,10 @@ class _MyPageState extends State<PeerChatPage> {
         }
       }
       setState(() {});
+    };
+
+    ZIMEventHandler.onMessageSentStatusChanged = (zim, infos) {
+      window.console.warn(infos);
     };
   }
 
