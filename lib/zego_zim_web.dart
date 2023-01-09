@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:html';
 import 'dart:js_util';
 // In order to *not* need this ignore, consider extracting the "web" version
@@ -419,16 +418,7 @@ class ZegoZimPlugin {
 
     resultMap["conversationList"].forEach((conversation) {
       var index = resultMap["conversationList"].indexOf(conversation);
-      resultMap["conversationList"][index]["lastMessage"]["localMessageID"] =
-          int.parse(resultMap["conversationList"][index]["lastMessage"]
-              ["localMessageID"]);
-      resultMap["conversationList"][index]["lastMessage"]["messageID"] =
-          int.parse(
-              resultMap["conversationList"][index]["lastMessage"]["messageID"]);
-      resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] =
-          resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] is bool ? resultMap["conversationList"][index]["lastMessage"]["isUserInserted"] : false;
-      resultMap["conversationList"][index]["lastMessage"]["orderKey"] =
-          resultMap["conversationList"][index]["lastMessage"]["orderKey"] is int ? resultMap["conversationList"][index]["lastMessage"]["orderKey"] : 0;
+      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(resultMap["conversationList"][index]["lastMessage"]);
     });
 
     return resultMap;
@@ -494,12 +484,7 @@ class ZegoZimPlugin {
 
     resultMap["messageList"].forEach((message) {
       var index = resultMap["messageList"].indexOf(message);
-      resultMap["messageList"][index]["localMessageID"] =
-          int.parse(resultMap["messageList"][index]["localMessageID"]);
-      resultMap["messageList"][index]["messageID"] =
-          int.parse(resultMap["messageList"][index]["messageID"]);
-      resultMap["messageList"][index]["isUserInserted"] =
-          resultMap["messageList"][index]["isUserInserted"] is bool ? resultMap["messageList"][index]["isUserInserted"] : false;
+      resultMap["messageList"][index] = convertZIMMessage(resultMap["messageList"][index]);
     });
 
     return resultMap;
@@ -1480,7 +1465,10 @@ class ZegoZimPlugin {
 
     List<dynamic> infoList = data["infoList"];
 
-    handleConversationList(infoList);
+    infoList.forEach((info) {
+      info["conversation"]["lastMessage"] = convertZIMMessage(info["conversation"]["lastMessage"]);
+    });
+
 
     List<ZIMConversationChangeInfo> conversationChangeInfoList =
         ZIMConverter.oZIMConversationChangeInfoList(infoList);
@@ -1552,11 +1540,14 @@ class ZegoZimPlugin {
     ZIMEventHandler.onMessageRevokeReceived!(zim, messageList);
   }
 
-  static void messageSentStatusChangedHandle(ZIMEngine zim, dynamic data) {
+   static void messageSentStatusChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onMessageSentStatusChanged == null) {
       return;
     }
     final _infos = data["infos"];
+    _infos.forEach((info) {
+      info["message"] = convertZIMMessage(info["message"]);
+    });
     List<ZIMMessageSentStatusChangeInfo> infos = ZIMConverter.oMessageSentStatusChangeInfoList(_infos);
 
 
@@ -1583,40 +1574,7 @@ class ZegoZimPlugin {
           : 0;
       msgMap["orderKey"] = msgMap["orderKey"] is int ? msgMap["orderKey"] : 0;
       msgMap["isUserInserted"] = msgMap["isUserInserted"] is bool ? msgMap["isUserInserted"] : false;
-    });
-  }
-
-  static void handleConversationList(List<dynamic> infoList) {
-    infoList.forEach((info) {
-      final infoConversation = info["conversation"];
-      final infoConversationLastMessage = infoConversation["lastMessage"];
-
-      if (infoConversationLastMessage != null) {
-        infoConversationLastMessage["localMessageID"] =
-            infoConversationLastMessage["localMessageID"] is String
-                ? int.parse(infoConversationLastMessage["localMessageID"])
-                : 0;
-        infoConversationLastMessage["messageID"] =
-            infoConversationLastMessage["messageID"] is String
-                ? int.parse(infoConversationLastMessage["messageID"])
-                : infoConversationLastMessage["messageID"];
-        infoConversationLastMessage["orderKey"] =
-            infoConversationLastMessage["orderKey"] is int
-                ? infoConversationLastMessage["orderKey"]
-                : 0;
-        infoConversationLastMessage["conversationSeq"] =
-            infoConversationLastMessage["conversationSeq"] is int
-                ? infoConversationLastMessage["conversationSeq"]
-                : int.parse(infoConversationLastMessage["conversationSeq"]);
-        infoConversationLastMessage["isUserInserted"] =
-            infoConversationLastMessage["isUserInserted"] is bool
-                ? infoConversationLastMessage["isUserInserted"]
-                : false;
-        infoConversationLastMessage["extendedData"] =
-            infoConversationLastMessage["extendedData"] is String
-                ? infoConversationLastMessage["extendedData"]
-                : "";
-      }
+      msgMap["extendedData"] = msgMap["extendedData"] is String ? msgMap["extendedData"] : "";
     });
   }
 
@@ -1647,7 +1605,7 @@ class ZegoZimPlugin {
     return param is String ? param : "";
   }
 
-  ZIMMessage getZIMMessage(Object messageObj) {
+  static ZIMMessage getZIMMessage(Object messageObj) {
     Map messageMap = jsObjectToMap(messageObj);
     ZIMMessage zimMessage = ZIMMessage();
     zimMessage.conversationID = messageMap["conversationID"];
@@ -1668,5 +1626,16 @@ class ZegoZimPlugin {
     zimMessage.extendedData = messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
 
     return zimMessage;
+  }
+
+  static Map convertZIMMessage(Map messageMap) {
+    messageMap["messageID"] = int.parse(messageMap["messageID"]);
+    messageMap["localMessageID"] = int.parse((messageMap["localMessageID"]));
+    messageMap["isUserInserted"] =
+        messageMap["isUserInserted"] is bool ? messageMap["isUserInserted"] : false;
+    messageMap["orderKey"] = messageMap["orderKey"] is int ? messageMap["orderKey"] : 0;
+    messageMap["extendedData"] = messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
+
+    return messageMap;
   }
 }
