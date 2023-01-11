@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'FlutterMacOS'
-  s.dependency 'ZIM','2.5.0'
+  s.dependency 'ZIM','2.6.0'
   #s.vendored_frameworks = "ZIM.xcframework"
 
   s.platform = :osx, '10.11'

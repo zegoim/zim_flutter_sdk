@@ -1,3 +1,9 @@
+## 2.6.0
+### 1. Feature
+1、ZIMMessage adds an extendedData field that allows users to pass in information such as user avatar and nickname for real-time display when a chat session sends a message.
+2、Added message status event, Developers can refine the logic of message delivery status by listening for this callback. According to the change of message status, the developer can make corresponding reminders on the UI.
+3、Added callbacks related to call invitation on the server.
+
 ## 2.5.0+1
 1、Fixed an extended data property naming error.
 2、Fixed some windows platform convert bug.
