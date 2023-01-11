@@ -13,6 +13,8 @@ class ZIMErrorCode {
   static const int commonModuleImServerDisconnect = 6000009;
   static const int commonModuleUploadLogError = 6000010;
   static const int commonModuleUserIsNotExist = 6000011;
+  static const int commonModuleUserIsOperationLimit = 6000012;
+  static const int commonModuleUnsupportedRequestOfCurrentMenu = 6000013;
 
   static const int networkModuleCommonError = 6000101;
   static const int networkModuleServerError = 6000102;
