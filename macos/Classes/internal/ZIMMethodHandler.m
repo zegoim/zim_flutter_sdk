@@ -49,6 +49,7 @@
     
     NSDictionary *appConfigDic = [call.arguments objectForKey:@"config"];
     ZIMAppConfig *appConfig = [ZIMPluginConverter oZIMAppConfig:appConfigDic];
+    [ZIM setAdvancedConfigWithKey:@"zim_cross_platform" value:@"flutter"];
     ZIM *zim = [ZIM createWithAppConfig:appConfig];
     if(zim){
         [self.engineMap safeSetObject:zim forKey:handle];

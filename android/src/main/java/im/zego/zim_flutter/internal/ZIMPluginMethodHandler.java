@@ -131,6 +131,8 @@ public class ZIMPluginMethodHandler {
 
         String handle = call.argument("handle");
         Application application = (Application) binding.getApplicationContext();
+
+        ZIM.setAdvancedConfig("zim_cross_platform","flutter");
         ZIMAppConfig appConfig = ZIMPluginConverter.oZIMAppConfig(Objects.requireNonNull(call.argument("config")));
         ZIM zim = ZIM.create(appConfig, application);
         if(zim != null) {

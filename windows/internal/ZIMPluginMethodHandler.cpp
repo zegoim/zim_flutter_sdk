@@ -37,7 +37,7 @@ void ZIMPluginMethodHandler::create(flutter::EncodableMap& argument,
     ZIMAppConfig appConfig;
     appConfig.appID = appID;
     appConfig.appSign = appSign;
-
+    ZIM::setAdvancedConfig("zim_cross_platform","flutter");
     auto zim = ZIM::create(appConfig);
     if (zim) {
         this->engineMap[handle] = zim;
