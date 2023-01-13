@@ -1,3 +1,6 @@
+## 2.5.0+2
+report platform type.
+
 ## 2.5.0+1
 1、Fixed an extended data property naming error.
 2、Fixed some windows platform convert bug.
