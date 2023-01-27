@@ -1,3 +1,6 @@
+## 2.6.0+1
+Fix known problems.
+
 ## 2.6.0
 ### 1. Feature
 1、ZIMMessage adds an extendedData field that allows users to pass in information such as user avatar and nickname for real-time display when a chat session sends a message.
