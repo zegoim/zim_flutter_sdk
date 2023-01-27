@@ -4,6 +4,9 @@
 2、Added message status event, Developers can refine the logic of message delivery status by listening for this callback. According to the change of message status, the developer can make corresponding reminders on the UI.
 3、Added callbacks related to call invitation on the server.
 
+## 2.5.0+2
+report platform type.
+
 ## 2.5.0+1
 1、Fixed an extended data property naming error.
 2、Fixed some windows platform convert bug.

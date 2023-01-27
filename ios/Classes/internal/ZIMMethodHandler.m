@@ -47,6 +47,7 @@
     }
     NSString *handle = [call.arguments objectForKey:@"handle"];
     
+    [ZIM setAdvancedConfigWithKey:@"zim_cross_platform" value:@"flutter"];
     NSDictionary *appConfigDic = [call.arguments objectForKey:@"config"];
     ZIMAppConfig *appConfig = [ZIMPluginConverter oZIMAppConfig:appConfigDic];
     ZIM *zim = [ZIM createWithAppConfig:appConfig];
