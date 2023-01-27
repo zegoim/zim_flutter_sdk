@@ -6,10 +6,10 @@ PODS:
     - FlutterMacOS
   - shared_preferences_macos (0.0.1):
     - FlutterMacOS
-  - zego_zim (2.5.0):
+  - zego_zim (2.6.0):
     - FlutterMacOS
-    - ZIM (= 2.5.0)
-  - ZIM (2.5.0)
+    - ZIM (= 2.6.0)
+  - ZIM (2.6.0)
 
 DEPENDENCIES:
   - emoji_picker_flutter (from `Flutter/ephemeral/.symlinks/plugins/emoji_picker_flutter/macos`)
@@ -38,9 +38,9 @@ SPEC CHECKSUMS:
   emoji_picker_flutter: 533634326b1c5de9a181ba14b9758e6dfe967a20
   FlutterMacOS: 85f90bfb3f1703249cf1539e4dfbff31e8584698
   path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
-  shared_preferences_macos: a64dc611287ed6cbe28fd1297898db1336975727
-  zego_zim: 9fc1fd8c2c1fe8d6a7246e6f8b8e2d821518736d
-  ZIM: 98ff6cc7bc28b0c54476ab317dfe1e62f6e90738
+  shared_preferences_macos: 8b221d457159a85f478c0b9d2f19aeae9feff475
+  zego_zim: b76933cfd12e9ca94269b41bc569ad7cd121a5c7
+  ZIM: 6b320ccd4d189f522192031c0a923150283c2c9c
 
 PODFILE CHECKSUM: a884f6dd3f7494f3892ee6c81feea3a3abbf9153
 
