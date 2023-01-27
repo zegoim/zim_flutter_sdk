@@ -47,9 +47,9 @@
     }
     NSString *handle = [call.arguments objectForKey:@"handle"];
     
+    [ZIM setAdvancedConfigWithKey:@"zim_cross_platform" value:@"flutter"];
     NSDictionary *appConfigDic = [call.arguments objectForKey:@"config"];
     ZIMAppConfig *appConfig = [ZIMPluginConverter oZIMAppConfig:appConfigDic];
-    [ZIM setAdvancedConfigWithKey:@"zim_cross_platform" value:@"flutter"];
     ZIM *zim = [ZIM createWithAppConfig:appConfig];
     if(zim){
         [self.engineMap safeSetObject:zim forKey:handle];
@@ -149,10 +149,11 @@
         return;
     }
     
-    NSString *token = [call.arguments objectForKey:@"token"];
-    [zim renewToken:token callback:^(NSString * _Nonnull token, ZIMError * _Nonnull errorInfo) {
+    NSString *inputToken = [call.arguments objectForKey:@"token"];
+    [zim renewToken:inputToken callback:^(NSString * _Nonnull token, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"token":token};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:token forKey:@"token"];
             result(resultDic);
         }
         else{
@@ -169,10 +170,11 @@
         return;
     }
     
-    NSString *userName = [call.arguments objectForKey:@"userName"];
-    [zim updateUserName:userName callback:^(NSString * _Nonnull userName, ZIMError * _Nonnull errorInfo) {
+    NSString *inputUserName = [call.arguments objectForKey:@"userName"];
+    [zim updateUserName:inputUserName callback:^(NSString * _Nonnull userName, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"userName":userName};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:userName forKey:@"userName"];
             result(resultDic);
         }else{
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
@@ -191,7 +193,8 @@
     NSString *updateUserAvatarUrl = [call.arguments objectForKey:@"userAvatarUrl"];
     [zim updateUserAvatarUrl:updateUserAvatarUrl callback:^(NSString * _Nonnull userAvatarUrl, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"userAvatarUrl":userAvatarUrl};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:userAvatarUrl forKey:@"userAvatarUrl"];
             result(resultDic);
         }else{
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
@@ -210,7 +213,8 @@
     NSString *updateUserExtendedData = [call.arguments objectForKey:@"extendedData"];
     [zim updateUserExtendedData:updateUserExtendedData callback:^(NSString * _Nonnull extendedData, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"extendedData":extendedData};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:extendedData forKey:@"extendedData"];
             result(resultDic);
         }else{
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
@@ -237,10 +241,14 @@
             }
             NSMutableArray *errorUserListBasic = [[NSMutableArray alloc] init];
             for (ZIMErrorUserInfo *errorUserInfo in errorUserList) {
-                NSDictionary *errorUserInfoDic = @{@"userID":errorUserInfo.userID,@"reason":[NSNumber numberWithUnsignedInt:errorUserInfo.reason]};
+                NSMutableDictionary *errorUserInfoDic = [[NSMutableDictionary alloc] init];
+                [errorUserInfoDic safeSetObject:errorUserInfo.userID forKey:@"userID"];
+                [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:errorUserInfo.reason] forKey:@"reason"];
                 [errorUserListBasic addObject:errorUserInfoDic];
             }
-            NSDictionary *resultDic = @{@"userList":userListBasic,@"errorUserList":errorUserList};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:userListBasic forKey:@"userList"];
+            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserList"];
             result(resultDic);
         }
         else{
@@ -265,7 +273,8 @@
     [zim queryConversationListWithConfig:config callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo)  {
         if(errorInfo.code == 0){
             NSArray *conversationBasicList = [ZIMPluginConverter mZIMConversationList:conversationList];
-            NSDictionary *resultDic = @{@"conversationList":conversationBasicList};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationBasicList forKey:@"conversationList"];
             result(resultDic);
         }
         else{
@@ -282,12 +291,14 @@
         return;
     }
     
-    NSString *conversationID = [call.arguments objectForKey:@"conversationID"];
-    int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
+    NSString *inputConversationID = [call.arguments objectForKey:@"conversationID"];
+    int inputConversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
     ZIMConversationDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMConversationDeleteConfig:[call.arguments objectForKey:@"config"]];
-    [zim deleteConversation:conversationID conversationType:conversationType config:deleteConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
+    [zim deleteConversation:inputConversationID conversationType:inputConversationType config:deleteConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType]};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
             result(resultDic);
         }
         else{
@@ -304,11 +315,13 @@
         return;
     }
     
-    NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
-    int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
-    [zim clearConversationUnreadMessageCount:conversationID conversationType:conversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
+    NSString *inputConversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
+    int inputConversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
+    [zim clearConversationUnreadMessageCount:inputConversationID conversationType:inputConversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType]};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
             result(resultDic);
         }
         else{
@@ -326,12 +339,14 @@
     }
     
     int status = ((NSNumber *)[call.arguments objectForKey:@"status"]).intValue;
-    NSString *conversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
-    int conversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
+    NSString *inputConversationID = (NSString *)[call.arguments objectForKey:@"conversationID"];
+    int inputConversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
     
-    [zim setConversationNotificationStatus:status conversationID:conversationID conversationType:conversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
+    [zim setConversationNotificationStatus:status conversationID:inputConversationID conversationType:inputConversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType]};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
             result(resultDic);
         }
         else{
@@ -347,16 +362,17 @@
         result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
         return;
     }
-    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
-    NSString *conversationID = (NSString *)[call.arguments safeObjectForKey:@"conversationID"];
-    int conversationType = ((NSNumber *)[call.arguments safeObjectForKey:@"conversationType"]).intValue;
+    ZIMMessage *inputMessage = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
+    NSString *inputConversationID = (NSString *)[call.arguments safeObjectForKey:@"conversationID"];
+    int inputConversationType = ((NSNumber *)[call.arguments safeObjectForKey:@"conversationType"]).intValue;
     NSString *senderUserID = (NSString *)[call.arguments safeObjectForKey:@"senderUserID"];
     NSNumber *messageID = [call.arguments safeObjectForKey:@"messageID"];
-    [zim insertMessageToLocalDB:message conversationID:conversationID conversationType:conversationType senderUserID:senderUserID callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+    [zim insertMessageToLocalDB:inputMessage conversationID:inputConversationID conversationType:inputConversationType senderUserID:senderUserID callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         NSDictionary *messageModel = [ZIMPluginConverter mZIMMessage:message];
-        NSDictionary *resultDic = @{@"message":messageModel,@"messageID":messageID};
+        NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:messageModel forKey:@"message"];
+        [resultDic safeSetObject:messageID forKey:@"messageID"];
         if(errorInfo.code == 0){
-            
             result(resultDic);
         }else{
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:resultDic]);
@@ -393,7 +409,9 @@
     };
     [zim sendMessage:message toConversationID:toConversationID conversationType:conversationType config:sendConfig notification:sendNotification callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
-        NSDictionary *resultDic = @{@"message":messageDic,@"messageID":messageID};
+        NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:messageDic forKey:@"message"];
+        [resultDic safeSetObject:messageID forKey:@"messageID"];
         if(errorInfo.code == 0){
             result(resultDic);
         }
@@ -417,7 +435,8 @@
     [zim sendPeerMessage:message toUserID:toUserID config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
-            NSDictionary *resultDic = @{@"message":messageDic};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:messageDic forKey:@"message"];
             result(resultDic);
         }
         else{
@@ -440,7 +459,8 @@
     [zim sendRoomMessage:message toRoomID:toRoomID config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
-            NSDictionary *resultDic = @{@"message":messageDic};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:messageDic forKey:@"message"];
             result(resultDic);
         }
         else{
@@ -463,7 +483,8 @@
     [zim sendGroupMesage:message toGroupID:toGroupID config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
-            NSDictionary *resultDic = @{@"message":messageDic};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:messageDic forKey:@"message"];
             result(resultDic);
         }
         else{
@@ -724,8 +745,10 @@
     [zim queryHistoryMessageByConversationID:conversationID conversationType:conversationType config:queryConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, NSArray<ZIMMessage *> * _Nonnull messageList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSArray *MsgDicList = [ZIMPluginConverter mZIMMessageList:messageList];
-            
-            NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType],@"messageList":MsgDicList};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
+            [resultDic safeSetObject:MsgDicList forKey:@"messageList"];
             result(resultDic);
         }
         else{
@@ -747,7 +770,9 @@
     ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMMessageDeleteConfig:[call.arguments objectForKey:@"config"]];
     [zim deleteAllMessageByConversationID:conversationID conversationType:conversationType config:deleteConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType]};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
             result(resultDic);
         }
         else{
@@ -770,7 +795,9 @@
     ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMMessageDeleteConfig:[call.arguments objectForKey:@"config"]];
     [zim deleteMessages:messageList conversationID:conversationID conversationType:conversationType config:deleteConfig callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"conversationID":conversationID,@"conversationType":[NSNumber numberWithInt:(int)conversationType]};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
             result(resultDic);
         }
         else{
@@ -792,7 +819,8 @@
     [zim enterRoom:roomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
-            NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomInfoDic forKey:@"roomInfo"];
             result(resultDic);
         }
         else{
@@ -814,7 +842,8 @@
     [zim createRoom:roomInfo callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
-            NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomInfoDic forKey:@"roomInfo"];
             result(resultDic);
         }
         else{
@@ -837,7 +866,8 @@
     [zim createRoom:roomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
-            NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomInfoDic forKey:@"roomInfo"];
             result(resultDic);
         }
         else{
@@ -858,7 +888,8 @@
     [zim joinRoom:roomID callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
-            NSDictionary *resultDic = @{@"roomInfo":roomInfoDic};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomInfoDic forKey:@"roomInfo"];
             result(resultDic);
         }
         else{
@@ -875,10 +906,11 @@
         return;
     }
     
-    NSString *roomID = [call.arguments objectForKey:@"roomID"];
-    [zim leaveRoom:roomID callback:^(NSString * _Nonnull roomID, ZIMError * _Nonnull errorInfo) {
+    NSString *inputRoomID = [call.arguments objectForKey:@"roomID"];
+    [zim leaveRoom:inputRoomID callback:^(NSString * _Nonnull roomID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"roomID":roomID};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomID forKey:@"roomID"];
             result(resultDic);
         }
         else{
@@ -901,7 +933,10 @@
     [zim queryRoomMemberListByRoomID:roomID config:config callback:^(NSString * _Nonnull roomID, NSArray<ZIMUserInfo *> * _Nonnull memberList, NSString * _Nonnull nextFlag, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSArray *basicMemberList = [ZIMPluginConverter mZIMUserInfoList:memberList];
-            NSDictionary *resultDic = @{@"roomID":roomID,@"memberList":basicMemberList,@"nextFlag":nextFlag};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomID forKey:@"roomID"];
+            [resultDic safeSetObject:basicMemberList forKey:@"memberList"];
+            [resultDic safeSetObject:nextFlag forKey:@"nextFlag"];
             result(resultDic);
         }
         else{
@@ -922,7 +957,9 @@
     
     [zim queryRoomOnlineMemberCountByRoomID:roomID callback:^(NSString * _Nonnull roomID, unsigned int count, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"roomID":roomID,@"count":[NSNumber numberWithUnsignedInt:count]};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomID forKey:@"roomID"];
+            [resultDic safeSetObject:[NSNumber numberWithUnsignedInt:count] forKey:@"count"];;
             result(resultDic);
         }
         else{
@@ -944,7 +981,9 @@
     ZIMRoomAttributesSetConfig *setConfig = [ZIMPluginConverter oZIMRoomAttributesSetConfig:[call.arguments objectForKey:@"config"]];
     [zim setRoomAttributes:roomAttributes roomID:roomID config:setConfig callback:^(NSString * _Nonnull roomID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"roomID":roomID,@"errorKeys":errorKeys};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomID forKey:@"roomID"];
+            [resultDic safeSetObject:errorKeys forKey:@"errorKeys"];
             result(resultDic);
         }
         else{
@@ -966,7 +1005,9 @@
     ZIMRoomAttributesDeleteConfig *config = [ZIMPluginConverter oZIMRoomAttributesDeleteConfig:[call.arguments objectForKey:@"config"]];
     [zim deleteRoomAttributesByKeys:keys roomID:roomID config:config callback:^(NSString * _Nonnull roomID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"roomID":roomID,@"errorKeys":errorKeys};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomID forKey:@"roomID"];
+            [resultDic safeSetObject:errorKeys forKey:@"errorKeys"];
             result(resultDic);
         }
         else{
@@ -1002,7 +1043,8 @@
     
     [zim endRoomAttributesBatchOperationWithRoomID:roomID callback:^(NSString * _Nonnull roomID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"roomID":roomID};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomID forKey:@"roomID"];
             result(resultDic);
         }
         else{
@@ -1023,7 +1065,9 @@
     
     [zim queryRoomAllAttributesByRoomID:roomID callback:^(NSString * _Nonnull roomID, NSDictionary<NSString *,NSString *> * _Nonnull roomAttributes, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"roomID":roomID,@"roomAttributes":roomAttributes};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:roomID forKey:@"roomID"];
+            [resultDic safeSetObject:roomAttributes forKey:@"roomAttributes"];
             result(resultDic);
         }
         else{
@@ -1126,7 +1170,10 @@
             NSArray *basicUserList = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
             NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
             NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
-            NSDictionary *resultDic = @{@"groupInfo":groupInfoDic,@"userList":basicUserList,@"errorUserList":basicErrorUserList};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
+            [resultDic safeSetObject:basicUserList forKey:@"userList"];
+            [resultDic safeSetObject:basicErrorUserList forKey:@"errorUserList"];
             result(resultDic);
         }
         else{
@@ -1152,7 +1199,10 @@
             NSArray *basicUserList = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
             NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
             NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
-            NSDictionary *resultDic = @{@"groupInfo":groupInfoDic,@"userList":basicUserList,@"errorUserList":basicErrorUserList};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
+            [resultDic safeSetObject:basicUserList forKey:@"userList"];
+            [resultDic safeSetObject:basicErrorUserList forKey:@"errorUserList"];
             result(resultDic);
         }
         else{
@@ -1173,7 +1223,8 @@
     [zim joinGroup:groupID callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
-            NSDictionary *resultDic = @{@"groupInfo":groupInfoDic};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
             result(resultDic);
         }
         else{
@@ -1193,7 +1244,8 @@
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim dismissGroup:groupID callback:^(NSString * _Nonnull groupID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"groupID":groupID};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
             result(resultDic);
         }
         else{
@@ -1213,7 +1265,8 @@
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim leaveGroup:groupID callback:^(NSString * _Nonnull groupID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"groupID":groupID};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
             result(resultDic);
         }
         else{
@@ -1236,8 +1289,10 @@
         if(errorInfo.code == 0){
             NSArray *basicUserList = [ZIMPluginConverter mZIMGroupMemberInfoList:userList];
             NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
-
-            NSDictionary *resultDic = @{@"groupID":groupID,@"userList":basicUserList,@"errorUserList":basicErrorUserList};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:basicUserList forKey:@"userList"];
+            [resultDic safeSetObject:basicErrorUserList forKey:@"errorUserList"];
             result(resultDic);
         }
         else{
@@ -1258,10 +1313,11 @@
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim kickGroupMembers:userIDs groupID:groupID callback:^(NSString * _Nonnull groupID, NSArray<NSString *> * _Nonnull kickedUserIDList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            
-            
             NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
-            NSDictionary *resultDic = @{@"groupID":groupID,@"kickedUserIDList":kickedUserIDList,@"errorUserList":basicErrorUserList};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:kickedUserIDList forKey:@"kickedUserIDList"];
+            [resultDic safeSetObject:basicErrorUserList forKey:@"errorUserList"];
             result(resultDic);
             
         }
@@ -1283,7 +1339,9 @@
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim transferGroupOwnerToUserID:userID groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull toUserID, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"groupID":groupID,@"toUserID":toUserID};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:toUserID forKey:@"toUserID"];
             result(resultDic);
         }
         else{
@@ -1304,7 +1362,9 @@
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim updateGroupName:groupName groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupName, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"groupID":groupID,@"groupName":groupName};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:groupName forKey:@"groupName"];
             result(resultDic);
         }
         else{
@@ -1326,7 +1386,9 @@
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim updateGroupAvatarUrl:groupAvatarUrl groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupAvatarUrl, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"groupID":groupID,@"groupAvatarUrl":groupAvatarUrl};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:groupAvatarUrl forKey:@"groupAvatarUrl"];
             result(resultDic);
         }
         else{
@@ -1347,7 +1409,9 @@
     NSString *groupID = [call.arguments objectForKey:@"groupID"];
     [zim updateGroupNotice:groupNotice groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull groupNotice, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSDictionary *resultDic = @{@"groupID":groupID,@"groupNotice":groupNotice};
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:groupNotice forKey:@"groupNotice"];
             result(resultDic);
         }
         else{
@@ -1705,6 +1769,7 @@
         }
     }];
 }
+
 #pragma mark - Getter
 - (NSMutableDictionary *)engineMap {
     if (!_engineMap) {

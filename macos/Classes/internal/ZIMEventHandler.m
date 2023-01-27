@@ -188,6 +188,19 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim
+    messageSentStatusChanged:
+(NSArray<ZIMMessageSentStatusChangeInfo *> *)messageSentStatusChangeInfoList{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSArray *basicList = [ZIMPluginConverter mMessageSentStatusChangeInfoList:messageSentStatusChangeInfoList];
+    NSDictionary *resultDic = @{@"method":@"onMessageSentStatusChanged", @"handle": handle, @"messageSentStatusChangeInfoList":basicList};
+    _events(resultDic);
+}
+
 
 // MARK: Room
 - (void)zim:(ZIM *)zim

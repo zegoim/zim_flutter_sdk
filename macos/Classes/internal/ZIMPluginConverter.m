@@ -127,6 +127,18 @@
     return basicChangeInfoList;
 }
 
++(nullable NSArray *)mMessageSentStatusChangeInfoList:(nullable NSArray<ZIMMessageSentStatusChangeInfo *> *)messageSentStatusChangeInfoList{
+    if(messageSentStatusChangeInfoList == nil || messageSentStatusChangeInfoList == NULL || [messageSentStatusChangeInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicChangeInfoList = [[NSMutableArray alloc] init];
+    for (ZIMMessageSentStatusChangeInfo *changeInfo in messageSentStatusChangeInfoList) {
+        NSDictionary *changeInfoDic = [ZIMPluginConverter mMessageSentStatusChangeInfo:changeInfo];
+        [basicChangeInfoList safeAddObject:changeInfoDic];
+    }
+    return basicChangeInfoList;
+}
+
 +(nullable NSDictionary *)mConversationChangeInfo:(nullable ZIMConversationChangeInfo *)changeInfo{
     if(changeInfo == nil || changeInfo == NULL || [changeInfo isEqual:[NSNull null]]){
         return nil;
@@ -135,6 +147,17 @@
     [changeInfoDic safeSetObject:[NSNumber numberWithInt:(int)changeInfo.event] forKey:@"event"];
     NSDictionary *conversationDic = [ZIMPluginConverter mZIMConversation:changeInfo.conversation];
     [changeInfoDic safeSetObject:conversationDic forKey:@"conversation"];
+    return changeInfoDic;
+}
+
++(nullable NSDictionary *)mMessageSentStatusChangeInfo:(nullable ZIMMessageSentStatusChangeInfo *)changeInfo{
+    if(changeInfo == nil || changeInfo == NULL || [changeInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *changeInfoDic = [[NSMutableDictionary alloc] init];
+    [changeInfoDic safeSetObject:[NSNumber numberWithInt:(int)changeInfo.status] forKey:@"sentStatus"];
+    NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:changeInfo.message];
+    [changeInfoDic safeSetObject:messageDic forKey:@"message"];
     return changeInfoDic;
 }
 
@@ -224,6 +247,7 @@
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"orderKey"]  forKey:@"orderKey"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isUserInserted"] forKey:@"isUserInserted"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey: @"receiptStatus"] forKey:@"receiptStatus"];
+    [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"extendedData"]  forKey:@"extendedData"];
     if([msg isKindOfClass:[ZIMMediaMessage class]]){
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileLocalPath"]  forKey:@"fileLocalPath"];
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileDownloadUrl"] forKey:@"fileDownloadUrl"];
@@ -257,6 +281,7 @@
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.conversationSeq] forKey:@"conversationSeq"];
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.orderKey] forKey:@"orderKey"];
     [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:message.receiptStatus] forKey:@"receiptStatus"];
+    [messageDic safeSetObject:message.extendedData forKey:@"extendedData"];
     if([message isKindOfClass:[ZIMMediaMessage class]]){
         ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
         [messageDic safeSetObject:mediaMsg.fileLocalPath forKey:@"fileLocalPath"];
@@ -320,6 +345,7 @@
         case ZIMMessageTypeSystem:{
             ZIMSystemMessage *sysMsg = (ZIMSystemMessage *)message;
             [messageDic safeSetObject:sysMsg.message forKey:@"message"];
+            break;
         }
         case ZIMMessageTypeRevoke:{
             ZIMRevokeMessage *revokeMsg = (ZIMRevokeMessage *)message;
@@ -330,6 +356,7 @@
             [messageDic safeSetObject:revokeMsg.revokeExtendedData forKey:@"revokeExtendedData"];
             [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:revokeMsg.originalMessageType] forKey:@"originalMessageType"];
             [messageDic safeSetObject:revokeMsg.originalTextMessageContent forKey:@"originalTextMessageContent"];
+            break;
         }
         default:
             break;
@@ -819,7 +846,7 @@
         return nil;
     }
     ZIMRoomMemberAttributesSetConfig *setConfig = [[ZIMRoomMemberAttributesSetConfig alloc] init];
-    setConfig.isDeleteAfterOwnerLeft = [configDic safeObjectForKey: @"isDeleteAfterOwnerLeft"];
+    setConfig.isDeleteAfterOwnerLeft = [[configDic safeObjectForKey: @"isDeleteAfterOwnerLeft"] boolValue];
     return setConfig;
 }
 
