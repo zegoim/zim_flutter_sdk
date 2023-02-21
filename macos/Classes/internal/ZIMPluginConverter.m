@@ -155,7 +155,7 @@
         return nil;
     }
     NSMutableDictionary *changeInfoDic = [[NSMutableDictionary alloc] init];
-    [changeInfoDic safeSetObject:[NSNumber numberWithInt:(int)changeInfo.status] forKey:@"sentStatus"];
+    [changeInfoDic safeSetObject:[NSNumber numberWithInt:(int)changeInfo.status] forKey:@"status"];
     NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:changeInfo.message];
     [changeInfoDic safeSetObject:messageDic forKey:@"message"];
     return changeInfoDic;
