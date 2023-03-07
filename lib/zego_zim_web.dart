@@ -530,8 +530,11 @@ class ZegoZimPlugin {
 
     final result = await promiseToFuture(
         ZIM.getInstance()!.queryRoomMemberList(roomID, _config));
+    Map resultMap = jsObjectToMap(result);
 
-    return jsObjectToMap(result);
+    resultMap["nextFlag"] = resultMap["nextFlag"] is String ? resultMap["nextFlag"] : "";
+
+    return resultMap;
   }
 
   Future<Map<dynamic, dynamic>> queryRoomOnlineMemberCount(
@@ -1629,12 +1632,25 @@ class ZegoZimPlugin {
   }
 
   static Map convertZIMMessage(Map messageMap) {
-    messageMap["messageID"] = int.parse(messageMap["messageID"]);
+    ZIMMessageType msgType =
+        ZIMMessageTypeExtension.mapValue[messageMap['type']]!;
+
+    messageMap["messageID"] = messageMap["messageID"] is int ? messageMap["messageID"] :int.parse(messageMap["messageID"]);
     messageMap["localMessageID"] = int.parse((messageMap["localMessageID"]));
     messageMap["isUserInserted"] =
         messageMap["isUserInserted"] is bool ? messageMap["isUserInserted"] : false;
     messageMap["orderKey"] = messageMap["orderKey"] is int ? messageMap["orderKey"] : 0;
     messageMap["extendedData"] = messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
+    messageMap["fileLocalPath"] = messageMap["fileLocalPath"] is String ? messageMap["fileLocalPath"] : "";
+
+    switch(msgType) {
+      case ZIMMessageType.image:
+        messageMap["thumbnailLocalPath"] = messageMap["thumbnailLocalPath"] is String ? messageMap["thumbnailLocalPath"] : "";
+        messageMap["largeImageLocalPath"] = messageMap["largeImageLocalPath"] is String ? messageMap["largeImageLocalPath"] : "";
+        break;
+      case ZIMMessageType.video:
+        messageMap["videoFirstFrameLocalPath"] = messageMap["videoFirstFrameLocalPath"] is String ? messageMap["videoFirstFrameLocalPath"] : "";
+    }
 
     return messageMap;
   }

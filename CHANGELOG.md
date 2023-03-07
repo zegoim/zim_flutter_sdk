@@ -1,3 +1,9 @@
+## 2.7.0
+### 1. Feature
+1、Optimized the blank setting logic for user userName during login.
+2、Optimize session message pull timing.
+3、Optimize the timing of network disconnection and reconnection.
+
 ## 2.6.0+1
 Fix known problems.
 

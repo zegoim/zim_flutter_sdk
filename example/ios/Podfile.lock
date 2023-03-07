@@ -50,10 +50,10 @@ PODS:
   - SwiftyGif (5.4.3)
   - video_player_avfoundation (0.0.1):
     - Flutter
-  - zego_zim (2.5.0):
+  - zego_zim (2.7.0):
     - Flutter
-    - ZIM (= 2.5.0)
-  - ZIM (2.5.0)
+    - ZIM (= 2.7.0)
+  - ZIM (2.7.0)
 
 DEPENDENCIES:
   - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
