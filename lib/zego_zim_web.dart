@@ -1635,7 +1635,7 @@ class ZegoZimPlugin {
     ZIMMessageType msgType =
         ZIMMessageTypeExtension.mapValue[messageMap['type']]!;
 
-    messageMap["messageID"] = int.parse(messageMap["messageID"]);
+    messageMap["messageID"] = messageMap["messageID"] is int ? messageMap["messageID"] :int.parse(messageMap["messageID"]);
     messageMap["localMessageID"] = int.parse((messageMap["localMessageID"]));
     messageMap["isUserInserted"] =
         messageMap["isUserInserted"] is bool ? messageMap["isUserInserted"] : false;
