@@ -14,10 +14,10 @@ class ZIMManager {
 
   static Map<String, ZIMEngine> engineMap = {};
 
-  static ZIMEngine? instanceEngine;
+  static String? instanceHandle;
 
   static ZIMEngine? getInstance() {
-    return instanceEngine;
+    return engineMap[instanceHandle];
   }
 
   static Future<String> getVersion() async {
@@ -41,10 +41,8 @@ class ZIMManager {
 
     String handle = generateHandle();
 
-    channel.invokeMethod("create", {
-      "handle": handle,
-      "config": ZIMConverter.mZIMAppConfig(config)
-    });
+    channel.invokeMethod("create",
+        {"handle": handle, "config": ZIMConverter.mZIMAppConfig(config)});
     ZIMEngine engine = ZIMEngine(
         handle: handle,
         channel: channel,
@@ -53,23 +51,20 @@ class ZIMManager {
 
     engineMap[handle] = engine;
 
-    if (instanceEngine == null) {
-      ZIMManager.instanceEngine = engine;
+    if (instanceHandle == null) {
+      ZIMManager.instanceHandle = handle;
     }
-
     return engine;
   }
 
   static bool destroyEngine(String handle) {
-
-    if(engineMap.containsKey(handle)) {
-      //engine.destroy();
+    if (engineMap.containsKey(handle)) {
       engineMap.remove(handle);
-      instanceEngine = null;
-
+      if (instanceHandle == handle) {
+        instanceHandle == null;
+      }
       return true;
     }
-
     return false;
   }
 

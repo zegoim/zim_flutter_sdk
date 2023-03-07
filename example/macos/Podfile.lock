@@ -2,45 +2,47 @@ PODS:
   - emoji_picker_flutter (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
-  - path_provider_macos (0.0.1):
+  - path_provider_foundation (0.0.1):
+    - Flutter
     - FlutterMacOS
-  - shared_preferences_macos (0.0.1):
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
     - FlutterMacOS
   - zego_zim (2.6.0):
     - FlutterMacOS
-    - ZIM (= 2.6.0)
-  - ZIM (2.6.0)
+    - ZIM_macOS (= 2.7.0)
+  - ZIM_macOS (2.7.0)
 
 DEPENDENCIES:
   - emoji_picker_flutter (from `Flutter/ephemeral/.symlinks/plugins/emoji_picker_flutter/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
-  - shared_preferences_macos (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/macos`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/macos`)
   - zego_zim (from `Flutter/ephemeral/.symlinks/plugins/zego_zim/macos`)
 
 SPEC REPOS:
   trunk:
-    - ZIM
+    - ZIM_macOS
 
 EXTERNAL SOURCES:
   emoji_picker_flutter:
     :path: Flutter/ephemeral/.symlinks/plugins/emoji_picker_flutter/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
-  path_provider_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
-  shared_preferences_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos
+  path_provider_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/macos
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/macos
   zego_zim:
     :path: Flutter/ephemeral/.symlinks/plugins/zego_zim/macos
 
 SPEC CHECKSUMS:
   emoji_picker_flutter: 533634326b1c5de9a181ba14b9758e6dfe967a20
   FlutterMacOS: 85f90bfb3f1703249cf1539e4dfbff31e8584698
-  path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
-  shared_preferences_macos: 8b221d457159a85f478c0b9d2f19aeae9feff475
-  zego_zim: b76933cfd12e9ca94269b41bc569ad7cd121a5c7
-  ZIM: 6b320ccd4d189f522192031c0a923150283c2c9c
+  path_provider_foundation: 37748e03f12783f9de2cb2c4eadfaa25fe6d4852
+  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
+  zego_zim: 4420a6bf04998c15646b8fdbb4b0768846416bd2
+  ZIM_macOS: be6816b1a22157c7f594b64764ce54aa2b45c686
 
 PODFILE CHECKSUM: a884f6dd3f7494f3892ee6c81feea3a3abbf9153
 
