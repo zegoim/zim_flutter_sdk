@@ -1,3 +1,6 @@
+## 2.7.1
+1、Fixed some error.
+
 ## 2.7.0
 ### 1. Feature
 1、Optimized the blank setting logic for user userName during login.
