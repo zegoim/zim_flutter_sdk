@@ -174,6 +174,10 @@ abstract class ZIM {
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
+  Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList();
+
+  Future<ZIMConversationPinnedUpdatedResult> updateConversationPinnedState(bool isPinned, String conversationID, ZIMConversationType conversationType);
+
   /// Available since: 2.1.5 and above.
   ///
   /// Description: Used to clear unread for the current user target session.

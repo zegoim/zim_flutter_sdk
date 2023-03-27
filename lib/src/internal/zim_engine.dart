@@ -850,4 +850,23 @@ class ZIMEngine implements ZIM {
       });
       return ZIMConverter.oZIMMessageRevokedResult(resultMap);
   }
+
+  @override
+  Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList() async{
+    Map resultMap = await channel.invokeMethod('queryConversationPinnedList',{
+      'handle': handle
+    });
+    return ZIMConverter.oZIMConversationPinnedListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMConversationPinnedUpdatedResult> updateConversationPinnedState(bool isPinned, String conversationID, ZIMConversationType conversationType) async{
+    Map resultMap = await channel.invokeMethod('updateConversationPinnedState',{
+      'handle': handle,
+      'isPinned':isPinned,
+      'conversationID':conversationID,
+      'conversationType': ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMConversationPinnedUpdatedResult(resultMap);
+  }
 }
