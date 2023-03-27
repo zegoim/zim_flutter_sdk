@@ -305,7 +305,58 @@
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
         }
     }];
+
 }
+
+- (void)queryConversationPinnedList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
+    NSDictionary *configDic = [call.arguments objectForKey:@"config"];
+    ZIMConversationQueryConfig *queryConfig = [[ZIMConversationQueryConfig alloc] init];
+    queryConfig.count = ((NSNumber *)[configDic objectForKey:@"count"]).unsignedIntValue;
+    queryConfig.nextConversation = [ZIMPluginConverter oZIMConversation:(NSDictionary *)[configDic objectForKey:@"nextConversation"]];
+    [zim queryConversationPinnedListWithConfig:queryConfig callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSArray *conversationBasicList = [ZIMPluginConverter mZIMConversationList:conversationList];
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationBasicList forKey:@"conversationList"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)updateConversationPinnedState:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    NSString *inputConversationID = [call.arguments objectForKey:@"conversationID"];
+    int inputConversationType = ((NSNumber *)[call.arguments safeObjectForKey:@"conversationType"]).intValue;
+    bool isPinned = ((NSNumber *)[call.arguments safeObjectForKey:@"isPinned"]).boolValue;
+    [zim updateConversationPinnedState:isPinned conversationID:inputConversationID conversationType:inputConversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+
 
 - (void)clearConversationUnreadMessageCount:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
