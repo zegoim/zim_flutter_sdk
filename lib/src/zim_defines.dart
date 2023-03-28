@@ -1034,7 +1034,7 @@ class ZIMConversationDeletedResult {
 class ZIMConversationPinnedStateUpdatedResult {
   String conversationID;
   ZIMConversationType conversationType;
-  ZIMConversationPinnedUpdatedResult(
+  ZIMConversationPinnedStateUpdatedResult(
       {required this.conversationID, required this.conversationType});
 }
 
