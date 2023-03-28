@@ -142,6 +142,7 @@ public class ZIMPluginConverter {
         else {
             conversationMap.put("lastMessage",null);
         }
+        conversationMap.put("isPinned",conversation.isPinned);
         return conversationMap;
     }
 
@@ -606,6 +607,7 @@ public class ZIMPluginConverter {
         }else{
             conversation.lastMessage = null;
         }
+        conversation.isPinned = ZIMPluginCommonTools.safeGetBoolValue(resultMap.get("isPinned"));
         return conversation;
     }
 
