@@ -231,6 +231,7 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	conversationMap[FTValue("unreadMessageCount")] = FTValue((int32_t)conversation->unreadMessageCount);
 	conversationMap[FTValue("orderKey")] = FTValue(conversation->orderKey);
 	conversationMap[FTValue("lastMessage")] = cnvZIMMessageObjectToMap(conversation->lastMessage.get());
+    conversationMap[FTValue("isPinned")] = FTValue(conversation->isPinned);
 
 	return conversationMap;
 }
@@ -375,10 +376,10 @@ ZIMConversationDeleteConfig ZIMPluginConverter::cnvZIMConversationDeleteConfigTo
 std::shared_ptr<ZIMConversation>  ZIMPluginConverter::cnvZIMConversationToObject(FTMap conversationMap) {
 	std::shared_ptr<ZIMConversation> conversationPtr = std::make_shared<ZIMConversation>();
 
-
 	conversationPtr->conversationID = std::get<std::string>(conversationMap[FTValue("conversationID")]);
 	conversationPtr->conversationName = std::get<std::string>(conversationMap[FTValue("conversationName")]);
 	conversationPtr->conversationAvatarUrl = std::get<std::string>(conversationMap[FTValue("conversationAvatarUrl")]);
+	conversationPtr->isPinned = std::get<bool>(conversationMap[FTValue("isPinned")]);
 	if (std::holds_alternative<int32_t>(conversationMap[FTValue("type")])) {
 		conversationPtr->type = (ZIMConversationType)std::get<int32_t>(conversationMap[FTValue("type")]);
 	}
