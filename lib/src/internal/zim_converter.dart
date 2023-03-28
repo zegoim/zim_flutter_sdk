@@ -347,8 +347,8 @@ class ZIMConverter {
     return ZIMConversationPinnedListQueriedResult(conversationList: conversationList);
   }
 
-  static ZIMConversationPinnedUpdatedResult oZIMConversationPinnedUpdatedResult(Map resultMap) {
-    return ZIMConversationPinnedUpdatedResult(
+  static ZIMConversationPinnedStateUpdatedResult oZIMConversationPinnedStateUpdatedResult(Map resultMap) {
+    return ZIMConversationPinnedStateUpdatedResult(
         conversationID: resultMap['conversationID'],
         conversationType: ZIMConversationTypeExtension
             .mapValue[resultMap['conversationType']]!);

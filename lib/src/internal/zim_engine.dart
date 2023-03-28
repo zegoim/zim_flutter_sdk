@@ -852,21 +852,23 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList() async{
+  Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList(
+      ZIMConversationQueryConfig config) async{
     Map resultMap = await channel.invokeMethod('queryConversationPinnedList',{
-      'handle': handle
+      'handle': handle,
+      'config': ZIMConverter.mZIMConversationQueryConfig(config)
     });
     return ZIMConverter.oZIMConversationPinnedListQueriedResult(resultMap);
   }
 
   @override
-  Future<ZIMConversationPinnedUpdatedResult> updateConversationPinnedState(bool isPinned, String conversationID, ZIMConversationType conversationType) async{
+  Future<ZIMConversationPinnedStateUpdatedResult> updateConversationPinnedState(bool isPinned, String conversationID, ZIMConversationType conversationType) async{
     Map resultMap = await channel.invokeMethod('updateConversationPinnedState',{
       'handle': handle,
       'isPinned':isPinned,
       'conversationID':conversationID,
       'conversationType': ZIMConversationTypeExtension.valueMap[conversationType]
     });
-    return ZIMConverter.oZIMConversationPinnedUpdatedResult(resultMap);
+    return ZIMConverter.oZIMConversationPinnedStateUpdatedResult(resultMap);
   }
 }
