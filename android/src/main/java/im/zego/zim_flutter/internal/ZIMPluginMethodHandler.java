@@ -15,6 +15,8 @@ import im.zego.zim.callback.ZIMCallInvitationSentCallback;
 import im.zego.zim.callback.ZIMCallRejectionSentCallback;
 import im.zego.zim.callback.ZIMConversationDeletedCallback;
 import im.zego.zim.callback.ZIMConversationListQueriedCallback;
+import im.zego.zim.callback.ZIMConversationPinnedStateUpdatedCallback;
+import im.zego.zim.callback.ZIMConversationPinnedListQueriedCallback;
 import im.zego.zim.callback.ZIMConversationMessageReceiptReadSentCallback;
 import im.zego.zim.callback.ZIMConversationNotificationStatusSetCallback;
 import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
