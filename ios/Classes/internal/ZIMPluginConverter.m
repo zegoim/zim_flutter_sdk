@@ -223,6 +223,11 @@
             ((ZIMSystemMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
             break;
         }
+        case ZIMMessageTypeCustom:
+            msg = [[ZIMCustomMessage alloc] init];
+            ((ZIMCustomMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
+            ((ZIMCustomMessage *)msg).subType = ((NSNumber *)[messageDic safeObjectForKey:@"subType"]).unsignedIntValue;
+            break;
         case ZIMMessageTypeRevoke:{
             msg = [[ZIMRevokeMessage alloc] init];
             [((ZIMRevokeMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"revokeType"]  forKey:@"revokeType"];
@@ -347,6 +352,12 @@
         case ZIMMessageTypeSystem:{
             ZIMSystemMessage *sysMsg = (ZIMSystemMessage *)message;
             [messageDic safeSetObject:sysMsg.message forKey:@"message"];
+            break;
+        }
+        case ZIMMessageTypeCustom:{
+            ZIMCustomMessage *customMsg = (ZIMCustomMessage *)message;
+            [messageDic safeSetObject:customMsg.message forKey:@"message"];
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedInt:customMsg.subType] forKey:@"subType"];
             break;
         }
         case ZIMMessageTypeRevoke:{

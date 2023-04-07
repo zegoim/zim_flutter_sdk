@@ -189,7 +189,9 @@ enum ZIMMessageType {
 
   system,
 
-  revoke
+  revoke,
+
+  custom
 }
 
 enum ZIMMediaFileType {
@@ -556,6 +558,14 @@ class ZIMSystemMessage extends ZIMMessage {
   String message = '';
   ZIMSystemMessage({required this.message}) {
     super.type = ZIMMessageType.system;
+  }
+}
+
+class ZIMCustomMessage extends ZIMMessage {
+  String message = '';
+  int subType=0;
+  ZIMCustomMessage({required this.message}){
+    super.type = ZIMMessageType.custom;
   }
 }
 
