@@ -92,6 +92,7 @@ class ZIMConverter {
             .valueMap[conversation.notificationStatus];
     conversationMap['unreadMessageCount'] = conversation.unreadMessageCount;
     conversationMap['orderKey'] = conversation.orderKey;
+    conversationMap['isPinned'] = conversation.isPinned;
     if (conversation.lastMessage != null) {
       conversationMap['lastMessage'] = mZIMMessage(conversation.lastMessage!);
     }
@@ -111,6 +112,7 @@ class ZIMConverter {
       conversation.lastMessage = oZIMMessage(resultMap['lastMessage']);
     }
     conversation.notificationStatus = ZIMConversationNotificationStatusExtension.mapValue[resultMap['notificationStatus']]!;
+    conversation.isPinned = resultMap['isPinned'];
     return conversation;
   }
 
@@ -334,6 +336,22 @@ class ZIMConverter {
       conversationList.add(oZIMConversation(conversationBasicMap));
     }
     return ZIMConversationListQueriedResult(conversationList: conversationList);
+  }
+
+  static ZIMConversationPinnedListQueriedResult oZIMConversationPinnedListQueriedResult(Map resultMap) {
+    List conversationBasicList = resultMap['conversationList'];
+    List<ZIMConversation> conversationList = [];
+    for (Map conversationBasicMap in conversationBasicList) {
+      conversationList.add(oZIMConversation(conversationBasicMap));
+    }
+    return ZIMConversationPinnedListQueriedResult(conversationList: conversationList);
+  }
+
+  static ZIMConversationPinnedStateUpdatedResult oZIMConversationPinnedStateUpdatedResult(Map resultMap) {
+    return ZIMConversationPinnedStateUpdatedResult(
+        conversationID: resultMap['conversationID'],
+        conversationType: ZIMConversationTypeExtension
+            .mapValue[resultMap['conversationType']]!);
   }
 
   static Map mZIMConversationDeleteConfig(ZIMConversationDeleteConfig config) {

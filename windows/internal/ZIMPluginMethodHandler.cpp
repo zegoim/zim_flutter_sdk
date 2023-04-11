@@ -342,6 +342,73 @@ void ZIMPluginMethodHandler::queryConversationList(flutter::EncodableMap& argume
     });
 }
 
+void ZIMPluginMethodHandler::queryConversationPinnedList(flutter::EncodableMap& argument,
+    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+
+    FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
+    ZIMConversationQueryConfig queryConfig;
+    queryConfig.count = std::get<int32_t>(configMap[FTValue("count")]);
+
+    if (std::holds_alternative<std::monostate>(configMap[FTValue("nextConversation")])) {
+        queryConfig.nextConversation = nullptr;
+    }
+    else {
+        auto nextConversation = std::get<FTMap>(configMap[FTValue("nextConversation")]);
+        queryConfig.nextConversation = ZIMPluginConverter::cnvZIMConversationToObject(nextConversation);
+    }
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->queryConversationPinnedList(queryConfig, [=](const std::vector<std::shared_ptr<ZIMConversation>>& conversationList,
+        const ZIMError& errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("conversationList")] = ZIMPluginConverter::cnvZIMConversationListToArray(conversationList);
+
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+
+    });
+}
+
+void ZIMPluginMethodHandler::updateConversationPinnedState(flutter::EncodableMap& argument,
+    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+
+    bool isPinned = std::get<bool>(argument[FTValue("isPinned"));
+    auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
+
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->updateConversationPinnedState(isPinned, conversationID, (ZIMConversationType)conversationType, [=](const std::string& conversationID, ZIMConversationType conversationType,
+        const ZIMError& errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("conversationID")] = FTValue(conversationID);
+            retMap[FTValue("conversationType")] = FTValue(conversationType);
+
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
 void ZIMPluginMethodHandler::deleteConversation(flutter::EncodableMap& argument,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 

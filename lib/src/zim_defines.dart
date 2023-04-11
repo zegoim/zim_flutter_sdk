@@ -569,6 +569,7 @@ class ZIMConversation {
   int unreadMessageCount = 0;
   ZIMMessage? lastMessage;
   int orderKey = 0;
+  bool isPinned =false;
   ZIMConversation();
 }
 
@@ -1030,6 +1031,18 @@ class ZIMConversationDeletedResult {
       {required this.conversationID, required this.conversationType});
 }
 
+class ZIMConversationPinnedStateUpdatedResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  ZIMConversationPinnedStateUpdatedResult(
+      {required this.conversationID, required this.conversationType});
+}
+
+class ZIMConversationPinnedListQueriedResult {
+  List<ZIMConversation> conversationList;
+
+  ZIMConversationPinnedListQueriedResult({required this.conversationList});
+}
 /// Available since: 2.0.0 and above.
 ///
 /// Description: This callback returns the result of clearing a session if the session is not read.
