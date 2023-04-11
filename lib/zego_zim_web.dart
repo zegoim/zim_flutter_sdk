@@ -222,6 +222,14 @@ class ZegoZimPlugin {
         return callAccept(call.arguments["callID"], call.arguments["config"]);
       case 'callReject':
         return callReject(call.arguments["callID"], call.arguments["config"]);
+      case 'callQuit':
+        return callQuit(call.arguments["callID"], call.arguments["config"]);
+      case 'callEnd':
+        return callEnd(call.arguments["callID"], call.arguments["config"]);
+      case 'callingInvite':
+        return callingInvite(call.arguments["callID"], call.arguments["invitees"], call.arguments["config"]);
+      case 'queryCallList':
+        return queryCallList(call.arguments["config"]);
       case 'queryRoomMemberAttributesList':
         return queryRoomMemberAttributesList(
             call.arguments["roomID"], call.arguments["config"]);
@@ -320,6 +328,10 @@ class ZegoZimPlugin {
           return callInvitationRejectedHandle(_zim, data);
         case "callInviteesAnsweredTimeout":
           return callInviteesAnsweredTimeoutHandle(_zim, data);
+        case "callStateChanged":
+          return callStateChangedHandle(_zim, data);
+        case "callUserStateChanged":
+          return callUserStateChangedHandle(_zim, data);
         case "conversationChanged":
           return conversationChangedHandle(_zim, data);
         case "conversationTotalUnreadMessageCountUpdated":
@@ -1014,6 +1026,43 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
+  Future<void> callQuit(
+      String callID, dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    await promiseToFuture(ZIM.getInstance()!.callQuit(callID, _config));
+
+    return;
+  }
+
+  Future<void> callEnd(
+      String callID, dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    await promiseToFuture(ZIM.getInstance()!.callEnd(callID, _config));
+
+    return;
+  }
+
+  Future<Map<dynamic, dynamic>> callingInvite(
+      String callID, dynamic invitees, dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.callingInvite(callID, invitees, _config));
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryCallList(dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.queryCallList(_config));
+
+    return jsObjectToMap(result);
+  }
+
   Future<Map<dynamic, dynamic>> queryRoomMemberAttributesList(
       String roomID, dynamic config) async {
     Object _config = mapToJSObj(config);
@@ -1463,6 +1512,32 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInviteesAnsweredTimeout!(zim, invitees, callID);
   }
 
+  static void callStateChangedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onCallStateChanged == null) return;
+
+    String callID = data["callID"];
+    ZIMCallState state = ZIMCallStateExtension.mapValue[data["state"]]!;
+    int duration = data["duration"];
+    String extendedData = data["extendedData"];
+    int timeout = data["timeout"];
+
+    ZIMEventHandler.onCallStateChanged!(zim, callID, state, duration, extendedData, timeout);
+  }
+
+  static void callUserStateChangedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onCallUserStateChanged == null) return;
+
+    String callID = data["callID"];
+    List <dynamic> userList = data["userList"];
+    List <ZIMCallUserInfo> _userList = [];
+    userList.forEach((map) {
+      ZIMCallUserInfo info = ZIMConverter.oZIMCallUserInfo(map);
+      _userList.add(info);
+    });
+
+    ZIMEventHandler.onCallUserStateChanged!(zim, callID, _userList);
+  }
+
   static void conversationChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConversationChanged == null) return;
 
@@ -1543,7 +1618,7 @@ class ZegoZimPlugin {
     ZIMEventHandler.onMessageRevokeReceived!(zim, messageList);
   }
 
-   static void messageSentStatusChangedHandle(ZIMEngine zim, dynamic data) {
+  static void messageSentStatusChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onMessageSentStatusChanged == null) {
       return;
     }

@@ -496,6 +496,12 @@ class ZIMConverter {
         conversationID: conversationID, conversationType: conversationType);
   }
 
+  static ZIMCallCancelSentResult oZIMCallCancelSentResult(Map resultMap) {
+    return ZIMCallCancelSentResult(
+        callID: resultMap['callID'],
+        errorInvitees: (resultMap['errorInvitees'] as List).cast<String>());
+  }
+
   static Map mZIMRoomInfo(ZIMRoomInfo roomInfo) {
     Map roomInfoMap = {};
     roomInfoMap['roomID'] = roomInfo.roomID;
@@ -958,10 +964,16 @@ class ZIMConverter {
     return configMap;
   }
 
-  static ZIMCallCancelSentResult oZIMCallCancelSentResult(Map resultMap) {
-    return ZIMCallCancelSentResult(
+  static ZIMCallingInvitationSentResult oZIMCallingInvitationSentResult(Map resultMap) {
+    return ZIMCallingInvitationSentResult(
         callID: resultMap['callID'],
         errorInvitees: (resultMap['errorInvitees'] as List).cast<String>());
+  }
+
+  static ZIMQueryCallListResult oZIMQueryCallListResult(Map resultMap) {
+    return ZIMQueryCallListResult(
+        nextFlag: resultMap['nextFlag'],
+        callList: (resultMap['callList'] as List).cast<String>());
   }
 
   static Map mZIMCallAcceptConfig(ZIMCallAcceptConfig config) {
@@ -1197,5 +1209,33 @@ class ZIMConverter {
     revokeConfig['pushConfig'] = mZIMPushConfig(config.pushConfig);
     revokeConfig['revokeExtendedData'] = config.revokeExtendedData;
     return revokeConfig;
+  }
+
+  static Map mZIMCallEndConfig(ZIMCallEndConfig config) {
+    Map configMap = {};
+    configMap['extendedData'] = config.extendedData;
+    configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    return configMap;
+  }
+
+  static Map mZIMCallQuitConfig(ZIMCallQuitConfig config) {
+    Map configMap = {};
+    configMap['extendedData'] = config.extendedData;
+    configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    return configMap;
+  }
+
+  static Map mZIMCallingInviteConfig(ZIMCallingInviteConfig config) {
+    Map configMap = {};
+    configMap['extendedData'] = config.extendedData;
+    configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    return configMap;
+  }
+
+  static Map mZIMQueryCallListConfig(ZIMQueryCallListConfig config) {
+    Map configMap = {};
+    configMap['count'] = config.count;
+    configMap['nextFlag'] = config.nextFlag;
+    return configMap;
   }
 }

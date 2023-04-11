@@ -871,4 +871,44 @@ class ZIMEngine implements ZIM {
     });
     return ZIMConverter.oZIMConversationPinnedStateUpdatedResult(resultMap);
   }
+
+  @override
+  Future<void> callEnd(String callID, ZIMCallEndConfig config) async {
+    await channel.invokeMethod('callEnd',{
+      'handle': handle,
+      'callID': callID,
+      'config': ZIMConverter.mZIMCallEndConfig(config)
+    });
+    return;
+  }
+
+  @override
+  Future<void> callQuit(String callID, ZIMCallQuitConfig config) async {
+    Map resultMap = await channel.invokeMethod('callQuit',{
+      'handle': handle,
+      'callID': callID,
+      'config': ZIMConverter.mZIMCallQuitConfig(config)
+    });
+    return;
+  }
+
+  @override
+  Future<ZIMCallingInvitationSentResult> callingInvite(String callID, List<String> invitees, ZIMCallingInviteConfig config) async {
+    Map resultMap = await channel.invokeMethod('callingInvite',{
+      'handle': handle,
+      'callID': callID,
+      'invitees': invitees,
+      'config': ZIMConverter.mZIMCallingInviteConfig(config)
+    });
+    return ZIMConverter.oZIMCallingInvitationSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMQueryCallListResult> queryCallList(ZIMQueryCallListConfig config) async {
+    Map resultMap = await channel.invokeMethod('callingInvite',{
+      'handle': handle,
+      'config': ZIMConverter.mZIMQueryCallListConfig(config)
+    });
+    return ZIMConverter.oZIMQueryCallListResult(resultMap);
+  }
 }

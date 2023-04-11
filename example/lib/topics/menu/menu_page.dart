@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:badges/badges.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter/services.dart';
 import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zim_example/topics/items/key_center/04_token_plugin/04_token_plugin.dart';
