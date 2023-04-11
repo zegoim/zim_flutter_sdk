@@ -389,7 +389,7 @@ void ZIMPluginMethodHandler::updateConversationPinnedState(flutter::EncodableMap
         return;
     }
 
-    bool isPinned = std::get<bool>(argument[FTValue("isPinned"));
+    bool isPinned = std::get<bool>(argument[FTValue("isPinned")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
 
