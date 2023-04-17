@@ -801,10 +801,55 @@
     ZIMCallInviteConfig *config = [[ZIMCallInviteConfig alloc] init];
     config.timeout = ((NSNumber *)[configDic safeObjectForKey:@"timeout"]).unsignedIntValue;
     config.extendedData = [configDic safeObjectForKey:@"extendedData"];
+    config.mode = ((NSNumber *)[configDic objectForKey:@"mode"]).intValue;
+    config.callID = [configDic safeObjectForKey:@"callID"];
+
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
+    
+    return config;
+}
+
++(nullable ZIMCallingInviteConfig *)oZIMCallingInviteConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallingInviteConfig *config = [[ZIMCallingInviteConfig alloc] init];
+    config.extendedData = [configDic safeObjectForKey:@"extendedData"];
     
     config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
     
     return config;
+}
+
++(nullable ZIMCallQuitConfig *)oZIMCallQuitConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallQuitConfig *config = [[ZIMCallQuitConfig alloc] init];
+    config.extendedData = [configDic safeObjectForKey:@"extendedData"];
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
+    return config;
+}
+
++(nullable ZIMCallEndConfig *)oZIMCallEndConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallEndConfig *config = [[ZIMCallEndConfig alloc] init];
+    config.extendedData = [configDic safeObjectForKey:@"extendedData"];
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
+    return config;
+}
+
++(nullable ZIMQueryCallListConfig *)oZIMQueryCallListConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMQueryCallListConfig *queryConfig = [[ZIMQueryCallListConfig alloc] init];
+    queryConfig.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
+    queryConfig.nextFlag = [configDic safeObjectForKey:@"nextFlag" unsignedIntValue];
+    return queryConfig;
+    
 }
 
 +(nullable NSDictionary *)mZIMCallInvitationSentInfo:(nullable ZIMCallInvitationSentInfo *)info{
@@ -815,6 +860,44 @@
     [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
     [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.errorInvitees] forKey:@"errorInvitees"];
     return infoDic;
+}
+
++(nullable NSDictionary *)mZIMCallingInvitationSentInfo:(nullable ZIMCallingInvitationSentInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.errorInvitees] forKey:@"errorInvitees"];
+    return infoDic;
+}
+
++(nullable NSDictionary *)mZIMCallInfo:(ZIMCallInfo *)callInfo{
+    if(callInfo == nil || callInfo == NULL || [callInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *callInfoDic = [[NSMutableDictionary alloc] init];
+    [callInfoDic safeSetObject:callInfo.callID forKey:@"callID"];
+    [callInfoDic safeSetObject:callInfo.caller forKey:@"caller"];
+    [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.createTime] forKey:@"createTime"];
+    [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.endTime] forKey:@"endTime"];
+    [callInfoDic safeSetObject:[NSNumber numberWithInt:(int)callInfo.state] forKey:@"state"];
+    [callInfoDic safeSetObject:[NSNumber numberWithInt:(int)callInfo.mode] forKey:@"mode"];
+    [callInfoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:callInfo.callUserInfos] forKey:@"callUserList"];
+    [callInfoDic safeSetObject:callInfo.extendedData forKey:@"extendedData"];
+    [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.duration] forKey:@"duration"];
+    return callInfoDic;
+}
+
++(nullable NSArray *)mZIMCallInfoList:(nullable NSArray<ZIMCallInfo *> *)callInfoList{
+    if(callInfoList == nil || callInfoList == NULL || [callInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicList = [[NSMutableArray alloc] init];
+    for (ZIMCallInfo *info in callInfoList) {
+        NSDictionary *infoDic = [ZIMPluginConverter mZIMCallInfo:info];
+        [basicList safeAddObject:infoDic];
+    }
+    return basicList;
 }
 
 +(nullable ZIMCallCancelConfig *)oZIMCallCancelConfig:(nullable NSDictionary *)configDic{
