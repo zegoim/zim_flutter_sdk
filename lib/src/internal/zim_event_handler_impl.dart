@@ -314,7 +314,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       case 'onCallUserStateChanged':
         if(ZIMEventHandler.onCallUserStateChanged == null) return;
         ZIMEventHandler.onCallUserStateChanged!(
-            zim!,
+            zim!,map['callID'],
             ZIMConverter.oZIMCallUserStateChangeInfo(map['callUserStateChangeInfo']));
         break;
       default:

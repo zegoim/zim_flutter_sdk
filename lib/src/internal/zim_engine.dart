@@ -883,13 +883,13 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<void> callQuit(String callID, ZIMCallQuitConfig config) async {
+  Future<ZIMCallQuitSentResult> callQuit(String callID, ZIMCallQuitConfig config) async {
     Map resultMap = await channel.invokeMethod('callQuit',{
       'handle': handle,
       'callID': callID,
       'config': ZIMConverter.mZIMCallQuitConfig(config)
     });
-    return;
+    return ZIMConverter;
   }
 
   @override

@@ -539,7 +539,20 @@ fromGroupID:(NSString *)fromGroupID{
     
 }
 
-
+- (void)zim:(ZIM *)zim callStateChanged:(ZIMCallStateChangeInfo *)info{
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onCallStateChanged" forKey:@"method"];
+    [resultDic safeSetObject:info.callID forKey:@"callID"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)info.state] forKey:@"state"];
+    [resultDic safeSetObject:[NSNumber numberWithLongLong:info.callDuration] forKey:@"callDuration"];
+    [resultDic safeSetObject:[NSNumber numberWithLongLong:info.userDuration] forKey:@"userDuration"];
+    [resultDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
+    [resultDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfo:info.callUserInfo] forKey:@"callUserInfo"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
 #pragma mark - Getter
 - (NSMapTable *)engineEventMap {
     if (!_engineEventMap) {

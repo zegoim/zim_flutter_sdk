@@ -84,7 +84,7 @@
     conversation.unreadMessageCount = ((NSNumber *)[conversationDic objectForKey:@"unreadMessageCount"]).intValue;
     conversation.orderKey = ((NSNumber *)[conversationDic objectForKey:@"orderKey"]).longLongValue;
     conversation.lastMessage = [ZIMPluginConverter oZIMMessage:(NSDictionary *)[conversationDic objectForKey:@"lastMessage"]];
-    conversation.isPinned = ((NSNumber *)[conversationDic objectForKey:@"isPinned"]).boolValue;
+   // conversation.isPinned = ((NSNumber *)[conversationDic objectForKey:@"isPinned"]).boolValue;
     return conversation;
 }
 
@@ -101,7 +101,7 @@
     [conversationDic safeSetObject:[NSNumber numberWithUnsignedInt:conversation.unreadMessageCount] forKey:@"unreadMessageCount"];
     [conversationDic safeSetObject:[NSNumber numberWithLongLong:conversation.orderKey] forKey:@"orderKey"];
     [conversationDic safeSetObject:[ZIMPluginConverter mZIMMessage:conversation.lastMessage] forKey:@"lastMessage"];
-    [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
+  //  [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
     return conversationDic;
     
 }
@@ -847,7 +847,7 @@
     }
     ZIMQueryCallListConfig *queryConfig = [[ZIMQueryCallListConfig alloc] init];
     queryConfig.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
-    queryConfig.nextFlag = [configDic safeObjectForKey:@"nextFlag" unsignedIntValue];
+    queryConfig.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] unsignedIntValue];
     return queryConfig;
     
 }
@@ -882,9 +882,10 @@
     [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.endTime] forKey:@"endTime"];
     [callInfoDic safeSetObject:[NSNumber numberWithInt:(int)callInfo.state] forKey:@"state"];
     [callInfoDic safeSetObject:[NSNumber numberWithInt:(int)callInfo.mode] forKey:@"mode"];
-    [callInfoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:callInfo.callUserInfos] forKey:@"callUserList"];
+    [callInfoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:callInfo.callUserList] forKey:@"callUserList"];
     [callInfoDic safeSetObject:callInfo.extendedData forKey:@"extendedData"];
-    [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.duration] forKey:@"duration"];
+    [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.callDuration] forKey:@"callDuration"];
+    [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.userDuration] forKey:@"userDuration"];
     return callInfoDic;
 }
 
@@ -984,4 +985,5 @@
     [infoDic safeSetObject:info.userID forKey:@"userID"];
     return infoDic;
 }
+
 @end
