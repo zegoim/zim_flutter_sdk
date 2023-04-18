@@ -656,6 +656,20 @@ class ZIMMessageQueryConfig {
   ZIMMessageQueryConfig();
 }
 
+class ZIMCallInfo {
+  String callID ="";
+  String caller = "";
+  int createTime = 0;
+  int callDuration = 0;
+  int userDuration = 0;
+  int endTime = 0;
+  ZIMCallState state = ZIMCallState.start;
+  ZIMInvitationMode mode = ZIMInvitationMode.general;
+  List<ZIMCallUserInfo> callUserList = [];
+  String extendedData = "";
+  ZIMCallInfo();
+}
+
 /// Delete message configuration.
 class ZIMMessageDeleteConfig {
   /// Description: Whether to remove flags for server messages. The default value is YES.
@@ -1663,7 +1677,7 @@ class ZIMCallingInvitationSentResult {
 }
 
 class ZIMQueryCallListResult {
-  List<String> callList;
+  List<ZIMCallInfo> callList;
   int nextFlag;
   ZIMQueryCallListResult({required this.callList, required this.nextFlag});
 }
