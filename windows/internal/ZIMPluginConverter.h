@@ -198,8 +198,10 @@ public:
     static FTMap cnvZIMGroupAttributesUpdateInfoToMap(const ZIMGroupAttributesUpdateInfo& updateInfo);
     static FTArray cnvZIMGroupAttributesUpdateInfoListToArray(const std::vector<ZIMGroupAttributesUpdateInfo>& updateInfoList);
     static FTMap cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInfo);
+    static FTMap cnvZIMCallInfoToMap(const ZIMCallInfo& userInfo)
     static FTArray cnvZIMCallUserListToArray(const std::vector<ZIMCallUserInfo>& callUserList);
     static FTMap cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info);
+    static FTMap cnvZIMCallingInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info);
 
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);

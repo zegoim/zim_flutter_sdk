@@ -140,6 +140,14 @@ protected:
         const std::vector<std::string>& invitees,
         const std::string& callID);
 
+    void onCallStateChanged(ZIM * zim, const std::string& callID,
+                                    const ZIMCallState& state, long long duration,
+                                    const std::string &extendedData);
+
+    void onCallUserStateChange(ZIM * zim, const std::string& callID,
+                                       const std::vector<ZIMCallUserInfo> &userList);
+
+
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
 
