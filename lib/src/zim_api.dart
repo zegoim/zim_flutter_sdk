@@ -1175,10 +1175,10 @@ abstract class ZIM {
       String callID, ZIMCallRejectConfig config);
 
 
-  Future<void> callQuit(
+  Future<ZIMCallQuitSentResult> callQuit(
       String callID, ZIMCallQuitConfig config);
 
-  Future<void> callEnd(
+  Future<ZIMCallEndSentResult> callEnd(
       String callID, ZIMCallEndConfig config);
 
   Future<ZIMCallingInvitationSentResult> callingInvite(

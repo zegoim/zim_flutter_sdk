@@ -990,6 +990,21 @@ class ZIMCallInvitationRejectedInfo {
   ZIMCallInvitationRejectedInfo();
 }
 
+class ZIMCallStateChangeInfo{
+  String callID = "";
+  ZIMCallState state = ZIMCallState.start;
+  ZIMCallUserInfo? callUserInfo;
+  int callDuration = 0;
+  int userDuration = 0;
+  int timeout = 0;
+  String extendedData = "";
+}
+
+class ZIMCallUserStateChangeInfo{
+  String callID = "";
+  List<ZIMCallUserInfo> callUserList = [];
+}
+
 class ZIMCallInvitationTimeoutInfo {
   String inviter = "";
   ZIMCallInvitationTimeoutInfo();
@@ -1674,6 +1689,22 @@ class ZIMCallingInvitationSentResult {
   String callID;
   List<String> errorInvitees;
   ZIMCallingInvitationSentResult({required this.callID, required this.errorInvitees});
+}
+
+class ZIMCallQuitSentResult {
+  String callID;
+  List<String> errorInvitees;
+  ZIMCallQuitSentResult({required this.callID, required this.errorInvitees});
+}
+
+class ZIMCallEndSentResult {
+  String callID;
+  int createTime;
+  int endTime;
+  int callDuration;
+  int userDuration;
+  ZIMCallEndSentResult({required this.callID, required this.createTime,
+    required this.endTime,required this.callDuration,required this.userDuration});
 }
 
 class ZIMQueryCallListResult {

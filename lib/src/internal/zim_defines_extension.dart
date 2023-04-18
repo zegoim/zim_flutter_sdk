@@ -333,6 +333,19 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMCallStateExtension on ZIMCallState {
+  static const valueMap = {
+    ZIMCallState.start: 0,
+    ZIMCallState.end: 1,
+  };
+  static const mapValue = {
+    0: ZIMCallState.start,
+    1: ZIMCallState.end,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMMessageReceiptStatusExtension on ZIMMessageReceiptStatus {
   static const valueMap = {
     ZIMMessageReceiptStatus.none: 0,

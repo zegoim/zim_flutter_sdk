@@ -1238,4 +1238,28 @@ class ZIMConverter {
     configMap['nextFlag'] = config.nextFlag;
     return configMap;
   }
+
+  static ZIMCallStateChangeInfo oZIMCallStateChangeInfo(Map callStateChangeInfoMap) {
+
+    ZIMCallStateChangeInfo callStateChangeInfo = ZIMCallStateChangeInfo();
+    callStateChangeInfo.callID = callStateChangeInfoMap['callID'];
+    callStateChangeInfo.state = ZIMCallStateExtension.mapValue[infoMap['state']]!;
+    callStateChangeInfo.callUserInfo = oZIMCallUserInfo(callStateChangeInfoMap['callUserInfo']);
+    callStateChangeInfo.callDuration = callStateChangeInfoMap['callDuration'];
+    callStateChangeInfo.userDuration = callStateChangeInfoMap['userDuration'];
+    callStateChangeInfo.timeout = callStateChangeInfoMap['timeout'];
+    callStateChangeInfo.extendedData = callStateChangeInfoMap['extendedData'];
+
+    return callStateChangeInfo;
+  }
+
+  static ZIMCallUserStateChangeInfo oZIMCallUserStateChangeInfo(Map callUserStateChangeInfoMap) {
+
+    ZIMCallUserStateChangeInfo callUserStateChangeInfo = ZIMCallUserStateChangeInfo();
+    callUserStateChangeInfo.callID = callUserStateChangeInfoMap['callID'];
+    callUserStateChangeInfo.callUserList = oZIMCallUserInfoList(callUserStateChangeInfoMap['callUserList']);
+
+    return callUserStateChangeInfo;
+  }
+
 }

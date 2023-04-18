@@ -461,10 +461,9 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
       onMessageRevokeReceived;
 
-
-  static void Function(ZIM zim, String callID, ZIMCallState state, int duration, String extendedData, int timeout)?
+  static void Function(ZIM zim, ZIMCallStateChangeInfo callStateChangeInfo)?
       onCallStateChanged;
 
-  static void Function(ZIM zim, String callID, List<ZIMCallUserInfo> userList)?
+  static void Function(ZIM zim, String callID, ZIMCallUserStateChangeInfo callUserStateChangeInfo)?
       onCallUserStateChanged;
 }
