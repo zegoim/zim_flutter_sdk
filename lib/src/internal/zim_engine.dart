@@ -873,13 +873,14 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<void> callEnd(String callID, ZIMCallEndConfig config) async {
-    await channel.invokeMethod('callEnd',{
+  Future<ZIMCallEndSentResult> callEnd(
+      String callID, ZIMCallEndConfig config) async{
+    Map resultMap = await channel.invokeMethod('callEnd',{
       'handle': handle,
       'callID': callID,
       'config': ZIMConverter.mZIMCallEndConfig(config)
     });
-    return;
+    return ZIMConverter.oZIMCallEndSentResult(resultMap);
   }
 
   @override
@@ -889,7 +890,7 @@ class ZIMEngine implements ZIM {
       'callID': callID,
       'config': ZIMConverter.mZIMCallQuitConfig(config)
     });
-    return ZIMConverter;
+    return ZIMConverter.oZIMCallQuitSentResult(resultMap);
   }
 
   @override

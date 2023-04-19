@@ -1514,14 +1514,15 @@ class ZegoZimPlugin {
 
   static void callStateChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallStateChanged == null) return;
-
-    String callID = data["callID"];
-    ZIMCallState state = ZIMCallStateExtension.mapValue[data["state"]]!;
-    int duration = data["duration"];
-    String extendedData = data["extendedData"];
-    int timeout = data["timeout"];
-
-    ZIMEventHandler.onCallStateChanged!(zim, callID, state, duration, extendedData, timeout);
+    ZIMCallStateChangeInfo callStateChangeInfo = ZIMCallStateChangeInfo();
+    callStateChangeInfo.callID = data["callID"];
+    callStateChangeInfo.state = ZIMCallStateExtension.mapValue[data["state"]]!;
+    callStateChangeInfo.callDuration = data["callDuration"];
+    callStateChangeInfo.userDuration = data["userDuration"];
+    callStateChangeInfo.extendedData = data["extendedData"];
+    callStateChangeInfo.timeout = data["timeout"];
+    callStateChangeInfo.callUserInfo = ZIMConverter.oZIMCallUserInfo(data['callUserInfo']);
+    ZIMEventHandler.onCallStateChanged!(zim, callStateChangeInfo);
   }
 
   static void callUserStateChangedHandle(ZIMEngine zim, dynamic data) {
@@ -1530,12 +1531,14 @@ class ZegoZimPlugin {
     String callID = data["callID"];
     List <dynamic> userList = data["userList"];
     List <ZIMCallUserInfo> _userList = [];
-    userList.forEach((map) {
+    ZIMCallUserStateChangeInfo changeInfo = ZIMCallUserStateChangeInfo();
+    changeInfo.callID = data["callID"];
+    for (var map in userList) {
       ZIMCallUserInfo info = ZIMConverter.oZIMCallUserInfo(map);
-      _userList.add(info);
-    });
+      changeInfo.callUserList.add(info);
+    }
 
-    ZIMEventHandler.onCallUserStateChanged!(zim, callID, _userList);
+    ZIMEventHandler.onCallUserStateChanged!(zim, callID,changeInfo);
   }
 
   static void conversationChangedHandle(ZIMEngine zim, dynamic data) {

@@ -973,7 +973,7 @@ class ZIMConverter {
   static ZIMQueryCallListResult oZIMQueryCallListResult(Map resultMap) {
     return ZIMQueryCallListResult(
         nextFlag: resultMap['nextFlag'],
-        callList: (resultMap['callList'] as List).cast<String>());
+        callList: resultMap['callList']);
   }
 
   static Map mZIMCallAcceptConfig(ZIMCallAcceptConfig config) {
@@ -1243,7 +1243,7 @@ class ZIMConverter {
 
     ZIMCallStateChangeInfo callStateChangeInfo = ZIMCallStateChangeInfo();
     callStateChangeInfo.callID = callStateChangeInfoMap['callID'];
-    callStateChangeInfo.state = ZIMCallStateExtension.mapValue[infoMap['state']]!;
+    callStateChangeInfo.state = ZIMCallStateExtension.mapValue[callStateChangeInfoMap['state']]!;
     callStateChangeInfo.callUserInfo = oZIMCallUserInfo(callStateChangeInfoMap['callUserInfo']);
     callStateChangeInfo.callDuration = callStateChangeInfoMap['callDuration'];
     callStateChangeInfo.userDuration = callStateChangeInfoMap['userDuration'];
@@ -1262,4 +1262,29 @@ class ZIMConverter {
     return callUserStateChangeInfo;
   }
 
+  static ZIMCallEndSentResult oZIMCallEndSentResult(Map resultMap) {
+    ZIMCallEndSentResult result = ZIMCallEndSentResult(callID: resultMap['callID'], createTime: resultMap['createTime'], endTime: resultMap['endTime'], callDuration: resultMap['callDuration'], userDuration: resultMap['userDuration']);
+    return result;
+  }
+
+  static ZIMCallQuitSentResult oZIMCallQuitSentResult(Map resultMap) {
+
+    ZIMCallQuitSentResult result = ZIMCallQuitSentResult(callID:  resultMap['callID']);
+    return result;
+  }
+
+  static ZIMCallInfo oZIMCallInfo(Map map){
+    ZIMCallInfo callInfo = ZIMCallInfo();
+    callInfo.callID = map['callID'];
+    callInfo.caller = map['caller'];
+    callInfo.createTime = map['createTime'];
+    callInfo.endTime = map['endTime'];
+    callInfo.state = ZIMCallStateExtension.mapValue[map['state']]!;
+    callInfo.mode = ZIMInvitationModeExtension.mapValue[map["mode"]]!;
+    callInfo.callUserList = ZIMConverter.oZIMCallUserInfoList(map["callUserList"]);
+    callInfo.extendedData = map['extendedData'];
+    callInfo.callDuration = map['callDuration'];
+    callInfo.userDuration = map['userDuration'];
+    return callInfo;
+  }
 }

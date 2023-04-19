@@ -335,12 +335,12 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
 
 extension ZIMCallStateExtension on ZIMCallState {
   static const valueMap = {
-    ZIMCallState.start: 0,
-    ZIMCallState.end: 1,
+    ZIMCallState.start: 1,
+    ZIMCallState.end: 2,
   };
   static const mapValue = {
-    0: ZIMCallState.start,
-    1: ZIMCallState.end,
+    1: ZIMCallState.start,
+    2: ZIMCallState.end,
   };
 
   int get value => valueMap[this] ?? -1;
@@ -401,3 +401,16 @@ extension ZIMMessageRevokeStatusExtension on ZIMMessageRevokeStatus {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMInvitationModeExtension on ZIMInvitationMode {
+  static const valueMap = {
+    ZIMInvitationMode.general: 0,
+    ZIMInvitationMode.call: 1,
+  };
+
+  static const mapValue = {
+    0:ZIMInvitationMode.general,
+    1:ZIMInvitationMode.call
+  };
+
+  int get value => valueMap[this] ?? -1;
+}

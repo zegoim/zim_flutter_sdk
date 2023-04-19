@@ -1693,8 +1693,7 @@ class ZIMCallingInvitationSentResult {
 
 class ZIMCallQuitSentResult {
   String callID;
-  List<String> errorInvitees;
-  ZIMCallQuitSentResult({required this.callID, required this.errorInvitees});
+  ZIMCallQuitSentResult({required this.callID});
 }
 
 class ZIMCallEndSentResult {
