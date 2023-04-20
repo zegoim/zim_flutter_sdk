@@ -1687,7 +1687,7 @@ class ZIMCallRejectionSentResult {
 
 class ZIMCallingInvitationSentResult {
   String callID;
-  List<String> errorInvitees;
+  List<ZIMCallUserInfo> errorInvitees = [];
   ZIMCallingInvitationSentResult({required this.callID, required this.errorInvitees});
 }
 
@@ -1706,7 +1706,7 @@ class ZIMCallEndSentResult {
     required this.endTime,required this.callDuration,required this.userDuration});
 }
 
-class ZIMQueryCallListResult {
+class ZIMCallListQueriedResult {
   List<ZIMCallInfo> callList;
   int nextFlag;
   ZIMQueryCallListResult({required this.callList, required this.nextFlag});
