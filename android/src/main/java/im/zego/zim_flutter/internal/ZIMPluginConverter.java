@@ -15,7 +15,7 @@ import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
-import im.zego.zim.entity.ZIMCallStateChangedInfo;
+import im.zego.zim.entity.ZIMCallStateChangeInfo;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallInviteConfig;
@@ -149,7 +149,7 @@ public class ZIMPluginConverter {
         else {
             conversationMap.put("lastMessage",null);
         }
-        conversationMap.put("isPinned",conversation.isPinned);
+//        conversationMap.put("isPinned",conversation.isPinned);
         return conversationMap;
     }
 
@@ -614,7 +614,7 @@ public class ZIMPluginConverter {
         }else{
             conversation.lastMessage = null;
         }
-        conversation.isPinned = ZIMPluginCommonTools.safeGetBoolValue(resultMap.get("isPinned"));
+//        conversation.isPinned = ZIMPluginCommonTools.safeGetBoolValue(resultMap.get("isPinned"));
         return conversation;
     }
 
@@ -907,8 +907,18 @@ public class ZIMPluginConverter {
         callInfoMap.put("mode",callInfo.mode.value());
         callInfoMap.put("callUserList", mZIMCallUserInfoList(callInfo.callUserList));
         callInfoMap.put("extendedData",callInfo.extendedData);
-        callInfoMap.put("duration",callInfo.duration);
+        callInfoMap.put("callDuration",callInfo.callDuration);
+        callInfoMap.put("userDuration",callInfo.userDuration);
         return callInfoMap;
+    }
+
+    static public ArrayList<HashMap<String ,Object>> mZIMCallInfoList(ArrayList<ZIMCallInfo> callInfoList){
+        ArrayList<HashMap<String ,Object>> basicInfoList = new ArrayList<>();
+        for (ZIMCallInfo callInfo :
+                callInfoList) {
+            basicInfoList.add(mZIMCallInfo(callInfo));
+        }
+        return basicInfoList;
     }
 
     static public ArrayList<HashMap<String ,Object>> mZIMCallUserInfoList(ArrayList<ZIMCallUserInfo> callUserInfoList){
@@ -1043,7 +1053,7 @@ public class ZIMPluginConverter {
         return infoMap;
     }
 
-    static public HashMap<String,Object> mZIMCallStateChangedInfo(mZIMCallStateChangedInfo info){
+    static public HashMap<String,Object> mZIMCallStateChangedInfo(ZIMCallStateChangeInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("callID",info.callID);
         infoMap.put("callUserInfo",mZIMCallUserInfo(info.callUserInfo));

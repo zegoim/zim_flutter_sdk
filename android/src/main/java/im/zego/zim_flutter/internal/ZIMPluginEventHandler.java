@@ -11,7 +11,8 @@ import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
-import im.zego.zim.entity.ZIMCallStateChangedInfo;
+import im.zego.zim.entity.ZIMCallStateChangeInfo;
+import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMError;
 import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
@@ -516,7 +517,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onCallStateChanged(ZIM zim, ZIMCallStateChangedInfo info) {
+    public void onCallStateChanged(ZIM zim, ZIMCallStateChangeInfo info) {
         if(mysink == null){
             return;
         }
@@ -531,7 +532,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangedInfo info) {
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info) {
         if(mysink == null){
             return;
         }
@@ -542,7 +543,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("method","onCallUserStateChanged");
         resultMap.put("handle", handle);
         resultMap.put("callID", info.callID);
-        resultMap.put("callUserList", mZIMCallUserInfoList(info.callUserList));
+        resultMap.put("callUserList", ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
         mysink.success(resultMap);
     }
 
