@@ -951,6 +951,12 @@ class ZIMConverter {
     return info;
   }
 
+  static ZIMCallInvitationSentInfo oZIMCallingInvitationSentInfo(Map infoMap) {
+    ZIMCallingInvitationSentInfo info = ZIMCallingInvitationSentInfo();
+    info.errorInvitees = oZIMCallUserInfoList(infoMap['errorInvitees']);
+    return info;
+  }
+
   static ZIMCallInvitationSentResult oZIMCallInvitationSentResult(
       Map resultMap) {
     ZIMCallInvitationSentInfo info =
@@ -965,9 +971,9 @@ class ZIMConverter {
   }
 
   static ZIMCallingInvitationSentResult oZIMCallingInvitationSentResult(Map resultMap) {
-    return ZIMCallingInvitationSentResult(
-        callID: resultMap['callID'],
-        errorInvitees: (resultMap['errorInvitees'] as List).cast<String>());
+    ZIMCallingInvitationSentInfo info =
+        ZIMConverter.oZIMCallingInvitationSentInfo(resultMap['info']);
+    return ZIMCallingInvitationSentResult(callID: resultMap['callID'], info: info);
   }
 
   static ZIMQueryCallListResult oZIMQueryCallListResult(Map resultMap) {
