@@ -564,6 +564,7 @@ class ZIMSystemMessage extends ZIMMessage {
 class ZIMCustomMessage extends ZIMMessage {
   String message = '';
   int subType=0;
+  String searchedContent = '';
   ZIMCustomMessage({required this.message}){
     super.type = ZIMMessageType.custom;
   }

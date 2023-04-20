@@ -226,6 +226,7 @@ public class ZIMPluginConverter {
                 assert message instanceof ZIMCustomMessage;
                 messageMap.put("message",((ZIMCustomMessage)message).message);
                 messageMap.put("subType",((ZIMCustomMessage)message).subType);
+                messageMap.put("searchedContent",((ZIMCustomMessage)message).searchedContent);
             case UNKNOWN:
             default:
                 break;
@@ -357,6 +358,7 @@ public class ZIMPluginConverter {
                 message = new ZIMCustomMessage();
                 ((ZIMCustomMessage) message).message = (String) messageMap.get("message");
                 ((ZIMCustomMessage) message).subType = ZIMPluginCommonTools.safeGetIntValue(messageMap.get("subType"));
+                ((ZIMCustomMessage) message).searchedContent = (String) messageMap.get("searchedContent");
                 break;
             case REVOKE:
                 message = new ZIMRevokeMessage();

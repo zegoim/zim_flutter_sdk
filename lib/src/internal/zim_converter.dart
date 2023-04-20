@@ -195,6 +195,7 @@ class ZIMConverter {
         message as ZIMCustomMessage;
         messageMap['message'] = message.message;
         messageMap['subType'] = message.subType;
+        messageMap['searchedContent'] = message.searchedContent;
         break;
       case ZIMMessageType.revoke:
         message as ZIMRevokeMessage;
@@ -276,6 +277,7 @@ class ZIMConverter {
         message ??= ZIMCustomMessage(message: resultMap['message']);
         message as ZIMCustomMessage;
         message.subType = resultMap['subType'];
+        message.searchedContent = resultMap['searchedContent'];
         break;
       case ZIMMessageType.revoke:
         message ??= ZIMRevokeMessage();
