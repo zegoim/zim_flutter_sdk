@@ -46,10 +46,10 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryConversationList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryConversationPinnedList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateConversationPinnedState(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    //void queryConversationPinnedList(flutter::EncodableMap& argument,
+    //    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    //void updateConversationPinnedState(flutter::EncodableMap& argument,
+    //    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void deleteConversation(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void clearConversationUnreadMessageCount(flutter::EncodableMap& argument,

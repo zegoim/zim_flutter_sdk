@@ -140,12 +140,9 @@ protected:
         const std::vector<std::string>& invitees,
         const std::string& callID);
 
-    void onCallStateChanged(ZIM * zim, const std::string& callID,
-                                    const ZIMCallState& state, long long duration,
-                                    const std::string &extendedData);
+    void onCallStateChanged(ZIM * zim, const ZIMCallStateChangedInfo& info);
 
-    void onCallUserStateChange(ZIM * zim, const std::string& callID,
-                                       const std::vector<ZIMCallUserInfo> &userList);
+    void onCallUserStateChange(ZIM * zim, const ZIMCallUserStateChangedInfo& info);
 
 
 private:
