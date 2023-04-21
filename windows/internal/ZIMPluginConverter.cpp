@@ -350,6 +350,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	case ZIM_MESSAGE_TYPE_CUSTOM:{
 		auto customMessage = (ZIMCustomMessage*)message;
 		messageMap[FTValue("message")] = FTValue(customMessage->message);
+		messageMap[FTValue("searchedContent")] = FTValue(customMessage->searchedContent);
 		messageMap[FTValue("subType")] = FTValue((int32_t)customMessage->subType);
 		break;
 	}
@@ -488,6 +489,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		messagePtr = std::make_shared<ZIMCustomMessage>();
 		auto customMessage = std::static_pointer_cast<ZIMCustomMessage>(messagePtr);
 		customMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
+		customMessage->searchedContent = std::get<std::string>(messageMap[FTValue("searchedContent")]);
 		customMessage->subType = std::get<std::string>((unsigned int)std::get<int32_t>(messageMap[FTValue("subType")]));
 		break;
 	}
