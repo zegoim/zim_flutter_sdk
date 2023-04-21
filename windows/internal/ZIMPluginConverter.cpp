@@ -490,7 +490,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		auto customMessage = std::static_pointer_cast<ZIMCustomMessage>(messagePtr);
 		customMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
 		customMessage->searchedContent = std::get<std::string>(messageMap[FTValue("searchedContent")]);
-		customMessage->subType = std::get<std::string>((unsigned int)std::get<int32_t>(messageMap[FTValue("subType")]));
+		customMessage->subType = (unsigned int)std::get<int32_t>(messageMap[FTValue("subType")]);;
 		break;
 	}
 	case zim::ZIM_MESSAGE_TYPE_REVOKE:{
