@@ -226,6 +226,7 @@
         case ZIMMessageTypeCustom:
             msg = [[ZIMCustomMessage alloc] init];
             ((ZIMCustomMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
+            ((ZIMCustomMessage *)msg).searchedContent = [messageDic safeObjectForKey:@"searchedContent"];
             ((ZIMCustomMessage *)msg).subType = ((NSNumber *)[messageDic safeObjectForKey:@"subType"]).unsignedIntValue;
             break;
         case ZIMMessageTypeRevoke:{
@@ -357,6 +358,7 @@
         case ZIMMessageTypeCustom:{
             ZIMCustomMessage *customMsg = (ZIMCustomMessage *)message;
             [messageDic safeSetObject:customMsg.message forKey:@"message"];
+            [messageDic safeSetObject:customMsg.searchedContent forKey:@"searchedContent"];
             [messageDic safeSetObject:[NSNumber numberWithUnsignedInt:customMsg.subType] forKey:@"subType"];
             break;
         }
