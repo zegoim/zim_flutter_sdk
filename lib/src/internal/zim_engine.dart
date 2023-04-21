@@ -905,11 +905,11 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMQueryCallListResult> queryCallList(ZIMQueryCallListConfig config) async {
-    Map resultMap = await channel.invokeMethod('callingInvite',{
+  Future<ZIMCallListQueriedResult> queryCallList(ZIMQueryCallListConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryCallList',{
       'handle': handle,
       'config': ZIMConverter.mZIMQueryCallListConfig(config)
     });
-    return ZIMConverter.oZIMQueryCallListResult(resultMap);
+    return ZIMConverter.oZIMCallListQueriedResult(resultMap);
   }
 }

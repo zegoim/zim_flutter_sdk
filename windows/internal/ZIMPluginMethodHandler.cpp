@@ -2175,6 +2175,7 @@ void ZIMPluginMethodHandler::callInvite(flutter::EncodableMap& argument,
     ZIMCallInviteConfig config;
     config.callID = std::get<std::string>(configMap[FTValue("callID")]);
     config.timeout = std::get<int32_t>(configMap[FTValue("timeout")]);
+    config.mode = (ZIMInvitationMode)std::get<int32_t>(configMap[FTValue("mode")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
@@ -2228,7 +2229,7 @@ void ZIMPluginMethodHandler::callingInvite(flutter::EncodableMap& argument,
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("callID")] = FTValue(callID);
-            retMap[FTValue("errorInvitees")] = ZIMPluginConverter::cnvZIMCallUserInfoListToArray(info.errorInvitees);
+            retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallingInvitationSentInfoToMap(info);
 
             sharedPtrResult->Success(retMap);
         }

@@ -924,6 +924,8 @@ class ZIMConverter {
   static Map mZIMCallInviteConfig(ZIMCallInviteConfig config) {
     Map configMap = {};
     configMap['timeout'] = config.timeout;
+    configMap['callID'] = config.callID;
+    configMap['mode'] = ZIMInvitationModeExtension.valueMap[config.mode];
     configMap['extendedData'] = config.extendedData;
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
     return configMap;
@@ -947,13 +949,13 @@ class ZIMConverter {
   static ZIMCallInvitationSentInfo oZIMCallInvitationSentInfo(Map infoMap) {
     ZIMCallInvitationSentInfo info = ZIMCallInvitationSentInfo();
     info.timeout = infoMap['timeout'];
-    info.errorInvitees = oZIMCallUserInfoList(infoMap['errorInvitees']);
+    info.errorInvitees = oZIMErrorUserInfoList(infoMap['errorInvitees']);
     return info;
   }
 
-  static ZIMCallInvitationSentInfo oZIMCallingInvitationSentInfo(Map infoMap) {
+  static ZIMCallingInvitationSentInfo oZIMCallingInvitationSentInfo(Map infoMap) {
     ZIMCallingInvitationSentInfo info = ZIMCallingInvitationSentInfo();
-    info.errorInvitees = oZIMCallUserInfoList(infoMap['errorInvitees']);
+    info.errorInvitees = oZIMErrorUserInfoList(infoMap['errorInvitees']);
     return info;
   }
 
@@ -976,8 +978,8 @@ class ZIMConverter {
     return ZIMCallingInvitationSentResult(callID: resultMap['callID'], info: info);
   }
 
-  static ZIMQueryCallListResult oZIMQueryCallListResult(Map resultMap) {
-    return ZIMQueryCallListResult(
+  static ZIMCallListQueriedResult oZIMCallListQueriedResult(Map resultMap) {
+    return ZIMCallListQueriedResult(
         nextFlag: resultMap['nextFlag'],
         callList: resultMap['callList']);
   }

@@ -526,7 +526,7 @@ void ZIMPluginEventHandler::onCallStateChanged(ZIM * zim, const ZIMCallStateChan
         retMap[FTValue("method")] = FTValue("onCallStateChanged");
         auto handle = this->engineEventMap[zim];
         retMap[FTValue("handle")] = FTValue(handle);
-        retMap[FTValue("callStateChangedInfo")] = ZIMPluginConverter::cnvZIMCallStateChangedInfoToMap(info);
+        retMap[FTValue("callStateChangeInfo")] = ZIMPluginConverter::cnvZIMCallStateChangedInfoToMap(info);
 
         eventSink_->Success(retMap);
     }
@@ -538,7 +538,7 @@ void ZIMPluginEventHandler::onCallUserStateChange(ZIM * zim, const ZIMCallUserSt
         retMap[FTValue("method")] = FTValue("onCallUserStateChange");
         auto handle = this->engineEventMap[zim];
         retMap[FTValue("handle")] = FTValue(handle);
-        retMap[FTValue("callUserStateChangedInfo")] = ZIMPluginConverter::cnvZIMCallUserStateChangedInfoToMap(info);
+        retMap[FTValue("callUserStateChangeInfo")] = ZIMPluginConverter::cnvZIMCallUserStateChangedInfoToMap(info);
         eventSink_->Success(retMap);
     }
 }

@@ -1184,6 +1184,6 @@ abstract class ZIM {
   Future<ZIMCallingInvitationSentResult> callingInvite(
       String callID, List<String>invitees, ZIMCallingInviteConfig config);
 
-  Future<ZIMQueryCallListResult> queryCallList(ZIMQueryCallListConfig config);
+  Future<ZIMCallListQueriedResult> queryCallList(ZIMQueryCallListConfig config);
 
 }

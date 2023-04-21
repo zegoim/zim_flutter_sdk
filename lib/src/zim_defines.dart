@@ -866,7 +866,7 @@ class ZIMCallUserInfo {
 /// The behavior property of the Send Call Invitation setting.
 class ZIMCallInviteConfig {
   /// Description: The timeout setting of the call invitation, the unit is seconds. The default value is 90s.
-  int timeout = 0;
+  int timeout = 90;
 
   ZIMInvitationMode mode = ZIMInvitationMode.general;
 
@@ -943,8 +943,15 @@ class ZIMCallInvitationSentInfo {
   int timeout = 0;
 
   /// Description: User id that has not received a call invitation.
-  List<ZIMCallUserInfo> errorInvitees = [];
+  List<ZIMErrorUserInfo> errorInvitees = [];
   ZIMCallInvitationSentInfo();
+}
+
+/// Call invitation sent message.
+class ZIMCallingInvitationSentInfo {
+  /// Description: User id that has not received a call invitation.
+  List<ZIMErrorUserInfo> errorInvitees = [];
+  ZIMCallingInvitationSentInfo();
 }
 
 /// Information to accept the call invitation.
@@ -1686,9 +1693,9 @@ class ZIMCallRejectionSentResult {
 }
 
 class ZIMCallingInvitationSentResult {
-  String callID;
-  List<ZIMCallUserInfo> errorInvitees = [];
-  ZIMCallingInvitationSentResult({required this.callID, required this.errorInvitees});
+  String callID = "";
+  ZIMCallingInvitationSentInfo info;
+  ZIMCallingInvitationSentResult({required this.callID, required this.info});
 }
 
 class ZIMCallQuitSentResult {
@@ -1709,7 +1716,7 @@ class ZIMCallEndSentResult {
 class ZIMCallListQueriedResult {
   List<ZIMCallInfo> callList;
   int nextFlag;
-  ZIMQueryCallListResult({required this.callList, required this.nextFlag});
+  ZIMCallListQueriedResult({required this.callList, required this.nextFlag});
 }
 
 class ZIMConversationMessageReceiptReadSentResult {
