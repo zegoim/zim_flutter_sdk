@@ -864,7 +864,7 @@ FTMap ZIMPluginConverter::cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingI
 	return sentInfoMap;
 }
 
-FTMap ZIMPluginConverter::cnvZIMCallStateChangedInfoToMap(const ZIMCallStateChangedInfo& info){
+FTMap ZIMPluginConverter::cnvZIMCallStateChangeInfoToMap(const ZIMCallStateChangeInfo& info){
 	FTMap sentInfoMap;
     sentInfoMap[FTValue("callID")] = FTValue(info.callID);
     sentInfoMap[FTValue("state")] = FTValue(info.state);
@@ -876,7 +876,7 @@ FTMap ZIMPluginConverter::cnvZIMCallStateChangedInfoToMap(const ZIMCallStateChan
 	return sentInfoMap;
 }
 
-FTMap ZIMPluginConverter::cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangedInfo& info){
+FTMap ZIMPluginConverter::cnvZIMCallUserStateChangeInfoToMap(const ZIMCallUserStateChangeInfo& info){
 	FTMap sentInfoMap;
     sentInfoMap[FTValue("callID")] = FTValue(info.callID);
     sentInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(info.callUserInfos);

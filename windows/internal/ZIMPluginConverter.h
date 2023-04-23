@@ -203,8 +203,8 @@ public:
     static FTArray cnvZIMCallUserInfoListToArray(const std::vector<ZIMCallUserInfo>& callUserList);
     static FTMap cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info);
     static FTMap cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingInvitationSentInfo& info);
-    static FTMap cnvZIMCallStateChangedInfoToMap(const ZIMCallStateChangedInfo& info);
-    static FTMap cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangedInfo& info);
+    static FTMap cnvZIMCallStateChangeInfoToMap(const ZIMCallStateChangeInfo& info);
+    static FTMap cnvZIMCallUserStateChangeInfoToMap(const ZIMCallUserStateChangeInfo& info);
 
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
