@@ -2093,7 +2093,7 @@ public class ZIMPluginMethodHandler {
                     HashMap<String,Object> resultMap = new HashMap<>();
 
                     resultMap.put("callID",callID);
-                    resultMap.put("errorInvitees",ZIMPluginConverter.mZIMCallingInvitationSentInfo(info));
+                    resultMap.put("info",ZIMPluginConverter.mZIMCallingInvitationSentInfo(info));
                     result.success(resultMap);
                 }
                 else {

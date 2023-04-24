@@ -542,17 +542,33 @@ fromGroupID:(NSString *)fromGroupID{
 - (void)zim:(ZIM *)zim callStateChanged:(ZIMCallStateChangeInfo *)info{
     NSString *handle = [_engineEventMap objectForKey:zim];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.callID forKey:@"callID"];
+    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.state] forKey:@"state"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.callDuration] forKey:@"callDuration"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.userDuration] forKey:@"userDuration"];
+    [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
+    [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfo:info.callUserInfo] forKey:@"callUserInfo"];
+
     [resultDic safeSetObject:@"onCallStateChanged" forKey:@"method"];
-    [resultDic safeSetObject:info.callID forKey:@"callID"];
-    [resultDic safeSetObject:[NSNumber numberWithInt:(int)info.state] forKey:@"state"];
-    [resultDic safeSetObject:[NSNumber numberWithLongLong:info.callDuration] forKey:@"callDuration"];
-    [resultDic safeSetObject:[NSNumber numberWithLongLong:info.userDuration] forKey:@"userDuration"];
-    [resultDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
-    [resultDic safeSetObject:info.extendedData forKey:@"extendedData"];
-    [resultDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfo:info.callUserInfo] forKey:@"callUserInfo"];
+    [resultDic safeSetObject:infoDic forKey:@"callStateChangeInfo"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }
+
+- (void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info{
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.callID forKey:@"callID"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
+    [resultDic safeSetObject:@"onCallUserStateChanged" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"callUserStateChangeInfo"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
 #pragma mark - Getter
 - (NSMapTable *)engineEventMap {
     if (!_engineEventMap) {

@@ -1763,18 +1763,18 @@
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
     ZIMCallingInviteConfig *config = [ZIMPluginConverter oZIMCallingInviteConfig:[call.arguments safeObjectForKey:@"config"]];
-//    [zim callingInviteWithInvitees:invitees config:config callback:^(NSString * _Nonnull callID, ZIMCallingInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
-//        if(errorInfo.code == 0){
-//            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
-//            [resultMtDic safeSetObject:callID forKey:@"callID"];
-//            NSDictionary *infoDic = [ZIMPluginConverter mZIMCallingInvitationSentInfo:info];
-//            [resultMtDic safeSetObject:infoDic forKey:@"info"];
-//            result(resultMtDic);
-//        }
-//        else{
-//            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
-//        }
-//    }];
+   [zim callingInviteWithInvitees:invitees config:config callback:^(NSString * _Nonnull callID, ZIMCallingInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+       if(errorInfo.code == 0){
+           NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+           [resultMtDic safeSetObject:callID forKey:@"callID"];
+           NSDictionary *infoDic = [ZIMPluginConverter mZIMCallingInvitationSentInfo:info];
+           [resultMtDic safeSetObject:infoDic forKey:@"info"];
+           result(resultMtDic);
+       }
+       else{
+           result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+       }
+   }];
 }
 
 - (void)callQuit:(FlutterMethodCall *)call result:(FlutterResult)result {

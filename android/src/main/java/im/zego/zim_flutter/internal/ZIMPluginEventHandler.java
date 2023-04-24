@@ -527,7 +527,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallStateChanged");
         resultMap.put("handle", handle);
-        resultMap.put("info",ZIMPluginConverter.mZIMCallStateChangedInfo(info));
+        resultMap.put("callStateChangeInfo",ZIMPluginConverter.mZIMCallStateChangedInfo(info));
         mysink.success(resultMap);
     }
 
@@ -542,8 +542,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallUserStateChanged");
         resultMap.put("handle", handle);
-        resultMap.put("callID", info.callID);
-        resultMap.put("callUserList", ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
+        resultMap.put("callUserStateChangeInfo",ZIMPluginConverter.mZIMCallUserStateChangeInfo(info));
         mysink.success(resultMap);
     }
 
