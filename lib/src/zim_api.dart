@@ -1182,7 +1182,7 @@ abstract class ZIM {
       String callID, ZIMCallEndConfig config);
 
   Future<ZIMCallingInvitationSentResult> callingInvite(
-      String callID, List<String>invitees, ZIMCallingInviteConfig config);
+      List<String>invitees, String callID, ZIMCallingInviteConfig config);
 
   Future<ZIMCallListQueriedResult> queryCallList(ZIMQueryCallListConfig config);
 

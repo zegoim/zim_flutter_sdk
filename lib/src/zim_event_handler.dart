@@ -461,8 +461,8 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
       onMessageRevokeReceived;
 
-  static void Function(ZIM zim, ZIMCallStateChangeInfo callStateChangeInfo)?
-      onCallStateChanged;
+  static void Function(ZIM zim, ZIMCallInvitationEndedInfo callInvitationEndedInfo, String callID)?
+  onCallInvitationEnded;
 
   static void Function(ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo)?
       onCallUserStateChanged;

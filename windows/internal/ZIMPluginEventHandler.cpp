@@ -423,10 +423,12 @@ void ZIMPluginEventHandler::onCallInvitationReceived(ZIM* zim,
         retMap[FTValue("callID")] = FTValue(callID);
 
         FTMap infoMap;
-        infoMap[FTValue("timeout")] = FTValue(info.timeout);
         infoMap[FTValue("inviter")] = FTValue(info.inviter);
         infoMap[FTValue("extendedData")] = FTValue(info.extendedData);
-
+        infoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
+        infoMap[FTValue("timeout")] = FTValue((int32_t)info.timeout);
+        infoMap[FTValue("createTime")] = FTValue((int64_t)info.createTime);
+        infoMap[FTValue("callUserList")] = ZIMPluginConverter::cnvZIMCallUserInfoListToArray(info.callUserList);
         retMap[FTValue("info")] = infoMap;
 
         eventSink_->Success(retMap);
@@ -446,6 +448,8 @@ void ZIMPluginEventHandler::onCallInvitationCancelled(ZIM* zim,
         FTMap infoMap;
         infoMap[FTValue("inviter")] = FTValue(info.inviter);
         infoMap[FTValue("extendedData")] = FTValue(info.extendedData);
+        infoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
+        infoMap[FTValue("createTime")] = FTValue((int64_t)info.createTime);
 
         retMap[FTValue("info")] = infoMap;
 
@@ -520,13 +524,15 @@ void ZIMPluginEventHandler::onCallInviteesAnsweredTimeout(ZIM* zim,
     }
 }
 
-void ZIMPluginEventHandler::onCallStateChanged(ZIM * zim, const ZIMCallStateChangeInfo& info) {
+void ZIMPluginEventHandler::onCallInvitationEnded(ZIM* zim, const ZIMCallInvitationEndedInfo& info,
+	const std::string& callID) {
     if (eventSink_) {
         FTMap retMap;
-        retMap[FTValue("method")] = FTValue("onCallStateChanged");
+        retMap[FTValue("method")] = FTValue("onCallInvitationEnded");
         auto handle = this->engineEventMap[zim];
         retMap[FTValue("handle")] = FTValue(handle);
-        retMap[FTValue("callStateChangeInfo")] = ZIMPluginConverter::cnvZIMCallStateChangeInfoToMap(info);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallInvitationEndedInfoToMap(info);
+        retMap[FTValue("callID")] = FTValue(callID);
 
         eventSink_->Success(retMap);
     }
@@ -538,7 +544,7 @@ void ZIMPluginEventHandler::onCallUserStateChange(ZIM * zim, const ZIMCallUserSt
         retMap[FTValue("method")] = FTValue("onCallUserStateChange");
         auto handle = this->engineEventMap[zim];
         retMap[FTValue("handle")] = FTValue(handle);
-        retMap[FTValue("callUserStateChangeInfo")] = ZIMPluginConverter::cnvZIMCallUserStateChangeInfoToMap(info);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallUserStateChangeInfoToMap(info);
         eventSink_->Success(retMap);
     }
 }

@@ -808,7 +808,7 @@ FTMap ZIMPluginConverter::cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInf
 	FTMap userInfoMap;
 	userInfoMap[FTValue("userID")] = FTValue(userInfo.userID);
 	userInfoMap[FTValue("state")] = FTValue((int32_t)userInfo.userState);
-
+	userInfoMap[FTValue("extendedData")] = FTValue(userInfo.extendedData);
 	return userInfoMap;
 }
 
@@ -817,13 +817,33 @@ FTMap ZIMPluginConverter::cnvZIMCallInfoToMap(const ZIMCallInfo& callInfo) {
 	callInfoMap[FTValue("callID")] = FTValue(callInfo.callID);
 	callInfoMap[FTValue("caller")] = FTValue(callInfo.caller);
 	callInfoMap[FTValue("createTime")] = FTValue((int64_t)callInfo.createTime);
-	callInfoMap[FTValue("callDuration")] = FTValue((int64_t)callInfo.callDuration);
-	callInfoMap[FTValue("userDuration")] = FTValue((int64_t)callInfo.userDuration);
+	//callInfoMap[FTValue("callDuration")] = FTValue((int64_t)callInfo.callDuration);
+	//callInfoMap[FTValue("userDuration")] = FTValue((int64_t)callInfo.userDuration);
+	//callInfoMap[FTValue("timeout")] = FTValue((int32_t)callInfo.timeout);
 	callInfoMap[FTValue("endTime")] = FTValue((int64_t)callInfo.endTime);
 	callInfoMap[FTValue("state")] = FTValue((int32_t)callInfo.state);
 	callInfoMap[FTValue("mode")] = FTValue((int32_t)callInfo.mode);
-	callInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(callInfo.callUserInfos);
+	callInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(callInfo.callUserList);
 	callInfoMap[FTValue("extendedData")] = FTValue(callInfo.extendedData);
+
+	return callInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallEndedSentInfoToMap(const ZIMCallEndedSentInfo& callEndedSentInfo) {
+	FTMap callInfoMap;
+    callInfoMap[FTValue("createTime")] = FTValue((int64_t)callEndedSentInfo.createTime);
+    callInfoMap[FTValue("endTime")] = FTValue((int64_t)callEndedSentInfo.endTime);
+    //callInfoMap[FTValue("callDuration")] = FTValue((int64_t)callEndedSentInfo.callDuration);
+    //callInfoMap[FTValue("userDuration")] = FTValue((int64_t)callEndedSentInfo.userDuration);
+
+	return callInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallQuitSentInfoToMap(const ZIMCallQuitSentInfo& callQuitSentInfo) {
+	FTMap callInfoMap;
+	callInfoMap[FTValue("createTime")] = FTValue((int64_t)callQuitSentInfo.createTime);
+	callInfoMap[FTValue("acceptTime")] = FTValue((int64_t)callQuitSentInfo.acceptTime);
+	callInfoMap[FTValue("quitTime")] = FTValue((int64_t)callQuitSentInfo.quitTime);
 
 	return callInfoMap;
 }
@@ -853,6 +873,7 @@ FTMap ZIMPluginConverter::cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitat
 	FTMap sentInfoMap;
 	sentInfoMap[FTValue("timeout")] = FTValue((int32_t)info.timeout);
 	sentInfoMap[FTValue("errorInvitees")] = cnvZIMErrorUserInfoListToArray(info.errorInvitees);
+	sentInfoMap[FTValue("oldErrorInvitees")] = cnvZIMCallUserInfoListToArray(info.oldErrorInvitees);
 
 	return sentInfoMap;
 }
@@ -864,22 +885,20 @@ FTMap ZIMPluginConverter::cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingI
 	return sentInfoMap;
 }
 
-FTMap ZIMPluginConverter::cnvZIMCallStateChangeInfoToMap(const ZIMCallStateChangeInfo& info){
+FTMap ZIMPluginConverter::cnvZIMCallInvitationEndedInfoToMap(const ZIMCallInvitationEndedInfo& info){
 	FTMap sentInfoMap;
-    sentInfoMap[FTValue("callID")] = FTValue(info.callID);
-    sentInfoMap[FTValue("state")] = FTValue(info.state);
-	sentInfoMap[FTValue("callUserInfo")] = cnvZIMCallUserInfoToMap(info.callUserInfo);
-    sentInfoMap[FTValue("callDuration")] = FTValue(info.callDuration);
-	sentInfoMap[FTValue("userDuration")] = FTValue(info.userDuration);
-	sentInfoMap[FTValue("timeout")] = FTValue(info.timeout);
-    sentInfoMap[FTValue("extendedData")] = FTValue(info.extendedData);
+	sentInfoMap[FTValue("inviter")] = FTValue(info.inviter);
+	sentInfoMap[FTValue("operatedUserID")] = FTValue(info.operatedUserID);
+	sentInfoMap[FTValue("extendedData")] = FTValue(info.extendedData);
+	sentInfoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
+	sentInfoMap[FTValue("endTime")] = FTValue((int64_t)info.endTime);
 	return sentInfoMap;
 }
 
 FTMap ZIMPluginConverter::cnvZIMCallUserStateChangeInfoToMap(const ZIMCallUserStateChangeInfo& info){
 	FTMap sentInfoMap;
     sentInfoMap[FTValue("callID")] = FTValue(info.callID);
-    sentInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(info.callUserInfos);
+    sentInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(info.callUserList);
 	return sentInfoMap;
 }
 

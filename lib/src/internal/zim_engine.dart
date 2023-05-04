@@ -894,11 +894,11 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMCallingInvitationSentResult> callingInvite(String callID, List<String> invitees, ZIMCallingInviteConfig config) async {
+  Future<ZIMCallingInvitationSentResult> callingInvite(List<String> invitees, String callID,ZIMCallingInviteConfig config) async {
     Map resultMap = await channel.invokeMethod('callingInvite',{
       'handle': handle,
-      'callID': callID,
       'invitees': invitees,
+      'callID': callID,
       'config': ZIMConverter.mZIMCallingInviteConfig(config)
     });
     return ZIMConverter.oZIMCallingInvitationSentResult(resultMap);

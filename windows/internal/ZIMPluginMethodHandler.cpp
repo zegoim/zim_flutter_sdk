@@ -2173,7 +2173,6 @@ void ZIMPluginMethodHandler::callInvite(flutter::EncodableMap& argument,
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     ZIMCallInviteConfig config;
-    config.callID = std::get<std::string>(configMap[FTValue("callID")]);
     config.timeout = std::get<int32_t>(configMap[FTValue("timeout")]);
     config.mode = (ZIMInvitationMode)std::get<int32_t>(configMap[FTValue("mode")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
@@ -2215,7 +2214,6 @@ void ZIMPluginMethodHandler::callingInvite(flutter::EncodableMap& argument,
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     ZIMCallingInviteConfig config;
-    config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -2225,7 +2223,7 @@ void ZIMPluginMethodHandler::callingInvite(flutter::EncodableMap& argument,
         config.pushConfig = pushConfigPtr.get();
     }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->callingInvite(callID, invitees, config, [=](const std::string& callID, const ZIMCallingInvitationSentInfo& info, const ZIMError& errorInfo) {
+    zim->callingInvite(invitees, callID, config, [=](const std::string& callID, const ZIMCallingInvitationSentInfo& info, const ZIMError& errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("callID")] = FTValue(callID);
@@ -2264,11 +2262,11 @@ void ZIMPluginMethodHandler::callQuit(flutter::EncodableMap& argument,
     }
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->callQuit(callID, config, [=](const std::string& callID, const ZIMError& errorInfo) {
+    zim->callQuit(callID, config, [=](const std::string& callID, const ZIMCallQuitSentInfo& info, const ZIMError& errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("callID")] = FTValue(callID);
-
+            retMap[FTValue("callQuitSentInfo")] = ZIMPluginConverter::cnvZIMCallQuitSentInfoToMap(info);
             sharedPtrResult->Success(retMap);
         }
         else {
@@ -2302,15 +2300,11 @@ void ZIMPluginMethodHandler::callEnd(flutter::EncodableMap& argument,
     }
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->callEnd(callID, config, [=](const std::string& callID, long long createTime, long long endTime,
-                                       long long callDuration, long long userDuration, const ZIMError& errorInfo) {
+    zim->callEnd(callID, config, [=](const std::string& callID, const ZIMCallEndedSentInfo& info, const ZIMError& errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
+            retMap[FTValue("callEndedSentInfo")] = ZIMPluginConverter::cnvZIMCallEndedSentInfoToMap(info);
             retMap[FTValue("callID")] = FTValue(callID);
-            retMap[FTValue("createTime")] = FTValue(createTime);
-            retMap[FTValue("endTime")] = FTValue(endTime);
-            retMap[FTValue("callDuration")] = FTValue(callDuration);
-            retMap[FTValue("userDuration")] = FTValue(userDuration);
             sharedPtrResult->Success(retMap);
         }
         else {
@@ -2424,7 +2418,7 @@ void ZIMPluginMethodHandler::queryCallList(flutter::EncodableMap& argument,
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-    ZIMQueryCallListConfig config;
+    ZIMCallListQueryConfig config;
     config.count = std::get<int32_t>(configMap[FTValue("count")]);
     config.nextFlag = std::get<int32_t>(configMap[FTValue("nextFlag")]);
 

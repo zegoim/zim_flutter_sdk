@@ -404,12 +404,12 @@ extension ZIMMessageRevokeStatusExtension on ZIMMessageRevokeStatus {
 extension ZIMInvitationModeExtension on ZIMInvitationMode {
   static const valueMap = {
     ZIMInvitationMode.general: 0,
-    ZIMInvitationMode.call: 1,
+    ZIMInvitationMode.advanced: 1,
   };
 
   static const mapValue = {
     0:ZIMInvitationMode.general,
-    1:ZIMInvitationMode.call
+    1:ZIMInvitationMode.advanced
   };
 
   int get value => valueMap[this] ?? -1;

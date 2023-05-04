@@ -924,7 +924,6 @@ class ZIMConverter {
   static Map mZIMCallInviteConfig(ZIMCallInviteConfig config) {
     Map configMap = {};
     configMap['timeout'] = config.timeout;
-    configMap['callID'] = config.callID;
     configMap['mode'] = ZIMInvitationModeExtension.valueMap[config.mode];
     configMap['extendedData'] = config.extendedData;
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
@@ -946,10 +945,26 @@ class ZIMConverter {
     return callUserInfoList;
   }
 
+  static ZIMCallQuitSentInfo oZIMCallQuitSentInfo(Map infoMap) {
+    ZIMCallQuitSentInfo info = ZIMCallQuitSentInfo();
+    info.createTime = infoMap['createTime'];
+    info.acceptTime = infoMap['acceptTime'];
+    info.quitTime = infoMap['quitTime'];
+    return info;
+  }
+
+  static ZIMCallEndedSentInfo oZIMCallEndSentInfo(Map infoMap) {
+    ZIMCallEndedSentInfo info = ZIMCallEndedSentInfo();
+    info.endTime = infoMap['endTime'];
+    info.createTime = infoMap['createTime'];
+    return info;
+  }
+
   static ZIMCallInvitationSentInfo oZIMCallInvitationSentInfo(Map infoMap) {
     ZIMCallInvitationSentInfo info = ZIMCallInvitationSentInfo();
     info.timeout = infoMap['timeout'];
     info.errorInvitees = oZIMErrorUserInfoList(infoMap['errorInvitees']);
+    info.oldErrorInvitees = oZIMCallUserInfoList(infoMap['oldErrorInvitees']);
     return info;
   }
 
@@ -979,9 +994,17 @@ class ZIMConverter {
   }
 
   static ZIMCallListQueriedResult oZIMCallListQueriedResult(Map resultMap) {
+    
+    List<ZIMCallInfo> callInfoList = [];
+    for (Map infoMap in resultMap['callList']) {
+      ZIMCallInfo callInfo =
+          oZIMCallInfo(infoMap);
+      callInfoList.add(callInfo);
+    }
+
     return ZIMCallListQueriedResult(
         nextFlag: resultMap['nextFlag'],
-        callList: resultMap['callList']);
+        callList: callInfoList);
   }
 
   static Map mZIMCallAcceptConfig(ZIMCallAcceptConfig config) {
@@ -1008,9 +1031,12 @@ class ZIMConverter {
   static ZIMCallInvitationReceivedInfo oZIMCallInvitationReceivedInfo(
       Map infoMap) {
     ZIMCallInvitationReceivedInfo info = ZIMCallInvitationReceivedInfo();
-    info.timeout = infoMap['timeout'];
     info.inviter = infoMap['inviter'];
     info.extendedData = infoMap['extendedData'];
+    info.mode = infoMap['mode'];
+    info.timeout = infoMap['timeout'];
+    info.createTime = infoMap['createTime'];
+    info.callUserList = oZIMCallUserInfoList(infoMap['callUserList']);
     return info;
   }
 
@@ -1019,6 +1045,8 @@ class ZIMConverter {
     ZIMCallInvitationCancelledInfo info = ZIMCallInvitationCancelledInfo();
     info.inviter = infoMap['inviter'];
     info.extendedData = infoMap['extendedData'];
+    info.mode = infoMap['mode'];
+    info.createTime = infoMap['createTime'];
     return info;
   }
 
@@ -1247,18 +1275,14 @@ class ZIMConverter {
     return configMap;
   }
 
-  static ZIMCallStateChangeInfo oZIMCallStateChangeInfo(Map callStateChangeInfoMap) {
-
-    ZIMCallStateChangeInfo callStateChangeInfo = ZIMCallStateChangeInfo();
-    callStateChangeInfo.callID = callStateChangeInfoMap['callID'];
-    callStateChangeInfo.state = ZIMCallStateExtension.mapValue[callStateChangeInfoMap['state']]!;
-    callStateChangeInfo.callUserInfo = oZIMCallUserInfo(callStateChangeInfoMap['callUserInfo']);
-    callStateChangeInfo.callDuration = callStateChangeInfoMap['callDuration'];
-    callStateChangeInfo.userDuration = callStateChangeInfoMap['userDuration'];
-    callStateChangeInfo.timeout = callStateChangeInfoMap['timeout'];
-    callStateChangeInfo.extendedData = callStateChangeInfoMap['extendedData'];
-
-    return callStateChangeInfo;
+  static ZIMCallInvitationEndedInfo oZIMCallInvitationEndedInfo(Map infoMap) {
+    ZIMCallInvitationEndedInfo info = ZIMCallInvitationEndedInfo();
+    info.inviter = infoMap['inviter'];
+    info.operatedUserID = infoMap['operatedUserID'];
+    info.extendedData = infoMap['extendedData'];
+    info.mode = infoMap['mode'];
+    info.endTime = infoMap['endTime'];
+    return info;
   }
 
   static ZIMCallUserStateChangeInfo oZIMCallUserStateChangeInfo(Map callUserStateChangeInfoMap) {
@@ -1271,13 +1295,14 @@ class ZIMConverter {
   }
 
   static ZIMCallEndSentResult oZIMCallEndSentResult(Map resultMap) {
-    ZIMCallEndSentResult result = ZIMCallEndSentResult(callID: resultMap['callID'], createTime: resultMap['createTime'], endTime: resultMap['endTime'], callDuration: resultMap['callDuration'], userDuration: resultMap['userDuration']);
+    ZIMCallEndedSentInfo callEndedSentInfo = oZIMCallEndSentInfo(resultMap['callEndedSentInfo']);
+    ZIMCallEndSentResult result = ZIMCallEndSentResult(callID: resultMap['callID'], info: callEndedSentInfo);
     return result;
   }
 
   static ZIMCallQuitSentResult oZIMCallQuitSentResult(Map resultMap) {
-
-    ZIMCallQuitSentResult result = ZIMCallQuitSentResult(callID:  resultMap['callID']);
+    ZIMCallQuitSentInfo callQuitSentInfo = oZIMCallQuitSentInfo(resultMap['callQuitSentInfo']);
+    ZIMCallQuitSentResult result = ZIMCallQuitSentResult(callID:  resultMap['callID'], info: callQuitSentInfo);
     return result;
   }
 
@@ -1289,10 +1314,11 @@ class ZIMConverter {
     callInfo.endTime = map['endTime'];
     callInfo.state = ZIMCallStateExtension.mapValue[map['state']]!;
     callInfo.mode = ZIMInvitationModeExtension.mapValue[map["mode"]]!;
-    callInfo.callUserList = ZIMConverter.oZIMCallUserInfoList(map["callUserList"]);
     callInfo.extendedData = map['extendedData'];
-    callInfo.callDuration = map['callDuration'];
-    callInfo.userDuration = map['userDuration'];
+    callInfo.callUserList = oZIMCallUserInfoList(map['callUserList']);
+    // callInfo.timeout = map['timeout'];
+    // callInfo.callDuration = map['callDuration'];
+    // callInfo.userDuration = map['userDuration'];
     return callInfo;
   }
 }

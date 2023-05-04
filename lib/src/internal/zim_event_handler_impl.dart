@@ -305,17 +305,17 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         }
         ZIMEventHandler.onConversationMessageReceiptChanged!(zim!,infos);
         break;
-      case 'onCallStateChanged':
-        if(ZIMEventHandler.onCallStateChanged == null) return;
-        ZIMEventHandler.onCallStateChanged!(
+      case 'onCallInvitationEnded':
+        if(ZIMEventHandler.onCallInvitationEnded == null) return;
+        ZIMEventHandler.onCallInvitationEnded!(
             zim!,
-            ZIMConverter.oZIMCallStateChangeInfo(map['callStateChangeInfo']));
+            ZIMConverter.oZIMCallInvitationEndedInfo(map['info']), map['callID']);
         break;
       case 'onCallUserStateChanged':
         if(ZIMEventHandler.onCallUserStateChanged == null) return;
         ZIMEventHandler.onCallUserStateChanged!(
             zim!,
-            ZIMConverter.oZIMCallUserStateChangeInfo(map['callUserStateChangeInfo']));
+            ZIMConverter.oZIMCallUserStateChangeInfo(map['info']));
         break;
       default:
         break;
