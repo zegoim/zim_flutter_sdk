@@ -1763,7 +1763,7 @@
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
     ZIMCallingInviteConfig *config = [ZIMPluginConverter oZIMCallingInviteConfig:[call.arguments safeObjectForKey:@"config"]];
-   [zim callingInviteWithInvitees:invitees config:config callback:^(NSString * _Nonnull callID, ZIMCallingInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    [zim callingInviteWithInvitees:invitees callID:callID config:config callback:^(NSString * _Nonnull callID, ZIMCallingInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
        if(errorInfo.code == 0){
            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
            [resultMtDic safeSetObject:callID forKey:@"callID"];
@@ -1787,10 +1787,13 @@
     
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     ZIMCallQuitConfig *config = [ZIMPluginConverter oZIMCallQuitConfig:[call.arguments safeObjectForKey:@"config"]];
-    [zim callQuit:callID config:config callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+    [zim callQuit:callID config:config callback:^(NSString *callID, ZIMCallQuitSentInfo *info,
+                                        ZIMError *errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:callID forKey:@"callID"];
+            NSDictionary *infoDic = [ZIMPluginConverter mZIMCallQuitSentInfo:info];
+            [resultMtDic safeSetObject:infoDic forKey:@"info"];
             result(resultMtDic);
         }
         else{
@@ -1809,14 +1812,13 @@
     
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     ZIMCallEndConfig *config = [ZIMPluginConverter oZIMCallEndConfig:[call.arguments safeObjectForKey:@"config"]];
-    [zim callEnd:callID config:config callback:^(NSString * _Nonnull callID, long long createTime, long long endTime, long long callDuration, long long userDuration, ZIMError * _Nonnull errorInfo) {
+    [zim callEnd:callID config:config callback:^(NSString *callID, ZIMCallEndSentInfo *info,
+                                       ZIMError *errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:callID forKey:@"callID"];
-            [resultMtDic safeSetObject:[NSNumber numberWithLongLong:createTime] forKey:@"createTime"];
-            [resultMtDic safeSetObject:[NSNumber numberWithLongLong:endTime] forKey:@"endTime"];
-            [resultMtDic safeSetObject:[NSNumber numberWithLongLong:callDuration] forKey:@"callDuration"];
-            [resultMtDic safeSetObject:[NSNumber numberWithLongLong:userDuration] forKey:@"userDuration"];
+            NSDictionary *infoDic = [ZIMPluginConverter mZIMCallEndSentInfo:info];
+            [resultMtDic safeSetObject:infoDic forKey:@"info"];
             result(resultMtDic);
         }
         else{

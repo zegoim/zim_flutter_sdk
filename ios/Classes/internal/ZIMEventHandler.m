@@ -539,20 +539,22 @@ fromGroupID:(NSString *)fromGroupID{
     
 }
 
-- (void)zim:(ZIM *)zim callStateChanged:(ZIMCallStateChangeInfo *)info{
+- (void)zim:(ZIM *)zim
+    callInvitationEnded:(ZIMCallInvitationEndedInfo *)info
+     callID:(NSString *)callID{
     NSString *handle = [_engineEventMap objectForKey:zim];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
-    [infoDic safeSetObject:info.callID forKey:@"callID"];
-    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.state] forKey:@"state"];
-    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.callDuration] forKey:@"callDuration"];
-    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.userDuration] forKey:@"userDuration"];
-    [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
+    
+    [infoDic safeSetObject:info.caller forKey:@"caller"];
+    [infoDic safeSetObject:info.operatedUserID forKey:@"operatedUserID"];
     [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
-    [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfo:info.callUserInfo] forKey:@"callUserInfo"];
-
-    [resultDic safeSetObject:@"onCallStateChanged" forKey:@"method"];
-    [resultDic safeSetObject:infoDic forKey:@"callStateChangeInfo"];
+    [infoDic safeSetObject:(int)info.mode forKey:@"mode"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.endTime] forKey:@"endTime"];
+    
+    [resultDic safeSetObject:@"onCallInvitationEnded" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }
@@ -564,7 +566,7 @@ fromGroupID:(NSString *)fromGroupID{
     [infoDic safeSetObject:info.callID forKey:@"callID"];
     [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
     [resultDic safeSetObject:@"onCallUserStateChanged" forKey:@"method"];
-    [resultDic safeSetObject:infoDic forKey:@"callUserStateChangeInfo"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }

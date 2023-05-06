@@ -138,4 +138,12 @@
 +(nullable NSArray *)mMessageSentStatusChangeInfoList:(nullable NSArray<ZIMMessageSentStatusChangeInfo *> *)messageSentStatusChangeInfoList;
 
 +(nullable NSDictionary *)mZIMCallUserInfo:(nullable ZIMCallUserInfo *)callUserInfo;
+
++(nullable NSArray *)mZIMCallUserInfoList:(nullable NSArray<ZIMCallUserInfo *> *)callUserInfoList;
+
++(nullable NSDictionary *)mZIMCallEndSentInfo:(nullable ZIMCallEndSentInfo *)info;
+
++(nullable NSDictionary *)mZIMCallQuitSentInfo:(nullable ZIMCallQuitSentInfo *)info;
+
++(nullable NSArray *)mZIMCallUserInfoList:(nullable NSArray<ZIMCallUserInfo *> *)callUserInfoList;
 @end

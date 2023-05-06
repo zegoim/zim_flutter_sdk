@@ -2122,7 +2122,7 @@ public class ZIMPluginMethodHandler {
                     HashMap<String,Object> resultMap = new HashMap<>();
 
                     resultMap.put("callID",callID);
-                    resultMap.put("callQuitSentInfo",ZIMPluginConverter.mZIMCallQuitSentInfo(info));
+                    resultMap.put("info",ZIMPluginConverter.mZIMCallQuitSentInfo(info));
                     result.success(resultMap);
                 }
                 else {
@@ -2149,7 +2149,7 @@ public class ZIMPluginMethodHandler {
                     HashMap<String,Object> resultMap = new HashMap<>();
 
                     resultMap.put("callID",callID);
-                    resultMap.put("callEndSentInfo",ZIMPluginConverter.mZIMCallEndSentInfo(info));
+                    resultMap.put("info",ZIMPluginConverter.mZIMCallEndSentInfo(info));
                     result.success(resultMap);
                 }
                 else {

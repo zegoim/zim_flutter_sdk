@@ -2266,7 +2266,7 @@ void ZIMPluginMethodHandler::callQuit(flutter::EncodableMap& argument,
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("callID")] = FTValue(callID);
-            retMap[FTValue("callQuitSentInfo")] = ZIMPluginConverter::cnvZIMCallQuitSentInfoToMap(info);
+            retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallQuitSentInfoToMap(info);
             sharedPtrResult->Success(retMap);
         }
         else {
@@ -2303,7 +2303,7 @@ void ZIMPluginMethodHandler::callEnd(flutter::EncodableMap& argument,
     zim->callEnd(callID, config, [=](const std::string& callID, const ZIMCallEndSentInfo& info, const ZIMError& errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
-            retMap[FTValue("callEndSentInfo")] = ZIMPluginConverter::cnvZIMCallEndSentInfoToMap(info);
+            retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallEndSentInfoToMap(info);
             retMap[FTValue("callID")] = FTValue(callID);
             sharedPtrResult->Success(retMap);
         }

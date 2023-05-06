@@ -1296,13 +1296,13 @@ class ZIMConverter {
   }
 
   static ZIMCallEndSentResult oZIMCallEndSentResult(Map resultMap) {
-    ZIMCallEndedSentInfo callEndSentInfo = oZIMCallEndSentInfo(resultMap['callEndSentInfo']);
+    ZIMCallEndedSentInfo callEndSentInfo = oZIMCallEndSentInfo(resultMap['info']);
     ZIMCallEndSentResult result = ZIMCallEndSentResult(callID: resultMap['callID'], info: callEndSentInfo);
     return result;
   }
 
   static ZIMCallQuitSentResult oZIMCallQuitSentResult(Map resultMap) {
-    ZIMCallQuitSentInfo callQuitSentInfo = oZIMCallQuitSentInfo(resultMap['callQuitSentInfo']);
+    ZIMCallQuitSentInfo callQuitSentInfo = oZIMCallQuitSentInfo(resultMap['info']);
     ZIMCallQuitSentResult result = ZIMCallQuitSentResult(callID:  resultMap['callID'], info: callQuitSentInfo);
     return result;
   }

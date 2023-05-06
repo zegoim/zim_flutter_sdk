@@ -782,7 +782,7 @@
     return callUserInfoDic;
 }
 
-+(nullable NSArray *)mZIMCallUserInfoList:(NSArray<ZIMCallUserInfo *> *)callUserInfoList{
++(nullable NSArray *)mZIMCallUserInfoList:(nullable NSArray<ZIMCallUserInfo *> *)callUserInfoList{
     if(callUserInfoList == nil || callUserInfoList == NULL || [callUserInfoList isEqual:[NSNull null]]){
         return nil;
     }
@@ -794,6 +794,8 @@
     return basicList;
 }
 
+
+
 +(nullable ZIMCallInviteConfig *)oZIMCallInviteConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
@@ -802,8 +804,6 @@
     config.timeout = ((NSNumber *)[configDic safeObjectForKey:@"timeout"]).unsignedIntValue;
     config.extendedData = [configDic safeObjectForKey:@"extendedData"];
     config.mode = ((NSNumber *)[configDic objectForKey:@"mode"]).intValue;
-    config.callID = [configDic safeObjectForKey:@"callID"];
-
     config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
     
     return config;
@@ -814,7 +814,6 @@
         return nil;
     }
     ZIMCallingInviteConfig *config = [[ZIMCallingInviteConfig alloc] init];
-    config.extendedData = [configDic safeObjectForKey:@"extendedData"];
     
     config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
     
@@ -871,6 +870,28 @@
     return infoDic;
 }
 
++(nullable NSDictionary *)mZIMCallQuitSentInfo:(nullable ZIMCallQuitSentInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.acceptTime] forKey:@"acceptTime"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.quitTime] forKey:@"quitTime"];
+    return infoDic;
+}
+
++(nullable NSDictionary *)mZIMCallEndSentInfo:(nullable ZIMCallEndSentInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.endTime] forKey:@"endTime"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.acceptTime] forKey:@"acceptTime"];
+    return infoDic;
+}
+
 +(nullable NSDictionary *)mZIMCallInfo:(ZIMCallInfo *)callInfo{
     if(callInfo == nil || callInfo == NULL || [callInfo isEqual:[NSNull null]]){
         return nil;
@@ -884,8 +905,6 @@
     [callInfoDic safeSetObject:[NSNumber numberWithInt:(int)callInfo.mode] forKey:@"mode"];
     [callInfoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:callInfo.callUserList] forKey:@"callUserList"];
     [callInfoDic safeSetObject:callInfo.extendedData forKey:@"extendedData"];
-    [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.callDuration] forKey:@"callDuration"];
-    [callInfoDic safeSetObject:[NSNumber numberWithLongLong:callInfo.userDuration] forKey:@"userDuration"];
     return callInfoDic;
 }
 
