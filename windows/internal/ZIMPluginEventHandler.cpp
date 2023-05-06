@@ -449,7 +449,6 @@ void ZIMPluginEventHandler::onCallInvitationCancelled(ZIM* zim,
         infoMap[FTValue("inviter")] = FTValue(info.inviter);
         infoMap[FTValue("extendedData")] = FTValue(info.extendedData);
         infoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
-        infoMap[FTValue("createTime")] = FTValue((int64_t)info.createTime);
 
         retMap[FTValue("info")] = infoMap;
 
@@ -538,13 +537,13 @@ void ZIMPluginEventHandler::onCallInvitationEnded(ZIM* zim, const ZIMCallInvitat
     }
 }
 
-void ZIMPluginEventHandler::onCallUserStateChange(ZIM * zim, const ZIMCallUserStateChangeInfo& info) {
+void ZIMPluginEventHandler::onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangedInfo& info) {
     if (eventSink_) {
         FTMap retMap;
-        retMap[FTValue("method")] = FTValue("onCallUserStateChange");
+        retMap[FTValue("method")] = FTValue("onCallUserStateChanged");
         auto handle = this->engineEventMap[zim];
         retMap[FTValue("handle")] = FTValue(handle);
-        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallUserStateChangeInfoToMap(info);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallUserStateChangedInfoToMap(info);
         eventSink_->Success(retMap);
     }
 }

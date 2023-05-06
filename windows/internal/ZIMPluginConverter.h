@@ -200,13 +200,13 @@ public:
     static FTArray cnvZIMGroupAttributesUpdateInfoListToArray(const std::vector<ZIMGroupAttributesUpdateInfo>& updateInfoList);
     static FTMap cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInfo);
     static FTMap cnvZIMCallInfoToMap(const ZIMCallInfo& userInfo);
-    static FTMap cnvZIMCallEndedSentInfoToMap(const ZIMCallEndedSentInfo& callEndedSentInfo);
+    static FTMap cnvZIMCallEndSentInfoToMap(const ZIMCallEndSentInfo& callEndSentInfo);
     static FTMap cnvZIMCallQuitSentInfoToMap(const ZIMCallQuitSentInfo& callQuitSentInfo);
     static FTArray cnvZIMCallUserInfoListToArray(const std::vector<ZIMCallUserInfo>& callUserList);
     static FTMap cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info);
     static FTMap cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingInvitationSentInfo& info);
     static FTMap cnvZIMCallInvitationEndedInfoToMap(const ZIMCallInvitationEndedInfo& info);
-    static FTMap cnvZIMCallUserStateChangeInfoToMap(const ZIMCallUserStateChangeInfo& info);
+    static FTMap cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangedInfo& info);
 
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);

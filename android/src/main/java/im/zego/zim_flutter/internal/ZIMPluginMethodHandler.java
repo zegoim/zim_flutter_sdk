@@ -76,9 +76,11 @@ import im.zego.zim.entity.ZIMAppConfig;
 import im.zego.zim.entity.ZIMCacheConfig;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
 import im.zego.zim.entity.ZIMCallCancelConfig;
+import im.zego.zim.entity.ZIMCallEndSentInfo;
 import im.zego.zim.entity.ZIMCallInfo;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallInviteConfig;
+import im.zego.zim.entity.ZIMCallQuitSentInfo;
 import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallingInviteConfig;
 import im.zego.zim.entity.ZIMCallRejectConfig;
@@ -2086,7 +2088,7 @@ public class ZIMPluginMethodHandler {
         ZIMCallingInviteConfig config = ZIMPluginConverter.oZIMCallingInviteConfig(Objects.requireNonNull(call.argument("config")));
         String callID = call.argument("callID");
 
-        zim.callingInvite(callID, invitees, config, new ZIMCallingInvitationSentCallback() {
+        zim.callingInvite(invitees, callID, config, new ZIMCallingInvitationSentCallback() {
             @Override
             public void onCallingInvitationSent(String callID, ZIMCallingInvitationSentInfo info, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
@@ -2115,11 +2117,12 @@ public class ZIMPluginMethodHandler {
         ZIMCallQuitConfig config = ZIMPluginConverter.oZIMCallQuitConfig(Objects.requireNonNull(call.argument("config")));
         zim.callQuit(callID, config, new ZIMCallQuitSentCallback() {
             @Override
-            public void onCallQuitSent(String callID, ZIMError errorInfo) {
+            public void onCallQuitSent(String callID, ZIMCallQuitSentInfo info, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
 
                     resultMap.put("callID",callID);
+                    resultMap.put("callQuitSentInfo",ZIMPluginConverter.mZIMCallQuitSentInfo(info));
                     result.success(resultMap);
                 }
                 else {
@@ -2141,17 +2144,12 @@ public class ZIMPluginMethodHandler {
         ZIMCallEndConfig config = ZIMPluginConverter.oZIMCallEndConfig(Objects.requireNonNull(call.argument("config")));
         zim.callEnd(callID, config, new ZIMCallEndSentCallback() {
             @Override
-            public void onCallEndSent(String callID, long createTime, long endTime,
-            long callDuration, long userDuration,
-            ZIMError errorInfo) {
+            public void onCallEndSent(String callID, ZIMCallEndSentInfo info, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
 
                     resultMap.put("callID",callID);
-                    resultMap.put("createTime",createTime);
-                    resultMap.put("endTime",endTime);
-                    resultMap.put("callDuration",callDuration);
-                    resultMap.put("userDuration",userDuration);
+                    resultMap.put("callEndSentInfo",ZIMPluginConverter.mZIMCallEndSentInfo(info));
                     result.success(resultMap);
                 }
                 else {

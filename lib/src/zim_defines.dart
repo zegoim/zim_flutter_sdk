@@ -947,9 +947,9 @@ class ZIMCallInvitationSentInfo {
   int timeout = 0;
 
   /// Description: User id that has not received a call invitation.
-  List<ZIMErrorUserInfo> errorInvitees = [];
+  List<ZIMErrorUserInfo> errorList = [];
 
-  List<ZIMCallUserInfo> oldErrorInvitees = [];
+  List<ZIMCallUserInfo> errorInvitees = [];
 
   ZIMCallInvitationSentInfo();
 }
@@ -973,6 +973,8 @@ class ZIMCallQuitSentInfo {
 
 class ZIMCallEndedSentInfo {
   int createTime = 0;
+
+  int acceptTime = 0;
 
   int endTime = 0;
 
@@ -1031,14 +1033,14 @@ class ZIMCallInvitationRejectedInfo {
 }
 
 class ZIMCallInvitationEndedInfo{
-  String inviter = '';
+  String caller = '';
   String operatedUserID = '';
   String extendedData = '';
   ZIMInvitationMode mode = ZIMInvitationMode.general;
   int endTime = 0;
 }
 
-class ZIMCallUserStateChangeInfo{
+class ZIMCallUserStateChangedInfo{
   String callID = "";
   List<ZIMCallUserInfo> callUserList = [];
 }

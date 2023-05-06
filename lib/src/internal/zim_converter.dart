@@ -957,14 +957,15 @@ class ZIMConverter {
     ZIMCallEndedSentInfo info = ZIMCallEndedSentInfo();
     info.endTime = infoMap['endTime'];
     info.createTime = infoMap['createTime'];
+    info.acceptTime = infoMap['acceptTime'];
     return info;
   }
 
   static ZIMCallInvitationSentInfo oZIMCallInvitationSentInfo(Map infoMap) {
     ZIMCallInvitationSentInfo info = ZIMCallInvitationSentInfo();
     info.timeout = infoMap['timeout'];
-    info.errorInvitees = oZIMErrorUserInfoList(infoMap['errorInvitees']);
-    info.oldErrorInvitees = oZIMCallUserInfoList(infoMap['oldErrorInvitees']);
+    info.errorList = oZIMErrorUserInfoList(infoMap['errorList']);
+    info.errorInvitees = oZIMCallUserInfoList(infoMap['errorInvitees']);
     return info;
   }
 
@@ -1277,7 +1278,7 @@ class ZIMConverter {
 
   static ZIMCallInvitationEndedInfo oZIMCallInvitationEndedInfo(Map infoMap) {
     ZIMCallInvitationEndedInfo info = ZIMCallInvitationEndedInfo();
-    info.inviter = infoMap['inviter'];
+    info.caller = infoMap['caller'];
     info.operatedUserID = infoMap['operatedUserID'];
     info.extendedData = infoMap['extendedData'];
     info.mode = infoMap['mode'];
@@ -1285,18 +1286,18 @@ class ZIMConverter {
     return info;
   }
 
-  static ZIMCallUserStateChangeInfo oZIMCallUserStateChangeInfo(Map callUserStateChangeInfoMap) {
+  static ZIMCallUserStateChangedInfo oZIMCallUserStateChangedInfo(Map callUserStateChangedInfoMap) {
 
-    ZIMCallUserStateChangeInfo callUserStateChangeInfo = ZIMCallUserStateChangeInfo();
-    callUserStateChangeInfo.callID = callUserStateChangeInfoMap['callID'];
-    callUserStateChangeInfo.callUserList = oZIMCallUserInfoList(callUserStateChangeInfoMap['callUserList']);
+    ZIMCallUserStateChangedInfo callUserStateChangedInfo = ZIMCallUserStateChangedInfo();
+    callUserStateChangedInfo.callID = callUserStateChangedInfoMap['callID'];
+    callUserStateChangedInfo.callUserList = oZIMCallUserInfoList(callUserStateChangedInfoMap['callUserList']);
 
-    return callUserStateChangeInfo;
+    return callUserStateChangedInfo;
   }
 
   static ZIMCallEndSentResult oZIMCallEndSentResult(Map resultMap) {
-    ZIMCallEndedSentInfo callEndedSentInfo = oZIMCallEndSentInfo(resultMap['callEndedSentInfo']);
-    ZIMCallEndSentResult result = ZIMCallEndSentResult(callID: resultMap['callID'], info: callEndedSentInfo);
+    ZIMCallEndedSentInfo callEndSentInfo = oZIMCallEndSentInfo(resultMap['callEndSentInfo']);
+    ZIMCallEndSentResult result = ZIMCallEndSentResult(callID: resultMap['callID'], info: callEndSentInfo);
     return result;
   }
 

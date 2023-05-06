@@ -9,10 +9,10 @@ import im.zego.zim.ZIM;
 import im.zego.zim.callback.ZIMEventHandler;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
+import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
-import im.zego.zim.entity.ZIMCallStateChangeInfo;
-import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
+import im.zego.zim.entity.ZIMCallUserStateChangedInfo;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMError;
 import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
@@ -517,7 +517,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onCallStateChanged(ZIM zim, ZIMCallStateChangeInfo info) {
+    public void onCallInvitationEnded(ZIM zim, ZIMCallInvitationEndedInfo info, String callID) {
         if(mysink == null){
             return;
         }
@@ -525,14 +525,15 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         String handle = engineMapForCallback.get(zim);
 
         HashMap<String,Object> resultMap = new HashMap<>();
-        resultMap.put("method","onCallStateChanged");
+        resultMap.put("method","onCallInvitationEnded");
         resultMap.put("handle", handle);
-        resultMap.put("callStateChangeInfo",ZIMPluginConverter.mZIMCallStateChangedInfo(info));
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationEndedInfo(info));
+        resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
 
     @Override
-    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info) {
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangedInfo info) {
         if(mysink == null){
             return;
         }
@@ -542,7 +543,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallUserStateChanged");
         resultMap.put("handle", handle);
-        resultMap.put("callUserStateChangeInfo",ZIMPluginConverter.mZIMCallUserStateChangeInfo(info));
+        resultMap.put("info",ZIMPluginConverter.mZIMCallUserStateChangeInfo(info));
         mysink.success(resultMap);
     }
 
