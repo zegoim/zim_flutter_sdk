@@ -24,6 +24,7 @@ import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
+import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
 import im.zego.zim.entity.ZIMGroup;
@@ -221,6 +222,11 @@ public class ZIMPluginConverter {
                 messageMap.put("originalMessageType",((ZIMRevokeMessage) message).getOriginalMessageType().value());
                 messageMap.put("originalTextMessageContent",((ZIMRevokeMessage) message).getOriginalTextMessageContent());
                 break;
+            case CUSTOM:
+                assert message instanceof ZIMCustomMessage;
+                messageMap.put("message",((ZIMCustomMessage)message).message);
+                messageMap.put("subType",((ZIMCustomMessage)message).subType);
+                messageMap.put("searchedContent",((ZIMCustomMessage)message).searchedContent);
             case UNKNOWN:
             default:
                 break;
@@ -346,6 +352,13 @@ public class ZIMPluginConverter {
             case SYSTEM:
                 message = new ZIMSystemMessage();
                 ((ZIMSystemMessage) message).message = (String) messageMap.get("message");
+                break;
+
+            case CUSTOM:
+                message = new ZIMCustomMessage();
+                ((ZIMCustomMessage) message).message = (String) messageMap.get("message");
+                ((ZIMCustomMessage) message).subType = ZIMPluginCommonTools.safeGetIntValue(messageMap.get("subType"));
+                ((ZIMCustomMessage) message).searchedContent = (String) messageMap.get("searchedContent");
                 break;
             case REVOKE:
                 message = new ZIMRevokeMessage();

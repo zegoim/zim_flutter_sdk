@@ -347,6 +347,13 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 		messageMap[FTValue("message")] = FTValue(systemMessage->message);
 		break;
 	}
+	case ZIM_MESSAGE_TYPE_CUSTOM:{
+		auto customMessage = (ZIMCustomMessage*)message;
+		messageMap[FTValue("message")] = FTValue(customMessage->message);
+		messageMap[FTValue("searchedContent")] = FTValue(customMessage->searchedContent);
+		messageMap[FTValue("subType")] = FTValue((int32_t)customMessage->subType);
+		break;
+	}
 	case ZIM_MESSAGE_TYPE_REVOKE:{
 		auto revokeMessage = (ZIMRevokeMessage*)message;
 		messageMap[FTValue("revokeType")] = FTValue(revokeMessage->getRevokeType());
@@ -475,6 +482,15 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		messagePtr = std::make_shared<ZIMSystemMessage>();
 		auto systemMessage = std::static_pointer_cast<ZIMSystemMessage>(messagePtr);
 		systemMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
+		break;
+	}
+
+	case zim::ZIM_MESSAGE_TYPE_CUSTOM:{
+		messagePtr = std::make_shared<ZIMCustomMessage>();
+		auto customMessage = std::static_pointer_cast<ZIMCustomMessage>(messagePtr);
+		customMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
+		customMessage->searchedContent = std::get<std::string>(messageMap[FTValue("searchedContent")]);
+		customMessage->subType = (unsigned int)std::get<int32_t>(messageMap[FTValue("subType")]);;
 		break;
 	}
 	case zim::ZIM_MESSAGE_TYPE_REVOKE:{
