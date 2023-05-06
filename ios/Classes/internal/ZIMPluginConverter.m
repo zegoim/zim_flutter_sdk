@@ -858,6 +858,7 @@
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
     [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.errorInvitees] forKey:@"errorInvitees"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMErrorUserInfoList:info.errorList] forKey:@"errorList"];
     return infoDic;
 }
 
