@@ -166,6 +166,15 @@ FTMap ZIMPluginConverter::cnvZIMUserInfoObjectToMap(const ZIMUserInfo& userInfo)
 
 }
 
+FTMap ZIMPluginConverter::cnvZIMRoomMemberInfoObjectToMap(const ZIMRoomMemberInfo& userInfo) {
+	FTMap userInfoMap;
+	userInfoMap[FTValue("userID")] = FTValue(userInfo.userID);
+	userInfoMap[FTValue("userName")] = FTValue(userInfo.userName);
+
+	return userInfoMap;
+
+}
+
 FTMap ZIMPluginConverter::cnvZIMUserFullInfoObjectToMap(const ZIMUserFullInfo& userFullInfo) {
 	FTMap userFullInfoMap;
 	userFullInfoMap[FTValue("baseInfo")] = cnvZIMUserInfoObjectToMap(userFullInfo.baseInfo);
@@ -195,6 +204,16 @@ FTArray ZIMPluginConverter::cnvZIMUserListToArray(const std::vector<ZIMUserInfo>
 	FTArray userInfoListArray;
 	for (auto& userInfo : userInfoList) {
 		FTMap userInfoMap = cnvZIMUserInfoObjectToMap(userInfo);
+		userInfoListArray.emplace_back(userInfoMap);
+	}
+
+	return userInfoListArray;
+}
+
+FTArray ZIMPluginConverter::cnvZIMRoomMemberInfoListToArray(const std::vector<ZIMRoomMemberInfo>& roomMemberInfoList) {
+	FTArray userInfoListArray;
+	for (auto& userInfo : roomMemberInfoList) {
+		FTMap userInfoMap = cnvZIMRoomMemberInfoObjectToMap(userInfo);
 		userInfoListArray.emplace_back(userInfoMap);
 	}
 
@@ -486,11 +505,11 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	}
 
 	case zim::ZIM_MESSAGE_TYPE_CUSTOM:{
-		messagePtr = std::make_shared<ZIMCustomMessage>();
+		messagePtr = std::make_shared<ZIMCustomMessage>("", 0);
 		auto customMessage = std::static_pointer_cast<ZIMCustomMessage>(messagePtr);
 		customMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
 		customMessage->searchedContent = std::get<std::string>(messageMap[FTValue("searchedContent")]);
-		customMessage->subType = (unsigned int)std::get<int32_t>(messageMap[FTValue("subType")]);;
+		customMessage->subType = (unsigned int)std::get<int32_t>(messageMap[FTValue("subType")]);
 		break;
 	}
 	case zim::ZIM_MESSAGE_TYPE_REVOKE:{

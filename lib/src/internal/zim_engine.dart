@@ -350,6 +350,17 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMRoomMembersQueriedResult> queryRoomMembers(
+      List<String> userIDs, String roomID) async {
+    Map resultMap = await channel.invokeMethod('queryRoomMembers', {
+      'handle': handle,
+      'roomID': roomID,
+      'userIDs': userIDs
+    });
+    return ZIMConverter.oZIMRoomMembersQueriedResult(resultMap);
+  }
+
+  @override
   Future<ZIMRoomOnlineMemberCountQueriedResult> queryRoomOnlineMemberCount(
       String roomID) async {
     Map resultMap = await channel.invokeMethod(

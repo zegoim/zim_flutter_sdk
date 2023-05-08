@@ -432,6 +432,11 @@ class ZIMUserInfo {
   ZIMUserInfo();
 }
 
+class ZIMRoomMemberInfo extends ZIMUserInfo{
+
+  ZIMRoomMemberInfo();
+}
+
 class ZIMUserFullInfo {
   ZIMUserInfo baseInfo = ZIMUserInfo();
   String userAvatarUrl = '';
@@ -1225,6 +1230,14 @@ class ZIMRoomMemberQueriedResult {
   List<ZIMUserInfo> memberList;
   ZIMRoomMemberQueriedResult(
       {required this.roomID, required this.nextFlag, required this.memberList});
+}
+
+class ZIMRoomMembersQueriedResult {
+  String roomID;
+  List<ZIMRoomMemberInfo> memberList;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMRoomMembersQueriedResult(
+      {required this.roomID, required this.memberList, required this.errorUserList});
 }
 
 /// Callback of the result of querying the online members count in the room.

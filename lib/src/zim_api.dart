@@ -644,6 +644,9 @@ abstract class ZIM {
   Future<ZIMRoomMemberQueriedResult> queryRoomMemberList(
       String roomID, ZIMRoomMemberQueryConfig config);
 
+  Future<ZIMRoomMembersQueriedResult> queryRoomMembers(
+      List<String> userIDs, String roomID);
+
   /// Query the number of online members in the room.
   ///
   /// Available since: 2.1.5 or above.

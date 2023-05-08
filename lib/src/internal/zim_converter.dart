@@ -44,6 +44,13 @@ class ZIMConverter {
     return userInfo;
   }
 
+  static ZIMRoomMemberInfo oZIMRoomMemberInfo(Map userInfoBasicMap) {
+    ZIMRoomMemberInfo userInfo = ZIMRoomMemberInfo();
+    userInfo.userID = userInfoBasicMap['userID'];
+    userInfo.userName = userInfoBasicMap['userName'];
+    return userInfo;
+  }
+
   static ZIMErrorUserInfo oZIMErrorUserInfo(Map errorUserInfoBasicMap) {
     ZIMErrorUserInfo errorUserInfo = ZIMErrorUserInfo();
     errorUserInfo.userID = errorUserInfoBasicMap['userID'];
@@ -581,11 +588,26 @@ class ZIMConverter {
     return memberList;
   }
 
+  static List<ZIMRoomMemberInfo> oZIMRoomMemberInfoList(List memberListBasic) {
+    List<ZIMRoomMemberInfo> memberList = [];
+    for (Map memberInfoMap in memberListBasic) {
+      memberList.add(oZIMRoomMemberInfo(memberInfoMap));
+    }
+    return memberList;
+  }
+
   static ZIMRoomMemberQueriedResult oZIMRoomMemberQueriedResult(Map resultMap) {
     return ZIMRoomMemberQueriedResult(
         roomID: resultMap['roomID'],
         nextFlag: resultMap['nextFlag'],
         memberList: oZIMUserInfoList(resultMap['memberList']));
+  }
+
+  static ZIMRoomMembersQueriedResult oZIMRoomMembersQueriedResult(Map resultMap) {
+    return ZIMRoomMembersQueriedResult(
+        roomID: resultMap['roomID'],
+        errorUserList: oZIMErrorUserInfoList(resultMap['errorUserList']),
+        memberList: oZIMRoomMemberInfoList(resultMap['memberList']));
   }
 
   static ZIMRoomOnlineMemberCountQueriedResult
