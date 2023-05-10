@@ -35,6 +35,8 @@
 
 +(nullable NSArray *)mZIMConversationList:(nullable NSArray<ZIMConversation *> *)conversationList;
 
++(nullable NSDictionary *)mZIMConversation:(nullable ZIMConversation *)conversation;
+
 +(nullable ZIMConversationDeleteConfig *)oZIMConversationDeleteConfig:(nullable NSMutableDictionary *)configDic;
 
 +(nullable NSArray *)mConversationChangeInfoList:(nullable NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList;

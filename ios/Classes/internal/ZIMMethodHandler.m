@@ -297,7 +297,8 @@
                                                                                                  ZIMError *errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic safeSetObject:conversation forKey:@"conversation"];
+            
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMConversation:conversation]forKey:@"conversation"];
             result(resultDic);
         }
         else{
