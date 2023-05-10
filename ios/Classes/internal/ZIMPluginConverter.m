@@ -59,6 +59,16 @@
     return userInfoDic;
 }
 
++(nullable NSDictionary *)mZIMRoomMemberInfo:(nullable ZIMRoomMemberInfo *)userInfo{
+    if(userInfo == nil || userInfo == NULL || [userInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *userInfoDic = [[NSMutableDictionary alloc] init];
+    [userInfoDic safeSetObject:userInfo.userID forKey:@"userID"];
+    [userInfoDic safeSetObject:userInfo.userName forKey:@"userName"];
+    return userInfoDic;
+}
+
 +(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList{
     if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
         return nil;
@@ -66,6 +76,18 @@
     NSMutableArray *basicZIMUserInfoList = [[NSMutableArray alloc] init];
     for (ZIMUserInfo *userInfo in userInfoList) {
         NSDictionary *userInfoDic = [ZIMPluginConverter mZIMUserInfo:userInfo];
+        [basicZIMUserInfoList safeAddObject:userInfoDic];
+    }
+    return basicZIMUserInfoList;
+}
+
++(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList{
+    if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicZIMUserInfoList = [[NSMutableArray alloc] init];
+    for (ZIMRoomMemberInfo *userInfo in userInfoList) {
+        NSDictionary *userInfoDic = [ZIMPluginConverter mZIMRoomMemberInfo:userInfo];
         [basicZIMUserInfoList safeAddObject:userInfoDic];
     }
     return basicZIMUserInfoList;

@@ -19,6 +19,8 @@
 
 +(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList;
 
++(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList;
+
 +(nullable ZIMConversation *)oZIMConversation:(nullable NSDictionary *)conversationDic;
 
 +(nullable ZIMMessage *)oZIMMessage:(nullable NSDictionary *)messageDic;
