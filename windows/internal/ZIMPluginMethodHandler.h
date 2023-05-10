@@ -46,6 +46,8 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryConversationList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void ZIMPluginMethodHandler::queryConversation(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryConversationPinnedList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void updateConversationPinnedState(flutter::EncodableMap& argument,

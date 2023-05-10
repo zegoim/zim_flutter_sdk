@@ -374,6 +374,10 @@ class ZIMConverter {
             .mapValue[resultMap['conversationType']]!);
   }
 
+  static ZIMConversationQueriedResult oZIMConversationQueriedResult(Map resultMap) {
+    return ZIMConversationQueriedResult(conversation: oZIMConversation(resultMap['conversation']));
+  }
+
   static Map mZIMConversationDeleteConfig(ZIMConversationDeleteConfig config) {
     Map configMap = {};
     configMap['isAlsoDeleteServerConversation'] =

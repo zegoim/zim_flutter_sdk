@@ -882,4 +882,16 @@ class ZIMEngine implements ZIM {
     });
     return ZIMConverter.oZIMConversationPinnedStateUpdatedResult(resultMap);
   }
+
+  @override
+  Future<ZIMConversationQueriedResult> queryConversation(String conversationID,
+      ZIMConversationType conversationType) async{
+    Map resultMap = await channel.invokeMethod('queryConversation',{
+      'handle': handle,
+      'conversationID':conversationID,
+      'conversationType': ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMConversationQueriedResult(resultMap);
+  }
+
 }

@@ -174,6 +174,9 @@ abstract class ZIM {
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
+  Future<ZIMConversationQueriedResult> queryConversation(String conversationID,
+      ZIMConversationType conversationType);
+
   Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList(ZIMConversationQueryConfig config);
 
   Future<ZIMConversationPinnedStateUpdatedResult> updateConversationPinnedState(bool isPinned, String conversationID, ZIMConversationType conversationType);

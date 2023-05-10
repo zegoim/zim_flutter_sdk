@@ -146,6 +146,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "queryConversationList") {
         ZIMPluginMethodHandler::getInstance().queryConversationList(argument, std::move(result));
     }
+	else if (method_call.method_name() == "queryConversation") {
+		ZIMPluginMethodHandler::getInstance().queryConversation(argument, std::move(result));
+	}
 	else if (method_call.method_name() == "queryConversationPinnedList") {
 		ZIMPluginMethodHandler::getInstance().queryConversationPinnedList(argument, std::move(result));
 	}
