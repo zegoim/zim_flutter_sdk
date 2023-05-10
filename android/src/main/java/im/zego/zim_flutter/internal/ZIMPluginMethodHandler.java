@@ -19,6 +19,7 @@ import im.zego.zim.callback.ZIMConversationPinnedStateUpdatedCallback;
 import im.zego.zim.callback.ZIMConversationPinnedListQueriedCallback;
 import im.zego.zim.callback.ZIMConversationMessageReceiptReadSentCallback;
 import im.zego.zim.callback.ZIMConversationNotificationStatusSetCallback;
+import im.zego.zim.callback.ZIMConversationQueriedCallback;
 import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesQueriedCallback;
@@ -62,6 +63,7 @@ import im.zego.zim.callback.ZIMRoomMemberAttributesListQueriedCallback;
 import im.zego.zim.callback.ZIMRoomMemberQueriedCallback;
 import im.zego.zim.callback.ZIMRoomMembersAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMRoomMembersAttributesQueriedCallback;
+import im.zego.zim.callback.ZIMRoomMembersQueriedCallback;
 import im.zego.zim.callback.ZIMRoomOnlineMemberCountQueriedCallback;
 import im.zego.zim.callback.ZIMTokenRenewedCallback;
 import im.zego.zim.callback.ZIMUserAvatarUrlUpdatedCallback;
@@ -105,6 +107,7 @@ import im.zego.zim.entity.ZIMRoomMemberAttributesInfo;
 import im.zego.zim.entity.ZIMRoomMemberAttributesOperatedInfo;
 import im.zego.zim.entity.ZIMRoomMemberAttributesQueryConfig;
 import im.zego.zim.entity.ZIMRoomMemberAttributesSetConfig;
+import im.zego.zim.entity.ZIMRoomMemberInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
 import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
@@ -372,6 +375,32 @@ public class ZIMPluginMethodHandler {
                     HashMap<String,Object> resultMap = new HashMap<>();
                     ArrayList<HashMap<String,Object>> basicConversationList = ZIMPluginConverter.mZIMConversationList(conversationList);
                     resultMap.put("conversationList",basicConversationList);
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryConversation(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String conversationID = call.argument("conversationID");
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
+        ZIMConversationDeleteConfig config = ZIMPluginConverter.oZIMConversationDeleteConfig(Objects.requireNonNull(call.argument("config")));
+        zim.queryConversation(conversationID, conversationType, new ZIMConversationQueriedCallback() {
+            @Override
+            public void onConversationQueried(ZIMConversation conversation, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("conversation", ZIMPluginConverter.mZIMConversation(conversation));
                     result.success(resultMap);
                 }
                 else{
@@ -1184,6 +1213,35 @@ public class ZIMPluginMethodHandler {
                     ArrayList<HashMap<String,Object>> basicMemberList = ZIMPluginConverter.mZIMUserInfoList(memberList);
                     resultMap.put("memberList",basicMemberList);
                     resultMap.put("nextFlag",nextFlag);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryRoomMembers(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String roomID = call.argument("roomID");
+        ArrayList<String> userIDs = call.argument("userIDs");
+        zim.queryRoomMembers(userIDs, roomID, new ZIMRoomMembersQueriedCallback() {
+            @Override
+            public void onRoomMembersQueried(String roomID, ArrayList<ZIMRoomMemberInfo> memberList, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo){
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("roomID",roomID);
+                    ArrayList<HashMap<String,Object>> basicMemberList = ZIMPluginConverter.mZIMRoomMemberInfoList(memberList);
+                    ArrayList<HashMap<String,Object>> basicErrorUserList = ZIMPluginConverter.mZIMErrorUserInfoList(errorUserList);
+                    resultMap.put("errorUserList",basicErrorUserList);
+                    resultMap.put("memberList",basicMemberList);
                     result.success(resultMap);
                 }
                 else {
