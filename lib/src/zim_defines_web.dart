@@ -1,6 +1,9 @@
 @JS('ZIM')
 library zim_web;
 
+import 'dart:ffi';
+import 'dart:html';
+
 import 'package:js/js.dart';
 import 'package:zego_zim/src/internal/zim_utils_web.dart';
 
@@ -121,6 +124,9 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryGroupMessageReceiptReadMemberList(dynamic message, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> queryGroupMessageReceiptUnreadMemberList(dynamic message, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> revokeMessage(dynamic message, dynamic config);
+  external PromiseJsImpl<dynamic> queryConversationPinnedList(dynamic config);
+  external PromiseJsImpl<dynamic> updateConversationPinnedState(String conversationID, dynamic conversationType, bool isPinned);
+  external PromiseJsImpl<dynamic> queryRoomMembers(dynamic userIDs, String roomID);
 }
 
 @JS()

@@ -257,6 +257,12 @@ class ZegoZimPlugin {
         return queryGroupMessageReceiptUnreadMemberList(call.arguments["message"], call.arguments["groupID"], call.arguments["config"]);
       case 'revokeMessage':
         return revokeMessage(call.arguments["message"], call.arguments["config"]);
+      case 'queryConversationPinnedList':
+        return queryConversationPinnedList(call.arguments["config"]);
+      case 'updateConversationPinnedState':
+        return updateConversationPinnedState(call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["isPinned"]);
+      case 'queryRoomMembers':
+        return queryRoomMembers(call.arguments["userIDs"], call.arguments["roomID"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -1265,6 +1271,33 @@ class ZegoZimPlugin {
     final _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.revokeMessage(_message, _config)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryConversationPinnedList(dynamic config) async {
+    final _config = mapToJSObj((config));
+
+    final result = await promiseToFuture(ZIM.getInstance()!.queryConversationPinnedList(_config)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateConversationPinnedState(String conversationID, dynamic conversationType, bool isPinned) async {
+
+    final result = await promiseToFuture(ZIM.getInstance()!.updateConversationPinnedState(conversationID, conversationType, isPinned)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryRoomMembers(dynamic userIDs, String roomID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryRoomMembers(userIDs, roomID)).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
