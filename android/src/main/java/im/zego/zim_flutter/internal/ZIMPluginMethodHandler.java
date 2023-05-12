@@ -394,7 +394,6 @@ public class ZIMPluginMethodHandler {
 
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
-        ZIMConversationDeleteConfig config = ZIMPluginConverter.oZIMConversationDeleteConfig(Objects.requireNonNull(call.argument("config")));
         zim.queryConversation(conversationID, conversationType, new ZIMConversationQueriedCallback() {
             @Override
             public void onConversationQueried(ZIMConversation conversation, ZIMError errorInfo) {
