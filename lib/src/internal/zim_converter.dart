@@ -1033,8 +1033,9 @@ class ZIMConverter {
       Map infoMap) {
     ZIMCallInvitationReceivedInfo info = ZIMCallInvitationReceivedInfo();
     info.inviter = infoMap['inviter'];
+    info.caller = infoMap['caller'];
     info.extendedData = infoMap['extendedData'];
-    info.mode = infoMap['mode'];
+    info.mode = ZIMInvitationModeExtension.mapValue[infoMap["mode"]]!;
     info.timeout = infoMap['timeout'];
     info.createTime = infoMap['createTime'];
     info.callUserList = oZIMCallUserInfoList(infoMap['callUserList']);
@@ -1046,8 +1047,7 @@ class ZIMConverter {
     ZIMCallInvitationCancelledInfo info = ZIMCallInvitationCancelledInfo();
     info.inviter = infoMap['inviter'];
     info.extendedData = infoMap['extendedData'];
-    info.mode = infoMap['mode'];
-    info.createTime = infoMap['createTime'];
+    info.mode = ZIMInvitationModeExtension.mapValue[infoMap["mode"]]!;
     return info;
   }
 

@@ -453,6 +453,7 @@ fromGroupID:(NSString *)fromGroupID{
     NSMutableDictionary *callInvitationReceivedInfoDic = [[NSMutableDictionary alloc] init];
     [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
     [callInvitationReceivedInfoDic safeSetObject:info.inviter forKey:@"inviter"];
+    [callInvitationReceivedInfoDic safeSetObject:info.caller forKey:@"caller"];
     [callInvitationReceivedInfoDic safeSetObject:info.extendedData forKey:@"extendedData"];
     [resultDic safeSetObject:@"onCallInvitationReceived" forKey:@"method"];
     [resultDic safeSetObject:callInvitationReceivedInfoDic forKey:@"info"];
@@ -549,7 +550,7 @@ fromGroupID:(NSString *)fromGroupID{
     [infoDic safeSetObject:info.caller forKey:@"caller"];
     [infoDic safeSetObject:info.operatedUserID forKey:@"operatedUserID"];
     [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
-    [infoDic safeSetObject:(int)info.mode forKey:@"mode"];
+    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
     [infoDic safeSetObject:[NSNumber numberWithLongLong:info.endTime] forKey:@"endTime"];
     
     [resultDic safeSetObject:@"onCallInvitationEnded" forKey:@"method"];

@@ -989,6 +989,8 @@ class ZIMCallInvitationReceivedInfo {
   /// Description: Inviter ID.
   String inviter = "";
 
+  String caller = '';
+
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
 
@@ -1008,7 +1010,6 @@ class ZIMCallInvitationCancelledInfo {
   String extendedData = "";
 
   ZIMInvitationMode mode = ZIMInvitationMode.general;
-  int createTime = 0;
   ZIMCallInvitationCancelledInfo();
 }
 

@@ -424,6 +424,7 @@ void ZIMPluginEventHandler::onCallInvitationReceived(ZIM* zim,
 
         FTMap infoMap;
         infoMap[FTValue("inviter")] = FTValue(info.inviter);
+        infoMap[FTValue("caller")] = FTValue(info.caller);
         infoMap[FTValue("extendedData")] = FTValue(info.extendedData);
         infoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
         infoMap[FTValue("timeout")] = FTValue((int32_t)info.timeout);
