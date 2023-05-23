@@ -24,7 +24,7 @@ class ZIMEngine implements ZIM {
     if (ZIMManager.destroyEngine(handle)) {
       channel.invokeMethod("destroy", {"handle": handle});
       // TODO: Remove another map
-      ZIMEventHandlerImpl.unregisterEventHandler();
+      // ZIMEventHandlerImpl.unregisterEventHandler();
     }
   }
 
