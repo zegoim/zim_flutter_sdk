@@ -281,9 +281,8 @@ class ZIMConverter {
         break;
 
       case ZIMMessageType.custom:
-        message ??= ZIMCustomMessage(message: resultMap['message']);
+        message ??= ZIMCustomMessage(message: resultMap['message'],subType:resultMap['subType']);
         message as ZIMCustomMessage;
-        message.subType = resultMap['subType'];
         message.searchedContent = resultMap['searchedContent'];
         break;
       case ZIMMessageType.revoke:
