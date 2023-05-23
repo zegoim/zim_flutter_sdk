@@ -570,7 +570,7 @@ class ZIMCustomMessage extends ZIMMessage {
   String message = '';
   int subType=0;
   String searchedContent = '';
-  ZIMCustomMessage({required this.message}){
+  ZIMCustomMessage({required this.message,required this.subType}){
     super.type = ZIMMessageType.custom;
   }
 }
