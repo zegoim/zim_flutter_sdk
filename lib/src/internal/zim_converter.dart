@@ -112,7 +112,7 @@ class ZIMConverter {
       conversation.lastMessage = oZIMMessage(resultMap['lastMessage']);
     }
     conversation.notificationStatus = ZIMConversationNotificationStatusExtension.mapValue[resultMap['notificationStatus']]!;
-    conversation.isPinned = resultMap['isPinned'];
+    conversation.isPinned = resultMap['isPinned'] != 0;
     return conversation;
   }
 
