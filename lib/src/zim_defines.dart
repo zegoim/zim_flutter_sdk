@@ -304,15 +304,15 @@ enum ZIMGroupMessageNotificationStatus { notify, doNotDisturb }
 enum ZIMMessageReceiptStatus { none, processing, done, expired, failed }
 
 enum ZIMCallUserState {
+  unknown,
   inviting,
   accepted,
   rejected,
   cancelled,
   offline,
   received,
-  quited,
-  ended,
-  timeout
+  timeout,
+  quited
 }
 
 enum ZIMInvitationMode {
