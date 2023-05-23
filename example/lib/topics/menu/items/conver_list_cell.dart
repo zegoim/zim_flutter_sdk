@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import 'package:zego_zim/zego_zim.dart';
 import 'package:badges/badges.dart';
 import 'package:zego_zim_example/topics/chat/chat_with_conversation/group/group_chat_page.dart';

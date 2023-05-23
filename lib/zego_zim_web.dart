@@ -260,9 +260,11 @@ class ZegoZimPlugin {
       case 'queryConversationPinnedList':
         return queryConversationPinnedList(call.arguments["config"]);
       case 'updateConversationPinnedState':
-        return updateConversationPinnedState(call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["isPinned"]);
+        return updateConversationPinnedState(call.arguments["isPinned"], call.arguments["conversationID"], call.arguments["conversationType"]);
       case 'queryRoomMembers':
         return queryRoomMembers(call.arguments["userIDs"], call.arguments["roomID"]);
+      case 'queryConversation':
+        return queryConversation(call.arguments["conversationID"], call.arguments["conversationType"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -1284,12 +1286,19 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return jsObjectToMap(result);
+    final resultMap = jsObjectToMap(result);
+
+    resultMap["conversationList"].forEach((conversation) {
+      var index = resultMap["conversationList"].indexOf(conversation);
+      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(resultMap["conversationList"][index]["lastMessage"]);
+    });
+
+    return resultMap;
   }
 
-  Future<Map<dynamic, dynamic>> updateConversationPinnedState(String conversationID, dynamic conversationType, bool isPinned) async {
+  Future<Map<dynamic, dynamic>> updateConversationPinnedState(bool isPinned, String conversationID, dynamic conversationType) async {
 
-    final result = await promiseToFuture(ZIM.getInstance()!.updateConversationPinnedState(conversationID, conversationType, isPinned)).catchError((e) {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateConversationPinnedState(isPinned, conversationID, conversationType)).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1302,6 +1311,18 @@ class ZegoZimPlugin {
     });
 
     return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryConversation(String conversationID, dynamic conversationType) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryConversation(conversationID, conversationType)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
+
+    resultMap["conversation"]["lastMessage"] = convertZIMMessage(resultMap["conversation"]["lastMessage"]);
+
+    return resultMap;
   }
 
   static void connectionStateChangedHandle(ZIMEngine zim, dynamic data) {
