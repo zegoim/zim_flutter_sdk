@@ -454,6 +454,9 @@ fromGroupID:(NSString *)fromGroupID{
     [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
     [callInvitationReceivedInfoDic safeSetObject:info.inviter forKey:@"inviter"];
     [callInvitationReceivedInfoDic safeSetObject:info.caller forKey:@"caller"];
+    [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
+    [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
+    [callInvitationReceivedInfoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
     [callInvitationReceivedInfoDic safeSetObject:info.extendedData forKey:@"extendedData"];
     [resultDic safeSetObject:@"onCallInvitationReceived" forKey:@"method"];
     [resultDic safeSetObject:callInvitationReceivedInfoDic forKey:@"info"];
