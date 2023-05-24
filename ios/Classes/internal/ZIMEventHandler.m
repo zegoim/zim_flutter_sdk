@@ -477,6 +477,7 @@ fromGroupID:(NSString *)fromGroupID{
     [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
     [resultDic safeSetObject:@"onCallInvitationCancelled" forKey:@"method"];
     [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
     [resultDic safeSetObject:callID forKey:@"callID"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
