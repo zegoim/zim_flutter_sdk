@@ -24,6 +24,7 @@ import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
+import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
 import im.zego.zim.entity.ZIMGroup;
@@ -58,6 +59,7 @@ import im.zego.zim.entity.ZIMRoomMemberAttributesOperatedInfo;
 import im.zego.zim.entity.ZIMRoomMemberAttributesQueryConfig;
 import im.zego.zim.entity.ZIMRoomMemberAttributesSetConfig;
 import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
+import im.zego.zim.entity.ZIMRoomMemberInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
 import im.zego.zim.entity.ZIMRoomOperatedInfo;
 import im.zego.zim.entity.ZIMSystemMessage;
@@ -221,6 +223,11 @@ public class ZIMPluginConverter {
                 messageMap.put("originalMessageType",((ZIMRevokeMessage) message).getOriginalMessageType().value());
                 messageMap.put("originalTextMessageContent",((ZIMRevokeMessage) message).getOriginalTextMessageContent());
                 break;
+            case CUSTOM:
+                assert message instanceof ZIMCustomMessage;
+                messageMap.put("message",((ZIMCustomMessage)message).message);
+                messageMap.put("subType",((ZIMCustomMessage)message).subType);
+                messageMap.put("searchedContent",((ZIMCustomMessage)message).searchedContent);
             case UNKNOWN:
             default:
                 break;
@@ -346,6 +353,13 @@ public class ZIMPluginConverter {
             case SYSTEM:
                 message = new ZIMSystemMessage();
                 ((ZIMSystemMessage) message).message = (String) messageMap.get("message");
+                break;
+
+            case CUSTOM:
+                message = new ZIMCustomMessage("", 0);
+                ((ZIMCustomMessage) message).message = (String) messageMap.get("message");
+                ((ZIMCustomMessage) message).subType = ZIMPluginCommonTools.safeGetIntValue(messageMap.get("subType"));
+                ((ZIMCustomMessage) message).searchedContent = (String) messageMap.get("searchedContent");
                 break;
             case REVOKE:
                 message = new ZIMRevokeMessage();
@@ -544,6 +558,14 @@ public class ZIMPluginConverter {
         return userInfoBasicList;
     }
 
+    static public ArrayList<HashMap<String,Object>> mZIMRoomMemberInfoList(ArrayList<ZIMRoomMemberInfo> userList){
+        ArrayList<HashMap<String,Object>> userInfoBasicList = new ArrayList<>();
+        for (ZIMRoomMemberInfo userInfo:userList) {
+            userInfoBasicList.add(mZIMRoomMemberInfo(userInfo));
+        }
+        return userInfoBasicList;
+    }
+
     static public HashMap<String,Object> mZIMUserFullInfo(ZIMUserFullInfo userFullInfo){
         HashMap<String,Object> userFullInfoMap = new HashMap<>();
         userFullInfoMap.put("userAvatarUrl",userFullInfo.userAvatarUrl);
@@ -563,6 +585,13 @@ public class ZIMPluginConverter {
     }
 
     static public HashMap<String,Object> mZIMUserInfo(ZIMUserInfo userInfo){
+        HashMap<String,Object> userInfoMap = new HashMap<>();
+        userInfoMap.put("userID",userInfo.userID);
+        userInfoMap.put("userName",userInfo.userName);
+        return userInfoMap;
+    }
+
+    static public HashMap<String,Object> mZIMRoomMemberInfo(ZIMRoomMemberInfo userInfo){
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("userName",userInfo.userName);

@@ -59,6 +59,16 @@
     return userInfoDic;
 }
 
++(nullable NSDictionary *)mZIMRoomMemberInfo:(nullable ZIMRoomMemberInfo *)userInfo{
+    if(userInfo == nil || userInfo == NULL || [userInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *userInfoDic = [[NSMutableDictionary alloc] init];
+    [userInfoDic safeSetObject:userInfo.userID forKey:@"userID"];
+    [userInfoDic safeSetObject:userInfo.userName forKey:@"userName"];
+    return userInfoDic;
+}
+
 +(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList{
     if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
         return nil;
@@ -66,6 +76,18 @@
     NSMutableArray *basicZIMUserInfoList = [[NSMutableArray alloc] init];
     for (ZIMUserInfo *userInfo in userInfoList) {
         NSDictionary *userInfoDic = [ZIMPluginConverter mZIMUserInfo:userInfo];
+        [basicZIMUserInfoList safeAddObject:userInfoDic];
+    }
+    return basicZIMUserInfoList;
+}
+
++(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList{
+    if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicZIMUserInfoList = [[NSMutableArray alloc] init];
+    for (ZIMRoomMemberInfo *userInfo in userInfoList) {
+        NSDictionary *userInfoDic = [ZIMPluginConverter mZIMRoomMemberInfo:userInfo];
         [basicZIMUserInfoList safeAddObject:userInfoDic];
     }
     return basicZIMUserInfoList;
@@ -84,6 +106,7 @@
     conversation.unreadMessageCount = ((NSNumber *)[conversationDic objectForKey:@"unreadMessageCount"]).intValue;
     conversation.orderKey = ((NSNumber *)[conversationDic objectForKey:@"orderKey"]).longLongValue;
     conversation.lastMessage = [ZIMPluginConverter oZIMMessage:(NSDictionary *)[conversationDic objectForKey:@"lastMessage"]];
+    conversation.isPinned = ((NSNumber *)[conversationDic objectForKey:@"isPinned"]).boolValue;
     return conversation;
 }
 
@@ -100,6 +123,7 @@
     [conversationDic safeSetObject:[NSNumber numberWithUnsignedInt:conversation.unreadMessageCount] forKey:@"unreadMessageCount"];
     [conversationDic safeSetObject:[NSNumber numberWithLongLong:conversation.orderKey] forKey:@"orderKey"];
     [conversationDic safeSetObject:[ZIMPluginConverter mZIMMessage:conversation.lastMessage] forKey:@"lastMessage"];
+    [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
     return conversationDic;
     
 }
@@ -221,6 +245,12 @@
             ((ZIMSystemMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
             break;
         }
+        case ZIMMessageTypeCustom:
+            msg = [[ZIMCustomMessage alloc] init];
+            ((ZIMCustomMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
+            ((ZIMCustomMessage *)msg).searchedContent = [messageDic safeObjectForKey:@"searchedContent"];
+            ((ZIMCustomMessage *)msg).subType = ((NSNumber *)[messageDic safeObjectForKey:@"subType"]).unsignedIntValue;
+            break;
         case ZIMMessageTypeRevoke:{
             msg = [[ZIMRevokeMessage alloc] init];
             [((ZIMRevokeMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"revokeType"]  forKey:@"revokeType"];
@@ -345,6 +375,13 @@
         case ZIMMessageTypeSystem:{
             ZIMSystemMessage *sysMsg = (ZIMSystemMessage *)message;
             [messageDic safeSetObject:sysMsg.message forKey:@"message"];
+            break;
+        }
+        case ZIMMessageTypeCustom:{
+            ZIMCustomMessage *customMsg = (ZIMCustomMessage *)message;
+            [messageDic safeSetObject:customMsg.message forKey:@"message"];
+            [messageDic safeSetObject:customMsg.searchedContent forKey:@"searchedContent"];
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedInt:customMsg.subType] forKey:@"subType"];
             break;
         }
         case ZIMMessageTypeRevoke:{

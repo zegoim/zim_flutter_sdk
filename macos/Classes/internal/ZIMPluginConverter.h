@@ -6,7 +6,6 @@
 #import "NSMutableArray+safeInvoke.h"
 #import "NSObject+safeInvoke.h"
 @interface ZIMPluginConverter:NSObject
-
 +(nullable ZIMAppConfig*)oZIMAppConfig:(nullable NSDictionary *)configDic;
 
 +(nullable ZIMUsersInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic;
@@ -19,6 +18,8 @@
 +(nullable NSDictionary *)mZIMUserInfo:(nullable ZIMUserInfo *)userInfo;
 
 +(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList;
+
++(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList;
 
 +(nullable ZIMConversation *)oZIMConversation:(nullable NSDictionary *)conversationDic;
 
@@ -33,6 +34,8 @@
 +(nullable ZIMMessageRevokeConfig *)oZIMMessageRevokeConfig:(nullable NSDictionary *)configDic;
 
 +(nullable NSArray *)mZIMConversationList:(nullable NSArray<ZIMConversation *> *)conversationList;
+
++(nullable NSDictionary *)mZIMConversation:(nullable ZIMConversation *)conversation;
 
 +(nullable ZIMConversationDeleteConfig *)oZIMConversationDeleteConfig:(nullable NSMutableDictionary *)configDic;
 

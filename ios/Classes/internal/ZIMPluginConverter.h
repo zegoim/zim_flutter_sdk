@@ -19,6 +19,8 @@
 
 +(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList;
 
++(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList;
+
 +(nullable ZIMConversation *)oZIMConversation:(nullable NSDictionary *)conversationDic;
 
 +(nullable ZIMMessage *)oZIMMessage:(nullable NSDictionary *)messageDic;
@@ -32,6 +34,8 @@
 +(nullable ZIMMessageRevokeConfig *)oZIMMessageRevokeConfig:(nullable NSDictionary *)configDic;
 
 +(nullable NSArray *)mZIMConversationList:(nullable NSArray<ZIMConversation *> *)conversationList;
+
++(nullable NSDictionary *)mZIMConversation:(nullable ZIMConversation *)conversation;
 
 +(nullable ZIMConversationDeleteConfig *)oZIMConversationDeleteConfig:(nullable NSMutableDictionary *)configDic;
 
