@@ -293,7 +293,7 @@
     
     NSString *inputConversationID = [call.arguments objectForKey:@"conversationID"];
     int inputConversationType = ((NSNumber *)[call.arguments objectForKey:@"conversationType"]).intValue;
-    [zim queryConversationBy:inputConversationID conversationType:inputConversationType callback:^(ZIMConversation *conversation,
+    [zim queryConversation:inputConversationID conversationType:inputConversationType callback:^(ZIMConversation *conversation,
                                                                                                  ZIMError *errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
