@@ -475,9 +475,9 @@ fromGroupID:(NSString *)fromGroupID{
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     [infoDic safeSetObject:info.inviter forKey:@"inviter"];
     [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
     [resultDic safeSetObject:@"onCallInvitationCancelled" forKey:@"method"];
     [resultDic safeSetObject:infoDic forKey:@"info"];
-    [resultDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
     [resultDic safeSetObject:callID forKey:@"callID"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
