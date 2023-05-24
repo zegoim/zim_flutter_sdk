@@ -779,6 +779,7 @@
     NSMutableDictionary *callUserInfoDic = [[NSMutableDictionary alloc] init];
     [callUserInfoDic safeSetObject:callUserInfo.userID forKey:@"userID"];
     [callUserInfoDic safeSetObject:[NSNumber numberWithInt:(int)callUserInfo.state] forKey:@"state"];
+    [callUserInfoDic safeSetObject:callUserInfo.extendedData forKey:@"extendedData"];
     return callUserInfoDic;
 }
 

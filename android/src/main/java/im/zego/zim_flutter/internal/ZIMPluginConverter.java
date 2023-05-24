@@ -896,6 +896,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("state",userInfo.state.value());
+        userInfoMap.put("extendedData",userInfo.extendedData);
         return userInfoMap;
     }
     

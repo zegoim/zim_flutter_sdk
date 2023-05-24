@@ -934,6 +934,7 @@ class ZIMConverter {
     ZIMCallUserInfo userInfo = ZIMCallUserInfo();
     userInfo.userID = infoMap['userID'];
     userInfo.state = ZIMCallUserStateExtension.mapValue[infoMap['state']]!;
+    userInfo.extendedData = infoMap['extendedData'];
     return userInfo;
   }
 
