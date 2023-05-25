@@ -868,7 +868,7 @@
         return nil;
     }
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
-    [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.errorInvitees] forKey:@"errorInvitees"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMErrorUserInfoList:info.errorInvitees] forKey:@"errorInvitees"];
     return infoDic;
 }
 
