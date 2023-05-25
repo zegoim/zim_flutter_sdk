@@ -1842,7 +1842,7 @@
             
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:basicCallInfoList forKey:@"callList"];
-            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInt:nextFlag] forKey:@"nextFlag"];
+            [resultMtDic safeSetObject:[NSNumber numberWithLongLong:nextFlag] forKey:@"nextFlag"];
             result(resultMtDic);
         }
         else{
