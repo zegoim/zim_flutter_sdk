@@ -846,7 +846,7 @@
         return nil;
     }
     ZIMQueryCallListConfig *queryConfig = [[ZIMQueryCallListConfig alloc] init];
-    queryConfig.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
+    queryConfig.count = [[configDic safeObjectForKey:@"count"] longLongValue];
     queryConfig.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] unsignedIntValue];
     return queryConfig;
     
