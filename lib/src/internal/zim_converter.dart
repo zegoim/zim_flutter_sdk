@@ -1282,7 +1282,7 @@ class ZIMConverter {
     info.caller = infoMap['caller'];
     info.operatedUserID = infoMap['operatedUserID'];
     info.extendedData = infoMap['extendedData'];
-    info.mode = infoMap['mode'];
+    info.mode = ZIMInvitationModeExtension.mapValue[infoMap['mode']]!;
     info.endTime = infoMap['endTime'];
     return info;
   }
