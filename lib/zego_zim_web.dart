@@ -1844,8 +1844,11 @@ class ZegoZimPlugin {
   }
 
   static Uint8List convertToUint8List(dynamic data) {
-    final jsonData = jsonEncode(data);
-    final list = utf8.encode(jsonData);
+    final list = <int>[];
+    data.forEach((i) {
+      list.add(i);
+    });
+    
     final uint8List = Uint8List.fromList(list);
     return uint8List;
   }
