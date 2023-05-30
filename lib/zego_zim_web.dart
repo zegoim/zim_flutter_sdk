@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 import 'dart:js_util';
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
@@ -244,27 +243,49 @@ class ZegoZimPlugin {
             call.arguments["conversationType"],
             call.arguments["senderUserID"]);
       case 'setRoomMembersAttributes':
-        return setRoomMembersAttributes(call.arguments["attributes"], call.arguments["roomID"], call.arguments["userIDs"], call.arguments["config"]);
+        return setRoomMembersAttributes(
+            call.arguments["attributes"],
+            call.arguments["roomID"],
+            call.arguments["userIDs"],
+            call.arguments["config"]);
       case 'sendConversationMessageReceiptRead':
-        return sendConversationMessageReceiptRead(call.arguments["conversationID"], call.arguments["conversationType"]);
+        return sendConversationMessageReceiptRead(
+            call.arguments["conversationID"],
+            call.arguments["conversationType"]);
       case 'sendMessageReceiptsRead':
-        return sendMessageReceiptsRead(call.arguments["messageList"], call.arguments["conversationID"], call.arguments["conversationType"]);
+        return sendMessageReceiptsRead(
+            call.arguments["messageList"],
+            call.arguments["conversationID"],
+            call.arguments["conversationType"]);
       case 'queryMessageReceiptsInfo':
-        return queryMessageReceiptsInfo(call.arguments["messageList"], call.arguments["conversationID"], call.arguments["conversationType"]);
+        return queryMessageReceiptsInfo(
+            call.arguments["messageList"],
+            call.arguments["conversationID"],
+            call.arguments["conversationType"]);
       case 'queryGroupMessageReceiptReadMemberList':
-        return queryGroupMessageReceiptReadMemberList(call.arguments["message"], call.arguments["groupID"], call.arguments["config"]);
+        return queryGroupMessageReceiptReadMemberList(call.arguments["message"],
+            call.arguments["groupID"], call.arguments["config"]);
       case 'queryGroupMessageReceiptUnreadMemberList':
-        return queryGroupMessageReceiptUnreadMemberList(call.arguments["message"], call.arguments["groupID"], call.arguments["config"]);
+        return queryGroupMessageReceiptUnreadMemberList(
+            call.arguments["message"],
+            call.arguments["groupID"],
+            call.arguments["config"]);
       case 'revokeMessage':
-        return revokeMessage(call.arguments["message"], call.arguments["config"]);
+        return revokeMessage(
+            call.arguments["message"], call.arguments["config"]);
       case 'queryConversationPinnedList':
         return queryConversationPinnedList(call.arguments["config"]);
       case 'updateConversationPinnedState':
-        return updateConversationPinnedState(call.arguments["isPinned"], call.arguments["conversationID"], call.arguments["conversationType"]);
+        return updateConversationPinnedState(
+            call.arguments["isPinned"],
+            call.arguments["conversationID"],
+            call.arguments["conversationType"]);
       case 'queryRoomMembers':
-        return queryRoomMembers(call.arguments["userIDs"], call.arguments["roomID"]);
+        return queryRoomMembers(
+            call.arguments["userIDs"], call.arguments["roomID"]);
       case 'queryConversation':
-        return queryConversation(call.arguments["conversationID"], call.arguments["conversationType"]);
+        return queryConversation(call.arguments["conversationID"],
+            call.arguments["conversationType"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -421,8 +442,9 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> queryConversationList(dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(
-        ZIM.getInstance()!.queryConversationList(_config)).catchError((e) {
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.queryConversationList(_config))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -430,7 +452,8 @@ class ZegoZimPlugin {
 
     resultMap["conversationList"].forEach((conversation) {
       var index = resultMap["conversationList"].indexOf(conversation);
-      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(resultMap["conversationList"][index]["lastMessage"]);
+      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(
+          resultMap["conversationList"][index]["lastMessage"]);
     });
 
     return resultMap;
@@ -439,7 +462,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> updateUserAvatarUrl(
       String userAvatarUrl) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.updateUserAvatarUrl(userAvatarUrl)).catchError((e) {
+            ZIM.getInstance()!.updateUserAvatarUrl(userAvatarUrl))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -448,7 +472,8 @@ class ZegoZimPlugin {
 
   Future<Map<dynamic, dynamic>> updateUserName(String userName) async {
     final result =
-        await promiseToFuture(ZIM.getInstance()!.updateUserName(userName)).catchError((e) {
+        await promiseToFuture(ZIM.getInstance()!.updateUserName(userName))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -458,7 +483,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> updateUserExtendedData(
       String extendedData) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.updateUserExtendedData(extendedData)).catchError((e) {
+            ZIM.getInstance()!.updateUserExtendedData(extendedData))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -466,7 +492,8 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> renewToken(String token) async {
-    var result = await promiseToFuture(ZIM.getInstance()!.renewToken(token)).catchError((e) {
+    var result = await promiseToFuture(ZIM.getInstance()!.renewToken(token))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -478,7 +505,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryUsersInfo(userIDs, _config)).catchError((e) {
+            ZIM.getInstance()!.queryUsersInfo(userIDs, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -488,8 +516,10 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> clearConversationUnreadMessageCount(
       String conversationID, int conversationType) async {
     final result = await promiseToFuture(ZIM
-        .getInstance()!
-        .clearConversationUnreadMessageCount(conversationID, conversationType)).catchError((e) {
+            .getInstance()!
+            .clearConversationUnreadMessageCount(
+                conversationID, conversationType))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -501,8 +531,9 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM
-        .getInstance()!
-        .queryHistoryMessage(conversationID, conversationType, _config)).catchError((e) {
+            .getInstance()!
+            .queryHistoryMessage(conversationID, conversationType, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -510,7 +541,8 @@ class ZegoZimPlugin {
 
     resultMap["messageList"].forEach((message) {
       var index = resultMap["messageList"].indexOf(message);
-      resultMap["messageList"][index] = convertZIMMessage(resultMap["messageList"][index]);
+      resultMap["messageList"][index] =
+          convertZIMMessage(resultMap["messageList"][index]);
     });
 
     return resultMap;
@@ -521,8 +553,9 @@ class ZegoZimPlugin {
     Object _roomInfo = mapToJSObj(roomInfo);
     Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(
-        ZIM.getInstance()!.createRoom(_roomInfo, _config)).catchError((e) {
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.createRoom(_roomInfo, _config))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -531,21 +564,20 @@ class ZegoZimPlugin {
 
   Future<Map<dynamic, dynamic>> enterRoom(
       dynamic roomInfo, dynamic config) async {
-
-      Object _roomInfo = mapToJSObj(roomInfo);
-      Object _config = mapToJSObj(config);
-      final result =
-          await promiseToFuture(ZIM.getInstance()!.enterRoom(_roomInfo, _config)).catchError((e) {
+    Object _roomInfo = mapToJSObj(roomInfo);
+    Object _config = mapToJSObj(config);
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.enterRoom(_roomInfo, _config))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
-      });
-
+    });
 
     return jsObjectToMap(result);
-
   }
 
   Future<Map<dynamic, dynamic>> joinRoom(String roomID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.joinRoom(roomID)).catchError((e) {
+    final result = await promiseToFuture(ZIM.getInstance()!.joinRoom(roomID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -553,7 +585,8 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> leaveRoom(String roomID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.leaveRoom(roomID)).catchError((e) {
+    final result = await promiseToFuture(ZIM.getInstance()!.leaveRoom(roomID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -565,12 +598,14 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryRoomMemberList(roomID, _config)).catchError((e) {
+            ZIM.getInstance()!.queryRoomMemberList(roomID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
     Map resultMap = jsObjectToMap(result);
 
-    resultMap["nextFlag"] = resultMap["nextFlag"] is String ? resultMap["nextFlag"] : "";
+    resultMap["nextFlag"] =
+        resultMap["nextFlag"] is String ? resultMap["nextFlag"] : "";
 
     return resultMap;
   }
@@ -578,7 +613,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> queryRoomOnlineMemberCount(
       String roomID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryRoomOnlineMemberCount(roomID)).catchError((e) {
+            ZIM.getInstance()!.queryRoomOnlineMemberCount(roomID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -586,8 +622,9 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> queryRoomAllAttributes(String roomID) async {
-    final result = await promiseToFuture(
-        ZIM.getInstance()!.queryRoomAllAttributes(roomID)).catchError((e) {
+    final result =
+        await promiseToFuture(ZIM.getInstance()!.queryRoomAllAttributes(roomID))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -599,8 +636,9 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM
-        .getInstance()!
-        .setRoomAttributes(mapToJSObj(roomAttributes), roomID, _config)).catchError((e) {
+            .getInstance()!
+            .setRoomAttributes(mapToJSObj(roomAttributes), roomID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -612,7 +650,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.deleteRoomAttributes(keys, roomID, _config)).catchError((e) {
+            ZIM.getInstance()!.deleteRoomAttributes(keys, roomID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -623,8 +662,10 @@ class ZegoZimPlugin {
       String roomID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    await promiseToFuture(
-        ZIM.getInstance()!.beginRoomAttributesBatchOperation(roomID, _config)).catchError((e) {
+    await promiseToFuture(ZIM
+            .getInstance()!
+            .beginRoomAttributesBatchOperation(roomID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -634,7 +675,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> endRoomAttributesBatchOperation(
       String roomID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.endRoomAttributesBatchOperation(roomID)).catchError((e) {
+            ZIM.getInstance()!.endRoomAttributesBatchOperation(roomID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -680,11 +722,12 @@ class ZegoZimPlugin {
         ZIMCommonData.mediaDownloadingProgressMap[progressID];
 
     final result = await promiseToFuture(ZIM.getInstance()!.sendMediaMessage(
-        _message,
-        toConversationID,
-        conversationType,
-        _config,
-        mapToJSObj(notification))).catchError((e) {
+            _message,
+            toConversationID,
+            conversationType,
+            _config,
+            mapToJSObj(notification)))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -702,7 +745,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.sendPeerMessage(_message, toUserID, _config)).catchError((e) {
+            ZIM.getInstance()!.sendPeerMessage(_message, toUserID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -715,7 +759,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.sendRoomMessage(_message, toRoomID, _config)).catchError((e) {
+            ZIM.getInstance()!.sendRoomMessage(_message, toRoomID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -728,7 +773,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.sendGroupMessage(_message, toGroupID, _config)).catchError((e) {
+            ZIM.getInstance()!.sendGroupMessage(_message, toGroupID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -740,7 +786,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM.getInstance()!.deleteMessages(
-        messageList, conversationID, conversationType, _config)).catchError((e) {
+            messageList, conversationID, conversationType, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -752,8 +799,9 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM
-        .getInstance()!
-        .deleteAllMessage(conversationID, conversationType, _config)).catchError((e) {
+            .getInstance()!
+            .deleteAllMessage(conversationID, conversationType, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -766,7 +814,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.createGroup(_groupInfo, userIDs, _config)).catchError((e) {
+            ZIM.getInstance()!.createGroup(_groupInfo, userIDs, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -775,36 +824,31 @@ class ZegoZimPlugin {
     resultMap["userList"].forEach((user) {
       var index = resultMap["userList"].indexOf(user);
       resultMap["userList"][index]["memberNickname"] =
-          resultMap["userList"][index]["memberNickname"] is String
-              ? resultMap["userList"][index]["memberNickname"]
-              : "";
+          isString(resultMap["userList"][index]["memberNickname"]);
       resultMap["userList"][index]["memberAvatarUrl"] =
-          resultMap["userList"][index]["memberAvatarUrl"] is String
-              ? resultMap["userList"][index]["memberAvatarUrl"]
-              : "";
+          isString(resultMap["userList"][index]["memberAvatarUrl"]);
     });
 
     return resultMap;
   }
 
   Future<Map<dynamic, dynamic>> joinGroup(String groupID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.joinGroup(groupID)).catchError((e) {
+    final result = await promiseToFuture(ZIM.getInstance()!.joinGroup(groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     Map resultMap = jsObjectToMap(result);
 
     resultMap["groupInfo"]["groupNotice"] =
-        resultMap["groupInfo"]["groupNotice"] is String
-            ? resultMap["groupInfo"]["groupNotice"]
-            : "";
+        isString(resultMap["groupInfo"]["groupNotice"]);
 
     return resultMap;
   }
 
   Future<Map<dynamic, dynamic>> leaveGroup(String groupID) async {
-    final result =
-        await promiseToFuture(ZIM.getInstance()!.leaveGroup(groupID)).catchError((e) {
+    final result = await promiseToFuture(ZIM.getInstance()!.leaveGroup(groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -813,7 +857,8 @@ class ZegoZimPlugin {
 
   Future<Map<dynamic, dynamic>> dismissGroup(String groupID) async {
     final result =
-        await promiseToFuture(ZIM.getInstance()!.dismissGroup(groupID)).catchError((e) {
+        await promiseToFuture(ZIM.getInstance()!.dismissGroup(groupID))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -823,7 +868,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> inviteUsersIntoGroup(
       dynamic userIDs, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.inviteUsersIntoGroup(userIDs, groupID)).catchError((e) {
+            ZIM.getInstance()!.inviteUsersIntoGroup(userIDs, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -843,7 +889,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> kickGroupMembers(
       dynamic userIDs, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.kickGroupMembers(userIDs, groupID)).catchError((e) {
+            ZIM.getInstance()!.kickGroupMembers(userIDs, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -853,7 +900,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> transferGroupOwner(
       String toUserID, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.transferGroupOwner(toUserID, groupID)).catchError((e) {
+            ZIM.getInstance()!.transferGroupOwner(toUserID, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -863,7 +911,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> updateGroupName(
       String groupName, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.updateGroupName(groupName, groupID)).catchError((e) {
+            ZIM.getInstance()!.updateGroupName(groupName, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -873,7 +922,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> updateGroupAvatarUrl(
       String groupAvatarUrl, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.updateGroupAvatarUrl(groupAvatarUrl, groupID)).catchError((e) {
+            ZIM.getInstance()!.updateGroupAvatarUrl(groupAvatarUrl, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -883,7 +933,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> updateGroupNotice(
       String groupNotice, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.updateGroupNotice(groupNotice, groupID)).catchError((e) {
+            ZIM.getInstance()!.updateGroupNotice(groupNotice, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -892,7 +943,8 @@ class ZegoZimPlugin {
 
   Future<Map<dynamic, dynamic>> queryGroupInfo(String groupID) async {
     final result =
-        await promiseToFuture(ZIM.getInstance()!.queryGroupInfo(groupID)).catchError((e) {
+        await promiseToFuture(ZIM.getInstance()!.queryGroupInfo(groupID))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -900,6 +952,8 @@ class ZegoZimPlugin {
 
     resultMap["groupInfo"]["baseInfo"]["groupAvatarUrl"] =
         isString(resultMap["groupInfo"]["baseInfo"]["groupAvatarUrl"]);
+    resultMap["groupInfo"]["baseInfo"]["groupName"] =
+        isString(resultMap["groupInfo"]["baseInfo"]["groupName"]);
     resultMap["groupInfo"]["groupNotice"] =
         isString(resultMap["groupInfo"]["groupNotice"]);
 
@@ -907,7 +961,8 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> queryGroupList() async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupList()).catchError((e) {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupList())
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -917,6 +972,8 @@ class ZegoZimPlugin {
       var index = resultMap["groupList"].indexOf(group);
       resultMap["groupList"][index]["baseInfo"]["groupAvatarUrl"] =
           isString(resultMap["groupList"][index]["baseInfo"]["groupAvatarUrl"]);
+      resultMap["groupList"][index]["baseInfo"]["groupName"] =
+          isString(resultMap["groupList"][index]["baseInfo"]["groupName"]);
     });
 
     return resultMap;
@@ -925,7 +982,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> setGroupAttributes(
       Map<dynamic, dynamic> groupAttributes, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.setGroupAttributes(groupAttributes, groupID)).catchError((e) {
+            ZIM.getInstance()!.setGroupAttributes(groupAttributes, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -935,7 +993,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> deleteGroupAttributes(
       dynamic keys, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.deleteGroupAttributes(keys, groupID)).catchError((e) {
+            ZIM.getInstance()!.deleteGroupAttributes(keys, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -945,7 +1004,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> queryGroupAttributes(
       dynamic keys, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryGroupAttributes(keys, groupID)).catchError((e) {
+            ZIM.getInstance()!.queryGroupAttributes(keys, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -954,7 +1014,8 @@ class ZegoZimPlugin {
 
   Future<Map<dynamic, dynamic>> queryGroupAllAttributes(String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryGroupAllAttributes(groupID)).catchError((e) {
+            ZIM.getInstance()!.queryGroupAllAttributes(groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -967,7 +1028,8 @@ class ZegoZimPlugin {
     String groupID,
   ) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.setGroupMemberRole(role, forUserID, groupID)).catchError((e) {
+            ZIM.getInstance()!.setGroupMemberRole(role, forUserID, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -980,8 +1042,9 @@ class ZegoZimPlugin {
     String groupID,
   ) async {
     final result = await promiseToFuture(ZIM
-        .getInstance()!
-        .setGroupMemberNickname(nickname, forUserID, groupID)).catchError((e) {
+            .getInstance()!
+            .setGroupMemberNickname(nickname, forUserID, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -991,7 +1054,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> queryGroupMemberInfo(
       String userID, String groupID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryGroupMemberInfo(userID, groupID)).catchError((e) {
+            ZIM.getInstance()!.queryGroupMemberInfo(userID, groupID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1010,7 +1074,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryGroupMemberList(groupID, _config)).catchError((e) {
+            ZIM.getInstance()!.queryGroupMemberList(groupID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1032,8 +1097,9 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(ZIM
-        .getInstance()!
-        .deleteConversation(conversationID, conversationType, _config)).catchError((e) {
+            .getInstance()!
+            .deleteConversation(conversationID, conversationType, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1043,9 +1109,10 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> setConversationNotificationStatus(
       dynamic status, String conversationID, dynamic conversationType) async {
     final result = await promiseToFuture(ZIM
-        .getInstance()!
-        .setConversationNotificationStatus(
-            status, conversationID, conversationType)).catchError((e) {
+            .getInstance()!
+            .setConversationNotificationStatus(
+                status, conversationID, conversationType))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1057,7 +1124,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result =
-        await promiseToFuture(ZIM.getInstance()!.callInvite(invitees, _config)).catchError((e) {
+        await promiseToFuture(ZIM.getInstance()!.callInvite(invitees, _config))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1083,7 +1151,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.callCancel(invitees, callID, _config)).catchError((e) {
+            ZIM.getInstance()!.callCancel(invitees, callID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1109,7 +1178,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result =
-        await promiseToFuture(ZIM.getInstance()!.callAccept(callID, _config)).catchError((e) {
+        await promiseToFuture(ZIM.getInstance()!.callAccept(callID, _config))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1121,7 +1191,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result =
-        await promiseToFuture(ZIM.getInstance()!.callReject(callID, _config)).catchError((e) {
+        await promiseToFuture(ZIM.getInstance()!.callReject(callID, _config))
+            .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1133,7 +1204,8 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryRoomMemberAttributesList(roomID, _config)).catchError((e) {
+            ZIM.getInstance()!.queryRoomMemberAttributesList(roomID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1143,7 +1215,8 @@ class ZegoZimPlugin {
   Future<Map<dynamic, dynamic>> queryRoomMembersAttributes(
       dynamic userIDs, String roomID) async {
     final result = await promiseToFuture(
-        ZIM.getInstance()!.queryRoomMembersAttributes(userIDs, roomID)).catchError((e) {
+            ZIM.getInstance()!.queryRoomMembersAttributes(userIDs, roomID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1174,11 +1247,12 @@ class ZegoZimPlugin {
     };
 
     final result = await promiseToFuture(ZIM.getInstance()!.sendMessage(
-        _message,
-        toConversationID,
-        conversationType,
-        _config,
-        mapToJSObj(notification))).catchError((e) {
+            _message,
+            toConversationID,
+            conversationType,
+            _config,
+            mapToJSObj(notification)))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1196,9 +1270,10 @@ class ZegoZimPlugin {
       String senderUserID) async {
     Object _message = mapToJSObj(message);
     final result = await promiseToFuture(ZIM
-        .getInstance()!
-        .insertMessageToLocalDB(
-            _message, conversationID, conversationType, senderUserID)).catchError((e) {
+            .getInstance()!
+            .insertMessageToLocalDB(
+                _message, conversationID, conversationType, senderUserID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1208,81 +1283,112 @@ class ZegoZimPlugin {
     return resultMap;
   }
 
-  Future<Map<dynamic, dynamic>> setRoomMembersAttributes(Map attributes, String roomID, dynamic userIDs, dynamic config) async {
+  Future<Map<dynamic, dynamic>> setRoomMembersAttributes(
+      Map attributes, String roomID, dynamic userIDs, dynamic config) async {
     final _attributes = mapToJSObj(attributes);
     final _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.setRoomMembersAttributes(_attributes, userIDs, roomID, _config)).catchError((e) {
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .setRoomMembersAttributes(_attributes, userIDs, roomID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> sendConversationMessageReceiptRead(String conversationID, dynamic conversationType) async {
-
-    final result = await promiseToFuture(ZIM.getInstance()!.sendConversationMessageReceiptRead(conversationID, conversationType)).catchError((e) {
+  Future<Map<dynamic, dynamic>> sendConversationMessageReceiptRead(
+      String conversationID, dynamic conversationType) async {
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .sendConversationMessageReceiptRead(
+                conversationID, conversationType))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> sendMessageReceiptsRead(dynamic messageList, String conversationID, dynamic conversationType) async {
-
-    final result = await promiseToFuture(ZIM.getInstance()!.sendMessageReceiptsRead(messageList, conversationID, conversationType)).catchError((e) {
+  Future<Map<dynamic, dynamic>> sendMessageReceiptsRead(dynamic messageList,
+      String conversationID, dynamic conversationType) async {
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .sendMessageReceiptsRead(
+                messageList, conversationID, conversationType))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryMessageReceiptsInfo(dynamic messageList, String conversationID, dynamic conversationType) async {
-
-    final result = await promiseToFuture(ZIM.getInstance()!.queryMessageReceiptsInfo(messageList, conversationID, conversationType)).catchError((e) {
+  Future<Map<dynamic, dynamic>> queryMessageReceiptsInfo(dynamic messageList,
+      String conversationID, dynamic conversationType) async {
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .queryMessageReceiptsInfo(
+                messageList, conversationID, conversationType))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryGroupMessageReceiptReadMemberList(dynamic message, String groupID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> queryGroupMessageReceiptReadMemberList(
+      dynamic message, String groupID, dynamic config) async {
     final _message = mapToJSObj(message);
     final _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupMessageReceiptReadMemberList(_message, groupID, _config)).catchError((e) {
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .queryGroupMessageReceiptReadMemberList(_message, groupID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryGroupMessageReceiptUnreadMemberList(dynamic message, String groupID, dynamic config) async {
+  Future<Map<dynamic, dynamic>> queryGroupMessageReceiptUnreadMemberList(
+      dynamic message, String groupID, dynamic config) async {
     final _message = mapToJSObj(message);
     final _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupMessageReceiptUnreadMemberList(_message, groupID, _config)).catchError((e) {
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .queryGroupMessageReceiptUnreadMemberList(
+                _message, groupID, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> revokeMessage(dynamic message, dynamic config) async {
+  Future<Map<dynamic, dynamic>> revokeMessage(
+      dynamic message, dynamic config) async {
     final _message = mapToJSObj(message);
     final _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(ZIM.getInstance()!.revokeMessage(_message, _config)).catchError((e) {
+    final result = await promiseToFuture(
+            ZIM.getInstance()!.revokeMessage(_message, _config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryConversationPinnedList(dynamic config) async {
+  Future<Map<dynamic, dynamic>> queryConversationPinnedList(
+      dynamic config) async {
     final _config = mapToJSObj((config));
 
-    final result = await promiseToFuture(ZIM.getInstance()!.queryConversationPinnedList(_config)).catchError((e) {
+    final result = await promiseToFuture(
+            ZIM.getInstance()!.queryConversationPinnedList(_config))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1290,37 +1396,50 @@ class ZegoZimPlugin {
 
     resultMap["conversationList"].forEach((conversation) {
       var index = resultMap["conversationList"].indexOf(conversation);
-      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(resultMap["conversationList"][index]["lastMessage"]);
+      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(
+          resultMap["conversationList"][index]["lastMessage"]);
     });
 
     return resultMap;
   }
 
-  Future<Map<dynamic, dynamic>> updateConversationPinnedState(bool isPinned, String conversationID, dynamic conversationType) async {
-
-    final result = await promiseToFuture(ZIM.getInstance()!.updateConversationPinnedState(isPinned, conversationID, conversationType)).catchError((e) {
+  Future<Map<dynamic, dynamic>> updateConversationPinnedState(
+      bool isPinned, String conversationID, dynamic conversationType) async {
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .updateConversationPinnedState(
+                isPinned, conversationID, conversationType))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryRoomMembers(dynamic userIDs, String roomID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryRoomMembers(userIDs, roomID)).catchError((e) {
+  Future<Map<dynamic, dynamic>> queryRoomMembers(
+      dynamic userIDs, String roomID) async {
+    final result = await promiseToFuture(
+            ZIM.getInstance()!.queryRoomMembers(userIDs, roomID))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryConversation(String conversationID, dynamic conversationType) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryConversation(conversationID, conversationType)).catchError((e) {
+  Future<Map<dynamic, dynamic>> queryConversation(
+      String conversationID, dynamic conversationType) async {
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .queryConversation(conversationID, conversationType))
+        .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     final resultMap = jsObjectToMap(result);
 
-    resultMap["conversation"]["lastMessage"] = convertZIMMessage(resultMap["conversation"]["lastMessage"]);
+    resultMap["conversation"]["lastMessage"] =
+        convertZIMMessage(resultMap["conversation"]["lastMessage"]);
 
     return resultMap;
   }
@@ -1376,7 +1495,7 @@ class ZegoZimPlugin {
     Map<dynamic, dynamic> extendedData = {};
 
     if (data["extendedData"] != null && data["extendedData"] != "") {
-      extendedData = json.decode(data["extendedData"]);
+      extendedData = Map.from(data["extendedData"]);
     }
 
     ZIMRoomState _state = ZIMRoomState.values[data["state"]];
@@ -1393,14 +1512,16 @@ class ZegoZimPlugin {
     String roomID = data["roomID"];
 
     infos.forEach((info) {
-      Map infoMap = jsObjectToMap(info);
+      final roomAttributes = info["roomAttributes"];
+      Map<String, String> mapRoomAttributes =
+          Map<String, String>.from(roomAttributes);
       ZIMRoomAttributesUpdateAction action =
-          ZIMRoomAttributesUpdateAction.values[infoMap["action"]];
+          ZIMRoomAttributesUpdateAction.values[info["action"]];
 
       ZIMEventHandler.onRoomAttributesUpdated!(
           zim,
           ZIMRoomAttributesUpdateInfo(
-              action: action, roomAttributes: infoMap["roomAttributes"]),
+              action: action, roomAttributes: mapRoomAttributes),
           roomID);
     });
   }
@@ -1414,13 +1535,15 @@ class ZegoZimPlugin {
     List<ZIMRoomAttributesUpdateInfo> list = [];
 
     infos.forEach((info) {
-      Map infoMap = jsObjectToMap(info);
+      final roomAttributes = info["roomAttributes"];
+      Map<String, String> mapRoomAttributes =
+          Map<String, String>.from(roomAttributes);
 
       ZIMRoomAttributesUpdateAction action =
-          ZIMRoomAttributesUpdateAction.values[infoMap["action"]];
+          ZIMRoomAttributesUpdateAction.values[info["action"]];
 
       list.add(ZIMRoomAttributesUpdateInfo(
-          action: action, roomAttributes: infoMap["roomAttributes"]));
+          action: action, roomAttributes: mapRoomAttributes));
     });
 
     ZIMEventHandler.onRoomAttributesBatchUpdated!(zim, list, roomID);
@@ -1434,7 +1557,7 @@ class ZegoZimPlugin {
     List<ZIMUserInfo> list = [];
 
     memberList.forEach((member) {
-      Map memberMap = jsObjectToMap(member);
+      Map memberMap = Map.from(member);
       ZIMUserInfo userInfo = ZIMUserInfo();
       userInfo.userID = memberMap["userID"];
       userInfo.userName = memberMap["userName"];
@@ -1453,7 +1576,7 @@ class ZegoZimPlugin {
     List<ZIMUserInfo> list = [];
 
     memberList.forEach((member) {
-      Map memberMap = jsObjectToMap(member);
+      Map memberMap = Map.from(member);
       ZIMUserInfo userInfo = ZIMUserInfo();
       userInfo.userID = memberMap["userID"];
       userInfo.userName = memberMap["userName"];
@@ -1538,10 +1661,11 @@ class ZegoZimPlugin {
     List<dynamic> infoList = data["infoList"];
 
     infoList.forEach((info) {
-      Map infoMap = jsObjectToMap(info);
+      Map<String, String> mapGroupAttributes =
+          Map.from(info["groupAttributes"]);
       ZIMGroupAttributesUpdateInfo atr = ZIMGroupAttributesUpdateInfo();
-      atr.action = ZIMGroupAttributesUpdateAction.values[infoMap["action"]];
-      atr.groupAttributes = infoMap["groupAttributes"];
+      atr.action = ZIMGroupAttributesUpdateAction.values[info["action"]];
+      atr.groupAttributes = mapGroupAttributes;
       list.add(atr);
     });
 
@@ -1651,9 +1775,9 @@ class ZegoZimPlugin {
     List<dynamic> infoList = data["infoList"];
 
     infoList.forEach((info) {
-      info["conversation"]["lastMessage"] = convertZIMMessage(info["conversation"]["lastMessage"]);
+      info["conversation"]["lastMessage"] =
+          convertZIMMessage(info["conversation"]["lastMessage"]);
     });
-
 
     List<ZIMConversationChangeInfo> conversationChangeInfoList =
         ZIMConverter.oZIMConversationChangeInfoList(infoList);
@@ -1687,10 +1811,10 @@ class ZegoZimPlugin {
     });
 
     ZIMEventHandler.onMessageReceiptChanged!(zim, infos);
-
   }
 
-  static void conversationMessageReceiptChangedHandle(ZIMEngine zim, dynamic data) {
+  static void conversationMessageReceiptChangedHandle(
+      ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConversationMessageReceiptChanged == null) {
       return;
     }
@@ -1717,7 +1841,8 @@ class ZegoZimPlugin {
     handleReceiveMessage(_messageList);
 
     _messageList.forEach((map) {
-      ZIMRevokeMessage message = ZIMConverter.oZIMMessage(map) as ZIMRevokeMessage;
+      ZIMRevokeMessage message =
+          ZIMConverter.oZIMMessage(map) as ZIMRevokeMessage;
 
       messageList.add(message);
     });
@@ -1733,8 +1858,8 @@ class ZegoZimPlugin {
     _infos.forEach((info) {
       info["message"] = convertZIMMessage(info["message"]);
     });
-    List<ZIMMessageSentStatusChangeInfo> infos = ZIMConverter.oMessageSentStatusChangeInfoList(_infos);
-
+    List<ZIMMessageSentStatusChangeInfo> infos =
+        ZIMConverter.oMessageSentStatusChangeInfoList(_infos);
 
     ZIMEventHandler.onMessageSentStatusChanged!(zim, infos);
   }
@@ -1746,7 +1871,9 @@ class ZegoZimPlugin {
     resultMap["message"]["messageID"] =
         int.parse(resultMap["message"]["messageID"]);
     resultMap["message"]["isUserInserted"] =
-          resultMap["message"]["isUserInserted"] is bool ? resultMap["message"]["isUserInserted"] : false;
+        resultMap["message"]["isUserInserted"] is bool
+            ? resultMap["message"]["isUserInserted"]
+            : false;
 
     return resultMap;
   }
@@ -1758,16 +1885,27 @@ class ZegoZimPlugin {
           ? int.parse(msgMap["localMessageID"])
           : 0;
       msgMap["orderKey"] = msgMap["orderKey"] is int ? msgMap["orderKey"] : 0;
-      msgMap["isUserInserted"] = msgMap["isUserInserted"] is bool ? msgMap["isUserInserted"] : false;
-      msgMap["extendedData"] = msgMap["extendedData"] is String ? msgMap["extendedData"] : "";
-      msgMap["conversationSeq"] = msgMap["conversationSeq"] is int ? msgMap["conversationSeq"] : 0;
-      msgMap["receiptStatus"] = msgMap["receiptStatus"] is int ? msgMap["receiptStatus"] : 0;
+      msgMap["isUserInserted"] =
+          msgMap["isUserInserted"] is bool ? msgMap["isUserInserted"] : false;
+      msgMap["extendedData"] =
+          msgMap["extendedData"] is String ? msgMap["extendedData"] : "";
+      msgMap["conversationSeq"] =
+          msgMap["conversationSeq"] is int ? msgMap["conversationSeq"] : 0;
+      msgMap["receiptStatus"] =
+          msgMap["receiptStatus"] is int ? msgMap["receiptStatus"] : 0;
 
       if (msgMap["type"] == 2) {
         msgMap["message"] = convertToUint8List(msgMap["message"]);
       }
     });
   }
+
+  // static Map handleGroupResultMap(Map groupBaseInfo) {
+  //   groupBaseInfo["groupAvatarUrl"] = isString(groupBaseInfo["groupAvatarUrl"]);
+  //   groupBaseInfo["groupNamne"] = isString(groupBaseInfo["groupNamne"]);
+
+  //   return groupBaseInfo;
+  // }
 
   static Object mapToJSObj(Map<dynamic, dynamic>? a) {
     var object = js.newObject();
@@ -1812,9 +1950,11 @@ class ZegoZimPlugin {
         ZIMMessageSentStatus.values[messageMap["sentStatus"]];
     zimMessage.conversationType =
         ZIMConversationType.values[messageMap["conversationType"]];
-    zimMessage.isUserInserted =
-        messageMap["isUserInserted"] is bool ? messageMap["isUserInserted"] : false;
-    zimMessage.extendedData = messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
+    zimMessage.isUserInserted = messageMap["isUserInserted"] is bool
+        ? messageMap["isUserInserted"]
+        : false;
+    zimMessage.extendedData =
+        messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
 
     return zimMessage;
   }
@@ -1823,21 +1963,37 @@ class ZegoZimPlugin {
     ZIMMessageType msgType =
         ZIMMessageTypeExtension.mapValue[messageMap['type']]!;
 
-    messageMap["messageID"] = messageMap["messageID"] is int ? messageMap["messageID"] :int.parse(messageMap["messageID"]);
+    messageMap["messageID"] = messageMap["messageID"] is int
+        ? messageMap["messageID"]
+        : int.parse(messageMap["messageID"]);
     messageMap["localMessageID"] = int.parse((messageMap["localMessageID"]));
-    messageMap["isUserInserted"] =
-        messageMap["isUserInserted"] is bool ? messageMap["isUserInserted"] : false;
-    messageMap["orderKey"] = messageMap["orderKey"] is int ? messageMap["orderKey"] : 0;
-    messageMap["extendedData"] = messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
-    messageMap["fileLocalPath"] = messageMap["fileLocalPath"] is String ? messageMap["fileLocalPath"] : "";
+    messageMap["isUserInserted"] = messageMap["isUserInserted"] is bool
+        ? messageMap["isUserInserted"]
+        : false;
+    messageMap["orderKey"] =
+        messageMap["orderKey"] is int ? messageMap["orderKey"] : 0;
+    messageMap["extendedData"] =
+        messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
+    messageMap["fileLocalPath"] = messageMap["fileLocalPath"] is String
+        ? messageMap["fileLocalPath"]
+        : "";
 
-    switch(msgType) {
+    switch (msgType) {
       case ZIMMessageType.image:
-        messageMap["thumbnailLocalPath"] = messageMap["thumbnailLocalPath"] is String ? messageMap["thumbnailLocalPath"] : "";
-        messageMap["largeImageLocalPath"] = messageMap["largeImageLocalPath"] is String ? messageMap["largeImageLocalPath"] : "";
+        messageMap["thumbnailLocalPath"] =
+            messageMap["thumbnailLocalPath"] is String
+                ? messageMap["thumbnailLocalPath"]
+                : "";
+        messageMap["largeImageLocalPath"] =
+            messageMap["largeImageLocalPath"] is String
+                ? messageMap["largeImageLocalPath"]
+                : "";
         break;
       case ZIMMessageType.video:
-        messageMap["videoFirstFrameLocalPath"] = messageMap["videoFirstFrameLocalPath"] is String ? messageMap["videoFirstFrameLocalPath"] : "";
+        messageMap["videoFirstFrameLocalPath"] =
+            messageMap["videoFirstFrameLocalPath"] is String
+                ? messageMap["videoFirstFrameLocalPath"]
+                : "";
     }
 
     return messageMap;
@@ -1848,7 +2004,7 @@ class ZegoZimPlugin {
     data.forEach((i) {
       list.add(i);
     });
-    
+
     final uint8List = Uint8List.fromList(list);
     return uint8List;
   }
