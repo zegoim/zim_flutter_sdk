@@ -459,6 +459,7 @@ class ZIMMessage {
   bool isUserInserted = false;
   ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
   String extendedData = "";
+  String localExtendedData = "";
 }
 
 class ZIMTextMessage extends ZIMMessage {

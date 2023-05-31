@@ -168,6 +168,7 @@ public class ZIMPluginConverter {
         messageMap.put("isUserInserted",message.isUserInserted());
         messageMap.put("receiptStatus",message.getReceiptStatus().value());
         messageMap.put("extendedData",message.getExtendedData());
+        messageMap.put("localExtendedData",message.getLocalExtendedData());
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -477,11 +478,15 @@ public class ZIMPluginConverter {
             receiptStatusField.set(message, ZIMMessageReceiptStatus.getZIMMessageReceiptStatus(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("receiptStatus"))));
             receiptStatusField.setAccessible(false);
 
-
             Field extendedDataField = ZIMMessage.class.getDeclaredField("extendedData");
             extendedDataField.setAccessible(true);
             extendedDataField.set(message,messageMap.get("extendedData"));
             extendedDataField.setAccessible(false);
+
+            Field localExtendedDataField = ZIMMessage.class.getDeclaredField("localExtendedData");
+            localExtendedDataField.setAccessible(true);
+            localExtendedDataField.set(message,messageMap.get("localExtendedData"));
+            localExtendedDataField.setAccessible(false);
 
         }
         catch (NoSuchFieldException e) {
