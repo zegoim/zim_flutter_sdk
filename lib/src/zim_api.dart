@@ -1251,7 +1251,8 @@ abstract class ZIM {
       String callID, ZIMCallRejectConfig config);
 
 
-
+  Future<ZIMMessageLocalExtendedDataUpdatedResult>
+  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
 
 
 }

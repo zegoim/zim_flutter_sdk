@@ -1116,6 +1116,11 @@ class ZIMMessageSentResult {
   ZIMMessageSentResult({required this.message});
 }
 
+class ZIMMessageLocalExtendedDataUpdatedResult {
+  ZIMMessage message;
+  ZIMMessageLocalExtendedDataUpdatedResult({required this.message});
+}
+
 class ZIMMessageInsertedResult {
   ZIMMessage message;
   ZIMMessageInsertedResult({required this.message});
