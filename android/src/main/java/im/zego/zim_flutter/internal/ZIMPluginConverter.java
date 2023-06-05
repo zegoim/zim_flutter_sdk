@@ -936,7 +936,9 @@ public class ZIMPluginConverter {
     static public HashMap<String,Object> mZIMCallInvitationSentInfo(ZIMCallInvitationSentInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
+        infoMap.put("errorList",mZIMErrorUserInfoList(info.errorList));
         infoMap.put("errorInvitees", mZIMCallUserInfoList(info.errorInvitees));
+
         return infoMap;
     }
 
