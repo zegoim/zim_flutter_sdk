@@ -1049,6 +1049,10 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
         infoMap.put("inviter",info.inviter);
+        infoMap.put("caller",info.caller);
+        infoMap.put("mode", info.mode.value());
+        infoMap.put("createTime",info.createTime);
+        infoMap.callUserList("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
         infoMap.put("extendedData",info.extendedData);
         return infoMap;
     }
