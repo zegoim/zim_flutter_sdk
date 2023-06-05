@@ -170,6 +170,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "insertMessageToLocalDB") {
         ZIMPluginMethodHandler::getInstance().insertMessageToLocalDB(argument, std::move(result));
     }
+	else if (method_call.method_name() == "updateMessageLocalExtendedData") {
+		ZIMPluginMethodHandler::getInstance().updateMessageLocalExtendedData(argument, std::move(result));
+	}
     else if (method_call.method_name() == "sendPeerMessage") {
         ZIMPluginMethodHandler::getInstance().sendPeerMessage(argument, std::move(result));
     }
