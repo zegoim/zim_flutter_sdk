@@ -1063,6 +1063,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("inviter",info.inviter);
         infoMap.put("extendedData",info.extendedData);
+        infoMap.put("mode",info.mode.value());
         return infoMap;
     }
 
@@ -1086,7 +1087,7 @@ public class ZIMPluginConverter {
         infoMap.put("mode", info.mode.value());
         infoMap.put("extendedData", info.extendedData);
         infoMap.put("caller", info.caller);
-        infoMap.put("operatedUserId", info.operatedUserId);
+        infoMap.put("operatedUserID", info.operatedUserId);
         return infoMap;
     }
 
