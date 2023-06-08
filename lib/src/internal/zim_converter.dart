@@ -985,6 +985,7 @@ class ZIMConverter {
 
   static Map mZIMCallCancelConfig(ZIMCallCancelConfig config) {
     Map configMap = {};
+    configMap['pushConfig'] = ZIMConverter.mZIMPushConfig(config.pushConfig);
     configMap['extendedData'] = config.extendedData;
     return configMap;
   }

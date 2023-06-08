@@ -927,6 +927,7 @@
         return nil;
     }
     ZIMCallCancelConfig *config = [[ZIMCallCancelConfig alloc] init];
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
     config.extendedData = [configDic safeObjectForKey:@"extendedData"];
     return config;
 }

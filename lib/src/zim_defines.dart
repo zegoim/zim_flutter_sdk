@@ -886,6 +886,7 @@ class ZIMCallInviteConfig {
 
 /// Behavior property that cancels the call invitation setting.
 class ZIMCallCancelConfig {
+  ZIMPushConfig? pushConfig;
   /// Description: Extended field.
   String extendedData = "";
   ZIMCallCancelConfig();
