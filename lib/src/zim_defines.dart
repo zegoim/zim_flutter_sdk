@@ -937,7 +937,7 @@ class ZIMQueryCallListConfig {
 
   int count = 0;
 
-  int? nextFlag = 0;
+  int nextFlag = 0;
 
   ZIMQueryCallListConfig();
 }

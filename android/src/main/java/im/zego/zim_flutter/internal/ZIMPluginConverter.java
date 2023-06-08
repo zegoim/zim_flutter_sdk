@@ -1001,7 +1001,7 @@ public class ZIMPluginConverter {
     static public ZIMQueryCallListConfig oZIMQueryCallListConfig(HashMap<String,Object> configMap) {
         ZIMQueryCallListConfig config = new ZIMQueryCallListConfig();
         config.count = (Integer) configMap.get("count");
-        config.nextFlag = (Integer) configMap.get("nextFlag");
+        config.nextFlag = ZIMPluginCommonTools.safeGetLongValue(configMap.get("nextFlag"));
         return config;
     }
 
