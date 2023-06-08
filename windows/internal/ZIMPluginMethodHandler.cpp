@@ -2329,6 +2329,7 @@ void ZIMPluginMethodHandler::callCancel(flutter::EncodableMap& argument,
 
     ZIMCallCancelConfig config;
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
+    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
