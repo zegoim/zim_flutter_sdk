@@ -2427,7 +2427,7 @@ void ZIMPluginMethodHandler::queryCallList(flutter::EncodableMap& argument,
 
     ZIMQueryCallListConfig config;
     config.count = std::get<int32_t>(configMap[FTValue("count")]);
-    config.nextFlag = std::get<int32_t>(configMap[FTValue("nextFlag")]);
+    config.nextFlag = std::get<int64_t>(configMap[FTValue("nextFlag")]);
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->queryCallList(config, [=](const std::vector<ZIMCallInfo> &callList, long long nextFlag, const ZIMError& errorInfo) {
@@ -2441,7 +2441,7 @@ void ZIMPluginMethodHandler::queryCallList(flutter::EncodableMap& argument,
             }
 
             retMap[FTValue("callList")] = callInfoArray;
-            retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
+            retMap[FTValue("nextFlag")] = FTValue((int64_t)nextFlag);
 
             sharedPtrResult->Success(retMap);
         }
