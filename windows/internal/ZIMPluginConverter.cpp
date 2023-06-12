@@ -291,7 +291,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
 		messageMap[FTValue("fileDownloadUrl")] = FTValue(mediaMessage->fileDownloadUrl);
 		messageMap[FTValue("fileUID")] = FTValue(mediaMessage->getFileUID());
-		messageMap[FTValue("fileName")] = FTValue(mediaMessage->getFileName());
+		messageMap[FTValue("fileName")] = FTValue(mediaMessage->fileName);
 		messageMap[FTValue("fileSize")] = FTValue(mediaMessage->getFileSize());
 	}
 
