@@ -619,6 +619,31 @@ void ZIMPluginMethodHandler::insertMessageToLocalDB(flutter::EncodableMap& argum
         }
     });
 }
+
+void ZIMPluginMethodHandler::updateMessageLocalExtendedData(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
+	auto localExtendedData = std::get<std::string>(argument[FTValue("localExtendedData")]);
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->updateMessageLocalExtendedData(localExtendedData, std::static_pointer_cast<zim::ZIMMessage>(messagePtr), [=](const std::shared_ptr<zim::ZIMMessage>& message, const zim::ZIMError& errorInfo) {
+		FTMap retMap;
+		auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
+		retMap[FTValue("message")] = messageMap;
+		if (errorInfo.code == 0) {
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message, retMap);
+		}
+		});
+}
+
 void ZIMPluginMethodHandler::sendMessage(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
     auto handle = std::get<std::string>(argument[FTValue("handle")]);

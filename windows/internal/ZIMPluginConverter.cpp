@@ -15,9 +15,6 @@ template struct Rob<ZIM_FriendlyGet_senderUserID, &ZIMMessage::senderUserID>;
 std::string ZIMMessage::* get(ZIM_FriendlyGet_conversationID);
 template struct Rob<ZIM_FriendlyGet_conversationID, &ZIMMessage::conversationID>;
 
- std::string ZIMMessage::* get(ZIM_FriendlyGet_extendedData);
- template struct Rob<ZIM_FriendlyGet_extendedData, &ZIMMessage::extendedData>;
-
 ZIMConversationType ZIMMessage::* get(ZIM_FriendlyGet_conversationType);
 template struct Rob<ZIM_FriendlyGet_conversationType, &ZIMMessage::conversationType>;
 
@@ -41,9 +38,6 @@ template struct Rob<ZIM_FriendlyGet_isUserInserted, &ZIMMessage::userInserted>;
 
 std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileUID);
 template struct Rob<ZIM_FriendlyGet_fileUID, &ZIMMediaMessage::fileUID>;
-
-std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileName);
-template struct Rob<ZIM_FriendlyGet_fileName, &ZIMMediaMessage::fileName>;
 
 long long ZIMMediaMessage::* get(ZIM_FriendlyGet_fileSize);
 template struct Rob<ZIM_FriendlyGet_fileSize, &ZIMMediaMessage::fileSize>;
@@ -305,12 +299,13 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("isUserInserted")] = FTValue(message->isUserInserted());
 	messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
 	messageMap[FTValue("extendedData")] = FTValue(message->extendedData);
+	messageMap[FTValue("localExtendedData")] = FTValue(message->localExtendedData);
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
 		messageMap[FTValue("fileDownloadUrl")] = FTValue(mediaMessage->fileDownloadUrl);
 		messageMap[FTValue("fileUID")] = FTValue(mediaMessage->getFileUID());
-		messageMap[FTValue("fileName")] = FTValue(mediaMessage->getFileName());
+		messageMap[FTValue("fileName")] = FTValue(mediaMessage->fileName);
 		messageMap[FTValue("fileSize")] = FTValue(mediaMessage->getFileSize());
 	}
 
@@ -547,7 +542,8 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_msgType()) = msgType;
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_senderUserID()) = std::get<std::string>(messageMap[FTValue("senderUserID")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationID()) = std::get<std::string>(messageMap[FTValue("conversationID")]);
-	(*messagePtr.get()).*get(ZIM_FriendlyGet_extendedData()) = std::get<std::string>(messageMap[FTValue("extendedData")]);
+	messagePtr->extendedData = std::get<std::string>(messageMap[FTValue("extendedData")]);
+	messagePtr->localExtendedData = std::get<std::string>(messageMap[FTValue("localExtendedData")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_direction()) = (ZIMMessageDirection)std::get<int32_t>(messageMap[FTValue("direction")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_sentStatus()) = (ZIMMessageSentStatus)std::get<int32_t>(messageMap[FTValue("sentStatus")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationType()) = (ZIMConversationType)std::get<int32_t>(messageMap[FTValue("conversationType")]);
@@ -599,8 +595,8 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
 		mediaMessagePtr->fileDownloadUrl = std::get<std::string>(messageMap[FTValue("fileDownloadUrl")]);
+		mediaMessagePtr->fileName = std::get<std::string>(messageMap[FTValue("fileName")]);
 		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileUID()) = std::get<std::string>(messageMap[FTValue("fileUID")]);
-		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileName()) = std::get<std::string>(messageMap[FTValue("fileName")]);
 
 		if (std::holds_alternative<int32_t>(messageMap[FTValue("fileSize")])) {
 			(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileSize()) = (long long)std::get<int32_t>(messageMap[FTValue("fileSize")]);

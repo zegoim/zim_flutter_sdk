@@ -52,6 +52,7 @@ import im.zego.zim.callback.ZIMMessageReceiptsInfoQueriedCallback;
 import im.zego.zim.callback.ZIMMessageReceiptsReadSentCallback;
 import im.zego.zim.callback.ZIMMessageRevokedCallback;
 import im.zego.zim.callback.ZIMMessageSentCallback;
+import im.zego.zim.callback.ZIMMessageLocalExtendedDataUpdatedCallback;
 import im.zego.zim.callback.ZIMRoomAttributesBatchOperatedCallback;
 import im.zego.zim.callback.ZIMRoomAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMRoomAttributesQueriedCallback;
@@ -905,6 +906,31 @@ public class ZIMPluginMethodHandler {
                 HashMap<String,Object> messageModel = ZIMPluginConverter.mZIMMessage(message);
                 resultMap.put("message",messageModel);
                 resultMap.put("messageID",messageID);
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,resultMap);
+                }
+            }
+        });
+    }
+
+    public static void updateMessageLocalExtendedData(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMMessage message = (ZIMMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
+        String localExtendedData = Objects.requireNonNull(call.argument("localExtendedData"));
+        zim.updateMessageLocalExtendedData(localExtendedData, message,  new ZIMMessageLocalExtendedDataUpdatedCallback() {
+            @Override
+            public void onMessageExtendedDataUpdated(ZIMMessage message, ZIMError errorInfo) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                HashMap<String,Object> messageModel = ZIMPluginConverter.mZIMMessage(message);
+                resultMap.put("message",messageModel);
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     result.success(resultMap);
                 }

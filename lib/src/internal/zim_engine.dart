@@ -894,4 +894,15 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMConversationQueriedResult(resultMap);
   }
 
+  @override
+  Future<ZIMMessageLocalExtendedDataUpdatedResult>
+  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message) async{
+    Map resultMap = await channel.invokeMethod('updateMessageLocalExtendedData', {
+      'handle': handle,
+      'localExtendedData': localExtendedData,
+      'message': ZIMConverter.mZIMMessage(message)
+    });
+    return ZIMConverter.oZIMMessageLocalExtendedDataUpdatedResult(resultMap);
+  }
+
 }

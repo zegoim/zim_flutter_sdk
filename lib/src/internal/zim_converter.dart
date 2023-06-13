@@ -143,6 +143,7 @@ class ZIMConverter {
     messageMap['receiptStatus'] =
         ZIMMessageReceiptStatusExtension.valueMap[message.receiptStatus];
     messageMap['extendedData'] = message.extendedData;
+    messageMap['localExtendedData'] = message.localExtendedData;
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -328,6 +329,7 @@ class ZIMConverter {
       message.fileSize = resultMap['fileSize'];
     }
     message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
+    message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
     return message;
   }
 
@@ -375,6 +377,10 @@ class ZIMConverter {
 
   static ZIMConversationQueriedResult oZIMConversationQueriedResult(Map resultMap) {
     return ZIMConversationQueriedResult(conversation: oZIMConversation(resultMap['conversation']));
+  }
+
+  static ZIMMessageLocalExtendedDataUpdatedResult oZIMMessageLocalExtendedDataUpdatedResult(Map resultMap) {
+    return ZIMMessageLocalExtendedDataUpdatedResult(message: oZIMMessage(resultMap['message']));
   }
 
   static Map mZIMConversationDeleteConfig(ZIMConversationDeleteConfig config) {
