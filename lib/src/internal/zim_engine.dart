@@ -350,6 +350,17 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMRoomMembersQueriedResult> queryRoomMembers(
+      List<String> userIDs, String roomID) async {
+    Map resultMap = await channel.invokeMethod('queryRoomMembers', {
+      'handle': handle,
+      'roomID': roomID,
+      'userIDs': userIDs
+    });
+    return ZIMConverter.oZIMRoomMembersQueriedResult(resultMap);
+  }
+
+  @override
   Future<ZIMRoomOnlineMemberCountQueriedResult> queryRoomOnlineMemberCount(
       String roomID) async {
     Map resultMap = await channel.invokeMethod(
@@ -871,6 +882,29 @@ class ZIMEngine implements ZIM {
     });
     return ZIMConverter.oZIMConversationPinnedStateUpdatedResult(resultMap);
   }
+
+  @override
+  Future<ZIMConversationQueriedResult> queryConversation(String conversationID,
+      ZIMConversationType conversationType) async{
+    Map resultMap = await channel.invokeMethod('queryConversation',{
+      'handle': handle,
+      'conversationID':conversationID,
+      'conversationType': ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMConversationQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageLocalExtendedDataUpdatedResult>
+  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message) async{
+    Map resultMap = await channel.invokeMethod('updateMessageLocalExtendedData', {
+      'handle': handle,
+      'localExtendedData': localExtendedData,
+      'message': ZIMConverter.mZIMMessage(message)
+    });
+    return ZIMConverter.oZIMMessageLocalExtendedDataUpdatedResult(resultMap);
+  }
+
 
   @override
   Future<ZIMCallEndSentResult> callEnd(

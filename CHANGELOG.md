@@ -1,3 +1,34 @@
+## 2.8.0+3
+
+Fix known problems.
+
+## 2.8.0+2
+
+Fix known problems.
+
+## 2.8.0+1
+
+Fix known problems.
+
+## 2.8.0
+
+### 1. Feature
+1、You can select the sessions that you want to view first and place them at the top of the session list.
+2、Added user-defined message types. Developers can customize message types, such as vote type, relay type, and video card type, and complete message parsing. The ZIM SDK is not responsible for defining and parsing the specific content of custom messages.
+3、The specified session ID is used to query details about the session.
+4、By specifying several userids and Roomids, query whether the target user is in the specified room, so as to carry out business logic design, such as inviting Lianmai.You can query information about a maximum of 10 users at a time.
+5、By setting the server callback, ZIM sends a request to the developer server when the user sends a single chat, group chat or room chat message. The developer can:The violation message was intercepted.Create a whitelist of users.
+6、By setting the server callback, ZIM sends a request to the developer server after the user has successfully or failed to send a single chat, group chat, or room message. The developer can:Messages sent by users are recorded in real time.Collect statistics on the messages sent by users.In a live screen recording scenario, the chat record is embedded into the recorded video through the time stamp of the recorded video.
+7、Support to call the server interface, specify user information (user ID, etc.), developers can implement a request, register more than one user.A maximum of 100 users can be registered at a time.
+8、Support to call the server interface to obtain the ID of all groups in the App.
+9、You can invoke the server interface, specify the group ID, and obtain the member list of the corresponding group.
+10、Supports calling server interface, specifying group ID and user ID, batch group members.You can remove a maximum of 50 group members at a time.
+
+### 2. Deprecated
+1、ZIMMessageType discards system messages (value 30), developers are encouraged to use custom messages with more functionality (value 200) instead.
+2、Since version 2.8.0, ZIM no longer supports iOS 11.0 and the developer's iOS Deployment Target (minimum support version) has been upgraded to iOS 11.0.
+3、As of version 2.8.0, the ZIM iOS SDK no longer supports the 32-bit armv7 architecture.
+
 ## 2.7.1
 1、Fixed some error.
 

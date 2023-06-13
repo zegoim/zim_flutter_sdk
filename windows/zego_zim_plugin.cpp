@@ -146,6 +146,15 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "queryConversationList") {
         ZIMPluginMethodHandler::getInstance().queryConversationList(argument, std::move(result));
     }
+	else if (method_call.method_name() == "queryConversation") {
+		ZIMPluginMethodHandler::getInstance().queryConversation(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "queryConversationPinnedList") {
+		ZIMPluginMethodHandler::getInstance().queryConversationPinnedList(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "updateConversationPinnedState") {
+		ZIMPluginMethodHandler::getInstance().updateConversationPinnedState(argument, std::move(result));
+	}
     else if (method_call.method_name() == "deleteConversation") {
         ZIMPluginMethodHandler::getInstance().deleteConversation(argument, std::move(result));
     }
@@ -161,6 +170,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "insertMessageToLocalDB") {
         ZIMPluginMethodHandler::getInstance().insertMessageToLocalDB(argument, std::move(result));
     }
+	else if (method_call.method_name() == "updateMessageLocalExtendedData") {
+		ZIMPluginMethodHandler::getInstance().updateMessageLocalExtendedData(argument, std::move(result));
+	}
     else if (method_call.method_name() == "sendPeerMessage") {
         ZIMPluginMethodHandler::getInstance().sendPeerMessage(argument, std::move(result));
     }
@@ -221,6 +233,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "queryRoomMemberList") {
         ZIMPluginMethodHandler::getInstance().queryRoomMemberList(argument, std::move(result));
     }
+	else if (method_call.method_name() == "queryRoomMembers") {
+	    ZIMPluginMethodHandler::getInstance().queryRoomMembers(argument, std::move(result));
+	}
     else if (method_call.method_name() == "queryRoomOnlineMemberCount") {
         ZIMPluginMethodHandler::getInstance().queryRoomOnlineMemberCount(argument, std::move(result));
     }

@@ -38,10 +38,6 @@ struct ZIM_FriendlyGet_conversationID {
     typedef std::string ZIMMessage::* type;
 };
 
- struct ZIM_FriendlyGet_extendedData {
-     typedef std::string ZIMMessage::* type;
- };
-
 struct ZIM_FriendlyGet_conversationType {
     typedef ZIMConversationType ZIMMessage::* type;
 };
@@ -71,10 +67,6 @@ struct ZIM_FriendlyGet_isUserInserted {
 };
 
 struct ZIM_FriendlyGet_fileUID {
-    typedef std::string ZIMMediaMessage::* type;
-};
-
-struct ZIM_FriendlyGet_fileName {
     typedef std::string ZIMMediaMessage::* type;
 };
 
@@ -167,11 +159,13 @@ public:
 
 public:
     static FTMap cnvZIMUserInfoObjectToMap(const ZIMUserInfo& userInfo);
+    static FTMap cnvZIMRoomMemberInfoObjectToMap(const ZIMRoomMemberInfo& userInfo);
     static FTMap cnvZIMUserFullInfoObjectToMap(const ZIMUserFullInfo &userFullInfo);
     static FTMap cnvZIMErrorUserInfoToMap(const ZIMErrorUserInfo& errorUserInfo);
     static FTArray cnvZIMErrorUserInfoListToArray(const std::vector<ZIMErrorUserInfo>& errorUserInfoList);
     static FTMap cnvZIMErrorObjectToMap(const ZIMError& errorInfo);
     static FTArray cnvZIMUserListToArray(const std::vector<ZIMUserInfo>& userInfoList);
+    static FTArray cnvZIMRoomMemberInfoListToArray(const std::vector<ZIMRoomMemberInfo>& roomMemberInfoList);
     static FTArray cnvZIMErrorUserListToArray(const std::vector<ZIMErrorUserInfo>& errorUserList);
     static FTArray cnvZIMConversationListToArray(const std::vector<std::shared_ptr<ZIMConversation>> &converationList);
     static FTMap cnvZIMConversationToMap(const std::shared_ptr<ZIMConversation>& conversation);

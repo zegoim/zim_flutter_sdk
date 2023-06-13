@@ -59,6 +59,16 @@
     return userInfoDic;
 }
 
++(nullable NSDictionary *)mZIMRoomMemberInfo:(nullable ZIMRoomMemberInfo *)userInfo{
+    if(userInfo == nil || userInfo == NULL || [userInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *userInfoDic = [[NSMutableDictionary alloc] init];
+    [userInfoDic safeSetObject:userInfo.userID forKey:@"userID"];
+    [userInfoDic safeSetObject:userInfo.userName forKey:@"userName"];
+    return userInfoDic;
+}
+
 +(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList{
     if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
         return nil;
@@ -66,6 +76,18 @@
     NSMutableArray *basicZIMUserInfoList = [[NSMutableArray alloc] init];
     for (ZIMUserInfo *userInfo in userInfoList) {
         NSDictionary *userInfoDic = [ZIMPluginConverter mZIMUserInfo:userInfo];
+        [basicZIMUserInfoList safeAddObject:userInfoDic];
+    }
+    return basicZIMUserInfoList;
+}
+
++(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList{
+    if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicZIMUserInfoList = [[NSMutableArray alloc] init];
+    for (ZIMRoomMemberInfo *userInfo in userInfoList) {
+        NSDictionary *userInfoDic = [ZIMPluginConverter mZIMRoomMemberInfo:userInfo];
         [basicZIMUserInfoList safeAddObject:userInfoDic];
     }
     return basicZIMUserInfoList;
@@ -223,6 +245,12 @@
             ((ZIMSystemMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
             break;
         }
+        case ZIMMessageTypeCustom:
+            msg = [[ZIMCustomMessage alloc] init];
+            ((ZIMCustomMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
+            ((ZIMCustomMessage *)msg).searchedContent = [messageDic safeObjectForKey:@"searchedContent"];
+            ((ZIMCustomMessage *)msg).subType = ((NSNumber *)[messageDic safeObjectForKey:@"subType"]).unsignedIntValue;
+            break;
         case ZIMMessageTypeRevoke:{
             msg = [[ZIMRevokeMessage alloc] init];
             [((ZIMRevokeMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"revokeType"]  forKey:@"revokeType"];
@@ -250,6 +278,7 @@
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isUserInserted"] forKey:@"isUserInserted"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey: @"receiptStatus"] forKey:@"receiptStatus"];
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"extendedData"]  forKey:@"extendedData"];
+    [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"localExtendedData"]  forKey:@"localExtendedData"];
     if([msg isKindOfClass:[ZIMMediaMessage class]]){
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileLocalPath"]  forKey:@"fileLocalPath"];
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileDownloadUrl"] forKey:@"fileDownloadUrl"];
@@ -284,6 +313,7 @@
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.orderKey] forKey:@"orderKey"];
     [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:message.receiptStatus] forKey:@"receiptStatus"];
     [messageDic safeSetObject:message.extendedData forKey:@"extendedData"];
+    [messageDic safeSetObject:message.localExtendedData forKey:@"localExtendedData"];
     if([message isKindOfClass:[ZIMMediaMessage class]]){
         ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
         [messageDic safeSetObject:mediaMsg.fileLocalPath forKey:@"fileLocalPath"];
@@ -347,6 +377,13 @@
         case ZIMMessageTypeSystem:{
             ZIMSystemMessage *sysMsg = (ZIMSystemMessage *)message;
             [messageDic safeSetObject:sysMsg.message forKey:@"message"];
+            break;
+        }
+        case ZIMMessageTypeCustom:{
+            ZIMCustomMessage *customMsg = (ZIMCustomMessage *)message;
+            [messageDic safeSetObject:customMsg.message forKey:@"message"];
+            [messageDic safeSetObject:customMsg.searchedContent forKey:@"searchedContent"];
+            [messageDic safeSetObject:[NSNumber numberWithUnsignedInt:customMsg.subType] forKey:@"subType"];
             break;
         }
         case ZIMMessageTypeRevoke:{

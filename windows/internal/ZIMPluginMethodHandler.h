@@ -46,10 +46,12 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryConversationList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    //void queryConversationPinnedList(flutter::EncodableMap& argument,
-    //    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    //void updateConversationPinnedState(flutter::EncodableMap& argument,
-    //    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void ZIMPluginMethodHandler::queryConversation(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void queryConversationPinnedList(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void updateConversationPinnedState(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void deleteConversation(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void clearConversationUnreadMessageCount(flutter::EncodableMap& argument,
@@ -62,6 +64,8 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void insertMessageToLocalDB(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void updateMessageLocalExtendedData(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendPeerMessage(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendRoomMessage(flutter::EncodableMap& argument,
@@ -98,6 +102,8 @@ public:
     void leaveRoom(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryRoomMemberList(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void queryRoomMembers(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryRoomOnlineMemberCount(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);

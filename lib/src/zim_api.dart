@@ -174,8 +174,47 @@ abstract class ZIM {
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
+  /// Available since: 2.8.0 and above.
+  ///
+  /// Description: This method displays the session list of the logged in user.
+  ///
+  /// Use cases: When you need to know the relevant information of the specified conversation, you can call this interface to obtain the data source.
+  ///
+  /// When to call /Trigger: Can be invoked after login.
+  ///
+  /// Restrictions:There is no limit to the frequency of use, available after login, unavailable after logout.
+  ///
+  /// Related callbacks: [ZIMConversationQueriedResult].
+  /// [conversationID] Query conversation ID.
+  /// [conversationType] Query conversation type.
+  Future<ZIMConversationQueriedResult> queryConversation(String conversationID,
+      ZIMConversationType conversationType);
+
+  /// Available since: 2.8.0 and above.
+  ///
+  /// Description: This method displays the pinned conversation list of the logged in user.
+  ///
+  /// Use cases: This interface can be invoked to get the data source when you need to display an existing pinned message conversation after logging in.
+  ///
+  /// When to call /Trigger: Can be invoked after login.
+  ///
+  /// Restrictions:There is no limit to the frequency of use, available after login, unavailable after logout.
+  ///
+  /// Caution: NextConversation is the riveting point of the query message, which can be null for the first query. In subsequent query, the earliest conversation can be used as nextConversation to query earlier sessions. In paging query, Count in [ZIMConversationQueryConfig] fill each pull the number of sessions.
+  /// [config] Configuration for session queries.
   Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList(ZIMConversationQueryConfig config);
 
+  /// Available since: 2.8.0 and above.
+  ///
+  /// Description: This method can modify the pinned state of the specified conversation of the logged-in user.
+  ///
+  /// Use cases: You can call this interface when you need to modify the pinned state of a conversation.
+  ///
+  /// When to call /Trigger: Can be invoked after login.
+  ///
+  /// Restrictions: Available after login, unavailable after logout.
+  ///
+  /// Related callbacks: [ZIMConversationPinnedStateUpdatedResult].
   Future<ZIMConversationPinnedStateUpdatedResult> updateConversationPinnedState(bool isPinned, String conversationID, ZIMConversationType conversationType);
 
   /// Available since: 2.1.5 and above.
@@ -644,6 +683,22 @@ abstract class ZIM {
   Future<ZIMRoomMemberQueriedResult> queryRoomMemberList(
       String roomID, ZIMRoomMemberQueryConfig config);
 
+
+  /// Available since: 2.8.0 and above.
+  ///
+  /// Description: This method can query the information of up to ten users in the specified room of the logged-in user.
+  ///
+  /// Use cases: When you need to know the user information in the specified room, you can call this interface to obtain the data source.
+  ///
+  /// When to call /Trigger: Can be invoked after login.
+  ///
+  /// Restrictions: Available after login, unavailable after logout, up to ten users can be queried at one time.
+  ///
+  /// [roomID] ID of the room to query.
+  /// [userIDs] List of user IDs to query.
+  Future<ZIMRoomMembersQueriedResult> queryRoomMembers(
+      List<String> userIDs, String roomID);
+
   /// Query the number of online members in the room.
   ///
   /// Available since: 2.1.5 or above.
@@ -928,6 +983,17 @@ abstract class ZIM {
   Future<ZIMGroupNameUpdatedResult> updateGroupName(
       String groupName, String groupID);
 
+  /// Supported versions: 2.3.0 and above.
+  ///
+  /// Detail description: After a group is created, the user can modify the group avatar URL by calling this method.
+  ///
+  /// Business scenario: After creating a group, the user needs to change the group avatar URL.
+  ///
+  /// Invocation timing/notification timing: It can be invoked after creating a ZIM instance through [create] and logging in.
+  ///
+  /// Usage restrictions: Group members and group owners can modify the group avatar, with a maximum length of 500 bytes.
+  ///
+  /// Related callbacks: The result of changing the group name can be obtained through the [ZIMGroupAvatarUrlUpdatedResult] callback, and the updated group avatar information can be obtained through the [ZIMEventHandler.onGroupAvatarUrlUpdated] callback.
   Future<ZIMGroupAvatarUrlUpdatedResult> updateGroupAvatarUrl(
       String groupAvatarUrl, String groupID);
 
@@ -1108,6 +1174,16 @@ abstract class ZIM {
   Future<ZIMGroupMemberListQueriedResult> queryGroupMemberList(
       String groupID, ZIMGroupMemberQueryConfig config);
 
+  /// Available since: 2.2.0 or above.
+  ///
+  /// Description: Query the number of group members in a group.
+  ///
+  /// When to call: The ZIM instance can be invoked after being created by [create] and logged in.
+  ///
+  /// Restrictions: This function can only query the group that the user has entered.
+  ///
+  /// Related callbacks: [ZIMGroupMemberCountQueriedResult].
+  /// [groupID] The group ID of the group member list to be queried.
   Future<ZIMGroupMemberCountQueriedResult> queryGroupMemberCount(
       String groupID);
 
@@ -1175,15 +1251,11 @@ abstract class ZIM {
       String callID, ZIMCallRejectConfig config);
 
 
+  Future<ZIMMessageLocalExtendedDataUpdatedResult>
+  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
   Future<ZIMCallQuitSentResult> callQuit(
       String callID, ZIMCallQuitConfig config);
 
-  Future<ZIMCallEndSentResult> callEnd(
-      String callID, ZIMCallEndConfig config);
 
-  Future<ZIMCallingInvitationSentResult> callingInvite(
-      List<String>invitees, String callID, ZIMCallingInviteConfig config);
-
-  Future<ZIMCallListQueriedResult> queryCallList(ZIMQueryCallListConfig config);
 
 }

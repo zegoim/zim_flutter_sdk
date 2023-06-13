@@ -189,7 +189,9 @@ enum ZIMMessageType {
 
   system,
 
-  revoke
+  revoke,
+
+  custom
 }
 
 enum ZIMMediaFileType {
@@ -440,6 +442,11 @@ class ZIMUserInfo {
   ZIMUserInfo();
 }
 
+class ZIMRoomMemberInfo extends ZIMUserInfo{
+
+  ZIMRoomMemberInfo();
+}
+
 class ZIMUserFullInfo {
   ZIMUserInfo baseInfo = ZIMUserInfo();
   String userAvatarUrl = '';
@@ -462,6 +469,7 @@ class ZIMMessage {
   bool isUserInserted = false;
   ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
   String extendedData = "";
+  String localExtendedData = "";
 }
 
 class ZIMTextMessage extends ZIMMessage {
@@ -566,6 +574,15 @@ class ZIMSystemMessage extends ZIMMessage {
   String message = '';
   ZIMSystemMessage({required this.message}) {
     super.type = ZIMMessageType.system;
+  }
+}
+
+class ZIMCustomMessage extends ZIMMessage {
+  String message = '';
+  int subType=0;
+  String searchedContent = '';
+  ZIMCustomMessage({required this.message,required this.subType}){
+    super.type = ZIMMessageType.custom;
   }
 }
 
@@ -1149,6 +1166,12 @@ class ZIMConversationDeletedResult {
       {required this.conversationID, required this.conversationType});
 }
 
+class ZIMConversationQueriedResult{
+  ZIMConversation conversation;
+
+  ZIMConversationQueriedResult({required this.conversation});
+}
+
 class ZIMConversationPinnedStateUpdatedResult {
   String conversationID;
   ZIMConversationType conversationType;
@@ -1209,6 +1232,11 @@ class ZIMConversationNotificationStatusSetResult {
 class ZIMMessageSentResult {
   ZIMMessage message;
   ZIMMessageSentResult({required this.message});
+}
+
+class ZIMMessageLocalExtendedDataUpdatedResult {
+  ZIMMessage message;
+  ZIMMessageLocalExtendedDataUpdatedResult({required this.message});
 }
 
 class ZIMMessageInsertedResult {
@@ -1332,6 +1360,14 @@ class ZIMRoomMemberQueriedResult {
   List<ZIMUserInfo> memberList;
   ZIMRoomMemberQueriedResult(
       {required this.roomID, required this.nextFlag, required this.memberList});
+}
+
+class ZIMRoomMembersQueriedResult {
+  String roomID;
+  List<ZIMRoomMemberInfo> memberList;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMRoomMembersQueriedResult(
+      {required this.roomID, required this.memberList, required this.errorUserList});
 }
 
 /// Callback of the result of querying the online members count in the room.

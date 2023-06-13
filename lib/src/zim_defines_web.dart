@@ -125,6 +125,10 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryGroupMessageReceiptReadMemberList(dynamic message, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> queryGroupMessageReceiptUnreadMemberList(dynamic message, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> revokeMessage(dynamic message, dynamic config);
+  external PromiseJsImpl<dynamic> queryConversationPinnedList(dynamic config);
+  external PromiseJsImpl<dynamic> updateConversationPinnedState(bool isPinned, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> queryRoomMembers(dynamic userIDs, String roomID);
+  external PromiseJsImpl<dynamic> queryConversation(String conversationID, dynamic conversationType);
 }
 
 @JS()
