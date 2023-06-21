@@ -368,17 +368,17 @@
     NSString *inputConversationID = [call.arguments objectForKey:@"conversationID"];
     int inputConversationType = ((NSNumber *)[call.arguments safeObjectForKey:@"conversationType"]).intValue;
     bool isPinned = ((NSNumber *)[call.arguments safeObjectForKey:@"isPinned"]).boolValue;
-//    [zim updateConversationPinnedState:isPinned conversationID:inputConversationID conversationType:inputConversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
-//        if(errorInfo.code == 0){
-//            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-//            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
-//            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
-//            result(resultDic);
-//        }
-//        else{
-//            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
-//        }
-//    }];
+    [zim updateConversationPinnedState:isPinned conversationID:inputConversationID conversationType:inputConversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
 }
 
 
