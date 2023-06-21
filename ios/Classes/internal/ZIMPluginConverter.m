@@ -106,7 +106,7 @@
     conversation.unreadMessageCount = ((NSNumber *)[conversationDic objectForKey:@"unreadMessageCount"]).intValue;
     conversation.orderKey = ((NSNumber *)[conversationDic objectForKey:@"orderKey"]).longLongValue;
     conversation.lastMessage = [ZIMPluginConverter oZIMMessage:(NSDictionary *)[conversationDic objectForKey:@"lastMessage"]];
-   // conversation.isPinned = ((NSNumber *)[conversationDic objectForKey:@"isPinned"]).boolValue;
+    conversation.isPinned = ((NSNumber *)[conversationDic objectForKey:@"isPinned"]).boolValue;
     return conversation;
 }
 
@@ -123,7 +123,7 @@
     [conversationDic safeSetObject:[NSNumber numberWithUnsignedInt:conversation.unreadMessageCount] forKey:@"unreadMessageCount"];
     [conversationDic safeSetObject:[NSNumber numberWithLongLong:conversation.orderKey] forKey:@"orderKey"];
     [conversationDic safeSetObject:[ZIMPluginConverter mZIMMessage:conversation.lastMessage] forKey:@"lastMessage"];
-  //  [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
+    [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
     return conversationDic;
     
 }

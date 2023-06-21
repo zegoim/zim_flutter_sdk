@@ -155,13 +155,14 @@ public class ZIMPluginConverter {
         else {
             conversationMap.put("lastMessage",null);
         }
-//        conversationMap.put("isPinned",conversation.isPinned);
+        conversationMap.put("isPinned",conversation.isPinned);
         return conversationMap;
     }
 
 //    static public ArrayList cnvZIMConversationListToBasicList(ArrayList<ZIMConversation> conversationList){
 //        ArrayList
 //    }
+
 
     static public HashMap<String,Object> mZIMMessage(ZIMMessage message){
         HashMap<String,Object> messageMap = new HashMap<>();
@@ -652,7 +653,7 @@ public class ZIMPluginConverter {
         }else{
             conversation.lastMessage = null;
         }
-//        conversation.isPinned = ZIMPluginCommonTools.safeGetBoolValue(resultMap.get("isPinned"));
+        conversation.isPinned = ZIMPluginCommonTools.safeGetBoolValue(resultMap.get("isPinned"));
         return conversation;
     }
 
