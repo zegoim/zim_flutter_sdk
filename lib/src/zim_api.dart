@@ -1250,6 +1250,14 @@ abstract class ZIM {
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config);
 
+  Future<ZIMCallEndSentResult> callEnd(
+      String callID, ZIMCallEndConfig config);
+
+  Future<ZIMCallingInvitationSentResult> callingInvite(
+      List<String>invitees, String callID, ZIMCallingInviteConfig config);
+
+  Future<ZIMCallListQueriedResult> queryCallList(ZIMQueryCallListConfig config);
+
 
   Future<ZIMMessageLocalExtendedDataUpdatedResult>
   updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
