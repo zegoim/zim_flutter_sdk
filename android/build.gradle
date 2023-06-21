@@ -3,6 +3,7 @@ version '2.8.0'
 
 buildscript {
     repositories {
+        maven { url 'https://storage.zego.im/maven' }
         google()
         mavenCentral()
         jcenter()
@@ -15,7 +16,7 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
-        maven { url 'https://www.jitpack.io' }
+        maven { url 'https://storage.zego.im/maven' }
         google()
         mavenCentral()
         jcenter()
@@ -40,5 +41,5 @@ android {
 }
 dependencies {
     // for other module visit
-    api 'com.github.zegolibrary:zim:2.8.0'
+    api 'im.zego:zim:2.8.4'
 }
