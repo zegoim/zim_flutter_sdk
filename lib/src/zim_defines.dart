@@ -317,7 +317,7 @@ enum ZIMCallUserState {
   quited
 }
 
-enum ZIMInvitationMode {
+enum ZIMCallInvitationMode {
   general,
   advanced,
 }
@@ -679,7 +679,7 @@ class ZIMMessageQueryConfig {
 class ZIMCallInfo {
   String callID ="";
   String caller = "";
-  ZIMInvitationMode mode = ZIMInvitationMode.general;
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
   ZIMCallState state = ZIMCallState.start;
   String extendedData = "";
   int createTime = 0;
@@ -891,7 +891,7 @@ class ZIMCallInviteConfig {
   /// Description: The timeout setting of the call invitation, the unit is seconds. The default value is 90s.
   int timeout = 90;
 
-  ZIMInvitationMode mode = ZIMInvitationMode.general;
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
@@ -1013,7 +1013,7 @@ class ZIMCallInvitationReceivedInfo {
   String extendedData = "";
 
   int createTime = 0;
-  ZIMInvitationMode mode = ZIMInvitationMode.general;
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
   List<ZIMCallUserInfo> callUserList = [];
 
   ZIMCallInvitationReceivedInfo();
@@ -1027,7 +1027,7 @@ class ZIMCallInvitationCancelledInfo {
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
 
-  ZIMInvitationMode mode = ZIMInvitationMode.general;
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
   ZIMCallInvitationCancelledInfo();
 }
 
@@ -1055,7 +1055,7 @@ class ZIMCallInvitationEndedInfo{
   String caller = '';
   String operatedUserID = '';
   String extendedData = '';
-  ZIMInvitationMode mode = ZIMInvitationMode.general;
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
   int endTime = 0;
 }
 

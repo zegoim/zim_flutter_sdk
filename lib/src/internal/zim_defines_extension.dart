@@ -409,15 +409,15 @@ extension ZIMMessageRevokeStatusExtension on ZIMMessageRevokeStatus {
   int get value => valueMap[this] ?? -1;
 }
 
-extension ZIMInvitationModeExtension on ZIMInvitationMode {
+extension ZIMInvitationModeExtension on ZIMCallInvitationMode {
   static const valueMap = {
-    ZIMInvitationMode.general: 0,
-    ZIMInvitationMode.advanced: 1,
+    ZIMCallInvitationMode.general: 0,
+    ZIMCallInvitationMode.advanced: 1,
   };
 
   static const mapValue = {
-    0:ZIMInvitationMode.general,
-    1:ZIMInvitationMode.advanced
+    0:ZIMCallInvitationMode.general,
+    1:ZIMCallInvitationMode.advanced
   };
 
   int get value => valueMap[this] ?? -1;
