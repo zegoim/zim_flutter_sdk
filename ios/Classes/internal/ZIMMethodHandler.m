@@ -345,17 +345,17 @@
     ZIMConversationQueryConfig *queryConfig = [[ZIMConversationQueryConfig alloc] init];
     queryConfig.count = ((NSNumber *)[configDic objectForKey:@"count"]).unsignedIntValue;
     queryConfig.nextConversation = [ZIMPluginConverter oZIMConversation:(NSDictionary *)[configDic objectForKey:@"nextConversation"]];
-//    [zim queryConversationPinnedListWithConfig:queryConfig callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo) {
-//        if(errorInfo.code == 0){
-//            NSArray *conversationBasicList = [ZIMPluginConverter mZIMConversationList:conversationList];
-//            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-//            [resultDic safeSetObject:conversationBasicList forKey:@"conversationList"];
-//            result(resultDic);
-//        }
-//        else{
-//            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
-//        }
-//    }];
+    [zim queryConversationPinnedListWithConfig:queryConfig callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSArray *conversationBasicList = [ZIMPluginConverter mZIMConversationList:conversationList];
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:conversationBasicList forKey:@"conversationList"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
 }
 
 - (void)updateConversationPinnedState:(FlutterMethodCall *)call result:(FlutterResult)result {
