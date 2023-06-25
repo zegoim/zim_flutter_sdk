@@ -125,6 +125,9 @@ class ZIM {
   external PromiseJsImpl<dynamic> updateConversationPinnedState(bool isPinned, String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> queryRoomMembers(dynamic userIDs, String roomID);
   external PromiseJsImpl<dynamic> queryConversation(String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> addMessageReaction(String reactionType, dynamic message);
+  external PromiseJsImpl<dynamic> deleteMessageReaction(String reactionType, dynamic message);
+  external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);
 }
 
 @JS()

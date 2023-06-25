@@ -1236,4 +1236,65 @@ class ZIMConverter {
     revokeConfig['revokeExtendedData'] = config.revokeExtendedData;
     return revokeConfig;
   }
+
+  static ZIMReactionUserInfo oZIMReactionUserInfo(Map userInfoMap) {
+    ZIMReactionUserInfo reactionUserInfo = ZIMReactionUserInfo(userID: userInfoMap["userID"]);
+    return reactionUserInfo;
+  }
+
+  static ZIMMessageReaction oZIMMessageReaction(Map reactionMap) {
+    List userInfosBasic = reactionMap['userInfos'];
+
+    List<ZIMReactionUserInfo> userInfos = [];
+    for (Map userInfoMap in userInfosBasic) {
+      userInfos.add(oZIMReactionUserInfo(userInfoMap));
+    }
+
+    ZIMMessageReaction reaction = ZIMMessageReaction(
+      conversationID: reactionMap["conversationID"],
+      conversationType: reactionMap["conversationType"],
+      messageID: reactionMap["messageID"],
+      totalCount: reactionMap["totalCount"],
+      reactionType: reactionMap["reactionType"],
+      hasOwner: reactionMap["hasOwner"],
+      userInfos: userInfos,
+    );
+
+    return reaction;
+  }
+
+  static List<ZIMMessageReaction> oZIMMessageReactionList(List infosList) {
+    List<ZIMMessageReaction> infos = [];
+    for (Map infoMap in infosList) {
+      infos.add(oZIMMessageReaction(infoMap));
+    }
+    return infos;
+  }
+
+  static ZIMAddMessageReactionResult oZIMAddMessageReactionResult(Map resultMap) {
+    Map reactionMap = resultMap["reaction"];
+
+    ZIMMessageReaction reaction = oZIMMessageReaction(reactionMap);
+
+    return ZIMAddMessageReactionResult(reaction: reaction);
+  }
+
+  static ZIMDeleteMessageReactionResult oZIMDeleteMessageReactionResult(Map resultMap) {
+    Map reactionMap = resultMap["reaction"];
+
+    ZIMMessageReaction reaction = oZIMMessageReaction(reactionMap);
+
+    return ZIMDeleteMessageReactionResult(reaction: reaction);
+  }
+
+  static ZIMReactionUsersQueryResult oZIMReactionUsersQueryResult(Map resultMap) {
+    List userInfosBasic = resultMap["userInfos"];
+
+    List<ZIMReactionUserInfo> userInfos = [];
+    for (Map userInfoMap in userInfosBasic) {
+      userInfos.add(oZIMReactionUserInfo(userInfoMap));
+    }
+
+    return ZIMReactionUsersQueryResult(userInfos: userInfos);
+  }
 }

@@ -286,6 +286,12 @@ class ZegoZimPlugin {
       case 'queryConversation':
         return queryConversation(call.arguments["conversationID"],
             call.arguments["conversationType"]);
+      case 'addMessageReaction':
+        return addMessageReaction(call.arguments["reactionType"], call.arguments["message"]);
+      case 'deleteMessageReaction':
+        return deleteMessageReaction(call.arguments["reactionType"], call.arguments["message"]);
+      case 'queryMessageReactionUserList':
+        return queryMessageReactionUserList(call.arguments["message"], call.arguments["config"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -361,6 +367,8 @@ class ZegoZimPlugin {
           return messageRevokeReceivedHandle(_zim, data);
         case "messageSentStatusChanged":
           return messageSentStatusChangedHandle(_zim, data);
+        case "messageReactionsChanged":
+          return messageReactionsChangedHandle(_zim, data);
       }
     }
   }
@@ -1444,6 +1452,42 @@ class ZegoZimPlugin {
     return resultMap;
   }
 
+  Future<Map<dynamic, dynamic>> addMessageReaction(String reactionType, dynamic message) async {
+    Object _message = mapToJSObj(message);
+    final result = await promiseToFuture(ZIM.getInstance()!.addMessageReaction(reactionType, _message)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
+
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> deleteMessageReaction(String reactionType, dynamic message) async {
+    Object _message = mapToJSObj(message);
+    final result = await promiseToFuture(ZIM.getInstance()!.deleteMessageReaction(reactionType, _message)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
+
+    return resultMap;
+
+  }
+
+  Future<Map<dynamic, dynamic>> queryMessageReactionUserList(dynamic message, dynamic config)async {
+    Object _message = mapToJSObj(message);
+    Object _config = mapToJSObj(config);
+
+    final result = await promiseToFuture(ZIM.getInstance()!.queryMessageReactionUserList(_message, _config)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
+
+    return resultMap;
+  }
+
   static void connectionStateChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConnectionStateChanged == null) return;
 
@@ -1862,6 +1906,17 @@ class ZegoZimPlugin {
         ZIMConverter.oMessageSentStatusChangeInfoList(_infos);
 
     ZIMEventHandler.onMessageSentStatusChanged!(zim, infos);
+  }
+
+  static void messageReactionsChangedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onMessageReactionsChanged == null) {
+      return;
+    }
+
+    List<ZIMMessageReaction> infos =
+        ZIMConverter.oZIMMessageReactionList(data["infos"]);
+
+    ZIMEventHandler.onMessageReactionsChanged!(zim, infos);
   }
 
   static Map handleSendMessageResult(dynamic result) {

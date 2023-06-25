@@ -967,6 +967,37 @@ class ZIMMessageReceiptInfo {
       required this.unreadMemberCount});
 }
 
+class ZIMMessageReactionUsersQueryConfig {
+  int nextFlag = 0;
+  int count = 0;
+  String reactionType;
+
+  ZIMMessageReactionUsersQueryConfig({required this.reactionType});
+}
+
+class ZIMReactionUserInfo {
+  String userID;
+  ZIMReactionUserInfo({required this.userID});
+}
+
+class ZIMMessageReaction {
+  String conversationID;
+  ZIMConversationType conversationType;
+  int messageID;
+  List<ZIMReactionUserInfo> userInfos;
+  int totalCount;
+  String reactionType;
+  bool hasOwner;
+
+  ZIMMessageReaction(
+      {required this.conversationID,
+      required this.conversationType,
+      required this.messageID,
+      required this.userInfos,
+      required this.totalCount,
+      required this.reactionType,
+      required this.hasOwner});
+}
 //MARK : Result
 
 /// Callback of the result of renewing the token.
@@ -1674,4 +1705,19 @@ class ZIMGroupMessageReceiptMemberListQueriedResult {
 class ZIMMessageRevokedResult {
   ZIMRevokeMessage message;
   ZIMMessageRevokedResult({required this.message});
+}
+
+class ZIMAddMessageReactionResult {
+  ZIMMessageReaction reaction;
+  ZIMAddMessageReactionResult({required this.reaction});
+}
+
+class ZIMDeleteMessageReactionResult {
+  ZIMMessageReaction reaction;
+  ZIMDeleteMessageReactionResult({required this.reaction});
+}
+
+class ZIMReactionUsersQueryResult {
+  List<ZIMReactionUserInfo> userInfos;
+  ZIMReactionUsersQueryResult({required this.userInfos});
 }
