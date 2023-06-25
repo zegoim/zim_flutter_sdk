@@ -2256,7 +2256,7 @@ void ZIMPluginMethodHandler::callInvite(flutter::EncodableMap& argument,
 
     ZIMCallInviteConfig config;
     config.timeout = std::get<int32_t>(configMap[FTValue("timeout")]);
-    config.mode = (ZIMInvitationMode)std::get<int32_t>(configMap[FTValue("mode")]);
+    config.mode = (ZIMCallInvitationMode)std::get<int32_t>(configMap[FTValue("mode")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
