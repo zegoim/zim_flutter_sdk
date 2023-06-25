@@ -80,7 +80,7 @@ import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
 import im.zego.zim.entity.ZIMVideoMessage;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
-import im.zego.zim.enums.ZIMInvitationMode;
+import im.zego.zim.enums.ZIMCallInvitationMode;
 import im.zego.zim.enums.ZIMMessageDirection;
 import im.zego.zim.enums.ZIMMessagePriority;
 import im.zego.zim.enums.ZIMMessageReceiptStatus;
@@ -918,7 +918,7 @@ public class ZIMPluginConverter {
         ZIMCallInviteConfig config = new ZIMCallInviteConfig();
         config.timeout = ZIMPluginCommonTools.safeGetIntValue(configMap.get("timeout"));
         config.extendedData = (String) configMap.get("extendedData");
-        config.mode = ZIMInvitationMode.getZIMInvitationMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
+        config.mode = ZIMCallInvitationMode.getZIMInvitationMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         return config;
     }
