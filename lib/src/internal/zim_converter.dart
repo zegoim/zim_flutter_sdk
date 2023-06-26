@@ -1041,7 +1041,7 @@ class ZIMConverter {
   }
 
   static ZIMCallListQueriedResult oZIMCallListQueriedResult(Map resultMap) {
-    
+
     List<ZIMCallInfo> callInfoList = [];
     for (Map infoMap in resultMap['callList']) {
       ZIMCallInfo callInfo =
@@ -1093,6 +1093,14 @@ class ZIMConverter {
     ZIMCallInvitationCancelledInfo info = ZIMCallInvitationCancelledInfo();
     info.inviter = infoMap['inviter'];
     info.extendedData = infoMap['extendedData'];
+    info.mode = ZIMInvitationModeExtension.mapValue[infoMap["mode"]]!;
+    return info;
+  }
+
+  static ZIMCallInvitationTimeoutInfo oZIMCallInvitationTimeoutInfo(
+      Map infoMap) {
+    ZIMCallInvitationTimeoutInfo info = ZIMCallInvitationTimeoutInfo();
+
     info.mode = ZIMInvitationModeExtension.mapValue[infoMap["mode"]]!;
     return info;
   }

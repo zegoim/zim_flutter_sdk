@@ -243,7 +243,10 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       case 'onCallInvitationTimeout':
         if (ZIMEventHandler.onCallInvitationTimeout == null) return;
 
-        ZIMEventHandler.onCallInvitationTimeout!(zim!, map['callID']);
+        ZIMEventHandler.onCallInvitationTimeout!(
+            zim!,
+            ZIMConverter.oZIMCallInvitationTimeoutInfo(map['info']),
+            map['callID']);
         break;
       case 'onCallInviteesAnsweredTimeout':
         if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;

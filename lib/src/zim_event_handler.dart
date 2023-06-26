@@ -410,7 +410,7 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [callID]  callID.
-  static void Function(ZIM zim, String callID)? onCallInvitationTimeout;
+  static void Function(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID)? onCallInvitationTimeout;
 
   /// Supported versions: 2.0.0 and above.
   ///

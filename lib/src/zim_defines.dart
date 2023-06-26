@@ -1065,7 +1065,9 @@ class ZIMCallUserStateChangedInfo{
 }
 
 class ZIMCallInvitationTimeoutInfo {
-  String inviter = "";
+
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
+
   ZIMCallInvitationTimeoutInfo();
 }
 

@@ -226,9 +226,9 @@ class ZegoZimPlugin {
       case 'callEnd':
         return callEnd(call.arguments["callID"], call.arguments["config"]);
       case 'callingInvite':
-        return callingInvite(call.arguments["callID"], call.arguments["invitees"], call.arguments["config"]);
-      case 'queryCallList':
-        return queryCallList(call.arguments["config"]);
+        return callingInvite(call.arguments["invitees"], call.arguments["callID"], call.arguments["config"]);
+      case 'queryCallInvitationList':
+        return queryCallInvitationList(call.arguments["config"]);
       case 'queryRoomMemberAttributesList':
         return queryRoomMemberAttributesList(
             call.arguments["roomID"], call.arguments["config"]);
@@ -294,6 +294,16 @@ class ZegoZimPlugin {
       case 'queryConversation':
         return queryConversation(call.arguments["conversationID"],
             call.arguments["conversationType"]);
+      case 'searchGlobalLocalConversationMessages':
+        return searchGlobalLocalConversationMessages(call.arguments["config"]);
+      case 'searchGlobalLocalMessages':
+        return searchGlobalLocalMessages(call.arguments["config"]);
+      case 'searchLocalMessages':
+        return searchLocalMessages(call.arguments["config"]);
+      case 'searchLocalGroups':
+        return searchLocalGroups(call.arguments["config"]);
+      case 'searchLocalGroupMembers':
+        return searchLocalGroupMembers(call.arguments["config"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -357,10 +367,12 @@ class ZegoZimPlugin {
           return callInvitationRejectedHandle(_zim, data);
         case "callInviteesAnsweredTimeout":
           return callInviteesAnsweredTimeoutHandle(_zim, data);
-        case "callStateChanged":
-          return callStateChangedHandle(_zim, data);
+        // case "callStateChanged":
+        //   return callStateChangedHandle(_zim, data);
         case "callUserStateChanged":
           return callUserStateChangedHandle(_zim, data);
+        case "callInvitationEnded":
+          return callInvitationEndedHandle(_zim, data);
         case "conversationChanged":
           return conversationChangedHandle(_zim, data);
         case "conversationTotalUnreadMessageCountUpdated":
@@ -1230,20 +1242,20 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> callingInvite(
-      String callID, dynamic invitees, dynamic config) async {
+     dynamic invitees, String callID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
     final result =
-        await promiseToFuture(ZIM.getInstance()!.callingInvite(callID, invitees, _config));
+        await promiseToFuture(ZIM.getInstance()!.callingInvite(invitees, callID, _config));
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryCallList(dynamic config) async {
+  Future<Map<dynamic, dynamic>> queryCallInvitationList(dynamic config) async {
     Object _config = mapToJSObj(config);
 
     final result =
-        await promiseToFuture(ZIM.getInstance()!.queryCallList(_config));
+        await promiseToFuture(ZIM.getInstance()!.queryCallInvitationList(_config));
 
     return jsObjectToMap(result);
   }
@@ -1489,6 +1501,76 @@ class ZegoZimPlugin {
 
     resultMap["conversation"]["lastMessage"] =
         convertZIMMessage(resultMap["conversation"]["lastMessage"]);
+
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> searchGlobalLocalConversationMessages(dynamic config) async {
+    Object _config = mapToJSObj(config);
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .searchGlobalLocalConversationMessages(_config))
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
+
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> searchGlobalLocalMessages(dynamic config) async {
+    Object _config = mapToJSObj(config);
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .searchGlobalLocalMessages(_config))
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
+
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> searchLocalMessages(dynamic config) async {
+    Object _config = mapToJSObj(config);
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .searchLocalMessages(_config))
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
+
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> searchLocalGroups(dynamic config) async {
+    Object _config = mapToJSObj(config);
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .searchLocalGroups(_config))
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
+
+    return resultMap;
+  }
+
+  Future<Map<dynamic, dynamic>> searchLocalGroupMembers(dynamic config) async {
+    Object _config = mapToJSObj(config);
+    final result = await promiseToFuture(ZIM
+            .getInstance()!
+            .searchLocalGroupMembers(_config))
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    final resultMap = jsObjectToMap(result);
 
     return resultMap;
   }
@@ -1755,26 +1837,18 @@ class ZegoZimPlugin {
   static void callInvitationReceivedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationReceived == null) return;
 
-    ZIMCallInvitationReceivedInfo receivedInfo =
-        ZIMCallInvitationReceivedInfo();
-    receivedInfo.inviter = data["inviter"];
-    receivedInfo.extendedData = data["extendedData"];
-    receivedInfo.timeout = data["timeout"];
     String callID = data["callID"];
+    ZIMConverter.oZIMCallInvitationReceivedInfo(data);
 
-    ZIMEventHandler.onCallInvitationReceived!(zim, receivedInfo, callID);
+    ZIMEventHandler.onCallInvitationReceived!(zim, ZIMConverter.oZIMCallInvitationReceivedInfo(data), callID);
   }
 
   static void callInvitationCancelledHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationCancelled == null) return;
 
-    ZIMCallInvitationCancelledInfo cancelledInfo =
-        ZIMCallInvitationCancelledInfo();
-    cancelledInfo.inviter = data["inviter"];
-    cancelledInfo.extendedData = data["extendedData"];
     String callID = data["callID"];
 
-    ZIMEventHandler.onCallInvitationCancelled!(zim, cancelledInfo, callID);
+    ZIMEventHandler.onCallInvitationCancelled!(zim, ZIMConverter.oZIMCallInvitationCancelledInfo(data), callID);
   }
 
   static void callInvitationTimeoutHandle(ZIMEngine zim, dynamic data) {
@@ -1782,7 +1856,7 @@ class ZegoZimPlugin {
 
     String callID = data["callID"];
 
-    ZIMEventHandler.onCallInvitationTimeout!(zim, callID);
+    ZIMEventHandler.onCallInvitationTimeout!(zim, ZIMConverter.oZIMCallInvitationTimeoutInfo(data), callID);
   }
 
   static void callInvitationAcceptedHandle(ZIMEngine zim, dynamic data) {
@@ -1818,33 +1892,30 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInviteesAnsweredTimeout!(zim, invitees, callID);
   }
 
-  static void callStateChangedHandle(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onCallStateChanged == null) return;
-    ZIMCallStateChangeInfo callStateChangeInfo = ZIMCallStateChangeInfo();
-    callStateChangeInfo.callID = data["callID"];
-    callStateChangeInfo.state = ZIMCallStateExtension.mapValue[data["state"]]!;
-    callStateChangeInfo.callDuration = data["callDuration"];
-    callStateChangeInfo.userDuration = data["userDuration"];
-    callStateChangeInfo.extendedData = data["extendedData"];
-    callStateChangeInfo.timeout = data["timeout"];
-    callStateChangeInfo.callUserInfo = ZIMConverter.oZIMCallUserInfo(data['callUserInfo']);
-    ZIMEventHandler.onCallStateChanged!(zim, callStateChangeInfo);
-  }
+  // static void callStateChangedHandle(ZIMEngine zim, dynamic data) {
+  //   if (ZIMEventHandler.onCallStateChanged == null) return;
+  //   ZIMCallStateChangeInfo callStateChangeInfo = ZIMCallStateChangeInfo();
+  //   callStateChangeInfo.callID = data["callID"];
+  //   callStateChangeInfo.state = ZIMCallStateExtension.mapValue[data["state"]]!;
+  //   callStateChangeInfo.callDuration = data["callDuration"];
+  //   callStateChangeInfo.userDuration = data["userDuration"];
+  //   callStateChangeInfo.extendedData = data["extendedData"];
+  //   callStateChangeInfo.timeout = data["timeout"];
+  //   callStateChangeInfo.callUserInfo = ZIMConverter.oZIMCallUserInfo(data['callUserInfo']);
+  //   ZIMEventHandler.onCallStateChanged!(zim, callStateChangeInfo);
+  // }
 
   static void callUserStateChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallUserStateChanged == null) return;
 
-    String callID = data["callID"];
-    List <dynamic> userList = data["userList"];
-    List <ZIMCallUserInfo> _userList = [];
-    ZIMCallUserStateChangeInfo changeInfo = ZIMCallUserStateChangeInfo();
-    changeInfo.callID = data["callID"];
-    for (var map in userList) {
-      ZIMCallUserInfo info = ZIMConverter.oZIMCallUserInfo(map);
-      changeInfo.callUserList.add(info);
-    }
+    ZIMEventHandler.onCallUserStateChanged!(zim, ZIMConverter.oZIMCallUserStateChangedInfo(data));
+  }
 
-    ZIMEventHandler.onCallUserStateChanged!(zim, callID,changeInfo);
+  static void callInvitationEndedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onCallInvitationEnded == null) return;
+    String callID = data["callID"];
+
+    ZIMEventHandler.onCallInvitationEnded!(zim, ZIMConverter.oZIMCallInvitationEndedInfo(data), callID);
   }
 
   static void conversationChangedHandle(ZIMEngine zim, dynamic data) {
