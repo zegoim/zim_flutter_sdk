@@ -102,6 +102,10 @@ class ZIM {
       dynamic invitees, String callID, Object config);
   external PromiseJsImpl<dynamic> callAccept(String callID, Object config);
   external PromiseJsImpl<dynamic> callReject(String callID, Object config);
+  external PromiseJsImpl<dynamic> callQuit(String callID, Object config);
+  external PromiseJsImpl<dynamic> callEnd(String callID, Object config);
+  external PromiseJsImpl<dynamic> callingInvite(String callID, dynamic invitees, Object config);
+  external PromiseJsImpl<dynamic> queryCallList(Object config);
   external PromiseJsImpl<dynamic> queryRoomMemberAttributesList(
       String roomID, Object config);
   external PromiseJsImpl<dynamic> queryRoomMembersAttributes(

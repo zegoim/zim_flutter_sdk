@@ -13,12 +13,22 @@ import im.zego.zim.entity.ZIMCallAcceptConfig;
 import im.zego.zim.entity.ZIMCallCancelConfig;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
+import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
+import im.zego.zim.entity.ZIMCallQuitSentInfo;
+import im.zego.zim.entity.ZIMCallEndSentInfo;
+import im.zego.zim.entity.ZIMCallUserStateChangedInfo;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
+import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallInviteConfig;
+import im.zego.zim.entity.ZIMCallingInviteConfig;
 import im.zego.zim.entity.ZIMCallRejectConfig;
+import im.zego.zim.entity.ZIMQueryCallListConfig;
+import im.zego.zim.entity.ZIMCallQuitConfig;
+import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMCallUserInfo;
+import im.zego.zim.entity.ZIMCallInfo;
 import im.zego.zim.entity.ZIMCommandMessage;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
@@ -70,6 +80,7 @@ import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
 import im.zego.zim.entity.ZIMVideoMessage;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
+import im.zego.zim.enums.ZIMCallInvitationMode;
 import im.zego.zim.enums.ZIMMessageDirection;
 import im.zego.zim.enums.ZIMMessagePriority;
 import im.zego.zim.enums.ZIMMessageReceiptStatus;
@@ -152,6 +163,7 @@ public class ZIMPluginConverter {
 //        ArrayList
 //    }
 
+
     static public HashMap<String,Object> mZIMMessage(ZIMMessage message){
         HashMap<String,Object> messageMap = new HashMap<>();
         messageMap.put("type",message.getType().value());
@@ -168,6 +180,7 @@ public class ZIMPluginConverter {
         messageMap.put("isUserInserted",message.isUserInserted());
         messageMap.put("receiptStatus",message.getReceiptStatus().value());
         messageMap.put("extendedData",message.getExtendedData());
+        messageMap.put("localExtendedData",message.getLocalExtendedData());
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -477,11 +490,15 @@ public class ZIMPluginConverter {
             receiptStatusField.set(message, ZIMMessageReceiptStatus.getZIMMessageReceiptStatus(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("receiptStatus"))));
             receiptStatusField.setAccessible(false);
 
-
             Field extendedDataField = ZIMMessage.class.getDeclaredField("extendedData");
             extendedDataField.setAccessible(true);
             extendedDataField.set(message,messageMap.get("extendedData"));
             extendedDataField.setAccessible(false);
+
+            Field localExtendedDataField = ZIMMessage.class.getDeclaredField("localExtendedData");
+            localExtendedDataField.setAccessible(true);
+            localExtendedDataField.set(message,messageMap.get("localExtendedData"));
+            localExtendedDataField.setAccessible(false);
 
         }
         catch (NoSuchFieldException e) {
@@ -901,7 +918,14 @@ public class ZIMPluginConverter {
         ZIMCallInviteConfig config = new ZIMCallInviteConfig();
         config.timeout = ZIMPluginCommonTools.safeGetIntValue(configMap.get("timeout"));
         config.extendedData = (String) configMap.get("extendedData");
+        config.mode = ZIMCallInvitationMode.getZIMInvitationMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
+        return config;
+    }
+
+    static public ZIMCallingInviteConfig oZIMCallingInviteConfig(HashMap<String,Object> configMap){
+        ZIMCallingInviteConfig config = new ZIMCallingInviteConfig();
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
         return config;
     }
 
@@ -909,7 +933,32 @@ public class ZIMPluginConverter {
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("state",userInfo.state.value());
+        userInfoMap.put("extendedData",userInfo.extendedData);
         return userInfoMap;
+    }
+    
+    static public HashMap<String,Object> mZIMCallInfo(ZIMCallInfo callInfo){
+        HashMap<String,Object> callInfoMap = new HashMap<>();
+        callInfoMap.put("callID",callInfo.callID);
+        callInfoMap.put("caller",callInfo.caller);
+        callInfoMap.put("createTime",callInfo.createTime);
+        callInfoMap.put("endTime",callInfo.endTime);
+        callInfoMap.put("state",callInfo.state.value());
+        callInfoMap.put("mode",callInfo.mode.value());
+        callInfoMap.put("callUserList", mZIMCallUserInfoList(callInfo.callUserList));
+        callInfoMap.put("extendedData",callInfo.extendedData);
+//        callInfoMap.put("callDuration",callInfo.callDuration);
+//        callInfoMap.put("userDuration",callInfo.userDuration);
+        return callInfoMap;
+    }
+
+    static public ArrayList<HashMap<String ,Object>> mZIMCallInfoList(ArrayList<ZIMCallInfo> callInfoList){
+        ArrayList<HashMap<String ,Object>> basicInfoList = new ArrayList<>();
+        for (ZIMCallInfo callInfo :
+                callInfoList) {
+            basicInfoList.add(mZIMCallInfo(callInfo));
+        }
+        return basicInfoList;
     }
 
     static public ArrayList<HashMap<String ,Object>> mZIMCallUserInfoList(ArrayList<ZIMCallUserInfo> callUserInfoList){
@@ -924,8 +973,46 @@ public class ZIMPluginConverter {
     static public HashMap<String,Object> mZIMCallInvitationSentInfo(ZIMCallInvitationSentInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
+        infoMap.put("errorList",mZIMErrorUserInfoList(info.errorList));
         infoMap.put("errorInvitees", mZIMCallUserInfoList(info.errorInvitees));
+
         return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallingInvitationSentInfo(ZIMCallingInvitationSentInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("errorInvitees", mZIMErrorUserInfoList(info.errorInvitees));
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallQuitSentInfo(ZIMCallQuitSentInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("quitTime",info.quitTime);
+        infoMap.put("acceptTime",info.acceptTime);
+        infoMap.put("createTime",info.createTime);
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallEndSentInfo(ZIMCallEndSentInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("acceptTime",info.acceptTime);
+        infoMap.put("endTime",info.endTime);
+        infoMap.put("createTime",info.createTime);
+        return infoMap;
+    }
+
+    static public ZIMCallQuitConfig oZIMCallQuitConfig(HashMap<String,Object> configMap) {
+        ZIMCallQuitConfig config = new ZIMCallQuitConfig();
+        config.extendedData = (String) configMap.get("extendedData");
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
+    }
+
+    static public ZIMCallEndConfig oZIMCallEndConfig(HashMap<String,Object> configMap) {
+        ZIMCallEndConfig config = new ZIMCallEndConfig();
+        config.extendedData = (String) configMap.get("extendedData");
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
     }
 
     static public ZIMCallCancelConfig oZIMCallCancelConfig(HashMap<String,Object> configMap){
@@ -943,6 +1030,13 @@ public class ZIMPluginConverter {
     static public ZIMCallRejectConfig oZIMCallRejectConfig(HashMap<String,Object> configMap) {
         ZIMCallRejectConfig config = new ZIMCallRejectConfig();
         config.extendedData = (String) configMap.get("extendedData");
+        return config;
+    }
+
+    static public ZIMQueryCallListConfig oZIMQueryCallListConfig(HashMap<String,Object> configMap) {
+        ZIMQueryCallListConfig config = new ZIMQueryCallListConfig();
+        config.count = (Integer) configMap.get("count");
+        config.nextFlag = ZIMPluginCommonTools.safeGetLongValue(configMap.get("nextFlag"));
         return config;
     }
 
@@ -992,6 +1086,10 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
         infoMap.put("inviter",info.inviter);
+        infoMap.put("caller",info.caller);
+        infoMap.put("mode", info.mode.value());
+        infoMap.put("createTime",info.createTime);
+        infoMap.put("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
         infoMap.put("extendedData",info.extendedData);
         return infoMap;
     }
@@ -1000,6 +1098,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("inviter",info.inviter);
         infoMap.put("extendedData",info.extendedData);
+        infoMap.put("mode",info.mode.value());
         return infoMap;
     }
 
@@ -1014,6 +1113,23 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("invitee",info.invitee);
         infoMap.put("extendedData",info.extendedData);
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallInvitationEndedInfo(ZIMCallInvitationEndedInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("endTime", info.endTime);
+        infoMap.put("mode", info.mode.value());
+        infoMap.put("extendedData", info.extendedData);
+        infoMap.put("caller", info.caller);
+        infoMap.put("operatedUserID", info.operatedUserId);
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallUserStateChangeInfo(ZIMCallUserStateChangedInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("callID", info.callID);
+        infoMap.put("callUserList", mZIMCallUserInfoList(info.callUserList));
         return infoMap;
     }
 

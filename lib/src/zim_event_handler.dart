@@ -460,4 +460,10 @@ class ZIMEventHandler {
   /// Related callbacks:You can revoke message to other members via [ZIM.revokeMessage].
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
       onMessageRevokeReceived;
+
+  static void Function(ZIM zim, ZIMCallInvitationEndedInfo callInvitationEndedInfo, String callID)?
+  onCallInvitationEnded;
+
+  static void Function(ZIM zim, ZIMCallUserStateChangedInfo callUserStateChangedInfo)?
+      onCallUserStateChanged;
 }

@@ -24,7 +24,7 @@ class ZIMEngine implements ZIM {
     if (ZIMManager.destroyEngine(handle)) {
       channel.invokeMethod("destroy", {"handle": handle});
       // TODO: Remove another map
-      ZIMEventHandlerImpl.unregisterEventHandler();
+      // ZIMEventHandlerImpl.unregisterEventHandler();
     }
   }
 
@@ -894,4 +894,56 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMConversationQueriedResult(resultMap);
   }
 
+  @override
+  Future<ZIMMessageLocalExtendedDataUpdatedResult>
+  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message) async{
+    Map resultMap = await channel.invokeMethod('updateMessageLocalExtendedData', {
+      'handle': handle,
+      'localExtendedData': localExtendedData,
+      'message': ZIMConverter.mZIMMessage(message)
+    });
+    return ZIMConverter.oZIMMessageLocalExtendedDataUpdatedResult(resultMap);
+  }
+
+
+  @override
+  Future<ZIMCallEndSentResult> callEnd(
+      String callID, ZIMCallEndConfig config) async{
+    Map resultMap = await channel.invokeMethod('callEnd',{
+      'handle': handle,
+      'callID': callID,
+      'config': ZIMConverter.mZIMCallEndConfig(config)
+    });
+    return ZIMConverter.oZIMCallEndSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMCallQuitSentResult> callQuit(String callID, ZIMCallQuitConfig config) async {
+    Map resultMap = await channel.invokeMethod('callQuit',{
+      'handle': handle,
+      'callID': callID,
+      'config': ZIMConverter.mZIMCallQuitConfig(config)
+    });
+    return ZIMConverter.oZIMCallQuitSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMCallingInvitationSentResult> callingInvite(List<String> invitees, String callID,ZIMCallingInviteConfig config) async {
+    Map resultMap = await channel.invokeMethod('callingInvite',{
+      'handle': handle,
+      'invitees': invitees,
+      'callID': callID,
+      'config': ZIMConverter.mZIMCallingInviteConfig(config)
+    });
+    return ZIMConverter.oZIMCallingInvitationSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMCallListQueriedResult> queryCallList(ZIMQueryCallListConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryCallList',{
+      'handle': handle,
+      'config': ZIMConverter.mZIMQueryCallListConfig(config)
+    });
+    return ZIMConverter.oZIMCallListQueriedResult(resultMap);
+  }
 }
