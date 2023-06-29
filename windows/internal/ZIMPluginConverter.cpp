@@ -934,6 +934,12 @@ FTMap ZIMPluginConverter::cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserS
 	return sentInfoMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvitationTimeoutInfo& info){
+	FTMap sentInfoMap;
+    sentInfoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
+	return sentInfoMap;
+}
+
 ZIMRoomAdvancedConfig ZIMPluginConverter::cnvZIMRoomAdvancedConfigToObject(FTMap configMap) {
 	ZIMRoomAdvancedConfig config;
 	config.roomDestroyDelayTime = std::get<int32_t>(configMap[FTValue("roomDestroyDelayTime")]);

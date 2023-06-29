@@ -201,6 +201,7 @@ public:
     static FTMap cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingInvitationSentInfo& info);
     static FTMap cnvZIMCallInvitationEndedInfoToMap(const ZIMCallInvitationEndedInfo& info);
     static FTMap cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangedInfo& info);
+    static FTMap cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvitationTimeoutInfo& info);
 
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);

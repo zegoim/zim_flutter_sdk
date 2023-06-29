@@ -497,13 +497,14 @@ void ZIMPluginEventHandler::onCallInvitationRejected(ZIM* zim,
     }
 }
 
-void ZIMPluginEventHandler::onCallInvitationTimeout(ZIM* zim, const std::string& callID) {
+void ZIMPluginEventHandler::onCallInvitationTimeout(ZIM* zim, const ZIMCallInvitationTimeoutInfo &info,const std::string& callID) {
     if (eventSink_) {
         FTMap retMap;
         retMap[FTValue("method")] = FTValue("onCallInvitationTimeout");
         auto handle = this->engineEventMap[zim];
         retMap[FTValue("handle")] = FTValue(handle);
         retMap[FTValue("callID")] = FTValue(callID);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallInvitationTimeoutInfoToMap(info);
 
         eventSink_->Success(retMap);
     }
