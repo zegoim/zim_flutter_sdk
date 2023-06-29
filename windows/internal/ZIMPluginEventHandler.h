@@ -134,7 +134,7 @@ protected:
         const ZIMCallInvitationRejectedInfo& info,
         const std::string& callID);
 
-    void onCallInvitationTimeout(ZIM* zim, const std::string& callID);
+    void onCallInvitationTimeout(ZIM* zim, const ZIMCallInvitationTimeoutInfo &info,const std::string& callID);
 
     void onCallInviteesAnsweredTimeout(ZIM* zim,
         const std::vector<std::string>& invitees,
