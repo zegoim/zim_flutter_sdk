@@ -1045,4 +1045,13 @@
     return infoDic;
 }
 
++(nullable NSDictionary *)mZIMCallInvitationTimeoutInfo:(nullable ZIMCallInvitationTimeoutInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
+    return infoDic;
+}
+
 @end

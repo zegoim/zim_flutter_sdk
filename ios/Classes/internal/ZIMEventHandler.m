@@ -518,12 +518,12 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
-- (void)zim:(ZIM *)zim callInvitationTimeout:(NSString *)callID{
-    
+- (void)zim:(ZIM *)zim callInvitationTimeout:(ZIMCallInvitationTimeoutInfo *)info callID:(NSString *)callID{
     NSString *handle = [_engineEventMap objectForKey:zim];
     
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:@"onCallInvitationTimeout" forKey:@"method"];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMCallInvitationTimeoutInfo:info] forKey:@"info"];
     [resultDic safeSetObject:callID forKey:@"callID"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
