@@ -16,6 +16,7 @@ import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
 import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
+import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
 import im.zego.zim.entity.ZIMCallQuitSentInfo;
 import im.zego.zim.entity.ZIMCallEndSentInfo;
 import im.zego.zim.entity.ZIMCallUserStateChangedInfo;
@@ -1123,6 +1124,12 @@ public class ZIMPluginConverter {
         infoMap.put("extendedData", info.extendedData);
         infoMap.put("caller", info.caller);
         infoMap.put("operatedUserID", info.operatedUserId);
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallInvitationTimeoutInfo(ZIMCallInvitationTimeoutInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("mode", info.mode.value());
         return infoMap;
     }
 

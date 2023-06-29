@@ -12,6 +12,7 @@ import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
 import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
+import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
 import im.zego.zim.entity.ZIMCallUserStateChangedInfo;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMError;
@@ -486,7 +487,8 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onCallInvitationTimeout(ZIM zim, String callID) {
+    public void onCallInvitationTimeout(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID) {
+        super.onCallInvitationTimeout(zim, info, callID);
         if(mysink == null){
             return;
         }
@@ -495,10 +497,12 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
 
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallInvitationTimeout");
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationTimeoutInfo(info));
         resultMap.put("handle", handle);
         resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
+
 
     @Override
     public void onCallInviteesAnsweredTimeout(ZIM zim, ArrayList<String> invitees, String callID) {
