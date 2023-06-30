@@ -385,6 +385,7 @@ class ZIMEventHandler {
           ZIM zim, ZIMCallInvitationCancelledInfo info, String callID)?
       onCallInvitationCancelled;
 
+  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
   /// Supported versions: 2.0.0 and above.
   ///
   /// Detail description: After the invitee accepts the call invitation, this callback will be received when the inviter is online.
@@ -404,6 +405,7 @@ class ZIMEventHandler {
           ZIM zim, ZIMCallInvitationAcceptedInfo info, String callID)?
       onCallInvitationAccepted;
 
+  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
   /// Available since: 2.0.0 and above.
   ///
   /// Description: This callback will be received when the inviter is online after the inviter rejects the call invitation.
@@ -442,6 +444,7 @@ class ZIMEventHandler {
   /// [callID]  callID.
   static void Function(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID)? onCallInvitationTimeout;
 
+  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
   /// Supported versions: 2.0.0 and above.
   ///
   /// Detail description: When the call invitation times out, the invitee does not respond, and the inviter will receive a callback.
