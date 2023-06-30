@@ -2006,6 +2006,7 @@ class ZegoZimPlugin {
     final _infos = data["infos"];
     _infos.forEach((info) {
       info["message"] = convertZIMMessage(info["message"]);
+      info["reason"] = info["reason"] is String ? info["reason"]: "";
     });
     List<ZIMMessageSentStatusChangeInfo> infos =
         ZIMConverter.oMessageSentStatusChangeInfoList(_infos);
