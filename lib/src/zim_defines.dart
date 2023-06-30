@@ -322,7 +322,7 @@ enum ZIMCallInvitationMode {
   advanced,
 }
 
-enum ZIMCallState { start, end, cancelled }
+enum ZIMCallState { unknown,started, ended }
 
 class ZIMGroupMemberRole {
   static const int owner = 1;
@@ -681,13 +681,10 @@ class ZIMCallInfo {
   String callID ="";
   String caller = "";
   ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
-  ZIMCallState state = ZIMCallState.start;
+  ZIMCallState state = ZIMCallState.started;
   String extendedData = "";
   int createTime = 0;
   int endTime = 0;
-  // int timeout = 0;
-  // int callDuration = 0;
-  // int userDuration = 0;
   List<ZIMCallUserInfo> callUserList = [];
   ZIMCallInfo();
 }
@@ -881,7 +878,7 @@ class ZIMCallUserInfo {
   String userID = '';
 
   /// Description:  user status.
-  ZIMCallUserState state = ZIMCallUserState.accepted;
+  ZIMCallUserState state = ZIMCallUserState.inviting;
 
   String extendedData = '';
   ZIMCallUserInfo();
@@ -944,20 +941,18 @@ class ZIMCallEndConfig {
 
 class ZIMCallingInviteConfig {
 
-  String extendedData = "";
-
   ZIMPushConfig? pushConfig;
 
   ZIMCallingInviteConfig();
 }
 
-class ZIMQueryCallListConfig {
+class ZIMCallInvitationListQueryConfig {
 
   int count = 0;
 
   int nextFlag = 0;
 
-  ZIMQueryCallListConfig();
+  ZIMCallInvitationListQueryConfig();
 }
 
 /// Call invitation sent message.
@@ -966,8 +961,9 @@ class ZIMCallInvitationSentInfo {
   int timeout = 0;
 
   /// Description: User id that has not received a call invitation.
-  List<ZIMErrorUserInfo> errorList = [];
+  List<ZIMErrorUserInfo> errorUserList = [];
 
+  /// Deprecated since ZIM 2.9.0
   List<ZIMCallUserInfo> errorInvitees = [];
 
   ZIMCallInvitationSentInfo();
@@ -976,7 +972,7 @@ class ZIMCallInvitationSentInfo {
 /// Call invitation sent message.
 class ZIMCallingInvitationSentInfo {
   /// Description: User id that has not received a call invitation.
-  List<ZIMErrorUserInfo> errorInvitees = [];
+  List<ZIMErrorUserInfo> errorUserList = [];
   ZIMCallingInvitationSentInfo();
 }
 
@@ -1784,10 +1780,10 @@ class ZIMCallEndSentResult {
   ZIMCallEndSentResult({required this.callID, required this.info});
 }
 
-class ZIMCallListQueriedResult {
+class ZIMCallInvitationListQueriedResult {
   List<ZIMCallInfo> callList;
   int nextFlag;
-  ZIMCallListQueriedResult({required this.callList, required this.nextFlag});
+  ZIMCallInvitationListQueriedResult({required this.callList, required this.nextFlag});
 }
 
 class ZIMConversationMessageReceiptReadSentResult {

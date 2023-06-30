@@ -1907,8 +1907,8 @@ class ZegoZimPlugin {
 
   static void callUserStateChangedHandle(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallUserStateChanged == null) return;
-
-    ZIMEventHandler.onCallUserStateChanged!(zim, ZIMConverter.oZIMCallUserStateChangedInfo(data));
+    ZIMCallUserStateChangedInfo callUserStateChangedInfo = ZIMConverter.oZIMCallUserStateChangedInfo(data);
+    ZIMEventHandler.onCallUserStateChanged!(zim, ZIMConverter.oZIMCallUserStateChangedInfo(data),callUserStateChangedInfo.callID);
   }
 
   static void callInvitationEndedHandle(ZIMEngine zim, dynamic data) {

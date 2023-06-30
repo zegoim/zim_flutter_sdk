@@ -343,12 +343,14 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
 
 extension ZIMCallStateExtension on ZIMCallState {
   static const valueMap = {
-    ZIMCallState.start: 1,
-    ZIMCallState.end: 2,
+    ZIMCallState.unknown: -1,
+    ZIMCallState.started: 1,
+    ZIMCallState.ended: 2,
   };
   static const mapValue = {
-    1: ZIMCallState.start,
-    2: ZIMCallState.end,
+    -1: ZIMCallState.unknown,
+    1: ZIMCallState.started,
+    2: ZIMCallState.ended,
   };
 
   int get value => valueMap[this] ?? -1;
