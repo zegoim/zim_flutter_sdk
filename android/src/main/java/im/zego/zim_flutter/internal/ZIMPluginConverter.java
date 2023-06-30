@@ -138,6 +138,7 @@ public class ZIMPluginConverter {
         messageSentStatusChangeInfoMap.put("status",messageSentStatusChangeInfo.status.value());
 
         messageSentStatusChangeInfoMap.put("message", mZIMMessage(messageSentStatusChangeInfo.message));
+        messageSentStatusChangeInfoMap.put("reason", messageSentStatusChangeInfo.reason);
         return messageSentStatusChangeInfoMap;
     }
 

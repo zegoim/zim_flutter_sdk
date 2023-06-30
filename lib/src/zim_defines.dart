@@ -620,6 +620,7 @@ class ZIMConversationChangeInfo {
 class ZIMMessageSentStatusChangeInfo {
   ZIMMessageSentStatus status = ZIMMessageSentStatus.sending;
   ZIMMessage? message;
+  String reason = '';
   ZIMMessageSentStatusChangeInfo();
 }
 

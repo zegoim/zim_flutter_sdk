@@ -182,6 +182,7 @@
     [changeInfoDic safeSetObject:[NSNumber numberWithInt:(int)changeInfo.status] forKey:@"status"];
     NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:changeInfo.message];
     [changeInfoDic safeSetObject:messageDic forKey:@"message"];
+    [changeInfoDic safeSetObject:changeInfo.reason forKey:@"reason"];
     return changeInfoDic;
 }
 

@@ -463,6 +463,7 @@ class ZIMConverter {
 
     Map messageMap = messageSentStatusChangeInfoMap['message'];
     messageSentStatusChangeInfo.message = oZIMMessage(messageMap);
+    messageSentStatusChangeInfo.reason = messageSentStatusChangeInfoMap['reason'];
     return messageSentStatusChangeInfo;
   }
 
