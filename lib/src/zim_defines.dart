@@ -318,6 +318,7 @@ enum ZIMCallUserState {
 }
 
 enum ZIMCallInvitationMode {
+  unknown,
   general,
   advanced,
 }
