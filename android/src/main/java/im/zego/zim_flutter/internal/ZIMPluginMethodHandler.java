@@ -11,8 +11,8 @@ import java.util.Objects;
 import im.zego.zim.ZIM;
 import im.zego.zim.callback.ZIMCallAcceptanceSentCallback;
 import im.zego.zim.callback.ZIMCallCancelSentCallback;
+import im.zego.zim.callback.ZIMCallInvitationListQueriedCallback;
 import im.zego.zim.callback.ZIMCallInvitationSentCallback;
-import im.zego.zim.callback.ZIMCallListQueriedCallback;
 import im.zego.zim.callback.ZIMCallingInvitationSentCallback;
 import im.zego.zim.callback.ZIMCallRejectionSentCallback;
 import im.zego.zim.callback.ZIMCallQuitSentCallback;
@@ -79,15 +79,15 @@ import im.zego.zim.entity.ZIMAppConfig;
 import im.zego.zim.entity.ZIMCacheConfig;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
 import im.zego.zim.entity.ZIMCallCancelConfig;
-import im.zego.zim.entity.ZIMCallEndSentInfo;
+import im.zego.zim.entity.ZIMCallEndedSentInfo;
 import im.zego.zim.entity.ZIMCallInfo;
+import im.zego.zim.entity.ZIMCallInvitationListQueryConfig;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallInviteConfig;
 import im.zego.zim.entity.ZIMCallQuitSentInfo;
 import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallingInviteConfig;
 import im.zego.zim.entity.ZIMCallRejectConfig;
-import im.zego.zim.entity.ZIMQueryCallListConfig;
 import im.zego.zim.entity.ZIMCallQuitConfig;
 import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMConversation;
@@ -2223,11 +2223,14 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
+
         String callID = call.argument("callID");
+
         ZIMCallEndConfig config = ZIMPluginConverter.oZIMCallEndConfig(Objects.requireNonNull(call.argument("config")));
+
         zim.callEnd(callID, config, new ZIMCallEndSentCallback() {
             @Override
-            public void onCallEndSent(String callID, ZIMCallEndSentInfo info, ZIMError errorInfo) {
+            public void onCallEndSent(String callID, ZIMCallEndedSentInfo info, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
 
@@ -2325,6 +2328,8 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+
+
     public static void queryCallList(MethodCall call,Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
@@ -2332,15 +2337,14 @@ public class ZIMPluginMethodHandler {
             result.error("-1", "no native instance",null);
             return;
         }
-        
-        ZIMQueryCallListConfig config = ZIMPluginConverter.oZIMQueryCallListConfig(Objects.requireNonNull(call.argument("config")));
 
-        zim.queryCallList(config, new ZIMCallListQueriedCallback() {
+        ZIMCallInvitationListQueryConfig config = ZIMPluginConverter.oZIMQueryCallListConfig(Objects.requireNonNull(call.argument("config")));
+        zim.queryCallInvitationList(config, new ZIMCallInvitationListQueriedCallback() {
             @Override
-            public void onCallListQueried(ArrayList<ZIMCallInfo> callInfos, long nextFlag, ZIMError errorInfo) {
+            public void onCallInvitationListQueried(ArrayList<ZIMCallInfo> callList, long nextFlag, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
-                    resultMap.put("callList",ZIMPluginConverter.mZIMCallInfoList(callInfos));
+                    resultMap.put("callList",ZIMPluginConverter.mZIMCallInfoList(callList));
                     resultMap.put("nextFlag",nextFlag);
                     result.success(resultMap);
                 }

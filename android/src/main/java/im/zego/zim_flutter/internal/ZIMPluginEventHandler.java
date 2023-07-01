@@ -537,17 +537,18 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangedInfo info) {
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangedInfo info, String callID) {
+        super.onCallUserStateChanged(zim, info, callID);
         if(mysink == null){
             return;
         }
-
         String handle = engineMapForCallback.get(zim);
 
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallUserStateChanged");
         resultMap.put("handle", handle);
         resultMap.put("info",ZIMPluginConverter.mZIMCallUserStateChangeInfo(info));
+        resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
 

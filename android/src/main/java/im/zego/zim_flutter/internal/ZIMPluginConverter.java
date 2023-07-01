@@ -11,6 +11,7 @@ import im.zego.zim.entity.ZIMAudioMessage;
 import im.zego.zim.entity.ZIMBarrageMessage;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
 import im.zego.zim.entity.ZIMCallCancelConfig;
+import im.zego.zim.entity.ZIMCallEndedSentInfo;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
 import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
@@ -18,14 +19,12 @@ import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
 import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
 import im.zego.zim.entity.ZIMCallQuitSentInfo;
-import im.zego.zim.entity.ZIMCallEndSentInfo;
 import im.zego.zim.entity.ZIMCallUserStateChangedInfo;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallInviteConfig;
 import im.zego.zim.entity.ZIMCallingInviteConfig;
 import im.zego.zim.entity.ZIMCallRejectConfig;
-import im.zego.zim.entity.ZIMQueryCallListConfig;
 import im.zego.zim.entity.ZIMCallQuitConfig;
 import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMCallUserInfo;
@@ -89,6 +88,7 @@ import im.zego.zim.enums.ZIMMessageRevokeStatus;
 import im.zego.zim.enums.ZIMMessageSentStatus;
 import im.zego.zim.enums.ZIMMessageType;
 import im.zego.zim.enums.ZIMRevokeType;
+import im.zego.zim.entity.ZIMCallInvitationListQueryConfig;
 
 @SuppressWarnings({"unused","deprecation,unchecked,all"})
 public class ZIMPluginConverter {
@@ -975,7 +975,7 @@ public class ZIMPluginConverter {
     static public HashMap<String,Object> mZIMCallInvitationSentInfo(ZIMCallInvitationSentInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
-        infoMap.put("errorList",mZIMErrorUserInfoList(info.errorList));
+        infoMap.put("errorList",mZIMErrorUserInfoList(info.errorUserList));
         infoMap.put("errorInvitees", mZIMCallUserInfoList(info.errorInvitees));
 
         return infoMap;
@@ -983,7 +983,7 @@ public class ZIMPluginConverter {
 
     static public HashMap<String,Object> mZIMCallingInvitationSentInfo(ZIMCallingInvitationSentInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
-        infoMap.put("errorInvitees", mZIMErrorUserInfoList(info.errorInvitees));
+        infoMap.put("errorInvitees", mZIMErrorUserInfoList(info.errorUserList));
         return infoMap;
     }
 
@@ -995,7 +995,7 @@ public class ZIMPluginConverter {
         return infoMap;
     }
 
-    static public HashMap<String,Object> mZIMCallEndSentInfo(ZIMCallEndSentInfo info){
+    static public HashMap<String,Object> mZIMCallEndSentInfo(ZIMCallEndedSentInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("acceptTime",info.acceptTime);
         infoMap.put("endTime",info.endTime);
@@ -1035,8 +1035,8 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ZIMQueryCallListConfig oZIMQueryCallListConfig(HashMap<String,Object> configMap) {
-        ZIMQueryCallListConfig config = new ZIMQueryCallListConfig();
+    static public ZIMCallInvitationListQueryConfig oZIMQueryCallListConfig(HashMap<String,Object> configMap) {
+        ZIMCallInvitationListQueryConfig config = new ZIMCallInvitationListQueryConfig();
         config.count = (Integer) configMap.get("count");
         config.nextFlag = ZIMPluginCommonTools.safeGetLongValue(configMap.get("nextFlag"));
         return config;

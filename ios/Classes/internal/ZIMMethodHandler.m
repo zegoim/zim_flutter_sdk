@@ -1889,7 +1889,7 @@
     
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     ZIMCallEndConfig *config = [ZIMPluginConverter oZIMCallEndConfig:[call.arguments safeObjectForKey:@"config"]];
-    [zim callEnd:callID config:config callback:^(NSString *callID, ZIMCallEndSentInfo *info,
+    [zim callEnd:callID config:config callback:^(NSString *callID, ZIMCallEndedSentInfo *info,
                                        ZIMError *errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
@@ -1904,6 +1904,8 @@
     }];
 }
 
+
+
 - (void)queryCallList:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
@@ -1912,8 +1914,9 @@
         return;
     }
     
-    ZIMQueryCallListConfig *config = [ZIMPluginConverter oZIMQueryCallListConfig:[call.arguments safeObjectForKey:@"config"]];
-    [zim queryCallListWithConfig:config callback:^(NSArray<ZIMCallInfo *> * _Nonnull callList, long long nextFlag, ZIMError * _Nonnull errorInfo) {
+    ZIMCallInvitationListQueryConfig *config = [ZIMPluginConverter oZIMQueryCallListConfig:[call.arguments safeObjectForKey:@"config"]];
+    
+    [zim queryCallInvitationListWithConfig:config callback:^(NSArray<ZIMCallInfo *> * _Nonnull callList, long long nextFlag, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSArray *basicCallInfoList = [ZIMPluginConverter mZIMCallInfoList:callList];
             
