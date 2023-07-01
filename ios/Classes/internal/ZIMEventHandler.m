@@ -568,7 +568,6 @@ fromGroupID:(NSString *)fromGroupID{
     NSString *handle = [_engineEventMap objectForKey:zim];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
-    [infoDic safeSetObject:info.callID forKey:@"callID"];
     [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
     [resultDic safeSetObject:@"onCallUserStateChanged" forKey:@"method"];
     [resultDic safeSetObject:infoDic forKey:@"info"];

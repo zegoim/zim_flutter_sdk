@@ -1057,8 +1057,7 @@ class ZIMCallInvitationEndedInfo{
   int endTime = 0;
 }
 
-class ZIMCallUserStateChangedInfo{
-  String callID = "";
+class ZIMCallUserStateChangeInfo{
   List<ZIMCallUserInfo> callUserList = [];
 }
 

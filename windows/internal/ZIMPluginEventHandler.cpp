@@ -539,7 +539,7 @@ void ZIMPluginEventHandler::onCallInvitationEnded(ZIM* zim, const ZIMCallInvitat
     }
 }
 
-void ZIMPluginEventHandler::onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangedInfo& info, const std::string & callID) {
+void ZIMPluginEventHandler::onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo& info, const std::string & callID) {
     if (eventSink_) {
         FTMap retMap;
         retMap[FTValue("method")] = FTValue("onCallUserStateChanged");

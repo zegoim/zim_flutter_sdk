@@ -467,6 +467,6 @@ class ZIMEventHandler {
   static void Function(ZIM zim, ZIMCallInvitationEndedInfo callInvitationEndedInfo, String callID)?
   onCallInvitationEnded;
 
-  static void Function(ZIM zim, ZIMCallUserStateChangedInfo callUserStateChangedInfo, String callID)?
+  static void Function(ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID)?
       onCallUserStateChanged;
 }

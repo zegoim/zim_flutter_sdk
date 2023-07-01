@@ -1340,10 +1340,9 @@ class ZIMConverter {
     return info;
   }
 
-  static ZIMCallUserStateChangedInfo oZIMCallUserStateChangedInfo(Map callUserStateChangedInfoMap) {
+  static ZIMCallUserStateChangeInfo oZIMCallUserStateChangedInfo(Map callUserStateChangedInfoMap) {
 
-    ZIMCallUserStateChangedInfo callUserStateChangedInfo = ZIMCallUserStateChangedInfo();
-    callUserStateChangedInfo.callID = callUserStateChangedInfoMap['callID'];
+    ZIMCallUserStateChangeInfo callUserStateChangedInfo = ZIMCallUserStateChangeInfo();
     callUserStateChangedInfo.callUserList = oZIMCallUserInfoList(callUserStateChangedInfoMap['callUserList']);
 
     return callUserStateChangedInfo;

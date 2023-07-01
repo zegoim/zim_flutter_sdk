@@ -13,7 +13,7 @@ import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
 import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
-import im.zego.zim.entity.ZIMCallUserStateChangedInfo;
+import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMError;
 import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
@@ -537,7 +537,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangedInfo info, String callID) {
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID) {
         super.onCallUserStateChanged(zim, info, callID);
         if(mysink == null){
             return;

@@ -1134,9 +1134,8 @@ public class ZIMPluginConverter {
         return infoMap;
     }
 
-    static public HashMap<String,Object> mZIMCallUserStateChangeInfo(ZIMCallUserStateChangedInfo info){
+    static public HashMap<String,Object> mZIMCallUserStateChangeInfo(ZIMCallUserStateChangeInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
-        infoMap.put("callID", info.callID);
         infoMap.put("callUserList", mZIMCallUserInfoList(info.callUserList));
         return infoMap;
     }

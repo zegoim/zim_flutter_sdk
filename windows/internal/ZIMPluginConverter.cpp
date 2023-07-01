@@ -928,9 +928,8 @@ FTMap ZIMPluginConverter::cnvZIMCallInvitationEndedInfoToMap(const ZIMCallInvita
 	return sentInfoMap;
 }
 
-FTMap ZIMPluginConverter::cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangedInfo& info){
+FTMap ZIMPluginConverter::cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangeInfo& info){
 	FTMap sentInfoMap;
-    sentInfoMap[FTValue("callID")] = FTValue(info.callID);
     sentInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(info.callUserList);
 	return sentInfoMap;
 }

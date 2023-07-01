@@ -200,7 +200,7 @@ public:
     static FTMap cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info);
     static FTMap cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingInvitationSentInfo& info);
     static FTMap cnvZIMCallInvitationEndedInfoToMap(const ZIMCallInvitationEndedInfo& info);
-    static FTMap cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangedInfo& info);
+    static FTMap cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangeInfo& info);
     static FTMap cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvitationTimeoutInfo& info);
 
 public:

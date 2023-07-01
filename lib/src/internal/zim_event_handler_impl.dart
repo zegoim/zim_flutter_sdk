@@ -316,10 +316,11 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onCallUserStateChanged':
         if(ZIMEventHandler.onCallUserStateChanged == null) return;
-        ZIMCallUserStateChangedInfo userStateChangedInfo = ZIMConverter.oZIMCallUserStateChangedInfo(map['info']);
+        ZIMCallUserStateChangeInfo userStateChangedInfo = ZIMConverter.oZIMCallUserStateChangedInfo(map['info']);
+        String callID = map['callID'];
         ZIMEventHandler.onCallUserStateChanged!(
             zim!,
-            ZIMConverter.oZIMCallUserStateChangedInfo(map['info']),userStateChangedInfo.callID);
+            ZIMConverter.oZIMCallUserStateChangedInfo(map['info']),callID);
         break;
       default:
         break;
