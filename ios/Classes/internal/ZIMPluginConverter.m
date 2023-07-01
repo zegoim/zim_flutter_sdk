@@ -879,11 +879,11 @@
     return config;
 }
 
-+(nullable ZIMQueryCallListConfig *)oZIMQueryCallListConfig:(nullable NSDictionary *)configDic{
++(nullable ZIMCallInvitationListQueryConfig *)oZIMQueryCallListConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
-    ZIMQueryCallListConfig *queryConfig = [[ZIMQueryCallListConfig alloc] init];
+    ZIMCallInvitationListQueryConfig *queryConfig = [[ZIMCallInvitationListQueryConfig alloc] init];
     queryConfig.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
     queryConfig.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] longLongValue];
     return queryConfig;
@@ -897,7 +897,7 @@
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
     [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.errorInvitees] forKey:@"errorInvitees"];
-    [infoDic safeSetObject:[ZIMPluginConverter mZIMErrorUserInfoList:info.errorList] forKey:@"errorList"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMErrorUserInfoList:info.errorUserList] forKey:@"errorList"];
     return infoDic;
 }
 
@@ -906,7 +906,7 @@
         return nil;
     }
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
-    [infoDic safeSetObject:[ZIMPluginConverter mZIMErrorUserInfoList:info.errorInvitees] forKey:@"errorInvitees"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMErrorUserInfoList:info.errorUserList] forKey:@"errorInvitees"];
     return infoDic;
 }
 
@@ -921,7 +921,7 @@
     return infoDic;
 }
 
-+(nullable NSDictionary *)mZIMCallEndSentInfo:(nullable ZIMCallEndSentInfo *)info{
++(nullable NSDictionary *)mZIMCallEndSentInfo:(nullable ZIMCallEndedSentInfo *)info{
     if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
         return nil;
     }
