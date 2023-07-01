@@ -143,7 +143,7 @@ protected:
     void onCallInvitationEnded(ZIM* zim, const ZIMCallInvitationEndedInfo& info,
         const std::string& callID);
 
-    void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangedInfo& info);
+    void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangedInfo& info, const std::string & callID);
 
 
 private:

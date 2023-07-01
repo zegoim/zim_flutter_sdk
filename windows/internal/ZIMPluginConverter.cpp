@@ -839,7 +839,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& group
 FTMap ZIMPluginConverter::cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInfo) {
 	FTMap userInfoMap;
 	userInfoMap[FTValue("userID")] = FTValue(userInfo.userID);
-	userInfoMap[FTValue("state")] = FTValue((int32_t)userInfo.userState);
+	userInfoMap[FTValue("state")] = FTValue((int32_t)userInfo.state);
 	userInfoMap[FTValue("extendedData")] = FTValue(userInfo.extendedData);
 	return userInfoMap;
 }
@@ -861,7 +861,7 @@ FTMap ZIMPluginConverter::cnvZIMCallInfoToMap(const ZIMCallInfo& callInfo) {
 	return callInfoMap;
 }
 
-FTMap ZIMPluginConverter::cnvZIMCallEndSentInfoToMap(const ZIMCallEndSentInfo& callEndSentInfo) {
+FTMap ZIMPluginConverter::cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo& callEndSentInfo) {
 	FTMap callInfoMap;
     callInfoMap[FTValue("createTime")] = FTValue((int64_t)callEndSentInfo.createTime);
 	callInfoMap[FTValue("acceptTime")] = FTValue((int64_t)callEndSentInfo.acceptTime);
@@ -905,7 +905,7 @@ FTArray ZIMPluginConverter::cnvZIMCallUserInfoListToArray(const std::vector<ZIMC
 FTMap ZIMPluginConverter::cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info) {
 	FTMap sentInfoMap;
 	sentInfoMap[FTValue("timeout")] = FTValue((int32_t)info.timeout);
-	sentInfoMap[FTValue("errorList")] = cnvZIMErrorUserInfoListToArray(info.errorList);
+	sentInfoMap[FTValue("errorList")] = cnvZIMErrorUserInfoListToArray(info.errorUserList);
 	sentInfoMap[FTValue("errorInvitees")] = cnvZIMCallUserInfoListToArray(info.errorInvitees);
 
 	return sentInfoMap;
@@ -913,7 +913,7 @@ FTMap ZIMPluginConverter::cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitat
 
 FTMap ZIMPluginConverter::cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingInvitationSentInfo& info) {
 	FTMap sentInfoMap;
-	sentInfoMap[FTValue("errorInvitees")] = cnvZIMErrorUserInfoListToArray(info.errorInvitees);
+	sentInfoMap[FTValue("errorInvitees")] = cnvZIMErrorUserInfoListToArray(info.errorUserList);
 
 	return sentInfoMap;
 }

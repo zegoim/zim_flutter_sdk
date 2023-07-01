@@ -194,7 +194,7 @@ public:
     static FTArray cnvZIMGroupAttributesUpdateInfoListToArray(const std::vector<ZIMGroupAttributesUpdateInfo>& updateInfoList);
     static FTMap cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInfo);
     static FTMap cnvZIMCallInfoToMap(const ZIMCallInfo& userInfo);
-    static FTMap cnvZIMCallEndSentInfoToMap(const ZIMCallEndSentInfo& callEndSentInfo);
+    static FTMap cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo& callEndSentInfo);
     static FTMap cnvZIMCallQuitSentInfoToMap(const ZIMCallQuitSentInfo& callQuitSentInfo);
     static FTArray cnvZIMCallUserInfoListToArray(const std::vector<ZIMCallUserInfo>& callUserList);
     static FTMap cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info);
