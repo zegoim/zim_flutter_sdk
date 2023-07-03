@@ -459,6 +459,7 @@ class ZIMMessage {
   bool isUserInserted = false;
   ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
   String extendedData = "";
+  List<ZIMMessageReaction> reactions = [];
 }
 
 class ZIMTextMessage extends ZIMMessage {
@@ -1719,5 +1720,8 @@ class ZIMDeleteMessageReactionResult {
 
 class ZIMReactionUsersQueryResult {
   List<ZIMReactionUserInfo> userInfos;
-  ZIMReactionUsersQueryResult({required this.userInfos});
+  String reactionType;
+  int totalCount;
+  int nextFlag;
+  ZIMReactionUsersQueryResult({required this.reactionType,required this.userInfos,required this.nextFlag,required this.totalCount});
 }

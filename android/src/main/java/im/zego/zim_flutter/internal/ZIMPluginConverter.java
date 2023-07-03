@@ -41,6 +41,9 @@ import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
+import im.zego.zim.entity.ZIMMessageReaction;
+import im.zego.zim.entity.ZIMMessageReactionUserInfo;
+import im.zego.zim.entity.ZIMMessageReactionUsersQueryConfig;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageRevokeConfig;
 import im.zego.zim.entity.ZIMMessageSendConfig;
@@ -168,6 +171,7 @@ public class ZIMPluginConverter {
         messageMap.put("isUserInserted",message.isUserInserted());
         messageMap.put("receiptStatus",message.getReceiptStatus().value());
         messageMap.put("extendedData",message.getExtendedData());
+        messageMap.put("reactions",mZIMMessageReactionList(message.getReactions()));
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -1029,5 +1033,46 @@ public class ZIMPluginConverter {
         revokeConfig.revokeExtendedData = (String) configMap.get("revokeExtendedData");
         revokeConfig.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         return revokeConfig;
+    }
+
+    public static HashMap<String,Object> mZIMMessageReaction(ZIMMessageReaction reaction) {
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("userInfos",mZIMMessageReactionUserInfoList(reaction.userInfos));
+        infoMap.put("conversationID",reaction.conversationID);
+        infoMap.put("conversationType",reaction.conversationType.value());
+        infoMap.put("messageID",reaction.messageID);
+        infoMap.put("totalCount",reaction.totalCount);
+        infoMap.put("reactionType",reaction.reactionType);
+        infoMap.put("hasOwner",reaction.hasOwner);
+        return infoMap;
+    }
+
+    public static ArrayList<HashMap<String,Object>> mZIMMessageReactionUserInfoList(ArrayList<ZIMMessageReactionUserInfo> userInfos) {
+        ArrayList<HashMap<String,Object>> userInfoMaps = new ArrayList<>();
+        for (ZIMMessageReactionUserInfo userInfo : userInfos) {
+            userInfoMaps.add(mZIMMessageReactionUserInfo(userInfo));
+        }
+        return userInfoMaps;
+    }
+
+    public static HashMap<String, Object> mZIMMessageReactionUserInfo(ZIMMessageReactionUserInfo userInfo) {
+        HashMap<String,Object> userInfoMap = new HashMap<>();
+        userInfoMap.put("userID",userInfo.userID);
+        return userInfoMap;
+    }
+
+    public static ZIMMessageReactionUsersQueryConfig oZIMMessageReactionUsersQueryConfig(HashMap<String,Object> configMap) {
+        ZIMMessageReactionUsersQueryConfig queryConfig = new ZIMMessageReactionUsersQueryConfig();
+        queryConfig.nextFlag = ZIMPluginCommonTools.safeGetLongValue(configMap.get("nextFlag"));
+        queryConfig.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
+        queryConfig.reactionType = (String) Objects.requireNonNull(configMap.get("reactionType"));;
+        return queryConfig;
+    }
+    public static ArrayList<HashMap<String,Object>> mZIMMessageReactionList(ArrayList<ZIMMessageReaction> infos){
+        ArrayList<HashMap<String,Object>> maps = new ArrayList<>();
+        for (ZIMMessageReaction info:infos) {
+            maps.add(ZIMPluginConverter.mZIMMessageReaction(info));
+        }
+        return maps;
     }
 }

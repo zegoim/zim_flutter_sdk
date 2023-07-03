@@ -328,6 +328,7 @@ class ZIMConverter {
       message.fileSize = resultMap['fileSize'];
     }
     message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
+    message.reactions = oZIMMessageReactionList(resultMap['reactions']);
     return message;
   }
 
@@ -1295,6 +1296,8 @@ class ZIMConverter {
       userInfos.add(oZIMReactionUserInfo(userInfoMap));
     }
 
-    return ZIMReactionUsersQueryResult(userInfos: userInfos);
+    return ZIMReactionUsersQueryResult(reactionType:resultMap["reactionType"],
+        userInfos: userInfos,nextFlag: resultMap["nextFlag"],
+        totalCount: resultMap["totalCount"]);
   }
 }

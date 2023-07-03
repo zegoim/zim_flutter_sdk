@@ -48,6 +48,9 @@ import im.zego.zim.callback.ZIMMediaMessageSentCallback;
 import im.zego.zim.callback.ZIMMessageDeletedCallback;
 import im.zego.zim.callback.ZIMMessageInsertedCallback;
 import im.zego.zim.callback.ZIMMessageQueriedCallback;
+import im.zego.zim.callback.ZIMMessageReactionAddCallback;
+import im.zego.zim.callback.ZIMMessageReactionDeleteCallback;
+import im.zego.zim.callback.ZIMMessageReactionUsersQueryCallback;
 import im.zego.zim.callback.ZIMMessageReceiptsInfoQueriedCallback;
 import im.zego.zim.callback.ZIMMessageReceiptsReadSentCallback;
 import im.zego.zim.callback.ZIMMessageRevokedCallback;
@@ -94,6 +97,9 @@ import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
+import im.zego.zim.entity.ZIMMessageReaction;
+import im.zego.zim.entity.ZIMMessageReactionUserInfo;
+import im.zego.zim.entity.ZIMMessageReactionUsersQueryConfig;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageRevokeConfig;
 import im.zego.zim.entity.ZIMMessageSendConfig;
@@ -2197,6 +2203,78 @@ public class ZIMPluginMethodHandler {
                 }
                 else {
                     result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+    public static void addMessageReaction(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMMessage message = (ZIMMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
+        String reactionType = Objects.requireNonNull(call.argument("reactionType"));
+        zim.addMessageReaction(reactionType, message, new ZIMMessageReactionAddCallback() {
+            @Override
+            public void onMessageReactionAdded(ZIMMessageReaction reaction, ZIMError error) {
+                if (error.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("reaction",ZIMPluginConverter.mZIMMessageReaction(reaction));
+                    result.success(resultMap);
+                }else {
+                    result.error(String.valueOf(error.code.value()),error.message,null);
+                }
+            }
+        });
+    }
+    public static void deleteMessageReaction(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMMessage message = (ZIMMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
+        String reactionType = Objects.requireNonNull(call.argument("reactionType"));
+        zim.deleteMessageReaction(reactionType, message, new ZIMMessageReactionDeleteCallback() {
+            @Override
+            public void onMessageReactionDeleted(ZIMMessageReaction reaction, ZIMError error) {
+                if (error.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("reaction",ZIMPluginConverter.mZIMMessageReaction(reaction));
+                    result.success(resultMap);
+                }else {
+                    result.error(String.valueOf(error.code.value()),error.message,null);
+                }
+            }
+        });
+    }
+    public static void queryMessageReactionUserList(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMMessage message = (ZIMMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
+        ZIMMessageReactionUsersQueryConfig config = ZIMPluginConverter.oZIMMessageReactionUsersQueryConfig(Objects.requireNonNull(call.argument("config")));
+
+        zim.queryMessageReactionUserList(message, config, new ZIMMessageReactionUsersQueryCallback() {
+            @Override
+            public void onMessageReactionUsersQueried(ArrayList<ZIMMessageReactionUserInfo> userInfos, String reactionType, long nextFlag, int totalCount, ZIMError error) {
+                if (error.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("userInfos",ZIMPluginConverter.mZIMMessageReactionUserInfoList(userInfos));
+                    resultMap.put("reactionType",reactionType);
+                    resultMap.put("nextFlag",nextFlag);
+                    resultMap.put("totalCount",totalCount);
+                    result.success(resultMap);
+                }else {
+                    result.error(String.valueOf(error.code.value()),error.message,null);
                 }
             }
         });
