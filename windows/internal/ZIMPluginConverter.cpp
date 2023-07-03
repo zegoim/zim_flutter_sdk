@@ -15,9 +15,6 @@ template struct Rob<ZIM_FriendlyGet_senderUserID, &ZIMMessage::senderUserID>;
 std::string ZIMMessage::* get(ZIM_FriendlyGet_conversationID);
 template struct Rob<ZIM_FriendlyGet_conversationID, &ZIMMessage::conversationID>;
 
- std::string ZIMMessage::* get(ZIM_FriendlyGet_extendedData);
- template struct Rob<ZIM_FriendlyGet_extendedData, &ZIMMessage::extendedData>;
-
 ZIMConversationType ZIMMessage::* get(ZIM_FriendlyGet_conversationType);
 template struct Rob<ZIM_FriendlyGet_conversationType, &ZIMMessage::conversationType>;
 
@@ -41,9 +38,6 @@ template struct Rob<ZIM_FriendlyGet_isUserInserted, &ZIMMessage::userInserted>;
 
 std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileUID);
 template struct Rob<ZIM_FriendlyGet_fileUID, &ZIMMediaMessage::fileUID>;
-
-std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileName);
-template struct Rob<ZIM_FriendlyGet_fileName, &ZIMMediaMessage::fileName>;
 
 long long ZIMMediaMessage::* get(ZIM_FriendlyGet_fileSize);
 template struct Rob<ZIM_FriendlyGet_fileSize, &ZIMMediaMessage::fileSize>;
@@ -279,6 +273,7 @@ FTArray ZIMPluginConverter::cnvZIMMessageSentStatusChangeInfoListToArray(const s
 		FTMap messageSentStatusChangeInfoMap;
 		messageSentStatusChangeInfoMap[FTValue("status")] = FTValue(messageSentStatusChangeInfo.status);
 		messageSentStatusChangeInfoMap[FTValue("message")] = cnvZIMMessageObjectToMap(messageSentStatusChangeInfo.message.get());
+		messageSentStatusChangeInfoMap[FTValue("reason")] = FTValue(messageSentStatusChangeInfo.reason);
 		messageSentStatusInfoArray.emplace_back(messageSentStatusChangeInfoMap);
 	}
 
@@ -305,12 +300,13 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("isUserInserted")] = FTValue(message->isUserInserted());
 	messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
 	messageMap[FTValue("extendedData")] = FTValue(message->extendedData);
+	messageMap[FTValue("localExtendedData")] = FTValue(message->localExtendedData);
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
 		messageMap[FTValue("fileDownloadUrl")] = FTValue(mediaMessage->fileDownloadUrl);
 		messageMap[FTValue("fileUID")] = FTValue(mediaMessage->getFileUID());
-		messageMap[FTValue("fileName")] = FTValue(mediaMessage->getFileName());
+		messageMap[FTValue("fileName")] = FTValue(mediaMessage->fileName);
 		messageMap[FTValue("fileSize")] = FTValue(mediaMessage->getFileSize());
 	}
 
@@ -547,7 +543,8 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_msgType()) = msgType;
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_senderUserID()) = std::get<std::string>(messageMap[FTValue("senderUserID")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationID()) = std::get<std::string>(messageMap[FTValue("conversationID")]);
-	(*messagePtr.get()).*get(ZIM_FriendlyGet_extendedData()) = std::get<std::string>(messageMap[FTValue("extendedData")]);
+	messagePtr->extendedData = std::get<std::string>(messageMap[FTValue("extendedData")]);
+	messagePtr->localExtendedData = std::get<std::string>(messageMap[FTValue("localExtendedData")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_direction()) = (ZIMMessageDirection)std::get<int32_t>(messageMap[FTValue("direction")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_sentStatus()) = (ZIMMessageSentStatus)std::get<int32_t>(messageMap[FTValue("sentStatus")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationType()) = (ZIMConversationType)std::get<int32_t>(messageMap[FTValue("conversationType")]);
@@ -599,8 +596,8 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
 		mediaMessagePtr->fileDownloadUrl = std::get<std::string>(messageMap[FTValue("fileDownloadUrl")]);
+		mediaMessagePtr->fileName = std::get<std::string>(messageMap[FTValue("fileName")]);
 		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileUID()) = std::get<std::string>(messageMap[FTValue("fileUID")]);
-		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileName()) = std::get<std::string>(messageMap[FTValue("fileName")]);
 
 		if (std::holds_alternative<int32_t>(messageMap[FTValue("fileSize")])) {
 			(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileSize()) = (long long)std::get<int32_t>(messageMap[FTValue("fileSize")]);
@@ -842,12 +839,60 @@ FTMap ZIMPluginConverter::cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& group
 FTMap ZIMPluginConverter::cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInfo) {
 	FTMap userInfoMap;
 	userInfoMap[FTValue("userID")] = FTValue(userInfo.userID);
-	userInfoMap[FTValue("state")] = FTValue((int32_t)userInfo.userState);
-
+	userInfoMap[FTValue("state")] = FTValue((int32_t)userInfo.state);
+	userInfoMap[FTValue("extendedData")] = FTValue(userInfo.extendedData);
 	return userInfoMap;
 }
 
-FTArray ZIMPluginConverter::cnvZIMCallUserListToArray(const std::vector<ZIMCallUserInfo>& callUserList) {
+FTMap ZIMPluginConverter::cnvZIMCallInfoToMap(const ZIMCallInfo& callInfo) {
+	FTMap callInfoMap;
+	callInfoMap[FTValue("callID")] = FTValue(callInfo.callID);
+	callInfoMap[FTValue("caller")] = FTValue(callInfo.caller);
+	callInfoMap[FTValue("createTime")] = FTValue((int64_t)callInfo.createTime);
+	//callInfoMap[FTValue("callDuration")] = FTValue((int64_t)callInfo.callDuration);
+	//callInfoMap[FTValue("userDuration")] = FTValue((int64_t)callInfo.userDuration);
+	//callInfoMap[FTValue("timeout")] = FTValue((int32_t)callInfo.timeout);
+	callInfoMap[FTValue("endTime")] = FTValue((int64_t)callInfo.endTime);
+	callInfoMap[FTValue("state")] = FTValue((int32_t)callInfo.state);
+	callInfoMap[FTValue("mode")] = FTValue((int32_t)callInfo.mode);
+	callInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(callInfo.callUserList);
+	callInfoMap[FTValue("extendedData")] = FTValue(callInfo.extendedData);
+
+	return callInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo& callEndSentInfo) {
+	FTMap callInfoMap;
+    callInfoMap[FTValue("createTime")] = FTValue((int64_t)callEndSentInfo.createTime);
+	callInfoMap[FTValue("acceptTime")] = FTValue((int64_t)callEndSentInfo.acceptTime);
+    callInfoMap[FTValue("endTime")] = FTValue((int64_t)callEndSentInfo.endTime);
+    //callInfoMap[FTValue("callDuration")] = FTValue((int64_t)callEndedSentInfo.callDuration);
+    //callInfoMap[FTValue("userDuration")] = FTValue((int64_t)callEndedSentInfo.userDuration);
+
+	return callInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallQuitSentInfoToMap(const ZIMCallQuitSentInfo& callQuitSentInfo) {
+	FTMap callInfoMap;
+	callInfoMap[FTValue("createTime")] = FTValue((int64_t)callQuitSentInfo.createTime);
+	callInfoMap[FTValue("acceptTime")] = FTValue((int64_t)callQuitSentInfo.acceptTime);
+	callInfoMap[FTValue("quitTime")] = FTValue((int64_t)callQuitSentInfo.quitTime);
+
+	return callInfoMap;
+}
+
+FTArray ZIMPluginConverter::cnvZIMErrorUserInfoListToArray(const std::vector<ZIMErrorUserInfo>& errorUserInfoList) {
+	FTArray errorUserInfoArray;
+	for (auto& user : errorUserInfoList) {
+		FTMap userMap = cnvZIMErrorUserInfoToMap(user);
+		errorUserInfoArray.emplace_back(userMap);
+	}
+
+	return errorUserInfoArray;
+}
+
+
+FTArray ZIMPluginConverter::cnvZIMCallUserInfoListToArray(const std::vector<ZIMCallUserInfo>& callUserList) {
 	FTArray callUserArray;
 	for (auto& user : callUserList) {
 		FTMap userMap = cnvZIMCallUserInfoToMap(user);
@@ -860,8 +905,38 @@ FTArray ZIMPluginConverter::cnvZIMCallUserListToArray(const std::vector<ZIMCallU
 FTMap ZIMPluginConverter::cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info) {
 	FTMap sentInfoMap;
 	sentInfoMap[FTValue("timeout")] = FTValue((int32_t)info.timeout);
-	sentInfoMap[FTValue("errorInvitees")] = cnvZIMCallUserListToArray(info.errorInvitees);
+	sentInfoMap[FTValue("errorList")] = cnvZIMErrorUserInfoListToArray(info.errorUserList);
+	sentInfoMap[FTValue("errorInvitees")] = cnvZIMCallUserInfoListToArray(info.errorInvitees);
 
+	return sentInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingInvitationSentInfo& info) {
+	FTMap sentInfoMap;
+	sentInfoMap[FTValue("errorInvitees")] = cnvZIMErrorUserInfoListToArray(info.errorUserList);
+
+	return sentInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallInvitationEndedInfoToMap(const ZIMCallInvitationEndedInfo& info){
+	FTMap sentInfoMap;
+	sentInfoMap[FTValue("caller")] = FTValue(info.caller);
+	sentInfoMap[FTValue("operatedUserID")] = FTValue(info.operatedUserID);
+	sentInfoMap[FTValue("extendedData")] = FTValue(info.extendedData);
+	sentInfoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
+	sentInfoMap[FTValue("endTime")] = FTValue((int64_t)info.endTime);
+	return sentInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangeInfo& info){
+	FTMap sentInfoMap;
+    sentInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(info.callUserList);
+	return sentInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvitationTimeoutInfo& info){
+	FTMap sentInfoMap;
+    sentInfoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
 	return sentInfoMap;
 }
 

@@ -54,6 +54,16 @@ class ZIMEventHandler {
   static void Function(ZIM zim, int totalUnreadMessageCount)?
       onConversationTotalUnreadMessageCountUpdated;
 
+  /// Available since: 2.5.0 and above.
+
+  /// Description: When the message receiver has read the session, the message sender knows through this callback.
+
+  /// Trigger: Trigger a notification when the message receiver has read the session.
+
+  /// Related APIs: triggered when the peer calls via [ZIM.sendConversationMessageReceiptRead].
+  static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
+  onConversationMessageReceiptChanged;
+
 /* Message */
 
   /// The callback for receiving peer-to-peer message.
@@ -89,6 +99,26 @@ class ZIMEventHandler {
           ZIM zim, List<ZIMMessage> messageList, String fromGroupID)?
       onReceiveGroupMessage;
 
+  /// Available since: 2.5.0 and above.
+
+  /// Description: When the message receiver confirms that the message has been read, the message sender knows through this callback.
+
+  /// Trigger: Trigger a notification when the message receiver has read the message.
+
+  /// Related APIs: triggered when the peer calls via [ZIM.sendMessageReceiptsRead].
+  static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
+  onMessageReceiptChanged;
+
+
+  /// Available since: 2.5.0  or above.
+
+  /// Description: This callback is received when some one else sends a message and then revoke.
+
+  /// When to call: This callback occurs when a ZIM instance is created with [ZIM.create] and the other user revoke a message.
+
+  /// Related callbacks:You can revoke message to other members via [ZIM.revokeMessage].
+  static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
+  onMessageRevokeReceived;
 /* Room */
 
   /// Callback when other members join the room.
@@ -355,6 +385,7 @@ class ZIMEventHandler {
           ZIM zim, ZIMCallInvitationCancelledInfo info, String callID)?
       onCallInvitationCancelled;
 
+  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
   /// Supported versions: 2.0.0 and above.
   ///
   /// Detail description: After the invitee accepts the call invitation, this callback will be received when the inviter is online.
@@ -374,6 +405,7 @@ class ZIMEventHandler {
           ZIM zim, ZIMCallInvitationAcceptedInfo info, String callID)?
       onCallInvitationAccepted;
 
+  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
   /// Available since: 2.0.0 and above.
   ///
   /// Description: This callback will be received when the inviter is online after the inviter rejects the call invitation.
@@ -410,8 +442,9 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [callID]  callID.
-  static void Function(ZIM zim, String callID)? onCallInvitationTimeout;
+  static void Function(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID)? onCallInvitationTimeout;
 
+  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
   /// Supported versions: 2.0.0 and above.
   ///
   /// Detail description: When the call invitation times out, the invitee does not respond, and the inviter will receive a callback.
@@ -430,36 +463,12 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<String> invitees, String callID)?
       onCallInviteesAnsweredTimeout;
 
-  /// Available since: 2.5.0 and above.
 
-  /// Description: When the message receiver confirms that the message has been read, the message sender knows through this callback.
+  static void Function(ZIM zim, ZIMCallInvitationEndedInfo callInvitationEndedInfo, String callID)?
+  onCallInvitationEnded;
 
-  /// Trigger: Trigger a notification when the message receiver has read the message.
-
-  /// Related APIs: triggered when the peer calls via [ZIM.sendMessageReceiptsRead].
-  static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
-      onMessageReceiptChanged;
-
-  /// Available since: 2.5.0 and above.
-
-  /// Description: When the message receiver has read the session, the message sender knows through this callback.
-
-  /// Trigger: Trigger a notification when the message receiver has read the session.
-
-  /// Related APIs: triggered when the peer calls via [ZIM.sendConversationMessageReceiptRead].
-  static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
-      onConversationMessageReceiptChanged;
-
-
-  /// Available since: 2.5.0  or above.
-
-  /// Description: This callback is received when some one else sends a message and then revoke.
-
-  /// When to call: This callback occurs when a ZIM instance is created with [ZIM.create] and the other user revoke a message.
-
-  /// Related callbacks:You can revoke message to other members via [ZIM.revokeMessage].
-  static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
-      onMessageRevokeReceived;
+  static void Function(ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID)?
+      onCallUserStateChanged;
 
   static void Function(ZIM zim, List<ZIMMessageReaction> infos)?
       onMessageReactionsChanged;

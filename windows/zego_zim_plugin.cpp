@@ -170,6 +170,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "insertMessageToLocalDB") {
         ZIMPluginMethodHandler::getInstance().insertMessageToLocalDB(argument, std::move(result));
     }
+	else if (method_call.method_name() == "updateMessageLocalExtendedData") {
+		ZIMPluginMethodHandler::getInstance().updateMessageLocalExtendedData(argument, std::move(result));
+	}
     else if (method_call.method_name() == "sendPeerMessage") {
         ZIMPluginMethodHandler::getInstance().sendPeerMessage(argument, std::move(result));
     }
@@ -328,6 +331,18 @@ void ZegoZimPlugin::HandleMethodCall(
     }
     else if (method_call.method_name() == "callInvite") {
         ZIMPluginMethodHandler::getInstance().callInvite(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "callingInvite") {
+        ZIMPluginMethodHandler::getInstance().callingInvite(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "callQuit") {
+        ZIMPluginMethodHandler::getInstance().callQuit(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "callEnd") {
+        ZIMPluginMethodHandler::getInstance().callEnd(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "queryCallList") {
+        ZIMPluginMethodHandler::getInstance().queryCallList(argument, std::move(result));
     }
     else if (method_call.method_name() == "callCancel") {
         ZIMPluginMethodHandler::getInstance().callCancel(argument, std::move(result));

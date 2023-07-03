@@ -306,13 +306,24 @@ enum ZIMGroupMessageNotificationStatus { notify, doNotDisturb }
 enum ZIMMessageReceiptStatus { none, processing, done, expired, failed }
 
 enum ZIMCallUserState {
+  unknown,
   inviting,
   accepted,
   rejected,
   cancelled,
   offline,
-  received
+  received,
+  timeout,
+  quited
 }
+
+enum ZIMCallInvitationMode {
+  unknown,
+  general,
+  advanced,
+}
+
+enum ZIMCallState { unknown,started, ended }
 
 class ZIMGroupMemberRole {
   static const int owner = 1;
@@ -459,6 +470,7 @@ class ZIMMessage {
   bool isUserInserted = false;
   ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
   String extendedData = "";
+  String localExtendedData = "";
   List<ZIMMessageReaction> reactions = [];
 }
 
@@ -610,6 +622,7 @@ class ZIMConversationChangeInfo {
 class ZIMMessageSentStatusChangeInfo {
   ZIMMessageSentStatus status = ZIMMessageSentStatus.sending;
   ZIMMessage? message;
+  String reason = '';
   ZIMMessageSentStatusChangeInfo();
 }
 
@@ -664,6 +677,18 @@ class ZIMMessageQueryConfig {
   /// Description: Indicates whether the query is in reverse order. The default value is NO.
   bool reverse = false;
   ZIMMessageQueryConfig();
+}
+
+class ZIMCallInfo {
+  String callID ="";
+  String caller = "";
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
+  ZIMCallState state = ZIMCallState.started;
+  String extendedData = "";
+  int createTime = 0;
+  int endTime = 0;
+  List<ZIMCallUserInfo> callUserList = [];
+  ZIMCallInfo();
 }
 
 /// Delete message configuration.
@@ -852,17 +877,21 @@ class ZIMGroupAttributesUpdateInfo {
 /// Call invitation user information.
 class ZIMCallUserInfo {
   /// Description:  userID.
-  String userID = "";
+  String userID = '';
 
   /// Description:  user status.
-  ZIMCallUserState state = ZIMCallUserState.accepted;
+  ZIMCallUserState state = ZIMCallUserState.inviting;
+
+  String extendedData = '';
   ZIMCallUserInfo();
 }
 
 /// The behavior property of the Send Call Invitation setting.
 class ZIMCallInviteConfig {
   /// Description: The timeout setting of the call invitation, the unit is seconds. The default value is 90s.
-  int timeout = 0;
+  int timeout = 90;
+
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
@@ -874,6 +903,7 @@ class ZIMCallInviteConfig {
 
 /// Behavior property that cancels the call invitation setting.
 class ZIMCallCancelConfig {
+  ZIMPushConfig? pushConfig;
   /// Description: Extended field.
   String extendedData = "";
   ZIMCallCancelConfig();
@@ -893,14 +923,79 @@ class ZIMCallRejectConfig {
   ZIMCallRejectConfig();
 }
 
+class ZIMCallQuitConfig {
+
+  String extendedData = "";
+
+  ZIMPushConfig? pushConfig;
+
+  ZIMCallQuitConfig();
+}
+
+class ZIMCallEndConfig {
+
+  String extendedData = "";
+
+  ZIMPushConfig? pushConfig;
+
+  ZIMCallEndConfig();
+}
+
+class ZIMCallingInviteConfig {
+
+  ZIMPushConfig? pushConfig;
+
+  ZIMCallingInviteConfig();
+}
+
+class ZIMCallInvitationQueryConfig {
+
+  int count = 0;
+
+  int nextFlag = 0;
+
+  ZIMCallInvitationQueryConfig();
+}
+
 /// Call invitation sent message.
 class ZIMCallInvitationSentInfo {
   /// Description: The timeout setting of the call invitation, the unit is seconds.
   int timeout = 0;
 
   /// Description: User id that has not received a call invitation.
+  List<ZIMErrorUserInfo> errorUserList = [];
+
+  /// Deprecated since ZIM 2.9.0
   List<ZIMCallUserInfo> errorInvitees = [];
+
   ZIMCallInvitationSentInfo();
+}
+
+/// Call invitation sent message.
+class ZIMCallingInvitationSentInfo {
+  /// Description: User id that has not received a call invitation.
+  List<ZIMErrorUserInfo> errorUserList = [];
+  ZIMCallingInvitationSentInfo();
+}
+
+class ZIMCallQuitSentInfo {
+  int createTime = 0;
+
+  int acceptTime = 0;
+
+  int quitTime = 0;
+
+  ZIMCallQuitSentInfo();
+}
+
+class ZIMCallEndedSentInfo {
+  int createTime = 0;
+
+  int acceptTime = 0;
+
+  int endTime = 0;
+
+  ZIMCallEndedSentInfo();
 }
 
 /// Information to accept the call invitation.
@@ -911,8 +1006,15 @@ class ZIMCallInvitationReceivedInfo {
   /// Description: Inviter ID.
   String inviter = "";
 
+  String caller = '';
+
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+
+  int createTime = 0;
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
+  List<ZIMCallUserInfo> callUserList = [];
+
   ZIMCallInvitationReceivedInfo();
 }
 
@@ -923,6 +1025,8 @@ class ZIMCallInvitationCancelledInfo {
 
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
+
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
   ZIMCallInvitationCancelledInfo();
 }
 
@@ -946,8 +1050,22 @@ class ZIMCallInvitationRejectedInfo {
   ZIMCallInvitationRejectedInfo();
 }
 
+class ZIMCallInvitationEndedInfo{
+  String caller = '';
+  String operatedUserID = '';
+  String extendedData = '';
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
+  int endTime = 0;
+}
+
+class ZIMCallUserStateChangeInfo{
+  List<ZIMCallUserInfo> callUserList = [];
+}
+
 class ZIMCallInvitationTimeoutInfo {
-  String inviter = "";
+
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
+
   ZIMCallInvitationTimeoutInfo();
 }
 
@@ -1145,6 +1263,11 @@ class ZIMConversationNotificationStatusSetResult {
 class ZIMMessageSentResult {
   ZIMMessage message;
   ZIMMessageSentResult({required this.message});
+}
+
+class ZIMMessageLocalExtendedDataUpdatedResult {
+  ZIMMessage message;
+  ZIMMessageLocalExtendedDataUpdatedResult({required this.message});
 }
 
 class ZIMMessageInsertedResult {
@@ -1669,6 +1792,30 @@ class ZIMCallAcceptanceSentResult {
 class ZIMCallRejectionSentResult {
   String callID;
   ZIMCallRejectionSentResult({required this.callID});
+}
+
+class ZIMCallingInvitationSentResult {
+  String callID = "";
+  ZIMCallingInvitationSentInfo info;
+  ZIMCallingInvitationSentResult({required this.callID, required this.info});
+}
+
+class ZIMCallQuitSentResult {
+  String callID;
+  ZIMCallQuitSentInfo info;
+  ZIMCallQuitSentResult({required this.callID, required this.info});
+}
+
+class ZIMCallEndSentResult {
+  String callID;
+  ZIMCallEndedSentInfo info;
+  ZIMCallEndSentResult({required this.callID, required this.info});
+}
+
+class ZIMCallInvitationListQueriedResult {
+  List<ZIMCallInfo> callList;
+  int nextFlag;
+  ZIMCallInvitationListQueriedResult({required this.callList, required this.nextFlag});
 }
 
 class ZIMConversationMessageReceiptReadSentResult {

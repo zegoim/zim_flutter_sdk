@@ -596,6 +596,12 @@ abstract class ZIM {
       ZIMMessage message, ZIMMessageReactionUsersQueryConfig config);
   //MARK: - Room
 
+  Future<ZIMMessageLocalExtendedDataUpdatedResult>
+  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
+  Future<ZIMCallQuitSentResult> callQuit(
+      String callID, ZIMCallQuitConfig config);
+
+
   /// Create a room.
   ///
   /// Available since: 2.1.5 or above.
@@ -1213,6 +1219,10 @@ abstract class ZIM {
   Future<ZIMCallInvitationSentResult> callInvite(
       List<String> invitees, ZIMCallInviteConfig config);
 
+
+  Future<ZIMCallingInvitationSentResult> callingInvite(
+      List<String>invitees, String callID, ZIMCallingInviteConfig config);
+
   /// Supported versions: 2.1.5 and above.
   ///
   /// Detail description: After the caller initiates a call invitation, the call invitation can be canceled through this interface before the timeout period.
@@ -1259,8 +1269,10 @@ abstract class ZIM {
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config);
 
+  Future<ZIMCallEndSentResult> callEnd(
+      String callID, ZIMCallEndConfig config);
 
-
+  Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
 
 }

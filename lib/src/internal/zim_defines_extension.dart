@@ -316,20 +316,41 @@ extension ZIMGroupMessageNotificationStatusEventExtension
 
 extension ZIMCallUserStateExtension on ZIMCallUserState {
   static const valueMap = {
+    ZIMCallUserState.unknown: -1,
     ZIMCallUserState.inviting: 0,
     ZIMCallUserState.accepted: 1,
     ZIMCallUserState.rejected: 2,
     ZIMCallUserState.cancelled: 3,
     ZIMCallUserState.offline: 4,
     ZIMCallUserState.received: 5,
+    ZIMCallUserState.timeout:6,
+    ZIMCallUserState.quited:7
   };
   static const mapValue = {
+    -1: ZIMCallUserState.unknown,
     0: ZIMCallUserState.inviting,
     1: ZIMCallUserState.accepted,
     2: ZIMCallUserState.rejected,
     3: ZIMCallUserState.cancelled,
     4: ZIMCallUserState.offline,
     5: ZIMCallUserState.received,
+    6: ZIMCallUserState.timeout,
+    7: ZIMCallUserState.quited,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMCallStateExtension on ZIMCallState {
+  static const valueMap = {
+    ZIMCallState.unknown: -1,
+    ZIMCallState.started: 1,
+    ZIMCallState.ended: 2,
+  };
+  static const mapValue = {
+    -1: ZIMCallState.unknown,
+    1: ZIMCallState.started,
+    2: ZIMCallState.ended,
   };
 
   int get value => valueMap[this] ?? -1;
@@ -390,3 +411,18 @@ extension ZIMMessageRevokeStatusExtension on ZIMMessageRevokeStatus {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMInvitationModeExtension on ZIMCallInvitationMode {
+  static const valueMap = {
+    ZIMCallInvitationMode.unknown: -1,
+    ZIMCallInvitationMode.general: 0,
+    ZIMCallInvitationMode.advanced: 1,
+  };
+
+  static const mapValue = {
+    -1:ZIMCallInvitationMode.unknown,
+    0:ZIMCallInvitationMode.general,
+    1:ZIMCallInvitationMode.advanced
+  };
+
+  int get value => valueMap[this] ?? -1;
+}

@@ -102,6 +102,10 @@ class ZIM {
       dynamic invitees, String callID, Object config);
   external PromiseJsImpl<dynamic> callAccept(String callID, Object config);
   external PromiseJsImpl<dynamic> callReject(String callID, Object config);
+  external PromiseJsImpl<dynamic> callQuit(String callID, Object config);
+  external PromiseJsImpl<dynamic> callEnd(String callID, Object config);
+  external PromiseJsImpl<dynamic> callingInvite(dynamic invitees, String callID, Object config);
+  external PromiseJsImpl<dynamic> queryCallInvitationList(Object config);
   external PromiseJsImpl<dynamic> queryRoomMemberAttributesList(
       String roomID, Object config);
   external PromiseJsImpl<dynamic> queryRoomMembersAttributes(
@@ -125,6 +129,11 @@ class ZIM {
   external PromiseJsImpl<dynamic> updateConversationPinnedState(bool isPinned, String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> queryRoomMembers(dynamic userIDs, String roomID);
   external PromiseJsImpl<dynamic> queryConversation(String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> searchGlobalLocalConversationMessages(dynamic config);
+  external PromiseJsImpl<dynamic> searchGlobalLocalMessages(dynamic config);
+  external PromiseJsImpl<dynamic> searchLocalMessages(dynamic config);
+  external PromiseJsImpl<dynamic> searchLocalGroups(dynamic config);
+  external PromiseJsImpl<dynamic> searchLocalGroupMembers(dynamic config);
   external PromiseJsImpl<dynamic> addMessageReaction(String reactionType, dynamic message);
   external PromiseJsImpl<dynamic> deleteMessageReaction(String reactionType, dynamic message);
   external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);

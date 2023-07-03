@@ -9,8 +9,11 @@ import im.zego.zim.ZIM;
 import im.zego.zim.callback.ZIMEventHandler;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
+import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
+import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
+import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMError;
 import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
@@ -485,7 +488,8 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onCallInvitationTimeout(ZIM zim, String callID) {
+    public void onCallInvitationTimeout(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID) {
+        super.onCallInvitationTimeout(zim, info, callID);
         if(mysink == null){
             return;
         }
@@ -494,10 +498,12 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
 
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onCallInvitationTimeout");
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationTimeoutInfo(info));
         resultMap.put("handle", handle);
         resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
+
 
     @Override
     public void onCallInviteesAnsweredTimeout(ZIM zim, ArrayList<String> invitees, String callID) {
@@ -511,6 +517,38 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("method","onCallInviteesAnsweredTimeout");
         resultMap.put("handle", handle);
         resultMap.put("invitees",invitees);
+        resultMap.put("callID",callID);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onCallInvitationEnded(ZIM zim, ZIMCallInvitationEndedInfo info, String callID) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onCallInvitationEnded");
+        resultMap.put("handle", handle);
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationEndedInfo(info));
+        resultMap.put("callID",callID);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID) {
+        super.onCallUserStateChanged(zim, info, callID);
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onCallUserStateChanged");
+        resultMap.put("handle", handle);
+        resultMap.put("info",ZIMPluginConverter.mZIMCallUserStateChangeInfo(info));
         resultMap.put("callID",callID);
         mysink.success(resultMap);
     }
