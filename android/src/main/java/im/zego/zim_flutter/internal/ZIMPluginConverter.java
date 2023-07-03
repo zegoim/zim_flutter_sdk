@@ -88,7 +88,7 @@ import im.zego.zim.enums.ZIMMessageRevokeStatus;
 import im.zego.zim.enums.ZIMMessageSentStatus;
 import im.zego.zim.enums.ZIMMessageType;
 import im.zego.zim.enums.ZIMRevokeType;
-import im.zego.zim.entity.ZIMCallInvitationListQueryConfig;
+import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
 
 @SuppressWarnings({"unused","deprecation,unchecked,all"})
 public class ZIMPluginConverter {
@@ -1035,8 +1035,8 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ZIMCallInvitationListQueryConfig oZIMQueryCallListConfig(HashMap<String,Object> configMap) {
-        ZIMCallInvitationListQueryConfig config = new ZIMCallInvitationListQueryConfig();
+    static public ZIMCallInvitationQueryConfig oZIMQueryCallListConfig(HashMap<String,Object> configMap) {
+        ZIMCallInvitationQueryConfig config = new ZIMCallInvitationQueryConfig();
         config.count = (Integer) configMap.get("count");
         config.nextFlag = ZIMPluginCommonTools.safeGetLongValue(configMap.get("nextFlag"));
         return config;

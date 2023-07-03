@@ -81,7 +81,7 @@ import im.zego.zim.entity.ZIMCallAcceptConfig;
 import im.zego.zim.entity.ZIMCallCancelConfig;
 import im.zego.zim.entity.ZIMCallEndedSentInfo;
 import im.zego.zim.entity.ZIMCallInfo;
-import im.zego.zim.entity.ZIMCallInvitationListQueryConfig;
+import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallInviteConfig;
 import im.zego.zim.entity.ZIMCallQuitSentInfo;
@@ -2338,7 +2338,7 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        ZIMCallInvitationListQueryConfig config = ZIMPluginConverter.oZIMQueryCallListConfig(Objects.requireNonNull(call.argument("config")));
+        ZIMCallInvitationQueryConfig config = ZIMPluginConverter.oZIMQueryCallListConfig(Objects.requireNonNull(call.argument("config")));
         zim.queryCallInvitationList(config, new ZIMCallInvitationListQueriedCallback() {
             @Override
             public void onCallInvitationListQueried(ArrayList<ZIMCallInfo> callList, long nextFlag, ZIMError errorInfo) {

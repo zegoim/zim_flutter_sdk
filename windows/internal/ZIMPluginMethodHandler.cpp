@@ -2507,7 +2507,7 @@ void ZIMPluginMethodHandler::queryCallList(flutter::EncodableMap& argument,
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-    ZIMCallInvitationListQueryConfig config;
+    ZIMCallInvitationQueryConfig config;
     config.count = std::get<int32_t>(configMap[FTValue("count")]);
 
     if (std::holds_alternative<int32_t>(configMap[FTValue("nextFlag")])) {

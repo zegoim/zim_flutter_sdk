@@ -1323,7 +1323,7 @@ class ZIMConverter {
     return configMap;
   }
 
-  static Map mZIMQueryCallListConfig(ZIMCallInvitationListQueryConfig config) {
+  static Map mZIMQueryCallListConfig(ZIMCallInvitationQueryConfig config) {
     Map configMap = {};
     configMap['count'] = config.count;
     configMap['nextFlag'] = config.nextFlag;

@@ -123,7 +123,7 @@
 
 +(nullable ZIMCallEndConfig *)oZIMCallEndConfig:(nullable NSDictionary *)configDic;
 
-+(nullable ZIMCallInvitationListQueryConfig *)oZIMQueryCallListConfig:(nullable NSDictionary *)configDic;
++(nullable ZIMCallInvitationQueryConfig *)oZIMQueryCallListConfig:(nullable NSDictionary *)configDic;
 
 +(nullable NSDictionary *)mZIMCallInvitationSentInfo:(nullable ZIMCallInvitationSentInfo *)info;
 

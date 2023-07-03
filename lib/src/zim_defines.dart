@@ -947,13 +947,13 @@ class ZIMCallingInviteConfig {
   ZIMCallingInviteConfig();
 }
 
-class ZIMCallInvitationListQueryConfig {
+class ZIMCallInvitationQueryConfig {
 
   int count = 0;
 
   int nextFlag = 0;
 
-  ZIMCallInvitationListQueryConfig();
+  ZIMCallInvitationQueryConfig();
 }
 
 /// Call invitation sent message.

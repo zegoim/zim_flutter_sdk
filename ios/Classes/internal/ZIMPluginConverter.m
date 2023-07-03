@@ -879,11 +879,11 @@
     return config;
 }
 
-+(nullable ZIMCallInvitationListQueryConfig *)oZIMQueryCallListConfig:(nullable NSDictionary *)configDic{
++(nullable ZIMCallInvitationQueryConfig *)oZIMQueryCallListConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
-    ZIMCallInvitationListQueryConfig *queryConfig = [[ZIMCallInvitationListQueryConfig alloc] init];
+    ZIMCallInvitationQueryConfig *queryConfig = [[ZIMCallInvitationQueryConfig alloc] init];
     queryConfig.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
     queryConfig.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] longLongValue];
     return queryConfig;

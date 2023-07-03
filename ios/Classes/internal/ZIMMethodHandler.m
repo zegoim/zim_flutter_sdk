@@ -1914,7 +1914,7 @@
         return;
     }
     
-    ZIMCallInvitationListQueryConfig *config = [ZIMPluginConverter oZIMQueryCallListConfig:[call.arguments safeObjectForKey:@"config"]];
+    ZIMCallInvitationQueryConfig *config = [ZIMPluginConverter oZIMQueryCallListConfig:[call.arguments safeObjectForKey:@"config"]];
     
     [zim queryCallInvitationListWithConfig:config callback:^(NSArray<ZIMCallInfo *> * _Nonnull callList, long long nextFlag, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
