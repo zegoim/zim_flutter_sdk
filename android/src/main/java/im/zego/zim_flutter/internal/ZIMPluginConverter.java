@@ -34,6 +34,7 @@ import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
 import im.zego.zim.entity.ZIMConversationMessageGlobalSearchConfig;
+import im.zego.zim.entity.ZIMConversationMessageGlobalSearchInfo;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
 import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
@@ -54,7 +55,6 @@ import im.zego.zim.entity.ZIMImageMessage;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
-import im.zego.zim.entity.ZIMMessageGlobalSearchInfo;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageRevokeConfig;
@@ -582,7 +582,7 @@ public class ZIMPluginConverter {
         config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
         config.order = ZIMMessageOrder.getZIMMessageOrder(ZIMPluginCommonTools.safeGetIntValue(configMap.get("order")));
         config.keywords = (ArrayList<String>) configMap.get("keywords");
-        config.subTypes = (ArrayList<Integer>) configMap.get("subMessageTypes");
+        config.subMessageTypes = (ArrayList<Integer>) configMap.get("subMessageTypes");
         config.senderUserIDs = (ArrayList<String>) configMap.get("senderUserIDs");
         ArrayList<ZIMMessageType> messageTypes = new ArrayList<>();
         for(Integer msgType : (ArrayList<Integer>) configMap.get("messageTypes")) {
@@ -598,10 +598,10 @@ public class ZIMPluginConverter {
     static public ZIMConversationMessageGlobalSearchConfig oZIMConversationMessageGlobalSearchConfig(HashMap<String,Object> configMap) {
         ZIMConversationMessageGlobalSearchConfig config = new ZIMConversationMessageGlobalSearchConfig();
         config.nextFlag = ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
-        config.totalMessageCount = ZIMPluginCommonTools.safeGetIntValue(configMap.get("totalConversationCount"));
+        config.totalConversationCount = ZIMPluginCommonTools.safeGetIntValue(configMap.get("totalConversationCount"));
         config.conversationMessageCount = ZIMPluginCommonTools.safeGetIntValue(configMap.get("conversationMessageCount"));
         config.keywords = (ArrayList<String>) configMap.get("keywords");
-        config.subTypes = (ArrayList<Integer>) configMap.get("subMessageTypes");
+        config.subMessageTypes = (ArrayList<Integer>) configMap.get("subMessageTypes");
         config.senderUserIDs = (ArrayList<String>) configMap.get("senderUserIDs");
         ArrayList<ZIMMessageType> messageTypes = new ArrayList<>();
         for(Integer msgType : (ArrayList<Integer>) configMap.get("messageTypes")) {
@@ -614,9 +614,9 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ArrayList<HashMap<String,Object>> mZIMConversationMessageGlobalSearchInfoList(ArrayList<ZIMMessageGlobalSearchInfo> globalInfoList) {
+    static public ArrayList<HashMap<String,Object>> mZIMConversationMessageGlobalSearchInfoList(ArrayList<ZIMConversationMessageGlobalSearchInfo> globalInfoList) {
         ArrayList<HashMap<String,Object>> mapInfoList = new ArrayList<>();
-        for(ZIMMessageGlobalSearchInfo info : globalInfoList) {
+        for(ZIMConversationMessageGlobalSearchInfo info : globalInfoList) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("conversationID", info.conversationID);
             map.put("conversationType", info.conversationType.value());

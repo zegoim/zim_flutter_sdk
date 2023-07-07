@@ -115,7 +115,7 @@ import im.zego.zim.entity.ZIMLogConfig;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
-import im.zego.zim.entity.ZIMMessageGlobalSearchInfo;
+import im.zego.zim.entity.ZIMConversationMessageGlobalSearchInfo;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageRevokeConfig;
@@ -1186,7 +1186,7 @@ public class ZIMPluginMethodHandler {
         ZIMConversationMessageGlobalSearchConfig config = new ZIMConversationMessageGlobalSearchConfig();
         zim.searchGlobalLocalConversationMessages(config, new ZIMConversationMessagesGlobalSearchedCallback() {
             @Override
-            public void onConversationMessagesGlobalSearched(ArrayList<ZIMMessageGlobalSearchInfo> globalMessageInfoList, int nextFlag, ZIMError errorInfo) {
+            public void onConversationMessagesGlobalSearched(ArrayList<ZIMConversationMessageGlobalSearchInfo> globalMessageInfoList, int nextFlag, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
 
@@ -2267,7 +2267,7 @@ public class ZIMPluginMethodHandler {
         ZIMGroupMemberSearchConfig config = ZIMPluginConverter.oZIMGroupMemberSearchConfig(Objects.requireNonNull(call.argument("config")));
         zim.searchLocalGroupMembers(groupID, config, new ZIMGroupMembersSearchedCallback() {
             @Override
-            public void onGroupMembersSearchedCallback(String groupID, ArrayList<ZIMGroupMemberInfo> userList, int nextFlag, ZIMError errorInfo) {
+            public void onGroupMembersSearched(String groupID, ArrayList<ZIMGroupMemberInfo> userList, int nextFlag, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String,Object> resultMap = new HashMap<>();
 
