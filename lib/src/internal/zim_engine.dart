@@ -952,7 +952,7 @@ class ZIMEngine implements ZIM {
     Map resultMap = await channel.invokeMethod('addMessageReaction', {
       'handle': handle,
       'reactionType': reactionType,
-      'message': message
+      'message': ZIMConverter.mZIMMessage(message)
     });
     return ZIMConverter.oZIMAddMessageReactionResult(resultMap);
   }
@@ -963,7 +963,7 @@ class ZIMEngine implements ZIM {
     Map resultMap = await channel.invokeMethod('deleteMessageReaction', {
       'handle': handle,
       'reactionType': reactionType,
-      'message': message
+      'message': ZIMConverter.mZIMMessage(message)
     });
     return ZIMConverter.oZIMDeleteMessageReactionResult(resultMap);
   }
@@ -973,8 +973,8 @@ class ZIMEngine implements ZIM {
       ZIMMessage message, ZIMMessageReactionUsersQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryMessageReactionUserList', {
       'handle': handle,
-      'message': message,
-      'config': config,
+      'message': ZIMConverter.mZIMMessage(message),
+      'config': ZIMConverter.mZIMMessageReactionUsersQueryConfig(config),
     });
     return ZIMConverter.oZIMReactionUsersQueryResult(resultMap);
   }

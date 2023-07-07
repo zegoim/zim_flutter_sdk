@@ -1346,6 +1346,14 @@ class ZIMConverter {
     return ZIMAddMessageReactionResult(reaction: reaction);
   }
 
+  static Map mZIMMessageReactionUsersQueryConfig(ZIMMessageReactionUsersQueryConfig config) {
+    Map queryConfigMap = {};
+    queryConfigMap['nextFlag'] = config.nextFlag;
+    queryConfigMap['count'] = config.count;
+    queryConfigMap['reactionType'] = config.reactionType;
+    return queryConfigMap;
+  }
+
   static ZIMDeleteMessageReactionResult oZIMDeleteMessageReactionResult(Map resultMap) {
     Map reactionMap = resultMap["reaction"];
 
