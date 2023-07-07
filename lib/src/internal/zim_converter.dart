@@ -1319,7 +1319,7 @@ class ZIMConverter {
 
     ZIMMessageReaction reaction = ZIMMessageReaction(
       conversationID: reactionMap["conversationID"],
-      conversationType: reactionMap["conversationType"],
+      conversationType: ZIMConversationTypeExtension.mapValue[reactionMap['conversationType']]!,
       messageID: reactionMap["messageID"],
       totalCount: reactionMap["totalCount"],
       reactionType: reactionMap["reactionType"],
