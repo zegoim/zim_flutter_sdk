@@ -259,6 +259,11 @@ enum ZIMMessageSentStatus {
   failed
 }
 
+enum ZIMMessageOrder {
+  descending,
+  ascending
+}
+
 /// conversation type.
 enum ZIMConversationType { peer, room, group }
 
@@ -697,6 +702,34 @@ class ZIMMessageDeleteConfig {
   ZIMMessageDeleteConfig();
 }
 
+class ZIMMessageSearchConfig {
+  ZIMMessage? nextMessage;
+  int count = 0;
+  ZIMMessageOrder order = ZIMMessageOrder.descending;
+  List<String> keywords = [];
+  List<ZIMMessageType> messageTypes = [];
+  List<int> subMessageTypes = [];
+  List<String> senderUserIDs = [];
+  int startTime = 0;
+  int endTime = 0;
+
+  ZIMMessageSearchConfig();
+}
+
+class ZIMConversationMessageGlobalSearchConfig {
+  int nextFlag = 0;
+  int totalConversationCount = 0;
+  int conversationMessageCount = 0;
+  List<String> keywords = [];
+  List<ZIMMessageType> messageTypes = [];
+  List<int> subMessageTypes = [];
+  List<String> senderUserIDs = [];
+  int startTime = 0;
+  int endTime = 0;
+
+  ZIMConversationMessageGlobalSearchConfig();
+}
+
 /// Configuration for querying member.
 ///
 /// Description: When querying member, you need to configure this object.
@@ -871,6 +904,31 @@ class ZIMGroupAttributesUpdateInfo {
   /// Description: group properties.
   Map<String, String>? groupAttributes;
   ZIMGroupAttributesUpdateInfo();
+}
+
+class ZIMGroupSearchConfig {
+  int nextFlag = 0;
+  int count = 0;
+  List<String> keywords = [];
+  bool isAlsoMatchGroupMemberUserName = false;
+  bool isAlsoMatchGroupMemberNickname = false;
+
+  ZIMGroupSearchConfig();
+}
+
+class ZIMGroupSearchInfo {
+  ZIMGroupInfo groupInfo;
+  List<ZIMGroupMemberInfo> userList;
+  ZIMGroupSearchInfo({required this.groupInfo, required this.userList});
+}
+
+class ZIMGroupMemberSearchConfig {
+  int nextFlag = 0;
+  int count = 0;
+  List<String> keywords = [];
+  bool isAlsoMatchGroupMemberNickname = false;
+
+  ZIMGroupMemberSearchConfig();
 }
 
 /// Call invitation user information.
@@ -1085,6 +1143,17 @@ class ZIMMessageReceiptInfo {
       required this.unreadMemberCount});
 }
 
+
+class ZIMConversationMessageGlobalSearchInfo {
+  String conversationID;
+  ZIMConversationType conversationType;
+  int totalMessageCount;
+  List<ZIMMessage> messageList;
+
+  ZIMConversationMessageGlobalSearchInfo({required this.conversationID, required this.conversationType, required this.totalMessageCount, required this.messageList});
+}
+
+
 //MARK : Result
 
 /// Callback of the result of renewing the token.
@@ -1287,6 +1356,26 @@ class ZIMMessageDeletedResult {
   ZIMConversationType conversationType;
   ZIMMessageDeletedResult(
       {required this.conversationID, required this.conversationType});
+}
+
+class ZIMMessagesSearchedResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  List<ZIMMessage> messageList;
+  ZIMMessage? nextMessage;
+  ZIMMessagesSearchedResult({required this.conversationID, required this.conversationType, required this.messageList, required this.nextMessage});
+}
+
+class ZIMMessagesGlobalSearchedResult {
+  List<ZIMMessage> messageList;
+  ZIMMessage? nextMessage;
+  ZIMMessagesGlobalSearchedResult({required this.messageList, required this.nextMessage});
+}
+
+class ZIMConversationMessagesGlobalSearchedResult {
+  List<ZIMConversationMessageGlobalSearchInfo> globalInfoList = [];
+  int nextFlag = 0;
+  ZIMConversationMessagesGlobalSearchedResult({required this.globalInfoList, required this.nextFlag});
 }
 
 /// Callback of the result of creating the room.
@@ -1702,6 +1791,19 @@ class ZIMGroupMemberCountQueriedResult {
   int count;
   ZIMGroupMemberCountQueriedResult(
       {required this.groupID, required this.count});
+}
+
+class ZIMGroupsSearchedResult {
+  List<ZIMGroupSearchInfo> groupSearchInfoList = [];
+  int nextFlag;
+  ZIMGroupsSearchedResult({required this.groupSearchInfoList, required this.nextFlag});
+}
+
+class ZIMGroupMembersSearchedResult {
+  String groupID;
+  List<ZIMGroupMemberInfo> userList;
+  int nextFlag;
+  ZIMGroupMembersSearchedResult({required this.groupID, required this.userList, required this.nextFlag});
 }
 
 /// Supported version: 2.0.0.

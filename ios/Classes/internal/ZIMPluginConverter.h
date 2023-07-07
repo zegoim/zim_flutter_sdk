@@ -51,6 +51,14 @@
 
 +(nullable ZIMMessageDeleteConfig *)oZIMMessageDeleteConfig:(nullable NSDictionary *)configDic;
 
++(nullable ZIMMessageSearchConfig *)oZIMMessageSearchConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMConversationMessageGlobalSearchConfig *) oZIMConversationMessageGlobalSearchConfig:(nullable NSDictionary *)configDic;
+
++(nullable NSDictionary *)mZIMConversationMessageSearchInfo:(nullable ZIMConversationMessageGlobalSearchInfo *)info;
+
++(nullable NSArray *)mZIMConversationMessageSearchInfoList:(nullable NSArray<ZIMConversationMessageGlobalSearchInfo *> *)infoList;
+
 +(nullable ZIMRoomInfo *)oZIMRoomInfo:(nullable NSDictionary *)roomInfoDic;
 
 +(nullable NSDictionary *)mZIMRoomInfo:(nullable ZIMRoomInfo *)roomInfo;
@@ -90,6 +98,14 @@
 +(nullable NSDictionary *)mZIMGroupMemberInfo:(nullable ZIMGroupMemberInfo *)memberInfo;
 
 +(nullable NSArray *)mZIMGroupMemberInfoList:(nullable NSArray<ZIMGroupMemberInfo *> *)memberInfoList;
+
++(nullable ZIMGroupSearchConfig *)oZIMGroupSearchConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMGroupMemberSearchConfig *)oZIMGroupMemberSearchConfig:(nullable NSDictionary *)configDic;
+
++(nullable NSDictionary *)mZIMGroupSearchInfo:(nullable ZIMGroupSearchInfo *)groupSearchInfo;
+
++(nullable NSArray *)mZIMGroupSearchInfoList:(nullable NSArray<ZIMGroupSearchInfo *> *)groupSearchInfoList;
 
 +(nullable NSDictionary *)mZIMErrorUserInfo:(nullable ZIMErrorUserInfo *)errorUserInfo;
 

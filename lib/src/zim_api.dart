@@ -589,8 +589,12 @@ abstract class ZIM {
 
   Future<ZIMMessageLocalExtendedDataUpdatedResult>
   updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
-  Future<ZIMCallQuitSentResult> callQuit(
-      String callID, ZIMCallQuitConfig config);
+
+  Future<ZIMMessagesSearchedResult> searchLocalMessages(String conversationID, ZIMConversationType conversationType, ZIMMessageSearchConfig config);
+
+  Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(ZIMMessageSearchConfig config);
+
+  Future<ZIMConversationMessagesGlobalSearchedResult> searchGlobalLocalConversationMessages(ZIMConversationMessageGlobalSearchConfig config);
 
 
   /// Create a room.
@@ -1193,6 +1197,10 @@ abstract class ZIM {
   Future<ZIMGroupMemberCountQueriedResult> queryGroupMemberCount(
       String groupID);
 
+  Future<ZIMGroupsSearchedResult> searchLocalGroups(ZIMGroupSearchConfig config);
+
+  Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(String groupID, ZIMGroupMemberSearchConfig config);
+
 //MARK: - CallInvite
 
   /// Supported versions: 2.1.5 and above.
@@ -1262,6 +1270,9 @@ abstract class ZIM {
 
   Future<ZIMCallEndSentResult> callEnd(
       String callID, ZIMCallEndConfig config);
+
+  Future<ZIMCallQuitSentResult> callQuit(
+      String callID, ZIMCallQuitConfig config);
 
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
