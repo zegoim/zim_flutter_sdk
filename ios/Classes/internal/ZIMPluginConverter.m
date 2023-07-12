@@ -789,7 +789,7 @@
         [basicList safeAddObject:searchInfoDic];
     }
     
-    return groupSearchInfoList;
+    return basicList;
 }
 
 +(nullable NSDictionary *)mZIMErrorUserInfo:(nullable ZIMErrorUserInfo *)errorUserInfo{
