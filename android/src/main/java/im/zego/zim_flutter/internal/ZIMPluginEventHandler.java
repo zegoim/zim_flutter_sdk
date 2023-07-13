@@ -614,7 +614,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         String handle = engineMapForCallback.get(zim);
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("infos",ZIMPluginConverter.mZIMMessageReactionList(infos));
-        resultMap.put("method","onConversationMessageReceiptChanged");
+        resultMap.put("method","onMessageReactionsChanged");
         resultMap.put("handle", handle);
         mysink.success(resultMap);
     }
