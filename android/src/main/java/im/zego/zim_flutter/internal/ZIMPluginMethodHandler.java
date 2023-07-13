@@ -19,13 +19,13 @@ import im.zego.zim.callback.ZIMCallQuitSentCallback;
 import im.zego.zim.callback.ZIMCallEndSentCallback;
 import im.zego.zim.callback.ZIMConversationDeletedCallback;
 import im.zego.zim.callback.ZIMConversationListQueriedCallback;
-import im.zego.zim.callback.ZIMConversationMessagesGlobalSearchedCallback;
 import im.zego.zim.callback.ZIMConversationPinnedStateUpdatedCallback;
 import im.zego.zim.callback.ZIMConversationPinnedListQueriedCallback;
 import im.zego.zim.callback.ZIMConversationMessageReceiptReadSentCallback;
 import im.zego.zim.callback.ZIMConversationNotificationStatusSetCallback;
 import im.zego.zim.callback.ZIMConversationQueriedCallback;
 import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
+import im.zego.zim.callback.ZIMConversationsSearchedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesQueriedCallback;
 import im.zego.zim.callback.ZIMGroupAvatarUrlUpdatedCallback;
@@ -97,8 +97,9 @@ import im.zego.zim.entity.ZIMCallQuitConfig;
 import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
-import im.zego.zim.entity.ZIMConversationMessageGlobalSearchConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
+import im.zego.zim.entity.ZIMConversationSearchConfig;
+import im.zego.zim.entity.ZIMConversationSearchInfo;
 import im.zego.zim.entity.ZIMError;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMGroup;
@@ -115,7 +116,6 @@ import im.zego.zim.entity.ZIMLogConfig;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
-import im.zego.zim.entity.ZIMConversationMessageGlobalSearchInfo;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageRevokeConfig;
@@ -1175,7 +1175,7 @@ public class ZIMPluginMethodHandler {
         });
     }
 
-    public static void searchGlobalLocalConversationMessages(MethodCall call, Result result) {
+    public static void searchLocalConversations(MethodCall call, Result result) {
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if(zim == null) {
@@ -1183,14 +1183,14 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        ZIMConversationMessageGlobalSearchConfig config = new ZIMConversationMessageGlobalSearchConfig();
-        zim.searchGlobalLocalConversationMessages(config, new ZIMConversationMessagesGlobalSearchedCallback() {
+        ZIMConversationSearchConfig config = new ZIMConversationSearchConfig();
+        zim.searchLocalConversations(config, new ZIMConversationsSearchedCallback() {
             @Override
-            public void onConversationMessagesGlobalSearched(ArrayList<ZIMConversationMessageGlobalSearchInfo> globalMessageInfoList, int nextFlag, ZIMError errorInfo) {
+            public void onConversationsSearched(ArrayList<ZIMConversationSearchInfo> globalMessageInfoList, int nextFlag, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
 
-                    resultMap.put("globalInfoList", ZIMPluginConverter.mZIMConversationMessageGlobalSearchInfoList(globalMessageInfoList));
+                    resultMap.put("conversationSearchInfoList", ZIMPluginConverter.mZIMConversationSearchInfoList(globalMessageInfoList));
                     resultMap.put("nextFlag", nextFlag);
                     result.success(resultMap);
                 }

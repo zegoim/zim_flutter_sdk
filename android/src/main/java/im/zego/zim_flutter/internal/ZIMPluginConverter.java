@@ -33,9 +33,9 @@ import im.zego.zim.entity.ZIMCommandMessage;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
-import im.zego.zim.entity.ZIMConversationMessageGlobalSearchConfig;
-import im.zego.zim.entity.ZIMConversationMessageGlobalSearchInfo;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
+import im.zego.zim.entity.ZIMConversationSearchConfig;
+import im.zego.zim.entity.ZIMConversationSearchInfo;
 import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
@@ -595,8 +595,8 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ZIMConversationMessageGlobalSearchConfig oZIMConversationMessageGlobalSearchConfig(HashMap<String,Object> configMap) {
-        ZIMConversationMessageGlobalSearchConfig config = new ZIMConversationMessageGlobalSearchConfig();
+    static public ZIMConversationSearchConfig oZIMConversationMessageGlobalSearchConfig(HashMap<String,Object> configMap) {
+        ZIMConversationSearchConfig config = new ZIMConversationSearchConfig();
         config.nextFlag = ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
         config.totalConversationCount = ZIMPluginCommonTools.safeGetIntValue(configMap.get("totalConversationCount"));
         config.conversationMessageCount = ZIMPluginCommonTools.safeGetIntValue(configMap.get("conversationMessageCount"));
@@ -614,9 +614,9 @@ public class ZIMPluginConverter {
         return config;
     }
 
-    static public ArrayList<HashMap<String,Object>> mZIMConversationMessageGlobalSearchInfoList(ArrayList<ZIMConversationMessageGlobalSearchInfo> globalInfoList) {
+    static public ArrayList<HashMap<String,Object>> mZIMConversationSearchInfoList(ArrayList<ZIMConversationSearchInfo> globalInfoList) {
         ArrayList<HashMap<String,Object>> mapInfoList = new ArrayList<>();
-        for(ZIMConversationMessageGlobalSearchInfo info : globalInfoList) {
+        for(ZIMConversationSearchInfo info : globalInfoList) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("conversationID", info.conversationID);
             map.put("conversationType", info.conversationType.value());

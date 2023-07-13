@@ -895,12 +895,12 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMConversationMessagesGlobalSearchedResult> searchGlobalLocalConversationMessages(ZIMConversationMessageGlobalSearchConfig config) async {
-    Map resultMap = await channel.invokeMethod('searchGlobalLocalConversationMessages', {
+  Future<ZIMConversationsSearchedResult> searchLocalConversations(ZIMConversationSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalConversations', {
       'handle': handle,
-      'config': ZIMConverter.mZIMConversationMessageSearchConfig(config)
+      'config': ZIMConverter.mZIMConversationSearchConfig(config)
     });
-    return ZIMConverter.oZIMConversationMessagesGlobalSearchedResult(resultMap);
+    return ZIMConverter.oZIMConversationsSearchedResult(resultMap);
   }
 
   @override

@@ -716,7 +716,7 @@ class ZIMMessageSearchConfig {
   ZIMMessageSearchConfig();
 }
 
-class ZIMConversationMessageGlobalSearchConfig {
+class ZIMConversationSearchConfig {
   int nextFlag = 0;
   int totalConversationCount = 0;
   int conversationMessageCount = 0;
@@ -727,7 +727,7 @@ class ZIMConversationMessageGlobalSearchConfig {
   int startTime = 0;
   int endTime = 0;
 
-  ZIMConversationMessageGlobalSearchConfig();
+  ZIMConversationSearchConfig();
 }
 
 /// Configuration for querying member.
@@ -1144,13 +1144,13 @@ class ZIMMessageReceiptInfo {
 }
 
 
-class ZIMConversationMessageGlobalSearchInfo {
+class ZIMConversationSearchInfo {
   String conversationID;
   ZIMConversationType conversationType;
   int totalMessageCount;
   List<ZIMMessage> messageList;
 
-  ZIMConversationMessageGlobalSearchInfo({required this.conversationID, required this.conversationType, required this.totalMessageCount, required this.messageList});
+  ZIMConversationSearchInfo({required this.conversationID, required this.conversationType, required this.totalMessageCount, required this.messageList});
 }
 
 
@@ -1372,10 +1372,10 @@ class ZIMMessagesGlobalSearchedResult {
   ZIMMessagesGlobalSearchedResult({required this.messageList, required this.nextMessage});
 }
 
-class ZIMConversationMessagesGlobalSearchedResult {
-  List<ZIMConversationMessageGlobalSearchInfo> globalInfoList = [];
+class ZIMConversationsSearchedResult {
+  List<ZIMConversationSearchInfo> conversationSearchInfoList = [];
   int nextFlag = 0;
-  ZIMConversationMessagesGlobalSearchedResult({required this.globalInfoList, required this.nextFlag});
+  ZIMConversationsSearchedResult({required this.conversationSearchInfoList, required this.nextFlag});
 }
 
 /// Callback of the result of creating the room.

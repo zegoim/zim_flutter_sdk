@@ -412,23 +412,23 @@ class ZIMConverter {
     return ZIMMessagesGlobalSearchedResult(messageList: messageList, nextMessage: nextMessage);
   }
 
-  static ZIMConversationMessageGlobalSearchInfo oZIMConversationMessageGlobalInfo(Map infoMap) {
+  static ZIMConversationSearchInfo oZIMConversationSearchInfo(Map infoMap) {
     List<ZIMMessage> messageList = [];
     for (Map messageMap in infoMap['messageList']) {
       messageList.add(oZIMMessage(messageMap));
     }
 
-    return ZIMConversationMessageGlobalSearchInfo(conversationID: infoMap['conversationID'], conversationType: ZIMConversationTypeExtension
+    return ZIMConversationSearchInfo(conversationID: infoMap['conversationID'], conversationType: ZIMConversationTypeExtension
         .mapValue[infoMap['conversationType']]!, totalMessageCount: infoMap['totalMessageCount'], messageList: messageList);
   }
 
-  static ZIMConversationMessagesGlobalSearchedResult oZIMConversationMessagesGlobalSearchedResult(Map resultMap) {
-    List<ZIMConversationMessageGlobalSearchInfo> globalInfoList = [];
-    for (Map infoMap in resultMap['globalInfoList']) {
-      globalInfoList.add(oZIMConversationMessageGlobalInfo(infoMap));
+  static ZIMConversationsSearchedResult oZIMConversationsSearchedResult(Map resultMap) {
+    List<ZIMConversationSearchInfo> conversationSearchInfoList = [];
+    for (Map infoMap in resultMap['conversationSearchInfoList']) {
+      conversationSearchInfoList.add(oZIMConversationSearchInfo(infoMap));
     }
 
-    return ZIMConversationMessagesGlobalSearchedResult(globalInfoList: globalInfoList, nextFlag: resultMap['nextFlag']);
+    return ZIMConversationsSearchedResult(conversationSearchInfoList: conversationSearchInfoList, nextFlag: resultMap['nextFlag']);
   }
 
   static Map mZIMConversationDeleteConfig(ZIMConversationDeleteConfig config) {
@@ -1394,7 +1394,7 @@ class ZIMConverter {
     return configMap;
   }
 
-  static Map mZIMConversationMessageSearchConfig(ZIMConversationMessageGlobalSearchConfig config) {
+  static Map mZIMConversationSearchConfig(ZIMConversationSearchConfig config) {
     Map configMap = {};
 
     List<int> messageTypeList = [];

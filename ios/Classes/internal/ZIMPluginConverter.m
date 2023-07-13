@@ -498,12 +498,12 @@
     return config;
 }
 
-+(nullable ZIMConversationMessageGlobalSearchConfig *) oZIMConversationMessageGlobalSearchConfig:(nullable NSDictionary *)configDic {
++(nullable ZIMConversationSearchConfig *) oZIMConversationMessageGlobalSearchConfig:(nullable NSDictionary *)configDic {
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
     
-    ZIMConversationMessageGlobalSearchConfig *config = [[ZIMConversationMessageGlobalSearchConfig alloc] init];
+    ZIMConversationSearchConfig *config = [[ZIMConversationSearchConfig alloc] init];
     config.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] unsignedIntValue];
     config.totalConversationCount = [[configDic safeObjectForKey:@"totalConversationCount"] unsignedIntValue];
     config.conversationMessageCount = [[configDic safeObjectForKey:@"conversationMessageCount"] unsignedIntValue];
@@ -517,7 +517,7 @@
     return config;
 }
 
-+(nullable NSDictionary *)mZIMConversationMessageSearchInfo:(nullable ZIMConversationMessageGlobalSearchInfo *)info {
++(nullable NSDictionary *)mZIMConversationMessageSearchInfo:(nullable ZIMConversationSearchInfo *)info {
     if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
         return nil;
     }
@@ -531,12 +531,12 @@
     return configDic;
 }
 
-+(nullable NSArray *)mZIMConversationMessageSearchInfoList:(nullable NSArray<ZIMConversationMessageGlobalSearchInfo *> *)infoList {
++(nullable NSArray *)mZIMConversationMessageSearchInfoList:(nullable NSArray<ZIMConversationSearchInfo *> *)infoList {
     if(infoList == nil || infoList == NULL || [infoList isEqual:[NSNull null]]){
         return nil;
     }
     NSMutableArray *DicArr = [[NSMutableArray alloc] init];
-    for (ZIMConversationMessageGlobalSearchInfo *info in infoList) {
+    for (ZIMConversationSearchInfo *info in infoList) {
         [DicArr addObject:[ZIMPluginConverter mZIMConversationMessageSearchInfo:info]];
     }
     return DicArr;

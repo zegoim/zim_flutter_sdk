@@ -594,7 +594,7 @@ abstract class ZIM {
 
   Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(ZIMMessageSearchConfig config);
 
-  Future<ZIMConversationMessagesGlobalSearchedResult> searchGlobalLocalConversationMessages(ZIMConversationMessageGlobalSearchConfig config);
+  Future<ZIMConversationsSearchedResult> searchLocalConversations(ZIMConversationSearchConfig config);
 
 
   /// Create a room.

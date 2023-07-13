@@ -960,7 +960,7 @@
     }];
 }
 
-- (void)searchGlobalLocalConversationMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
+- (void)searchLocalConversations:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if(!zim) {
@@ -968,11 +968,11 @@
         return;
     }
     
-    ZIMConversationMessageGlobalSearchConfig *config = [ZIMPluginConverter oZIMConversationMessageGlobalSearchConfig:[call.arguments objectForKey:@"config"]];
-    [zim searchGlobalLocalConversationMessagesWithConfig:config callback:^(NSArray<ZIMConversationMessageGlobalSearchInfo *> * _Nonnull globalInfoList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+    ZIMConversationSearchConfig *config = [ZIMPluginConverter oZIMConversationMessageGlobalSearchConfig:[call.arguments objectForKey:@"config"]];
+    [zim searchLocalConversationsWithConfig:config callback:^(NSArray<ZIMConversationSearchInfo *> * _Nonnull globalInfoList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic safeSetObject:[ZIMPluginConverter mZIMConversationMessageSearchInfoList:globalInfoList] forKey:@"globalInfoList"];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMConversationMessageSearchInfoList:globalInfoList] forKey:@"conversationSearchInfoList"];
             [resultDic safeSetObject:@(nextFlag) forKey:@"nextFlag"];
             result(resultDic);
             

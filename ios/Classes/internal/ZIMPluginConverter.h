@@ -53,11 +53,11 @@
 
 +(nullable ZIMMessageSearchConfig *)oZIMMessageSearchConfig:(nullable NSDictionary *)configDic;
 
-+(nullable ZIMConversationMessageGlobalSearchConfig *) oZIMConversationMessageGlobalSearchConfig:(nullable NSDictionary *)configDic;
++(nullable ZIMConversationSearchConfig *) oZIMConversationMessageGlobalSearchConfig:(nullable NSDictionary *)configDic;
 
-+(nullable NSDictionary *)mZIMConversationMessageSearchInfo:(nullable ZIMConversationMessageGlobalSearchInfo *)info;
++(nullable NSDictionary *)mZIMConversationMessageSearchInfo:(nullable ZIMConversationSearchInfo *)info;
 
-+(nullable NSArray *)mZIMConversationMessageSearchInfoList:(nullable NSArray<ZIMConversationMessageGlobalSearchInfo *> *)infoList;
++(nullable NSArray *)mZIMConversationMessageSearchInfoList:(nullable NSArray<ZIMConversationSearchInfo *> *)infoList;
 
 +(nullable ZIMRoomInfo *)oZIMRoomInfo:(nullable NSDictionary *)roomInfoDic;
 
