@@ -1121,7 +1121,7 @@ public class ZIMPluginMethodHandler {
 
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
-        ZIMMessageSearchConfig config = new ZIMMessageSearchConfig();
+        ZIMMessageSearchConfig config = ZIMPluginConverter.oZIMMessageSearchConfig(Objects.requireNonNull(call.argument("config")));
         zim.searchLocalMessages(conversationID, conversationType, config, new ZIMMessagesSearchedCallback() {
             @Override
             public void onMessagesSearched(String conversationID, ZIMConversationType conversationType, ArrayList<ZIMMessage> messageList, ZIMMessage nextMessage, ZIMError errorInfo) {
@@ -1153,7 +1153,7 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        ZIMMessageSearchConfig config = new ZIMMessageSearchConfig();
+        ZIMMessageSearchConfig config = ZIMPluginConverter.oZIMMessageSearchConfig(Objects.requireNonNull(call.argument("config")));
         zim.searchGlobalLocalMessages(config, new ZIMMessagesGlobalSearchedCallback() {
             @Override
             public void onMessagesGlobalSearched(ArrayList<ZIMMessage> messageList, ZIMMessage nextMessage, ZIMError errorInfo) {
@@ -1183,7 +1183,7 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        ZIMConversationSearchConfig config = new ZIMConversationSearchConfig();
+        ZIMConversationSearchConfig config = ZIMPluginConverter.oZIMConversationMessageGlobalSearchConfig(Objects.requireNonNull(call.argument("config")));
         zim.searchLocalConversations(config, new ZIMConversationsSearchedCallback() {
             @Override
             public void onConversationsSearched(ArrayList<ZIMConversationSearchInfo> globalMessageInfoList, int nextFlag, ZIMError errorInfo) {
