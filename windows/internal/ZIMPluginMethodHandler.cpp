@@ -855,7 +855,10 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
     }
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-    int32_t progressID = std::get<int32_t>(argument[FTValue("progressID")]);
+    int32_t progressID = 0;
+	if (!std::holds_alternative<std::monostate>(argument[FTValue("progressID")])) {
+        progressID = std::get<int32_t>(argument[FTValue("progressID")]);
+	}
     auto messageID = std::get<int32_t>(argument[FTValue("messageID")]);
     
     int32_t messageAttachedCallbackID = 0;
@@ -919,7 +922,10 @@ void ZIMPluginMethodHandler::downloadMediaFile(flutter::EncodableMap& argument,
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-    auto progressID = std::get<int32_t>(argument[FTValue("progressID")]);
+    int32_t progressID = 0;
+	if (!std::holds_alternative<std::monostate>(argument[FTValue("progressID")])) {
+        progressID = std::get<int32_t>(argument[FTValue("progressID")]);
+	}
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->downloadMediaFile(mediaMessagePtr.get(), (ZIMMediaFileType)fileType, [=](const std::shared_ptr<ZIMMediaMessage>& message,
