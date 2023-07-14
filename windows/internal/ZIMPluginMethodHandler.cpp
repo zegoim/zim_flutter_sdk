@@ -1188,7 +1188,7 @@ void ZIMPluginMethodHandler::searchLocalMessages(flutter::EncodableMap& argument
     int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
     auto config = ZIMPluginConverter::cnvZIMMessageSearchConfigMapToObject(std::get<FTMap>(argument[FTValue("config")]));
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->searchLocalMessages(conversationID, conversationType, config, [=](const std::string &conversationID, ZIMConversationType conversationType, const std::vector<std::shared_ptr<ZIMMessage>> &messageList, const std::shared_ptr<ZIMMessage> &nextMessage, const ZIMError &errorInfo) {
+    zim->searchLocalMessages(conversationID, (ZIMConversationType)conversationType, config, [=](const std::string &conversationID, ZIMConversationType conversationType, const std::vector<std::shared_ptr<ZIMMessage>> &messageList, const std::shared_ptr<ZIMMessage> &nextMessage, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("conversationID")] = FTValue(conversationID);
@@ -2358,6 +2358,7 @@ void ZIMPluginMethodHandler::searchLocalGroupMembers(flutter::EncodableMap& argu
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMemberSearchConfigMapToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->searchLocalGroupMembers(groupID, config, [=](const std::string &groupID, const std::vector<ZIMGroupMemberInfo> &userList, unsigned int nextFlag, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
