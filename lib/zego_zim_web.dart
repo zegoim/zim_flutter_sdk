@@ -294,16 +294,16 @@ class ZegoZimPlugin {
       case 'queryConversation':
         return queryConversation(call.arguments["conversationID"],
             call.arguments["conversationType"]);
-      case 'searchGlobalLocalConversationMessages':
-        return searchGlobalLocalConversationMessages(call.arguments["config"]);
+      case 'searchLocalConversations':
+        return searchLocalConversations(call.arguments["config"]);
       case 'searchGlobalLocalMessages':
         return searchGlobalLocalMessages(call.arguments["config"]);
       case 'searchLocalMessages':
-        return searchLocalMessages(call.arguments["config"]);
+        return searchLocalMessages(call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["config"]);
       case 'searchLocalGroups':
         return searchLocalGroups(call.arguments["config"]);
       case 'searchLocalGroupMembers':
-        return searchLocalGroupMembers(call.arguments["config"]);
+        return searchLocalGroupMembers(call.arguments["groupID"], call.arguments["config"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -1505,16 +1505,24 @@ class ZegoZimPlugin {
     return resultMap;
   }
 
-  Future<Map<dynamic, dynamic>> searchGlobalLocalConversationMessages(dynamic config) async {
+  Future<Map<dynamic, dynamic>> searchLocalConversations(dynamic config) async {
     Object _config = mapToJSObj(config);
     final result = await promiseToFuture(ZIM
             .getInstance()!
-            .searchGlobalLocalConversationMessages(_config))
+            .searchLocalConversations(_config))
         .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     final resultMap = jsObjectToMap(result);
+
+    for (var infoMap in resultMap["conversationSearchInfoList"]) {
+      for (var messageMap in infoMap["messageList"]) {
+        messageMap = convertZIMMessage(messageMap);
+      }
+    }
+
+    resultMap["nextFlag"] = resultMap["nextFlag"] is int ? resultMap["nextFlag"] : 0;
 
     return resultMap;
   }
@@ -1530,19 +1538,35 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
+    for (var messageMap in resultMap["messageList"]) {
+      messageMap = convertZIMMessage(messageMap);
+    }
+
+    if (resultMap["nextMessage"] != null) {
+      resultMap["nextMessage"] = convertZIMMessage(resultMap["nextMessage"]);
+    }
+
     return resultMap;
   }
 
-  Future<Map<dynamic, dynamic>> searchLocalMessages(dynamic config) async {
+  Future<Map<dynamic, dynamic>> searchLocalMessages(String conversationID, dynamic conversationType, dynamic config) async {
     Object _config = mapToJSObj(config);
     final result = await promiseToFuture(ZIM
             .getInstance()!
-            .searchLocalMessages(_config))
+            .searchLocalMessages(conversationID, conversationType, _config))
         .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     final resultMap = jsObjectToMap(result);
+
+    for (var messageMap in resultMap["messageList"]) {
+      messageMap = convertZIMMessage(messageMap);
+    }
+
+    if (resultMap["nextMessage"] != null) {
+      resultMap["nextMessage"] = convertZIMMessage(resultMap["nextMessage"]);
+    }
 
     return resultMap;
   }
@@ -1561,11 +1585,11 @@ class ZegoZimPlugin {
     return resultMap;
   }
 
-  Future<Map<dynamic, dynamic>> searchLocalGroupMembers(dynamic config) async {
+  Future<Map<dynamic, dynamic>> searchLocalGroupMembers(String groupID, dynamic config) async {
     Object _config = mapToJSObj(config);
     final result = await promiseToFuture(ZIM
             .getInstance()!
-            .searchLocalGroupMembers(_config))
+            .searchLocalGroupMembers(groupID, _config))
         .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
@@ -1925,8 +1949,10 @@ class ZegoZimPlugin {
     List<dynamic> infoList = data["infoList"];
 
     infoList.forEach((info) {
-      info["conversation"]["lastMessage"] =
+      if (info["conversation"]["lastMessage"] != null) {
+        info["conversation"]["lastMessage"] =
           convertZIMMessage(info["conversation"]["lastMessage"]);
+      }
     });
 
     List<ZIMConversationChangeInfo> conversationChangeInfoList =
