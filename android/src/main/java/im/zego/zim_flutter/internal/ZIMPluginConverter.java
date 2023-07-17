@@ -188,8 +188,8 @@ public class ZIMPluginConverter {
         messageMap.put("orderKey",message.getOrderKey());
         messageMap.put("isUserInserted",message.isUserInserted());
         messageMap.put("receiptStatus",message.getReceiptStatus().value());
-        messageMap.put("extendedData",message.getExtendedData());
-        messageMap.put("localExtendedData",message.getLocalExtendedData());
+        messageMap.put("extendedData",message.extendedData);
+        messageMap.put("localExtendedData",message.localExtendedData);
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
