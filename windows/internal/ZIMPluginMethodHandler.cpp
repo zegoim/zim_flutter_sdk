@@ -595,8 +595,7 @@ void ZIMPluginMethodHandler::insertMessageToLocalDB(flutter::EncodableMap& argum
         return;
     }
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
-	FTMap messageMap = std::get<FTMap>(argument[FTValue("message")]);
-	auto messageID = ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("messageID")]);
+	auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
     auto senderUserID = std::get<std::string>(argument[FTValue("senderUserID")]);
@@ -626,8 +625,7 @@ void ZIMPluginMethodHandler::sendMessage(flutter::EncodableMap& argument,
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toConversationID = std::get<std::string>(argument[FTValue("toConversationID")]);
     int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
-	FTMap messageMap = std::get<FTMap>(argument[FTValue("message")]);
-	auto messageID = ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("messageID")]);
+	auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
     
 	int32_t messageAttachedCallbackID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageAttachedCallbackID")]);
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
@@ -824,8 +822,7 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
     int32_t progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
-    FTMap messageMap = std::get<FTMap>(argument[FTValue("message")]);
-    auto messageID = ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("messageID")]);
+    auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
     int32_t messageAttachedCallbackID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageAttachedCallbackID")]);
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
