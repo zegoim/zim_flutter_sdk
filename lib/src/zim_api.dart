@@ -10,7 +10,7 @@ abstract class ZIM {
   static ZIM? getInstance() {
     return ZIMManager.getInstance();
   }
-  
+
   /// Gets the SDK's version number.
   ///
   /// When the SDK is running, the developer finds that it does not match the expected situation and submits the problem and related logs to the ZEGO technical staff for locating. The ZEGO technical staff may need the information of the engine version to assist in locating the problem.
@@ -270,13 +270,13 @@ abstract class ZIM {
   /// Available since: 2.5.0 and above.
   ///
   /// Description: Set all received receipts of the conversation to be read.
-  ///    
+  ///
   /// Use cases: Set all received receipt messages in the entire conversation to be read, and the sender of the message receipt in the conversation will receive the [onConversationMessageReceiptChanged] callback from ZIMEventHandler.
-  ///    
+  ///
   /// When to call: It can be called after login. It is recommended to call before entering the message list page. In the message list page, it is recommended to call [sendMessageReceiptsRead] to batch set the messages that need to be read.
-  ///        
+  ///
   /// Caution: Only single chat conversation are allowed.
-  ///    
+  ///
   /// Related callback: [ZIMConversationMessageReceiptReadSentResult].
   ///
   /// Related APIs: [sendMessageReceiptsRead], [sendMessage].
@@ -507,13 +507,13 @@ abstract class ZIM {
   /// Available since: 2.5.0 and above.
 
   /// Description: This method can set the receipt of a batch of messages to become read.
-      
+
   /// Use cases: Developers can use this method to set a batch of messages with receipts that have been read. If the sender is online, it will receive the [onMessageReceiptChanged] callback.
-      
+
   /// When to call: Callable after login. It is recommended to set the settings for the messages that need to be read on the message list page. It is not recommended to mix with [sendConversationMessageReceiptRead].
 
   /// Restrictions: Only support the settings for received messages with receipt status as PROCESSING.
-      
+
   /// Related callbacks: [ZIMMessageReceiptsReadSentResult].
 
   /// Related APIs: [sendMessage].
@@ -522,70 +522,80 @@ abstract class ZIM {
 
 
   /// Available since: 2.5.0 and above.
-  /// 
+  ///
   /// Description: This method can query the receipt information of a batch of messages, including the status, the number of unread users and the number of read users.
-  /// 
+  ///
   /// Use cases: If you need to query the receipt status of the message, the number of unread users and the number of read users, you can call this interface.
-  /// 
+  ///
   /// When to call: Callable after login. If you need to query the detailed member list, you can query through the interface [queryGroupMessageReceiptReadMemberList] or [queryGroupMessageReceiptUnreadMemberList].
-  /// 
+  ///
   /// Restrictions: Only messages whose statuses are not NONE and UNKNOWN are supported.
-  /// 
+  ///
   /// Related callbacks: [ZIMMessageReceiptsInfoQueriedResult].
-  /// 
+  ///
   /// Related APIs: [queryGroupMessageReceiptReadMemberList] , [queryGroupMessageReceiptUnreadMemberList].
   Future<ZIMMessageReceiptsInfoQueriedResult> queryMessageReceiptsInfo(
       List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
 
   /// Available since: 2.5.0 and above.
-  /// 
+  ///
   /// Description: This method can query the specific read member list of a message sent by a group.
-  /// 
+  ///
   /// Use cases: Developers can use this method to query the specific read member list of a message they send.
-  /// 
+  ///
   /// When to call: Callable after login.
-  /// 
+  ///
   /// Restrictions: only supports querying the messages sent by the local end, and the receipt status of the messages is not NONE and UNKNOWN. If the user is not in the group, or has been kicked out of the group, the corresponding member list cannot be found.
-  /// 
+  ///
   /// Related callbacks: [ZIMGroupMessageReceiptMemberListQueriedResult].
-  /// 
+  ///
   /// Related APIs: If you need to query the receipt status of a certain message or only need to query the read/unread count, you can query through the interface [queryMessageReceiptsInfo].
   Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList (
       ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
 
 
   /// Available since: 2.5.0 and above.
-  /// 
+  ///
   /// Description: This method can query the specific unread member list of a message sent by a group.
-  /// 
+  ///
   /// Use cases: Developers can use this method to query the specific unread member list of a message they send.
-  /// 
+  ///
   /// When to call: Callable after login.
-  /// 
+  ///
   /// Restrictions: only supports querying the messages sent by the local end, and the receipt status of the messages is not NONE and UNKNOWN. If the user is not in the group, or has been kicked out of the group, the corresponding member list cannot be found.
-  /// 
+  ///
   /// Related callbacks: [ZIMGroupMessageReceiptMemberListQueriedResult].
-  /// 
+  ///
   /// Related APIs: If you need to query the receipt status of a certain message or only need to query the read/unread count, you can query through the interface [queryMessageReceiptsInfo].
   Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList (
       ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
 
   /// Available sinces: 2.5.0 and above.
-  /// 
+  ///
   /// Detail description: This method implements the function of revoking messages.
-  /// 
+  ///
   /// Use cases: The user needs to recall a message. This method can be used when the user does not want other users to see the message.
-  /// 
+  ///
   /// When to call: Called when the message needs to be revoked.
-  /// 
+  ///
   /// Note: Room message revoke is not supported.
-  /// 
+  ///
   /// Restrictions: Effective after login.
-  /// 
+  ///
   /// Related callbacks: If the revoked message is the latest message of the session, the [ZIMEventHandler.onConversationChanged] callback will be triggered, and if the message is unread, the [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] callback will be triggered.
   Future<ZIMMessageRevokedResult> revokeMessage (
       ZIMMessage message, ZIMMessageRevokeConfig config);
 //MARK: - Room
+
+  Future<ZIMMessageLocalExtendedDataUpdatedResult>
+  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
+
+  Future<ZIMMessagesSearchedResult> searchLocalMessages(String conversationID, ZIMConversationType conversationType, ZIMMessageSearchConfig config);
+
+  Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(ZIMMessageSearchConfig config);
+
+  Future<ZIMConversationsSearchedResult> searchLocalConversations(ZIMConversationSearchConfig config);
+
 
   /// Create a room.
   ///
@@ -628,17 +638,17 @@ abstract class ZIM {
   Future<ZIMRoomJoinedResult> joinRoom(String roomID);
 
   /// Supported version: 2.1.5.
-  /// 
+  ///
   /// Detail description: After calling this API, ZIM will decide whether to create a room or join a room according to whether the user is the first to enter. At the same time, if the first user to enter has room advanced attributes, those attributes will take effect.
-  /// 
+  ///
   /// Business scenario: When you need to enter a multi-person chat scene with custom attributes, and you do not need to distinguish whether the room is created or added, you can enter a room through this interface.
-  /// 
+  ///
   /// When to call: It can be called after logging in.
-  /// 
+  ///
   /// Note: When everyone leaves the room, the room will be automatically destroyed, and a user can be in a maximum of 5 rooms at the same time. [enterRoom] is equivalent to [createRoom] or [joinRoom], so you only need to choose one of the APIs.
-  /// 
+  ///
   /// Related callbacks: The result of entering the room can be obtained through the [ZIMRoomEnteredResult] callback.
-  /// 
+  ///
   /// Related interface: You can enter the room through [enterRoom], and leave the room through [leaveRoom].
   Future<ZIMRoomEnteredResult> enterRoom(
       ZIMRoomInfo roomInfo, ZIMRoomAdvancedConfig config);
@@ -1187,6 +1197,10 @@ abstract class ZIM {
   Future<ZIMGroupMemberCountQueriedResult> queryGroupMemberCount(
       String groupID);
 
+  Future<ZIMGroupsSearchedResult> searchLocalGroups(ZIMGroupSearchConfig config);
+
+  Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(String groupID, ZIMGroupMemberSearchConfig config);
+
 //MARK: - CallInvite
 
   /// Supported versions: 2.1.5 and above.
@@ -1203,6 +1217,10 @@ abstract class ZIM {
   /// [config] Call Invitation Related Configuration.
   Future<ZIMCallInvitationSentResult> callInvite(
       List<String> invitees, ZIMCallInviteConfig config);
+
+
+  Future<ZIMCallingInvitationSentResult> callingInvite(
+      List<String>invitees, String callID, ZIMCallingInviteConfig config);
 
   /// Supported versions: 2.1.5 and above.
   ///
@@ -1250,8 +1268,13 @@ abstract class ZIM {
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config);
 
+  Future<ZIMCallEndSentResult> callEnd(
+      String callID, ZIMCallEndConfig config);
 
+  Future<ZIMCallQuitSentResult> callQuit(
+      String callID, ZIMCallQuitConfig config);
 
+  Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
 
 }
