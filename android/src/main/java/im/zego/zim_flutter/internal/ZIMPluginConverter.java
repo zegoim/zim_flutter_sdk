@@ -1012,7 +1012,7 @@ public class ZIMPluginConverter {
         ZIMCallInviteConfig config = new ZIMCallInviteConfig();
         config.timeout = ZIMPluginCommonTools.safeGetIntValue(configMap.get("timeout"));
         config.extendedData = (String) configMap.get("extendedData");
-        config.mode = ZIMCallInvitationMode.getZIMInvitationMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
+        config.mode = ZIMCallInvitationMode.getZIMCallInvitationMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         return config;
     }
@@ -1216,7 +1216,7 @@ public class ZIMPluginConverter {
         infoMap.put("mode", info.mode.value());
         infoMap.put("extendedData", info.extendedData);
         infoMap.put("caller", info.caller);
-        infoMap.put("operatedUserID", info.operatedUserId);
+        infoMap.put("operatedUserID", info.operatedUserID);
         return infoMap;
     }
 
