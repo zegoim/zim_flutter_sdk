@@ -25,7 +25,13 @@ void ZIMPluginMethodHandler::create(flutter::EncodableMap& argument,
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-    unsigned int appID = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("appID")]);
+    unsigned int appID = 0;
+    if (std::holds_alternative<int32_t>(configMap[FTValue("appID")])) {
+        appID = (unsigned int)std::get<int32_t>(configMap[FTValue("appID")]);
+    }
+    else {
+        appID = (unsigned int)std::get<int64_t>(configMap[FTValue("appID")]);
+    }
     auto appSign = std::get<std::string>(configMap[FTValue("appSign")]);
 
     ZIMAppConfig appConfig;
@@ -62,7 +68,7 @@ void ZIMPluginMethodHandler::setLogConfig(flutter::EncodableMap& argument,
     
     ZIMLogConfig logConfig;
     logConfig.logPath = std::get<std::string>(argument[FTValue("logPath")]);
-    logConfig.logSize = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("logSize")]);
+    logConfig.logSize = std::get<int32_t>(argument[FTValue("logSize")]);
 
     ZIM::setLogConfig(logConfig);
 
@@ -311,7 +317,7 @@ void ZIMPluginMethodHandler::queryConversationList(flutter::EncodableMap& argume
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMConversationQueryConfig queryConfig;
-    queryConfig.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+    queryConfig.count = std::get<int32_t>(configMap[FTValue("count")]);
 
     if (std::holds_alternative<std::monostate>(configMap[FTValue("nextConversation")])) {
         queryConfig.nextConversation = nullptr;
@@ -347,7 +353,7 @@ void ZIMPluginMethodHandler::queryConversation(flutter::EncodableMap& argument,
 	}
 
 	auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-	int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+	int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
 
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 	zim->queryConversation(conversationID, (ZIMConversationType)conversationType, [=](const std::shared_ptr<ZIMConversation>& conversation, const ZIMError& errorInfo) {
@@ -375,7 +381,7 @@ void ZIMPluginMethodHandler::queryConversationPinnedList(flutter::EncodableMap& 
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMConversationQueryConfig queryConfig;
-    queryConfig.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+    queryConfig.count = std::get<int32_t>(configMap[FTValue("count")]);
 
     if (std::holds_alternative<std::monostate>(configMap[FTValue("nextConversation")])) {
         queryConfig.nextConversation = nullptr;
@@ -412,7 +418,7 @@ void ZIMPluginMethodHandler::updateConversationPinnedState(flutter::EncodableMap
 
     bool isPinned = std::get<bool>(argument[FTValue("isPinned")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->updateConversationPinnedState(isPinned, conversationID, (ZIMConversationType)conversationType, [=](const std::string& conversationID, ZIMConversationType conversationType,
@@ -441,7 +447,7 @@ void ZIMPluginMethodHandler::deleteConversation(flutter::EncodableMap& argument,
     }
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     ZIMConversationDeleteConfig deleteConfig = ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(configMap);
@@ -472,7 +478,7 @@ void ZIMPluginMethodHandler::clearConversationUnreadMessageCount(flutter::Encoda
     }
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->clearConversationUnreadMessageCount(conversationID, (ZIMConversationType)conversationType, [=](const std::string& conversationID, ZIMConversationType conversationType,
@@ -503,9 +509,9 @@ void ZIMPluginMethodHandler::setConversationNotificationStatus(flutter::Encodabl
     }
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
 
-    int status = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("status")]);
+    int status = std::get<int32_t>(argument[FTValue("status")]);
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->setConversationNotificationStatus((ZIMConversationNotificationStatus)status, conversationID, (ZIMConversationType)conversationType, [=](const std::string& conversationID, ZIMConversationType conversationType,
@@ -534,7 +540,7 @@ void ZIMPluginMethodHandler::sendConversationMessageReceiptRead(flutter::Encodab
         return;
     }
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->sendConversationMessageReceiptRead(conversationID, (ZIMConversationType)conversationType, [=](const std::string &conversationID, ZIMConversationType conversationType,const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -595,10 +601,9 @@ void ZIMPluginMethodHandler::insertMessageToLocalDB(flutter::EncodableMap& argum
         return;
     }
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
-	FTMap messageMap = std::get<FTMap>(argument[FTValue("message")]);
-	auto messageID = ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("messageID")]);
+    auto messageID = std::get<int32_t>(argument[FTValue("messageID")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
     auto senderUserID = std::get<std::string>(argument[FTValue("senderUserID")]);
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->insertMessageToLocalDB(std::static_pointer_cast<zim::ZIMMessage>(messagePtr),conversationID, (ZIMConversationType)conversationType, senderUserID,[=](const std::shared_ptr<zim::ZIMMessage> &message,const zim::ZIMError &errorInfo) {
@@ -625,15 +630,17 @@ void ZIMPluginMethodHandler::sendMessage(flutter::EncodableMap& argument,
 
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toConversationID = std::get<std::string>(argument[FTValue("toConversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
-	FTMap messageMap = std::get<FTMap>(argument[FTValue("message")]);
-	auto messageID = ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("messageID")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
+    auto messageID = std::get<int32_t>(argument[FTValue("messageID")]);
     
-	int32_t messageAttachedCallbackID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageAttachedCallbackID")]);
+    int32_t messageAttachedCallbackID = 0;
+    if (!std::holds_alternative<std::monostate>(argument[FTValue("messageAttachedCallbackID")])) {
+        messageAttachedCallbackID = std::get<int32_t>(argument[FTValue("messageAttachedCallbackID")]);
+    }
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+    config.priority = (ZIMMessagePriority)std::get<int32_t>(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -688,7 +695,7 @@ void ZIMPluginMethodHandler::sendPeerMessage(flutter::EncodableMap& argument,
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+    config.priority = (ZIMMessagePriority)std::get<int32_t>(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -729,7 +736,7 @@ void ZIMPluginMethodHandler::sendRoomMessage(flutter::EncodableMap& argument,
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+    config.priority = (ZIMMessagePriority)std::get<int32_t>(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -770,7 +777,7 @@ void ZIMPluginMethodHandler::sendGroupMessage(flutter::EncodableMap& argument,
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+    config.priority = (ZIMMessagePriority)std::get<int32_t>(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -807,12 +814,12 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
 
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toConversationID = std::get<std::string>(argument[FTValue("toConversationID")]);
-    auto conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    auto conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+    config.priority = (ZIMMessagePriority)std::get<int32_t>(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -823,11 +830,13 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
     }
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-    int32_t progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
-    FTMap messageMap = std::get<FTMap>(argument[FTValue("message")]);
-    auto messageID = ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("messageID")]);
-    int32_t messageAttachedCallbackID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageAttachedCallbackID")]);
-
+    int32_t progressID = std::get<int32_t>(argument[FTValue("progressID")]);
+    auto messageID = std::get<int32_t>(argument[FTValue("messageID")]);
+    
+    int32_t messageAttachedCallbackID = 0;
+    if (!std::holds_alternative<std::monostate>(argument[FTValue("messageAttachedCallbackID")])) {
+        messageAttachedCallbackID = std::get<int32_t>(argument[FTValue("messageAttachedCallbackID")]);
+    }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 
 
@@ -881,11 +890,12 @@ void ZIMPluginMethodHandler::downloadMediaFile(flutter::EncodableMap& argument,
         return;
     }
 
-    auto fileType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("fileType")]);
+    auto fileType = std::get<int32_t>(argument[FTValue("fileType")]);
     auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto progressID = std::get<int32_t>(argument[FTValue("progressID")]);
+
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->downloadMediaFile(mediaMessagePtr.get(), (ZIMMediaFileType)fileType, [=](const std::shared_ptr<ZIMMediaMessage>& message,
         unsigned long long currentFileSize, unsigned long long totalFileSize) {
@@ -925,11 +935,11 @@ void ZIMPluginMethodHandler::queryHistoryMessage(flutter::EncodableMap& argument
     }
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageQueryConfig config;
-    config.count = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("count")]);
+    config.count = std::get<int32_t>(configMap[FTValue("count")]);
     config.reverse = std::get<bool>(configMap[FTValue("reverse")]);
     
     std::shared_ptr<ZIMMessage> nextMessagePtr = nullptr;
@@ -972,7 +982,7 @@ void ZIMPluginMethodHandler::deleteAllMessage(flutter::EncodableMap& argument,
     }
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-	int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageDeleteConfig config;
@@ -1008,7 +1018,8 @@ void ZIMPluginMethodHandler::deleteMessages(flutter::EncodableMap& argument,
     auto messageArray = std::get<FTArray>(argument[(FTValue("messageList"))]);
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
+
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageDeleteConfig config;
     config.isAlsoDeleteServerMessage = std::get<bool>(configMap[FTValue("isAlsoDeleteServerMessage")]);
@@ -1042,7 +1053,7 @@ void ZIMPluginMethodHandler::sendMessageReceiptsRead(flutter::EncodableMap& argu
     auto messageArray = std::get<FTArray>(argument[(FTValue("messageList"))]);
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->sendMessageReceiptsRead(messageObjectList, conversationID, (ZIMConversationType)conversationType, [=](const std::string &conversationID, ZIMConversationType conversationType,const std::vector<long long> &errorMessageIDs, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
@@ -1070,7 +1081,7 @@ void ZIMPluginMethodHandler::queryMessageReceiptsInfo(flutter::EncodableMap& arg
     auto messageArray = std::get<FTArray>(argument[(FTValue("messageList"))]);
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
-    int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+    int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->queryMessageReceiptsInfo(messageObjectList, conversationID, (ZIMConversationType)conversationType, [=](const std::vector<ZIMMessageReceiptInfo> &infos, std::vector<long long> errorMessageIDs,const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
@@ -2045,7 +2056,7 @@ void ZIMPluginMethodHandler::setGroupMemberRole(flutter::EncodableMap& argument,
     }
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
-    int role = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("role")]);
+    int role = std::get<int32_t>(argument[FTValue("role")]);
     auto forUserID = std::get<std::string>(argument[FTValue("forUserID")]);
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
@@ -2219,7 +2230,7 @@ void ZIMPluginMethodHandler::callInvite(flutter::EncodableMap& argument,
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     ZIMCallInviteConfig config;
-    config.timeout = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("timeout")]);
+    config.timeout = std::get<int32_t>(configMap[FTValue("timeout")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {

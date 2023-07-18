@@ -223,8 +223,6 @@ public:
     static ZIMGroupMessageReceiptMemberQueryConfig cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(FTMap configMap);
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
-    static int32_t cnvFTMapToInt32(flutter::EncodableValue value);
-    static int64_t cnvFTMapToInt64(flutter::EncodableValue value);
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
