@@ -590,10 +590,49 @@ abstract class ZIM {
   Future<ZIMMessageLocalExtendedDataUpdatedResult>
   updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
 
+
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detailed description: This method is used to search local messages.
+  ///
+  /// Business scenario: When it is necessary to search for past local messages based on keywords or other conditions, this interface can be called to perform pagination search for local messages.
+  ///
+  /// Restrictions: Effective after login, invalid after logout. Searching is not supported in the room scene (conversationType=1).
+  ///
+  /// Related callbacks: [ZIMMessagesSearchedResult].
+  ///
+  /// [conversationID] The conversation ID of the local message to be search.
+  /// [conversationType] conversation type.
+  /// [config] Search the configuration of local messages.
   Future<ZIMMessagesSearchedResult> searchLocalMessages(String conversationID, ZIMConversationType conversationType, ZIMMessageSearchConfig config);
 
+
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detailed description: This method is used to search global local messages.
+  ///
+  /// Business scenario: When there is a need to perform a global search of previous local messages based on keywords or other conditions, you can invoke this interface to search local messages by grouping them according to conversations.
+  ///
+  /// Restrictions: Effective after login, invalid after logout. Searching global is not supported in the room scene (conversationType=1).
+  ///
+  /// Related callbacks: [ZIMMessagesGlobalSearchedResult].
+  ///
+  /// [config] Search global the configuration of local messages.
   Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(ZIMMessageSearchConfig config);
 
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detailed description: This method is used for searching local conversations based on local messages.
+  ///
+  /// Business scenario: When there is a need to search conversations using keywords or other conditions, this API can be called for searching.
+  ///
+  /// Call timing/Notification timing: It should be invoked when there is a requirement to search conversations using keywords or other conditions.
+  ///
+  /// Restrictions: effective after logging in and becomes invalid after logging out. Searching is not supported in room scenarios (conversationType=1).
+  ///
+  /// Related callbacks: [ZIMConversationsSearchedResult].
+  ///
+  /// [config] Global search conversation config.
   Future<ZIMConversationsSearchedResult> searchLocalConversations(ZIMConversationSearchConfig config);
 
 
@@ -1197,8 +1236,36 @@ abstract class ZIM {
   Future<ZIMGroupMemberCountQueriedResult> queryGroupMemberCount(
       String groupID);
 
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detailed description: This method is used to search for local groups.
+  ///
+  /// Business scenario: When you need to search for local groups by keywords or other criteria, you can call this interface to search.
+  ///
+  /// Call timing/Notification timing: After calling [login]
+  ///
+  /// Restrictions: Takes effect after login, becomes invalid after logout.
+  ///
+  /// Related callbacks: [ZIMGroupsSearchedResult].
+  ///
+  /// [config] Configuration for searching groups.
   Future<ZIMGroupsSearchedResult> searchLocalGroups(ZIMGroupSearchConfig config);
 
+
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detailed description: This method is used to search for local groups.
+  ///
+  /// Business scenario: When you need to search for local groups by keywords or other criteria, you can call this interface to search.
+  ///
+  /// Call timing/Notification timing: After calling [login]
+  ///
+  /// Restrictions: Takes effect after login, becomes invalid after logout.
+  ///
+  /// Related callbacks: [ZIMGroupsSearchedResult].
+  ///
+  /// [groupID] groupID.
+  /// [config] Configuration for searching groups.
   Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(String groupID, ZIMGroupMemberSearchConfig config);
 
 //MARK: - CallInvite
@@ -1219,6 +1286,19 @@ abstract class ZIM {
       List<String> invitees, ZIMCallInviteConfig config);
 
 
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detail description: In the advanced mode, when the master calls the call invitation, users in the call can continue to invite other users to join the call through the interface，Or after the called party accepts the advanced mode call invitation.
+  ///
+  /// When to call: After calling [callInvite] to initiate a call invitation in advanced mode.
+  ///
+  /// Note: User calls that are not in the call will fail. ZIM SDK has no relevant business logic after accepting. Developers can customize the development logic after adding calls. By default, a call can contain a maximum of 9 users.
+  ///
+  /// Related callbacks: [ZIMCallingInvitationSentResult].
+  ///
+  /// [invitees] List of invited user ids.
+  /// [callID] callID of the current call in advanced mode.
+  /// [config] This section describes how to configure the call invitation.
   Future<ZIMCallingInvitationSentResult> callingInvite(
       List<String>invitees, String callID, ZIMCallingInviteConfig config);
 
@@ -1268,12 +1348,49 @@ abstract class ZIM {
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config);
 
+
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detail description: End The call in advanced mode.
+  ///
+  /// When to call: The call was in advanced mode and the user status was Accepted.
+  ///
+  /// Note: User calls that are not in the call will fail. ZIM SDK Does not have service logic after the call ends, and developers can customize the development logic after the end.
+  ///
+  /// Related callbacks: [ZIMCallEndSentResult].
+  ///
+  /// [callID] The ID of the call invitation to be ended.
+  /// [config] Related configuration for end call invitations.
   Future<ZIMCallEndSentResult> callEnd(
       String callID, ZIMCallEndConfig config);
 
+
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detail description: Exit the call in advanced mode.
+  ///
+  /// When to call: After the call is established, users whose call status is Accepted can call this interface.
+  ///
+  /// Note: The callee will fail to quit the uninvited callid.
+  ///
+  /// Related callbacks: [ZIMCallQuitSentResult].
+  ///
+  /// [callID] The ID of the call invitation to be quit.
+  /// [config] Related configuration for quit call invitations.
   Future<ZIMCallQuitSentResult> callQuit(
       String callID, ZIMCallQuitConfig config);
 
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detail description: Users can call the call invitation list through the query.
+  ///
+  /// Service scenario: Users can use the query call invitation list for interface display or other functions.
+  ///
+  /// When to call: Run [create] to create a ZIM instance, which can be invoked after login.
+  ///
+  /// Related callbacks: [ZIMCallInvitationListQueriedResult].
+  ///
+  /// [config] Query the relevant configuration of the call invitation list.
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
 

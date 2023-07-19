@@ -683,6 +683,15 @@ class ZIMMessageQueryConfig {
   ZIMMessageQueryConfig();
 }
 
+/// Call invitation information.
+/// [callID] Call invite ID.
+/// [caller] Call invitation initiator ID.
+/// [mode] Call invitation mode.
+/// [state] Call invitation status.
+/// [extendedData] Create a call invitation additional information.
+/// [createTime] Call invites to create a timestamp.
+/// [endTime] Call invitation end time.
+/// [callUserList] The list of call member.
 class ZIMCallInfo {
   String callID ="";
   String caller = "";
@@ -1358,6 +1367,16 @@ class ZIMMessageDeletedResult {
       {required this.conversationID, required this.conversationType});
 }
 
+/// Description: Detailed description: Return of search results for local messages.
+///
+/// Use cases: After performing a local message search operation, the success or failure can be determined through this callback.
+///
+/// Related API: [searchLocalMessages], search for local messages.
+///
+/// [conversationID] ConversationID.
+/// [conversationType] Conversation Type.
+/// [messageList] The message list of the searched result.
+/// [nextMessage] Pagination retrieval flag, message anchor for searching the next page.
 class ZIMMessagesSearchedResult {
   String conversationID;
   ZIMConversationType conversationType;
@@ -1366,12 +1385,28 @@ class ZIMMessagesSearchedResult {
   ZIMMessagesSearchedResult({required this.conversationID, required this.conversationType, required this.messageList, required this.nextMessage});
 }
 
+/// Description: Detailed description: Return of search results for local messages.
+///
+/// Use cases: After performing a local message search operation, the success or failure can be determined through this callback.
+///
+/// Related API: [searchLocalMessages], search for local messages.
+///
+/// [messageList] The message list of the searched result.
+/// [nextMessage] Pagination retrieval flag, message anchor for searching the next page.
 class ZIMMessagesGlobalSearchedResult {
   List<ZIMMessage> messageList;
   ZIMMessage? nextMessage;
   ZIMMessagesGlobalSearchedResult({required this.messageList, required this.nextMessage});
 }
 
+/// Description: Search the results of local conversations based on local messages.
+///
+/// Use cases: After performing a local session message search operation, the success or failure can be known through this callback.
+///
+/// Related API: [searchLocalConversations], search for local conversations based on local messages.
+///
+/// [conversationSearchInfoList] List of searched conversation messages.
+/// [nextFlag] The next flag.
 class ZIMConversationsSearchedResult {
   List<ZIMConversationSearchInfo> conversationSearchInfoList = [];
   int nextFlag = 0;
@@ -1450,6 +1485,18 @@ class ZIMRoomMemberQueriedResult {
       {required this.roomID, required this.nextFlag, required this.memberList});
 }
 
+
+/// Available since: 2.8.0 and above.
+///
+/// Description: After querying room user information, the query result is returned through this callback.
+///
+/// Use cases: The logic after querying room user information can be done in this callback.
+///
+/// When to call /Trigger: Triggered after querying room user information.
+///
+/// [roomID] Description: Room ID.
+/// [memberList] List of members in the room.
+/// [errorUserList] List of users whose query failed.
 class ZIMRoomMembersQueriedResult {
   String roomID;
   List<ZIMRoomMemberInfo> memberList;
@@ -1510,17 +1557,56 @@ class ZIMRoomAttributesQueriedResult {
       {required this.roomID, required this.roomAttributes});
 }
 
+/// Supported version: 2.4.0.
+///
+/// Detail description: Returns the result of the room user attribute operation.
+///
+/// Business scenario: After the custom attribute operation is performed, the success or failure can be known through this callback.
+///
+/// Notification timing: The result is returned after the room user attribute operation is completed.
+///
+/// Related interface: [setRoomMembersAttributes], add or modify room user attributes.
+///
+/// [roomID] Room ID.
+/// [infos] The attributes information of the room member after the operation.
+/// [errorUserList] List of UserIDs with errors.
 class ZIMRoomMembersAttributesOperatedResult {
   String roomID = '';
   List<ZIMRoomMemberAttributesOperatedInfo> infos = [];
   List<String> errorUserList = [];
 }
 
+/// Supported version: 2.4.0.
+///
+/// Detailed description: According to the UserID list, batch query results of room user attributes are returned.
+///
+/// Business scenario: After querying room user attributes, the success or failure and query results can be known through this callback.
+///
+/// Notification timing: The result will be returned after the room user attribute query is completed.
+///
+/// Related interface: [queryRoomMembersAttributes], query room user attributes.
+///
+/// [roomID] Room ID.
+/// [infos] List of room user attributes.
 class ZIMRoomMembersAttributesQueriedResult {
   String roomID = '';
   List<ZIMRoomMemberAttributesInfo> infos = [];
 }
 
+
+/// Supported version: 2.4.0.
+///
+/// Detail description: Returns the result of paging query of all user attribute lists in the room.
+///
+/// Business scenario: After querying room user attributes, the success or failure and query results can be known through this callback.
+///
+/// Notification timing: The result will be returned after the room user attribute query is completed.
+///
+/// Related interface: [queryRoomMemberAttributesList], query room user attributes.
+///
+/// [roomID] Room ID.
+/// [infos] List of room user attributes.
+/// [nextFlag] The anchor of the next paging query. If it is empty, it means that the query has been completed.
 class ZIMRoomMemberAttributesListQueriedResult {
   String roomID = '';
   List<ZIMRoomMemberAttributesInfo> infos = [];
@@ -1864,30 +1950,56 @@ class ZIMCallRejectionSentResult {
   ZIMCallRejectionSentResult({required this.callID});
 }
 
+/// Invite others to enter the call back result information.
+///
+/// [callID] Description: call ID.
+/// [info] Description: User id that has not received a call invitation and the reason.
 class ZIMCallingInvitationSentResult {
   String callID = "";
   ZIMCallingInvitationSentInfo info;
   ZIMCallingInvitationSentResult({required this.callID, required this.info});
 }
 
+/// Exit the return result of the current call.
+///
+/// [callID] Description: call ID.
+/// [info] Description: Information about quit.
 class ZIMCallQuitSentResult {
   String callID;
   ZIMCallQuitSentInfo info;
   ZIMCallQuitSentResult({required this.callID, required this.info});
 }
 
+/// Result callback of ending the call invitation.
+/// [callID] callID.
+/// [info] End call invitation return information.
 class ZIMCallEndSentResult {
   String callID;
   ZIMCallEndedSentInfo info;
   ZIMCallEndSentResult({required this.callID, required this.info});
 }
 
+/// Result Callback of querying the call list.
+/// [callList] Query the list of returned call information.
+/// [nextFlag] An anchor returned by a paging query that is passed in the next query to continue the query based on the last query.
 class ZIMCallInvitationListQueriedResult {
   List<ZIMCallInfo> callList;
   int nextFlag;
   ZIMCallInvitationListQueriedResult({required this.callList, required this.nextFlag});
 }
 
+
+/// Supported version: 2.5.0 and above.
+///
+/// Detailed description: Set the callback interface for the read receipt conversation.
+///
+/// Business scenario: Developers can judge whether the sending is successful through [errorCode] in the callback.
+///
+/// Notification timing: When the developer calls the [sendConversationMessageReceiptRead] interface, this callback will be triggered.
+///
+/// Relevant interface: The success or failure of the conversation read result set by [sendConversationMessageReceiptRead] will be notified through this callback.
+/// [conversationID] Description: Conversation ID.
+/// [conversationType] Description: Conversation type.
 class ZIMConversationMessageReceiptReadSentResult {
   String conversationID;
   ZIMConversationType conversationType;
