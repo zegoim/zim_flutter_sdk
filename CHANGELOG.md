@@ -1,3 +1,20 @@
+## 2.9.0
+
+### 1. Feature
+1、Call invitation Added mode,The new advanced mode allows users to invite, exit, and end a call during a call.
+2、In a group session, the group owner can withdraw messages sent by others.
+3、Supports sending pictures, files, audio, video, custom, and bullet-screen messages through the server interface. For details, see MessageBody.
+4、You can invoke the downloadMediaFile interface to download rich media messages from external urls.
+5、Added a message extension field that is visible only to the local end. This field can be updated to display the message translation status or other content.
+6、Search the local messages of single or all single chat and group chat sessions by keyword, user ID, etc., and obtain the list of messages that meet the conditions; You can also search for sessions based on local messages.
+7、Search group names based on keywords, and group member names and nicknames can be included in the search scope.
+8、Search for group member names in a specified group based on keywords, and group member nicknames are included in the search range.
+9、Optimized the common call invitation mode. Within the call invitation timeout period, an offline user can be notified immediately after receiving a call invitation.
+
+### 2. Deprecated
+1、Added onCallUserStateChanged to allow developers to listen to call status changes of users in call invitations. Replace the original call invite callback onCallInvitationAccepted, onCallInvitationRejected and onCallInviteesAnsweredTimeout.
+2、Original static void Function(ZIM zim, String callID)? onCallInvitationTimeout is deprecated,please use static void Function(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID)? onCallInvitationTimeout instead.
+
 ## 2.8.0+4
 
 Fix known problems.
