@@ -219,7 +219,7 @@ class ZIMEventHandler {
   )? onRoomMemberAttributesUpdated;
 /* Group */
 
-  /// Description: allback notification of group status change.
+  /// Description: callback notification of group status change.
   ///
   /// Use cases: Scenarios that require interaction based on the group status.
   ///
@@ -231,7 +231,7 @@ class ZIMEventHandler {
   /// [state] The status of the group after the change.
   /// [event] Group related events.
   /// [operatedInfo] Group information that has been operated.
-  /// [groupInfo]  The groupInfowhere the group state change occurred.
+  /// [groupInfo]  The group info where the group state change occurred.
   static void Function(
       ZIM zim,
       ZIMGroupState state,
@@ -385,7 +385,7 @@ class ZIMEventHandler {
           ZIM zim, ZIMCallInvitationCancelledInfo info, String callID)?
       onCallInvitationCancelled;
 
-  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
+  /// Deprecated since ZIM 2.9.0, please use  [onCallUserStateChanged] instead.
   /// Supported versions: 2.0.0 and above.
   ///
   /// Detail description: After the invitee accepts the call invitation, this callback will be received when the inviter is online.
@@ -405,7 +405,7 @@ class ZIMEventHandler {
           ZIM zim, ZIMCallInvitationAcceptedInfo info, String callID)?
       onCallInvitationAccepted;
 
-  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
+  /// Deprecated since ZIM 2.9.0, please use  [onCallUserStateChanged] instead.
   /// Available since: 2.0.0 and above.
   ///
   /// Description: This callback will be received when the inviter is online after the inviter rejects the call invitation.
@@ -444,7 +444,7 @@ class ZIMEventHandler {
   /// [callID]  callID.
   static void Function(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID)? onCallInvitationTimeout;
 
-  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
+  /// Deprecated since ZIM 2.9.0, please use  [onCallUserStateChanged] instead.
   /// Supported versions: 2.0.0 and above.
   ///
   /// Detail description: When the call invitation times out, the invitee does not respond, and the inviter will receive a callback.
@@ -463,10 +463,32 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<String> invitees, String callID)?
       onCallInviteesAnsweredTimeout;
 
-
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detail description: In an advanced call,  a participant ends the call, and all participants will receive this callback.
+  ///
+  /// Note: If the user is not the inviter who initiated this call invitation or is not online, the callback will not be received.
+  ///
+  /// Related APIs: [ZIM.callEnd]
+  /// [zim] ZIM instance.
+  /// [callID] Timeout invitee ID.
+  /// [info] Information carried by the event callback.
   static void Function(ZIM zim, ZIMCallInvitationEndedInfo callInvitationEndedInfo, String callID)?
   onCallInvitationEnded;
 
+  /// Supported versions: 2.9.0 and above.
+  ///
+  /// Detail description: Listen for calling user status changes.
+  ///
+  /// When to call: After the call invitation is initiated, the calling member accepts, rejects, or exits, or the response times out, the current calling inviting member receives this callback.
+  ///
+  /// Note: If the user is not the inviter who initiated this call invitation or is not online, the callback will not be received.
+  ///
+  /// Related APIs: [ZIM.callInvite], [ZIM.callingInvite], [ZIM.callAccept], [ZIM.callReject],[ZIM.callQuit].
+  ///
+  /// [zim] ZIM instance.
+  /// [callUserStateChangeInfo] Information about the status change of a call member.
+  /// [callID] Unique identifier of the call.
   static void Function(ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID)?
       onCallUserStateChanged;
 

@@ -1021,3 +1021,124 @@ ZIMGroupMessageReceiptMemberQueryConfig ZIMPluginConverter::cnvZIMGroupMessageRe
 	config.nextFlag = std::get<int32_t>(configMap[FTValue("nextFlag")]);
 	return config;
 }
+
+ZIMMessageSearchConfig ZIMPluginConverter::cnvZIMMessageSearchConfigMapToObject(FTMap configMap) {
+	ZIMMessageSearchConfig config;
+	std::shared_ptr<ZIMMessage> nextMessagePtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("nextMessage")])) {
+		config.nextMessage = nullptr;
+	}
+	else {
+		auto nextMessageMap = std::get<FTMap>(configMap[FTValue("nextMessage")]);
+		nextMessagePtr = ZIMPluginConverter::cnvZIMMessageToObject(nextMessageMap);
+		config.nextMessage = nextMessagePtr;
+	}
+	config.count = (unsigned int)std::get<int32_t>(configMap[FTValue("count")]);
+	config.order = (ZIMMessageOrder)std::get<int32_t>(configMap[FTValue("order")]);
+	config.keywords = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[FTValue("keywords")]));
+	config.senderUserIDs = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[FTValue("senderUserIDs")]));
+	for (auto& msgTypeObj : std::get<FTArray>(configMap[FTValue("messageTypes")])) {
+		auto msgType = (ZIMMessageType)std::get<int32_t>(msgTypeObj);
+		config.messageTypes.emplace_back(msgType);
+	}
+	for (auto& subMsgTypeObj : std::get<FTArray>(configMap[FTValue("subMessageTypes")])) {
+		auto subMsgType = (unsigned int)std::get<int32_t>(subMsgTypeObj);
+		config.subMessageTypes.emplace_back(subMsgType);
+	}
+	if (std::holds_alternative<int32_t>(configMap[FTValue("startTime")])) {
+		config.startTime = (long long)std::get<int32_t>(configMap[FTValue("startTime")]);
+	}
+	else {
+		config.startTime = (long long)std::get<int64_t>(configMap[FTValue("startTime")]);
+	}
+	if (std::holds_alternative<int32_t>(configMap[FTValue("endTime")])) {
+		config.endTime = (long long)std::get<int32_t>(configMap[FTValue("endTime")]);
+	}
+	else {
+		config.endTime = (long long)std::get<int64_t>(configMap[FTValue("endTime")]);
+	}
+
+	return config;
+}
+
+ZIMConversationSearchConfig ZIMPluginConverter::cnvZIMConversationSearchConfigMapToObject(FTMap configMap) {
+	ZIMConversationSearchConfig config;
+	config.nextFlag = (unsigned int)std::get<int32_t>(configMap[FTValue("nextFlag")]);
+	config.totalConversationCount = std::get<int32_t>(configMap[FTValue("totalConversationCount")]);
+	config.conversationMessageCount = std::get<int32_t>(configMap[FTValue("conversationMessageCount")]);
+	config.keywords = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[FTValue("keywords")]));
+	config.senderUserIDs = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[FTValue("senderUserIDs")]));
+
+	for (auto& msgTypeObj : std::get<FTArray>(configMap[FTValue("messageTypes")])) {
+		auto msgType = (ZIMMessageType)std::get<int32_t>(msgTypeObj);
+		config.messageTypes.emplace_back(msgType);
+	}
+
+	for (auto& subMsgTypeObj : std::get<FTArray>(configMap[FTValue("subMessageTypes")])) {
+		auto subMsgType = (unsigned int)std::get<int32_t>(subMsgTypeObj);
+		config.subMessageTypes.emplace_back(subMsgType);
+	}
+
+	if (std::holds_alternative<int32_t>(configMap[FTValue("startTime")])) {
+		config.startTime = (long long)std::get<int32_t>(configMap[FTValue("startTime")]);
+	}
+	else {
+		config.startTime = (long long)std::get<int64_t>(configMap[FTValue("startTime")]);
+	}
+
+	if (std::holds_alternative<int32_t>(configMap[FTValue("endTime")])) {
+		config.endTime = (long long)std::get<int32_t>(configMap[FTValue("endTime")]);
+	}
+	else {
+		config.endTime = (long long)std::get<int64_t>(configMap[FTValue("endTime")]);
+	}
+
+	return config;
+}
+
+ZIMGroupSearchConfig ZIMPluginConverter::cnvZIMGroupSearchConfigMapToObject(FTMap configMap) {
+	ZIMGroupSearchConfig config;
+	config.nextFlag = (unsigned int)std::get<int32_t>(configMap[FTValue("nextFlag")]);
+	config.count = std::get<int32_t>(configMap[FTValue("count")]);
+	config.keywords = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[(FTValue("keywords"))]));
+	config.isAlsoMatchGroupMemberUserName = std::get<bool>(configMap[FTValue("isAlsoMatchGroupMemberUserName")]);
+	config.isAlsoMatchGroupMemberNickname = std::get<bool>(configMap[FTValue("isAlsoMatchGroupMemberNickname")]);
+
+	return config;
+}
+
+ZIMGroupMemberSearchConfig ZIMPluginConverter::cnvZIMGroupMemberSearchConfigMapToObject(FTMap configMap) {
+	ZIMGroupMemberSearchConfig config;
+	config.nextFlag = (unsigned int)std::get<int32_t>(configMap[FTValue("nextFlag")]);
+	config.count = std::get<int32_t>(configMap[FTValue("count")]);
+	config.keywords = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[FTValue("keywords")]));
+	config.isAlsoMatchGroupMemberNickname = std::get<bool>(configMap[FTValue("isAlsoMatchGroupMemberNickname")]);
+	
+	return config;
+}
+
+FTArray ZIMPluginConverter::cnvZIMConversationSearchInfoListToArray(const std::vector<ZIMConversationSearchInfo>& conversationSearchInfoList) {
+	FTArray searchInfoArray;
+	for (auto& convInfo : conversationSearchInfoList) {
+		FTMap convSearchInfoMap;
+		convSearchInfoMap[FTValue("conversationID")] = FTValue(convInfo.conversationID);
+		convSearchInfoMap[FTValue("conversationType")] = FTValue(convInfo.conversationType);
+		convSearchInfoMap[FTValue("totalMessageCount")] = FTValue((int32_t)convInfo.totalMessageCount);
+		convSearchInfoMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(convInfo.messageList);
+		searchInfoArray.emplace_back(convSearchInfoMap);
+	}
+
+	return searchInfoArray;
+}
+
+FTArray ZIMPluginConverter::cnvZIMGroupSearchInfoListToArray(const std::vector<ZIMGroupSearchInfo>& groupSearchInfoList) {
+	FTArray searchInfoArray;
+	for (auto& groupSearchInfo : groupSearchInfoList) {
+		FTMap groupSearchInfoMap;
+		groupSearchInfoMap[FTValue("groupInfo")] = ZIMPluginConverter::cnvZIMGroupInfoToMap(groupSearchInfo.groupInfo);
+		groupSearchInfoMap[FTValue("userList")] = ZIMPluginConverter::cnvZIMGroupMemberInfoListToArray(groupSearchInfo.userList);
+		searchInfoArray.emplace_back(groupSearchInfoMap);
+	}
+
+	return searchInfoArray;
+}

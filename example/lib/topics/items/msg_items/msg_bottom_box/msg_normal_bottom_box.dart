@@ -193,7 +193,7 @@ class _WidgetState extends State<MsgNormalBottomBox> {
                         skinToneDialogBgColor: Colors.white,
                         skinToneIndicatorColor: Colors.grey,
                         enableSkinTones: true,
-                        showRecentsTab: false,
+                        // showRecentsTab: false,
                         recentsLimit: 28,
                         replaceEmojiOnLimitExceed: false,
                         noRecents: const Text(

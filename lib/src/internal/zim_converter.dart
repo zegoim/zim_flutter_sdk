@@ -384,6 +384,54 @@ class ZIMConverter {
     return ZIMMessageLocalExtendedDataUpdatedResult(message: oZIMMessage(resultMap['message']));
   }
 
+  static ZIMMessagesSearchedResult oZIMMessagesSearchedResult(Map resultMap) {
+    List<ZIMMessage> messageList = [];
+    for (Map messageMap in resultMap['messageList']) {
+      messageList.add(oZIMMessage(messageMap));
+    }
+
+    ZIMMessage ?nextMessage;
+    if(resultMap['nextMessage'] != null) {
+      nextMessage = oZIMMessage(resultMap['nextMessage']);
+    }
+
+    return ZIMMessagesSearchedResult(conversationID: resultMap['conversationID'], conversationType: ZIMConversationTypeExtension
+        .mapValue[resultMap['conversationType']]!, messageList: messageList, nextMessage: nextMessage);
+  }
+
+  static ZIMMessagesGlobalSearchedResult oZIMMessagesGlobalSearchedResult(Map resultMap) {
+    List<ZIMMessage> messageList = [];
+    for (Map messageMap in resultMap['messageList']) {
+      messageList.add(oZIMMessage(messageMap));
+    }
+
+    ZIMMessage ?nextMessage;
+    if(resultMap['nextMessage'] != null) {
+      nextMessage = oZIMMessage(resultMap['nextMessage']);
+    }
+
+    return ZIMMessagesGlobalSearchedResult(messageList: messageList, nextMessage: nextMessage);
+  }
+
+  static ZIMConversationSearchInfo oZIMConversationSearchInfo(Map infoMap) {
+    List<ZIMMessage> messageList = [];
+    for (Map messageMap in infoMap['messageList']) {
+      messageList.add(oZIMMessage(messageMap));
+    }
+
+    return ZIMConversationSearchInfo(conversationID: infoMap['conversationID'], conversationType: ZIMConversationTypeExtension
+        .mapValue[infoMap['conversationType']]!, totalMessageCount: infoMap['totalMessageCount'], messageList: messageList);
+  }
+
+  static ZIMConversationsSearchedResult oZIMConversationsSearchedResult(Map resultMap) {
+    List<ZIMConversationSearchInfo> conversationSearchInfoList = [];
+    for (Map infoMap in resultMap['conversationSearchInfoList']) {
+      conversationSearchInfoList.add(oZIMConversationSearchInfo(infoMap));
+    }
+
+    return ZIMConversationsSearchedResult(conversationSearchInfoList: conversationSearchInfoList, nextFlag: resultMap['nextFlag']);
+  }
+
   static Map mZIMConversationDeleteConfig(ZIMConversationDeleteConfig config) {
     Map configMap = {};
     configMap['isAlsoDeleteServerConversation'] =
@@ -915,6 +963,10 @@ class ZIMConverter {
     return groupList;
   }
 
+  static ZIMGroupSearchInfo oZIMGroupSearchInfo(Map mapInfo) {
+    return ZIMGroupSearchInfo(groupInfo: oZIMGroupInfo(mapInfo['groupInfo'])!, userList: oZIMGroupMemberInfoList(mapInfo['userList']));
+  }
+
   static ZIMGroupListQueriedResult oZIMGroupListQueriedResult(Map resultMap) {
     List<ZIMGroup> groupList = oZIMGroupList(resultMap['groupList']);
     return ZIMGroupListQueriedResult(groupList: groupList);
@@ -936,6 +988,20 @@ class ZIMConverter {
         groupID: resultMap['groupID'],
         userList: userList,
         nextFlag: resultMap['nextFlag']);
+  }
+
+  static ZIMGroupsSearchedResult oZIMGroupsSearchedResult(Map resultMap) {
+    List<ZIMGroupSearchInfo> groupSearchInfoList = [];
+    for (Map groupSearchInfoMap in resultMap['groupSearchInfoList']) {
+      groupSearchInfoList.add(oZIMGroupSearchInfo(groupSearchInfoMap));
+    }
+
+    return ZIMGroupsSearchedResult(groupSearchInfoList: groupSearchInfoList, nextFlag: resultMap['nextFlag']);
+  }
+
+  static ZIMGroupMembersSearchedResult oZIMGroupMembersSearchedResult(Map resultMap) {
+
+    return ZIMGroupMembersSearchedResult(groupID: resultMap['groupID'], userList: oZIMGroupMemberInfoList(resultMap['userList']), nextFlag: resultMap['nextFlag']);
   }
 
   static ZIMGroupOperatedInfo oZIMGroupOperatedInfo(Map resultMap) {
@@ -1302,6 +1368,75 @@ class ZIMConverter {
     revokeConfig['pushConfig'] = mZIMPushConfig(config.pushConfig);
     revokeConfig['revokeExtendedData'] = config.revokeExtendedData;
     return revokeConfig;
+  }
+
+  static Map mZIMMessageSearchConfig(ZIMMessageSearchConfig config) {
+    Map configMap = {};
+    if (config.nextMessage != null) {
+      configMap['nextMessage'] = mZIMMessage(config.nextMessage!);
+    } else {
+      configMap['nextMessage'] = null;
+    }
+
+    List<int> messageTypeList = [];
+    for(ZIMMessageType msgType in config.messageTypes) {
+      messageTypeList.add(ZIMMessageTypeExtension.valueMap[msgType]!);
+    }
+
+    configMap['count'] = config.count;
+    configMap['order'] = ZIMMessageOrderExtension.valueMap[config.order];
+    configMap['keywords'] = config.keywords;
+    configMap['messageTypes'] = messageTypeList;
+    configMap['subMessageTypes'] = config.subMessageTypes;
+    configMap['senderUserIDs'] = config.senderUserIDs;
+    configMap['startTime'] = config.startTime;
+    configMap['endTime'] = config.endTime;
+
+    return configMap;
+  }
+
+  static Map mZIMConversationSearchConfig(ZIMConversationSearchConfig config) {
+    Map configMap = {};
+
+    List<int> messageTypeList = [];
+    for(ZIMMessageType msgType in config.messageTypes) {
+      messageTypeList.add(ZIMMessageTypeExtension.valueMap[msgType]!);
+    }
+
+    configMap['nextFlag'] = config.nextFlag;
+    configMap['totalConversationCount'] = config.totalConversationCount;
+    configMap['conversationMessageCount'] = config.conversationMessageCount;
+    configMap['keywords'] = config.keywords;
+    configMap['messageTypes'] = messageTypeList;
+    configMap['subMessageTypes'] = config.subMessageTypes;
+    configMap['senderUserIDs'] = config.senderUserIDs;
+    configMap['startTime'] = config.startTime;
+    configMap['endTime'] = config.endTime;
+
+    return configMap;
+  }
+
+  static Map mZIMGroupSearchConfig(ZIMGroupSearchConfig config) {
+    Map configMap = {};
+
+    configMap['nextFlag'] = config.nextFlag;
+    configMap['count'] = config.count;
+    configMap['keywords'] = config.keywords;
+    configMap['isAlsoMatchGroupMemberUserName'] = config.isAlsoMatchGroupMemberUserName;
+    configMap['isAlsoMatchGroupMemberNickname'] = config.isAlsoMatchGroupMemberNickname;
+
+    return configMap;
+  }
+
+  static Map mZIMGroupMemberSearchConfig(ZIMGroupMemberSearchConfig config) {
+    Map configMap = {};
+
+    configMap['nextFlag'] = config.nextFlag;
+    configMap['count'] = config.count;
+    configMap['keywords'] = config.keywords;
+    configMap['isAlsoMatchGroupMemberNickname'] = config.isAlsoMatchGroupMemberNickname;
+
+    return configMap;
   }
 
   static ZIMReactionUserInfo oZIMReactionUserInfo(Map userInfoMap) {

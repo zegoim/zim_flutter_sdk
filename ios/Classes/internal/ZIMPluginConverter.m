@@ -479,6 +479,69 @@
     
 }
 
++(nullable ZIMMessageSearchConfig *)oZIMMessageSearchConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    
+    ZIMMessageSearchConfig *config = [[ZIMMessageSearchConfig alloc] init];
+    config.nextMessage = [ZIMPluginConverter oZIMMessage:[configDic objectForKey:@"nextMessage"]];
+    config.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
+    config.order = (ZIMMessageOrder)[[configDic safeObjectForKey:@"order"] integerValue];
+    config.keywords = [configDic safeObjectForKey:@"keywords"];
+    config.messageTypes = [configDic safeObjectForKey:@"messageTypes"];
+    config.subMessageTypes = [configDic safeObjectForKey:@"subMessageTypes"];
+    config.senderUserIDs = [configDic safeObjectForKey:@"senderUserIDs"];
+    config.startTime = [[configDic safeObjectForKey:@"startTime"] longLongValue];
+    config.endTime = [[configDic safeObjectForKey:@"endTime"] longLongValue];
+    
+    return config;
+}
+
++(nullable ZIMConversationSearchConfig *) oZIMConversationMessageGlobalSearchConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    
+    ZIMConversationSearchConfig *config = [[ZIMConversationSearchConfig alloc] init];
+    config.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    config.totalConversationCount = [[configDic safeObjectForKey:@"totalConversationCount"] unsignedIntValue];
+    config.conversationMessageCount = [[configDic safeObjectForKey:@"conversationMessageCount"] unsignedIntValue];
+    config.keywords = [configDic safeObjectForKey:@"keywords"];
+    config.messageTypes = [configDic safeObjectForKey:@"messageTypes"];
+    config.subMessageTypes = [configDic safeObjectForKey:@"subMessageTypes"];
+    config.senderUserIDs = [configDic safeObjectForKey:@"senderUserIDs"];
+    config.startTime = [[configDic safeObjectForKey:@"startTime"] longLongValue];
+    config.endTime = [[configDic safeObjectForKey:@"endTime"] longLongValue];
+    
+    return config;
+}
+
++(nullable NSDictionary *)mZIMConversationMessageSearchInfo:(nullable ZIMConversationSearchInfo *)info {
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    
+    NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
+    [configDic safeSetObject:info.conversationID forKey:@"conversationID"];
+    [configDic safeSetObject:@(info.conversationType) forKey:@"conversationType"];
+    [configDic safeSetObject:@(info.totalMessageCount) forKey:@"totalMessageCount"];
+    [configDic safeSetObject:[ZIMPluginConverter mZIMMessageList:info.messageList] forKey:@"messageList"];
+    
+    return configDic;
+}
+
++(nullable NSArray *)mZIMConversationMessageSearchInfoList:(nullable NSArray<ZIMConversationSearchInfo *> *)infoList {
+    if(infoList == nil || infoList == NULL || [infoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *DicArr = [[NSMutableArray alloc] init];
+    for (ZIMConversationSearchInfo *info in infoList) {
+        [DicArr addObject:[ZIMPluginConverter mZIMConversationMessageSearchInfo:info]];
+    }
+    return DicArr;
+}
+
 
 +(nullable ZIMConversationDeleteConfig *)oZIMConversationDeleteConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
@@ -671,6 +734,61 @@
         NSDictionary *infoDic = [ZIMPluginConverter mZIMGroupMemberInfo:info];
         [basicList safeAddObject:infoDic];
     }
+    return basicList;
+}
+
++(nullable ZIMGroupSearchConfig *)oZIMGroupSearchConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    
+    ZIMGroupSearchConfig *config = [[ZIMGroupSearchConfig alloc] init];
+    config.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    config.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
+    config.keywords = [configDic safeObjectForKey:@"keywords"];
+    config.isAlsoMatchGroupMemberUserName = [[configDic safeObjectForKey:@"isAlsoMatchGroupMemberUserName"] boolValue];
+    config.isAlsoMatchGroupMemberNickname = [[configDic safeObjectForKey:@"isAlsoMatchGroupMemberNickname"] boolValue];
+    
+    return config;
+}
+
++(nullable ZIMGroupMemberSearchConfig *)oZIMGroupMemberSearchConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    
+    ZIMGroupMemberSearchConfig *config = [[ZIMGroupMemberSearchConfig alloc] init];
+    config.nextFlag = [[configDic safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    config.count = [[configDic safeObjectForKey:@"count"] unsignedIntValue];
+    config.keywords = [configDic safeObjectForKey:@"keywords"];
+    config.isAlsoMatchGroupMemberNickname = [[configDic safeObjectForKey:@"isAlsoMatchGroupMemberNickname"] boolValue];
+    
+    return config;
+}
+
++(nullable NSDictionary *)mZIMGroupSearchInfo:(nullable ZIMGroupSearchInfo *)groupSearchInfo {
+    if(groupSearchInfo == nil || groupSearchInfo == NULL || [groupSearchInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    
+    NSMutableDictionary *searchInfoDic = [[NSMutableDictionary alloc] init];
+    [searchInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupInfo:groupSearchInfo.groupInfo] forKey:@"groupInfo"];
+    [searchInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupMemberInfoList:groupSearchInfo.userList] forKey:@"userList"];
+    
+    return searchInfoDic;
+}
+
++(nullable NSArray *)mZIMGroupSearchInfoList:(nullable NSArray<ZIMGroupSearchInfo *> *)groupSearchInfoList {
+    if(groupSearchInfoList == nil || groupSearchInfoList == NULL || [groupSearchInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    
+    NSMutableArray *basicList = [[NSMutableArray alloc] init];
+    for (ZIMGroupSearchInfo *searchInfo in groupSearchInfoList) {
+        NSDictionary *searchInfoDic = [ZIMPluginConverter mZIMGroupSearchInfo:searchInfo];
+        [basicList safeAddObject:searchInfoDic];
+    }
+    
     return basicList;
 }
 

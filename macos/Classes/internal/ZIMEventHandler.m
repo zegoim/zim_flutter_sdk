@@ -453,6 +453,10 @@ fromGroupID:(NSString *)fromGroupID{
     NSMutableDictionary *callInvitationReceivedInfoDic = [[NSMutableDictionary alloc] init];
     [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
     [callInvitationReceivedInfoDic safeSetObject:info.inviter forKey:@"inviter"];
+    [callInvitationReceivedInfoDic safeSetObject:info.caller forKey:@"caller"];
+    [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
+    [callInvitationReceivedInfoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
+    [callInvitationReceivedInfoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
     [callInvitationReceivedInfoDic safeSetObject:info.extendedData forKey:@"extendedData"];
     [resultDic safeSetObject:@"onCallInvitationReceived" forKey:@"method"];
     [resultDic safeSetObject:callInvitationReceivedInfoDic forKey:@"info"];
@@ -471,6 +475,7 @@ fromGroupID:(NSString *)fromGroupID{
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     [infoDic safeSetObject:info.inviter forKey:@"inviter"];
     [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
     [resultDic safeSetObject:@"onCallInvitationCancelled" forKey:@"method"];
     [resultDic safeSetObject:infoDic forKey:@"info"];
     [resultDic safeSetObject:callID forKey:@"callID"];
@@ -513,12 +518,12 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
-- (void)zim:(ZIM *)zim callInvitationTimeout:(NSString *)callID{
-    
+- (void)zim:(ZIM *)zim callInvitationTimeout:(ZIMCallInvitationTimeoutInfo *)info callID:(NSString *)callID{
     NSString *handle = [_engineEventMap objectForKey:zim];
     
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:@"onCallInvitationTimeout" forKey:@"method"];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMCallInvitationTimeoutInfo:info] forKey:@"info"];
     [resultDic safeSetObject:callID forKey:@"callID"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
@@ -539,7 +544,37 @@ fromGroupID:(NSString *)fromGroupID{
     
 }
 
+- (void)zim:(ZIM *)zim
+    callInvitationEnded:(ZIMCallInvitationEndedInfo *)info
+     callID:(NSString *)callID{
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    
+    [infoDic safeSetObject:info.caller forKey:@"caller"];
+    [infoDic safeSetObject:info.operatedUserID forKey:@"operatedUserID"];
+    [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.endTime] forKey:@"endTime"];
+    
+    [resultDic safeSetObject:@"onCallInvitationEnded" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
 
+- (void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(NSString *)callID{
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
+    [resultDic safeSetObject:@"onCallUserStateChanged" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
 #pragma mark - Getter
 - (NSMapTable *)engineEventMap {
     if (!_engineEventMap) {

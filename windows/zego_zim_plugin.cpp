@@ -214,7 +214,16 @@ void ZegoZimPlugin::HandleMethodCall(
     }
     else if (method_call.method_name() == "deleteMessages") {
         ZIMPluginMethodHandler::getInstance().deleteMessages(argument, std::move(result));
-    }
+    } 
+    else if (method_call.method_name() == "searchLocalMessages") {
+        ZIMPluginMethodHandler::getInstance().searchLocalMessages(argument, std::move(result));
+    } 
+    else if (method_call.method_name() == "searchGlobalLocalMessages") {
+        ZIMPluginMethodHandler::getInstance().searchGlobalLocalMessages(argument, std::move(result));
+    } 
+    else if (method_call.method_name() == "searchLocalConversations") {
+        ZIMPluginMethodHandler::getInstance().searchLocalConversations(argument, std::move(result));
+    } 
     else if (method_call.method_name() == "enterRoom") {
         ZIMPluginMethodHandler::getInstance().enterRoom(argument, std::move(result));
     }
@@ -328,6 +337,12 @@ void ZegoZimPlugin::HandleMethodCall(
     }
     else if (method_call.method_name() == "queryGroupMemberCount") {
         ZIMPluginMethodHandler::getInstance().queryGroupMemberCount(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "searchLocalGroups") {
+        ZIMPluginMethodHandler::getInstance().searchLocalGroups(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "searchLocalGroupMembers") {
+        ZIMPluginMethodHandler::getInstance().searchLocalGroupMembers(argument, std::move(result));
     }
     else if (method_call.method_name() == "callInvite") {
         ZIMPluginMethodHandler::getInstance().callInvite(argument, std::move(result));

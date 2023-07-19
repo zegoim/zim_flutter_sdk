@@ -129,11 +129,11 @@ class ZIM {
   external PromiseJsImpl<dynamic> updateConversationPinnedState(bool isPinned, String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> queryRoomMembers(dynamic userIDs, String roomID);
   external PromiseJsImpl<dynamic> queryConversation(String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> searchGlobalLocalConversationMessages(dynamic config);
+  external PromiseJsImpl<dynamic> searchLocalConversations(dynamic config);
   external PromiseJsImpl<dynamic> searchGlobalLocalMessages(dynamic config);
-  external PromiseJsImpl<dynamic> searchLocalMessages(dynamic config);
+  external PromiseJsImpl<dynamic> searchLocalMessages(String conversationID, dynamic conversationType, dynamic config);
   external PromiseJsImpl<dynamic> searchLocalGroups(dynamic config);
-  external PromiseJsImpl<dynamic> searchLocalGroupMembers(dynamic config);
+  external PromiseJsImpl<dynamic> searchLocalGroupMembers(String groupID, dynamic config);
   external PromiseJsImpl<dynamic> addMessageReaction(String reactionType, dynamic message);
   external PromiseJsImpl<dynamic> deleteMessageReaction(String reactionType, dynamic message);
   external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);

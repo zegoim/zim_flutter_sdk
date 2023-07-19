@@ -375,6 +375,20 @@ extension ZIMMessageReceiptStatusExtension on ZIMMessageReceiptStatus {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMMessageOrderExtension on ZIMMessageOrder {
+  static const valueMap = {
+    ZIMMessageOrder.descending: 0,
+    ZIMMessageOrder.ascending: 1
+  };
+
+  static const mapValue = {
+    0: ZIMMessageOrder.descending,
+    1: ZIMMessageOrder.ascending,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMRevokeTypeExtension on ZIMRevokeType {
   static const valueMap = {
     ZIMRevokeType.unknown: -1,
