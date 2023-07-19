@@ -219,7 +219,7 @@ class ZIMEventHandler {
   )? onRoomMemberAttributesUpdated;
 /* Group */
 
-  /// Description: allback notification of group status change.
+  /// Description: callback notification of group status change.
   ///
   /// Use cases: Scenarios that require interaction based on the group status.
   ///
@@ -231,7 +231,7 @@ class ZIMEventHandler {
   /// [state] The status of the group after the change.
   /// [event] Group related events.
   /// [operatedInfo] Group information that has been operated.
-  /// [groupInfo]  The groupInfowhere the group state change occurred.
+  /// [groupInfo]  The group info where the group state change occurred.
   static void Function(
       ZIM zim,
       ZIMGroupState state,
@@ -385,7 +385,7 @@ class ZIMEventHandler {
           ZIM zim, ZIMCallInvitationCancelledInfo info, String callID)?
       onCallInvitationCancelled;
 
-  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
+  /// Deprecated since ZIM 2.9.0, please use  [onCallUserStateChanged] instead.
   /// Supported versions: 2.0.0 and above.
   ///
   /// Detail description: After the invitee accepts the call invitation, this callback will be received when the inviter is online.
@@ -405,7 +405,7 @@ class ZIMEventHandler {
           ZIM zim, ZIMCallInvitationAcceptedInfo info, String callID)?
       onCallInvitationAccepted;
 
-  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
+  /// Deprecated since ZIM 2.9.0, please use  [onCallUserStateChanged] instead.
   /// Available since: 2.0.0 and above.
   ///
   /// Description: This callback will be received when the inviter is online after the inviter rejects the call invitation.
@@ -444,7 +444,7 @@ class ZIMEventHandler {
   /// [callID]  callID.
   static void Function(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID)? onCallInvitationTimeout;
 
-  /// Deprecated since ZIM 2.9.0, please use  [zim:callUserStateChanged:] instead.
+  /// Deprecated since ZIM 2.9.0, please use  [onCallUserStateChanged] instead.
   /// Supported versions: 2.0.0 and above.
   ///
   /// Detail description: When the call invitation times out, the invitee does not respond, and the inviter will receive a callback.

@@ -587,6 +587,19 @@ abstract class ZIM {
       ZIMMessage message, ZIMMessageRevokeConfig config);
 //MARK: - Room
 
+
+  /// Available since: 2.2.0 or above.
+  ///
+  /// Description: After the user logs in, calling this interface allows updating the local expandable field of the message.
+  ///
+  /// When to call: After the user is logged in.
+  ///
+  /// Privacy reminder: Please avoid passing sensitive personal information, including but not limited to phone numbers, ID card numbers, passport numbers, real names, etc.
+  ///
+  /// Related callbacks: [ZIMMessageLocalExtendedDataUpdatedResult].
+  ///
+  /// [localExtendedData]  The expandable message field visible only on this end can store additional information locally and currently has a length limit of 128K. If you have special requirements, please contact ZEGO technical support for configuration.
+  /// [message] Message body to be updated.
   Future<ZIMMessageLocalExtendedDataUpdatedResult>
   updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
 
