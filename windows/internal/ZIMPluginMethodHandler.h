@@ -64,8 +64,6 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void insertMessageToLocalDB(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void updateMessageLocalExtendedData(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendPeerMessage(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendRoomMessage(flutter::EncodableMap& argument,
@@ -90,12 +88,6 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryGroupMessageReceiptUnreadMemberList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchLocalMessages(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchGlobalLocalMessages(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchLocalConversations(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void revokeMessage(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void enterRoom(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
@@ -173,26 +165,14 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryGroupMemberCount(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchLocalGroups(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchLocalGroupMembers(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void callInvite(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callingInvite(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callQuit(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callEnd(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);              
     void callCancel(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void callAccept(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void callReject(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryCallList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);     
 
 
 private:
