@@ -51,6 +51,14 @@
 
 +(nullable ZIMMessageDeleteConfig *)oZIMMessageDeleteConfig:(nullable NSDictionary *)configDic;
 
++(nullable ZIMMessageSearchConfig *)oZIMMessageSearchConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMConversationSearchConfig *) oZIMConversationMessageGlobalSearchConfig:(nullable NSDictionary *)configDic;
+
++(nullable NSDictionary *)mZIMConversationMessageSearchInfo:(nullable ZIMConversationSearchInfo *)info;
+
++(nullable NSArray *)mZIMConversationMessageSearchInfoList:(nullable NSArray<ZIMConversationSearchInfo *> *)infoList;
+
 +(nullable ZIMRoomInfo *)oZIMRoomInfo:(nullable NSDictionary *)roomInfoDic;
 
 +(nullable NSDictionary *)mZIMRoomInfo:(nullable ZIMRoomInfo *)roomInfo;
@@ -91,6 +99,14 @@
 
 +(nullable NSArray *)mZIMGroupMemberInfoList:(nullable NSArray<ZIMGroupMemberInfo *> *)memberInfoList;
 
++(nullable ZIMGroupSearchConfig *)oZIMGroupSearchConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMGroupMemberSearchConfig *)oZIMGroupMemberSearchConfig:(nullable NSDictionary *)configDic;
+
++(nullable NSDictionary *)mZIMGroupSearchInfo:(nullable ZIMGroupSearchInfo *)groupSearchInfo;
+
++(nullable NSArray *)mZIMGroupSearchInfoList:(nullable NSArray<ZIMGroupSearchInfo *> *)groupSearchInfoList;
+
 +(nullable NSDictionary *)mZIMErrorUserInfo:(nullable ZIMErrorUserInfo *)errorUserInfo;
 
 +(nullable NSArray *)mZIMErrorUserInfoList:(nullable NSArray<ZIMErrorUserInfo *> *)errorUserInfoList;
@@ -117,7 +133,19 @@
 
 +(nullable ZIMCallInviteConfig *)oZIMCallInviteConfig:(nullable NSDictionary *)configDic;
 
++(nullable ZIMCallingInviteConfig *)oZIMCallingInviteConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMCallQuitConfig *)oZIMCallQuitConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMCallEndConfig *)oZIMCallEndConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMCallInvitationQueryConfig *)oZIMQueryCallListConfig:(nullable NSDictionary *)configDic;
+
 +(nullable NSDictionary *)mZIMCallInvitationSentInfo:(nullable ZIMCallInvitationSentInfo *)info;
+
++(nullable NSDictionary *)mZIMCallingInvitationSentInfo:(nullable ZIMCallingInvitationSentInfo *)info;
+
++(nullable NSArray *)mZIMCallInfoList:(nullable NSArray<ZIMCallInfo *> *)callInfoList;
 
 +(nullable ZIMCallCancelConfig *)oZIMCallCancelConfig:(nullable NSDictionary *)configDic;
 
@@ -128,4 +156,14 @@
 +(nullable NSDictionary *)mMessageSentStatusChangeInfo:(nullable ZIMMessageSentStatusChangeInfo *)changeInfo;
 
 +(nullable NSArray *)mMessageSentStatusChangeInfoList:(nullable NSArray<ZIMMessageSentStatusChangeInfo *> *)messageSentStatusChangeInfoList;
+
++(nullable NSDictionary *)mZIMCallUserInfo:(nullable ZIMCallUserInfo *)callUserInfo;
+
++(nullable NSArray *)mZIMCallUserInfoList:(nullable NSArray<ZIMCallUserInfo *> *)callUserInfoList;
+
++(nullable NSDictionary *)mZIMCallEndSentInfo:(nullable ZIMCallEndedSentInfo *)info;
+
++(nullable NSDictionary *)mZIMCallQuitSentInfo:(nullable ZIMCallQuitSentInfo *)info;
+
++(nullable NSDictionary *)mZIMCallInvitationTimeoutInfo:(nullable ZIMCallInvitationTimeoutInfo *)info;
 @end

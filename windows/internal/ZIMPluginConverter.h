@@ -38,10 +38,6 @@ struct ZIM_FriendlyGet_conversationID {
     typedef std::string ZIMMessage::* type;
 };
 
- struct ZIM_FriendlyGet_extendedData {
-     typedef std::string ZIMMessage::* type;
- };
-
 struct ZIM_FriendlyGet_conversationType {
     typedef ZIMConversationType ZIMMessage::* type;
 };
@@ -71,10 +67,6 @@ struct ZIM_FriendlyGet_isUserInserted {
 };
 
 struct ZIM_FriendlyGet_fileUID {
-    typedef std::string ZIMMediaMessage::* type;
-};
-
-struct ZIM_FriendlyGet_fileName {
     typedef std::string ZIMMediaMessage::* type;
 };
 
@@ -170,6 +162,7 @@ public:
     static FTMap cnvZIMRoomMemberInfoObjectToMap(const ZIMRoomMemberInfo& userInfo);
     static FTMap cnvZIMUserFullInfoObjectToMap(const ZIMUserFullInfo &userFullInfo);
     static FTMap cnvZIMErrorUserInfoToMap(const ZIMErrorUserInfo& errorUserInfo);
+    static FTArray cnvZIMErrorUserInfoListToArray(const std::vector<ZIMErrorUserInfo>& errorUserInfoList);
     static FTMap cnvZIMErrorObjectToMap(const ZIMError& errorInfo);
     static FTArray cnvZIMUserListToArray(const std::vector<ZIMUserInfo>& userInfoList);
     static FTArray cnvZIMRoomMemberInfoListToArray(const std::vector<ZIMRoomMemberInfo>& roomMemberInfoList);
@@ -200,8 +193,17 @@ public:
     static FTMap cnvZIMGroupAttributesUpdateInfoToMap(const ZIMGroupAttributesUpdateInfo& updateInfo);
     static FTArray cnvZIMGroupAttributesUpdateInfoListToArray(const std::vector<ZIMGroupAttributesUpdateInfo>& updateInfoList);
     static FTMap cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInfo);
-    static FTArray cnvZIMCallUserListToArray(const std::vector<ZIMCallUserInfo>& callUserList);
+    static FTMap cnvZIMCallInfoToMap(const ZIMCallInfo& userInfo);
+    static FTMap cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo& callEndSentInfo);
+    static FTMap cnvZIMCallQuitSentInfoToMap(const ZIMCallQuitSentInfo& callQuitSentInfo);
+    static FTArray cnvZIMCallUserInfoListToArray(const std::vector<ZIMCallUserInfo>& callUserList);
     static FTMap cnvZIMCallInvitationSentInfoToMap(const ZIMCallInvitationSentInfo& info);
+    static FTMap cnvZIMCallingInvitationSentInfoToMap(const ZIMCallingInvitationSentInfo& info);
+    static FTMap cnvZIMCallInvitationEndedInfoToMap(const ZIMCallInvitationEndedInfo& info);
+    static FTMap cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangeInfo& info);
+    static FTMap cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvitationTimeoutInfo& info);
+    static FTArray cnvZIMConversationSearchInfoListToArray(const std::vector<ZIMConversationSearchInfo>& conversationSearchInfoList);
+    static FTArray cnvZIMGroupSearchInfoListToArray(const std::vector<ZIMGroupSearchInfo>& groupSearchInfoList);
 
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
@@ -221,10 +223,13 @@ public:
     static ZIMGroupAdvancedConfig cnvZIMGroupAdvancedConfigToObject(FTMap configMap);
     static ZIMGroupMemberQueryConfig cnvZIMGroupMemberQueryConfigToObject(FTMap configMap);
     static ZIMGroupMessageReceiptMemberQueryConfig cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(FTMap configMap);
+    static ZIMMessageSearchConfig cnvZIMMessageSearchConfigMapToObject(FTMap configMap);
+    static ZIMConversationSearchConfig cnvZIMConversationSearchConfigMapToObject(FTMap configMap);
+    static ZIMGroupSearchConfig cnvZIMGroupSearchConfigMapToObject(FTMap configMap);
+    static ZIMGroupMemberSearchConfig cnvZIMGroupMemberSearchConfigMapToObject(FTMap configMap);
+
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
-    static int32_t cnvFTMapToInt32(flutter::EncodableValue value);
-    static int64_t cnvFTMapToInt64(flutter::EncodableValue value);
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);

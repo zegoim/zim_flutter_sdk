@@ -24,7 +24,7 @@ class ZIMEngine implements ZIM {
     if (ZIMManager.destroyEngine(handle)) {
       channel.invokeMethod("destroy", {"handle": handle});
       // TODO: Remove another map
-      ZIMEventHandlerImpl.unregisterEventHandler();
+      // ZIMEventHandlerImpl.unregisterEventHandler();
     }
   }
 
@@ -863,6 +863,47 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMMessageLocalExtendedDataUpdatedResult>
+  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message) async{
+    Map resultMap = await channel.invokeMethod('updateMessageLocalExtendedData', {
+      'handle': handle,
+      'localExtendedData': localExtendedData,
+      'message': ZIMConverter.mZIMMessage(message)
+    });
+    return ZIMConverter.oZIMMessageLocalExtendedDataUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessagesSearchedResult> searchLocalMessages(String conversationID, ZIMConversationType conversationType, ZIMMessageSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalMessages', {
+      'handle': handle,
+      'conversationID': conversationID,
+      'conversationType':
+      ZIMConversationTypeExtension.valueMap[conversationType],
+      'config': ZIMConverter.mZIMMessageSearchConfig(config)
+    });
+    return ZIMConverter.oZIMMessagesSearchedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(ZIMMessageSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchGlobalLocalMessages', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMMessageSearchConfig(config)
+    });
+    return ZIMConverter.oZIMMessagesGlobalSearchedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMConversationsSearchedResult> searchLocalConversations(ZIMConversationSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalConversations', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMConversationSearchConfig(config)
+    });
+    return ZIMConverter.oZIMConversationsSearchedResult(resultMap);
+  }
+
+  @override
   Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList(
       ZIMConversationQueryConfig config) async{
     Map resultMap = await channel.invokeMethod('queryConversationPinnedList',{
@@ -894,4 +935,64 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMConversationQueriedResult(resultMap);
   }
 
+
+  @override
+  Future<ZIMCallEndSentResult> callEnd(
+      String callID, ZIMCallEndConfig config) async{
+    Map resultMap = await channel.invokeMethod('callEnd',{
+      'handle': handle,
+      'callID': callID,
+      'config': ZIMConverter.mZIMCallEndConfig(config)
+    });
+    return ZIMConverter.oZIMCallEndSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMCallQuitSentResult> callQuit(String callID, ZIMCallQuitConfig config) async {
+    Map resultMap = await channel.invokeMethod('callQuit',{
+      'handle': handle,
+      'callID': callID,
+      'config': ZIMConverter.mZIMCallQuitConfig(config)
+    });
+    return ZIMConverter.oZIMCallQuitSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMCallingInvitationSentResult> callingInvite(List<String> invitees, String callID,ZIMCallingInviteConfig config) async {
+    Map resultMap = await channel.invokeMethod('callingInvite',{
+      'handle': handle,
+      'invitees': invitees,
+      'callID': callID,
+      'config': ZIMConverter.mZIMCallingInviteConfig(config)
+    });
+    return ZIMConverter.oZIMCallingInvitationSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryCallList',{
+      'handle': handle,
+      'config': ZIMConverter.mZIMQueryCallListConfig(config)
+    });
+    return ZIMConverter.oZIMCallListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupsSearchedResult> searchLocalGroups(ZIMGroupSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalGroups',{
+      'handle': handle,
+      'config': ZIMConverter.mZIMGroupSearchConfig(config)
+    });
+    return ZIMConverter.oZIMGroupsSearchedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(String groupID, ZIMGroupMemberSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalGroupMembers',{
+      'handle': handle,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupMemberSearchConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMembersSearchedResult(resultMap);
+  }
 }

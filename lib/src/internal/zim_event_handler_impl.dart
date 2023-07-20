@@ -243,7 +243,10 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       case 'onCallInvitationTimeout':
         if (ZIMEventHandler.onCallInvitationTimeout == null) return;
 
-        ZIMEventHandler.onCallInvitationTimeout!(zim!, map['callID']);
+        ZIMEventHandler.onCallInvitationTimeout!(
+            zim!,
+            ZIMConverter.oZIMCallInvitationTimeoutInfo(map['info']),
+            map['callID']);
         break;
       case 'onCallInviteesAnsweredTimeout':
         if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;
@@ -304,6 +307,20 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
         }
         ZIMEventHandler.onConversationMessageReceiptChanged!(zim!,infos);
+        break;
+      case 'onCallInvitationEnded':
+        if(ZIMEventHandler.onCallInvitationEnded == null) return;
+        ZIMEventHandler.onCallInvitationEnded!(
+            zim!,
+            ZIMConverter.oZIMCallInvitationEndedInfo(map['info']), map['callID']);
+        break;
+      case 'onCallUserStateChanged':
+        if(ZIMEventHandler.onCallUserStateChanged == null) return;
+        ZIMCallUserStateChangeInfo userStateChangedInfo = ZIMConverter.oZIMCallUserStateChangedInfo(map['info']);
+        String callID = map['callID'];
+        ZIMEventHandler.onCallUserStateChanged!(
+            zim!,
+            ZIMConverter.oZIMCallUserStateChangedInfo(map['info']),callID);
         break;
       default:
         break;

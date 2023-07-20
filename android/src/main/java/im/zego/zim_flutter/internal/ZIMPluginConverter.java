@@ -11,19 +11,31 @@ import im.zego.zim.entity.ZIMAudioMessage;
 import im.zego.zim.entity.ZIMBarrageMessage;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
 import im.zego.zim.entity.ZIMCallCancelConfig;
+import im.zego.zim.entity.ZIMCallEndedSentInfo;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
+import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
+import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
+import im.zego.zim.entity.ZIMCallQuitSentInfo;
+import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
+import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallInviteConfig;
+import im.zego.zim.entity.ZIMCallingInviteConfig;
 import im.zego.zim.entity.ZIMCallRejectConfig;
+import im.zego.zim.entity.ZIMCallQuitConfig;
+import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMCallUserInfo;
+import im.zego.zim.entity.ZIMCallInfo;
 import im.zego.zim.entity.ZIMCommandMessage;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
+import im.zego.zim.entity.ZIMConversationSearchConfig;
+import im.zego.zim.entity.ZIMConversationSearchInfo;
 import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
@@ -34,8 +46,11 @@ import im.zego.zim.entity.ZIMGroupFullInfo;
 import im.zego.zim.entity.ZIMGroupInfo;
 import im.zego.zim.entity.ZIMGroupMemberInfo;
 import im.zego.zim.entity.ZIMGroupMemberQueryConfig;
+import im.zego.zim.entity.ZIMGroupMemberSearchConfig;
 import im.zego.zim.entity.ZIMGroupMessageReceiptMemberQueryConfig;
 import im.zego.zim.entity.ZIMGroupOperatedInfo;
+import im.zego.zim.entity.ZIMGroupSearchConfig;
+import im.zego.zim.entity.ZIMGroupSearchInfo;
 import im.zego.zim.entity.ZIMImageMessage;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
@@ -43,6 +58,7 @@ import im.zego.zim.entity.ZIMMessageDeleteConfig;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageRevokeConfig;
+import im.zego.zim.entity.ZIMMessageSearchConfig;
 import im.zego.zim.entity.ZIMMessageSendConfig;
 import im.zego.zim.entity.ZIMMessageSentStatusChangeInfo;
 import im.zego.zim.entity.ZIMPushConfig;
@@ -70,13 +86,16 @@ import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
 import im.zego.zim.entity.ZIMVideoMessage;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
+import im.zego.zim.enums.ZIMCallInvitationMode;
 import im.zego.zim.enums.ZIMMessageDirection;
+import im.zego.zim.enums.ZIMMessageOrder;
 import im.zego.zim.enums.ZIMMessagePriority;
 import im.zego.zim.enums.ZIMMessageReceiptStatus;
 import im.zego.zim.enums.ZIMMessageRevokeStatus;
 import im.zego.zim.enums.ZIMMessageSentStatus;
 import im.zego.zim.enums.ZIMMessageType;
 import im.zego.zim.enums.ZIMRevokeType;
+import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
 
 @SuppressWarnings({"unused","deprecation,unchecked,all"})
 public class ZIMPluginConverter {
@@ -126,6 +145,7 @@ public class ZIMPluginConverter {
         messageSentStatusChangeInfoMap.put("status",messageSentStatusChangeInfo.status.value());
 
         messageSentStatusChangeInfoMap.put("message", mZIMMessage(messageSentStatusChangeInfo.message));
+        messageSentStatusChangeInfoMap.put("reason", messageSentStatusChangeInfo.reason);
         return messageSentStatusChangeInfoMap;
     }
 
@@ -152,6 +172,7 @@ public class ZIMPluginConverter {
 //        ArrayList
 //    }
 
+
     static public HashMap<String,Object> mZIMMessage(ZIMMessage message){
         HashMap<String,Object> messageMap = new HashMap<>();
         messageMap.put("type",message.getType().value());
@@ -167,7 +188,8 @@ public class ZIMPluginConverter {
         messageMap.put("orderKey",message.getOrderKey());
         messageMap.put("isUserInserted",message.isUserInserted());
         messageMap.put("receiptStatus",message.getReceiptStatus().value());
-        messageMap.put("extendedData",message.getExtendedData());
+        messageMap.put("extendedData",message.extendedData);
+        messageMap.put("localExtendedData",message.localExtendedData);
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -477,11 +499,15 @@ public class ZIMPluginConverter {
             receiptStatusField.set(message, ZIMMessageReceiptStatus.getZIMMessageReceiptStatus(ZIMPluginCommonTools.safeGetIntValue(messageMap.get("receiptStatus"))));
             receiptStatusField.setAccessible(false);
 
-
             Field extendedDataField = ZIMMessage.class.getDeclaredField("extendedData");
             extendedDataField.setAccessible(true);
             extendedDataField.set(message,messageMap.get("extendedData"));
             extendedDataField.setAccessible(false);
+
+            Field localExtendedDataField = ZIMMessage.class.getDeclaredField("localExtendedData");
+            localExtendedDataField.setAccessible(true);
+            localExtendedDataField.set(message,messageMap.get("localExtendedData"));
+            localExtendedDataField.setAccessible(false);
 
         }
         catch (NoSuchFieldException e) {
@@ -539,7 +565,7 @@ public class ZIMPluginConverter {
         return messageList;
     }
 
-    static public HashMap<String,Object>mZIMMessageReceiptInfo(ZIMMessageReceiptInfo info){
+    static public HashMap<String,Object> mZIMMessageReceiptInfo(ZIMMessageReceiptInfo info){
         HashMap<String,Object> infoModel = new HashMap<>();
         infoModel.put("conversationID",info.conversationID);
         infoModel.put("conversationType",info.conversationType.value());
@@ -548,6 +574,58 @@ public class ZIMPluginConverter {
         infoModel.put("readMemberCount",info.readMemberCount);
         infoModel.put("unreadMemberCount",info.unreadMemberCount);
         return infoModel;
+    }
+
+    static public ZIMMessageSearchConfig oZIMMessageSearchConfig(HashMap<String,Object> configMap) {
+        ZIMMessageSearchConfig config = new ZIMMessageSearchConfig();
+        config.nextMessage = oZIMMessage(ZIMPluginCommonTools.safeGetHashMap(configMap.get("nextMessage")));
+        config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
+        config.order = ZIMMessageOrder.getZIMMessageOrder(ZIMPluginCommonTools.safeGetIntValue(configMap.get("order")));
+        config.keywords = (ArrayList<String>) configMap.get("keywords");
+        config.subMessageTypes = (ArrayList<Integer>) configMap.get("subMessageTypes");
+        config.senderUserIDs = (ArrayList<String>) configMap.get("senderUserIDs");
+        ArrayList<ZIMMessageType> messageTypes = new ArrayList<>();
+        for(Integer msgType : (ArrayList<Integer>) configMap.get("messageTypes")) {
+            messageTypes.add(ZIMMessageType.getZIMMessageType(msgType.intValue()));
+        }
+        config.messageTypes = messageTypes;
+        config.startTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("startTime"));
+        config.endTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("endTime"));
+
+        return config;
+    }
+
+    static public ZIMConversationSearchConfig oZIMConversationMessageGlobalSearchConfig(HashMap<String,Object> configMap) {
+        ZIMConversationSearchConfig config = new ZIMConversationSearchConfig();
+        config.nextFlag = ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
+        config.totalConversationCount = ZIMPluginCommonTools.safeGetIntValue(configMap.get("totalConversationCount"));
+        config.conversationMessageCount = ZIMPluginCommonTools.safeGetIntValue(configMap.get("conversationMessageCount"));
+        config.keywords = (ArrayList<String>) configMap.get("keywords");
+        config.subMessageTypes = (ArrayList<Integer>) configMap.get("subMessageTypes");
+        config.senderUserIDs = (ArrayList<String>) configMap.get("senderUserIDs");
+        ArrayList<ZIMMessageType> messageTypes = new ArrayList<>();
+        for(Integer msgType : (ArrayList<Integer>) configMap.get("messageTypes")) {
+            messageTypes.add(ZIMMessageType.getZIMMessageType(msgType.intValue()));
+        }
+        config.messageTypes = messageTypes;
+        config.startTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("startTime"));
+        config.endTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("endTime"));
+
+        return config;
+    }
+
+    static public ArrayList<HashMap<String,Object>> mZIMConversationSearchInfoList(ArrayList<ZIMConversationSearchInfo> globalInfoList) {
+        ArrayList<HashMap<String,Object>> mapInfoList = new ArrayList<>();
+        for(ZIMConversationSearchInfo info : globalInfoList) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("conversationID", info.conversationID);
+            map.put("conversationType", info.conversationType.value());
+            map.put("totalMessageCount", info.totalMessageCount);
+            map.put("messageList", mZIMMessageList(info.messageList));
+            mapInfoList.add(map);
+        }
+
+        return mapInfoList;
     }
 
     static public ArrayList<HashMap<String,Object>> mZIMUserInfoList(ArrayList<ZIMUserInfo> userList){
@@ -897,11 +975,51 @@ public class ZIMPluginConverter {
         return config;
     }
 
+    static public ZIMGroupSearchConfig oZIMGroupSearchConfig(HashMap<String, Object> configMap) {
+        ZIMGroupSearchConfig config = new ZIMGroupSearchConfig();
+        config.nextFlag = ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
+        config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
+        config.keywords = (ArrayList<String>) configMap.get("keywords");
+        config.isAlsoMatchGroupMemberUserName = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoMatchGroupMemberUserName"));
+        config.isAlsoMatchGroupMemberNickname = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoMatchGroupMemberNickname"));
+
+        return config;
+    }
+
+    static public ZIMGroupMemberSearchConfig oZIMGroupMemberSearchConfig(HashMap<String, Object> configMap) {
+        ZIMGroupMemberSearchConfig config = new ZIMGroupMemberSearchConfig();
+        config.nextFlag = ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
+        config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
+        config.keywords = (ArrayList<String>) configMap.get("keywords");
+        config.isAlsoMatchGroupMemberNickname = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoMatchGroupMemberNickname"));
+
+        return config;
+    }
+
+    static public ArrayList<HashMap<String, Object>> mZIMGroupSearchInfoList(ArrayList<ZIMGroupSearchInfo> groupSearchInfoList) {
+        ArrayList<HashMap<String, Object>> mapInfoList = new ArrayList<>();
+        for(ZIMGroupSearchInfo info : groupSearchInfoList) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("groupInfo", mZIMGroupInfo(info.groupInfo));
+            map.put("userList", mZIMGroupMemberInfoList(info.userList));
+            mapInfoList.add(map);
+        }
+
+        return mapInfoList;
+    }
+
     static public ZIMCallInviteConfig oZIMCallInviteConfig(HashMap<String,Object> configMap){
         ZIMCallInviteConfig config = new ZIMCallInviteConfig();
         config.timeout = ZIMPluginCommonTools.safeGetIntValue(configMap.get("timeout"));
         config.extendedData = (String) configMap.get("extendedData");
+        config.mode = ZIMCallInvitationMode.getZIMCallInvitationMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
+        return config;
+    }
+
+    static public ZIMCallingInviteConfig oZIMCallingInviteConfig(HashMap<String,Object> configMap){
+        ZIMCallingInviteConfig config = new ZIMCallingInviteConfig();
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
         return config;
     }
 
@@ -909,7 +1027,32 @@ public class ZIMPluginConverter {
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("state",userInfo.state.value());
+        userInfoMap.put("extendedData",userInfo.extendedData);
         return userInfoMap;
+    }
+    
+    static public HashMap<String,Object> mZIMCallInfo(ZIMCallInfo callInfo){
+        HashMap<String,Object> callInfoMap = new HashMap<>();
+        callInfoMap.put("callID",callInfo.callID);
+        callInfoMap.put("caller",callInfo.caller);
+        callInfoMap.put("createTime",callInfo.createTime);
+        callInfoMap.put("endTime",callInfo.endTime);
+        callInfoMap.put("state",callInfo.state.value());
+        callInfoMap.put("mode",callInfo.mode.value());
+        callInfoMap.put("callUserList", mZIMCallUserInfoList(callInfo.callUserList));
+        callInfoMap.put("extendedData",callInfo.extendedData);
+//        callInfoMap.put("callDuration",callInfo.callDuration);
+//        callInfoMap.put("userDuration",callInfo.userDuration);
+        return callInfoMap;
+    }
+
+    static public ArrayList<HashMap<String ,Object>> mZIMCallInfoList(ArrayList<ZIMCallInfo> callInfoList){
+        ArrayList<HashMap<String ,Object>> basicInfoList = new ArrayList<>();
+        for (ZIMCallInfo callInfo :
+                callInfoList) {
+            basicInfoList.add(mZIMCallInfo(callInfo));
+        }
+        return basicInfoList;
     }
 
     static public ArrayList<HashMap<String ,Object>> mZIMCallUserInfoList(ArrayList<ZIMCallUserInfo> callUserInfoList){
@@ -924,8 +1067,46 @@ public class ZIMPluginConverter {
     static public HashMap<String,Object> mZIMCallInvitationSentInfo(ZIMCallInvitationSentInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
+        infoMap.put("errorList",mZIMErrorUserInfoList(info.errorUserList));
         infoMap.put("errorInvitees", mZIMCallUserInfoList(info.errorInvitees));
+
         return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallingInvitationSentInfo(ZIMCallingInvitationSentInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("errorInvitees", mZIMErrorUserInfoList(info.errorUserList));
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallQuitSentInfo(ZIMCallQuitSentInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("quitTime",info.quitTime);
+        infoMap.put("acceptTime",info.acceptTime);
+        infoMap.put("createTime",info.createTime);
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallEndSentInfo(ZIMCallEndedSentInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("acceptTime",info.acceptTime);
+        infoMap.put("endTime",info.endTime);
+        infoMap.put("createTime",info.createTime);
+        return infoMap;
+    }
+
+    static public ZIMCallQuitConfig oZIMCallQuitConfig(HashMap<String,Object> configMap) {
+        ZIMCallQuitConfig config = new ZIMCallQuitConfig();
+        config.extendedData = (String) configMap.get("extendedData");
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
+    }
+
+    static public ZIMCallEndConfig oZIMCallEndConfig(HashMap<String,Object> configMap) {
+        ZIMCallEndConfig config = new ZIMCallEndConfig();
+        config.extendedData = (String) configMap.get("extendedData");
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
     }
 
     static public ZIMCallCancelConfig oZIMCallCancelConfig(HashMap<String,Object> configMap){
@@ -943,6 +1124,13 @@ public class ZIMPluginConverter {
     static public ZIMCallRejectConfig oZIMCallRejectConfig(HashMap<String,Object> configMap) {
         ZIMCallRejectConfig config = new ZIMCallRejectConfig();
         config.extendedData = (String) configMap.get("extendedData");
+        return config;
+    }
+
+    static public ZIMCallInvitationQueryConfig oZIMQueryCallListConfig(HashMap<String,Object> configMap) {
+        ZIMCallInvitationQueryConfig config = new ZIMCallInvitationQueryConfig();
+        config.count = (Integer) configMap.get("count");
+        config.nextFlag = ZIMPluginCommonTools.safeGetLongValue(configMap.get("nextFlag"));
         return config;
     }
 
@@ -992,6 +1180,10 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("timeout",info.timeout);
         infoMap.put("inviter",info.inviter);
+        infoMap.put("caller",info.caller);
+        infoMap.put("mode", info.mode.value());
+        infoMap.put("createTime",info.createTime);
+        infoMap.put("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
         infoMap.put("extendedData",info.extendedData);
         return infoMap;
     }
@@ -1000,6 +1192,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("inviter",info.inviter);
         infoMap.put("extendedData",info.extendedData);
+        infoMap.put("mode",info.mode.value());
         return infoMap;
     }
 
@@ -1014,6 +1207,28 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("invitee",info.invitee);
         infoMap.put("extendedData",info.extendedData);
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallInvitationEndedInfo(ZIMCallInvitationEndedInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("endTime", info.endTime);
+        infoMap.put("mode", info.mode.value());
+        infoMap.put("extendedData", info.extendedData);
+        infoMap.put("caller", info.caller);
+        infoMap.put("operatedUserID", info.operatedUserID);
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallInvitationTimeoutInfo(ZIMCallInvitationTimeoutInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("mode", info.mode.value());
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMCallUserStateChangeInfo(ZIMCallUserStateChangeInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("callUserList", mZIMCallUserInfoList(info.callUserList));
         return infoMap;
     }
 

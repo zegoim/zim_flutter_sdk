@@ -134,11 +134,17 @@ protected:
         const ZIMCallInvitationRejectedInfo& info,
         const std::string& callID);
 
-    void onCallInvitationTimeout(ZIM* zim, const std::string& callID);
+    void onCallInvitationTimeout(ZIM* zim, const ZIMCallInvitationTimeoutInfo &info,const std::string& callID);
 
     void onCallInviteesAnsweredTimeout(ZIM* zim,
         const std::vector<std::string>& invitees,
         const std::string& callID);
+
+    void onCallInvitationEnded(ZIM* zim, const ZIMCallInvitationEndedInfo& info,
+        const std::string& callID);
+
+    void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo& info, const std::string & callID);
+
 
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;

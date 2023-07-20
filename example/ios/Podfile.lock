@@ -52,10 +52,10 @@ PODS:
   - SwiftyGif (5.4.3)
   - video_player_avfoundation (0.0.1):
     - Flutter
-  - zego_zim (2.7.1):
+  - zego_zim (2.9.0):
     - Flutter
-    - ZIM (= 2.7.1)
-  - ZIM (2.7.1)
+    - ZIM (= 2.9.0)
+  - ZIM (2.9.0)
 
 DEPENDENCIES:
   - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
@@ -109,8 +109,8 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
-  zego_zim: 4e72278879017951f270f5cbbefd7343ea44ec8c
-  ZIM: 70617c39c931038adc87bbe1f4aee3c80bbc997d
+  zego_zim: 1d30243d82da65d2d3d096736dfe723136aab9f6
+  ZIM: c3388322ebe0028b85f976979c8cafd3d3032399
 
 PODFILE CHECKSUM: e6e8b6a1c3777d55673d4e1443d337cc6c4c6569
 
