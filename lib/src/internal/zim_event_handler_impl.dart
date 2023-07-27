@@ -324,8 +324,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onMessageReactionsChanged':
         if (ZIMEventHandler.onMessageReactionsChanged == null) return;
-        List<ZIMMessageReaction> infos = List<ZIMMessageReaction>.from(ZIMConverter.oZIMMessageReactionList(map['infos']));
-        ZIMEventHandler.onMessageReactionsChanged!(zim!,infos);
+        List<ZIMMessageReaction> reactions = List<ZIMMessageReaction>.from(ZIMConverter.oZIMMessageReactionList(map['reactions']));
+        ZIMEventHandler.onMessageReactionsChanged!(zim!,reactions);
         break;
       default:
         break;

@@ -606,14 +606,14 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onMessageReactionChanged(ZIM zim, ArrayList<ZIMMessageReaction> infos) {
-        super.onMessageReactionChanged(zim, infos);
+    public void onMessageReactionChanged(ZIM zim, ArrayList<ZIMMessageReaction> reactions) {
+        super.onMessageReactionChanged(zim, reactions);
         if(mysink == null){
             return;
         }
         String handle = engineMapForCallback.get(zim);
         HashMap<String,Object> resultMap = new HashMap<>();
-        resultMap.put("infos",ZIMPluginConverter.mZIMMessageReactionList(infos));
+        resultMap.put("reactions",ZIMPluginConverter.mZIMMessageReactionList(reactions));
         resultMap.put("method","onMessageReactionsChanged");
         resultMap.put("handle", handle);
         mysink.success(resultMap);

@@ -1445,12 +1445,8 @@ class ZIMConverter {
   }
 
   static ZIMMessageReaction oZIMMessageReaction(Map reactionMap) {
-    List userInfosBasic = reactionMap['userInfos'];
 
-    List<ZIMReactionUserInfo> userInfos = [];
-    for (Map userInfoMap in userInfosBasic) {
-      userInfos.add(oZIMReactionUserInfo(userInfoMap));
-    }
+    List<ZIMReactionUserInfo> userList = oZIMReactionUserInfoList(reactionMap);
 
     ZIMMessageReaction reaction = ZIMMessageReaction(
       conversationID: reactionMap["conversationID"],
@@ -1458,8 +1454,8 @@ class ZIMConverter {
       messageID: reactionMap["messageID"],
       totalCount: reactionMap["totalCount"],
       reactionType: reactionMap["reactionType"],
-      hasOwner: reactionMap["hasOwner"],
-      userInfos: userInfos,
+      isSelfIncluded: reactionMap["isSelfIncluded"],
+      userList: userList,
     );
 
     return reaction;
@@ -1473,12 +1469,12 @@ class ZIMConverter {
     return infos;
   }
 
-  static ZIMAddMessageReactionResult oZIMAddMessageReactionResult(Map resultMap) {
+  static ZIMAddedMessageReactionResult oZIMAddMessageReactionResult(Map resultMap) {
     Map reactionMap = resultMap["reaction"];
 
     ZIMMessageReaction reaction = oZIMMessageReaction(reactionMap);
 
-    return ZIMAddMessageReactionResult(reaction: reaction);
+    return ZIMAddedMessageReactionResult(reaction: reaction);
   }
 
   static Map mZIMMessageReactionUsersQueryConfig(ZIMMessageReactionUsersQueryConfig config) {
@@ -1489,24 +1485,30 @@ class ZIMConverter {
     return queryConfigMap;
   }
 
-  static ZIMDeleteMessageReactionResult oZIMDeleteMessageReactionResult(Map resultMap) {
+  static ZIMDeletedMessageReactionResult oZIMDeleteMessageReactionResult(Map resultMap) {
     Map reactionMap = resultMap["reaction"];
 
     ZIMMessageReaction reaction = oZIMMessageReaction(reactionMap);
 
-    return ZIMDeleteMessageReactionResult(reaction: reaction);
+    return ZIMDeletedMessageReactionResult(reaction: reaction);
   }
 
-  static ZIMReactionUsersQueryResult oZIMReactionUsersQueryResult(Map resultMap) {
-    List userInfosBasic = resultMap["userInfos"];
-
-    List<ZIMReactionUserInfo> userInfos = [];
-    for (Map userInfoMap in userInfosBasic) {
-      userInfos.add(oZIMReactionUserInfo(userInfoMap));
+  static List<ZIMReactionUserInfo> oZIMReactionUserInfoList(Map resultMap){
+    List userListBasic = resultMap["userList"];
+    List<ZIMReactionUserInfo> userList= [];
+    for (Map userInfoMap in userListBasic) {
+      userList.add(oZIMReactionUserInfo(userInfoMap));
     }
+    return userList;
+  }
 
-    return ZIMReactionUsersQueryResult(reactionType:resultMap["reactionType"],
-        userInfos: userInfos,nextFlag: resultMap["nextFlag"],
+  static ZIMReactionUserListQueriedResult oZIMReactionUsersQueryResult(Map resultMap) {
+
+    List<ZIMReactionUserInfo> userList = oZIMReactionUserInfoList(resultMap);
+    return ZIMReactionUserListQueriedResult(message:oZIMMessage(resultMap["message"]),
+        reactionType:resultMap["reactionType"],
+        userList: userList,
+        nextFlag: resultMap["nextFlag"],
         totalCount: resultMap["totalCount"]);
   }
 

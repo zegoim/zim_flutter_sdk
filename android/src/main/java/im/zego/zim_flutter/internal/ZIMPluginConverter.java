@@ -58,7 +58,7 @@ import im.zego.zim.entity.ZIMMessageDeleteConfig;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReaction;
 import im.zego.zim.entity.ZIMMessageReactionUserInfo;
-import im.zego.zim.entity.ZIMMessageReactionUsersQueryConfig;
+import im.zego.zim.entity.ZIMMessageReactionUserQueryConfig;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageRevokeConfig;
 import im.zego.zim.entity.ZIMMessageSearchConfig;
@@ -1252,13 +1252,13 @@ public class ZIMPluginConverter {
 
     public static HashMap<String,Object> mZIMMessageReaction(ZIMMessageReaction reaction) {
         HashMap<String,Object> infoMap = new HashMap<>();
-        infoMap.put("userInfos",mZIMMessageReactionUserInfoList(reaction.userInfos));
+        infoMap.put("userList",mZIMMessageReactionUserInfoList(reaction.userList));
         infoMap.put("conversationID",reaction.conversationID);
         infoMap.put("conversationType",reaction.conversationType.value());
         infoMap.put("messageID",reaction.messageID);
         infoMap.put("totalCount",reaction.totalCount);
         infoMap.put("reactionType",reaction.reactionType);
-        infoMap.put("hasOwner",reaction.hasOwner);
+        infoMap.put("isSelfIncluded",reaction.isSelfIncluded);
         return infoMap;
     }
 
@@ -1276,13 +1276,14 @@ public class ZIMPluginConverter {
         return userInfoMap;
     }
 
-    public static ZIMMessageReactionUsersQueryConfig oZIMMessageReactionUsersQueryConfig(HashMap<String,Object> configMap) {
-        ZIMMessageReactionUsersQueryConfig queryConfig = new ZIMMessageReactionUsersQueryConfig();
+    public static ZIMMessageReactionUserQueryConfig oZIMMessageReactionUsersQueryConfig(HashMap<String,Object> configMap) {
+        ZIMMessageReactionUserQueryConfig queryConfig = new ZIMMessageReactionUserQueryConfig();
         queryConfig.nextFlag = ZIMPluginCommonTools.safeGetLongValue(configMap.get("nextFlag"));
         queryConfig.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
         queryConfig.reactionType = (String) Objects.requireNonNull(configMap.get("reactionType"));;
         return queryConfig;
     }
+
     public static ArrayList<HashMap<String,Object>> mZIMMessageReactionList(ArrayList<ZIMMessageReaction> infos){
         ArrayList<HashMap<String,Object>> maps = new ArrayList<>();
         for (ZIMMessageReaction info:infos) {

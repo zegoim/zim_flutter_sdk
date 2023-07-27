@@ -1170,19 +1170,19 @@ class ZIMMessageReaction {
   String conversationID;
   ZIMConversationType conversationType;
   int messageID;
-  List<ZIMReactionUserInfo> userInfos;
+  List<ZIMReactionUserInfo> userList;
   int totalCount;
   String reactionType;
-  bool hasOwner;
+  bool isSelfIncluded;
 
   ZIMMessageReaction(
       {required this.conversationID,
       required this.conversationType,
       required this.messageID,
-      required this.userInfos,
+      required this.userList,
       required this.totalCount,
       required this.reactionType,
-      required this.hasOwner});
+      required this.isSelfIncluded});
 }
 
 class ZIMConversationSearchInfo {
@@ -2068,20 +2068,21 @@ class ZIMMessageRevokedResult {
   ZIMMessageRevokedResult({required this.message});
 }
 
-class ZIMAddMessageReactionResult {
+class ZIMAddedMessageReactionResult {
   ZIMMessageReaction reaction;
-  ZIMAddMessageReactionResult({required this.reaction});
+  ZIMAddedMessageReactionResult({required this.reaction});
 }
 
-class ZIMDeleteMessageReactionResult {
+class ZIMDeletedMessageReactionResult {
   ZIMMessageReaction reaction;
-  ZIMDeleteMessageReactionResult({required this.reaction});
+  ZIMDeletedMessageReactionResult({required this.reaction});
 }
 
-class ZIMReactionUsersQueryResult {
-  List<ZIMReactionUserInfo> userInfos;
+class ZIMReactionUserListQueriedResult {
+  List<ZIMReactionUserInfo> userList;
+  ZIMMessage message;
   String reactionType;
   int totalCount;
   int nextFlag;
-  ZIMReactionUsersQueryResult({required this.reactionType,required this.userInfos,required this.nextFlag,required this.totalCount});
+  ZIMReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
 }
