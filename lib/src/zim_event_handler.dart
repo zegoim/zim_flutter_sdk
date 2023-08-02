@@ -120,7 +120,7 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
   onMessageRevokeReceived;
 
-  static void Function(ZIM zim, List<ZIMMessage> message)?
+  static void Function(ZIM zim, ZIMMessage message)?
   onBroadcastMessageReceived;
 /* Room */
 
