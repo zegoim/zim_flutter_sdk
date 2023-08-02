@@ -185,11 +185,13 @@ extension ZIMMessageSentStatusExtension on ZIMMessageSentStatus {
 
 extension ZIMConversationTypeExtension on ZIMConversationType {
   static const valueMap = {
+    ZIMConversationType.unknown: -1,
     ZIMConversationType.peer: 0,
     ZIMConversationType.room: 1,
     ZIMConversationType.group: 2,
   };
   static const mapValue = {
+    -1: ZIMConversationType.unknown,
     0: ZIMConversationType.peer,
     1: ZIMConversationType.room,
     2: ZIMConversationType.group,

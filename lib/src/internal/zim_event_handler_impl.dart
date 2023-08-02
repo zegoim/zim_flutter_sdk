@@ -300,6 +300,10 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         }
         ZIMEventHandler.onMessageReceiptChanged!(zim!,infos);
         break;
+      case 'onBroadcastMessageReceived':
+        if (ZIMEventHandler.onBroadcastMessageReceived == null) return;
+        ZIMEventHandler.onBroadcastMessageReceived!(zim!,ZIMConverter.oZIMMessage(map['message']));
+        break;
       case 'onConversationMessageReceiptChanged':
         if (ZIMEventHandler.onConversationMessageReceiptChanged == null) return;
         List<ZIMMessageReceiptInfo> infos = [];

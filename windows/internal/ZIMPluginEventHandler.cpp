@@ -200,6 +200,18 @@ void ZIMPluginEventHandler::onMessageRevokeReceived(ZIM* zim, const std::vector<
     eventSink_->Success(retMap);       
 }
 
+void ZIMPluginEventHandler::onBroadcastMessageReceived(ZIM* zim, const std::shared_ptr<ZIMMessage>& message) {
+	if (!eventSink_) {
+		return;
+	}
+	FTMap retMap;
+	retMap[FTValue("method")] = FTValue("onBroadcastMessageReceived");
+	auto handle = this->engineEventMap[zim];
+	retMap[FTValue("handle")] = FTValue(handle);
+	retMap[FTValue("message")] = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
+	eventSink_->Success(retMap);
+}
+
 void ZIMPluginEventHandler::onRoomStateChanged(ZIM* zim, ZIMRoomState state, ZIMRoomEvent event,
     const std::string& extendedData,
     const std::string& roomID) {

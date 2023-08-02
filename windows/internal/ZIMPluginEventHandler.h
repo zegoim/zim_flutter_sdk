@@ -71,6 +71,8 @@ protected:
 
     void onMessageRevokeReceived(ZIM* zim, const std::vector<std::shared_ptr<ZIMRevokeMessage>>& messageList);
 
+    void onBroadcastMessageReceived(ZIM* zim, const std::shared_ptr<ZIMMessage>& message);
+
     void onRoomMemberJoined(ZIM* zim, const std::vector<ZIMUserInfo>& memberList,
         const std::string& roomID);
 

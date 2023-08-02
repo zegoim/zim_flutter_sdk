@@ -321,6 +321,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
 	messageMap[FTValue("extendedData")] = FTValue(message->extendedData);
 	messageMap[FTValue("localExtendedData")] = FTValue(message->localExtendedData);
+	messageMap[FTValue("isBroadcastMessage")] = FTValue(message->isBroadcastMessage());
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
@@ -540,7 +541,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_timestamp()) = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("timestamp")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_orderKey()) = (long long)ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("orderKey")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_receiptStatus()) = (ZIMMessageReceiptStatus)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("receiptStatus")]);
-
+	(*messagePtr.get()).*get(ZIM_FriendlyGet_isBroadcastMessage()) = (bool)std::get<bool>(messageMap[FTValue("isBroadcastMessage")]);
 
 	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
