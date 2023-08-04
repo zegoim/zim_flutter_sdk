@@ -25,7 +25,7 @@ void ZIMPluginMethodHandler::create(flutter::EncodableMap& argument,
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-    unsigned int appID = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("appID")]);
+    unsigned int appID = (unsigned int)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("appID")]);
     auto appSign = std::get<std::string>(configMap[FTValue("appSign")]);
 
     ZIMAppConfig appConfig;

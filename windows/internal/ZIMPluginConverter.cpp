@@ -36,6 +36,9 @@ template struct Rob<ZIM_FriendlyGet_orderKey, &ZIMMessage::orderKey>;
 bool ZIMMessage::* get(ZIM_FriendlyGet_isUserInserted);
 template struct Rob<ZIM_FriendlyGet_isUserInserted, &ZIMMessage::userInserted>;
 
+bool ZIMMessage::* get(ZIM_FriendlyGet_isBroadcastMessage);
+template struct Rob<ZIM_FriendlyGet_isBroadcastMessage, &ZIMMessage::broadcastMessage>;
+
 std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileUID);
 template struct Rob<ZIM_FriendlyGet_fileUID, &ZIMMediaMessage::fileUID>;
 
