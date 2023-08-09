@@ -951,7 +951,7 @@ void ZIMPluginMethodHandler::queryHistoryMessage(flutter::EncodableMap& argument
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageQueryConfig config;
-    config.count = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("count")]);
+    config.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
     config.reverse = std::get<bool>(configMap[FTValue("reverse")]);
     
     std::shared_ptr<ZIMMessage> nextMessagePtr = nullptr;
