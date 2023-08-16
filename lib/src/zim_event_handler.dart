@@ -491,4 +491,7 @@ class ZIMEventHandler {
   /// [callID] Unique identifier of the call.
   static void Function(ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID)?
       onCallUserStateChanged;
+
+  static void Function(ZIM zim, List<ZIMMessageReaction> infos)?
+      onMessageReactionsChanged;
 }

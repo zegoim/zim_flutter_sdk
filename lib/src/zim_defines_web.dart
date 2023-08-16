@@ -134,6 +134,9 @@ class ZIM {
   external PromiseJsImpl<dynamic> searchLocalMessages(String conversationID, dynamic conversationType, dynamic config);
   external PromiseJsImpl<dynamic> searchLocalGroups(dynamic config);
   external PromiseJsImpl<dynamic> searchLocalGroupMembers(String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> addMessageReaction(String reactionType, dynamic message);
+  external PromiseJsImpl<dynamic> deleteMessageReaction(String reactionType, dynamic message);
+  external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);
 }
 
 @JS()

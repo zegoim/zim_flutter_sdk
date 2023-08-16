@@ -995,4 +995,37 @@ class ZIMEngine implements ZIM {
     });
     return ZIMConverter.oZIMGroupMembersSearchedResult(resultMap);
   }
+  @override
+  Future<ZIMAddedMessageReactionResult> addMessageReaction (
+      String reactionType, ZIMMessage message) async {
+    Map resultMap = await channel.invokeMethod('addMessageReaction', {
+      'handle': handle,
+      'reactionType': reactionType,
+      'message': ZIMConverter.mZIMMessage(message)
+    });
+    return ZIMConverter.oZIMAddMessageReactionResult(resultMap);
+  }
+
+  @override
+  Future<ZIMDeletedMessageReactionResult> deleteMessageReaction (
+      String reactionType, ZIMMessage message) async {
+    Map resultMap = await channel.invokeMethod('deleteMessageReaction', {
+      'handle': handle,
+      'reactionType': reactionType,
+      'message': ZIMConverter.mZIMMessage(message)
+    });
+    return ZIMConverter.oZIMDeleteMessageReactionResult(resultMap);
+  }
+
+  @override
+  Future<ZIMReactionUserListQueriedResult> queryMessageReactionUserList (
+      ZIMMessage message, ZIMMessageReactionUsersQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryMessageReactionUserList', {
+      'handle': handle,
+      'message': ZIMConverter.mZIMMessage(message),
+      'config': ZIMConverter.mZIMMessageReactionUsersQueryConfig(config),
+    });
+    return ZIMConverter.oZIMReactionUsersQueryResult(resultMap);
+  }
+
 }

@@ -329,6 +329,7 @@ class ZIMConverter {
       message.fileSize = resultMap['fileSize'];
     }
     message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
+    message.reactions = oZIMMessageReactionList(resultMap['reactions']);
     message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
     return message;
   }
@@ -1436,6 +1437,79 @@ class ZIMConverter {
     configMap['isAlsoMatchGroupMemberNickname'] = config.isAlsoMatchGroupMemberNickname;
 
     return configMap;
+  }
+
+  static ZIMReactionUserInfo oZIMReactionUserInfo(Map userInfoMap) {
+    ZIMReactionUserInfo reactionUserInfo = ZIMReactionUserInfo(userID: userInfoMap["userID"]);
+    return reactionUserInfo;
+  }
+
+  static ZIMMessageReaction oZIMMessageReaction(Map reactionMap) {
+
+    List<ZIMReactionUserInfo> userList = oZIMReactionUserInfoList(reactionMap);
+
+    ZIMMessageReaction reaction = ZIMMessageReaction(
+      conversationID: reactionMap["conversationID"],
+      conversationType: ZIMConversationTypeExtension.mapValue[reactionMap['conversationType']]!,
+      messageID: reactionMap["messageID"],
+      totalCount: reactionMap["totalCount"],
+      reactionType: reactionMap["reactionType"],
+      isSelfIncluded: reactionMap["isSelfIncluded"],
+      userList: userList,
+    );
+
+    return reaction;
+  }
+
+  static List<ZIMMessageReaction> oZIMMessageReactionList(List infosList) {
+    List<ZIMMessageReaction> infos = [];
+    for (Map infoMap in infosList) {
+      infos.add(oZIMMessageReaction(infoMap));
+    }
+    return infos;
+  }
+
+  static ZIMAddedMessageReactionResult oZIMAddMessageReactionResult(Map resultMap) {
+    Map reactionMap = resultMap["reaction"];
+
+    ZIMMessageReaction reaction = oZIMMessageReaction(reactionMap);
+
+    return ZIMAddedMessageReactionResult(reaction: reaction);
+  }
+
+  static Map mZIMMessageReactionUsersQueryConfig(ZIMMessageReactionUsersQueryConfig config) {
+    Map queryConfigMap = {};
+    queryConfigMap['nextFlag'] = config.nextFlag;
+    queryConfigMap['count'] = config.count;
+    queryConfigMap['reactionType'] = config.reactionType;
+    return queryConfigMap;
+  }
+
+  static ZIMDeletedMessageReactionResult oZIMDeleteMessageReactionResult(Map resultMap) {
+    Map reactionMap = resultMap["reaction"];
+
+    ZIMMessageReaction reaction = oZIMMessageReaction(reactionMap);
+
+    return ZIMDeletedMessageReactionResult(reaction: reaction);
+  }
+
+  static List<ZIMReactionUserInfo> oZIMReactionUserInfoList(Map resultMap){
+    List userListBasic = resultMap["userList"];
+    List<ZIMReactionUserInfo> userList= [];
+    for (Map userInfoMap in userListBasic) {
+      userList.add(oZIMReactionUserInfo(userInfoMap));
+    }
+    return userList;
+  }
+
+  static ZIMReactionUserListQueriedResult oZIMReactionUsersQueryResult(Map resultMap) {
+
+    List<ZIMReactionUserInfo> userList = oZIMReactionUserInfoList(resultMap);
+    return ZIMReactionUserListQueriedResult(message:oZIMMessage(resultMap["message"]),
+        reactionType:resultMap["reactionType"],
+        userList: userList,
+        nextFlag: resultMap["nextFlag"],
+        totalCount: resultMap["totalCount"]);
   }
 
   static Map mZIMCallEndConfig(ZIMCallEndConfig config) {

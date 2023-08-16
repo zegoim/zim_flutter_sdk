@@ -21,6 +21,7 @@ import im.zego.zim.entity.ZIMGroupFullInfo;
 import im.zego.zim.entity.ZIMGroupMemberInfo;
 import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMMessage;
+import im.zego.zim.entity.ZIMMessageReaction;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageSentStatusChangeInfo;
 import im.zego.zim.entity.ZIMRevokeMessage;
@@ -600,6 +601,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         }
         resultMap.put("infos",infosModel);
         resultMap.put("method","onConversationMessageReceiptChanged");
+        resultMap.put("handle", handle);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onMessageReactionChanged(ZIM zim, ArrayList<ZIMMessageReaction> reactions) {
+        super.onMessageReactionChanged(zim, reactions);
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("reactions",ZIMPluginConverter.mZIMMessageReactionList(reactions));
+        resultMap.put("method","onMessageReactionsChanged");
         resultMap.put("handle", handle);
         mysink.success(resultMap);
     }

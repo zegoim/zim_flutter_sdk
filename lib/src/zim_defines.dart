@@ -476,6 +476,7 @@ class ZIMMessage {
   ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
   String extendedData = "";
   String localExtendedData = "";
+  List<ZIMMessageReaction> reactions = [];
 }
 
 class ZIMTextMessage extends ZIMMessage {
@@ -1152,6 +1153,37 @@ class ZIMMessageReceiptInfo {
       required this.unreadMemberCount});
 }
 
+class ZIMMessageReactionUsersQueryConfig {
+  int nextFlag = 0;
+  int count = 0;
+  String reactionType;
+
+  ZIMMessageReactionUsersQueryConfig({required this.reactionType});
+}
+
+class ZIMReactionUserInfo {
+  String userID;
+  ZIMReactionUserInfo({required this.userID});
+}
+
+class ZIMMessageReaction {
+  String conversationID;
+  ZIMConversationType conversationType;
+  int messageID;
+  List<ZIMReactionUserInfo> userList;
+  int totalCount;
+  String reactionType;
+  bool isSelfIncluded;
+
+  ZIMMessageReaction(
+      {required this.conversationID,
+      required this.conversationType,
+      required this.messageID,
+      required this.userList,
+      required this.totalCount,
+      required this.reactionType,
+      required this.isSelfIncluded});
+}
 
 class ZIMConversationSearchInfo {
   String conversationID;
@@ -1161,7 +1193,6 @@ class ZIMConversationSearchInfo {
 
   ZIMConversationSearchInfo({required this.conversationID, required this.conversationType, required this.totalMessageCount, required this.messageList});
 }
-
 
 //MARK : Result
 
@@ -2035,4 +2066,23 @@ class ZIMGroupMessageReceiptMemberListQueriedResult {
 class ZIMMessageRevokedResult {
   ZIMRevokeMessage message;
   ZIMMessageRevokedResult({required this.message});
+}
+
+class ZIMAddedMessageReactionResult {
+  ZIMMessageReaction reaction;
+  ZIMAddedMessageReactionResult({required this.reaction});
+}
+
+class ZIMDeletedMessageReactionResult {
+  ZIMMessageReaction reaction;
+  ZIMDeletedMessageReactionResult({required this.reaction});
+}
+
+class ZIMReactionUserListQueriedResult {
+  List<ZIMReactionUserInfo> userList;
+  ZIMMessage message;
+  String reactionType;
+  int totalCount;
+  int nextFlag;
+  ZIMReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
 }

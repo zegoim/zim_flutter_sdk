@@ -585,7 +585,16 @@ abstract class ZIM {
   /// Related callbacks: If the revoked message is the latest message of the session, the [ZIMEventHandler.onConversationChanged] callback will be triggered, and if the message is unread, the [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] callback will be triggered.
   Future<ZIMMessageRevokedResult> revokeMessage (
       ZIMMessage message, ZIMMessageRevokeConfig config);
-//MARK: - Room
+
+  Future<ZIMAddedMessageReactionResult> addMessageReaction (
+      String reactionType, ZIMMessage message);
+
+  Future<ZIMDeletedMessageReactionResult> deleteMessageReaction (
+      String reactionType, ZIMMessage message);
+
+  Future<ZIMReactionUserListQueriedResult> queryMessageReactionUserList (
+      ZIMMessage message, ZIMMessageReactionUsersQueryConfig config);
+  //MARK: - Room
 
 
   /// Available since: 2.2.0 or above.
