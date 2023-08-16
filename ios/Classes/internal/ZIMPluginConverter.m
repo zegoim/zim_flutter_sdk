@@ -315,6 +315,7 @@
     [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:message.receiptStatus] forKey:@"receiptStatus"];
     [messageDic safeSetObject:message.extendedData forKey:@"extendedData"];
     [messageDic safeSetObject:message.localExtendedData forKey:@"localExtendedData"];
+    [messageDic safeSetObject:[ZIMPluginConverter mZIMMessageReactionList:message.reactions] forKey:@"reactions"];
     if([message isKindOfClass:[ZIMMediaMessage class]]){
         ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
         [messageDic safeSetObject:mediaMsg.fileLocalPath forKey:@"fileLocalPath"];
@@ -1172,5 +1173,66 @@
     [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
     return infoDic;
 }
+
++(nullable NSDictionary *)mZIMMessageReaction:(nullable ZIMMessageReaction *)reaction{
+    if(reaction == nil || reaction == NULL || [reaction isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:reaction.conversationID forKey:@"conversationID"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:reaction.messageID] forKey:@"messageID"];
+    [infoDic safeSetObject:reaction.reactionType forKey:@"reactionType"];
+    [infoDic safeSetObject:[NSNumber numberWithUnsignedInteger:reaction.conversationType] forKey:@"conversationType"];
+    [infoDic safeSetObject:[NSNumber numberWithUnsignedInteger:reaction.totalCount] forKey:@"totalCount"];
+    [infoDic safeSetObject:[NSNumber numberWithBool:reaction.isSelfIncluded] forKey:@"isSelfIncluded"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMMessageReactionUserInfoList:reaction.userList] forKey:@"userList"];
+    
+    return infoDic;
+}
+
++(nullable NSDictionary *)mZIMMessageReactionUserInfo:(nullable ZIMMessageReactionUserInfo *)userInfo{
+    if(userInfo == nil || userInfo == NULL || [userInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:userInfo.userID forKey:@"userID"];
+    return infoDic;
+}
+
++(nullable NSArray *)mZIMMessageReactionList:(nullable NSArray<ZIMMessageReaction *> *)reactions{
+    if(reactions == nil || reactions == NULL || [reactions isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *infoDic = [[NSMutableArray alloc] init];
+    for (ZIMMessageReaction *reaction in reactions) {
+        NSDictionary *reactionInfoDic = [ZIMPluginConverter mZIMMessageReaction:reaction];
+        [infoDic safeAddObject:reactionInfoDic];
+    }
+    return infoDic;
+}
+
++(nullable NSArray *)mZIMMessageReactionUserInfoList:(nullable NSArray<ZIMMessageReactionUserInfo *> *)userInfoList{
+    if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *infoDic = [[NSMutableArray alloc] init];
+    for (ZIMMessageReactionUserInfo *userInfo in userInfoList) {
+        NSDictionary *userInfoDic = [ZIMPluginConverter mZIMMessageReactionUserInfo:userInfo];
+        [infoDic safeAddObject:userInfoDic];
+    }
+    return infoDic;
+}
+
++(nullable ZIMMessageReactionUserQueryConfig *)oZIMMessageReactionUsersQueryConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMMessageReactionUserQueryConfig *config = [[ZIMMessageReactionUserQueryConfig alloc] init];
+    config.nextFlag = ((NSNumber *)[configDic safeObjectForKey:@"nextFlag"]).unsignedLongLongValue;
+    config.reactionType = [configDic safeObjectForKey:@"reactionType"];
+    config.count = ((NSNumber *)[configDic objectForKey:@"count"]).unsignedIntValue;
+    return config;
+}
+
 
 @end
