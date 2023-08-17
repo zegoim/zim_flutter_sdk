@@ -204,7 +204,11 @@ public:
     static FTMap cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvitationTimeoutInfo& info);
     static FTArray cnvZIMConversationSearchInfoListToArray(const std::vector<ZIMConversationSearchInfo>& conversationSearchInfoList);
     static FTArray cnvZIMGroupSearchInfoListToArray(const std::vector<ZIMGroupSearchInfo>& groupSearchInfoList);
-
+    static FTMap cnvZIMMessageReactionToMap(const ZIMMessageReaction& reaction);
+    static FTMap cnvZIMMessageReactionUserInfoToMap(const ZIMMessageReactionUserInfo& userInfo);
+    static FTArray cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList);
+    static FTArray cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList);
+    
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
@@ -227,7 +231,8 @@ public:
     static ZIMConversationSearchConfig cnvZIMConversationSearchConfigMapToObject(FTMap configMap);
     static ZIMGroupSearchConfig cnvZIMGroupSearchConfigMapToObject(FTMap configMap);
     static ZIMGroupMemberSearchConfig cnvZIMGroupMemberSearchConfigMapToObject(FTMap configMap);
-
+    static ZIMMessageReactionUserQueryConfig cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap);
+    
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static int32_t cnvFTMapToInt32(flutter::EncodableValue value);

@@ -1087,7 +1087,7 @@ FTMap ZIMPluginConverter::cnvZIMMessageReactionUserInfoToMap(const ZIMMessageRea
 FTArray ZIMPluginConverter::cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList) {
 	FTArray reactionArray;
 	for (auto& reaction : reactionList) {
-		FTMap reactionMap = cnvZIMMessageReactionToMap(reaction);
+		FTMap reactionMap = ZIMPluginConverter::cnvZIMMessageReactionToMap(reaction);
 		reactionArray.emplace_back(reactionMap);
 	}
 	return reactionArray;
@@ -1096,7 +1096,7 @@ FTArray ZIMPluginConverter::cnvZIMMessageReactionListToArray(const std::vector<Z
 FTArray ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList) {
 	FTArray reactionUserInfoArray;
 	for (auto& userInfo : reactionUserInfoList) {
-		FTMap userInfoMap = cnvZIMMessageReactionUserInfoToMap(userInfo);
+		FTMap userInfoMap = ZIMPluginConverter::cnvZIMMessageReactionUserInfoToMap(userInfo);
 		reactionUserInfoArray.emplace_back(userInfoMap);
 	}
 	return reactionUserInfoArray;
