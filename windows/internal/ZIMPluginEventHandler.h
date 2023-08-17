@@ -145,6 +145,7 @@ protected:
 
     void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo& info, const std::string & callID);
 
+    void onMessageReactionChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions);
 
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;

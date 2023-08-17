@@ -2669,16 +2669,7 @@ void addMessageReaction(flutter::EncodableMap& argument,
     zim->addMessageReaction(reactionType,messagePtr, [=](const ZIMMessageReaction &reaction, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
-
-            FTArray callInfoArray;
-            for (auto& callInfo : callList) {
-                auto callInfoMap = ZIMPluginConverter::cnvZIMCallInfoToMap(callInfo);
-                callInfoArray.emplace_back(callInfoMap);
-            }
-
-            retMap[FTValue("callList")] = callInfoArray;
-            retMap[FTValue("nextFlag")] = FTValue((int64_t)nextFlag);
-
+            retMap[FTValue("reaction")] = ZIMPluginConverter::cnvZIMMessageReactionToMap(reaction);;
             sharedPtrResult->Success(retMap);
         }
         else {
@@ -2688,11 +2679,51 @@ void addMessageReaction(flutter::EncodableMap& argument,
 }
 void deleteMessageReaction(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
-
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
+    auto reactionType = std::get<std::string>(argument[FTValue("reactionType")]);
+    zim->deleteMessageReaction(reactionType,messagePtr, [=](const ZIMMessageReaction &reaction, const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("reaction")] = ZIMPluginConverter::cnvZIMMessageReactionToMap(reaction);;
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
 }
 void queryMessageReactionUserList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
-
+        auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
+    auto config = ZIMPluginConverter::cnvZIMMessageReactionUserQueryConfigMapToObject(std::get<FTMap>(argument[FTValue("config")]));
+    zim->queryMessageReactionUserList(messagePtr,config, [=](const std::shared_ptr<ZIMMessage> &message,
+    const std::vector<ZIMMessageReactionUserInfo> &userList, const std::string &reactionType,
+    const long long nextFlag, const unsigned int totalCount, const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
+            retMap[FTValue("message")] = messageMap;
+            auto userListMap = ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(userList);
+            retMap[FTValue("userList")] = userListMap;
+            retMap[FTValue("reactionType")] = FTValue(reactionType);
+            retMap[FTValue("nextFlag")] = FTValue((int64_t)nextFlag);
+            retMap[FTValue("totalCount")] = FTValue((int32_t)totalCount);;
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
 }
 
 

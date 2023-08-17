@@ -321,6 +321,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
 	messageMap[FTValue("extendedData")] = FTValue(message->extendedData);
 	messageMap[FTValue("localExtendedData")] = FTValue(message->localExtendedData);
+	messageMap[FTValue("localExtendedData"] = ZIMPluginConverter::cnvZIMMessageReactionListToArray(message->reactions);
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
@@ -1073,7 +1074,7 @@ FTMap ZIMPluginConverter::cnvZIMMessageReactionToMap(const ZIMMessageReaction& r
 	reactionMap[FTValue("totalCount")] = FTValue((int32_t)reaction.totalCount);
 	reactionMap[FTValue("reactionType")] = FTValue(reaction.reactionType);
 	reactionMap[FTValue("isSelfIncluded")] = FTValue(reaction.isSelfIncluded);
-	reactionMap[FTValue("userList")] = FTValue(reaction.messageID);
+	reactionMap[FTValue("userList")] = FTValue(ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(reaction.userList));
 	return reactionMap;
 }
 
@@ -1103,8 +1104,8 @@ FTArray ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(const std::
 
 ZIMMessageReactionUserQueryConfig ZIMPluginConverter::cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap) {
 	ZIMMessageReactionUserQueryConfig config;
-	config.nextFlag = (unsigned long long)std::get<int32_t>(configMap[FTValue("nextFlag")]);
-	config.count = std::get<int32_t>(configMap[FTValue("count")]);
+	config.nextFlag = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
+	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
 	config.reactionType = std::get<std::string>(infoMap[FTValue("reactionType")]);
 	return config;
 }
