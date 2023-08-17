@@ -551,7 +551,7 @@ void ZIMPluginEventHandler::onCallUserStateChanged(ZIM * zim, const ZIMCallUserS
     }
 }
 
-void onMessageReactionChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions){
+void ZIMPluginEventHandler::onMessageReactionChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions){
     if (eventSink_) {
         FTMap retMap;
         retMap[FTValue("method")] = FTValue("onMessageReactionsChanged");
