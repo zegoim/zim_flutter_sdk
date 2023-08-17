@@ -1142,3 +1142,47 @@ FTArray ZIMPluginConverter::cnvZIMGroupSearchInfoListToArray(const std::vector<Z
 
 	return searchInfoArray;
 }
+
+FTMap ZIMPluginConverter::cnvZIMMessageReactionToMap(const ZIMMessageReaction& reaction) {
+	FTMap reactionMap;
+	reactionMap[FTValue("conversationID")] = FTValue(reaction.conversationID);
+	reactionMap[FTValue("conversationType")] = FTValue(reaction.conversationType);
+	reactionMap[FTValue("messageID")] = FTValue(reaction.messageID);
+	reactionMap[FTValue("totalCount")] = FTValue((int32_t)reaction.totalCount);
+	reactionMap[FTValue("reactionType")] = FTValue(reaction.reactionType);
+	reactionMap[FTValue("isSelfIncluded")] = FTValue(reaction.isSelfIncluded);
+	reactionMap[FTValue("userList")] = FTValue(reaction.messageID);
+	return reactionMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMMessageReactionUserInfoToMap(const ZIMMessageReactionUserInfo& userInfo) {
+	FTMap reactionMap;
+	reactionMap[FTValue("userID")] = FTValue(userInfo.userID);
+	return reactionMap;
+}
+
+FTArray ZIMPluginConverter::cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList) {
+	FTArray reactionArray;
+	for (auto& reaction : reactionList) {
+		FTMap reactionMap = cnvZIMMessageReactionToMap(reaction);
+		reactionArray.emplace_back(reactionMap);
+	}
+	return reactionArray;
+}
+
+FTArray ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList) {
+	FTArray reactionUserInfoArray;
+	for (auto& userInfo : reactionUserInfoList) {
+		FTMap userInfoMap = cnvZIMMessageReactionUserInfoToMap(userInfo);
+		reactionUserInfoArray.emplace_back(userInfoMap);
+	}
+	return reactionUserInfoArray;
+}
+
+ZIMMessageReactionUserQueryConfig ZIMPluginConverter::cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap) {
+	ZIMMessageReactionUserQueryConfig config;
+	config.nextFlag = (unsigned long long)std::get<int32_t>(configMap[FTValue("nextFlag")]);
+	config.count = std::get<int32_t>(configMap[FTValue("count")]);
+	config.reactionType = std::get<std::string>(infoMap[FTValue("reactionType")]);
+	return config;
+}
