@@ -321,7 +321,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
 	messageMap[FTValue("extendedData")] = FTValue(message->extendedData);
 	messageMap[FTValue("localExtendedData")] = FTValue(message->localExtendedData);
-	messageMap[FTValue("localExtendedData"] = ZIMPluginConverter::cnvZIMMessageReactionListToArray(message->reactions);
+	messageMap[FTValue("reactions")] = ZIMPluginConverter::cnvZIMMessageReactionListToArray(message->reactions);
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
