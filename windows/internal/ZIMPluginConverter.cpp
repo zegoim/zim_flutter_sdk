@@ -1106,6 +1106,6 @@ ZIMMessageReactionUserQueryConfig ZIMPluginConverter::cnvZIMMessageReactionUserQ
 	ZIMMessageReactionUserQueryConfig config;
 	config.nextFlag = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
 	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
-	config.reactionType = std::get<std::string>(infoMap[FTValue("reactionType")]);
+	config.reactionType = std::get<std::string>(configMap[FTValue("reactionType")]);
 	return config;
 }
