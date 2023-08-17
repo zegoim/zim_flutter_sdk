@@ -584,7 +584,7 @@ fromGroupID:(NSString *)fromGroupID{
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSArray *reactionsArray = [ZIMPluginConverter mZIMMessageReactionList:reactions];
     
-    [resultDic safeSetObject:@"onCallUserStateChanged" forKey:@"method"];
+    [resultDic safeSetObject:@"onMessageReactionsChanged" forKey:@"method"];
     [resultDic safeSetObject:reactionsArray forKey:@"reactions"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
