@@ -265,7 +265,7 @@ enum ZIMMessageOrder {
 }
 
 /// conversation type.
-enum ZIMConversationType { peer, room, group }
+enum ZIMConversationType { unknown, peer, room, group }
 
 enum ZIMConversationEvent { added, updated, disabled }
 
@@ -476,6 +476,7 @@ class ZIMMessage {
   ZIMMessageReceiptStatus receiptStatus = ZIMMessageReceiptStatus.none;
   String extendedData = "";
   String localExtendedData = "";
+  bool isBroadcastMessage = false;
   List<ZIMMessageReaction> reactions = [];
 }
 

@@ -588,6 +588,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onBroadcastMessageReceived(ZIM zim, ZIMMessage message) {
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("message",ZIMPluginConverter.mZIMMessage(message));
+        resultMap.put("method","onBroadcastMessageReceived");
+        resultMap.put("handle", handle);
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onConversationMessageReceiptChanged(ZIM zim, ArrayList<ZIMMessageReceiptInfo> infos) {
         if(mysink == null){
             return;

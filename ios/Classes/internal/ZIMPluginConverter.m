@@ -280,6 +280,7 @@
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey: @"receiptStatus"] forKey:@"receiptStatus"];
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"extendedData"]  forKey:@"extendedData"];
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"localExtendedData"]  forKey:@"localExtendedData"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isBroadcastMessage"] forKey:@"isBroadcastMessage"];
     if([msg isKindOfClass:[ZIMMediaMessage class]]){
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileLocalPath"]  forKey:@"fileLocalPath"];
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileDownloadUrl"] forKey:@"fileDownloadUrl"];
@@ -315,6 +316,7 @@
     [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:message.receiptStatus] forKey:@"receiptStatus"];
     [messageDic safeSetObject:message.extendedData forKey:@"extendedData"];
     [messageDic safeSetObject:message.localExtendedData forKey:@"localExtendedData"];
+    [messageDic safeSetObject:[NSNumber numberWithBool:message.isBroadcastMessage] forKey:@"isBroadcastMessage"];
     [messageDic safeSetObject:[ZIMPluginConverter mZIMMessageReactionList:message.reactions] forKey:@"reactions"];
     if([message isKindOfClass:[ZIMMediaMessage class]]){
         ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
