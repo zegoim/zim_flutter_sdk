@@ -36,6 +36,9 @@ template struct Rob<ZIM_FriendlyGet_orderKey, &ZIMMessage::orderKey>;
 bool ZIMMessage::* get(ZIM_FriendlyGet_isUserInserted);
 template struct Rob<ZIM_FriendlyGet_isUserInserted, &ZIMMessage::userInserted>;
 
+bool ZIMMessage::* get(ZIM_FriendlyGet_isBroadcastMessage);
+template struct Rob<ZIM_FriendlyGet_isBroadcastMessage, &ZIMMessage::broadcastMessage>;
+
 std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileUID);
 template struct Rob<ZIM_FriendlyGet_fileUID, &ZIMMediaMessage::fileUID>;
 
@@ -321,6 +324,8 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
 	messageMap[FTValue("extendedData")] = FTValue(message->extendedData);
 	messageMap[FTValue("localExtendedData")] = FTValue(message->localExtendedData);
+	messageMap[FTValue("reactions")] = ZIMPluginConverter::cnvZIMMessageReactionListToArray(message->reactions);
+	messageMap[FTValue("isBroadcastMessage")] = FTValue(message->isBroadcastMessage());
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
@@ -540,7 +545,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_timestamp()) = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("timestamp")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_orderKey()) = (long long)ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("orderKey")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_receiptStatus()) = (ZIMMessageReceiptStatus)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("receiptStatus")]);
-
+	(*messagePtr.get()).*get(ZIM_FriendlyGet_isBroadcastMessage()) = (bool)std::get<bool>(messageMap[FTValue("isBroadcastMessage")]);
 
 	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
@@ -1063,4 +1068,48 @@ FTArray ZIMPluginConverter::cnvZIMGroupSearchInfoListToArray(const std::vector<Z
 	}
 
 	return searchInfoArray;
+}
+
+FTMap ZIMPluginConverter::cnvZIMMessageReactionToMap(const ZIMMessageReaction& reaction) {
+	FTMap reactionMap;
+	reactionMap[FTValue("conversationID")] = FTValue(reaction.conversationID);
+	reactionMap[FTValue("conversationType")] = FTValue(reaction.conversationType);
+	reactionMap[FTValue("messageID")] = FTValue(reaction.messageID);
+	reactionMap[FTValue("totalCount")] = FTValue((int32_t)reaction.totalCount);
+	reactionMap[FTValue("reactionType")] = FTValue(reaction.reactionType);
+	reactionMap[FTValue("isSelfIncluded")] = FTValue(reaction.isSelfIncluded);
+	reactionMap[FTValue("userList")] = FTValue(ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(reaction.userList));
+	return reactionMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMMessageReactionUserInfoToMap(const ZIMMessageReactionUserInfo& userInfo) {
+	FTMap reactionMap;
+	reactionMap[FTValue("userID")] = FTValue(userInfo.userID);
+	return reactionMap;
+}
+
+FTArray ZIMPluginConverter::cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList) {
+	FTArray reactionArray;
+	for (auto& reaction : reactionList) {
+		FTMap reactionMap = ZIMPluginConverter::cnvZIMMessageReactionToMap(reaction);
+		reactionArray.emplace_back(reactionMap);
+	}
+	return reactionArray;
+}
+
+FTArray ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList) {
+	FTArray reactionUserInfoArray;
+	for (auto& userInfo : reactionUserInfoList) {
+		FTMap userInfoMap = ZIMPluginConverter::cnvZIMMessageReactionUserInfoToMap(userInfo);
+		reactionUserInfoArray.emplace_back(userInfoMap);
+	}
+	return reactionUserInfoArray;
+}
+
+ZIMMessageReactionUserQueryConfig ZIMPluginConverter::cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap) {
+	ZIMMessageReactionUserQueryConfig config;
+	config.nextFlag = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
+	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+	config.reactionType = std::get<std::string>(configMap[FTValue("reactionType")]);
+	return config;
 }

@@ -193,8 +193,12 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryCallList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);     
-
-
+    void addMessageReaction(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void deleteMessageReaction(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void queryMessageReactionUserList(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 private:
     ZIMPluginMethodHandler() = default;
 private:

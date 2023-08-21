@@ -71,6 +71,8 @@ protected:
 
     void onMessageRevokeReceived(ZIM* zim, const std::vector<std::shared_ptr<ZIMRevokeMessage>>& messageList);
 
+    void onBroadcastMessageReceived(ZIM* zim, const std::shared_ptr<ZIMMessage>& message);
+
     void onRoomMemberJoined(ZIM* zim, const std::vector<ZIMUserInfo>& memberList,
         const std::string& roomID);
 
@@ -145,6 +147,7 @@ protected:
 
     void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo& info, const std::string & callID);
 
+    void onMessageReactionChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions);
 
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;

@@ -119,6 +119,9 @@ class ZIMEventHandler {
   /// Related callbacks:You can revoke message to other members via [ZIM.revokeMessage].
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
   onMessageRevokeReceived;
+
+  static void Function(ZIM zim, ZIMMessage message)?
+  onBroadcastMessageReceived;
 /* Room */
 
   /// Callback when other members join the room.

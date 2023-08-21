@@ -368,6 +368,15 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "callReject") {
         ZIMPluginMethodHandler::getInstance().callReject(argument, std::move(result));
     }
+    else if (method_call.method_name() == "queryMessageReactionUserList") {
+        ZIMPluginMethodHandler::getInstance().queryMessageReactionUserList(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "deleteMessageReaction") {
+        ZIMPluginMethodHandler::getInstance().deleteMessageReaction(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "addMessageReaction") {
+        ZIMPluginMethodHandler::getInstance().addMessageReaction(argument, std::move(result));
+    }
     else {
         result->NotImplemented();
     
