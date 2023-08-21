@@ -1640,6 +1640,14 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
+    resultMap["message"]["reactions"] =
+        resultMap["message"]["reactions"] == null
+            ? [] : resultMap["reactions"].forEach((reactionMap) {
+                      reactionMap["messageID"] = reactionMap["messageID"] is int
+                          ? reactionMap["messageID"]
+                          : int.parse(reactionMap["messageID"]);
+                   });
+
     return resultMap;
   }
 
@@ -2107,6 +2115,14 @@ class ZegoZimPlugin {
             ? resultMap["message"]["isUserInserted"]
             : false;
 
+    resultMap["message"]["reactions"] =
+        resultMap["message"]["reactions"] == null
+            ? [] : resultMap["reactions"].forEach((reactionMap) {
+                      reactionMap["messageID"] = reactionMap["messageID"] is int
+                          ? reactionMap["messageID"]
+                          : int.parse(reactionMap["messageID"]);
+                   });
+
     return resultMap;
   }
 
@@ -2210,6 +2226,16 @@ class ZegoZimPlugin {
         ? messageMap["fileLocalPath"]
         : "";
 
+    if (messageMap["reactions"] != null) {
+      messageMap["reactions"].forEach((reactionMap) {
+        reactionMap["messageID"] = reactionMap["messageID"] is int
+            ? reactionMap["messageID"]
+            : int.parse(reactionMap["messageID"]);
+      });
+    } else {
+      messageMap["reactions"] = [];
+    }
+
     switch (msgType) {
       case ZIMMessageType.image:
         messageMap["thumbnailLocalPath"] =
@@ -2226,6 +2252,9 @@ class ZegoZimPlugin {
             messageMap["videoFirstFrameLocalPath"] is String
                 ? messageMap["videoFirstFrameLocalPath"]
                 : "";
+        break;
+      default:
+        break;
     }
 
     return messageMap;
