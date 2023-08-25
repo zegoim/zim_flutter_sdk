@@ -620,7 +620,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onMessageReactionChanged(ZIM zim, ArrayList<ZIMMessageReaction> reactions) {
+    public void onMessageReactionsChanged(ZIM zim, ArrayList<ZIMMessageReaction> reactions) {
         super.onMessageReactionChanged(zim, reactions);
         if(mysink == null){
             return;

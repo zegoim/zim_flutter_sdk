@@ -588,7 +588,7 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
-- (void)zim:(ZIM *)zim messageReactionChanged:(NSArray<ZIMMessageReaction *> *)reactions{
+- (void)zim:(ZIM *)zim messageReactionsChanged:(NSArray<ZIMMessageReaction *> *)reactions{
     if(_events == nil){
         return;
     }
