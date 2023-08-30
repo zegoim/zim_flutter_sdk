@@ -1648,6 +1648,10 @@ class ZegoZimPlugin {
                           : int.parse(reactionMap["messageID"]);
                    });
 
+    resultMap["message"]["isBroadcastMessage"] = resultMap["message"]["isBroadcastMessage"] is bool
+      ? resultMap["message"]["isBroadcastMessage"]
+        : false;
+
     return resultMap;
   }
 
@@ -2098,10 +2102,26 @@ class ZegoZimPlugin {
       return;
     }
 
-    List<ZIMMessageReaction> infos =
-        ZIMConverter.oZIMMessageReactionList(data["infos"]);
+    data["reactions"].forEach((reactionMap) {
+      reactionMap["messageID"] = int.parse(reactionMap["messageID"]);
+    });
 
-    ZIMEventHandler.onMessageReactionsChanged!(zim, infos);
+    List<ZIMMessageReaction> reactions =
+        ZIMConverter.oZIMMessageReactionList(data["reactions"]);
+
+    ZIMEventHandler.onMessageReactionsChanged!(zim, reactions);
+  }
+
+  static void broadcastMessageReceivedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onBroadcastMessageReceived == null) {
+      return;
+    }
+
+    data["message"] = convertZIMMessage(data["message"]);
+
+    ZIMMessage message = ZIMConverter.oZIMMessage(data["message"]);
+
+    ZIMEventHandler.onBroadcastMessageReceived!(zim, message);
   }
 
   static Map handleSendMessageResult(dynamic result) {
@@ -2122,6 +2142,10 @@ class ZegoZimPlugin {
                           ? reactionMap["messageID"]
                           : int.parse(reactionMap["messageID"]);
                    });
+
+    resultMap["message"]["isBroadcastMessage"] = resultMap["message"]["isBroadcastMessage"] is bool
+      ? resultMap["message"]["isBroadcastMessage"]
+        : false;
 
     return resultMap;
   }
@@ -2225,6 +2249,9 @@ class ZegoZimPlugin {
     messageMap["fileLocalPath"] = messageMap["fileLocalPath"] is String
         ? messageMap["fileLocalPath"]
         : "";
+    messageMap["isBroadcastMessage"] = messageMap["isBroadcastMessage"] is bool
+        ? messageMap["isBroadcastMessage"]
+        : false;
 
     if (messageMap["reactions"] != null) {
       messageMap["reactions"].forEach((reactionMap) {
