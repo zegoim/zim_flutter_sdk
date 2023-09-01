@@ -996,7 +996,7 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMGroupMembersSearchedResult(resultMap);
   }
   @override
-  Future<ZIMAddedMessageReactionResult> addMessageReaction (
+  Future<ZIMMessageAddedMessageReactionResult> addMessageReaction (
       String reactionType, ZIMMessage message) async {
     Map resultMap = await channel.invokeMethod('addMessageReaction', {
       'handle': handle,
@@ -1007,7 +1007,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMDeletedMessageReactionResult> deleteMessageReaction (
+  Future<ZIMMessageDeletedMessageReactionResult> deleteMessageReaction (
       String reactionType, ZIMMessage message) async {
     Map resultMap = await channel.invokeMethod('deleteMessageReaction', {
       'handle': handle,

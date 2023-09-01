@@ -586,10 +586,10 @@ abstract class ZIM {
   Future<ZIMMessageRevokedResult> revokeMessage (
       ZIMMessage message, ZIMMessageRevokeConfig config);
 
-  Future<ZIMAddedMessageReactionResult> addMessageReaction (
+  Future<ZIMMessageAddedMessageReactionResult> addMessageReaction (
       String reactionType, ZIMMessage message);
 
-  Future<ZIMDeletedMessageReactionResult> deleteMessageReaction (
+  Future<ZIMMessageDeletedMessageReactionResult> deleteMessageReaction (
       String reactionType, ZIMMessage message);
 
   Future<ZIMMessageReactionUserListQueriedResult> queryMessageReactionUserList (
