@@ -2123,6 +2123,76 @@
         }
     }];
 }
+- (void)addMessageReaction:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
+    NSString *reactionType = [call.arguments safeObjectForKey:@"reactionType"];
+    [zim addMessageReaction:reactionType message:message callback:^(ZIMMessageReaction * _Nonnull reaction, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            NSDictionary *reactionDic = [ZIMPluginConverter mZIMMessageReaction:reaction];
+            [resultMtDic safeSetObject:reactionDic forKey:@"reaction"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+- (void)deleteMessageReaction:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
+    NSString *reactionType = [call.arguments safeObjectForKey:@"reactionType"];
+    [zim deleteMessageReaction:reactionType message:message callback:^(ZIMMessageReaction * _Nonnull reaction, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            NSDictionary *reactionDic = [ZIMPluginConverter mZIMMessageReaction:reaction];
+            [resultMtDic safeSetObject:reactionDic forKey:@"reaction"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)queryMessageReactionUserList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
+    ZIMMessageReactionUserQueryConfig *config = [ZIMPluginConverter oZIMMessageReactionUsersQueryConfig:[call.arguments objectForKey:@"config"]];
+    [zim queryMessageReactionUserListByMessage:message config:config callback:^(ZIMMessage * _Nonnull message, NSArray<ZIMMessageReactionUserInfo *> * _Nonnull userList, NSString * _Nonnull reactionType, long long nextFlag, int totalCount, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
+            NSArray *userListDic = [ZIMPluginConverter mZIMMessageReactionUserInfoList:userList];
+            
+            [resultMtDic safeSetObject:messageDic forKey:@"message"];
+            [resultMtDic safeSetObject:userListDic forKey:@"userList"];
+            [resultMtDic safeSetObject:reactionType forKey:@"reactionType"];
+            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedLongLong:nextFlag]forKey:@"nextFlag"];
+            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInteger:totalCount] forKey:@"totalCount"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
 
 #pragma mark - Getter
 - (NSMutableDictionary *)engineMap {

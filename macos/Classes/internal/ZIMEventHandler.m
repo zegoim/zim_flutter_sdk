@@ -156,6 +156,18 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim broadcastMessageReceived:(ZIMMessage *)message{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMMessage:message] forKey:@"message"];
+    [resultDic safeSetObject:@"onBroadcastMessageReceived" forKey:@"method"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
 - (void)zim:(ZIM *)zim messageReceiptChanged:(NSArray<ZIMMessageReceiptInfo *> *)infos{
     if(_events == nil){
         return;
@@ -575,6 +587,21 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }
+
+- (void)zim:(ZIM *)zim messageReactionsChanged:(NSArray<ZIMMessageReaction *> *)reactions{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *reactionsArray = [ZIMPluginConverter mZIMMessageReactionList:reactions];
+    
+    [resultDic safeSetObject:@"onMessageReactionsChanged" forKey:@"method"];
+    [resultDic safeSetObject:reactionsArray forKey:@"reactions"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
 #pragma mark - Getter
 - (NSMapTable *)engineEventMap {
     if (!_engineEventMap) {

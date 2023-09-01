@@ -1,3 +1,10 @@
+## 2.10.0
+
+### 1. Feature
+1、Support for single chat and group chat messages to react (that is, position), generally can be used for scenes such as emoticons reply messages, can also be used to initiate group voting, confirm group results and other operations. In addition, it also supports deleting statements made by oneself, and querying user information related to a statement.
+2、New the SenderUnaware field allows the client with FromUserId (sender user ID) in the request parameter to be unaware of the transmission after a single-chat message is sent through the server.
+3、Supports sending messages with specific content to all online users (including message sending users themselves), such as text, pictures, etc. This function is suitable for all staff activity announcements, gifts across the room floating screen and other scenes.
+4、This interface enables you to query whether the specified user is in the target room.
 ## 2.9.0
 
 ### 1. Feature
