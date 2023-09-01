@@ -1504,10 +1504,10 @@ class ZIMConverter {
     return userList;
   }
 
-  static ZIMReactionUserListQueriedResult oZIMReactionUsersQueryResult(Map resultMap) {
+  static ZIMMessageReactionUserListQueriedResult oZIMReactionUsersQueryResult(Map resultMap) {
 
     List<ZIMReactionUserInfo> userList = oZIMReactionUserInfoList(resultMap);
-    return ZIMReactionUserListQueriedResult(message:oZIMMessage(resultMap["message"]),
+    return ZIMMessageReactionUserListQueriedResult(message:oZIMMessage(resultMap["message"]),
         reactionType:resultMap["reactionType"],
         userList: userList,
         nextFlag: resultMap["nextFlag"],

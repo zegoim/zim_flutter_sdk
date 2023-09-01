@@ -1018,7 +1018,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMReactionUserListQueriedResult> queryMessageReactionUserList (
+  Future<ZIMMessageReactionUserListQueriedResult> queryMessageReactionUserList (
       ZIMMessage message, ZIMMessageReactionUsersQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryMessageReactionUserList', {
       'handle': handle,

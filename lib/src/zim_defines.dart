@@ -443,7 +443,7 @@ class ZIMUserInfo {
   /// User ID, a string with a maximum length of 32 bytes or less. Only support numbers, English characters and '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '=', '-', '`', ';', '’', ',', '.', '<', '>', '/', '\'.
   String userID = '';
 
-  /// User name, a string with a maximum length of 64 bytes or less.
+  /// User name, a string with a maximum length of 256 bytes or less.
   String userName = '';
   ZIMUserInfo();
 }
@@ -2079,11 +2079,11 @@ class ZIMDeletedMessageReactionResult {
   ZIMDeletedMessageReactionResult({required this.reaction});
 }
 
-class ZIMReactionUserListQueriedResult {
+class ZIMMessageReactionUserListQueriedResult {
   List<ZIMReactionUserInfo> userList;
   ZIMMessage message;
   String reactionType;
   int totalCount;
   int nextFlag;
-  ZIMReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
+  ZIMMessageReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
 }

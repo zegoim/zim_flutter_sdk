@@ -592,7 +592,7 @@ abstract class ZIM {
   Future<ZIMDeletedMessageReactionResult> deleteMessageReaction (
       String reactionType, ZIMMessage message);
 
-  Future<ZIMReactionUserListQueriedResult> queryMessageReactionUserList (
+  Future<ZIMMessageReactionUserListQueriedResult> queryMessageReactionUserList (
       ZIMMessage message, ZIMMessageReactionUsersQueryConfig config);
   //MARK: - Room
 
