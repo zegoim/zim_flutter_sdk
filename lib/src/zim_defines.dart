@@ -2069,14 +2069,14 @@ class ZIMMessageRevokedResult {
   ZIMMessageRevokedResult({required this.message});
 }
 
-class ZIMMessageAddedMessageReactionResult {
+class ZIMMessageReactionAddedResult {
   ZIMMessageReaction reaction;
-  ZIMMessageAddedMessageReactionResult({required this.reaction});
+  ZIMMessageReactionAddedResult({required this.reaction});
 }
 
-class ZIMMessageDeletedMessageReactionResult {
+class ZIMMessageReactionDeletedResult {
   ZIMMessageReaction reaction;
-  ZIMMessageDeletedMessageReactionResult({required this.reaction});
+  ZIMMessageReactionDeletedResult({required this.reaction});
 }
 
 class ZIMMessageReactionUserListQueriedResult {

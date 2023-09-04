@@ -1471,12 +1471,12 @@ class ZIMConverter {
     return infos;
   }
 
-  static ZIMMessageAddedMessageReactionResult oZIMAddMessageReactionResult(Map resultMap) {
+  static ZIMMessageReactionAddedResult oZIMAddMessageReactionResult(Map resultMap) {
     Map reactionMap = resultMap["reaction"];
 
     ZIMMessageReaction reaction = oZIMMessageReaction(reactionMap);
 
-    return ZIMMessageAddedMessageReactionResult(reaction: reaction);
+    return ZIMMessageReactionAddedResult(reaction: reaction);
   }
 
   static Map mZIMMessageReactionUsersQueryConfig(ZIMMessageReactionUsersQueryConfig config) {
@@ -1487,12 +1487,12 @@ class ZIMConverter {
     return queryConfigMap;
   }
 
-  static ZIMMessageDeletedMessageReactionResult oZIMDeleteMessageReactionResult(Map resultMap) {
+  static ZIMMessageReactionDeletedResult oZIMDeleteMessageReactionResult(Map resultMap) {
     Map reactionMap = resultMap["reaction"];
 
     ZIMMessageReaction reaction = oZIMMessageReaction(reactionMap);
 
-    return ZIMMessageDeletedMessageReactionResult(reaction: reaction);
+    return ZIMMessageReactionDeletedResult(reaction: reaction);
   }
 
   static List<ZIMReactionUserInfo> oZIMReactionUserInfoList(Map resultMap){
