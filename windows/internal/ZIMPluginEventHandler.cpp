@@ -121,6 +121,17 @@ void ZIMPluginEventHandler::onConversationChanged(
     }
 }
 
+void ZIMPluginEventHandler::onConversationsAllDeleted(
+	ZIM* zim) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onConversationsAllDeleted");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+		eventSink_->Success(retMap);
+	}
+}
+
 void ZIMPluginEventHandler::onMessageSentStatusChanged(
     ZIM* zim,
     const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList) {

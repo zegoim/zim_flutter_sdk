@@ -461,6 +461,30 @@ void ZIMPluginMethodHandler::deleteConversation(flutter::EncodableMap& argument,
     });
 }
 
+void ZIMPluginMethodHandler::deleteAllConversations(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+
+    ZIMConversationsAllDeleteConfig deleteConfig = ZIMPluginConverter::cnvZIMConversationsAllDeleteConfigToObject(configMap);
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->deleteAllConversations(deleteConfig, [=](const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				sharedPtrResult->Success();
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
 void ZIMPluginMethodHandler::clearConversationUnreadMessageCount(flutter::EncodableMap& argument,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 
@@ -489,6 +513,29 @@ void ZIMPluginMethodHandler::clearConversationUnreadMessageCount(flutter::Encoda
         }
     
     });
+
+}
+
+void ZIMPluginMethodHandler::clearConversationsAllUnreadMessageCount(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->clearConversationsAllUnreadMessageCount([=](const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				sharedPtrResult->Success();
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+
+		});
 
 }
 

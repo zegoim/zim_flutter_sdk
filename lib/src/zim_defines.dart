@@ -619,6 +619,11 @@ class ZIMConversationDeleteConfig {
   ZIMConversationDeleteConfig();
 }
 
+class ZIMConversationsAllDeleteConfig {
+  bool isAlsoDeleteServerConversation = false;
+  ZIMConversationsAllDeleteConfig();
+}
+
 class ZIMConversationChangeInfo {
   ZIMConversationEvent event = ZIMConversationEvent.added;
   ZIMConversation? conversation;
@@ -1271,6 +1276,11 @@ class ZIMConversationListQueriedResult {
 class ZIMConversationDeletedResult {
   String conversationID;
   ZIMConversationType conversationType;
+  ZIMConversationDeletedResult(
+      {required this.conversationID, required this.conversationType});
+}
+
+class ZIMConversationsAllDeletedResult {
   ZIMConversationDeletedResult(
       {required this.conversationID, required this.conversationType});
 }
