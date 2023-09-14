@@ -119,6 +119,8 @@ int32_t ZIMPluginConverter::cnvFTMapToInt32(flutter::EncodableValue value) {
 	int32_t num = 0;
 	if (std::holds_alternative<int32_t>(value)) {
 		num = std::get<int32_t>(value);
+	} else if (std::holds_alternative<int64_t>(value)){
+		num = (int32_t)std::get<int64_t>(value);
 	}
 	return num;
 }
