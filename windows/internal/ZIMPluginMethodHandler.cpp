@@ -672,6 +672,7 @@ void ZIMPluginMethodHandler::sendMessage(flutter::EncodableMap& argument,
             return;
         }
         FTMap onMessageAttachedMap;
+        onMessageAttachedMap[FTValue("handle")] = FTValue(handle);
         onMessageAttachedMap[FTValue("method")] = FTValue("onMessageAttached");
         onMessageAttachedMap[FTValue("messageAttachedCallbackID")] = FTValue(messageAttachedCallbackID);
         onMessageAttachedMap[FTValue("messageID")] = FTValue(messageID);
@@ -859,6 +860,7 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
                     return;
                 }
                 FTMap onMessageAttachedMap;
+                onMessageAttachedMap[FTValue("handle")] = FTValue(handle);
                 onMessageAttachedMap[FTValue("method")] = FTValue("onMessageAttached");
                 onMessageAttachedMap[FTValue("messageAttachedCallbackID")] = FTValue(messageAttachedCallbackID);
                 onMessageAttachedMap[FTValue("messageID")] = FTValue(messageID);
@@ -869,6 +871,7 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
                 unsigned long long currentFileSize,
                 unsigned long long totalFileSize) {
                 FTMap progressRetMap;
+                progressRetMap[FTValue("handle")] = FTValue(handle);
                 progressRetMap[FTValue("method")] = FTValue("uploadMediaProgress");
                 progressRetMap[FTValue("progressID")] = FTValue(progressID);
                 progressRetMap[FTValue("message")] = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
