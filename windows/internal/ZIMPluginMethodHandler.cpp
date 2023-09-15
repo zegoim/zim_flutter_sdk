@@ -916,6 +916,7 @@ void ZIMPluginMethodHandler::downloadMediaFile(flutter::EncodableMap& argument,
         unsigned long long currentFileSize, unsigned long long totalFileSize) {
 
         FTMap progressRetMap;
+        progressRetMap[FTValue("handle")] = FTValue(handle);
         progressRetMap[FTValue("method")] = FTValue("downloadMediaFileProgress");
         progressRetMap[FTValue("progressID")] = FTValue(progressID);
         progressRetMap[FTValue("message")] = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
