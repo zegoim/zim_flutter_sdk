@@ -863,7 +863,7 @@ public class ZIMPluginMethodHandler {
                 }
                 HashMap<String,Object> messageMap = ZIMPluginConverter.mZIMMessage(message);
                 HashMap<String,Object> resultMap = new HashMap<>();
-                resultMap.put("handle","handle");
+                resultMap.put("handle",handle);
                 resultMap.put("method","downloadMediaFileProgress");
                 resultMap.put("progressID",progressID);
                 resultMap.put("message",messageMap);
