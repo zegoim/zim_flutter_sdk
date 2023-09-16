@@ -863,6 +863,7 @@ public class ZIMPluginMethodHandler {
                 }
                 HashMap<String,Object> messageMap = ZIMPluginConverter.mZIMMessage(message);
                 HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("handle","handle");
                 resultMap.put("method","downloadMediaFileProgress");
                 resultMap.put("progressID",progressID);
                 resultMap.put("message",messageMap);
@@ -894,6 +895,7 @@ public class ZIMPluginMethodHandler {
                 }
                 HashMap<String,Object> resultMap = new HashMap<>();
                 HashMap<String,Object> messageModel = ZIMPluginConverter.mZIMMessage(message);
+                resultMap.put("handle",handle);
                 resultMap.put("message",messageModel);
                 resultMap.put("method","onMessageAttached");
                 resultMap.put("messageID",messageID);
@@ -1007,6 +1009,7 @@ public class ZIMPluginMethodHandler {
                 }
                 HashMap<String,Object> resultMap = new HashMap<>();
                 HashMap<String,Object> messageModel = ZIMPluginConverter.mZIMMessage(message);
+                resultMap.put("handle",handle);
                 resultMap.put("message",messageModel);
                 resultMap.put("method","onMessageAttached");
                 resultMap.put("messageID",messageID);
@@ -1021,6 +1024,7 @@ public class ZIMPluginMethodHandler {
                 }
                 HashMap<String,Object> messageMap = ZIMPluginConverter.mZIMMessage(message);
                 HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("handle",handle);
                 resultMap.put("method","uploadMediaProgress");
                 resultMap.put("progressID",progressID);
                 resultMap.put("message",messageMap);

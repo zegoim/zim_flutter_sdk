@@ -499,6 +499,7 @@
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
 
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"onMessageAttached" forKey:@"method"];
         [resultDic safeSetObject:messageID forKey:@"messageID"];
         [resultDic safeSetObject:messageAttachedCallbackID forKey:@"messageAttachedCallbackID"];
@@ -614,6 +615,7 @@
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
         
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"uploadMediaProgress" forKey:@"method"];
         [resultDic safeSetObject:progressID forKey:@"progressID"];
         [resultDic safeSetObject:messageID forKey:@"messageID"];
@@ -629,6 +631,7 @@
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
 
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"onMessageAttached" forKey:@"method"];
         [resultDic safeSetObject:messageID forKey:@"messageID"];
         [resultDic safeSetObject:messageAttachedCallbackID forKey:@"messageAttachedCallbackID"];
@@ -810,6 +813,7 @@
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
         
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"downloadMediaFileProgress" forKey:@"method"];
         [resultDic safeSetObject:progressID forKey:@"progressID"];
         [resultDic safeSetObject:messageDic forKey:@"message"];
