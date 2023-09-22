@@ -67,6 +67,8 @@ class ZegoZimPlugin {
         return setLogConfig(call.arguments["logLevel"]);
       case 'setCacheConfig':
         return setCacheConfig();
+      case 'setAdvancedConfig':
+        return setAdvancedConfig(call.arguments["key"], call.arguments["value"]);
       case 'login':
         return login(call.arguments['userID'], call.arguments['userName'],
             call.arguments['token']);
@@ -446,6 +448,10 @@ class ZegoZimPlugin {
 
   static void setCacheConfig() {
     return;
+  }
+
+  static void setAdvancedConfig(String key, String value){
+    ZIM.setAdvancedConfig(key, value);
   }
 
   Future<void> login(String userID, String userName, String token) async {
