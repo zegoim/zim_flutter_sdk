@@ -31,6 +31,10 @@ abstract class ZIM {
     return await ZIMManager.getVersion();
   }
 
+  static setAdvancedConfig(String key,String value) async {
+    return await ZIMManager.setAdvancedConfig(key, value);
+  }
+
   /// Set log related configuration.
   ///
   /// [config] Log configuration object.

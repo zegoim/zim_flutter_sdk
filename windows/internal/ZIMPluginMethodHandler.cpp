@@ -70,6 +70,18 @@ void ZIMPluginMethodHandler::setLogConfig(flutter::EncodableMap& argument,
 
 }
 
+void ZIMPluginMethodHandler::setAdvancedConfig(flutter::EncodableMap& argument,
+    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+
+    std::string key = std::get<std::string>(argument[FTValue("key")]);
+    std::string value = std::get<std::string>(argument[FTValue("value")]);
+
+    ZIM::setAdvancedConfig(key,value);
+
+    result->Success();
+
+}
+
 void ZIMPluginMethodHandler::setCacheConfig(flutter::EncodableMap& argument,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 

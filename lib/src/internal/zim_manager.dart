@@ -24,6 +24,10 @@ class ZIMManager {
     return await channel.invokeMethod('getVersion');
   }
 
+  static setAdvancedConfig(String key, String value) async {
+    return await channel.invokeMethod('setAdvancedConfig',{'key':key,'value':value});
+  }
+
   static setLogConfig(ZIMLogConfig config) {
     channel.invokeMethod(
         'setLogConfig', {'logPath': config.logPath, 'logSize': config.logSize, 'logLevel': config.logLevel});
