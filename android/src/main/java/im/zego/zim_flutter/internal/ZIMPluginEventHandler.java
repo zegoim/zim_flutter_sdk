@@ -602,6 +602,19 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onConversationsAllDeleted(ZIM zim) {
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onConversationsAllDeleted");
+        resultMap.put("handle", handle);
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onConversationMessageReceiptChanged(ZIM zim, ArrayList<ZIMMessageReceiptInfo> infos) {
         if(mysink == null){
             return;

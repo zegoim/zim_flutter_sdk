@@ -33,6 +33,7 @@ import im.zego.zim.entity.ZIMCommandMessage;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
+import im.zego.zim.entity.ZIMConversationsAllDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
 import im.zego.zim.entity.ZIMConversationSearchConfig;
 import im.zego.zim.entity.ZIMConversationSearchInfo;
@@ -745,6 +746,12 @@ public class ZIMPluginConverter {
 
     static public ZIMConversationDeleteConfig oZIMConversationDeleteConfig(HashMap<String,Object> configMap){
         ZIMConversationDeleteConfig config = new ZIMConversationDeleteConfig();
+        config.isAlsoDeleteServerConversation =  ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoDeleteServerConversation"));
+        return config;
+    }
+
+    static public ZIMConversationsAllDeleteConfig oZIMConversationsAllDeleteConfig(HashMap<String,Object> configMap){
+        ZIMConversationsAllDeleteConfig config = new ZIMConversationsAllDeleteConfig();
         config.isAlsoDeleteServerConversation =  ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoDeleteServerConversation"));
         return config;
     }

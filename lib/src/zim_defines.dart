@@ -1281,8 +1281,7 @@ class ZIMConversationDeletedResult {
 }
 
 class ZIMConversationsAllDeletedResult {
-  ZIMConversationDeletedResult(
-      {required this.conversationID, required this.conversationType});
+  ZIMConversationsAllDeletedResult();
 }
 
 class ZIMConversationQueriedResult{
