@@ -93,6 +93,17 @@ conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeIn
 }
 
 - (void)zim:(ZIM *)zim
+conversationsAllDeleted{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSDictionary *resultDic = @{@"method":@"onConversationsAllDeleted", @"handle": handle};
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
 conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount{
     if(_events == nil){
         return;
