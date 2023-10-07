@@ -570,8 +570,8 @@ public class ZIMPluginMethodHandler {
             }
         });
     }
-
-    public static void clearConversationsAllUnreadMessageCount(MethodCall call, Result result){
+    
+    public static void clearAllConversationsUnreadMessageCount(MethodCall call, Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if(zim == null) {
@@ -579,7 +579,7 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        zim.clearConversationsAllUnreadMessageCount(new ZIMConversationsAllUnreadMessageCountClearedCallback() {
+        zim.clearAllConversationsUnreadMessageCount(new ZIMConversationsAllUnreadMessageCountClearedCallback() {
             @Override
             public void onConversationsAllUnreadMessageCountCleared(ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
