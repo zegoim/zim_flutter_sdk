@@ -92,8 +92,7 @@ conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeIn
     _events(resultDic);
 }
 
-- (void)zim:(ZIM *)zim
-conversationsAllDeleted:{
+- (void)conversationsAllDeleted:(ZIM *)zim{
     if(_events == nil){
         return;
     }
