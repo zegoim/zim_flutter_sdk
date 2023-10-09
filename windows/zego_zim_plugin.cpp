@@ -164,8 +164,8 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "clearConversationUnreadMessageCount") {
         ZIMPluginMethodHandler::getInstance().clearConversationUnreadMessageCount(argument, std::move(result));
     }
-	else if (method_call.method_name() == "clearConversationsAllUnreadMessageCount") {
-		ZIMPluginMethodHandler::getInstance().clearConversationsAllUnreadMessageCount(argument, std::move(result));
+	else if (method_call.method_name() == "clearAllConversationsUnreadMessageCount") {
+		ZIMPluginMethodHandler::getInstance().clearAllConversationsUnreadMessageCount(argument, std::move(result));
 	}
     else if (method_call.method_name() == "setConversationNotificationStatus") {
         ZIMPluginMethodHandler::getInstance().setConversationNotificationStatus(argument, std::move(result));

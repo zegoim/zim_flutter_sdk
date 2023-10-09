@@ -516,7 +516,7 @@ void ZIMPluginMethodHandler::clearConversationUnreadMessageCount(flutter::Encoda
 
 }
 
-void ZIMPluginMethodHandler::clearConversationsAllUnreadMessageCount(flutter::EncodableMap& argument,
+void ZIMPluginMethodHandler::clearAllConversationsUnreadMessageCount(flutter::EncodableMap& argument,
 	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 
 	auto handle = std::get<std::string>(argument[FTValue("handle")]);
@@ -527,7 +527,7 @@ void ZIMPluginMethodHandler::clearConversationsAllUnreadMessageCount(flutter::En
 	}
 
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-	zim->clearConversationsAllUnreadMessageCount([=](const ZIMError& errorInfo) {
+	zim->clearAllConversationsUnreadMessageCount([=](const ZIMError& errorInfo) {
 			if (errorInfo.code == 0) {
 				sharedPtrResult->Success();
 			}
