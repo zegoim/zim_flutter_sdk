@@ -133,8 +133,8 @@ class ZIMEngine implements ZIM {
 
   @override
   Future<void>
-  clearConversationsAllUnreadMessageCount() async {
-    return await channel.invokeMethod('clearConversationsAllUnreadMessageCount', {
+  clearAllConversationsUnreadMessageCount() async {
+    return await channel.invokeMethod('clearAllConversationsUnreadMessageCount', {
       'handle': handle,
     });
   }
