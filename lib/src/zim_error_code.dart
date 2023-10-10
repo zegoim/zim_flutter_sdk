@@ -98,6 +98,7 @@ class ZIMErrorCode {
   static const int groupModuleGroupAlreadyExists = 6000524;
   static const int groupModuleGroupMemberHasReachedLimit = 6000525;
   static const int groupModuleGroupAttributeDoseNotExist = 6000526;
+  static const int groupModuleGroupWithDismissed = 6000527;
   static const int groupModuleTheNumberOfGroupAttributesExceedsLimit = 6000531;
   static const int groupModuleTheLengthOfGroupAttributeKeyExceedsLimit =
       6000532;
