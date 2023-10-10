@@ -17,6 +17,22 @@ extension ZIMConnectionStateExtension on ZIMConnectionState {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMGeofencingTypeExtension on ZIMGeofencingType {
+  static const valueMap = {
+    ZIMGeofencingType.none:0,
+    ZIMGeofencingType.include:1,
+    ZIMGeofencingType.exclude:2
+  };
+
+  static const mapValue = {
+    0:ZIMGeofencingType.none,
+    1:ZIMGeofencingType.include,
+    2:ZIMGeofencingType.exclude
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMRoomStateExtension on ZIMRoomState {
   static const valueMap = {
     ZIMRoomState.disconnected: 0,

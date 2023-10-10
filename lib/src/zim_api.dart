@@ -69,6 +69,10 @@ abstract class ZIM {
   static setCacheConfig(ZIMCacheConfig config) {
     ZIMManager.setCacheConfig(config);
   }
+
+  static setGeofencingConfig(ZIMGeofencingType type,List<int> areaList){
+    ZIMManager.setGeofencingConfig(type,areaList);
+  }
 //MARK: - Main
 
   /// Create a ZIM instance.

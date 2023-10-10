@@ -93,6 +93,21 @@ void ZIMPluginMethodHandler::setCacheConfig(flutter::EncodableMap& argument,
     result->Success();
 }
 
+void setGeofencingConfig(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+
+    int geofencingType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("type")]);
+
+    auto areaList = std::get<FTArray>(argument[FTValue("areaList")]);
+    std::vector<int> areaListVec;
+    for (auto& areaValue : areaList) {
+        auto area = ZIMPluginConverter::cnvFTMapToInt32(areaValue);
+        areaListVec.emplace_back(area);
+    }
+    ZIM::setGeofencingConfig((ZIMGeofencingType)geofencingType,areaListVec);
+    result->Success();
+}
+
 void ZIMPluginMethodHandler::login(flutter::EncodableMap& argument,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 

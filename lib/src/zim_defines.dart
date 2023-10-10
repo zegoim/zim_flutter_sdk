@@ -30,6 +30,31 @@ enum ZIMConnectionState {
   reconnecting
 }
 
+enum ZIMGeofencingType{
+  none,
+
+  include,
+
+  exclude
+}
+
+class ZIMGeofencingArea{
+  /// Chinese mainland (excluding Hong Kong, Macao and Taiwan).
+  static const int CN = 2;
+
+  /// North America.
+  static const int NA = 3;
+
+  /// Europe, including the UK.
+  static const int EU = 4;
+
+  /// Asia, excluding Chinese mainland and India.
+  static const int AS = 5;
+
+  /// India.
+  static const int IN = 6;
+}
+
 /// Connection state.
 ///
 /// Description: The state machine that identifies the current connection state.
