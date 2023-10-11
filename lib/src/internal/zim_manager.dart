@@ -38,8 +38,8 @@ class ZIMManager {
     channel.invokeMethod('setCacheConfig', {'cachePath': config.cachePath});
   }
 
-  static setGeofencingConfig(ZIMGeofencingType type,List<int> areaList) {
-    channel.invokeMethod('setGeofencingConfig',{'type':ZIMGeofencingTypeExtension.valueMap[type],'areaList':areaList});
+  static Future<bool> setGeofencingConfig(ZIMGeofencingType type,List<int> areaList) async{
+    return await channel.invokeMethod('setGeofencingConfig',{'type':ZIMGeofencingTypeExtension.valueMap[type],'areaList':areaList});
   }
 
   static ZIMEngine? createEngine(ZIMAppConfig config) {

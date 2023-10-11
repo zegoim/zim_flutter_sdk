@@ -70,8 +70,8 @@ abstract class ZIM {
     ZIMManager.setCacheConfig(config);
   }
 
-  static setGeofencingConfig(ZIMGeofencingType type,List<int> areaList){
-    ZIMManager.setGeofencingConfig(type,areaList);
+  static Future<bool> setGeofencingConfig(ZIMGeofencingType type,List<int> areaList) async{
+    return await ZIMManager.setGeofencingConfig(type,areaList);
   }
 //MARK: - Main
 

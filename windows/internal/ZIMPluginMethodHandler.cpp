@@ -104,8 +104,8 @@ void setGeofencingConfig(flutter::EncodableMap& argument,
         auto area = ZIMPluginConverter::cnvFTMapToInt32(areaValue);
         areaListVec.emplace_back(area);
     }
-    ZIM::setGeofencingConfig((ZIMGeofencingType)geofencingType,areaListVec);
-    result->Success();
+    bool operatorResult = ZIM::setGeofencingConfig((ZIMGeofencingType)geofencingType,areaListVec);
+    result->Success(operatorResult);
 }
 
 void ZIMPluginMethodHandler::login(flutter::EncodableMap& argument,
