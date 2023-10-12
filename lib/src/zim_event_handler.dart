@@ -38,7 +38,7 @@ class ZIMEventHandler {
       onConversationChanged;
 
   static void Function(
-      ZIM zim)?
+      ZIM zim, ZIMConversationsAllDeletedInfo info)?
   onConversationsAllDeleted;
 
   /// The callback for message sent status changed event.

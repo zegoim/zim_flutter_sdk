@@ -92,13 +92,20 @@ conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeIn
     _events(resultDic);
 }
 
-- (void)conversationsAllDeleted:(ZIM *)zim{
+- (void)zim:(ZIM *)zim
+    conversationsAllDeleted:(ZIMConversationsAllDeletedInfo *)info{
     if(_events == nil){
         return;
     }
     NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     
-    NSDictionary *resultDic = @{@"method":@"onConversationsAllDeleted", @"handle": handle};
+    [infoDic safeSetObject:info.count forKey:@"count"];
+    
+    [resultDic safeSetObject:@"onConversationsAllDeleted" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }
 

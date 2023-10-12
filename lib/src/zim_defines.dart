@@ -1200,6 +1200,12 @@ class ZIMConversationSearchInfo {
   ZIMConversationSearchInfo({required this.conversationID, required this.conversationType, required this.totalMessageCount, required this.messageList});
 }
 
+class ZIMConversationsAllDeletedInfo {
+  int count;
+
+  ZIMConversationsAllDeletedInfo({required this.count});
+}
+
 //MARK : Result
 
 /// Callback of the result of renewing the token.

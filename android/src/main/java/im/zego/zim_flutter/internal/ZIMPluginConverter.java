@@ -37,6 +37,7 @@ import im.zego.zim.entity.ZIMConversationsAllDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
 import im.zego.zim.entity.ZIMConversationSearchConfig;
 import im.zego.zim.entity.ZIMConversationSearchInfo;
+import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
 import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
@@ -637,6 +638,13 @@ public class ZIMPluginConverter {
         }
 
         return mapInfoList;
+    }
+
+    static public HashMap<String,Object> mZIMConversationsAllDeletedInfo(ZIMConversationsAllDeletedInfo conversationsAllDeletedInfo){
+        HashMap<String,Object> conversationsAllDeletedInfoMap = new HashMap<>();
+        conversationsAllDeletedInfoMap.put("count",conversationsAllDeletedInfo.count);
+
+        return  conversationsAllDeletedInfoMap;
     }
 
     static public ArrayList<HashMap<String,Object>> mZIMUserInfoList(ArrayList<ZIMUserInfo> userList){

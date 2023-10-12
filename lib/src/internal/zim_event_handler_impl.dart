@@ -61,7 +61,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       case 'onConversationsAllDeleted':
         if (ZIMEventHandler.onConversationsAllDeleted == null) return;
         ZIMEventHandler.onConversationsAllDeleted!(
-            zim);
+            zim, ZIMConverter.oZIMConversationsAllDeletedInfo(map['info']));
         break;
       case 'onMessageSentStatusChanged':
         if (ZIMEventHandler.onMessageSentStatusChanged == null) return;

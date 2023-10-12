@@ -425,6 +425,12 @@ class ZIMConverter {
         .mapValue[infoMap['conversationType']]!, totalMessageCount: infoMap['totalMessageCount'], messageList: messageList);
   }
 
+  static ZIMConversationsAllDeletedInfo oZIMConversationsAllDeletedInfo(Map infoMap) {
+    ZIMConversationsAllDeletedInfo info = ZIMConversationsAllDeletedInfo();
+    info.count = infoMap['count'];
+    return info;
+  }
+
   static ZIMConversationsSearchedResult oZIMConversationsSearchedResult(Map resultMap) {
     List<ZIMConversationSearchInfo> conversationSearchInfoList = [];
     for (Map infoMap in resultMap['conversationSearchInfoList']) {
@@ -1046,8 +1052,8 @@ class ZIMConverter {
     Map configMap = {};
     configMap['timeout'] = config.timeout;
     configMap['mode'] = ZIMInvitationModeExtension.valueMap[config.mode];
-    configMap['extendedData'] = config.extendedData;
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    configMap['extendedData'] = config.extendedData;
     return configMap;
   }
 

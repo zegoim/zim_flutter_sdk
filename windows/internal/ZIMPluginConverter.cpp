@@ -1065,6 +1065,12 @@ FTArray ZIMPluginConverter::cnvZIMConversationSearchInfoListToArray(const std::v
 	return searchInfoArray;
 }
 
+FTMap ZIMPluginConverter::cnvZIMConversationsAllDeletedInfoToMap(const ZIMConversationsAllDeletedInfo& info){
+	FTMap sentInfoMap;
+	sentInfoMap[FTValue("count")] = FTValue(info.count);
+	return sentInfoMap;
+}
+
 FTArray ZIMPluginConverter::cnvZIMGroupSearchInfoListToArray(const std::vector<ZIMGroupSearchInfo>& groupSearchInfoList) {
 	FTArray searchInfoArray;
 	for (auto& groupSearchInfo : groupSearchInfoList) {
