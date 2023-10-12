@@ -101,7 +101,7 @@ conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeIn
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     
-    [infoDic safeSetObject:info.count forKey:@"count"];
+    [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.count] forKey:@"count"];
     
     [resultDic safeSetObject:@"onConversationsAllDeleted" forKey:@"method"];
     [resultDic safeSetObject:infoDic forKey:@"info"];
