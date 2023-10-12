@@ -426,8 +426,7 @@ class ZIMConverter {
   }
 
   static ZIMConversationsAllDeletedInfo oZIMConversationsAllDeletedInfo(Map infoMap) {
-    ZIMConversationsAllDeletedInfo info = ZIMConversationsAllDeletedInfo();
-    info.count = infoMap['count'];
+    ZIMConversationsAllDeletedInfo info = ZIMConversationsAllDeletedInfo(count: infoMap['count']);
     return info;
   }
 
