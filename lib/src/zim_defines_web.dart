@@ -93,8 +93,10 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryConversationList(Object config);
   external PromiseJsImpl<dynamic> deleteConversation(
       String conversationID, dynamic conversationType, Object? config);
+  external PromiseJsImpl<dynamic> deleteAllConversations(dynamic config);
   external PromiseJsImpl<dynamic> clearConversationUnreadMessageCount(
       String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> clearAllConversationsUnreadMessageCount();
   external PromiseJsImpl<dynamic> setConversationNotificationStatus(
       dynamic status, String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> callInvite(dynamic invitees, Object? config);
