@@ -1067,7 +1067,7 @@ FTArray ZIMPluginConverter::cnvZIMConversationSearchInfoListToArray(const std::v
 
 FTMap ZIMPluginConverter::cnvZIMConversationsAllDeletedInfoToMap(const ZIMConversationsAllDeletedInfo& info){
 	FTMap sentInfoMap;
-	sentInfoMap[FTValue("count")] = FTValue(info.count);
+	sentInfoMap[FTValue("count")] = FTValue((int32_t)info.count);
 	return sentInfoMap;
 }
 
