@@ -39,6 +39,8 @@ extension ZIMConnectionEventExtension on ZIMConnectionEvent {
     ZIMConnectionEvent.loginTimeout: 2,
     ZIMConnectionEvent.interrupted: 3,
     ZIMConnectionEvent.kickedOut: 4,
+    ZIMConnectionEvent.tokenExpired: 5,
+    ZIMConnectionEvent.unregistered: 6
   };
   static const mapValue = {
     0: ZIMConnectionEvent.success,
@@ -46,6 +48,8 @@ extension ZIMConnectionEventExtension on ZIMConnectionEvent {
     2: ZIMConnectionEvent.loginTimeout,
     3: ZIMConnectionEvent.interrupted,
     4: ZIMConnectionEvent.kickedOut,
+    5: ZIMConnectionEvent.tokenExpired,
+    6: ZIMConnectionEvent.unregistered
   };
 
   int get value => valueMap[this] ?? -1;

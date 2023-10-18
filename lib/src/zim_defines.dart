@@ -75,7 +75,13 @@ enum ZIMConnectionEvent {
   interrupted,
 
   /// Description: Being kicked out.
-  kickedOut
+  kickedOut,
+
+  /// Description: Being token expierd.
+  tokenExpired,
+
+  /// Description: Being unregistered.
+  unregistered
 }
 
 /// The event that caused the room connection status to change.
