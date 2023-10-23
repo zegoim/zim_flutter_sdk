@@ -332,7 +332,7 @@ class ZIMConverter {
     message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
     message.reactions = oZIMMessageReactionList(resultMap['reactions']);
     message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
-    message.isBroadcastMessage = resultMap['isBroadcastMessage'];
+    message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
     return message;
   }
 
