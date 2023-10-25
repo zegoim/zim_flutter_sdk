@@ -55,6 +55,7 @@ import im.zego.zim.entity.ZIMImageMessage;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
+import im.zego.zim.entity.ZIMMessageDeletedInfo;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReaction;
 import im.zego.zim.entity.ZIMMessageReactionUserInfo;
@@ -87,6 +88,8 @@ import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
 import im.zego.zim.entity.ZIMVideoMessage;
+import im.zego.zim.entity.ZIMVoIPConfig;
+import im.zego.zim.enums.ZIMCXHandleType;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
 import im.zego.zim.enums.ZIMCallInvitationMode;
@@ -583,6 +586,7 @@ public class ZIMPluginConverter {
         infoModel.put("status",info.status.value());
         infoModel.put("readMemberCount",info.readMemberCount);
         infoModel.put("unreadMemberCount",info.unreadMemberCount);
+        infoModel.put("isSelfOperated",info.isSelfOperated);
         return infoModel;
     }
 
@@ -1296,5 +1300,22 @@ public class ZIMPluginConverter {
             maps.add(ZIMPluginConverter.mZIMMessageReaction(info));
         }
         return maps;
+    }
+
+    public static ZIMVoIPConfig oZIMVoIPconfig(HashMap<String,Object> configMap) {
+        ZIMVoIPConfig voIPConfig = new ZIMVoIPConfig();
+        voIPConfig.iOSVoIPHandleType = ZIMCXHandleType.getZIMCXHandleType((Integer) configMap.get("iOSVoIPHandleType"));
+        voIPConfig.iOSVoIPHasVideo = (Boolean) configMap.get("iOSVoIPHasVideo");
+        voIPConfig.iOSVoIPHandleValue = (String) configMap.get("iOSVoIPHandleValue");
+        return voIPConfig;
+    }
+
+    public static HashMap<String,Object> mZIMMessageDeletedInfo(ZIMMessageDeletedInfo info){
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("conversationID",info.conversationID);
+        map.put(" conversationType",info.conversationType.value());
+        map.put("isDeleteConversationAllMessage",info.isDeleteConversationAllMessage);
+        map.put("messageList",ZIMPluginConverter.mZIMMessageList(info.messageList));
+        return map;
     }
 }

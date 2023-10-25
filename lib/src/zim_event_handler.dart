@@ -26,6 +26,10 @@ class ZIMEventHandler {
   /// [second] The remaining second before the token expires.
   static void Function(ZIM zim, int second)? onTokenWillExpire;
 
+
+  static void Function(ZIM zim, ZIMUserFullInfo info)? onUserInfoUpdated;
+
+  static void Function(ZIM zim, ZIMMessageDeletedInfo deletedInfo)? onMessageDeleted;
 /* Conversation */
 
   /// The callback for conversation changed event.

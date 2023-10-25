@@ -113,7 +113,9 @@ enum ZIMRoomEvent {
   /// Description: user was kicked out of the room.
   kickedOut,
 
-  connectTimeout
+  connectTimeout,
+
+  kickedOutByOtherDevice
 }
 
 /// The priority of the message.
@@ -267,7 +269,7 @@ enum ZIMMessageOrder {
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
 
-enum ZIMConversationEvent { added, updated, disabled }
+enum ZIMConversationEvent { added, updated, disabled, deleted}
 
 enum ZIMConversationNotificationStatus { notify, doNotDisturb }
 
@@ -330,6 +332,14 @@ enum ZIMCallInvitationMode {
 
 enum ZIMCallState { unknown,started, ended }
 
+enum ZIMCXHandleType{generic,phoneNumber,emailAddress }
+
+class ZIMVoIPConfig {
+  ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
+  String iOSVoIPHandleValue = "";
+  bool iOSVoIPHasVideo = false;
+}
+
 class ZIMGroupMemberRole {
   static const int owner = 1;
   static const int member = 3;
@@ -390,6 +400,8 @@ class ZIMPushConfig {
   String payload = '';
 
   String resourcesID = '';
+
+  ZIMVoIPConfig? voIPConfig;
 
   ZIMPushConfig();
 }
@@ -1144,6 +1156,7 @@ class ZIMMessageReceiptInfo {
   ZIMMessageReceiptStatus status;
   int readMemberCount;
   int unreadMemberCount;
+  bool isSelfOperated;
 
   ZIMMessageReceiptInfo(
       {required this.conversationID,
@@ -1151,7 +1164,8 @@ class ZIMMessageReceiptInfo {
       required this.messageID,
       required this.status,
       required this.readMemberCount,
-      required this.unreadMemberCount});
+      required this.unreadMemberCount,
+      required this.isSelfOperated});
 }
 
 class ZIMMessageReactionUsersQueryConfig {
@@ -2087,3 +2101,13 @@ class ZIMMessageReactionUserListQueriedResult {
   int nextFlag;
   ZIMMessageReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
 }
+
+class ZIMMessageDeletedInfo {
+  String conversationID;
+  ZIMConversationType conversationType;
+  bool isDeleteConversationAllMessage;
+  List<ZIMMessage> messageList;
+
+  ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.isDeleteConversationAllMessage,required this.messageList});
+}
+

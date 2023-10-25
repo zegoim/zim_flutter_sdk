@@ -534,6 +534,11 @@ class ZIMConverter {
     pushConfigMap['content'] = pushConfig.content;
     pushConfigMap['payload'] = pushConfig.payload;
     pushConfigMap['resourcesID'] = pushConfig.resourcesID;
+    if(pushConfig.voIPConfig != null){
+      pushConfigMap['voIPConfig'] = ZIMConverter.mZIMVoIPConfig(pushConfig.voIPConfig!);
+    }else{
+      pushConfigMap['voIPConfig'] = null;
+    }
     return pushConfigMap;
   }
 
@@ -1334,7 +1339,9 @@ class ZIMConverter {
         messageID: infoMap['messageID'],
         status: ZIMMessageReceiptStatusExtension.mapValue[infoMap['status']]!,
         readMemberCount: infoMap['readMemberCount'],
-        unreadMemberCount: infoMap['unreadMemberCount']);
+        unreadMemberCount: infoMap['unreadMemberCount'],
+        isSelfOperated: infoMap['isSelfOperated']
+    );
 
     return receiptInfo;
   }
@@ -1487,6 +1494,14 @@ class ZIMConverter {
     return queryConfigMap;
   }
 
+  static Map mZIMVoIPConfig(ZIMVoIPConfig config){
+    Map map = {};
+    map['iOSVoIPHandleType'] = ZIMCXHandleTypeExtension.valueMap[config.iOSVoIPHandleType];
+    map['iOSVoIPHandleValue'] = config.iOSVoIPHandleValue;
+    map['iOSVoIPHasVideo'] = config.iOSVoIPHasVideo;
+    return map;
+  }
+
   static ZIMMessageReactionDeletedResult oZIMDeleteMessageReactionResult(Map resultMap) {
     Map reactionMap = resultMap["reaction"];
 
@@ -1585,5 +1600,11 @@ class ZIMConverter {
     // callInfo.callDuration = map['callDuration'];
     // callInfo.userDuration = map['userDuration'];
     return callInfo;
+  }
+
+
+  static ZIMMessageDeletedInfo oZIMMessageDeletedInfo(Map map){
+
+    return ZIMMessageDeletedInfo(conversationID: map['conversationID'], conversationType: ZIMConversationTypeExtension.mapValue['conversationType']!, isDeleteConversationAllMessage: map['isDeleteConversationAllMessage'], messageList: ZIMConverter.oZIMMessageList(map['messageList']));
   }
 }

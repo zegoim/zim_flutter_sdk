@@ -62,7 +62,8 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     ZIMRoomEvent.activeEnter: 6,
     ZIMRoomEvent.enterFailed: 7,
     ZIMRoomEvent.kickedOut: 8,
-    ZIMRoomEvent.connectTimeout: 9
+    ZIMRoomEvent.connectTimeout: 9,
+    ZIMRoomEvent.kickedOutByOtherDevice: 10
   };
   static const mapValue = {
     0: ZIMRoomEvent.success,
@@ -74,7 +75,8 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     6: ZIMRoomEvent.activeEnter,
     7: ZIMRoomEvent.enterFailed,
     8: ZIMRoomEvent.kickedOut,
-    9: ZIMRoomEvent.connectTimeout
+    9: ZIMRoomEvent.connectTimeout,
+    10: ZIMRoomEvent.kickedOutByOtherDevice
   };
 
   int get value => valueMap[this] ?? -1;
@@ -204,11 +206,13 @@ extension ZIMConversationEventExtension on ZIMConversationEvent {
     ZIMConversationEvent.added: 0,
     ZIMConversationEvent.updated: 1,
     ZIMConversationEvent.disabled: 2,
+    ZIMConversationEvent.deleted: 3
   };
   static const mapValue = {
     0: ZIMConversationEvent.added,
     1: ZIMConversationEvent.updated,
     2: ZIMConversationEvent.disabled,
+    3: ZIMConversationEvent.deleted
   };
   int get value => valueMap[this] ?? -1;
 }
@@ -441,4 +445,20 @@ extension ZIMInvitationModeExtension on ZIMCallInvitationMode {
   };
 
   int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMCXHandleTypeExtension on ZIMCXHandleType {
+  static const valueMap = {
+    ZIMCXHandleType.generic : 1,
+    ZIMCXHandleType.phoneNumber : 2,
+    ZIMCXHandleType.emailAddress : 3
+  };
+
+  static const mapValue = {
+    1 : ZIMCXHandleType.generic,
+    2: ZIMCXHandleType.phoneNumber,
+    3: ZIMCXHandleType.emailAddress
+  };
+
+  int get value => valueMap[this]?? - 1;
 }

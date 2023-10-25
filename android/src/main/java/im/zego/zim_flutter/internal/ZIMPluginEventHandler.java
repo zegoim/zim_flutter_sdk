@@ -21,6 +21,7 @@ import im.zego.zim.entity.ZIMGroupFullInfo;
 import im.zego.zim.entity.ZIMGroupMemberInfo;
 import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMMessage;
+import im.zego.zim.entity.ZIMMessageDeletedInfo;
 import im.zego.zim.entity.ZIMMessageReaction;
 import im.zego.zim.entity.ZIMMessageReceiptInfo;
 import im.zego.zim.entity.ZIMMessageSentStatusChangeInfo;
@@ -28,6 +29,7 @@ import im.zego.zim.entity.ZIMRevokeMessage;
 import im.zego.zim.entity.ZIMRoomAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomOperatedInfo;
+import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.enums.ZIMConnectionEvent;
 import im.zego.zim.enums.ZIMConnectionState;
@@ -630,6 +632,34 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("reactions",ZIMPluginConverter.mZIMMessageReactionList(reactions));
         resultMap.put("method","onMessageReactionsChanged");
         resultMap.put("handle", handle);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onUserInfoUpdated(ZIM zim, ZIMUserFullInfo info) {
+        super.onUserInfoUpdated(zim, info);
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onUserInfoUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("info",ZIMPluginConverter.mZIMUserFullInfo(info));
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onMessageDeleted(ZIM zim, ZIMMessageDeletedInfo deletedInfo) {
+        super.onMessageDeleted(zim, deletedInfo);
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onMessageDeleted");
+        resultMap.put("handle", handle);
+        resultMap.put("info",ZIMPluginConverter.mZIMMessageDeletedInfo(deletedInfo));
         mysink.success(resultMap);
     }
 }
