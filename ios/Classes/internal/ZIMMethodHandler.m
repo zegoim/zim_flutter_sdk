@@ -342,7 +342,7 @@
     }
     
     ZIMConversationsAllDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMConversationsAllDeleteConfig:[call.arguments objectForKey:@"config"]];
-    [zim deleteAllConversations:deleteConfig callback:^(ZIMError * _Nonnull errorInfo) {
+    [zim deleteAllConversationsWithConfig:deleteConfig callback:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             result(nil);
