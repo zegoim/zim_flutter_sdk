@@ -1044,11 +1044,11 @@ ZIMGroupSearchConfig ZIMPluginConverter::cnvZIMGroupSearchConfigMapToObject(FTMa
 	return config;
 }
 
-ZIMVoIPConfig ZIMPluginConverter::cnvZIMVoIPConfigConfigToObject(FTMap configMap) {
-	ZIMVoIPConfig config;
-	config.iOSVoIPHandleType = (ZIMCXHandleType)std::get<int32_t>(configMap[FTValue("iOSVoIPHandleType")]);
-	config.iOSVoIPHandleValue = std::get<std::string>(configMap[FTValue("iOSVoIPHandleValue")]);
-	config.iOSVoIPHasVideo = std::get<bool>(configMap[FTValue("iOSVoIPHasVideo")]);
+std::shared_ptr<ZIMVoIPConfig> ZIMPluginConverter::cnvZIMVoIPConfigConfigToObject(FTMap configMap) {
+	std::shared_ptr<ZIMVoIPConfig> config = std::make_shared<ZIMVoIPConfig>();
+	config->iOSVoIPHandleType = (ZIMCXHandleType)std::get<int32_t>(configMap[FTValue("iOSVoIPHandleType")]);
+	config->iOSVoIPHandleValue = std::get<std::string>(configMap[FTValue("iOSVoIPHandleValue")]);
+	config->iOSVoIPHasVideo = std::get<bool>(configMap[FTValue("iOSVoIPHasVideo")]);
 
 	return config;
 }

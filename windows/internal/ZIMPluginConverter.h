@@ -236,7 +236,7 @@ public:
     static ZIMGroupSearchConfig cnvZIMGroupSearchConfigMapToObject(FTMap configMap);
     static ZIMGroupMemberSearchConfig cnvZIMGroupMemberSearchConfigMapToObject(FTMap configMap);
     static ZIMMessageReactionUserQueryConfig cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap);
-    static ZIMVoIPConfig cnvZIMVoIPConfigConfigToObject(FTMap configMap);
+    static std::shared_ptr<ZIMVoIPConfig> cnvZIMVoIPConfigConfigToObject(FTMap configMap);
     
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
