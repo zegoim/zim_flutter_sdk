@@ -762,6 +762,7 @@ public class ZIMPluginConverter {
         config.content = (String) Objects.requireNonNull(configMap.get("content"));
         config.payload = (String) configMap.get("payload");
         config.resourcesID = (String) configMap.get("resourcesID");
+        config.voIPConfig = ZIMPluginConverter.oZIMVoIPconfig((HashMap<String, Object>) configMap.get("voIPConfig"));
         return config;
     }
 
