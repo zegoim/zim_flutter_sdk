@@ -395,6 +395,10 @@ class ZegoZimPlugin {
           return messageSentStatusChangedHandle(_zim, data);
         case "messageReactionsChanged":
           return messageReactionsChangedHandle(_zim, data);
+        case "userInfoUpdated":
+          return userInfoUpdatedHandle(_zim, data);
+        case "messageDeleted":
+          return messageDeletedHandle(_zim, data);
       }
     }
   }
@@ -2128,6 +2132,26 @@ class ZegoZimPlugin {
     ZIMMessage message = ZIMConverter.oZIMMessage(data["message"]);
 
     ZIMEventHandler.onBroadcastMessageReceived!(zim, message);
+  }
+
+  static void userInfoUpdatedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onUserInfoUpdated == null) {
+      return;
+    }
+
+    ZIMUserFullInfo userFullInfo = ZIMConverter.oZIMUserFullInfo(data["info"]);
+
+    ZIMEventHandler.onUserInfoUpdated!(zim, userFullInfo);
+  }
+
+  static void messageDeletedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onMessageDeleted == null) {
+      return;
+    }
+    handleReceiveMessage(data['messageList']);
+    ZIMMessageDeletedInfo deletedInfo = ZIMConverter.oZIMMessageDeletedInfo(data);
+
+    ZIMEventHandler.onMessageDeleted!(zim, deletedInfo);
   }
 
   static Map handleSendMessageResult(dynamic result) {
