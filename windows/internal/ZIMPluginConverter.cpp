@@ -561,18 +561,20 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	return messagePtr;
 }
 
-std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMap configMap) {
+std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMap configMap,std::shared_ptr<ZIMVoIPConfig> &voIPConfigPtr) {
 	auto config = std::make_shared<ZIMPushConfig>();
 	config->title = std::get<std::string>(configMap[FTValue("title")]);
 	config->content = std::get<std::string>(configMap[FTValue("content")]);
 	config->payload = std::get<std::string>(configMap[FTValue("payload")]);
 	config->resourcesID = std::get<std::string>(configMap[FTValue("resourcesID")]);
-
+	
 	if (std::holds_alternative<std::monostate>(configMap[std::get<FTMap>(configMap[FTValue("voIPConfig")])])) {
+		voIPConfigPtr = nullptr;
 		config->voIPConfig = nullptr;
 	}
 	else {
-		config->voIPConfig = cnvZIMVoIPConfigConfigToObject(std::get<FTMap>(configMap[FTValue("voIPConfig")]));
+		voIPConfigPtr = cnvZIMVoIPConfigConfigToObject(std::get<FTMap>(configMap[FTValue("voIPConfig")]));
+		config->voIPConfig = voIPConfig..get();
 	}
 	return config;
 }
