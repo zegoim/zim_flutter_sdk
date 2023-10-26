@@ -241,7 +241,7 @@ abstract class ZIM {
       clearConversationUnreadMessageCount(
           String conversationID, ZIMConversationType conversationType);
 
-  Future<void> clearAllConversationsUnreadMessageCount();
+  Future<void> clearConversationTotalUnreadMessageCount();
 
   /// Available since: 2.1.5 and above.
   ///

@@ -117,8 +117,8 @@ class ZegoZimPlugin {
         return clearConversationUnreadMessageCount(
             call.arguments["conversationID"],
             call.arguments["conversationType"]);
-      case 'clearAllConversationsUnreadMessageCount':
-        return clearAllConversationsUnreadMessageCount();
+      case 'clearConversationTotalUnreadMessageCount':
+        return clearConversationTotalUnreadMessageCount();
       case 'queryHistoryMessage':
         return queryHistoryMessage(call.arguments["conversationID"],
             call.arguments["conversationType"], call.arguments["config"]);
@@ -562,10 +562,10 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
-  Future<void> clearAllConversationsUnreadMessageCount () async  {
+  Future<void> clearConversationTotalUnreadMessageCount () async  {
     await promiseToFuture(ZIM
             .getInstance()!
-            .clearAllConversationsUnreadMessageCount())
+            .clearConversationTotalUnreadMessageCount())
         .catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });

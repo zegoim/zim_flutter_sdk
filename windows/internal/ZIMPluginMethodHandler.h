@@ -58,7 +58,7 @@ public:
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void clearConversationUnreadMessageCount(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void clearAllConversationsUnreadMessageCount(flutter::EncodableMap& argument,
+	void clearConversationTotalUnreadMessageCount(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void setConversationNotificationStatus(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);

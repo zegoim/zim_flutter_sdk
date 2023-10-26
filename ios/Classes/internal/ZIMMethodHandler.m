@@ -425,7 +425,7 @@
     }];
 }
 
-- (void)clearAllConversationsUnreadMessageCount:(FlutterMethodCall *)call result:(FlutterResult)result {
+- (void)clearConversationTotalUnreadMessageCount:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if(!zim) {
@@ -433,7 +433,7 @@
         return;
     }
 
-    [zim clearAllConversationsUnreadMessageCount:^(ZIMError * _Nonnull errorInfo) {
+    [zim clearConversationTotalUnreadMessageCount:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             result(nil);

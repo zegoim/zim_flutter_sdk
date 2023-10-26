@@ -26,7 +26,7 @@ import im.zego.zim.callback.ZIMConversationMessageReceiptReadSentCallback;
 import im.zego.zim.callback.ZIMConversationNotificationStatusSetCallback;
 import im.zego.zim.callback.ZIMConversationQueriedCallback;
 import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
-import im.zego.zim.callback.ZIMConversationsAllUnreadMessageCountClearedCallback;
+import im.zego.zim.callback.ZIMConversationTotalUnreadMessageCountClearedCallback;
 import im.zego.zim.callback.ZIMConversationsSearchedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesQueriedCallback;
@@ -572,7 +572,7 @@ public class ZIMPluginMethodHandler {
         });
     }
     
-    public static void clearAllConversationsUnreadMessageCount(MethodCall call, Result result){
+    public static void clearConversationTotalUnreadMessageCount(MethodCall call, Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if(zim == null) {
@@ -580,9 +580,9 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        zim.clearAllConversationsUnreadMessageCount(new ZIMConversationsAllUnreadMessageCountClearedCallback() {
+        zim.clearConversationTotalUnreadMessageCount(new ZIMConversationTotalUnreadMessageCountClearedCallback() {
             @Override
-            public void onConversationsAllUnreadMessageCountCleared(ZIMError errorInfo) {
+            public void onConversationTotalUnreadMessageCountCleared(ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     result.success(null);
                 }
