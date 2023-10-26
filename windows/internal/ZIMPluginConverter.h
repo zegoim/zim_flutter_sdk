@@ -217,7 +217,7 @@ public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
     static std::shared_ptr<ZIMMessage> cnvZIMMessageToObject(FTMap messageMap);
-    static std::shared_ptr<ZIMPushConfig> cnvZIMPushConfigToObject(FTMap configMap);
+    static std::shared_ptr<ZIMPushConfig> cnvZIMPushConfigToObject(FTMap configMap, std::shared_ptr<ZIMVoIPConfig> &voIPConfigPtr);
     static std::vector<std::shared_ptr<ZIMMessage>> cnvZIMMessageArrayToObjectList(FTArray messageArray);
     static ZIMRoomInfo cnvZIMRoomInfoToObject(FTMap infoMap);
     static ZIMRoomAdvancedConfig cnvZIMRoomAdvancedConfigToObject(FTMap configMap);
@@ -236,7 +236,7 @@ public:
     static ZIMGroupSearchConfig cnvZIMGroupSearchConfigMapToObject(FTMap configMap);
     static ZIMGroupMemberSearchConfig cnvZIMGroupMemberSearchConfigMapToObject(FTMap configMap);
     static ZIMMessageReactionUserQueryConfig cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap);
-    static ZIMVoIPConfig cnvZIMVoIPConfigConfigToObject(FTMap configMap);
+    static std::shared_ptr<ZIMVoIPConfig> cnvZIMVoIPConfigConfigToObject(FTMap configMap);
     
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
