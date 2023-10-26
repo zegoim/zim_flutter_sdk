@@ -580,7 +580,7 @@ void ZIMPluginMethodHandler::revokeMessage(flutter::EncodableMap& argument,std::
         config.config = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.config = pushConfigPtr.get();
     }
     auto revokeExtendedData = std::get<std::string>(configMap[FTValue("revokeExtendedData")]);

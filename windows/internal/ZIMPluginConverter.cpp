@@ -574,7 +574,7 @@ std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMa
 	}
 	else {
 		voIPConfigPtr = cnvZIMVoIPConfigConfigToObject(std::get<FTMap>(configMap[FTValue("voIPConfig")]));
-		config->voIPConfig = voIPConfig..get();
+		config->voIPConfig = voIPConfigPtr..get();
 	}
 	return config;
 }
