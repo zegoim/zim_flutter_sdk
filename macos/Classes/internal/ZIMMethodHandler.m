@@ -86,6 +86,13 @@
     result(nil);
 }
 
+- (void)setAdvancedConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *key = [call.arguments objectForKey:@"key"];
+    NSString *value = [call.arguments objectForKey:@"value"];
+    [ZIM setAdvancedConfigWithKey:key value:value];
+    result(nil);
+}
+
 - (void)login:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];

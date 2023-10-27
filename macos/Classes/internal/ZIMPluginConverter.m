@@ -450,6 +450,7 @@
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInteger:info.status] forKey:@"status"];
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInt:info.readMemberCount] forKey:@"readMemberCount"];
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInt:info.unreadMemberCount] forKey:@"unreadMemberCount"];
+    [infoModel safeSetObject:[NSNumber numberWithBool:info.isSelfOperated] forKey:@"isSelfOperated"];
     return infoModel;
 }
 
@@ -575,7 +576,19 @@
     pushConfig.content = (NSString *)[configDic objectForKey:@"content"];
     pushConfig.payload = (NSString *)[configDic objectForKey:@"payload"];
     pushConfig.resourcesID = (NSString *)[configDic objectForKey:@"resourcesID"];
+    pushConfig.voIPConfig = [ZIMPluginConverter oZIMVoIPConfig:[configDic objectForKey:@"voIPConfig"]];
     return pushConfig;
+}
+
++(nullable ZIMVoIPConfig *)oZIMVoIPConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMVoIPConfig *voIPConfig = [[ZIMVoIPConfig alloc] init];
+    voIPConfig.iOSVoIPHandleType = [[configDic safeObjectForKey:@"iOSVoIPHandleType"] integerValue];
+    voIPConfig.iOSVoIPHandleValue = [configDic safeObjectForKey:@"iOSVoIPHandleValue"];
+    voIPConfig.iOSVoIPHasVideo = [[configDic safeObjectForKey:@"iOSVoIPHasVideo"] boolValue];
+    return voIPConfig;
 }
 
 +(nullable ZIMMessageQueryConfig *)oZIMMessageQueryConfig:(nullable NSDictionary *)configDic{
@@ -1236,5 +1249,16 @@
     return config;
 }
 
++(nullable NSDictionary *)mZIMMessageDeletedInfo:(nullable ZIMMessageDeletedInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic setObject:info.conversationID forKey:@"conversationID"];
+    [infoDic setObject:[NSNumber numberWithInteger:info.conversationType] forKey:@"conversationType"];
+    [infoDic setObject:[NSNumber numberWithBool:info.isDeleteConversationAllMessage] forKey:@"isDeleteConversationAllMessage"];
+    [infoDic setObject:[ZIMPluginConverter mZIMMessageList:info.messageList] forKey:@"messageList"];
+    return infoDic;
+}
 
 @end
