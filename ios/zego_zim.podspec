@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'zego_zim'
-  s.version          = '2.10.0'
+  s.version          = '2.11.0'
   s.summary          = 'ZIM SDK for Flutter.'
   s.description      = <<-DESC
   ZIM Flutter SDK is a flutter plugin wrapper based on ZIM native Android / iOS SDK
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'ZIM','2.10.0'
+  s.dependency 'ZIM','2.11.0'
   s.platform = :ios, '11.0'
 
   # Flutter.framework does not contain a i386 slice.
