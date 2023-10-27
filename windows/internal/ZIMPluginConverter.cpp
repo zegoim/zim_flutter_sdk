@@ -568,7 +568,7 @@ std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMa
 	config->payload = std::get<std::string>(configMap[FTValue("payload")]);
 	config->resourcesID = std::get<std::string>(configMap[FTValue("resourcesID")]);
 	
-	if (std::holds_alternative<std::monostate>(configMap[std::get<FTMap>(configMap[FTValue("voIPConfig")])])) {
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("voIPConfig")])) {
 		voIPConfigPtr = nullptr;
 		config->voIPConfig = nullptr;
 	}
