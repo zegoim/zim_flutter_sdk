@@ -207,6 +207,7 @@ public:
     static FTMap cnvZIMCallUserStateChangedInfoToMap(const ZIMCallUserStateChangeInfo& info);
     static FTMap cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvitationTimeoutInfo& info);
     static FTArray cnvZIMConversationSearchInfoListToArray(const std::vector<ZIMConversationSearchInfo>& conversationSearchInfoList);
+    static FTMap cnvZIMConversationsAllDeletedInfoToMap(const ZIMConversationsAllDeletedInfo& info);
     static FTArray cnvZIMGroupSearchInfoListToArray(const std::vector<ZIMGroupSearchInfo>& groupSearchInfoList);
     static FTMap cnvZIMMessageReactionToMap(const ZIMMessageReaction& reaction);
     static FTMap cnvZIMMessageReactionUserInfoToMap(const ZIMMessageReactionUserInfo& userInfo);
@@ -214,6 +215,7 @@ public:
     static FTArray cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList);
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo& info);
 public:
+    static ZIMConversationsAllDeleteConfig cnvZIMConversationsAllDeleteConfigToObject(FTMap configMap);
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
     static std::shared_ptr<ZIMMessage> cnvZIMMessageToObject(FTMap messageMap);

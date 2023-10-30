@@ -415,6 +415,13 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	return messageMap;
 }
 
+ZIMConversationsAllDeleteConfig ZIMPluginConverter::cnvZIMConversationsAllDeleteConfigToObject(FTMap configMap) {
+	ZIMConversationsAllDeleteConfig config;
+	config.isAlsoDeleteServerConversation = std::get<bool>(configMap[FTValue("isAlsoDeleteServerConversation")]);
+
+	return config;
+}
+
 ZIMConversationDeleteConfig ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(FTMap configMap) {
 	ZIMConversationDeleteConfig config;
 	config.isAlsoDeleteServerConversation = std::get<bool>(configMap[FTValue("isAlsoDeleteServerConversation")]);
@@ -1077,6 +1084,12 @@ FTArray ZIMPluginConverter::cnvZIMConversationSearchInfoListToArray(const std::v
 	}
 
 	return searchInfoArray;
+}
+
+FTMap ZIMPluginConverter::cnvZIMConversationsAllDeletedInfoToMap(const ZIMConversationsAllDeletedInfo& info){
+	FTMap sentInfoMap;
+	sentInfoMap[FTValue("count")] = FTValue((int32_t)info.count);
+	return sentInfoMap;
 }
 
 FTArray ZIMPluginConverter::cnvZIMGroupSearchInfoListToArray(const std::vector<ZIMGroupSearchInfo>& groupSearchInfoList) {

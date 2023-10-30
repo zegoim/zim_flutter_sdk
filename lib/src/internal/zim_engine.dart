@@ -108,6 +108,15 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<void> deleteAllConversations(
+      ZIMConversationsAllDeleteConfig config) async {
+    return await channel.invokeMethod('deleteAllConversations', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMConversationsAllDeleteConfig(config)
+    });
+  }
+
+  @override
   Future<ZIMConversationUnreadMessageCountClearedResult>
       clearConversationUnreadMessageCount(
           String conversationID, ZIMConversationType conversationType) async {
@@ -120,6 +129,14 @@ class ZIMEngine implements ZIM {
     });
     return ZIMConverter.oZIMConversationUnreadMessageCountClearedResult(
         resultMap);
+  }
+
+  @override
+  Future<void>
+  clearConversationTotalUnreadMessageCount() async {
+    return await channel.invokeMethod('clearConversationTotalUnreadMessageCount', {
+      'handle': handle,
+    });
   }
 
   @override

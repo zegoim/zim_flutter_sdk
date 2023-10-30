@@ -18,6 +18,7 @@ import im.zego.zim.callback.ZIMCallRejectionSentCallback;
 import im.zego.zim.callback.ZIMCallQuitSentCallback;
 import im.zego.zim.callback.ZIMCallEndSentCallback;
 import im.zego.zim.callback.ZIMConversationDeletedCallback;
+import im.zego.zim.callback.ZIMConversationsAllDeletedCallback;
 import im.zego.zim.callback.ZIMConversationListQueriedCallback;
 import im.zego.zim.callback.ZIMConversationPinnedStateUpdatedCallback;
 import im.zego.zim.callback.ZIMConversationPinnedListQueriedCallback;
@@ -25,6 +26,7 @@ import im.zego.zim.callback.ZIMConversationMessageReceiptReadSentCallback;
 import im.zego.zim.callback.ZIMConversationNotificationStatusSetCallback;
 import im.zego.zim.callback.ZIMConversationQueriedCallback;
 import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
+import im.zego.zim.callback.ZIMConversationTotalUnreadMessageCountClearedCallback;
 import im.zego.zim.callback.ZIMConversationsSearchedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesQueriedCallback;
@@ -100,6 +102,7 @@ import im.zego.zim.entity.ZIMCallQuitConfig;
 import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
+import im.zego.zim.entity.ZIMConversationsAllDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
 import im.zego.zim.entity.ZIMConversationSearchConfig;
 import im.zego.zim.entity.ZIMConversationSearchInfo;
@@ -521,6 +524,28 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void deleteAllConversations(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMConversationsAllDeleteConfig config = ZIMPluginConverter.oZIMConversationsAllDeleteConfig(Objects.requireNonNull(call.argument("config")));
+        zim.deleteAllConversations(config, new ZIMConversationsAllDeletedCallback() {
+            @Override
+            public void onConversationsAllDeleted(ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    result.success(null);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
     public static void clearConversationUnreadMessageCount(MethodCall call, Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
@@ -539,6 +564,27 @@ public class ZIMPluginMethodHandler {
                     resultMap.put("conversationID",conversationID);
                     resultMap.put("conversationType",conversationType.value());
                     result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+    
+    public static void clearConversationTotalUnreadMessageCount(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        zim.clearConversationTotalUnreadMessageCount(new ZIMConversationTotalUnreadMessageCountClearedCallback() {
+            @Override
+            public void onConversationTotalUnreadMessageCountCleared(ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    result.success(null);
                 }
                 else{
                     result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);

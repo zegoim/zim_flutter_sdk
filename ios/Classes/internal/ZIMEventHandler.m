@@ -115,6 +115,23 @@ conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeIn
 }
 
 - (void)zim:(ZIM *)zim
+    conversationsAllDeleted:(ZIMConversationsAllDeletedInfo *)info{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    
+    [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.count] forKey:@"count"];
+    
+    [resultDic safeSetObject:@"onConversationsAllDeleted" forKey:@"method"];
+    [resultDic safeSetObject:infoDic forKey:@"info"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
 conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount{
     if(_events == nil){
         return;

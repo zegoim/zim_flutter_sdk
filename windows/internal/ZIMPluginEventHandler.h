@@ -60,6 +60,8 @@ protected:
         ZIM* zim,
         const std::vector<ZIMConversationChangeInfo>& conversationChangeInfoList);
 
+    void onConversationsAllDeleted(ZIM* zim, ZIMConversationsAllDeletedInfo info);
+
     void onMessageSentStatusChanged(
         ZIM* zim,
         const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList);

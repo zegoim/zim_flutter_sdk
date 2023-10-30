@@ -178,6 +178,8 @@ abstract class ZIM {
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
+  Future<void> deleteAllConversations(ZIMConversationsAllDeleteConfig config);
+
   /// Available since: 2.8.0 and above.
   ///
   /// Description: This method displays the session list of the logged in user.
@@ -242,6 +244,8 @@ abstract class ZIM {
   Future<ZIMConversationUnreadMessageCountClearedResult>
       clearConversationUnreadMessageCount(
           String conversationID, ZIMConversationType conversationType);
+
+  Future<void> clearConversationTotalUnreadMessageCount();
 
   /// Available since: 2.1.5 and above.
   ///
