@@ -450,6 +450,8 @@
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInteger:info.status] forKey:@"status"];
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInt:info.readMemberCount] forKey:@"readMemberCount"];
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInt:info.unreadMemberCount] forKey:@"unreadMemberCount"];
+    [infoModel safeSetObject:[NSNumber numberWithBool:info.enableBadge] forKey:@"enableBadge"];
+    [infoModel safeSetObject:[NSNumber numberWithInt:info.badgeIncrement] forKey:@"badgeIncrement"];
     [infoModel safeSetObject:[NSNumber numberWithBool:info.isSelfOperated] forKey:@"isSelfOperated"];
     return infoModel;
 }
@@ -1268,6 +1270,15 @@
     [infoDic setObject:[NSNumber numberWithBool:info.isDeleteConversationAllMessage] forKey:@"isDeleteConversationAllMessage"];
     [infoDic setObject:[ZIMPluginConverter mZIMMessageList:info.messageList] forKey:@"messageList"];
     return infoDic;
+}
+
++(nullable ZIMCallJoinConfig *)oZIMCallJoinConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallJoinConfig *config = [[ZIMCallJoinConfig alloc] init];
+    config.extendedData = [configMap objectForKey:@"extendedData"];
+    return config;
 }
 
 @end

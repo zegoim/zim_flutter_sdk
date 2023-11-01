@@ -1548,7 +1548,7 @@ class ZIMConverter {
   }
 
   static ZIMCallJoinSentResult oZIMCallJoinSentResult(Map resultMap) {
-    return ZIMCallJoinSentResult(callID: resultMap['callID'], info: resultMap['info']);
+    return ZIMCallJoinSentResult(callID: resultMap['callID'], info: oZIMCallJoinSentInfo(resultMap['info']));
   }
 
   static Map mZIMCallEndConfig(ZIMCallEndConfig config) {
