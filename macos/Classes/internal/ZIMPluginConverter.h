@@ -167,4 +167,16 @@
 +(nullable NSDictionary *)mZIMCallQuitSentInfo:(nullable ZIMCallQuitSentInfo *)info;
 
 +(nullable NSDictionary *)mZIMCallInvitationTimeoutInfo:(nullable ZIMCallInvitationTimeoutInfo *)info;
+
++(nullable NSDictionary *)mZIMMessageReaction:(nullable ZIMMessageReaction *)reaction;
+
++(nullable NSDictionary *)mZIMMessageReactionUserInfo:(nullable ZIMMessageReactionUserInfo *)userInfo;
+
++(nullable NSArray *)mZIMMessageReactionList:(nullable NSArray<ZIMMessageReaction *> *)reactions;
+
++(nullable NSArray *)mZIMMessageReactionUserInfoList:(nullable NSArray<ZIMMessageReactionUserInfo *> *)userInfoList;
+
++(nullable ZIMMessageReactionUserQueryConfig *)oZIMMessageReactionUsersQueryConfig:(nullable NSDictionary *)configDic;
+
++(nullable NSDictionary *)mZIMMessageDeletedInfo:(nullable ZIMMessageDeletedInfo *)info;
 @end

@@ -49,6 +49,11 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (ZIMEventHandler.onTokenWillExpire == null) return;
         ZIMEventHandler.onTokenWillExpire!(zim, map['second']);
         break;
+      case 'onUserInfoUpdated':
+        if (ZIMEventHandler.onUserInfoUpdated == null) return;
+        ZIMUserFullInfo info = ZIMConverter.oZIMUserFullInfo(map['info']);
+        ZIMEventHandler.onUserInfoUpdated!(zim,info);
+        break;
       case 'onConversationChanged':
         if (ZIMEventHandler.onConversationChanged == null) return;
         List<ZIMConversationChangeInfo> conversationChangeInfoList =
@@ -58,6 +63,11 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMEventHandler.onConversationChanged!(
             zim, conversationChangeInfoList);
         break;
+      case 'onConversationsAllDeleted':
+        if (ZIMEventHandler.onConversationsAllDeleted == null) return;
+        ZIMEventHandler.onConversationsAllDeleted!(
+            zim, ZIMConverter.oZIMConversationsAllDeletedInfo(map['info']));
+        break;
       case 'onMessageSentStatusChanged':
         if (ZIMEventHandler.onMessageSentStatusChanged == null) return;
         List<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList =
@@ -66,6 +76,11 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
 
         ZIMEventHandler.onMessageSentStatusChanged!(
             zim, messageSentStatusChangeInfoList);
+        break;
+      case 'onMessageDeleted':
+        if(ZIMEventHandler.onMessageDeleted == null) return;
+        ZIMMessageDeletedInfo info = ZIMConverter.oZIMMessageDeletedInfo(map['deletedInfo']);
+        ZIMEventHandler.onMessageDeleted!(zim,info);
         break;
       case 'onConversationTotalUnreadMessageCountUpdated':
         if (ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated ==

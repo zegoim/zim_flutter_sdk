@@ -36,6 +36,8 @@ protected:
         ZIMConnectionEvent event,
         const std::string& extendedData);
 
+    void onUserInfoUpdated(ZIM* zim, const ZIMUserFullInfo& info);
+
     void onRoomStateChanged(ZIM* zim, ZIMRoomState state, ZIMRoomEvent event,
         const std::string& extendedData,
         const std::string& roomID);
@@ -58,6 +60,8 @@ protected:
         ZIM* zim,
         const std::vector<ZIMConversationChangeInfo>& conversationChangeInfoList);
 
+    void onConversationsAllDeleted(ZIM* zim, ZIMConversationsAllDeletedInfo info);
+
     void onMessageSentStatusChanged(
         ZIM* zim,
         const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList);
@@ -72,6 +76,8 @@ protected:
     void onMessageRevokeReceived(ZIM* zim, const std::vector<std::shared_ptr<ZIMRevokeMessage>>& messageList);
 
     void onBroadcastMessageReceived(ZIM* zim, const std::shared_ptr<ZIMMessage>& message);
+
+    void onMessageDeleted(ZIM* zim, const ZIMMessageDeletedInfo& deletedInfo);
 
     void onRoomMemberJoined(ZIM* zim, const std::vector<ZIMUserInfo>& memberList,
         const std::string& roomID);

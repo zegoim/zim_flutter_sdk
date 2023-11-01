@@ -50,6 +50,18 @@ void ZIMPluginEventHandler::onConnectionStateChanged(ZIM* zim, ZIMConnectionStat
     }
 }
 
+void ZIMPluginEventHandler::onUserInfoUpdated(ZIM* zim, const ZIMUserFullInfo& info) {
+    if(eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onUserInfoUpdated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMUserFullInfoObjectToMap(info);
+
+        eventSink_->Success(retMap);
+    }
+}
+
 void ZIMPluginEventHandler::onTokenWillExpire(ZIM* zim, unsigned int second) {
     if (eventSink_) {
         FTMap retMap;
@@ -119,6 +131,18 @@ void ZIMPluginEventHandler::onConversationChanged(
 
         eventSink_->Success(retMap);
     }
+}
+
+void ZIMPluginEventHandler::onConversationsAllDeleted(
+	ZIM* zim, ZIMConversationsAllDeletedInfo info) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onConversationsAllDeleted");
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMConversationsAllDeletedInfoToMap(info);
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+		eventSink_->Success(retMap);
+	}
 }
 
 void ZIMPluginEventHandler::onMessageSentStatusChanged(
@@ -226,6 +250,19 @@ void ZIMPluginEventHandler::onRoomStateChanged(ZIM* zim, ZIMRoomState state, ZIM
         // TODO: It need rapidjson to convert
         retMap[FTValue("extendedData")] = FTValue("{}");
 
+        eventSink_->Success(retMap);
+    }
+}
+
+
+void ZIMPluginEventHandler::onMessageDeleted(ZIM* zim, const ZIMMessageDeletedInfo& deletedInfo){
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onMessageDeleted");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("deletedInfo")] = ZIMPluginConverter::cnvZIMMessageDeletedInfoToMap(deletedInfo);
+        
         eventSink_->Success(retMap);
     }
 }

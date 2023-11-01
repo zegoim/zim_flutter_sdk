@@ -334,6 +334,14 @@ class _MyPageState extends State<PeerChatPage> {
     ZIMEventHandler.onMessageSentStatusChanged = (zim, infos) {
       //window.console.warn(infos);
     };
+
+    ZIMEventHandler.onMessageDeleted = (zim, deletedInfo) {
+
+    };
+
+    ZIMEventHandler.onUserInfoUpdated = (zim, info) {
+
+    };
   }
 
   unregisterZIMEvent() {

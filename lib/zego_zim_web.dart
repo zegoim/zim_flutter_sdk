@@ -119,6 +119,8 @@ class ZegoZimPlugin {
         return clearConversationUnreadMessageCount(
             call.arguments["conversationID"],
             call.arguments["conversationType"]);
+      case 'clearConversationTotalUnreadMessageCount':
+        return clearConversationTotalUnreadMessageCount();
       case 'queryHistoryMessage':
         return queryHistoryMessage(call.arguments["conversationID"],
             call.arguments["conversationType"], call.arguments["config"]);
@@ -209,6 +211,8 @@ class ZegoZimPlugin {
       case 'deleteConversation':
         return deleteConversation(call.arguments["conversationID"],
             call.arguments["conversationType"], call.arguments["config"]);
+      case 'deleteAllConversations':
+        return deleteAllConversations(call.arguments["config"]);
       case 'setConversationNotificationStatus':
         return setConversationNotificationStatus(
             call.arguments["status"],
@@ -395,6 +399,10 @@ class ZegoZimPlugin {
           return messageSentStatusChangedHandle(_zim, data);
         case "messageReactionsChanged":
           return messageReactionsChangedHandle(_zim, data);
+        case "userInfoUpdated":
+          return userInfoUpdatedHandle(_zim, data);
+        case "messageDeleted":
+          return messageDeletedHandle(_zim, data);
       }
     }
   }
@@ -562,6 +570,16 @@ class ZegoZimPlugin {
     });
 
     return jsObjectToMap(result);
+  }
+
+  Future<void> clearConversationTotalUnreadMessageCount () async  {
+    await promiseToFuture(ZIM
+            .getInstance()!
+            .clearConversationTotalUnreadMessageCount())
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return;
   }
 
   Future<Map<dynamic, dynamic>> queryHistoryMessage(
@@ -1142,6 +1160,19 @@ class ZegoZimPlugin {
     });
 
     return jsObjectToMap(result);
+  }
+
+  Future<void> deleteAllConversations(dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    await promiseToFuture(ZIM
+            .getInstance()!
+            .deleteAllConversations(_config))
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return ;
   }
 
   Future<Map<dynamic, dynamic>> setConversationNotificationStatus(
@@ -2128,6 +2159,26 @@ class ZegoZimPlugin {
     ZIMMessage message = ZIMConverter.oZIMMessage(data["message"]);
 
     ZIMEventHandler.onBroadcastMessageReceived!(zim, message);
+  }
+
+  static void userInfoUpdatedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onUserInfoUpdated == null) {
+      return;
+    }
+
+    ZIMUserFullInfo userFullInfo = ZIMConverter.oZIMUserFullInfo(data["info"]);
+
+    ZIMEventHandler.onUserInfoUpdated!(zim, userFullInfo);
+  }
+
+  static void messageDeletedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onMessageDeleted == null) {
+      return;
+    }
+    handleReceiveMessage(data['messageList']);
+    ZIMMessageDeletedInfo deletedInfo = ZIMConverter.oZIMMessageDeletedInfo(data);
+
+    ZIMEventHandler.onMessageDeleted!(zim, deletedInfo);
   }
 
   static Map handleSendMessageResult(dynamic result) {

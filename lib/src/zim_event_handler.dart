@@ -26,6 +26,15 @@ class ZIMEventHandler {
   /// [second] The remaining second before the token expires.
   static void Function(ZIM zim, int second)? onTokenWillExpire;
 
+  ///Available since: 2.11.0 or above.
+  ///
+  ///Description: In the multi-terminal login scenario, after the user modifies their information on device A, other online multi-terminal devices will receive this callback. For offline devices, after the user goes online, they need to call the [ZIM.QueryUsersInfo] interface to actively query user information.
+  static void Function(ZIM zim, ZIMUserFullInfo info)? onUserInfoUpdated;
+
+  // Supported version: 2.11.0 or later.
+  //
+  // Description: In the multi-terminal login scenario, after the user deletes the server level message on device A, other online multi-terminal devices will receive this callback..
+  static void Function(ZIM zim, ZIMMessageDeletedInfo deletedInfo)? onMessageDeleted;
 /* Conversation */
 
   /// The callback for conversation changed event.
@@ -36,6 +45,10 @@ class ZIMEventHandler {
   static void Function(
           ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList)?
       onConversationChanged;
+
+  static void Function(
+      ZIM zim, ZIMConversationsAllDeletedInfo info)?
+  onConversationsAllDeleted;
 
   /// The callback for message sent status changed event.
   ///
@@ -495,6 +508,15 @@ class ZIMEventHandler {
   static void Function(ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID)?
       onCallUserStateChanged;
 
+  /// Supported version: 2.10.0 or later.
+  ///
+  /// Description: The callback is received when reactions change
+  ///
+  /// When to Call: This callback can be registered after the ZIM instance is created by [create] and before login.
+  ///
+  /// When to Trigger: After other users add or delete reactions to messages in private or group chats.
+  ///
+  /// Related APIs: [ZIM.addMessageReaction]、[ZIM.deleteMessageReaction]
   static void Function(ZIM zim, List<ZIMMessageReaction> infos)?
       onMessageReactionsChanged;
 }
