@@ -86,6 +86,13 @@
     result(nil);
 }
 
+- (void)setAdvancedConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *key = [call.arguments objectForKey:@"key"];
+    NSString *value = [call.arguments objectForKey:@"value"];
+    [ZIM setAdvancedConfigWithKey:key value:value];
+    result(nil);
+}
+
 - (void)login:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
@@ -499,6 +506,7 @@
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
 
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"onMessageAttached" forKey:@"method"];
         [resultDic safeSetObject:messageID forKey:@"messageID"];
         [resultDic safeSetObject:messageAttachedCallbackID forKey:@"messageAttachedCallbackID"];
@@ -614,6 +622,7 @@
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
         
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"uploadMediaProgress" forKey:@"method"];
         [resultDic safeSetObject:progressID forKey:@"progressID"];
         [resultDic safeSetObject:messageID forKey:@"messageID"];
@@ -629,6 +638,7 @@
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
 
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"onMessageAttached" forKey:@"method"];
         [resultDic safeSetObject:messageID forKey:@"messageID"];
         [resultDic safeSetObject:messageAttachedCallbackID forKey:@"messageAttachedCallbackID"];
@@ -810,6 +820,7 @@
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
         
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"downloadMediaFileProgress" forKey:@"method"];
         [resultDic safeSetObject:progressID forKey:@"progressID"];
         [resultDic safeSetObject:messageDic forKey:@"message"];

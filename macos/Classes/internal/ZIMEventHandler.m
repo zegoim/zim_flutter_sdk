@@ -69,6 +69,28 @@ extendedData:(NSDictionary *)extendedData{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim userInfoUpdated:(ZIMUserFullInfo *)info{
+    if(_events == nil){
+        return;
+    }
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic setObject:[ZIMPluginConverter mZIMUserFullInfo:info] forKey:@"info"];
+    [resultDic safeSetObject:[_engineEventMap objectForKey:zim] forKey:@"handle"];
+    [resultDic safeSetObject:@"onUserInfoUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim messageDeleted:(ZIMMessageDeletedInfo *)deletedInfo{
+    if(_events == nil){
+        return;
+    }
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[_engineEventMap objectForKey:zim] forKey:@"handle"];
+    [resultDic safeSetObject:@"onMessageDeleted" forKey:@"method"];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMMessageDeletedInfo:deletedInfo] forKey:@"deletedInfo"];
+    _events(resultDic);
+}
+
 - (void)zim:(ZIM *)zim tokenWillExpire:(unsigned int)second{
     if(_events == nil){
         return;
@@ -104,6 +126,7 @@ conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount
 }
 
 // MARK: Message
+
 
 - (void)zim:(ZIM *)zim
     receivePeerMessage:(NSArray<ZIMMessage *> *)messageList

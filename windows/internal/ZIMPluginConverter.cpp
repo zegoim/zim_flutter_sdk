@@ -119,6 +119,8 @@ int32_t ZIMPluginConverter::cnvFTMapToInt32(flutter::EncodableValue value) {
 	int32_t num = 0;
 	if (std::holds_alternative<int32_t>(value)) {
 		num = std::get<int32_t>(value);
+	} else if (std::holds_alternative<int64_t>(value)){
+		num = (int32_t)std::get<int64_t>(value);
 	}
 	return num;
 }
@@ -566,12 +568,21 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	return messagePtr;
 }
 
-std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMap configMap) {
+std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMap configMap,std::shared_ptr<ZIMVoIPConfig> &voIPConfigPtr) {
 	auto config = std::make_shared<ZIMPushConfig>();
 	config->title = std::get<std::string>(configMap[FTValue("title")]);
 	config->content = std::get<std::string>(configMap[FTValue("content")]);
 	config->payload = std::get<std::string>(configMap[FTValue("payload")]);
 	config->resourcesID = std::get<std::string>(configMap[FTValue("resourcesID")]);
+	
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("voIPConfig")])) {
+		voIPConfigPtr = nullptr;
+		config->voIPConfig = nullptr;
+	}
+	else {
+		voIPConfigPtr = cnvZIMVoIPConfigConfigToObject(std::get<FTMap>(configMap[FTValue("voIPConfig")]));
+		config->voIPConfig = voIPConfigPtr.get();
+	}
 	return config;
 }
 
@@ -596,6 +607,7 @@ FTMap ZIMPluginConverter::cnvZIMMessageReceiptInfoToMap(const ZIMMessageReceiptI
 	infoMap[FTValue("status")] = FTValue(messageReceiptInfo.status);
 	infoMap[FTValue("readMemberCount")] = FTValue((int32_t)messageReceiptInfo.readMemberCount);
 	infoMap[FTValue("unreadMemberCount")] = FTValue((int32_t)messageReceiptInfo.unreadMemberCount);
+	infoMap[FTValue("isSelfOperated")] = FTValue(messageReceiptInfo.isSelfOperated);
 	return infoMap;
 }
 
@@ -1041,6 +1053,15 @@ ZIMGroupSearchConfig ZIMPluginConverter::cnvZIMGroupSearchConfigMapToObject(FTMa
 	return config;
 }
 
+std::shared_ptr<ZIMVoIPConfig> ZIMPluginConverter::cnvZIMVoIPConfigConfigToObject(FTMap configMap) {
+	std::shared_ptr<ZIMVoIPConfig> config = std::make_shared<ZIMVoIPConfig>();
+	config->iOSVoIPHandleType = (ZIMCXHandleType)std::get<int32_t>(configMap[FTValue("iOSVoIPHandleType")]);
+	config->iOSVoIPHandleValue = std::get<std::string>(configMap[FTValue("iOSVoIPHandleValue")]);
+	config->iOSVoIPHasVideo = std::get<bool>(configMap[FTValue("iOSVoIPHasVideo")]);
+
+	return config;
+}
+
 ZIMGroupMemberSearchConfig ZIMPluginConverter::cnvZIMGroupMemberSearchConfigMapToObject(FTMap configMap) {
 	ZIMGroupMemberSearchConfig config;
 	config.nextFlag = (unsigned int)std::get<int32_t>(configMap[FTValue("nextFlag")]);
@@ -1100,6 +1121,16 @@ FTMap ZIMPluginConverter::cnvZIMMessageReactionUserInfoToMap(const ZIMMessageRea
 	reactionMap[FTValue("userID")] = FTValue(userInfo.userID);
 	return reactionMap;
 }
+
+FTMap ZIMPluginConverter::cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo& info){
+	FTMap infoMap;
+	infoMap[FTValue("conversationID")] = FTValue(info.conversationID);
+	infoMap[FTValue("conversationType")] = FTValue(info.conversationType);
+	infoMap[FTValue("isDeleteConversationAllMessage")] = FTValue(info.isDeleteConversationAllMessage);
+	infoMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(info.messageList);
+	return infoMap;
+}
+
 
 FTArray ZIMPluginConverter::cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList) {
 	FTArray reactionArray;

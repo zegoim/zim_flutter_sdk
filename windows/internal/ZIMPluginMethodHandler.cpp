@@ -70,6 +70,18 @@ void ZIMPluginMethodHandler::setLogConfig(flutter::EncodableMap& argument,
 
 }
 
+void ZIMPluginMethodHandler::setAdvancedConfig(flutter::EncodableMap& argument,
+    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+
+    std::string key = std::get<std::string>(argument[FTValue("key")]);
+    std::string value = std::get<std::string>(argument[FTValue("value")]);
+
+    ZIM::setAdvancedConfig(key,value);
+
+    result->Success();
+
+}
+
 void ZIMPluginMethodHandler::setCacheConfig(flutter::EncodableMap& argument,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 
@@ -610,11 +622,12 @@ void ZIMPluginMethodHandler::revokeMessage(flutter::EncodableMap& argument,std::
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageRevokeConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.config = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.config = pushConfigPtr.get();
     }
     auto revokeExtendedData = std::get<std::string>(configMap[FTValue("revokeExtendedData")]);
@@ -703,13 +716,14 @@ void ZIMPluginMethodHandler::sendMessage(flutter::EncodableMap& argument,
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
     
@@ -719,6 +733,7 @@ void ZIMPluginMethodHandler::sendMessage(flutter::EncodableMap& argument,
             return;
         }
         FTMap onMessageAttachedMap;
+        onMessageAttachedMap[FTValue("handle")] = FTValue(handle);
         onMessageAttachedMap[FTValue("method")] = FTValue("onMessageAttached");
         onMessageAttachedMap[FTValue("messageAttachedCallbackID")] = FTValue(messageAttachedCallbackID);
         onMessageAttachedMap[FTValue("messageID")] = FTValue(messageID);
@@ -758,13 +773,14 @@ void ZIMPluginMethodHandler::sendPeerMessage(flutter::EncodableMap& argument,
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
 
@@ -799,13 +815,14 @@ void ZIMPluginMethodHandler::sendRoomMessage(flutter::EncodableMap& argument,
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
 
@@ -840,13 +857,14 @@ void ZIMPluginMethodHandler::sendGroupMessage(flutter::EncodableMap& argument,
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
 
@@ -882,13 +900,14 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority = (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
 
@@ -906,6 +925,7 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
                     return;
                 }
                 FTMap onMessageAttachedMap;
+                onMessageAttachedMap[FTValue("handle")] = FTValue(handle);
                 onMessageAttachedMap[FTValue("method")] = FTValue("onMessageAttached");
                 onMessageAttachedMap[FTValue("messageAttachedCallbackID")] = FTValue(messageAttachedCallbackID);
                 onMessageAttachedMap[FTValue("messageID")] = FTValue(messageID);
@@ -916,6 +936,7 @@ void ZIMPluginMethodHandler::sendMediaMessage(flutter::EncodableMap& argument,
                 unsigned long long currentFileSize,
                 unsigned long long totalFileSize) {
                 FTMap progressRetMap;
+                progressRetMap[FTValue("handle")] = FTValue(handle);
                 progressRetMap[FTValue("method")] = FTValue("uploadMediaProgress");
                 progressRetMap[FTValue("progressID")] = FTValue(progressID);
                 progressRetMap[FTValue("message")] = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
@@ -960,6 +981,7 @@ void ZIMPluginMethodHandler::downloadMediaFile(flutter::EncodableMap& argument,
         unsigned long long currentFileSize, unsigned long long totalFileSize) {
 
         FTMap progressRetMap;
+        progressRetMap[FTValue("handle")] = FTValue(handle);
         progressRetMap[FTValue("method")] = FTValue("downloadMediaFileProgress");
         progressRetMap[FTValue("progressID")] = FTValue(progressID);
         progressRetMap[FTValue("message")] = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
@@ -2425,11 +2447,12 @@ void ZIMPluginMethodHandler::callInvite(flutter::EncodableMap& argument,
     config.timeout = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("timeout")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
@@ -2463,11 +2486,12 @@ void ZIMPluginMethodHandler::callingInvite(flutter::EncodableMap& argument,
 
     ZIMCallingInviteConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
@@ -2501,11 +2525,12 @@ void ZIMPluginMethodHandler::callQuit(flutter::EncodableMap& argument,
     ZIMCallQuitConfig config;
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
 
@@ -2539,11 +2564,12 @@ void ZIMPluginMethodHandler::callEnd(flutter::EncodableMap& argument,
     ZIMCallEndConfig config;
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
 
@@ -2578,11 +2604,12 @@ void ZIMPluginMethodHandler::callCancel(flutter::EncodableMap& argument,
     ZIMCallCancelConfig config;
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
     }
     else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]));
+        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]),voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));

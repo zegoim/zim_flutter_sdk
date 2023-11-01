@@ -1,3 +1,10 @@
+## 2.11.0
+### 1. Feature
+1、Dual-platform or multi-platform login policies can be configured. Users can log in to the same account on multiple platforms and devices at the same time, enabling communication between sessions, messages, and groups. For details about the impact of multi-login on other functions, see Multi-Login.This feature is only available for users of the Pro or Flagship packages, who need to contact ZEGO Technical Support to configure a login policy.
+2、Added the supported types of server signaling messages.
+3、Optimized the top placement logic after deleting a session.
+
+
 ## 2.10.0
 
 ### 1. Feature

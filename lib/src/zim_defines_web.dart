@@ -12,6 +12,7 @@ class ZIM {
   external static ZIM? create(dynamic appConfig);
   external static void destroy();
   external static ZIM? getInstance();
+  external static void setAdvancedConfig(String key, String value);
   external void setLogConfig(dynamic config);
   external PromiseJsImpl<void> uploadLog();
   external PromiseJsImpl<dynamic> renewToken(dynamic config);
