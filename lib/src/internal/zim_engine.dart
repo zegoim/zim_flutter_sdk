@@ -1045,4 +1045,13 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMReactionUsersQueryResult(resultMap);
   }
 
+  @override
+  Future<ZIMCallJoinSentResult> callJoin(String callID, ZIMCallJoinConfig config) async {
+    Map resultMap = await channel.invokeMethod('callJoin',{
+      'callID':callID,
+      'config': ZIMConverter.mZIMCallJoinConfig(config)
+    });
+    return ZIMConverter.oZIMCallJoinSentResult(resultMap);
+  }
+
 }

@@ -346,7 +346,8 @@ enum ZIMCallUserState {
   offline,
   received,
   timeout,
-  quited
+  quited,
+  ended
 }
 
 enum ZIMCallInvitationMode {
@@ -425,6 +426,10 @@ class ZIMPushConfig {
   String payload = '';
 
   String resourcesID = '';
+
+  bool enableBadge = false;
+
+  int badgeIncrement = 0;
 
   ZIMVoIPConfig? voIPConfig;
 
@@ -1058,6 +1063,10 @@ class ZIMCallingInviteConfig {
   ZIMCallingInviteConfig();
 }
 
+class ZIMCallJoinConfig {
+  String extendedData = "";
+}
+
 class ZIMCallInvitationQueryConfig {
 
   int count = 0;
@@ -1177,6 +1186,14 @@ class ZIMCallInvitationTimeoutInfo {
   ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
 
   ZIMCallInvitationTimeoutInfo();
+}
+
+class ZIMCallJoinSentInfo {
+  String extendedData;
+  int createTime;
+  int joinTime;
+
+  ZIMCallJoinSentInfo({required this.extendedData, required this.createTime, required this.joinTime});
 }
 
 class ZIMMessageReceiptInfo {
@@ -2044,6 +2061,12 @@ class ZIMCallingInvitationSentResult {
   String callID = "";
   ZIMCallingInvitationSentInfo info;
   ZIMCallingInvitationSentResult({required this.callID, required this.info});
+}
+
+class ZIMCallJoinSentResult {
+  String callID = "";
+  ZIMCallJoinSentInfo info;
+  ZIMCallJoinSentResult({required this.callID,required this.info});
 }
 
 /// Exit the return result of the current call.

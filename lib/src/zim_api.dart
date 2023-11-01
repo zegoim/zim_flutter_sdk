@@ -1336,6 +1336,8 @@ abstract class ZIM {
   Future<ZIMCallingInvitationSentResult> callingInvite(
       List<String>invitees, String callID, ZIMCallingInviteConfig config);
 
+
+  Future<ZIMCallJoinSentResult> callJoin(String callID,ZIMCallJoinConfig config);
   /// Supported versions: 2.1.5 and above.
   ///
   /// Detail description: After the caller initiates a call invitation, the call invitation can be canceled through this interface before the timeout period.

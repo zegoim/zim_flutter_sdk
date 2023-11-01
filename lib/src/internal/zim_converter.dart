@@ -546,6 +546,8 @@ class ZIMConverter {
     pushConfigMap['content'] = pushConfig.content;
     pushConfigMap['payload'] = pushConfig.payload;
     pushConfigMap['resourcesID'] = pushConfig.resourcesID;
+    pushConfigMap['enableBadge'] = pushConfig.enableBadge;
+    pushConfigMap['badgeIncrement'] = pushConfig.badgeIncrement;
     if(pushConfig.voIPConfig != null){
       pushConfigMap['voIPConfig'] = ZIMConverter.mZIMVoIPConfig(pushConfig.voIPConfig!);
     }else{
@@ -1541,6 +1543,14 @@ class ZIMConverter {
         totalCount: resultMap["totalCount"]);
   }
 
+  static ZIMCallJoinSentInfo oZIMCallJoinSentInfo(Map resultMap) {
+    return ZIMCallJoinSentInfo(extendedData: resultMap['extendedData'], createTime: resultMap['createTime'], joinTime: resultMap['joinTime']);
+  }
+
+  static ZIMCallJoinSentResult oZIMCallJoinSentResult(Map resultMap) {
+    return ZIMCallJoinSentResult(callID: resultMap['callID'], info: resultMap['info']);
+  }
+
   static Map mZIMCallEndConfig(ZIMCallEndConfig config) {
     Map configMap = {};
     configMap['extendedData'] = config.extendedData;
@@ -1565,6 +1575,12 @@ class ZIMConverter {
     Map configMap = {};
     configMap['count'] = config.count;
     configMap['nextFlag'] = config.nextFlag;
+    return configMap;
+  }
+
+  static Map mZIMCallJoinConfig(ZIMCallJoinConfig config) {
+    Map configMap = {};
+    configMap['extendedData'] = config.extendedData;
     return configMap;
   }
 
