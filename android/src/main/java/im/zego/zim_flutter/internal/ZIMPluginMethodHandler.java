@@ -8,11 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+//import javax.xml.transform.Result;
+
 import im.zego.zim.ZIM;
 import im.zego.zim.callback.ZIMCallAcceptanceSentCallback;
 import im.zego.zim.callback.ZIMCallCancelSentCallback;
 import im.zego.zim.callback.ZIMCallInvitationListQueriedCallback;
 import im.zego.zim.callback.ZIMCallInvitationSentCallback;
+import im.zego.zim.callback.ZIMCallJoinSentCallback;
 import im.zego.zim.callback.ZIMCallingInvitationSentCallback;
 import im.zego.zim.callback.ZIMCallRejectionSentCallback;
 import im.zego.zim.callback.ZIMCallQuitSentCallback;
@@ -94,6 +97,8 @@ import im.zego.zim.entity.ZIMCallInfo;
 import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallInviteConfig;
+import im.zego.zim.entity.ZIMCallJoinConfig;
+import im.zego.zim.entity.ZIMCallJoinSentInfo;
 import im.zego.zim.entity.ZIMCallQuitSentInfo;
 import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
 import im.zego.zim.entity.ZIMCallingInviteConfig;
@@ -148,6 +153,7 @@ import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
 import im.zego.zim.enums.ZIMErrorCode;
+import im.zego.zim.enums.ZIMGeofencingType;
 import im.zego.zim.enums.ZIMMediaFileType;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -207,6 +213,13 @@ public class ZIMPluginMethodHandler {
         zimCacheConfig.cachePath = call.argument("cachePath");
 
         ZIM.setCacheConfig(zimCacheConfig);
+        result.success(null);
+    }
+
+    public static void setGeofencingConfig(MethodCall call, Result result){
+        ArrayList<Integer> areaList = call.argument("areaList");
+        ZIMGeofencingType type = ZIMGeofencingType.getZIMGeofencingType(call.argument("type"));
+        ZIM.setGeofencingConfig(areaList,type);
         result.success(null);
     }
 
@@ -2386,6 +2399,33 @@ public class ZIMPluginMethodHandler {
 
                     resultMap.put("callID",callID);
                     resultMap.put("info",ZIMPluginConverter.mZIMCallingInvitationSentInfo(info));
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void callJoin(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String callID = call.argument("callID");
+        ZIMCallJoinConfig joinConfig = ZIMPluginConverter.oZIMCallJoinConfig(call.argument("config"));
+        zim.callJoin(callID, joinConfig, new ZIMCallJoinSentCallback() {
+            @Override
+            public void onCallJoinSent(String callID, ZIMCallJoinSentInfo info, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+
+                    resultMap.put("callID",callID);
+                    resultMap.put("info",ZIMPluginConverter.mZIMCallJoinSentInfo(info));
                     result.success(resultMap);
                 }
                 else {
