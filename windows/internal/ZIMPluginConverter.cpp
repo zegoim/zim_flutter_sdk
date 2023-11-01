@@ -1127,7 +1127,7 @@ FTMap ZIMPluginConverter::cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedI
 	infoMap[FTValue("conversationID")] = FTValue(info.conversationID);
 	infoMap[FTValue("conversationType")] = FTValue(info.conversationType);
 	infoMap[FTValue("isDeleteConversationAllMessage")] = FTValue(info.isDeleteConversationAllMessage);
-	infoMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(info.deletedMessageList);
+	infoMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(info.messageList);
 	return infoMap;
 }
 
