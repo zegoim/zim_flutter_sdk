@@ -450,8 +450,6 @@
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInteger:info.status] forKey:@"status"];
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInt:info.readMemberCount] forKey:@"readMemberCount"];
     [infoModel safeSetObject:[NSNumber numberWithUnsignedInt:info.unreadMemberCount] forKey:@"unreadMemberCount"];
-    [infoModel safeSetObject:[NSNumber numberWithBool:info.enableBadge] forKey:@"enableBadge"];
-    [infoModel safeSetObject:[NSNumber numberWithInt:info.badgeIncrement] forKey:@"badgeIncrement"];
     [infoModel safeSetObject:[NSNumber numberWithBool:info.isSelfOperated] forKey:@"isSelfOperated"];
     return infoModel;
 }
@@ -587,6 +585,8 @@
     pushConfig.content = (NSString *)[configDic objectForKey:@"content"];
     pushConfig.payload = (NSString *)[configDic objectForKey:@"payload"];
     pushConfig.resourcesID = (NSString *)[configDic objectForKey:@"resourcesID"];
+    pushConfig.enableBadge = [[configDic objectForKey@"enableBadge"] boolValue];
+    pushConfig.badgeIncrement = [[configDic objectForKey@"badgeIncrement"] intValue];
     pushConfig.voIPConfig = [ZIMPluginConverter oZIMVoIPConfig:[configDic objectForKey:@"voIPConfig"]];
     return pushConfig;
 }
