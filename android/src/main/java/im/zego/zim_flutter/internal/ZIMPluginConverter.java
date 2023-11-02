@@ -1323,6 +1323,9 @@ public class ZIMPluginConverter {
     }
 
     public static ZIMVoIPConfig oZIMVoIPconfig(HashMap<String,Object> configMap) {
+        if(configMap == null){
+            return null;
+        }
         ZIMVoIPConfig voIPConfig = new ZIMVoIPConfig();
         voIPConfig.iOSVoIPHandleType = ZIMCXHandleType.getZIMCXHandleType((Integer) configMap.get("iOSVoIPHandleType"));
         voIPConfig.iOSVoIPHasVideo = (Boolean) configMap.get("iOSVoIPHasVideo");
