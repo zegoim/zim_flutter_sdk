@@ -81,7 +81,7 @@ public class ZegoZimPlugin implements FlutterPlugin, MethodCallHandler,EventChan
       e.printStackTrace(pw);
       String stackTrace = sw.toString();
       pw.close();
-      result.error("1","InvocationTargetException:"+e.getMessage()+"stackTrace:"+stackTrace);
+      result.error("1","InvocationTargetException:"+e.getMessage()+"stackTrace:"+stackTrace,null);
     }
     catch (IllegalAccessException e){
       StringWriter sw = new StringWriter();
@@ -89,7 +89,7 @@ public class ZegoZimPlugin implements FlutterPlugin, MethodCallHandler,EventChan
       e.printStackTrace(pw);
       String stackTrace = sw.toString();
       pw.close();
-      result.error("1","IllegalAccessException:"+e.getMessage()+"stackTrace:"+stackTrace);
+      result.error("1","IllegalAccessException:"+e.getMessage()+"stackTrace:"+stackTrace,null);
     }
   }
 
