@@ -134,7 +134,7 @@ void ZIMPluginEventHandler::onConversationChanged(
 }
 
 void ZIMPluginEventHandler::onConversationsAllDeleted(
-	ZIM* zim, ZIMConversationsAllDeletedInfo info) {
+	ZIM* zim, const ZIMConversationsAllDeletedInfo& info) {
 	if (eventSink_) {
 		FTMap retMap;
 		retMap[FTValue("method")] = FTValue("onConversationsAllDeleted");
