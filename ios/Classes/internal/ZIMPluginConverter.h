@@ -39,8 +39,6 @@
 
 +(nullable ZIMConversationDeleteConfig *)oZIMConversationDeleteConfig:(nullable NSMutableDictionary *)configDic;
 
-+(nullable ZIMConversationsAllDeleteConfig *)oZIMConversationsAllDeleteConfig:(nullable NSMutableDictionary *)configDic;
-
 +(nullable NSArray *)mConversationChangeInfoList:(nullable NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList;
 
 +(nullable ZIMMessageSendConfig *)oZIMMessageSendConfig:(nullable NSDictionary *)configDic;

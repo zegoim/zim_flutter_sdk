@@ -182,7 +182,7 @@ abstract class ZIM {
   Future<ZIMConversationDeletedResult> deleteConversation(String conversationID,
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
-  Future<void> deleteAllConversations(ZIMConversationsAllDeleteConfig config);
+  Future<void> deleteAllConversations(ZIMConversationDeleteConfig config);
 
   /// Available since: 2.8.0 and above.
   ///

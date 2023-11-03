@@ -445,14 +445,7 @@ class ZIMConverter {
         config.isAlsoDeleteServerConversation;
     return configMap;
   }
-
-  static Map mZIMConversationsAllDeleteConfig(ZIMConversationsAllDeleteConfig config) {
-    Map configMap = {};
-    configMap['isAlsoDeleteServerConversation'] =
-        config.isAlsoDeleteServerConversation;
-    return configMap;
-  }
-
+  
   static Map mZIMMessageDeleteConfig(ZIMMessageDeleteConfig config) {
     Map map = {};
     map['isAlsoDeleteServerMessage'] = config.isAlsoDeleteServerMessage;

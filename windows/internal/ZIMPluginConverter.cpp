@@ -415,13 +415,6 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	return messageMap;
 }
 
-ZIMConversationsAllDeleteConfig ZIMPluginConverter::cnvZIMConversationsAllDeleteConfigToObject(FTMap configMap) {
-	ZIMConversationsAllDeleteConfig config;
-	config.isAlsoDeleteServerConversation = std::get<bool>(configMap[FTValue("isAlsoDeleteServerConversation")]);
-
-	return config;
-}
-
 ZIMConversationDeleteConfig ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(FTMap configMap) {
 	ZIMConversationDeleteConfig config;
 	config.isAlsoDeleteServerConversation = std::get<bool>(configMap[FTValue("isAlsoDeleteServerConversation")]);
