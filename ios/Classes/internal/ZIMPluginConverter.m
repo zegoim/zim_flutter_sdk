@@ -556,15 +556,6 @@
     return deleteConfig;
 }
 
-+(nullable ZIMConversationsAllDeleteConfig *)oZIMConversationsAllDeleteConfig:(nullable NSDictionary *)configDic{
-    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
-        return nil;
-    }
-    ZIMConversationsAllDeleteConfig *deleteConfig = [[ZIMConversationsAllDeleteConfig alloc] init];
-    deleteConfig.isAlsoDeleteServerConversation = ((NSNumber *)[configDic objectForKey:@"isAlsoDeleteServerConversation"]).boolValue;
-    return deleteConfig;
-}
-
 +(nullable ZIMMessageSendConfig *)oZIMMessageSendConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;

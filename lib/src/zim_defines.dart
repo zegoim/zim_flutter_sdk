@@ -661,11 +661,6 @@ class ZIMConversationDeleteConfig {
   ZIMConversationDeleteConfig();
 }
 
-class ZIMConversationsAllDeleteConfig {
-  bool isAlsoDeleteServerConversation = false;
-  ZIMConversationsAllDeleteConfig();
-}
-
 class ZIMConversationChangeInfo {
   ZIMConversationEvent event = ZIMConversationEvent.added;
   ZIMConversation? conversation;

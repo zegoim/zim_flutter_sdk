@@ -500,7 +500,7 @@ void ZIMPluginMethodHandler::deleteAllConversations(flutter::EncodableMap& argum
 
 	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-    ZIMConversationsAllDeleteConfig deleteConfig = ZIMPluginConverter::cnvZIMConversationsAllDeleteConfigToObject(configMap);
+    ZIMConversationDeleteConfig deleteConfig = ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(configMap);
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 	zim->deleteAllConversations(deleteConfig, [=](const ZIMError& errorInfo) {
 			if (errorInfo.code == 0) {

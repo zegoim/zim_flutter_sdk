@@ -107,7 +107,6 @@ import im.zego.zim.entity.ZIMCallQuitConfig;
 import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
-import im.zego.zim.entity.ZIMConversationsAllDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
 import im.zego.zim.entity.ZIMConversationSearchConfig;
 import im.zego.zim.entity.ZIMConversationSearchInfo;
@@ -545,7 +544,7 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        ZIMConversationsAllDeleteConfig config = ZIMPluginConverter.oZIMConversationsAllDeleteConfig(Objects.requireNonNull(call.argument("config")));
+        ZIMConversationDeleteConfig config = ZIMPluginConverter.oZIMConversationDeleteConfig(Objects.requireNonNull(call.argument("config")));
         zim.deleteAllConversations(config, new ZIMConversationsAllDeletedCallback() {
             @Override
             public void onConversationsAllDeleted(ZIMError errorInfo) {
