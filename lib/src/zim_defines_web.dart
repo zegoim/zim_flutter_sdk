@@ -13,6 +13,7 @@ class ZIM {
   external static void destroy();
   external static ZIM? getInstance();
   external static void setAdvancedConfig(String key, String value);
+  external static bool setGeofencingConfig(dynamic areaList, dynamic type);
   external void setLogConfig(dynamic config);
   external PromiseJsImpl<void> uploadLog();
   external PromiseJsImpl<dynamic> renewToken(dynamic config);
@@ -105,6 +106,7 @@ class ZIM {
       dynamic invitees, String callID, Object config);
   external PromiseJsImpl<dynamic> callAccept(String callID, Object config);
   external PromiseJsImpl<dynamic> callReject(String callID, Object config);
+  external PromiseJsImpl<dynamic> callJoin(String callID, Object config);
   external PromiseJsImpl<dynamic> callQuit(String callID, Object config);
   external PromiseJsImpl<dynamic> callEnd(String callID, Object config);
   external PromiseJsImpl<dynamic> callingInvite(dynamic invitees, String callID, Object config);
