@@ -2197,6 +2197,7 @@
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             NSMutableDictionary *callJoinInfoMap = [[NSMutableDictionary alloc] init];
             [callJoinInfoMap setObject:info.extendedData forKey:@"extendedData"];
+            [callJoinInfoMap setObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
             [callJoinInfoMap setObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
             [callJoinInfoMap setObject:[NSNumber numberWithLongLong:info.joinTime]forKey:@"joinTime"];
             [resultMtDic setObject:callJoinInfoMap forKey:@"info"];

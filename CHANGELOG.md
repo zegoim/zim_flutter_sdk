@@ -1,3 +1,22 @@
+## 2.12.0
+### 1. Feature
+1、Geofencing: Offers geofencing services to ensure IM data is stored locally in the operating region, suitable for high-security scenarios overseas.
+2、Group Message Management: Supports new members automatically receiving group's historical messages when joining a group.
+3、One-Click Read: Supports clearing all conversations' message unread counts and total unread message count.
+4、Call Invitation: Supports inviting external users to join advanced mode calls, or internal users to switch devices.
+5、Delete All Conversation Lists: Supports clearing the current conversation list.
+6、Server-Side Addition of Group Member Interface: Supports adding specified users to a group.
+7、Server-Side Dissolution of Group Interface: Supports dissolving a specified group.
+8、Server-Side Transfer of Group Ownership Interface: Supports transferring group ownership to a specified group member.
+9、Server-Side Setting of Group Member Nickname Interface: Supports setting nicknames for specific group members.
+10、Server-Side Messages with Receipts: When sending individual or group messages through the server, it is possible to attach a receipt function.
+11、Server-Side Login Logout Callback: When a user logs in or out, ZIM server will actively callback to notify the developer's server.
+12、All-Member Offline Push: When using the server-side interface for all-member push, it supports selecting the push type to implement offline push.
+
+### 2. Improved Optimization Items
+1、Login Logic Optimization: Optimizes the login logic to avoid abnormal device kicking each other out in weak network conditions.
+2、Call Creation Server Callback: The call creation server callback adds a 'caller' field to indicate the user initiating the call. For more details, please refer to the Call Creation Callback.
+
 ## 2.11.0
 ### 1. Feature
 1、Dual-platform or multi-platform login policies can be configured. Users can log in to the same account on multiple platforms and devices at the same time, enabling communication between sessions, messages, and groups. For details about the impact of multi-login on other functions, see Multi-Login.This feature is only available for users of the Pro or Flagship packages, who need to contact ZEGO Technical Support to configure a login policy.

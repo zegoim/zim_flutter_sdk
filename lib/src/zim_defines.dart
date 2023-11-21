@@ -1187,8 +1187,8 @@ class ZIMCallJoinSentInfo {
   String extendedData;
   int createTime;
   int joinTime;
-
-  ZIMCallJoinSentInfo({required this.extendedData, required this.createTime, required this.joinTime});
+  List<ZIMCallUserInfo> callUserList = [];
+  ZIMCallJoinSentInfo({required this.extendedData, required this.createTime, required this.joinTime,required this.callUserList});
 }
 
 class ZIMMessageReceiptInfo {

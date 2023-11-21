@@ -840,6 +840,7 @@ FTMap ZIMPluginConverter::cnvZIMCallJoinSentInfoToMap(const ZIMCallJoinSentInfo&
 	callInfoMap[FTValue("createTime")] = FTValue((int64_t)callJoinSentInfo.createTime);
 	callInfoMap[FTValue("joinTime")] = FTValue((int64_t)callJoinSentInfo.joinTime);
 	callInfoMap[FTValue("extendedData")] = FTValue(callJoinSentInfo.extendedData);
+	callInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(callJoinSentInfo.callUserList);
 
 	return callInfoMap;
 }

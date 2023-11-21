@@ -1346,6 +1346,7 @@ public class ZIMPluginConverter {
         infoMap.put("extendedData",info.extendedData);
         infoMap.put("createTime",info.createTime);
         infoMap.put("joinTime",info.joinTime);
+        infoMap.put("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
         return infoMap;
     }
 }

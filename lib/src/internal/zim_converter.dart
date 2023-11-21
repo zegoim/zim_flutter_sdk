@@ -1537,7 +1537,7 @@ class ZIMConverter {
   }
 
   static ZIMCallJoinSentInfo oZIMCallJoinSentInfo(Map resultMap) {
-    return ZIMCallJoinSentInfo(extendedData: resultMap['extendedData'], createTime: resultMap['createTime'], joinTime: resultMap['joinTime']);
+    return ZIMCallJoinSentInfo(extendedData: resultMap['extendedData'], createTime: resultMap['createTime'], joinTime: resultMap['joinTime'],callUserList: ZIMConverter.oZIMCallUserInfoList(resultMap["callUserList"]));
   }
 
   static ZIMCallJoinSentResult oZIMCallJoinSentResult(Map resultMap) {
