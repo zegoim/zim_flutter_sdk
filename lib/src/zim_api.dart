@@ -31,6 +31,10 @@ abstract class ZIM {
     return await ZIMManager.getVersion();
   }
 
+  /// Set zim advanced configuration.
+  /// When you need to customize the set advanced configurations, you need to call this function.
+  /// It must be set before calling [create] to take effect. If it is set after [create], it will take effect at the next [create].
+  ///
   static setAdvancedConfig(String key,String value) async {
     return await ZIMManager.setAdvancedConfig(key, value);
   }
@@ -70,6 +74,15 @@ abstract class ZIM {
     ZIMManager.setCacheConfig(config);
   }
 
+  /// Available since: 2.12.0 and above.
+  ///
+  /// Description: Geofencing means that instant messaging data transmission is limited to a certain area to meet regional data privacy and security regulations, that is, to restrict access to communication services in a specific area.
+  ///
+  /// When to call /Trigger: The [setGeofencingConfig] interface needs to be called before the [create] interface.
+  ///
+  /// Restrictions: If you need to use this function, please contact ZEGO technical support.
+  ///
+  /// Caution: If you need to update geo fencing information, please call the [destroy] interface to destroy the current ZIM instance, and then call this interface.
   static Future<bool> setGeofencingConfig(List<int> areaList,ZIMGeofencingType type) async{
     return await ZIMManager.setGeofencingConfig(areaList,type);
   }
@@ -624,12 +637,41 @@ abstract class ZIM {
   Future<ZIMMessageRevokedResult> revokeMessage (
       ZIMMessage message, ZIMMessageRevokeConfig config);
 
+  /// Available sinces: 2.10.0 and above.
+  ///
+  /// Detail description: Message reaction refers to the user's response to a message. It can generally be used to add or remove emoticons for single chat or group chat messages, as well as to initiate group voting, confirm group results, and other operations.
+  ///
+  /// Use cases: Users need to express their position on a certain message, such as liking, and this method can be used to express their position.
+  ///
+  /// Note: Room message reaction is not supported.
+  ///
+  /// Restrictions: You can only use it after logging in. And only supports message reactions for single chat and group chat
+  ///
+  /// Related callbacks: If the addition is successful, the [onMessageReactionsChanged] callback will be triggered. If the reaction is made to the latest message in the conversation, the [onConversationChanged] callback will be triggered when the addition is successful.
   Future<ZIMMessageReactionAddedResult> addMessageReaction (
       String reactionType, ZIMMessage message);
 
+  /// Available sinces: 2.10.0 and above.
+  ///
+  /// Detail description: Delete the reaction made by the local user.
+  ///
+  /// Use cases: Users need to delete the status of a message that has already been stated, which can be done using this method.
+  ///
+  /// Note: Room message reaction is not supported.
+  ///
+  /// Restrictions: You can only use it after logging in. And only supports message statements for single chat and group chat
+  ///
+  /// Related callbacks: If the deletion is successful, the [onMessageReactionsChanged] callback will be triggered. If the reaction is deleted from the latest message in the conversation, the [onConversationChanged] callback will be triggered when the addition is successful.
   Future<ZIMMessageReactionDeletedResult> deleteMessageReaction (
       String reactionType, ZIMMessage message);
 
+  /// Available sinces: 2.10.0 and above.
+  ///
+  /// Detail description: This method is used to query specific user information under a certain state of a message.
+  ///
+  /// Use cases: When it is necessary to obtain specific user information under a certain state of a message, this interface can be called to query state user messages in a paginated manner.
+  ///
+  /// Restrictions: You can only use it after logging in. And only supports message statements for single chat and group chat
   Future<ZIMMessageReactionUserListQueriedResult> queryMessageReactionUserList (
       ZIMMessage message, ZIMMessageReactionUsersQueryConfig config);
   //MARK: - Room
@@ -1362,7 +1404,13 @@ abstract class ZIM {
   Future<ZIMCallingInvitationSentResult> callingInvite(
       List<String>invitees, String callID, ZIMCallingInviteConfig config);
 
-
+  /// Available since: 2.12.0.
+  ///
+  /// Description: After create an advanced mode call invitation, you can invoke this interface to join the call or switch the primary device.
+  ///
+  /// Use cases: Users who are not in the call join the call, and users who are already in the call switch to the primary device.
+  ///
+  /// When to call: Need to be invoked after logged in.
   Future<ZIMCallJoinSentResult> callJoin(String callID,ZIMCallJoinConfig config);
   /// Supported versions: 2.1.5 and above.
   ///

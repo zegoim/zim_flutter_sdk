@@ -140,6 +140,11 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
   onMessageRevokeReceived;
 
+  /// Supported version: 2.10.0 or later.
+  ///
+  /// Description: The callback is received when the server interface [SendMessageToAllUsers] sends a message.
+  ///
+  /// Call time: This callback is received after logging in to the ZIM service and the server call the [SendMessageToAllUsers] interface to send a message.
   static void Function(ZIM zim, ZIMMessage message)?
   onBroadcastMessageReceived;
 /* Room */
