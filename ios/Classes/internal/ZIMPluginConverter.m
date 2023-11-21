@@ -576,6 +576,8 @@
     pushConfig.content = (NSString *)[configDic objectForKey:@"content"];
     pushConfig.payload = (NSString *)[configDic objectForKey:@"payload"];
     pushConfig.resourcesID = (NSString *)[configDic objectForKey:@"resourcesID"];
+    pushConfig.enableBadge = [[configDic objectForKey:@"enableBadge"] boolValue];
+    pushConfig.badgeIncrement = [[configDic objectForKey:@"badgeIncrement"] intValue];
     pushConfig.voIPConfig = [ZIMPluginConverter oZIMVoIPConfig:[configDic objectForKey:@"voIPConfig"]];
     return pushConfig;
 }
@@ -1259,6 +1261,15 @@
     [infoDic setObject:[NSNumber numberWithBool:info.isDeleteConversationAllMessage] forKey:@"isDeleteConversationAllMessage"];
     [infoDic setObject:[ZIMPluginConverter mZIMMessageList:info.messageList] forKey:@"messageList"];
     return infoDic;
+}
+
++(nullable ZIMCallJoinConfig *)oZIMCallJoinConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMCallJoinConfig *config = [[ZIMCallJoinConfig alloc] init];
+    config.extendedData = [configMap objectForKey:@"extendedData"];
+    return config;
 }
 
 @end

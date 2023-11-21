@@ -567,6 +567,8 @@ std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMa
 	config->content = std::get<std::string>(configMap[FTValue("content")]);
 	config->payload = std::get<std::string>(configMap[FTValue("payload")]);
 	config->resourcesID = std::get<std::string>(configMap[FTValue("resourcesID")]);
+	config->enableBadge = std::get<bool>(configMap[FTValue("enableBadge")]);
+	config->badgeIncrement = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("badgeIncrement")]);
 	
 	if (std::holds_alternative<std::monostate>(configMap[FTValue("voIPConfig")])) {
 		voIPConfigPtr = nullptr;
@@ -833,6 +835,16 @@ FTMap ZIMPluginConverter::cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo&
 	return callInfoMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMCallJoinSentInfoToMap(const ZIMCallJoinSentInfo& callJoinSentInfo) {
+	FTMap callInfoMap;
+	callInfoMap[FTValue("createTime")] = FTValue((int64_t)callJoinSentInfo.createTime);
+	callInfoMap[FTValue("joinTime")] = FTValue((int64_t)callJoinSentInfo.joinTime);
+	callInfoMap[FTValue("extendedData")] = FTValue(callJoinSentInfo.extendedData);
+	callInfoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(callJoinSentInfo.callUserList);
+
+	return callInfoMap;
+}
+
 FTMap ZIMPluginConverter::cnvZIMCallQuitSentInfoToMap(const ZIMCallQuitSentInfo& callQuitSentInfo) {
 	FTMap callInfoMap;
 	callInfoMap[FTValue("createTime")] = FTValue((int64_t)callQuitSentInfo.createTime);
@@ -1077,6 +1089,12 @@ FTArray ZIMPluginConverter::cnvZIMConversationSearchInfoListToArray(const std::v
 	}
 
 	return searchInfoArray;
+}
+
+FTMap ZIMPluginConverter::cnvZIMConversationsAllDeletedInfoToMap(const ZIMConversationsAllDeletedInfo& info){
+	FTMap sentInfoMap;
+	sentInfoMap[FTValue("count")] = FTValue((int32_t)info.count);
+	return sentInfoMap;
 }
 
 FTArray ZIMPluginConverter::cnvZIMGroupSearchInfoListToArray(const std::vector<ZIMGroupSearchInfo>& groupSearchInfoList) {

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:zego_zim/src/internal/zim_converter.dart';
+import 'package:zego_zim/src/internal/zim_defines_extension.dart';
 import 'package:zego_zim/src/internal/zim_engine.dart';
 import 'package:zego_zim/src/internal/zim_event_handler_impl.dart';
 import 'package:zego_zim/zego_zim.dart';
@@ -35,6 +36,10 @@ class ZIMManager {
 
   static setCacheConfig(ZIMCacheConfig config) {
     channel.invokeMethod('setCacheConfig', {'cachePath': config.cachePath});
+  }
+
+  static Future<bool> setGeofencingConfig(List<int> areaList ,ZIMGeofencingType type) async{
+    return await channel.invokeMethod('setGeofencingConfig',{'type':ZIMGeofencingTypeExtension.valueMap[type],'areaList':areaList});
   }
 
   static ZIMEngine? createEngine(ZIMAppConfig config) {

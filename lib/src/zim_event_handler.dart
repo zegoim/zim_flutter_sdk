@@ -46,6 +46,17 @@ class ZIMEventHandler {
           ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList)?
       onConversationChanged;
 
+  /// Available since: 2.12.0 and above.
+  /// 
+  /// Description: When multiple login ends delete all sessions, the local end triggers the callback to notify the local end that all sessions are deleted.
+  /// 
+  /// When to call /Trigger: When another end clears all unread sessions, the local end triggers a notification.
+  /// 
+  /// Related APIs: Triggered by [deleteAllConversations].
+  static void Function(
+      ZIM zim, ZIMConversationsAllDeletedInfo info)?
+  onConversationsAllDeleted;
+
   /// The callback for message sent status changed event.
   ///
   ///
@@ -129,6 +140,11 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
   onMessageRevokeReceived;
 
+  /// Supported version: 2.10.0 or later.
+  ///
+  /// Description: The callback is received when the server interface [SendMessageToAllUsers] sends a message.
+  ///
+  /// Call time: This callback is received after logging in to the ZIM service and the server call the [SendMessageToAllUsers] interface to send a message.
   static void Function(ZIM zim, ZIMMessage message)?
   onBroadcastMessageReceived;
 /* Room */

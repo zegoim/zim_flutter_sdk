@@ -30,6 +30,31 @@ enum ZIMConnectionState {
   reconnecting
 }
 
+enum ZIMGeofencingType{
+  none,
+
+  include,
+
+  exclude
+}
+
+class ZIMGeofencingArea{
+  /// Chinese mainland (excluding Hong Kong, Macao and Taiwan).
+  static const int CN = 2;
+
+  /// North America.
+  static const int NA = 3;
+
+  /// Europe, including the UK.
+  static const int EU = 4;
+
+  /// Asia, excluding Chinese mainland and India.
+  static const int AS = 5;
+
+  /// India.
+  static const int IN = 6;
+}
+
 /// Connection state.
 ///
 /// Description: The state machine that identifies the current connection state.
@@ -321,7 +346,8 @@ enum ZIMCallUserState {
   offline,
   received,
   timeout,
-  quited
+  quited,
+  ended
 }
 
 enum ZIMCallInvitationMode {
@@ -400,6 +426,10 @@ class ZIMPushConfig {
   String payload = '';
 
   String resourcesID = '';
+
+  bool enableBadge = false;
+
+  int badgeIncrement = 0;
 
   ZIMVoIPConfig? voIPConfig;
 
@@ -1028,6 +1058,10 @@ class ZIMCallingInviteConfig {
   ZIMCallingInviteConfig();
 }
 
+class ZIMCallJoinConfig {
+  String extendedData = "";
+}
+
 class ZIMCallInvitationQueryConfig {
 
   int count = 0;
@@ -1149,6 +1183,14 @@ class ZIMCallInvitationTimeoutInfo {
   ZIMCallInvitationTimeoutInfo();
 }
 
+class ZIMCallJoinSentInfo {
+  String extendedData;
+  int createTime;
+  int joinTime;
+  List<ZIMCallUserInfo> callUserList = [];
+  ZIMCallJoinSentInfo({required this.extendedData, required this.createTime, required this.joinTime,required this.callUserList});
+}
+
 class ZIMMessageReceiptInfo {
   String conversationID;
   ZIMConversationType conversationType;
@@ -1207,6 +1249,12 @@ class ZIMConversationSearchInfo {
   List<ZIMMessage> messageList;
 
   ZIMConversationSearchInfo({required this.conversationID, required this.conversationType, required this.totalMessageCount, required this.messageList});
+}
+
+class ZIMConversationsAllDeletedInfo {
+  int count;
+
+  ZIMConversationsAllDeletedInfo({required this.count});
 }
 
 //MARK : Result
@@ -1287,6 +1335,10 @@ class ZIMConversationDeletedResult {
   ZIMConversationType conversationType;
   ZIMConversationDeletedResult(
       {required this.conversationID, required this.conversationType});
+}
+
+class ZIMConversationsAllDeletedResult {
+  ZIMConversationsAllDeletedResult();
 }
 
 class ZIMConversationQueriedResult{
@@ -2004,6 +2056,12 @@ class ZIMCallingInvitationSentResult {
   String callID = "";
   ZIMCallingInvitationSentInfo info;
   ZIMCallingInvitationSentResult({required this.callID, required this.info});
+}
+
+class ZIMCallJoinSentResult {
+  String callID = "";
+  ZIMCallJoinSentInfo info;
+  ZIMCallJoinSentResult({required this.callID,required this.info});
 }
 
 /// Exit the return result of the current call.

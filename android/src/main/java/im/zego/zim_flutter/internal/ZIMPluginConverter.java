@@ -18,6 +18,8 @@ import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
 import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
+import im.zego.zim.entity.ZIMCallJoinConfig;
+import im.zego.zim.entity.ZIMCallJoinSentInfo;
 import im.zego.zim.entity.ZIMCallQuitSentInfo;
 import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
@@ -36,6 +38,7 @@ import im.zego.zim.entity.ZIMConversationDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
 import im.zego.zim.entity.ZIMConversationSearchConfig;
 import im.zego.zim.entity.ZIMConversationSearchInfo;
+import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
 import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
@@ -642,6 +645,13 @@ public class ZIMPluginConverter {
         return mapInfoList;
     }
 
+    static public HashMap<String,Object> mZIMConversationsAllDeletedInfo(ZIMConversationsAllDeletedInfo conversationsAllDeletedInfo){
+        HashMap<String,Object> conversationsAllDeletedInfoMap = new HashMap<>();
+        conversationsAllDeletedInfoMap.put("count",conversationsAllDeletedInfo.count);
+
+        return  conversationsAllDeletedInfoMap;
+    }
+
     static public ArrayList<HashMap<String,Object>> mZIMUserInfoList(ArrayList<ZIMUserInfo> userList){
         ArrayList<HashMap<String,Object>> userInfoBasicList = new ArrayList<>();
         for (ZIMUserInfo userInfo:userList) {
@@ -762,6 +772,8 @@ public class ZIMPluginConverter {
         config.content = (String) Objects.requireNonNull(configMap.get("content"));
         config.payload = (String) configMap.get("payload");
         config.resourcesID = (String) configMap.get("resourcesID");
+        config.enableBadge = (Boolean) configMap.get("enableBadge");
+        config.badgeIncrement = (int) configMap.get("badgeIncrement");
         config.voIPConfig = ZIMPluginConverter.oZIMVoIPconfig((HashMap<String, Object>) configMap.get("voIPConfig"));
         return config;
     }
@@ -1321,5 +1333,20 @@ public class ZIMPluginConverter {
         map.put("isDeleteConversationAllMessage",info.isDeleteConversationAllMessage);
         map.put("messageList",ZIMPluginConverter.mZIMMessageList(info.messageList));
         return map;
+    }
+
+    public static ZIMCallJoinConfig oZIMCallJoinConfig(HashMap<String,Object> configMap){
+        ZIMCallJoinConfig joinConfig = new ZIMCallJoinConfig();
+        joinConfig.extendedData = (String) configMap.get("extendedData");
+        return joinConfig;
+    }
+
+    public static HashMap<String,Object> mZIMCallJoinSentInfo(ZIMCallJoinSentInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("extendedData",info.extendedData);
+        infoMap.put("createTime",info.createTime);
+        infoMap.put("joinTime",info.joinTime);
+        infoMap.put("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
+        return infoMap;
     }
 }
