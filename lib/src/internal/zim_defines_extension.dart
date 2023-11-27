@@ -17,6 +17,22 @@ extension ZIMConnectionStateExtension on ZIMConnectionState {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMGeofencingTypeExtension on ZIMGeofencingType {
+  static const valueMap = {
+    ZIMGeofencingType.none:0,
+    ZIMGeofencingType.include:1,
+    ZIMGeofencingType.exclude:2
+  };
+
+  static const mapValue = {
+    0:ZIMGeofencingType.none,
+    1:ZIMGeofencingType.include,
+    2:ZIMGeofencingType.exclude
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMRoomStateExtension on ZIMRoomState {
   static const valueMap = {
     ZIMRoomState.disconnected: 0,
@@ -66,7 +82,8 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     ZIMRoomEvent.activeEnter: 6,
     ZIMRoomEvent.enterFailed: 7,
     ZIMRoomEvent.kickedOut: 8,
-    ZIMRoomEvent.connectTimeout: 9
+    ZIMRoomEvent.connectTimeout: 9,
+    ZIMRoomEvent.kickedOutByOtherDevice: 10
   };
   static const mapValue = {
     0: ZIMRoomEvent.success,
@@ -78,7 +95,8 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     6: ZIMRoomEvent.activeEnter,
     7: ZIMRoomEvent.enterFailed,
     8: ZIMRoomEvent.kickedOut,
-    9: ZIMRoomEvent.connectTimeout
+    9: ZIMRoomEvent.connectTimeout,
+    10: ZIMRoomEvent.kickedOutByOtherDevice
   };
 
   int get value => valueMap[this] ?? -1;
@@ -208,11 +226,13 @@ extension ZIMConversationEventExtension on ZIMConversationEvent {
     ZIMConversationEvent.added: 0,
     ZIMConversationEvent.updated: 1,
     ZIMConversationEvent.disabled: 2,
+    ZIMConversationEvent.deleted: 3
   };
   static const mapValue = {
     0: ZIMConversationEvent.added,
     1: ZIMConversationEvent.updated,
     2: ZIMConversationEvent.disabled,
+    3: ZIMConversationEvent.deleted
   };
   int get value => valueMap[this] ?? -1;
 }
@@ -330,7 +350,8 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
     ZIMCallUserState.offline: 4,
     ZIMCallUserState.received: 5,
     ZIMCallUserState.timeout:6,
-    ZIMCallUserState.quited:7
+    ZIMCallUserState.quited:7,
+    ZIMCallUserState.ended:8
   };
   static const mapValue = {
     -1: ZIMCallUserState.unknown,
@@ -342,6 +363,7 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
     5: ZIMCallUserState.received,
     6: ZIMCallUserState.timeout,
     7: ZIMCallUserState.quited,
+    8: ZIMCallUserState.ended
   };
 
   int get value => valueMap[this] ?? -1;
@@ -445,4 +467,20 @@ extension ZIMInvitationModeExtension on ZIMCallInvitationMode {
   };
 
   int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMCXHandleTypeExtension on ZIMCXHandleType {
+  static const valueMap = {
+    ZIMCXHandleType.generic : 1,
+    ZIMCXHandleType.phoneNumber : 2,
+    ZIMCXHandleType.emailAddress : 3
+  };
+
+  static const mapValue = {
+    1 : ZIMCXHandleType.generic,
+    2: ZIMCXHandleType.phoneNumber,
+    3: ZIMCXHandleType.emailAddress
+  };
+
+  int get value => valueMap[this]?? - 1;
 }

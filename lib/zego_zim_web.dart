@@ -119,6 +119,8 @@ class ZegoZimPlugin {
         return clearConversationUnreadMessageCount(
             call.arguments["conversationID"],
             call.arguments["conversationType"]);
+      case 'clearConversationTotalUnreadMessageCount':
+        return clearConversationTotalUnreadMessageCount();
       case 'queryHistoryMessage':
         return queryHistoryMessage(call.arguments["conversationID"],
             call.arguments["conversationType"], call.arguments["config"]);
@@ -209,6 +211,8 @@ class ZegoZimPlugin {
       case 'deleteConversation':
         return deleteConversation(call.arguments["conversationID"],
             call.arguments["conversationType"], call.arguments["config"]);
+      case 'deleteAllConversations':
+        return deleteAllConversations(call.arguments["config"]);
       case 'setConversationNotificationStatus':
         return setConversationNotificationStatus(
             call.arguments["status"],
@@ -227,6 +231,8 @@ class ZegoZimPlugin {
         return callQuit(call.arguments["callID"], call.arguments["config"]);
       case 'callEnd':
         return callEnd(call.arguments["callID"], call.arguments["config"]);
+      case 'callJoin':
+        return callJoin(call.arguments["callID"], call.arguments["config"]);
       case 'callingInvite':
         return callingInvite(call.arguments["invitees"], call.arguments["callID"], call.arguments["config"]);
       case 'queryCallInvitationList':
@@ -312,6 +318,8 @@ class ZegoZimPlugin {
         return deleteMessageReaction(call.arguments["reactionType"], call.arguments["message"]);
       case 'queryMessageReactionUserList':
         return queryMessageReactionUserList(call.arguments["message"], call.arguments["config"]);
+      case 'setGeofencingConfig':
+        return setGeofencingConfig(call.arguments["areaList"], call.arguments["type"]);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -395,6 +403,12 @@ class ZegoZimPlugin {
           return messageSentStatusChangedHandle(_zim, data);
         case "messageReactionsChanged":
           return messageReactionsChangedHandle(_zim, data);
+        case "userInfoUpdated":
+          return userInfoUpdatedHandle(_zim, data);
+        case "messageDeleted":
+          return messageDeletedHandle(_zim, data);
+        case "conversationsAllDeleted":
+          return conversationsAllDeletedHandle(_zim, data);
       }
     }
   }
@@ -452,6 +466,10 @@ class ZegoZimPlugin {
 
   static void setAdvancedConfig(String key, String value){
     ZIM.setAdvancedConfig(key, value);
+  }
+
+  static bool setGeofencingConfig(dynamic areaList, dynamic type) {
+    return ZIM.setGeofencingConfig(areaList, type);
   }
 
   Future<void> login(String userID, String userName, String token) async {
@@ -562,6 +580,16 @@ class ZegoZimPlugin {
     });
 
     return jsObjectToMap(result);
+  }
+
+  Future<void> clearConversationTotalUnreadMessageCount () async  {
+    await promiseToFuture(ZIM
+            .getInstance()!
+            .clearConversationTotalUnreadMessageCount())
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return;
   }
 
   Future<Map<dynamic, dynamic>> queryHistoryMessage(
@@ -1144,6 +1172,19 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
+  Future<void> deleteAllConversations(dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    await promiseToFuture(ZIM
+            .getInstance()!
+            .deleteAllConversations(_config))
+        .catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return ;
+  }
+
   Future<Map<dynamic, dynamic>> setConversationNotificationStatus(
       dynamic status, String conversationID, dynamic conversationType) async {
     final result = await promiseToFuture(ZIM
@@ -1237,22 +1278,36 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
-  Future<void> callQuit(
-      String callID, dynamic config) async {
-    Object _config = mapToJSObj(config);
+  Future<Map<dynamic, dynamic>> callJoin(String callID, dynamic config) async {
+      Object _config = mapToJSObj(config);
 
-    await promiseToFuture(ZIM.getInstance()!.callQuit(callID, _config));
+      final result = await promiseToFuture(ZIM.getInstance()!.callJoin(callID, _config)).catchError((e) {
+        throw PlatformException(code: e.code.toString(), message: e.message);
+      });
 
-    return;
+      return jsObjectToMap(result);
   }
 
-  Future<void> callEnd(
+  Future<Map<dynamic, dynamic>> callQuit(
       String callID, dynamic config) async {
     Object _config = mapToJSObj(config);
 
-    await promiseToFuture(ZIM.getInstance()!.callEnd(callID, _config));
+    final result = await promiseToFuture(ZIM.getInstance()!.callQuit(callID, _config)).catchError((e) {
+        throw PlatformException(code: e.code.toString(), message: e.message);
+    });
 
-    return;
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> callEnd(
+      String callID, dynamic config) async {
+    Object _config = mapToJSObj(config);
+
+    final result = await promiseToFuture(ZIM.getInstance()!.callEnd(callID, _config)).catchError((e) {
+        throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> callingInvite(
@@ -1260,7 +1315,9 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result =
-        await promiseToFuture(ZIM.getInstance()!.callingInvite(invitees, callID, _config));
+        await promiseToFuture(ZIM.getInstance()!.callingInvite(invitees, callID, _config)).catchError((e) {
+          throw PlatformException(code: e.code.toString(), message: e.message);
+    });
 
     return jsObjectToMap(result);
   }
@@ -1269,7 +1326,9 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     final result =
-        await promiseToFuture(ZIM.getInstance()!.queryCallInvitationList(_config));
+        await promiseToFuture(ZIM.getInstance()!.queryCallInvitationList(_config)).catchError((e) {
+          throw PlatformException(code: e.code.toString(), message: e.message);
+    });
 
     return jsObjectToMap(result);
   }
@@ -2128,6 +2187,36 @@ class ZegoZimPlugin {
     ZIMMessage message = ZIMConverter.oZIMMessage(data["message"]);
 
     ZIMEventHandler.onBroadcastMessageReceived!(zim, message);
+  }
+
+  static void userInfoUpdatedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onUserInfoUpdated == null) {
+      return;
+    }
+
+    ZIMUserFullInfo userFullInfo = ZIMConverter.oZIMUserFullInfo(data["info"]);
+
+    ZIMEventHandler.onUserInfoUpdated!(zim, userFullInfo);
+  }
+
+  static void messageDeletedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onMessageDeleted == null) {
+      return;
+    }
+    handleReceiveMessage(data['messageList']);
+    ZIMMessageDeletedInfo deletedInfo = ZIMConverter.oZIMMessageDeletedInfo(data);
+
+    ZIMEventHandler.onMessageDeleted!(zim, deletedInfo);
+  }
+
+  static void conversationsAllDeletedHandle(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onConversationsAllDeleted == null) {
+      return;
+    }
+
+    ZIMConversationsAllDeletedInfo deletedInfo = ZIMConverter.oZIMConversationsAllDeletedInfo(data);
+
+    ZIMEventHandler.onConversationsAllDeleted!(zim, deletedInfo);
   }
 
   static Map handleSendMessageResult(dynamic result) {

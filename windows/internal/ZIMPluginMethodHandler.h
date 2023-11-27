@@ -30,6 +30,8 @@ public:
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void setCacheConfig(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void setGeofencingConfig(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void login(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void logout(flutter::EncodableMap& argument,
@@ -56,8 +58,12 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void deleteConversation(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void deleteAllConversations(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void clearConversationUnreadMessageCount(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void clearConversationTotalUnreadMessageCount(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void setConversationNotificationStatus(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendConversationMessageReceiptRead(flutter::EncodableMap& argument,
@@ -193,8 +199,10 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void callReject(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void callJoin(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryCallList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);     
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);  
     void addMessageReaction(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void deleteMessageReaction(flutter::EncodableMap& argument,

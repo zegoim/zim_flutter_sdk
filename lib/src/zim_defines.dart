@@ -30,6 +30,31 @@ enum ZIMConnectionState {
   reconnecting
 }
 
+enum ZIMGeofencingType{
+  none,
+
+  include,
+
+  exclude
+}
+
+class ZIMGeofencingArea{
+  /// Chinese mainland (excluding Hong Kong, Macao and Taiwan).
+  static const int CN = 2;
+
+  /// North America.
+  static const int NA = 3;
+
+  /// Europe, including the UK.
+  static const int EU = 4;
+
+  /// Asia, excluding Chinese mainland and India.
+  static const int AS = 5;
+
+  /// India.
+  static const int IN = 6;
+}
+
 /// Connection state.
 ///
 /// Description: The state machine that identifies the current connection state.
@@ -119,7 +144,9 @@ enum ZIMRoomEvent {
   /// Description: user was kicked out of the room.
   kickedOut,
 
-  connectTimeout
+  connectTimeout,
+
+  kickedOutByOtherDevice
 }
 
 /// The priority of the message.
@@ -273,7 +300,7 @@ enum ZIMMessageOrder {
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
 
-enum ZIMConversationEvent { added, updated, disabled }
+enum ZIMConversationEvent { added, updated, disabled, deleted}
 
 enum ZIMConversationNotificationStatus { notify, doNotDisturb }
 
@@ -325,7 +352,8 @@ enum ZIMCallUserState {
   offline,
   received,
   timeout,
-  quited
+  quited,
+  ended
 }
 
 enum ZIMCallInvitationMode {
@@ -335,6 +363,14 @@ enum ZIMCallInvitationMode {
 }
 
 enum ZIMCallState { unknown,started, ended }
+
+enum ZIMCXHandleType{generic,phoneNumber,emailAddress }
+
+class ZIMVoIPConfig {
+  ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
+  String iOSVoIPHandleValue = "";
+  bool iOSVoIPHasVideo = false;
+}
 
 class ZIMGroupMemberRole {
   static const int owner = 1;
@@ -396,6 +432,12 @@ class ZIMPushConfig {
   String payload = '';
 
   String resourcesID = '';
+
+  bool enableBadge = false;
+
+  int badgeIncrement = 0;
+
+  ZIMVoIPConfig? voIPConfig;
 
   ZIMPushConfig();
 }
@@ -1022,6 +1064,10 @@ class ZIMCallingInviteConfig {
   ZIMCallingInviteConfig();
 }
 
+class ZIMCallJoinConfig {
+  String extendedData = "";
+}
+
 class ZIMCallInvitationQueryConfig {
 
   int count = 0;
@@ -1143,6 +1189,14 @@ class ZIMCallInvitationTimeoutInfo {
   ZIMCallInvitationTimeoutInfo();
 }
 
+class ZIMCallJoinSentInfo {
+  String extendedData;
+  int createTime;
+  int joinTime;
+  List<ZIMCallUserInfo> callUserList = [];
+  ZIMCallJoinSentInfo({required this.extendedData, required this.createTime, required this.joinTime,required this.callUserList});
+}
+
 class ZIMMessageReceiptInfo {
   String conversationID;
   ZIMConversationType conversationType;
@@ -1150,6 +1204,7 @@ class ZIMMessageReceiptInfo {
   ZIMMessageReceiptStatus status;
   int readMemberCount;
   int unreadMemberCount;
+  bool isSelfOperated;
 
   ZIMMessageReceiptInfo(
       {required this.conversationID,
@@ -1157,7 +1212,8 @@ class ZIMMessageReceiptInfo {
       required this.messageID,
       required this.status,
       required this.readMemberCount,
-      required this.unreadMemberCount});
+      required this.unreadMemberCount,
+      required this.isSelfOperated});
 }
 
 class ZIMMessageReactionUsersQueryConfig {
@@ -1199,6 +1255,12 @@ class ZIMConversationSearchInfo {
   List<ZIMMessage> messageList;
 
   ZIMConversationSearchInfo({required this.conversationID, required this.conversationType, required this.totalMessageCount, required this.messageList});
+}
+
+class ZIMConversationsAllDeletedInfo {
+  int count;
+
+  ZIMConversationsAllDeletedInfo({required this.count});
 }
 
 //MARK : Result
@@ -1279,6 +1341,10 @@ class ZIMConversationDeletedResult {
   ZIMConversationType conversationType;
   ZIMConversationDeletedResult(
       {required this.conversationID, required this.conversationType});
+}
+
+class ZIMConversationsAllDeletedResult {
+  ZIMConversationsAllDeletedResult();
 }
 
 class ZIMConversationQueriedResult{
@@ -1998,6 +2064,12 @@ class ZIMCallingInvitationSentResult {
   ZIMCallingInvitationSentResult({required this.callID, required this.info});
 }
 
+class ZIMCallJoinSentResult {
+  String callID = "";
+  ZIMCallJoinSentInfo info;
+  ZIMCallJoinSentResult({required this.callID,required this.info});
+}
+
 /// Exit the return result of the current call.
 ///
 /// [callID] Description: call ID.
@@ -2093,3 +2165,13 @@ class ZIMMessageReactionUserListQueriedResult {
   int nextFlag;
   ZIMMessageReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
 }
+
+class ZIMMessageDeletedInfo {
+  String conversationID;
+  ZIMConversationType conversationType;
+  bool isDeleteConversationAllMessage;
+  List<ZIMMessage> messageList;
+
+  ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.isDeleteConversationAllMessage,required this.messageList});
+}
+

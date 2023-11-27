@@ -18,6 +18,8 @@ import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
 import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
+import im.zego.zim.entity.ZIMCallJoinConfig;
+import im.zego.zim.entity.ZIMCallJoinSentInfo;
 import im.zego.zim.entity.ZIMCallQuitSentInfo;
 import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMCallInvitationSentInfo;
@@ -36,6 +38,7 @@ import im.zego.zim.entity.ZIMConversationDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
 import im.zego.zim.entity.ZIMConversationSearchConfig;
 import im.zego.zim.entity.ZIMConversationSearchInfo;
+import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
 import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
@@ -55,6 +58,7 @@ import im.zego.zim.entity.ZIMImageMessage;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
+import im.zego.zim.entity.ZIMMessageDeletedInfo;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReaction;
 import im.zego.zim.entity.ZIMMessageReactionUserInfo;
@@ -87,6 +91,8 @@ import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
 import im.zego.zim.entity.ZIMVideoMessage;
+import im.zego.zim.entity.ZIMVoIPConfig;
+import im.zego.zim.enums.ZIMCXHandleType;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
 import im.zego.zim.enums.ZIMCallInvitationMode;
@@ -583,6 +589,7 @@ public class ZIMPluginConverter {
         infoModel.put("status",info.status.value());
         infoModel.put("readMemberCount",info.readMemberCount);
         infoModel.put("unreadMemberCount",info.unreadMemberCount);
+        infoModel.put("isSelfOperated",info.isSelfOperated);
         return infoModel;
     }
 
@@ -636,6 +643,13 @@ public class ZIMPluginConverter {
         }
 
         return mapInfoList;
+    }
+
+    static public HashMap<String,Object> mZIMConversationsAllDeletedInfo(ZIMConversationsAllDeletedInfo conversationsAllDeletedInfo){
+        HashMap<String,Object> conversationsAllDeletedInfoMap = new HashMap<>();
+        conversationsAllDeletedInfoMap.put("count",conversationsAllDeletedInfo.count);
+
+        return  conversationsAllDeletedInfoMap;
     }
 
     static public ArrayList<HashMap<String,Object>> mZIMUserInfoList(ArrayList<ZIMUserInfo> userList){
@@ -758,6 +772,9 @@ public class ZIMPluginConverter {
         config.content = (String) Objects.requireNonNull(configMap.get("content"));
         config.payload = (String) configMap.get("payload");
         config.resourcesID = (String) configMap.get("resourcesID");
+        config.enableBadge = (Boolean) configMap.get("enableBadge");
+        config.badgeIncrement = (int) configMap.get("badgeIncrement");
+        config.voIPConfig = ZIMPluginConverter.oZIMVoIPconfig((HashMap<String, Object>) configMap.get("voIPConfig"));
         return config;
     }
 
@@ -1296,5 +1313,40 @@ public class ZIMPluginConverter {
             maps.add(ZIMPluginConverter.mZIMMessageReaction(info));
         }
         return maps;
+    }
+
+    public static ZIMVoIPConfig oZIMVoIPconfig(HashMap<String,Object> configMap) {
+        if(configMap == null){
+            return null;
+        }
+        ZIMVoIPConfig voIPConfig = new ZIMVoIPConfig();
+        voIPConfig.iOSVoIPHandleType = ZIMCXHandleType.getZIMCXHandleType((Integer) configMap.get("iOSVoIPHandleType"));
+        voIPConfig.iOSVoIPHasVideo = (Boolean) configMap.get("iOSVoIPHasVideo");
+        voIPConfig.iOSVoIPHandleValue = (String) configMap.get("iOSVoIPHandleValue");
+        return voIPConfig;
+    }
+
+    public static HashMap<String,Object> mZIMMessageDeletedInfo(ZIMMessageDeletedInfo info){
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("conversationID",info.conversationID);
+        map.put(" conversationType",info.conversationType.value());
+        map.put("isDeleteConversationAllMessage",info.isDeleteConversationAllMessage);
+        map.put("messageList",ZIMPluginConverter.mZIMMessageList(info.messageList));
+        return map;
+    }
+
+    public static ZIMCallJoinConfig oZIMCallJoinConfig(HashMap<String,Object> configMap){
+        ZIMCallJoinConfig joinConfig = new ZIMCallJoinConfig();
+        joinConfig.extendedData = (String) configMap.get("extendedData");
+        return joinConfig;
+    }
+
+    public static HashMap<String,Object> mZIMCallJoinSentInfo(ZIMCallJoinSentInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("extendedData",info.extendedData);
+        infoMap.put("createTime",info.createTime);
+        infoMap.put("joinTime",info.joinTime);
+        infoMap.put("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
+        return infoMap;
     }
 }

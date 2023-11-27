@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import im.zego.zim_flutter.internal.ZIMPluginEventHandler;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -74,10 +76,20 @@ public class ZegoZimPlugin implements FlutterPlugin, MethodCallHandler,EventChan
       result.notImplemented();
     }
     catch (InvocationTargetException e){
-      result.notImplemented();
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
+      e.printStackTrace(pw);
+      String stackTrace = sw.toString();
+      pw.close();
+      result.error("1","InvocationTargetException:"+e.getMessage()+"stackTrace:"+stackTrace,null);
     }
     catch (IllegalAccessException e){
-      result.notImplemented();
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
+      e.printStackTrace(pw);
+      String stackTrace = sw.toString();
+      pw.close();
+      result.error("1","IllegalAccessException:"+e.getMessage()+"stackTrace:"+stackTrace,null);
     }
   }
 

@@ -332,7 +332,7 @@ class ZIMConverter {
     message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
     message.reactions = oZIMMessageReactionList(resultMap['reactions']);
     message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
-    message.isBroadcastMessage = resultMap['isBroadcastMessage'];
+    message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
     return message;
   }
 
@@ -425,6 +425,11 @@ class ZIMConverter {
         .mapValue[infoMap['conversationType']]!, totalMessageCount: infoMap['totalMessageCount'], messageList: messageList);
   }
 
+  static ZIMConversationsAllDeletedInfo oZIMConversationsAllDeletedInfo(Map infoMap) {
+    ZIMConversationsAllDeletedInfo info = ZIMConversationsAllDeletedInfo(count: infoMap['count']);
+    return info;
+  }
+
   static ZIMConversationsSearchedResult oZIMConversationsSearchedResult(Map resultMap) {
     List<ZIMConversationSearchInfo> conversationSearchInfoList = [];
     for (Map infoMap in resultMap['conversationSearchInfoList']) {
@@ -440,7 +445,7 @@ class ZIMConverter {
         config.isAlsoDeleteServerConversation;
     return configMap;
   }
-
+  
   static Map mZIMMessageDeleteConfig(ZIMMessageDeleteConfig config) {
     Map map = {};
     map['isAlsoDeleteServerMessage'] = config.isAlsoDeleteServerMessage;
@@ -534,6 +539,13 @@ class ZIMConverter {
     pushConfigMap['content'] = pushConfig.content;
     pushConfigMap['payload'] = pushConfig.payload;
     pushConfigMap['resourcesID'] = pushConfig.resourcesID;
+    pushConfigMap['enableBadge'] = pushConfig.enableBadge;
+    pushConfigMap['badgeIncrement'] = pushConfig.badgeIncrement;
+    if(pushConfig.voIPConfig != null){
+      pushConfigMap['voIPConfig'] = ZIMConverter.mZIMVoIPConfig(pushConfig.voIPConfig!);
+    }else{
+      pushConfigMap['voIPConfig'] = null;
+    }
     return pushConfigMap;
   }
 
@@ -1039,8 +1051,8 @@ class ZIMConverter {
     Map configMap = {};
     configMap['timeout'] = config.timeout;
     configMap['mode'] = ZIMInvitationModeExtension.valueMap[config.mode];
-    configMap['extendedData'] = config.extendedData;
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    configMap['extendedData'] = config.extendedData;
     return configMap;
   }
 
@@ -1334,7 +1346,9 @@ class ZIMConverter {
         messageID: infoMap['messageID'],
         status: ZIMMessageReceiptStatusExtension.mapValue[infoMap['status']]!,
         readMemberCount: infoMap['readMemberCount'],
-        unreadMemberCount: infoMap['unreadMemberCount']);
+        unreadMemberCount: infoMap['unreadMemberCount'],
+        isSelfOperated: infoMap['isSelfOperated']
+    );
 
     return receiptInfo;
   }
@@ -1487,6 +1501,14 @@ class ZIMConverter {
     return queryConfigMap;
   }
 
+  static Map mZIMVoIPConfig(ZIMVoIPConfig config){
+    Map map = {};
+    map['iOSVoIPHandleType'] = ZIMCXHandleTypeExtension.valueMap[config.iOSVoIPHandleType];
+    map['iOSVoIPHandleValue'] = config.iOSVoIPHandleValue;
+    map['iOSVoIPHasVideo'] = config.iOSVoIPHasVideo;
+    return map;
+  }
+
   static ZIMMessageReactionDeletedResult oZIMDeleteMessageReactionResult(Map resultMap) {
     Map reactionMap = resultMap["reaction"];
 
@@ -1514,6 +1536,14 @@ class ZIMConverter {
         totalCount: resultMap["totalCount"]);
   }
 
+  static ZIMCallJoinSentInfo oZIMCallJoinSentInfo(Map resultMap) {
+    return ZIMCallJoinSentInfo(extendedData: resultMap['extendedData'], createTime: resultMap['createTime'], joinTime: resultMap['joinTime'],callUserList: ZIMConverter.oZIMCallUserInfoList(resultMap["callUserList"]));
+  }
+
+  static ZIMCallJoinSentResult oZIMCallJoinSentResult(Map resultMap) {
+    return ZIMCallJoinSentResult(callID: resultMap['callID'], info: oZIMCallJoinSentInfo(resultMap['info']));
+  }
+
   static Map mZIMCallEndConfig(ZIMCallEndConfig config) {
     Map configMap = {};
     configMap['extendedData'] = config.extendedData;
@@ -1538,6 +1568,12 @@ class ZIMConverter {
     Map configMap = {};
     configMap['count'] = config.count;
     configMap['nextFlag'] = config.nextFlag;
+    return configMap;
+  }
+
+  static Map mZIMCallJoinConfig(ZIMCallJoinConfig config) {
+    Map configMap = {};
+    configMap['extendedData'] = config.extendedData;
     return configMap;
   }
 
@@ -1585,5 +1621,14 @@ class ZIMConverter {
     // callInfo.callDuration = map['callDuration'];
     // callInfo.userDuration = map['userDuration'];
     return callInfo;
+  }
+
+
+  static ZIMMessageDeletedInfo oZIMMessageDeletedInfo(Map map){
+
+    return ZIMMessageDeletedInfo(conversationID: map['conversationID'],
+      conversationType: ZIMConversationTypeExtension.mapValue[map['conversationType']]!,
+      isDeleteConversationAllMessage: map['isDeleteConversationAllMessage'],
+      messageList: ZIMConverter.oZIMMessageList(map['messageList']));
   }
 }

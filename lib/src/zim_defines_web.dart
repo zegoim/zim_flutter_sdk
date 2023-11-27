@@ -13,6 +13,7 @@ class ZIM {
   external static void destroy();
   external static ZIM? getInstance();
   external static void setAdvancedConfig(String key, String value);
+  external static bool setGeofencingConfig(dynamic areaList, dynamic type);
   external void setLogConfig(dynamic config);
   external PromiseJsImpl<void> uploadLog();
   external PromiseJsImpl<dynamic> renewToken(dynamic config);
@@ -94,8 +95,10 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryConversationList(Object config);
   external PromiseJsImpl<dynamic> deleteConversation(
       String conversationID, dynamic conversationType, Object? config);
+  external PromiseJsImpl<dynamic> deleteAllConversations(dynamic config);
   external PromiseJsImpl<dynamic> clearConversationUnreadMessageCount(
       String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> clearConversationTotalUnreadMessageCount();
   external PromiseJsImpl<dynamic> setConversationNotificationStatus(
       dynamic status, String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> callInvite(dynamic invitees, Object? config);
@@ -103,6 +106,7 @@ class ZIM {
       dynamic invitees, String callID, Object config);
   external PromiseJsImpl<dynamic> callAccept(String callID, Object config);
   external PromiseJsImpl<dynamic> callReject(String callID, Object config);
+  external PromiseJsImpl<dynamic> callJoin(String callID, Object config);
   external PromiseJsImpl<dynamic> callQuit(String callID, Object config);
   external PromiseJsImpl<dynamic> callEnd(String callID, Object config);
   external PromiseJsImpl<dynamic> callingInvite(dynamic invitees, String callID, Object config);
