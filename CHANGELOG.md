@@ -1,3 +1,5 @@
+## 2.12.1
+Fix known problems.
 ## 2.12.0
 ### 1. Feature
 1、Geofencing: Offers geofencing services to ensure IM data is stored locally in the operating region, suitable for high-security scenarios overseas.

@@ -1048,6 +1048,7 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMCallJoinSentResult> callJoin(String callID, ZIMCallJoinConfig config) async {
     Map resultMap = await channel.invokeMethod('callJoin',{
+      'handle':handle,
       'callID':callID,
       'config': ZIMConverter.mZIMCallJoinConfig(config)
     });
