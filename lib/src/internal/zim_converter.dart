@@ -37,7 +37,10 @@ class ZIMConverter {
     return userFullInfo;
   }
 
-  static ZIMUserInfo oZIMUserInfo(Map userInfoBasicMap) {
+  static ZIMUserInfo? oZIMUserInfo(Map? userInfoBasicMap) {
+    if(userInfoBasicMap == null){
+      return null;
+    }
     ZIMUserInfo userInfo = ZIMUserInfo();
     userInfo.userID = userInfoBasicMap['userID'];
     userInfo.userName = userInfoBasicMap['userName'];
@@ -1630,5 +1633,45 @@ class ZIMConverter {
       conversationType: ZIMConversationTypeExtension.mapValue[map['conversationType']]!,
       isDeleteConversationAllMessage: map['isDeleteConversationAllMessage'],
       messageList: ZIMConverter.oZIMMessageList(map['messageList']));
+  }
+
+  static ZIMFriendApplicationInfo oZIMFriendApplicationInfo(Map map){
+    return ZIMFriendApplicationInfo(applyUser: oZIMUserInfo(map['applyUser']), wording: map['wording'], friendAlias: map['friendAlias'], createTime: map['createTime'], updateTime: map['updateTime'], friendAttributes: map['friendAttributes'], type: type, state: state)
+  }
+
+  static Map mZIMFriendApplicationAcceptConfig(ZIMFriendApplicationAcceptConfig config){
+    return {
+      'friendAlias':config.friendAlias,
+      'friendAttributes':config.friendAttributes,
+      'pushConfig':mZIMPushConfig(config.pushConfig)
+    };
+  }
+
+  static ZIMFriendApplicationAcceptedResult oZIMFriendApplicationAcceptedResult(Map map){
+    return ZIMFriendApplicationAcceptedResult(friendApplicationInfo: oZIMFriendApplicationInfo(map['friendApplicationInfo']));
+  }
+
+  static Map<String, dynamic> mZIMFriendAddConfig(ZIMFriendAddConfig config) {
+    return {
+      'wording': config.wording,
+      'alias': config.alias,
+      'attributes': config.attributes,
+    };
+  }
+
+  static Map<String, dynamic> mZIMFriendDeleteConfig(ZIMFriendDeleteConfig config) {
+    return {
+      'type': config.type.value, // Assuming ZIMFriendDeleteType has a value extension
+    };
+  }
+
+  static ZIMFriendInfo oZIMFriendInfo(Map<String, dynamic> map) {
+    return ZIMFriendInfo()
+      ..friendAlias = map['friendAlias'] ?? ""
+      ..createTime = map['createTime'] ?? 0
+      ..wording = map['wording'] ?? ""
+      ..friendAttributes = map['friendAttributes'] ?? ""
+    // Initialize other properties from ZIMUserInfo
+      ..initializeFromMap(map); // This is a hypothetical method to initialize inherited properties
   }
 }

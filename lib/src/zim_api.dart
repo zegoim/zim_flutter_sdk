@@ -1503,5 +1503,33 @@ abstract class ZIM {
   /// [config] Query the relevant configuration of the call invitation list.
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
+  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
 
+  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID,ZIMSendFriendApplicationConfig config);
+
+  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config);
+
+  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
+
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String alias, String userID);
+
+  Future<ZIMFriendsInfoQueriedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
+
+  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs);
+
+  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
+
+  Future<ZIMFriendApplicationAcceptedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
+
+  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
+
+  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config);
+
+  Future<ZIMBlacklistUsersAddedResult>  addUsersToBlacklist(List<String> userIDs);
+
+  Future<ZIMBlacklistUsersAddedResult> removeUsersFromBlacklist(List<String> userIDs);
+
+  Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config);
+
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlackList(String userID);
 }

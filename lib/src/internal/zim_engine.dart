@@ -1055,4 +1055,99 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMCallJoinSentResult(resultMap);
   }
 
+  @override
+  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID, ZIMFriendApplicationAcceptConfig config) async{
+    Map resultMap = await channel.invokeMethod('acceptFriendApplication',{
+      'handle':handle,
+      'userID':userID,
+      'config':ZIMConverter.mZIMFriendApplicationAcceptConfig(config)
+    });
+
+
+  }
+
+  @override
+  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config) {
+    // TODO: implement addFriend
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMBlacklistUsersAddedResult> addUsersToBlacklist(List<String> userIDs) {
+    // TODO: implement addUsersToBlacklist
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) {
+    // TODO: implement checkFriendRelation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlackList(String userID) {
+    // TODO: implement checkUserIsInBlackList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config) {
+    // TODO: implement deleteFriend
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config) {
+    // TODO: implement queryBlackList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config) {
+    // TODO: implement queryFriendApplicationList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config) {
+    // TODO: implement queryFriendList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs) {
+    // TODO: implement queryFriendsInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMFriendApplicationAcceptedResult> rejectFriendApplication(String userID, ZIMFriendApplicationRejectConfig config) {
+    // TODO: implement rejectFriendApplication
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMBlacklistUsersAddedResult> removeUsersFromBlacklist(List<String> userIDs) {
+    // TODO: implement removeUsersFromBlacklist
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID, ZIMSendFriendApplicationConfig config) {
+    // TODO: implement sendFriendApplication
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String alias, String userID) {
+    // TODO: implement updateFriendAlias
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ZIMFriendsInfoQueriedResult> updateFriendAttributes(Map<String, String> friendAttributes, String userID) {
+    // TODO: implement updateFriendAttributes
+    throw UnimplementedError();
+  }
+
 }

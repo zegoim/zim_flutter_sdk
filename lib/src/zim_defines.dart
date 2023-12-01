@@ -360,6 +360,20 @@ enum ZIMCallState { unknown,started, ended }
 
 enum ZIMCXHandleType{generic,phoneNumber,emailAddress }
 
+enum ZIMFriendApplicationState{unknown,waiting,accepted,rejected,expired,disabled}
+
+enum ZIMFriendApplicationType{unknown,received,sent,both}
+
+enum ZIMFriendDeleteType{both,single}
+
+enum ZIMFriendListChangeAction{added,deleted}
+
+enum ZIMFriendRelationCheckType{unknown,both,sent}
+
+enum ZIMUserRelationType{unknown,singleNO,singleHave,bothAllNo,bothSelfHave,bothOtherHave,bothAllHave}
+
+enum ZIMBlacklistChangedAction{added,deleted}
+
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
   String iOSVoIPHandleValue = "";
@@ -2160,6 +2174,72 @@ class ZIMMessageReactionUserListQueriedResult {
   ZIMMessageReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
 }
 
+class ZIMFriendAddedResult {
+  late ZIMFriendInfo friendInfo;
+}
+
+class ZIMFriendAliasUpdatedResult {
+  late ZIMFriendInfo friendInfo;
+}
+
+class ZIMFriendApplicationAcceptedResult {
+  ZIMFriendApplicationInfo friendApplicationInfo;
+  ZIMFriendApplicationAcceptedResult({required this.friendApplicationInfo});
+}
+
+class ZIMFriendApplicationListQueriedResult {
+  late List<ZIMFriendApplicationInfo> infoArrayList;
+  int nextFlag = 0;
+}
+
+class ZIMFriendApplicationRejectedResult {
+  late ZIMUserInfo zimUserInfo;
+}
+
+class ZIMFriendAttributesUpdatedResult {
+  late ZIMFriendInfo friendInfo;
+}
+
+class ZIMFriendDeletedResult {
+  late List<ZIMErrorUserInfo> errorUserList;
+}
+
+class ZIMFriendListQueriedResult {
+  late List<ZIMFriendInfo> friendList;
+  int nextFlag = 0;
+}
+
+class ZIMFriendRelationCheckedResult {
+  late List<ZIMFriendRelationInfo> friendRelationInfoArrayList;
+  late List<ZIMErrorUserInfo> errorUserInfos;
+}
+
+class ZIMFriendsInfoQueriedResult {
+  late List<ZIMFriendInfo> zimFriendInfos;
+  late List<ZIMErrorUserInfo> errorUserInfos;
+}
+
+class ZIMSendFriendApplicationResult {
+  late ZIMFriendApplicationInfo applicationInfoList;
+}
+
+class ZIMBlacklistCheckedResult {
+  late bool isUserInBlacklist;
+}
+
+class ZIMBlacklistQueriedResult {
+  late List<ZIMUserInfo> blacklist;
+  int nextFlag = 0;
+}
+
+class ZIMBlacklistUsersAddedResult {
+  late List<ZIMErrorUserInfo> userIDs;
+}
+
+class ZIMBlacklistUsersRemovedReuslt {
+  late List<ZIMErrorUserInfo> errorUserInfoArrayList;
+}
+
 class ZIMMessageDeletedInfo {
   String conversationID;
   ZIMConversationType conversationType;
@@ -2169,3 +2249,74 @@ class ZIMMessageDeletedInfo {
   ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.isDeleteConversationAllMessage,required this.messageList});
 }
 
+class ZIMFriendAddConfig {
+  String wording = "";
+  String alias = "";
+  Map<String,String> attributes = {};
+}
+
+class ZIMFriendDeleteConfig {
+  late ZIMFriendDeleteType type;
+}
+
+class ZIMFriendInfo extends ZIMUserInfo {
+  String friendAlias = "";
+  int createTime = 0;
+  String wording = "";
+  String friendAttributes = "";
+}
+
+class ZIMFriendApplicationInfo {
+  ZIMUserInfo? applyUser;
+  String wording;
+  String friendAlias;
+  int createTime;
+  int updateTime;
+  Map<String,String> friendAttributes;
+  ZIMFriendApplicationType type;
+  ZIMFriendApplicationState state;
+
+  ZIMFriendApplicationInfo({required this.applyUser,required this.wording,required this.friendAlias,required this.createTime,required this.updateTime,required this.friendAttributes,required this.type,required this.state});
+}
+
+
+class ZIMFriendListQueryConfig {
+  int count = 0;
+  int nextFlag = 0;
+}
+
+class ZIMFriendRelationCheckConfig {
+  late ZIMFriendRelationCheckType type;
+}
+
+class ZIMFriendRelationInfo {
+  late ZIMUserRelationType type;
+  String userID = "";
+}
+
+class ZIMSendFriendApplicationConfig {
+  String wording  = "";
+  String alias = "";
+  Map<String,String> attributes = {};
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMFriendApplicationAcceptConfig {
+  String friendAlias = "";
+  Map<String,String> friendAttributes = {};
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMFriendApplicationRejectConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMFriendApplicationListQueryConfig {
+  int count = 0;
+  int nextFlag = 0;
+}
+
+class ZIMBlacklistQueryConfig {
+  int nextFlag = 0;
+  int count = 0;
+}
