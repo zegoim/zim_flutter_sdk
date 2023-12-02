@@ -126,6 +126,7 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.system:30,
     ZIMMessageType.revoke:31,
     ZIMMessageType.custom:200,
+    ZIMMessageType.combine:100,
   };
   static const mapValue = {
     0: ZIMMessageType.unknown,
@@ -138,7 +139,8 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     20: ZIMMessageType.barrage,
     30: ZIMMessageType.system,
     31: ZIMMessageType.revoke,
-    200:ZIMMessageType.custom
+    200:ZIMMessageType.custom,
+    100:ZIMMessageType.custom
   };
 
   int get value => valueMap[this] ?? -1;

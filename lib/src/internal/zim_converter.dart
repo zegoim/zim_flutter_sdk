@@ -220,6 +220,17 @@ class ZIMConverter {
             message.originalTextMessageContent;
         messageMap['revokeExtendedData'] = message.revokeExtendedData;
         break;
+      case ZIMMessageType.combine:
+        message as ZIMCombineMessage;
+        messageMap['combineID'] = message.combineID;
+        messageMap['title'] = message.title;
+        messageMap['summary'] = message.summary;
+        List<Map> messageListMap = [];
+        for (var element in message.messageList) {
+          messageListMap.add(mZIMMessage(element));
+        }
+        messageMap['messageList'] = messageListMap;
+        break;
       default:
         break;
     }
@@ -301,6 +312,16 @@ class ZIMConverter {
             ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']]!;
         message.originalTextMessageContent =
             resultMap['originalTextMessageContent'];
+        break;
+      case ZIMMessageType.combine:
+        List<ZIMMessage> messageList = [];
+        List<Map> messageListMap = resultMap['messageList'];
+        for (var element in messageListMap) {
+          messageList.add(oZIMMessage(element));
+        }
+        message ??= ZIMCombineMessage(title:resultMap['title'], summary: resultMap['summary'], messageList: messageList);
+        message as ZIMCombineMessage;
+        message.combineID = resultMap['combineID'];
         break;
       default:
         message ??= ZIMMessage();

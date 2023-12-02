@@ -218,7 +218,9 @@ enum ZIMMessageType {
 
   revoke,
 
-  custom
+  custom,
+
+  combine
 }
 
 enum ZIMMediaFileType {
@@ -537,6 +539,20 @@ class ZIMCommandMessage extends ZIMMessage {
     required this.message,
   }) {
     super.type = ZIMMessageType.command;
+  }
+}
+
+class ZIMCombineMessage extends ZIMMessage {
+  String title = '';
+  String summary = '';
+  String combineID = '';
+  List<ZIMMessage> messageList = [];
+  ZIMCombineMessage({
+    required this.title,
+    required this.summary,
+    required this.messageList,
+  }) {
+    super.type = ZIMMessageType.combine;
   }
 }
 
@@ -2158,6 +2174,11 @@ class ZIMMessageReactionUserListQueriedResult {
   int totalCount;
   int nextFlag;
   ZIMMessageReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
+}
+
+class ZIMMessageCombineQueriedResult {
+  ZIMCombineMessage message;
+  ZIMMessageCombineQueriedResult({required this.message});
 }
 
 class ZIMMessageDeletedInfo {

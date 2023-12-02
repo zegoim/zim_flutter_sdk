@@ -31,6 +31,7 @@ import im.zego.zim.entity.ZIMCallQuitConfig;
 import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMCallUserInfo;
 import im.zego.zim.entity.ZIMCallInfo;
+import im.zego.zim.entity.ZIMCombineMessage;
 import im.zego.zim.entity.ZIMCommandMessage;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
@@ -261,6 +262,16 @@ public class ZIMPluginConverter {
                 messageMap.put("message",((ZIMCustomMessage)message).message);
                 messageMap.put("subType",((ZIMCustomMessage)message).subType);
                 messageMap.put("searchedContent",((ZIMCustomMessage)message).searchedContent);
+            case COMBINE:
+                assert message instanceof ZIMCombineMessage;
+                messageMap.put("title",((ZIMCombineMessage)message).title);
+                messageMap.put("summary",((ZIMCombineMessage)message).summary);
+                ArrayList<HashMap<String,Object>> messageListMap = new ArrayList<>();
+                for (ZIMMessage zimMessage : ((ZIMCombineMessage) message).messageList) {
+                    messageListMap.add(mZIMMessage(zimMessage));
+                }
+                messageMap.put("messageList",messageListMap);
+                messageMap.put("combineID",((ZIMCombineMessage)message).getCombineID());
             case UNKNOWN:
             default:
                 break;
@@ -438,7 +449,23 @@ public class ZIMPluginConverter {
                 catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
-                break;
+            case COMBINE:
+                ArrayList<ZIMMessage> messagesList = new ArrayList<>();
+                for (HashMap<String, Object> map : (ArrayList<HashMap<String, Object>>) messageMap.get("messageList")) {
+                    messagesList.add(oZIMMessage(map));
+                }
+                message = new ZIMCombineMessage((String) messageMap.get("title"),(String) messageMap.get("summary"),messagesList);
+                try {
+                    Field combineID = ZIMRevokeMessage.class.getDeclaredField("combineID");
+                    combineID.setAccessible(true);
+                    combineID.set(message,messageMap.get("combineID"));
+                    combineID.setAccessible(false);
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
             case UNKNOWN:
             default:
                 message = new ZIMMessage(ZIMMessageType.UNKNOWN);
