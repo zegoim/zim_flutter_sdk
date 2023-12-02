@@ -349,6 +349,34 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         List<ZIMMessageReaction> reactions = List<ZIMMessageReaction>.from(ZIMConverter.oZIMMessageReactionList(map['reactions']));
         ZIMEventHandler.onMessageReactionsChanged!(zim,reactions);
         break;
+      case 'onFriendInfoUpdated':
+        if (ZIMEventHandler.onFriendInfoUpdated == null) return;
+        List<ZIMFriendInfo>? friendInfoList =  ZIMConverter.oZIMFriendInfo(map['friendInfoList']) as List<ZIMFriendInfo>?;
+        ZIMEventHandler.onFriendInfoUpdated!(zim, friendInfoList);
+        break;
+      case 'onFriendListChanged':
+        if (ZIMEventHandler.onFriendListChanged == null) return;
+        ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[map['action']]!;
+        List<ZIMFriendInfo>? friendInfoList = ZIMConverter.oZIMFriendInfo(map['friendInfoList']) as List<ZIMFriendInfo>?;
+        ZIMEventHandler.onFriendListChanged!(zim, action, friendInfoList);
+        break;
+
+      case 'onFriendApplicationUpdated':
+        if (ZIMEventHandler.onFriendApplicationUpdated == null) return;
+        List<ZIMFriendApplicationInfo>? friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfo(map['friendApplicationInfoList']) as List<ZIMFriendApplicationInfo>?;
+        ZIMEventHandler.onFriendApplicationUpdated!(zim, friendApplicationInfoList);
+        break;
+      case 'onFriendApplicationReceived':
+        if (ZIMEventHandler.onFriendApplicationReceived == null) return;
+        List<ZIMFriendApplicationInfo>? friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfo(map['friendApplicationInfoList']) as List<ZIMFriendApplicationInfo>?;
+        ZIMEventHandler.onFriendApplicationReceived!(zim, friendApplicationInfoList);
+        break;
+      case 'onBlacklistChanged':
+        if (ZIMEventHandler.onBlacklistChanged == null) return;
+        ZIMBlacklistChangedAction action = ZIMBlacklistChangedActionExtension.mapValue[map['action']]!;
+        List<ZIMUserInfo>? userList = ZIMConverter.oZIMUserInfo(map['userList']) as List<ZIMUserInfo>?;
+        ZIMEventHandler.onBlacklistChanged!(zim, action, userList);
+        break;
       default:
         break;
     }

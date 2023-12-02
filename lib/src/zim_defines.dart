@@ -2175,11 +2175,11 @@ class ZIMMessageReactionUserListQueriedResult {
 }
 
 class ZIMFriendAddedResult {
-  late ZIMFriendInfo friendInfo;
+   ZIMFriendInfo? friendInfo;
 }
 
 class ZIMFriendAliasUpdatedResult {
-  late ZIMFriendInfo friendInfo;
+  late ZIMFriendInfo? friendInfo;
 }
 
 class ZIMFriendApplicationAcceptedResult {
@@ -2193,34 +2193,34 @@ class ZIMFriendApplicationListQueriedResult {
 }
 
 class ZIMFriendApplicationRejectedResult {
-  late ZIMUserInfo zimUserInfo;
+   ZIMUserInfo? zimUserInfo;
 }
 
 class ZIMFriendAttributesUpdatedResult {
-  late ZIMFriendInfo friendInfo;
+   ZIMFriendInfo? friendInfo;
 }
 
 class ZIMFriendDeletedResult {
-  late List<ZIMErrorUserInfo> errorUserList;
+   List<ZIMErrorUserInfo>? errorUserList;
 }
 
 class ZIMFriendListQueriedResult {
-  late List<ZIMFriendInfo> friendList;
+  List<ZIMFriendInfo>? friendList;
   int nextFlag = 0;
 }
 
 class ZIMFriendRelationCheckedResult {
-  late List<ZIMFriendRelationInfo> friendRelationInfoArrayList;
-  late List<ZIMErrorUserInfo> errorUserInfos;
+  List<ZIMFriendRelationInfo>? friendRelationInfoArrayList;
+  List<ZIMErrorUserInfo>? errorUserInfos;
 }
 
 class ZIMFriendsInfoQueriedResult {
-  late List<ZIMFriendInfo> zimFriendInfos;
-  late List<ZIMErrorUserInfo> errorUserInfos;
+  List<ZIMFriendInfo>? zimFriendInfos;
+  List<ZIMErrorUserInfo>? errorUserInfos;
 }
 
 class ZIMSendFriendApplicationResult {
-  late ZIMFriendApplicationInfo applicationInfoList;
+  ZIMFriendApplicationInfo? applicationInfoList;
 }
 
 class ZIMBlacklistCheckedResult {
@@ -2228,16 +2228,16 @@ class ZIMBlacklistCheckedResult {
 }
 
 class ZIMBlacklistQueriedResult {
-  late List<ZIMUserInfo> blacklist;
+  List<ZIMUserInfo>? blacklist;
   int nextFlag = 0;
 }
 
 class ZIMBlacklistUsersAddedResult {
-  late List<ZIMErrorUserInfo> userIDs;
+  List<ZIMErrorUserInfo>? userIDs;
 }
 
-class ZIMBlacklistUsersRemovedReuslt {
-  late List<ZIMErrorUserInfo> errorUserInfoArrayList;
+class ZIMBlacklistUsersRemovedResult {
+  List<ZIMErrorUserInfo>? errorUserInfoArrayList;
 }
 
 class ZIMMessageDeletedInfo {
