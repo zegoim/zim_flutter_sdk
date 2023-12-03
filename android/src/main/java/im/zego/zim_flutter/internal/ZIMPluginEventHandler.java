@@ -15,7 +15,7 @@ import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
 import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
 import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
-import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
+//import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
 import im.zego.zim.entity.ZIMError;
 import im.zego.zim.entity.ZIMFriendApplicationInfo;
 import im.zego.zim.entity.ZIMFriendInfo;
@@ -608,19 +608,19 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         mysink.success(resultMap);
     }
 
-    @Override
-    public void onConversationsAllDeleted(ZIM zim, ZIMConversationsAllDeletedInfo info) {
-        if(mysink == null){
-            return;
-        }
-        String handle = engineMapForCallback.get(zim);
-
-        HashMap<String,Object> resultMap = new HashMap<>();
-        resultMap.put("method","onConversationsAllDeleted");
-        resultMap.put("info",ZIMPluginConverter.mZIMConversationsAllDeletedInfo(info));
-        resultMap.put("handle", handle);
-        mysink.success(resultMap);
-    }
+//    @Override
+//    public void onConversationsAllDeleted(ZIM zim, ZIMConversationsAllDeletedInfo info) {
+//        if(mysink == null){
+//            return;
+//        }
+//        String handle = engineMapForCallback.get(zim);
+//
+//        HashMap<String,Object> resultMap = new HashMap<>();
+//        resultMap.put("method","onConversationsAllDeleted");
+//        resultMap.put("info",ZIMPluginConverter.mZIMConversationsAllDeletedInfo(info));
+//        resultMap.put("handle", handle);
+//        mysink.success(resultMap);
+//    }
 
     @Override
     public void onConversationMessageReceiptChanged(ZIM zim, ArrayList<ZIMMessageReceiptInfo> infos) {
