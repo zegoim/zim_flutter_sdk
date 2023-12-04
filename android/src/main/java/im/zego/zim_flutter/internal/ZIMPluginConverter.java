@@ -1405,8 +1405,8 @@ public class ZIMPluginConverter {
         info.createTime = (long) infoMap.get("createTime");
         info.updateTime = (long) infoMap.get("updateTime");
         info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
-        info.type = (ZIMFriendApplicationType) infoMap.get("type"); // 假设 ZIMFriendApplicationType 可直接转换
-        info.state = (ZIMFriendApplicationState) infoMap.get("state"); // 假设 ZIMFriendApplicationState 可直接转换
+        info.type = ZIMFriendApplicationType.getZIMFriendApplicationType((Integer) infoMap.get("type")); // 假设 ZIMFriendApplicationType 可直接转换
+        info.state = ZIMFriendApplicationState.getZIMFriendApplicationState((Integer) infoMap.get("state"));
         return info;
     }
 
@@ -1418,8 +1418,8 @@ public class ZIMPluginConverter {
         infoMap.put("createTime", info.createTime);
         infoMap.put("updateTime", info.updateTime);
         infoMap.put("friendAttributes", info.friendAttributes);
-        infoMap.put("type", info.type); // Assuming ZIMFriendApplicationType can be directly stored
-        infoMap.put("state", info.state); // Assuming ZIMFriendApplicationState can be directly stored
+        infoMap.put("type", info.type.value()); // Assuming ZIMFriendApplicationType can be directly stored
+        infoMap.put("state", info.state.value()); // Assuming ZIMFriendApplicationState can be directly stored
         return infoMap;
     }
 
@@ -1439,7 +1439,7 @@ public class ZIMPluginConverter {
 
     static public ZIMFriendDeleteConfig oZIMFriendDeleteConfig(HashMap<String, Object> configMap) {
         ZIMFriendDeleteConfig config = new ZIMFriendDeleteConfig();
-        config.type = (ZIMFriendDeleteType) configMap.get("type"); // Assuming direct conversion is possible
+        config.type = ZIMFriendDeleteType.getZIMCallState((Integer) configMap.get("type")); // Assuming direct conversion is possible
         return config;
     }
 
@@ -1471,20 +1471,20 @@ public class ZIMPluginConverter {
 
     static public ZIMFriendRelationCheckConfig oZIMFriendRelationCheckConfig(HashMap<String, Object> configMap) {
         ZIMFriendRelationCheckConfig config = new ZIMFriendRelationCheckConfig();
-        config.type = (ZIMFriendRelationCheckType) configMap.get("type"); // Assuming direct conversion is possible
+        config.type = ZIMFriendRelationCheckType.getZIMFriendCheckType ((Integer) configMap.get("type")); // Assuming direct conversion is possible
         return config;
     }
 
     static public HashMap<String, Object> mZIMFriendRelationInfo(ZIMFriendRelationInfo info) {
         HashMap<String, Object> infoMap = new HashMap<>();
-        infoMap.put("type", info.type); // Assuming ZIMUserRelationType can be directly stored
+        infoMap.put("type", info.type.value()); // Assuming ZIMUserRelationType can be directly stored
         infoMap.put("userID", info.userID);
         return infoMap;
     }
 
     static public ZIMFriendRelationInfo oZIMFriendRelationInfo(HashMap<String, Object> infoMap) {
         ZIMFriendRelationInfo info = new ZIMFriendRelationInfo();
-        info.type = (ZIMUserRelationType) infoMap.get("type"); // Assuming direct conversion is possible
+        info.type = ZIMUserRelationType.getZIMUserRelationType ((Integer) infoMap.get("type")); // Assuming direct conversion is possible
         info.userID = (String) infoMap.get("userID");
         return info;
     }

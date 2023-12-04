@@ -711,7 +711,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("method", "onFriendListChanged");
         resultMap.put("handle", handle);
-        resultMap.put("action", action); // 假设 ZIMFriendListChangeAction 可以直接存储
+        resultMap.put("action", action.value()); // 假设 ZIMFriendListChangeAction 可以直接存储
         ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
         for (ZIMFriendInfo info : friendInfoList) {
             infoList.add(ZIMPluginConverter.mZIMFriendInfo(info)); // 假设存在 mZIMFriendInfo 转换函数
@@ -768,7 +768,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("method", "onBlacklistChanged");
         resultMap.put("handle", handle);
-        resultMap.put("action", action); // 假设 ZIMBlacklistChangedAction 可以直接存储
+        resultMap.put("action", action.value()); // 假设 ZIMBlacklistChangedAction 可以直接存储
         ArrayList<HashMap<String, Object>> userListMap = new ArrayList<>();
         for (ZIMUserInfo userInfo : userList) {
             userListMap.add(ZIMPluginConverter.mZIMUserInfo(userInfo)); // 假设存在 mZIMUserInfo 转换函数

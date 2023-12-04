@@ -501,6 +501,9 @@ class ZIMUserInfo {
 
   /// User name, a string with a maximum length of 256 bytes or less.
   String userName = '';
+
+  String avatar = '';
+
   ZIMUserInfo();
 }
 

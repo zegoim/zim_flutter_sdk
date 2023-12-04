@@ -44,6 +44,7 @@ class ZIMConverter {
     userInfo ??= ZIMUserInfo();
     userInfo.userID = userInfoBasicMap['userID'];
     userInfo.userName = userInfoBasicMap['userName'];
+    userInfo.avatar = userInfoBasicMap['avatar'];
     return userInfo;
   }
 
