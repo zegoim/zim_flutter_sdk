@@ -1513,13 +1513,13 @@ abstract class ZIM {
 
   Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String alias, String userID);
 
-  Future<ZIMFriendsInfoQueriedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
+  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
 
   Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs);
 
   Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
 
-  Future<ZIMFriendApplicationAcceptedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
+  Future<ZIMFriendApplicationRejectedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
 
   Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
 

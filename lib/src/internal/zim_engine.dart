@@ -1161,14 +1161,14 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendApplicationAcceptedResult> rejectFriendApplication(String userID, ZIMFriendApplicationRejectConfig config) async {
+  Future<ZIMFriendApplicationRejectedResult> rejectFriendApplication(String userID, ZIMFriendApplicationRejectConfig config) async {
     Map resultMap = await channel.invokeMethod('rejectFriendApplication', {
       'handle': handle,
       'userID': userID,
       'config': ZIMConverter.mZIMFriendApplicationRejectConfig(config),
     });
 
-    return ZIMConverter.oZIMFriendApplicationAcceptedResult(resultMap);
+    return ZIMConverter.oZIMFriendApplicationRejectedResult(resultMap);
   }
 
   @override
@@ -1204,14 +1204,14 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendsInfoQueriedResult> updateFriendAttributes(Map<String, String> friendAttributes, String userID) async {
+  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String, String> friendAttributes, String userID) async {
     Map resultMap = await channel.invokeMethod('updateFriendAttributes', {
       'handle': handle,
       'friendAttributes': friendAttributes,
       'userID': userID,
     });
 
-    return ZIMConverter.oZIMFriendsInfoQueriedResult(resultMap);
+    return ZIMConverter.oZIMFriendAttributesUpdatedResult(resultMap);
   }
 
 }

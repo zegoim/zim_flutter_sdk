@@ -2263,7 +2263,7 @@ class ZIMFriendInfo extends ZIMUserInfo {
   String friendAlias = "";
   int createTime = 0;
   String wording = "";
-  String friendAttributes = "";
+  Map friendAttributes = {};
 }
 
 class ZIMFriendApplicationInfo {
