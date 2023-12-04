@@ -2717,6 +2717,7 @@ public class ZIMPluginMethodHandler {
         zim.addFriend(userID, config, new ZIMFriendAddedCallback() {
             @Override
             public void onFriendAddedCallback(ZIMFriendInfo friendInfo, ZIMError zimError) {
+                LogWriter.writeLog("Flutter Android add Friend Callback receive.");
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
                     resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // Assuming mZIMFriendInfo exists
