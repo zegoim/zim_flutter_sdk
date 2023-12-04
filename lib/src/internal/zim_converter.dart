@@ -1651,7 +1651,7 @@ class ZIMConverter {
     return ZIMFriendApplicationAcceptedResult(friendApplicationInfo: oZIMFriendApplicationInfo(map['friendApplicationInfo']));
   }
 
-  static Map<String, dynamic> mZIMFriendAddConfig(ZIMFriendAddConfig config) {
+  static Map mZIMFriendAddConfig(ZIMFriendAddConfig config) {
     return {
       'wording': config.wording,
       'alias': config.alias,
@@ -1659,13 +1659,13 @@ class ZIMConverter {
     };
   }
 
-  static Map<String, dynamic> mZIMFriendDeleteConfig(ZIMFriendDeleteConfig config) {
+  static Map mZIMFriendDeleteConfig(ZIMFriendDeleteConfig config) {
     return {
       'type': config.type.value, // Assuming ZIMFriendDeleteType has a value extension
     };
   }
 
-  static ZIMFriendInfo? oZIMFriendInfo(Map<String, dynamic>? map,[ZIMFriendInfo? friendInfo]) {
+  static ZIMFriendInfo? oZIMFriendInfo(Map? map,[ZIMFriendInfo? friendInfo]) {
     if(map == null){
       return null;
     }
@@ -1678,14 +1678,14 @@ class ZIMConverter {
     return friendInfo;
   }
 
-  static Map<String, dynamic> mZIMFriendListQueryConfig(ZIMFriendListQueryConfig config) {
+  static Map mZIMFriendListQueryConfig(ZIMFriendListQueryConfig config) {
     return {
       'count': config.count,
       'nextFlag': config.nextFlag,
     };
   }
 
-  static Map<String, dynamic> mZIMFriendRelationCheckConfig(ZIMFriendRelationCheckConfig config) {
+  static Map mZIMFriendRelationCheckConfig(ZIMFriendRelationCheckConfig config) {
     return {
       'type': ZIMFriendRelationCheckTypeExtension.valueMap[config.type],
     };
@@ -1697,7 +1697,7 @@ class ZIMConverter {
       ..userID = map['userID'] ?? "";
   }
 
-  static Map<String, dynamic> mZIMSendFriendApplicationConfig(ZIMSendFriendApplicationConfig config) {
+  static Map mZIMSendFriendApplicationConfig(ZIMSendFriendApplicationConfig config) {
     return {
       'wording': config.wording,
       'alias': config.alias,
@@ -1706,13 +1706,13 @@ class ZIMConverter {
     };
   }
 
-  static Map<String, dynamic> mZIMFriendApplicationRejectConfig(ZIMFriendApplicationRejectConfig config) {
+  static Map mZIMFriendApplicationRejectConfig(ZIMFriendApplicationRejectConfig config) {
     return {
       'pushConfig': mZIMPushConfig(config.pushConfig),
     };
   }
 
-  static Map<String, dynamic> mZIMFriendApplicationListQueryConfig(ZIMFriendApplicationListQueryConfig config) {
+  static Map mZIMFriendApplicationListQueryConfig(ZIMFriendApplicationListQueryConfig config) {
     return {
       'count': config.count,
       'nextFlag': config.nextFlag,
