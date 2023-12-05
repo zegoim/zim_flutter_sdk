@@ -315,7 +315,7 @@ class ZIMConverter {
         break;
       case ZIMMessageType.combine:
         List<ZIMMessage> messageList = [];
-        List<Map> messageListMap = resultMap['messageList'];
+        List<Map> messageListMap = List<Map>.from(resultMap['messageList']) ;
         for (var element in messageListMap) {
           messageList.add(oZIMMessage(element));
         }
