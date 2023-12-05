@@ -1637,7 +1637,7 @@ class ZIMConverter {
   }
 
   static ZIMFriendApplicationInfo oZIMFriendApplicationInfo(Map map){
-    return ZIMFriendApplicationInfo(applyUser: oZIMUserInfo(map['applyUser']), wording: map['wording'], friendAlias: map['friendAlias'], createTime: map['createTime'], updateTime: map['updateTime'], friendAttributes: Map<String,String>.from(map['friendAttributes']), type: ZIMFriendApplicationTypeExtension.mapValue[map['type']]!, state: ZIMFriendApplicationStateExtension.mapValue['state']!);
+    return ZIMFriendApplicationInfo(applyUser: oZIMUserInfo(map['applyUser']), wording: map['wording'], friendAlias: map['friendAlias'], createTime: map['createTime'], updateTime: map['updateTime'], friendAttributes: Map<String,String>.from(map['friendAttributes']), type: ZIMFriendApplicationTypeExtension.mapValue[map['type']]!, state: ZIMFriendApplicationStateExtension.mapValue[map['state']]!);
   }
 
   static Map mZIMFriendApplicationAcceptConfig(ZIMFriendApplicationAcceptConfig config){
@@ -1797,7 +1797,7 @@ class ZIMConverter {
 
   static ZIMSendFriendApplicationResult oZIMSendFriendApplicationResult(Map map) {
     return ZIMSendFriendApplicationResult()
-      ..applicationInfoList = oZIMFriendApplicationInfo(map['applicationInfoList']);
+      ..applicationInfo = oZIMFriendApplicationInfo(map['applicationInfo']);
   }
 
   static ZIMBlacklistCheckedResult oZIMBlacklistCheckedResult(Map map) {

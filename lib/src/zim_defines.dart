@@ -2223,7 +2223,7 @@ class ZIMFriendsInfoQueriedResult {
 }
 
 class ZIMSendFriendApplicationResult {
-  ZIMFriendApplicationInfo? applicationInfoList;
+  ZIMFriendApplicationInfo? applicationInfo;
 }
 
 class ZIMBlacklistCheckedResult {
