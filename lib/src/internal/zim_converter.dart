@@ -1640,6 +1640,14 @@ class ZIMConverter {
     return ZIMFriendApplicationInfo(applyUser: oZIMUserInfo(map['applyUser']), wording: map['wording'], friendAlias: map['friendAlias'], createTime: map['createTime'], updateTime: map['updateTime'], friendAttributes: Map<String,String>.from(map['friendAttributes']), type: ZIMFriendApplicationTypeExtension.mapValue[map['type']]!, state: ZIMFriendApplicationStateExtension.mapValue[map['state']]!);
   }
 
+  static List<ZIMFriendApplicationInfo> oZIMFriendApplicationInfoList(List list){
+    List<ZIMFriendApplicationInfo> infoList = [];
+    for(Map map in list){
+      infoList.add(oZIMFriendApplicationInfo(map));
+    }
+    return infoList;
+  }
+
   static Map mZIMFriendApplicationAcceptConfig(ZIMFriendApplicationAcceptConfig config){
     return {
       'friendAlias':config.friendAlias,
