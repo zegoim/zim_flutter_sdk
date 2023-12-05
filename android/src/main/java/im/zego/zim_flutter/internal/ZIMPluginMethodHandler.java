@@ -2817,7 +2817,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> infoMap = ZIMPluginConverter.mZIMFriendRelationInfo(info); // 假设存在 mZIMFriendRelationInfo 转换函数
                         relationInfoMapList.add(infoMap);
                     }
-                    resultMap.put("friendRelationInfoList", relationInfoMapList);
+                    resultMap.put("friendRelationInfoArrayList", relationInfoMapList);
 
                     // 转换错误用户信息
                     ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
@@ -2825,7 +2825,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
                         errorUsersMapList.add(errorInfoMap);
                     }
-                    resultMap.put("errorUserList", errorUsersMapList);
+                    resultMap.put("errorUserInfos", errorUsersMapList);
 
                     result.success(resultMap);
                 } else {
