@@ -707,6 +707,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("userName",userInfo.userName);
+        userInfoMap.put("avatar",userInfo.avatar);
         return userInfoMap;
     }
 
