@@ -1637,7 +1637,7 @@ class ZIMConverter {
   }
 
   static ZIMFriendApplicationInfo oZIMFriendApplicationInfo(Map map){
-    return ZIMFriendApplicationInfo(applyUser: oZIMUserInfo(map['applyUser']), wording: map['wording'], friendAlias: map['friendAlias'], createTime: map['createTime'], updateTime: map['updateTime'], friendAttributes: map['friendAttributes'], type: ZIMFriendApplicationTypeExtension.mapValue[map['type']]!, state: ZIMFriendApplicationStateExtension.mapValue['state']!);
+    return ZIMFriendApplicationInfo(applyUser: oZIMUserInfo(map['applyUser']), wording: map['wording'], friendAlias: map['friendAlias'], createTime: map['createTime'], updateTime: map['updateTime'], friendAttributes: Map<String,String>.from(map['friendAttributes']), type: ZIMFriendApplicationTypeExtension.mapValue[map['type']]!, state: ZIMFriendApplicationStateExtension.mapValue['state']!);
   }
 
   static Map mZIMFriendApplicationAcceptConfig(ZIMFriendApplicationAcceptConfig config){
@@ -1675,8 +1675,19 @@ class ZIMConverter {
     friendInfo.friendAlias = map['friendAlias'];
     friendInfo.createTime = map['createTime'];
     friendInfo.wording = map['wording'];
-    friendInfo.friendAttributes = map['friendAttributes'];
+    friendInfo.friendAttributes = Map<String,String>.from(map['friendAttributes']);
     return friendInfo;
+  }
+
+  static List<ZIMFriendInfo>? oZIMFriendInfoList(List? list){
+    if(list == null){
+      return null;
+    }
+    List<ZIMFriendInfo> infoList = [];
+    for(Map map in list){
+      infoList.add(oZIMFriendInfo(map)!);
+    }
+    return infoList;
   }
 
   static Map mZIMFriendListQueryConfig(ZIMFriendListQueryConfig config) {
@@ -1692,10 +1703,18 @@ class ZIMConverter {
     };
   }
 
-  static ZIMFriendRelationInfo oZIMFriendRelationInfo(Map<String, dynamic> map) {
+  static ZIMFriendRelationInfo oZIMFriendRelationInfo(Map map) {
     return ZIMFriendRelationInfo()
       ..type = ZIMUserRelationTypeExtension.mapValue[map['type']]!
       ..userID = map['userID'] ?? "";
+  }
+  
+  static List<ZIMFriendRelationInfo> oZIMFriendRelationInfoList(List basicList){
+    List<ZIMFriendRelationInfo> infoList = [];
+    for(Map map in basicList){
+      infoList.add(oZIMFriendRelationInfo(map));
+    }
+    return infoList;
   }
 
   static Map mZIMSendFriendApplicationConfig(ZIMSendFriendApplicationConfig config) {
@@ -1720,7 +1739,7 @@ class ZIMConverter {
     };
   }
 
-  static Map<String, dynamic> mZIMBlacklistQueryConfig(ZIMBlacklistQueryConfig config) {
+  static Map mZIMBlacklistQueryConfig(ZIMBlacklistQueryConfig config) {
     return {
       'nextFlag': config.nextFlag,
       'count': config.count,
@@ -1755,25 +1774,25 @@ class ZIMConverter {
 
   static ZIMFriendDeletedResult oZIMFriendDeletedResult(Map map) {
     return ZIMFriendDeletedResult()
-      ..errorUserList = List<ZIMErrorUserInfo>.from(map['errorUserList'].map((x) => oZIMErrorUserInfo(x))); // Assuming oZIMErrorUserInfo exists
+      ..errorUserList = oZIMErrorUserInfoList(map['errorUserList']); // Assuming oZIMErrorUserInfo exists
   }
 
   static ZIMFriendListQueriedResult oZIMFriendListQueriedResult(Map map) {
     return ZIMFriendListQueriedResult()
-      ..friendList = List<ZIMFriendInfo>.from(map['friendList'].map((x) => oZIMFriendInfo(x)))
+      ..friendList = oZIMFriendInfoList(map['friendList'])
       ..nextFlag = map['nextFlag'];
   }
 
   static ZIMFriendRelationCheckedResult oZIMFriendRelationCheckedResult(Map map) {
     return ZIMFriendRelationCheckedResult()
-      ..friendRelationInfoArrayList = List<ZIMFriendRelationInfo>.from(map['friendRelationInfoArrayList'].map((x) => oZIMFriendRelationInfo(x)))
-      ..errorUserInfos = List<ZIMErrorUserInfo>.from(map['errorUserInfos'].map((x) => oZIMErrorUserInfo(x))); // Assuming oZIMErrorUserInfo exists
+      ..friendRelationInfoArrayList = oZIMFriendRelationInfoList(map['friendRelationInfoArrayList'])
+      ..errorUserInfos = oZIMErrorUserInfoList(map['errorUserInfos']); // Assuming oZIMErrorUserInfo exists
   }
 
   static ZIMFriendsInfoQueriedResult oZIMFriendsInfoQueriedResult(Map map) {
     return ZIMFriendsInfoQueriedResult()
-      ..zimFriendInfos = List<ZIMFriendInfo>.from(map['zimFriendInfos'].map((x) => oZIMFriendInfo(x)))
-      ..errorUserInfos = List<ZIMErrorUserInfo>.from(map['errorUserInfos'].map((x) => oZIMErrorUserInfo(x))); // Assuming oZIMErrorUserInfo exists
+      ..zimFriendInfos = oZIMFriendInfoList(map['zimFriendInfos'])
+      ..errorUserInfos = oZIMErrorUserInfoList(map['errorUserInfos']); // Assuming oZIMErrorUserInfo exists
   }
 
   static ZIMSendFriendApplicationResult oZIMSendFriendApplicationResult(Map map) {
@@ -1788,18 +1807,18 @@ class ZIMConverter {
 
   static ZIMBlacklistQueriedResult oZIMBlacklistQueriedResult(Map map) {
     return ZIMBlacklistQueriedResult()
-      ..blacklist = List<ZIMUserInfo>.from(map['blacklist'].map((x) => oZIMUserInfo(x)))
+      ..blacklist = oZIMUserInfoList(map['blacklist'])
       ..nextFlag = map['nextFlag'];
   }
 
   static ZIMBlacklistUsersAddedResult oZIMBlacklistUsersAddedResult(Map map) {
     return ZIMBlacklistUsersAddedResult()
-      ..userIDs = List<ZIMErrorUserInfo>.from(map['userIDs'].map((x) => oZIMErrorUserInfo(x))); // Assuming oZIMErrorUserInfo exists
+      ..userIDs = oZIMErrorUserInfoList(map['userIDs']);
   }
 
   static ZIMBlacklistUsersRemovedResult oZIMBlacklistUsersRemovedResult(Map map) {
     return ZIMBlacklistUsersRemovedResult()
-      ..errorUserInfoArrayList = List<ZIMErrorUserInfo>.from(map['errorUserInfoArrayList'].map((x) => oZIMErrorUserInfo(x))); // Assuming oZIMErrorUserInfo exists
+      ..errorUserInfoArrayList = oZIMErrorUserInfoList(map['errorUserInfoArrayList']); // Assuming oZIMErrorUserInfo exists
   }
 
 }
