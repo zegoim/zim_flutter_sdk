@@ -3048,7 +3048,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> applicationInfoMap = ZIMPluginConverter.mZIMFriendApplicationInfo(applicationInfo); // 假设存在 mZIMFriendApplicationInfo 转换函数
                         applicationInfoMapList.add(applicationInfoMap);
                     }
-                    resultMap.put("applicationList", applicationInfoMapList);
+                    resultMap.put("infoArrayList", applicationInfoMapList);
                     resultMap.put("nextFlag", nextFlag);
 
                     result.success(resultMap);
