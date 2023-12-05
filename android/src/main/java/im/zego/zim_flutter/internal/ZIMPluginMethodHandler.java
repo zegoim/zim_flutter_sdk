@@ -2714,10 +2714,11 @@ public class ZIMPluginMethodHandler {
         HashMap<String, Object> configMap = call.argument("config");
         ZIMFriendAddConfig config = ZIMPluginConverter.oZIMFriendAddConfig(configMap);
 
+        LogWriter.writeLog("Flutter Android invoke add Friend. attributes:"+config.attributes.toString());
         zim.addFriend(userID, config, new ZIMFriendAddedCallback() {
             @Override
             public void onFriendAddedCallback(ZIMFriendInfo friendInfo, ZIMError zimError) {
-                LogWriter.writeLog("Flutter Android add Friend Callback receive.");
+                LogWriter.writeLog("Flutter Android add Friend Callback receive.friendInfo attributes:"+friendInfo.friendAttributes.toString());
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
                     resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // Assuming mZIMFriendInfo exists
