@@ -262,6 +262,7 @@ public class ZIMPluginConverter {
                 messageMap.put("message",((ZIMCustomMessage)message).message);
                 messageMap.put("subType",((ZIMCustomMessage)message).subType);
                 messageMap.put("searchedContent",((ZIMCustomMessage)message).searchedContent);
+                break;
             case COMBINE:
                 assert message instanceof ZIMCombineMessage;
                 messageMap.put("title",((ZIMCombineMessage)message).title);
@@ -272,6 +273,7 @@ public class ZIMPluginConverter {
                 }
                 messageMap.put("messageList",messageListMap);
                 messageMap.put("combineID",((ZIMCombineMessage)message).getCombineID());
+                break;
             case UNKNOWN:
             default:
                 break;
