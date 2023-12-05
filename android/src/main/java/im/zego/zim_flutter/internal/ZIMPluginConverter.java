@@ -451,6 +451,7 @@ public class ZIMPluginConverter {
                 catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
+                break;
             case COMBINE:
                 ArrayList<ZIMMessage> messagesList = new ArrayList<>();
                 for (HashMap<String, Object> map : (ArrayList<HashMap<String, Object>>) messageMap.get("messageList")) {
@@ -467,7 +468,7 @@ public class ZIMPluginConverter {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
-
+                break;
             case UNKNOWN:
             default:
                 message = new ZIMMessage(ZIMMessageType.UNKNOWN);
