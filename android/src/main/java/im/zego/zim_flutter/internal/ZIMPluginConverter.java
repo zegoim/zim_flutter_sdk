@@ -459,7 +459,7 @@ public class ZIMPluginConverter {
                 }
                 message = new ZIMCombineMessage((String) messageMap.get("title"),(String) messageMap.get("summary"),messagesList);
                 try {
-                    Field combineID = ZIMRevokeMessage.class.getDeclaredField("combineID");
+                    Field combineID = ZIMCombineMessage.class.getDeclaredField("combineID");
                     combineID.setAccessible(true);
                     combineID.set(message,messageMap.get("combineID"));
                     combineID.setAccessible(false);
