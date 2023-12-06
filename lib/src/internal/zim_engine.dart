@@ -1061,7 +1061,7 @@ class ZIMEngine implements ZIM {
       'handle':handle,
       'message': ZIMConverter.mZIMMessage(message)
     });
-    return ZIMMessageCombineQueriedResult(message:ZIMConverter.oZIMMessage(resultMap) as ZIMCombineMessage);
+    return ZIMMessageCombineQueriedResult(message:ZIMConverter.oZIMMessage(resultMap['message']) as ZIMCombineMessage);
   }
 
 }
