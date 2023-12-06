@@ -512,7 +512,7 @@ class ZIMMessage {
   String conversationID = "";
   ZIMMessageDirection direction = ZIMMessageDirection.send;
   ZIMMessageSentStatus sentStatus = ZIMMessageSentStatus.sending;
-  ZIMConversationType conversationType = ZIMConversationType.peer;
+  ZIMConversationType conversationType = ZIMConversationType.unknown;
   int timestamp = 0;
   int conversationSeq = 0;
   int orderKey = 0;
