@@ -2948,7 +2948,7 @@ public class ZIMPluginMethodHandler {
         zim.acceptFriendApplication(userID, config, new ZIMFriendApplicationAcceptedCallback() {
             @Override
             public void onFriendApplicationAccepted(ZIMFriendApplicationInfo friendApplicationInfo, ZIMError zimError) {
-                LogWriter.writeLog("flutter native android onFriendApplicationAccepted,attributes:"+friendApplicationInfo.friendAttributes.toString());
+                LogWriter.writeLog("flutter native android onFriendApplicationAccepted,attributes:"+friendApplicationInfo.friendAttributes.toString()+"alias:"+friendApplicationInfo.friendAlias);
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
                     resultMap.put("friendApplicationInfo", ZIMPluginConverter.mZIMFriendApplicationInfo(friendApplicationInfo)); // 假设存在 mZIMFriendApplicationInfo 转换函数
@@ -2977,6 +2977,7 @@ public class ZIMPluginMethodHandler {
         zim.rejectFriendApplication(userID, config, new ZIMFriendApplicationRejectedCallback() {
             @Override
             public void onFriendApplicationRejected(ZIMUserInfo zimUserInfo, ZIMError zimError) {
+                LogWriter.writeLog("Flutter Android Native onFriendApplicationRejected,userInfo:"+zimUserInfo.toString());
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
                     resultMap.put("userInfo", ZIMPluginConverter.mZIMUserInfo(zimUserInfo)); // 假设存在 mZIMUserInfo 转换函数
