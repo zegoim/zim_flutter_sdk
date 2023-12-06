@@ -2944,10 +2944,11 @@ public class ZIMPluginMethodHandler {
         String userID = call.argument("userID");
         HashMap<String, Object> configMap = call.argument("config");
         ZIMFriendApplicationAcceptConfig config = ZIMPluginConverter.oZIMFriendApplicationAcceptConfig(configMap);
-
+        LogWriter.writeLog("flutter native android acceptFriendApplication,attributes:"+config.friendAttributes.toString());
         zim.acceptFriendApplication(userID, config, new ZIMFriendApplicationAcceptedCallback() {
             @Override
             public void onFriendApplicationAccepted(ZIMFriendApplicationInfo friendApplicationInfo, ZIMError zimError) {
+                LogWriter.writeLog("flutter native android onFriendApplicationAccepted,attributes:"+friendApplicationInfo.friendAttributes.toString());
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
                     resultMap.put("friendApplicationInfo", ZIMPluginConverter.mZIMFriendApplicationInfo(friendApplicationInfo)); // 假设存在 mZIMFriendApplicationInfo 转换函数
