@@ -1172,13 +1172,13 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMBlacklistUsersAddedResult> removeUsersFromBlacklist(List<String> userIDs) async {
+  Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs) async {
     Map resultMap = await channel.invokeMethod('removeUsersFromBlacklist', {
       'handle': handle,
       'userIDs': userIDs,
     });
 
-    return ZIMConverter.oZIMBlacklistUsersAddedResult(resultMap);
+    return ZIMConverter.oZIMBlacklistUsersRemovedResult(resultMap);
   }
 
   @override

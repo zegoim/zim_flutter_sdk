@@ -1527,7 +1527,7 @@ abstract class ZIM {
 
   Future<ZIMBlacklistUsersAddedResult>  addUsersToBlacklist(List<String> userIDs);
 
-  Future<ZIMBlacklistUsersAddedResult> removeUsersFromBlacklist(List<String> userIDs);
+  Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs);
 
   Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config);
 
