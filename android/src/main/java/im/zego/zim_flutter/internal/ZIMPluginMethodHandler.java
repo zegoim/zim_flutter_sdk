@@ -2743,7 +2743,7 @@ public class ZIMPluginMethodHandler {
         String applyUserID = call.argument("applyUserID");
         HashMap<String, Object> configMap = call.argument("config");
         ZIMSendFriendApplicationConfig config = ZIMPluginConverter.oZIMSendFriendApplicationConfig(configMap);
-
+        LogWriter.writeLog("Flutter Native Android invoke sendFriendApplication,attributes:"+config.attributes.toString());
         zim.sendFriendApplication(applyUserID, config, new ZIMSendFriendApplicationCallback() {
             @Override
             public void onSendFriendApplicationCallback(ZIMFriendApplicationInfo applicationInfo, ZIMError errorInfo) {
@@ -3110,8 +3110,17 @@ public class ZIMPluginMethodHandler {
             @Override
             public void onBlacklistUsersRemoved(ArrayList<ZIMErrorUserInfo> errorUserInfoArrayList, ZIMError zimError) {
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
-                    // 在成功的情况下，可以返回一个空的成功响应或包含一些成功信息的响应
-                    result.success(null); // 或者根据需要返回包含成功状态的信息
+                    HashMap<String, Object> resultMap = new HashMap<>();
+
+                    // 转换错误用户信息
+                    ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
+                    for (ZIMErrorUserInfo errorUserInfo : errorUserInfoArrayList) {
+                        HashMap<String, Object> errorUserInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorUserInfo); // 假设存在 mZIMErrorUserInfo 转换函数
+                        errorUsersMapList.add(errorUserInfoMap);
+                    }
+                    resultMap.put("errorUserInfoArrayList", errorUsersMapList);
+
+                    result.success(resultMap);
                 } else {
                     // 在出现错误的情况下，返回错误信息
                     result.error(String.valueOf(zimError.code), zimError.message, null);
@@ -3162,7 +3171,8 @@ public class ZIMPluginMethodHandler {
             result.error("-1", "no native instance",null);
             return;
         }
-        zim.checkUserIsInBlackList("", new ZIMBlacklistCheckedCallback() {
+        String userID = call.argument("userID");
+        zim.checkUserIsInBlackList(userID, new ZIMBlacklistCheckedCallback() {
             @Override
             public void onBlacklistChecked(boolean isUserInBlacklist, ZIMError zimError) {
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
