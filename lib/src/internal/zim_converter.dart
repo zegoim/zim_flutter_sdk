@@ -1821,7 +1821,7 @@ class ZIMConverter {
 
   static ZIMBlacklistUsersAddedResult oZIMBlacklistUsersAddedResult(Map map) {
     return ZIMBlacklistUsersAddedResult()
-      ..userIDs = oZIMErrorUserInfoList(map['userIDs']);
+      ..errorUserList = oZIMErrorUserInfoList(map['errorUserList']);
   }
 
   static ZIMBlacklistUsersRemovedResult oZIMBlacklistUsersRemovedResult(Map map) {

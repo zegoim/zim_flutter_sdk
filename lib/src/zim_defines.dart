@@ -2236,7 +2236,7 @@ class ZIMBlacklistQueriedResult {
 }
 
 class ZIMBlacklistUsersAddedResult {
-  List<ZIMErrorUserInfo>? userIDs;
+  List<ZIMErrorUserInfo>? errorUserList;
 }
 
 class ZIMBlacklistUsersRemovedResult {
