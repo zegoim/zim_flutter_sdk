@@ -3143,6 +3143,7 @@ public class ZIMPluginMethodHandler {
         zim.queryBlackList(config, new ZIMBlacklistQueriedCallback() {
             @Override
             public void onBlacklistQueried(ArrayList<ZIMUserInfo> blacklist, int nextFlag, ZIMError zimError) {
+                LogWriter.writeLog("Flutter Android onBlacklistQueried,size:%d "+ blacklist.size());
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     // 在成功的情况下，处理并返回黑名单用户信息列表
                     ArrayList<HashMap<String, Object>> blacklistMapList = new ArrayList<>();
