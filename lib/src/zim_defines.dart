@@ -521,6 +521,7 @@ class ZIMMessage {
   String extendedData = "";
   String localExtendedData = "";
   bool isBroadcastMessage = false;
+  bool isServerMessage = false;
   List<ZIMMessageReaction> reactions = [];
 }
 

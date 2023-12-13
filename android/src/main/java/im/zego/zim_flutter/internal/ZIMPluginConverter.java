@@ -202,6 +202,7 @@ public class ZIMPluginConverter {
         messageMap.put("localExtendedData",message.localExtendedData);
         messageMap.put("reactions",mZIMMessageReactionList(message.getReactions()));
         messageMap.put("isBroadcastMessage",message.isBroadcastMessage());
+        messageMap.put("isServerMessage",message.isServerMessage());
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -554,6 +555,11 @@ public class ZIMPluginConverter {
             isBroadcastMessageField.setAccessible(true);
             isBroadcastMessageField.set(message,ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isBroadcastMessage")));
             isBroadcastMessageField.setAccessible(false);
+
+            Field isServerMessageField = ZIMMessage.class.getDeclaredField("isServerMessage");
+            isServerMessageField.setAccessible(true);
+            isServerMessageField.set(message,ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isServerMessage")));
+            isServerMessageField.setAccessible(false);
 
         }
         catch (NoSuchFieldException e) {

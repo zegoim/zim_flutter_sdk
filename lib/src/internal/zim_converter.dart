@@ -145,6 +145,7 @@ class ZIMConverter {
     messageMap['extendedData'] = message.extendedData;
     messageMap['localExtendedData'] = message.localExtendedData;
     messageMap['isBroadcastMessage'] = message.isBroadcastMessage;
+    messageMap['isServerMessage'] = message.isServerMessage;
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -354,6 +355,7 @@ class ZIMConverter {
     message.reactions = oZIMMessageReactionList(resultMap['reactions']);
     message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
     message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
+    message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
     return message;
   }
 
