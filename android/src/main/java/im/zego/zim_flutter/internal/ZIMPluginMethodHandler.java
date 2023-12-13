@@ -3123,7 +3123,7 @@ public class ZIMPluginMethodHandler {
                     result.success(resultMap);
                 } else {
                     // 在出现错误的情况下，返回错误信息
-                    result.error(String.valueOf(zimError.code), zimError.message, null);
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
                 }
             }
         });
@@ -3158,7 +3158,7 @@ public class ZIMPluginMethodHandler {
                     result.success(resultMap);
                 } else {
                     // 在出现错误的情况下，返回错误信息
-                    result.error(String.valueOf(zimError.code), zimError.message, null);
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
                 }
             }
         });
@@ -3183,7 +3183,7 @@ public class ZIMPluginMethodHandler {
                     result.success(resultMap);
                 } else {
                     // 在出现错误的情况下，返回错误信息
-                    result.error(String.valueOf(zimError.code), zimError.message, null);
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
                 }
             }
         });
