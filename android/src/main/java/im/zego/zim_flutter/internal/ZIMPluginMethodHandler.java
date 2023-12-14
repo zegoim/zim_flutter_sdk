@@ -220,8 +220,8 @@ public class ZIMPluginMethodHandler {
     public static void setGeofencingConfig(MethodCall call, Result result){
         ArrayList<Integer> areaList = call.argument("areaList");
         ZIMGeofencingType type = ZIMGeofencingType.getZIMGeofencingType(call.argument("type"));
-        ZIM.setGeofencingConfig(areaList,type);
-        result.success(null);
+        boolean ret = ZIM.setGeofencingConfig(areaList,type);
+        result.success(ret);
     }
 
     public static void login(MethodCall call ,Result result){
