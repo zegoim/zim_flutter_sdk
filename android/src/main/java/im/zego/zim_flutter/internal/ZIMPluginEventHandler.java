@@ -37,6 +37,7 @@ import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.enums.ZIMBlacklistChangedAction;
 import im.zego.zim.enums.ZIMConnectionEvent;
 import im.zego.zim.enums.ZIMConnectionState;
+import im.zego.zim.enums.ZIMFriendApplicationListChangeAction;
 import im.zego.zim.enums.ZIMFriendListChangeAction;
 import im.zego.zim.enums.ZIMGroupEvent;
 import im.zego.zim.enums.ZIMGroupMemberEvent;
@@ -740,19 +741,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
 
 
     @Override
-    public void onFriendApplicationReceived(ZIM zim, ArrayList<ZIMFriendApplicationInfo> friendApplicationInfoList) {
-        super.onFriendApplicationReceived(zim, friendApplicationInfoList);
+    public void onFriendApplicationListChanged(ZIM zim, ZIMFriendApplicationListChangeAction action, ArrayList<ZIMFriendApplicationInfo> friendApplicationInfoList) {
+        super.onFriendApplicationListChanged(zim, action,friendApplicationInfoList);
         if (mysink == null) {
             return;
         }
         String handle = engineMapForCallback.get(zim);
         HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("method", "onFriendApplicationReceived");
+        resultMap.put("method", "onFriendApplicationListChanged");
         resultMap.put("handle", handle);
         ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
         for (ZIMFriendApplicationInfo info : friendApplicationInfoList) {
             infoList.add(ZIMPluginConverter.mZIMFriendApplicationInfo(info)); // 假设存在 mZIMFriendApplicationInfo 转换函数
         }
+        resultMap.put("action",action.value());
         resultMap.put("friendApplicationInfoList", infoList);
         mysink.success(resultMap);
     }

@@ -368,6 +368,8 @@ enum ZIMFriendDeleteType{both,single}
 
 enum ZIMFriendListChangeAction{added,deleted}
 
+enum ZIMFriendApplicationListChangeAction{added,deleted}
+
 enum ZIMFriendRelationCheckType{unknown,both,sent}
 
 enum ZIMUserRelationType{unknown,singleNO,singleHave,bothAllNo,bothSelfHave,bothOtherHave,bothAllHave}

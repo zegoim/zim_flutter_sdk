@@ -366,10 +366,11 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         List<ZIMFriendApplicationInfo>? friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
         ZIMEventHandler.onFriendApplicationUpdated!(zim, friendApplicationInfoList);
         break;
-      case 'onFriendApplicationReceived':
-        if (ZIMEventHandler.onFriendApplicationReceived == null) return;
+      case 'onFriendApplicationListChanged':
+        if (ZIMEventHandler.onFriendApplicationListChanged == null) return;
         List<ZIMFriendApplicationInfo>? friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
-        ZIMEventHandler.onFriendApplicationReceived!(zim, friendApplicationInfoList);
+        ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[map['action']]!;
+        ZIMEventHandler.onFriendApplicationListChanged!(zim,action,friendApplicationInfoList);
         break;
       case 'onBlacklistChanged':
         if (ZIMEventHandler.onBlacklistChanged == null) return;

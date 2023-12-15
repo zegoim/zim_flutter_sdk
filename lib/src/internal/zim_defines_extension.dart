@@ -553,6 +553,20 @@ extension ZIMFriendListChangeActionExtension on ZIMFriendListChangeAction {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMFriendApplicationListChangeActionExtension on ZIMFriendApplicationListChangeAction {
+  static const valueMap = {
+    ZIMFriendApplicationListChangeAction.added:0,
+    ZIMFriendApplicationListChangeAction.deleted:1,
+  };
+
+  static const mapValue = {
+    0:ZIMFriendApplicationListChangeAction.added,
+    1:ZIMFriendApplicationListChangeAction.deleted,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 // ZIMFriendRelationCheckType Enum Extension
 extension ZIMFriendRelationCheckTypeExtension on ZIMFriendRelationCheckType {
   static const valueMap = {
