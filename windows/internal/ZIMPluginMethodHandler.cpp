@@ -2851,4 +2851,94 @@ void ZIMPluginMethodHandler::queryMessageReactionUserList(flutter::EncodableMap&
     });
 }
 
+void ZIMPluginMethodHandler::addMessageReaction(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
+	auto reactionType = std::get<std::string>(argument[FTValue("reactionType")]);
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+
+	zim->addMessageReaction(reactionType, messagePtr, [=](const ZIMMessageReaction& reaction, const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			FTMap retMap;
+			retMap[FTValue("reaction")] = ZIMPluginConverter::cnvZIMMessageReactionToMap(reaction);;
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
+void ZIMPluginMethodHandler::importLocalMessages(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+
+    auto folderPath = std::get<std::string>(argument[FTValue("folderPath")]);
+    ZIMMessageImportConfig config;
+    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+
+	zim->importLocalMessages(folderPath, config, [=](unsigned long long importedMessageCount,
+		unsigned long long totalMessageCount) {
+			FTMap progressRetMap;
+			progressRetMap[FTValue("handle")] = FTValue(handle);
+			progressRetMap[FTValue("method")] = FTValue("messageImportingProgress");
+			progressRetMap[FTValue("progressID")] = FTValue(progressID);
+			progressRetMap[FTValue("importedMessageCount")] = FTValue((int64_t)importedMessageCount);
+			progressRetMap[FTValue("totalMessageCount")] = FTValue((int64_t)totalMessageCount);
+			ZIMPluginEventHandler::getInstance()->sendEvent(progressRetMap);
+        }, [=](const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				sharedPtrResult->Success();
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+    });
+}
+
+void ZIMPluginMethodHandler::exportLocalMessages(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto folderPath = std::get<std::string>(argument[FTValue("folderPath")]);
+	ZIMMessageExportConfig config;
+	auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+
+	zim->exportLocalMessages(folderPath, config, [=](unsigned long long exportedMessageCount,
+		unsigned long long totalMessageCount) {
+			FTMap progressRetMap;
+			progressRetMap[FTValue("handle")] = FTValue(handle);
+			progressRetMap[FTValue("method")] = FTValue("messageExportingProgress");
+			progressRetMap[FTValue("progressID")] = FTValue(progressID);
+			progressRetMap[FTValue("exportedMessageCount")] = FTValue((int64_t)exportedMessageCount);
+			progressRetMap[FTValue("totalMessageCount")] = FTValue((int64_t)totalMessageCount);
+			ZIMPluginEventHandler::getInstance()->sendEvent(progressRetMap);
+		}, [=](const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				sharedPtrResult->Success();
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
 

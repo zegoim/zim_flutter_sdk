@@ -383,6 +383,12 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "addMessageReaction") {
         ZIMPluginMethodHandler::getInstance().addMessageReaction(argument, std::move(result));
     }
+	else if (method_call.method_name() == "importLocalMessages") {
+	ZIMPluginMethodHandler::getInstance().addMessageReaction(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "exportLocalMessages") {
+	ZIMPluginMethodHandler::getInstance().addMessageReaction(argument, std::move(result));
+	}
     else {
         result->NotImplemented();
     

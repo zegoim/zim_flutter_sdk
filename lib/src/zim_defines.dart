@@ -2175,3 +2175,15 @@ class ZIMMessageDeletedInfo {
   ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.isDeleteConversationAllMessage,required this.messageList});
 }
 
+typedef ZIMMessageImportingProgress = void Function(
+    int importedMessageCount, int totalMessageCount);
+
+class ZIMMessageImportConfig {
+
+  ZIMMessageImportConfig();
+}
+
+class ZIMMessageExportConfig {
+
+  ZIMMessageExportConfig();
+}

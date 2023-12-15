@@ -293,6 +293,26 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           progress(message, currentFileSize, totalFileSize);
         }
         break;
+      case 'messageExportingProgress':
+        int? progressID = map['progressID'];
+        int exportedMessageCount = map['exportedMessageCount'];
+        int totalMessageCount = map['totalMessageCount'];
+        ZIMMessageExportingProgress? progress =
+        ZIMCommonData.messageExportingProgressMap[progressID ?? 0];
+        if (progress != null) {
+          progress(exportedMessageCount, totalMessageCount);
+        }
+        break;
+      case 'messageImportingProgress':
+        int? progressID = map['progressID'];
+        int importedMessageCount = map['importedMessageCount'];
+        int totalMessageCount = map['totalMessageCount'];
+        ZIMMessageImportingProgress? progress =
+        ZIMCommonData.messageImportingProgressMap[progressID ?? 0];
+        if (progress != null) {
+          progress(importedMessageCount, totalMessageCount);
+        }
+        break;
       case 'uploadMediaProgress':
         int? progressID = map['progressID'];
         ZIMMessage message =

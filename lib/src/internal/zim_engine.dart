@@ -1055,4 +1055,47 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMCallJoinSentResult(resultMap);
   }
 
+  @override
+  Future<void> importLocalMessages(String folderPath, ZIMMessageImportConfig config, ZIMMessageImportingProgress? progress) async {
+    if (progress != null) {
+      int progressID = ZIMCommonData.getSequence();
+      ZIMCommonData.messageImportingProgressMap[progressID] = progress;
+      return await channel.invokeMethod("importLocalMessages", {
+        "handle": handle,
+        "folderPath": folderPath,
+        "config": {},
+        'progressID': progressID
+      });
+      ZIMCommonData.messageImportingProgressMap.remove(progressID);
+    } else {
+      return await channel.invokeMethod("importLocalMessages", {
+        "handle": handle,
+        "folderPath": folderPath,
+        "config": {}
+      });
+    }
+  }
+
+  @override
+  Future<void> exportLocalMessages(String folderPath, ZIMMessageExportConfig config, ZIMMessageExportingProgress? progress) async{
+    if (progress != null) {
+      int progressID = ZIMCommonData.getSequence();
+      ZIMCommonData.messageExportingProgressMap[progressID] = progress;
+      return await channel.invokeMethod("exportLocalMessages", {
+        "handle": handle,
+        "folderPath": folderPath,
+        "config": {},
+        'progressID': progressID
+      });
+      ZIMCommonData.messageExportingProgressMap.remove(progressID);
+    } else {
+      return await channel.invokeMethod("exportLocalMessages", {
+        "handle": handle,
+        "folderPath": folderPath,
+        "config": {}
+      });
+    }
+  }
+
+
 }

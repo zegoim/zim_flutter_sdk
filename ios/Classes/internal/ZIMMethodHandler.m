@@ -2282,6 +2282,73 @@
     }];
 }
 
+- (void)exportLocalMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
+    NSString *folderPath = [call.arguments objectForKey:@"folderPath"];
+    NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
+
+    [zim exportLocalMessages:folderPath progress:^(unsigned long long exportedMessageCount, unsigned long long totalMessageCount) {
+        if(progressID == nil){
+            return;
+        }
+        
+        NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
+        [resultDic safeSetObject:@"messageExportingProgress" forKey:@"method"];
+        [resultDic safeSetObject:progressID forKey:@"progressID"];
+        [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:exportedMessageCount] forKey:@"exportedMessageCount"];
+        [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:totalMessageCount] forKey:@"totalMessageCount"];
+        self.events(resultDic);
+    } callback:^(ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            result(nil);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)importLocalMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
+    NSString *folderPath = [call.arguments objectForKey:@"folderPath"];
+    NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
+
+    [zim importLocalMessages:folderPath progress:^(unsigned long long importedMessageCount, unsigned long long totalMessageCount) {
+        if(progressID == nil){
+            return;
+        }
+        
+        NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
+        [resultDic safeSetObject:@"messageImportingProgress" forKey:@"method"];
+        [resultDic safeSetObject:progressID forKey:@"progressID"];
+        [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:importedMessageCount] forKey:@"importedMessageCount"];
+        [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:totalMessageCount] forKey:@"totalMessageCount"];
+        self.events(resultDic);
+    } callback:^(ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            result(nil);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+
 #pragma mark - Getter
 - (NSMutableDictionary *)engineMap {
     if (!_engineMap) {
