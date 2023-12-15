@@ -2178,6 +2178,9 @@ class ZIMMessageDeletedInfo {
 typedef ZIMMessageImportingProgress = void Function(
     int importedMessageCount, int totalMessageCount);
 
+typedef ZIMMessageExportingProgress = void Function(
+    int exportedMessageCount, int totalMessageCount);
+
 class ZIMMessageImportConfig {
 
   ZIMMessageImportConfig();

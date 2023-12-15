@@ -2851,30 +2851,6 @@ void ZIMPluginMethodHandler::queryMessageReactionUserList(flutter::EncodableMap&
     });
 }
 
-void ZIMPluginMethodHandler::addMessageReaction(flutter::EncodableMap& argument,
-	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-	auto handle = std::get<std::string>(argument[FTValue("handle")]);
-	auto zim = this->engineMap[handle];
-	if (!zim) {
-		result->Error("-1", "no native instance");
-		return;
-	}
-	auto messagePtr = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
-	auto reactionType = std::get<std::string>(argument[FTValue("reactionType")]);
-	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-
-	zim->addMessageReaction(reactionType, messagePtr, [=](const ZIMMessageReaction& reaction, const ZIMError& errorInfo) {
-		if (errorInfo.code == 0) {
-			FTMap retMap;
-			retMap[FTValue("reaction")] = ZIMPluginConverter::cnvZIMMessageReactionToMap(reaction);;
-			sharedPtrResult->Success(retMap);
-		}
-		else {
-			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
-		}
-		});
-}
-
 void ZIMPluginMethodHandler::importLocalMessages(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
