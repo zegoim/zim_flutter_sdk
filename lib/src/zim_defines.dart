@@ -522,6 +522,8 @@ class ZIMMessage {
   String localExtendedData = "";
   bool isBroadcastMessage = false;
   bool isServerMessage = false;
+  bool isMentionAll = false;
+  List<String> mentionUserIds = [];
   List<ZIMMessageReaction> reactions = [];
 }
 
@@ -664,8 +666,23 @@ class ZIMConversation {
   ZIMMessage? lastMessage;
   int orderKey = 0;
   bool isPinned =false;
+  List<ZIMMessageMentionedInfo> mentionInfoList = [];
   ZIMConversation();
 }
+
+enum ZIMMessageMentionedType{
+  unknown,
+  mention_me,
+  mention_all,
+  mention_all_and_me
+}
+
+class ZIMMessageMentionedInfo {
+  int messageID = 0;
+  String fromUserID = '';
+  ZIMMessageMentionedType type = ZIMMessageMentionedType.unknown;
+}
+
 
 class ZIMConversationQueryConfig {
   ZIMConversation? nextConversation;

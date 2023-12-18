@@ -146,6 +146,23 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMMessageMentionedTypeExtension on ZIMMessageMentionedType {
+  static const valueMap = {
+    ZIMMessageMentionedType.unknown: -1,
+    ZIMMessageMentionedType.mention_me: 1,
+    ZIMMessageMentionedType.mention_all: 2,
+    ZIMMessageMentionedType.mention_all_and_me: 3,
+  };
+  static const mapValue = {
+    -1: ZIMMessageMentionedType.unknown,
+    1: ZIMMessageMentionedType.mention_me,
+    2: ZIMMessageMentionedType.mention_all,
+    3: ZIMMessageMentionedType.mention_all_and_me,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMMediaFileTypeExtension on ZIMMediaFileType {
   static const valueMap = {
     ZIMMediaFileType.originalFile: 1,

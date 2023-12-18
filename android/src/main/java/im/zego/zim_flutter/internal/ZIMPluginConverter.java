@@ -60,6 +60,7 @@ import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
 import im.zego.zim.entity.ZIMMessageDeletedInfo;
+import im.zego.zim.entity.ZIMMessageMentionedInfo;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReaction;
 import im.zego.zim.entity.ZIMMessageReactionUserInfo;
@@ -168,6 +169,16 @@ public class ZIMPluginConverter {
         conversationMap.put("unreadMessageCount",conversation.unreadMessageCount);
         conversationMap.put("orderKey",conversation.orderKey);
         conversationMap.put("notificationStatus",conversation.notificationStatus.value());
+        conversationMap.put("mentionInfoList",conversation.mentionedInfoList);
+        ArrayList<HashMap<String,Object>> mentionInfoList = new ArrayList<>();
+        for (ZIMMessageMentionedInfo info : conversation.mentionedInfoList) {
+            HashMap<String,Object> mentionInfo = new HashMap<String,Object>();
+            mentionInfo.put("fromUserID",info.fromUserID);
+            mentionInfo.put("messageID",info.messageID);
+            mentionInfo.put("type",info.type.value());
+            mentionInfoList.add(mentionInfo);
+        }
+        conversationMap.put("mentionInfoList",mentionInfoList);
         if(conversation.lastMessage != null){
             conversationMap.put("lastMessage", mZIMMessage(conversation.lastMessage));
         }
@@ -203,6 +214,12 @@ public class ZIMPluginConverter {
         messageMap.put("reactions",mZIMMessageReactionList(message.getReactions()));
         messageMap.put("isBroadcastMessage",message.isBroadcastMessage());
         messageMap.put("isServerMessage",message.isServerMessage());
+        ArrayList<String> messageListMap = new ArrayList<>();
+        for (String userId : message.getMentionedUserIDs()) {
+            messageListMap.add(userId);
+        }
+        messageMap.put("mentionedUserIDs",messageListMap);
+        messageMap.put("isMentionAll",message.isMentionAll());
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -560,7 +577,6 @@ public class ZIMPluginConverter {
             isServerMessageField.setAccessible(true);
             isServerMessageField.set(message,ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isServerMessage")));
             isServerMessageField.setAccessible(false);
-
         }
         catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -595,7 +611,12 @@ public class ZIMPluginConverter {
                 e.printStackTrace();
             }
         }
-
+        message.setIsMentionAll(ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isMentionAll")));
+        ArrayList<String> mentionedUserIds = new ArrayList<>();
+        for (String userId : (ArrayList<String>) messageMap.get("mentionedUserIDs")) {
+            mentionedUserIds.add(userId);
+        }
+        message.setMentionedUserIDs(mentionedUserIds);
         return message;
     }
 

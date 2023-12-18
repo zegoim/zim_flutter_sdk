@@ -120,6 +120,14 @@ class ZIMConverter {
     }
     conversation.notificationStatus = ZIMConversationNotificationStatusExtension.mapValue[resultMap['notificationStatus']]!;
     conversation.isPinned = resultMap['isPinned'];
+    List<Map> mentionInfoList = resultMap['mentionInfoList'];
+    for (var value in mentionInfoList) {
+      ZIMMessageMentionedInfo info = ZIMMessageMentionedInfo();
+      info.fromUserID = value['fromUserID'];
+      info.messageID = value['messageID'];
+      info.type = ZIMMessageMentionedTypeExtension.mapValue[value['type']]!;
+      conversation.mentionInfoList.add(info);
+    }
     return conversation;
   }
 
@@ -146,6 +154,8 @@ class ZIMConverter {
     messageMap['localExtendedData'] = message.localExtendedData;
     messageMap['isBroadcastMessage'] = message.isBroadcastMessage;
     messageMap['isServerMessage'] = message.isServerMessage;
+    messageMap['isMentionAll'] = message.isMentionAll;
+    messageMap['mentionedUserIDs'] = message.mentionUserIds;
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -356,6 +366,8 @@ class ZIMConverter {
     message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
     message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
     message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
+    message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
+    message.mentionUserIds = resultMap['mentionedUserIDs'] is List<String> ? resultMap['mentionedUserIDs'] : [];
     return message;
   }
 
