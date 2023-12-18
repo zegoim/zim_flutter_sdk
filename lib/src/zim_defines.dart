@@ -300,6 +300,8 @@ enum ZIMMessageOrder {
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
 
+enum ZIMMessageDeleteType { messageListDelete, singleConversationAllMessagesDelete, allMessagesDelete }
+
 enum ZIMConversationEvent { added, updated, disabled, deleted}
 
 enum ZIMConversationNotificationStatus { notify, doNotDisturb }
@@ -2169,9 +2171,10 @@ class ZIMMessageReactionUserListQueriedResult {
 class ZIMMessageDeletedInfo {
   String conversationID;
   ZIMConversationType conversationType;
+  ZIMMessageDeleteType messageDeleteType;
   bool isDeleteConversationAllMessage;
   List<ZIMMessage> messageList;
 
-  ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.isDeleteConversationAllMessage,required this.messageList});
+  ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.messageDeleteType,required this.isDeleteConversationAllMessage,required this.messageList});
 }
 

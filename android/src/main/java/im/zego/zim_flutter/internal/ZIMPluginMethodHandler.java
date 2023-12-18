@@ -60,6 +60,7 @@ import im.zego.zim.callback.ZIMMediaMessageSentCallback;
 import im.zego.zim.callback.ZIMMessageDeletedCallback;
 import im.zego.zim.callback.ZIMMessageInsertedCallback;
 import im.zego.zim.callback.ZIMMessageQueriedCallback;
+import im.zego.zim.callback.ZIMConversationMessagesAllDeletedCallback;
 import im.zego.zim.callback.ZIMMessageReactionAddedCallback;
 import im.zego.zim.callback.ZIMMessageReactionDeletedCallback;
 import im.zego.zim.callback.ZIMMessageReactionUserListQueriedCallback;
@@ -1150,6 +1151,28 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void deleteAllConversationMessages(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMMessageDeleteConfig config = ZIMPluginConverter.oZIMMessageDeleteConfig(Objects.requireNonNull(call.argument("config")));
+
+        zim.deleteAllConversationMessages(config, new ZIMConversationMessagesAllDeletedCallback() {
+            @Override
+            public void onConversationMessagesAllDeleted(ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    result.success(null);
+                }else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
     public static void deleteMessages(MethodCall call, Result result) {
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
@@ -1179,8 +1202,8 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    String handle = call.argument("handle");
     public static void searchLocalMessages(MethodCall call, Result result) {
-        String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if(zim == null) {
             result.error("-1", "no native instance",null);

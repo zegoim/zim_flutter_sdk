@@ -1329,7 +1329,8 @@ public class ZIMPluginConverter {
     public static HashMap<String,Object> mZIMMessageDeletedInfo(ZIMMessageDeletedInfo info){
         HashMap<String,Object> map = new HashMap<>();
         map.put("conversationID",info.conversationID);
-        map.put(" conversationType",info.conversationType.value());
+        map.put("conversationType",info.conversationType.value());
+        map.put("messageDeleteType",info.messageDeleteType.value());
         map.put("isDeleteConversationAllMessage",info.isDeleteConversationAllMessage);
         map.put("messageList",ZIMPluginConverter.mZIMMessageList(info.messageList));
         return map;

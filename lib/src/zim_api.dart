@@ -531,6 +531,8 @@ abstract class ZIM {
   Future<ZIMMessageDeletedResult> deleteAllMessage(String conversationID,
       ZIMConversationType conversationType, ZIMMessageDeleteConfig config);
 
+  Future<void> deleteAllConversationMessages(ZIMMessageDeleteConfig config);
+
   /// Supported versions: 2.1.5 and above.
 
   /// Detail description: This method implements the function of deleting messages.

@@ -1628,6 +1628,7 @@ class ZIMConverter {
 
     return ZIMMessageDeletedInfo(conversationID: map['conversationID'],
       conversationType: ZIMConversationTypeExtension.mapValue[map['conversationType']]!,
+      messageDeleteType: ZIMMessageDeleteTypeExtension.mapValue[map['messageDeleteType']]!,
       isDeleteConversationAllMessage: map['isDeleteConversationAllMessage'],
       messageList: ZIMConverter.oZIMMessageList(map['messageList']));
   }
