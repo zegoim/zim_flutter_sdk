@@ -610,3 +610,16 @@ void ZIMPluginEventHandler::onMessageReactionsChanged(ZIM * zim,const std::vecto
         eventSink_->Success(retMap);
     }
 }
+
+void ZIMPluginEventHandler::onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangedAction & action,
+                                const std::vector<ZIMUserInfo> & userList) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onBlacklistChanged");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("action")] = FTValue((int32_t)action);
+        retMap[FTValue("userList")] = ZIMPluginConverter::cnvZIMUserListToArray(userList);
+        eventSink_->Success(retMap);
+    }
+}

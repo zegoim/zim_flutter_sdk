@@ -155,6 +155,9 @@ protected:
 
     void onMessageReactionsChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions);
 
+    void onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangedAction & action,
+                                const std::vector<ZIMUserInfo> & userList);
+
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
 

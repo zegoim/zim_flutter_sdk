@@ -1162,3 +1162,10 @@ ZIMMessageReactionUserQueryConfig ZIMPluginConverter::cnvZIMMessageReactionUserQ
 	config.reactionType = std::get<std::string>(configMap[FTValue("reactionType")]);
 	return config;
 }
+
+ZIMBlacklistQueryConfig ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(FTMap configMap) {
+	ZIMBlacklistQueryConfig config;
+	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+	config.nextFlag = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
+	return config;
+}
