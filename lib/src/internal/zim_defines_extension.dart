@@ -484,3 +484,146 @@ extension ZIMCXHandleTypeExtension on ZIMCXHandleType {
 
   int get value => valueMap[this]?? - 1;
 }
+
+extension ZIMFriendApplicationStateExtension on ZIMFriendApplicationState {
+  static const valueMap = {
+    ZIMFriendApplicationState.unknown : -1,
+    ZIMFriendApplicationState.waiting: 1,
+    ZIMFriendApplicationState.accepted: 2,
+    ZIMFriendApplicationState.rejected: 3,
+    ZIMFriendApplicationState.expired: 4,
+    ZIMFriendApplicationState.disabled: 5
+  };
+
+  static const mapValue = {
+    -1:ZIMFriendApplicationState.unknown,
+    1:ZIMFriendApplicationState.waiting,
+    2:ZIMFriendApplicationState.accepted,
+    3:ZIMFriendApplicationState.rejected,
+    4:ZIMFriendApplicationState.expired,
+    5:ZIMFriendApplicationState.disabled
+  };
+
+  int get value => valueMap[this]?? - 1;
+}
+
+extension ZIMFriendApplicationTypeExtension on ZIMFriendApplicationType{
+  static const valueMap = {
+    ZIMFriendApplicationType.unknown : -1,
+    ZIMFriendApplicationType.received: 1,
+    ZIMFriendApplicationType.sent: 2,
+    ZIMFriendApplicationType.both:3
+  };
+
+  static const mapValue = {
+    -1: ZIMFriendApplicationType.unknown,
+    1: ZIMFriendApplicationType.received,
+    2:ZIMFriendApplicationType.sent,
+    3:ZIMFriendApplicationType.both
+  };
+
+  int get value => valueMap[this]?? - 1;
+}
+
+
+
+// ZIMFriendDeleteType Enum Extension
+extension ZIMFriendDeleteTypeExtension on ZIMFriendDeleteType {
+  static const valueMap = {
+    ZIMFriendDeleteType.both: 0,
+    ZIMFriendDeleteType.single: 1,
+  };
+
+  static const mapValue = {
+    0: ZIMFriendDeleteType.both,
+    1: ZIMFriendDeleteType.single,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+// ZIMFriendListChangeAction Enum Extension
+extension ZIMFriendListChangeActionExtension on ZIMFriendListChangeAction {
+  static const valueMap = {
+    ZIMFriendListChangeAction.added: 0,
+    ZIMFriendListChangeAction.deleted: 1,
+  };
+
+  static const mapValue = {
+    0: ZIMFriendListChangeAction.added,
+    1: ZIMFriendListChangeAction.deleted,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMFriendApplicationListChangeActionExtension on ZIMFriendApplicationListChangeAction {
+  static const valueMap = {
+    ZIMFriendApplicationListChangeAction.added:0,
+    ZIMFriendApplicationListChangeAction.deleted:1,
+  };
+
+  static const mapValue = {
+    0:ZIMFriendApplicationListChangeAction.added,
+    1:ZIMFriendApplicationListChangeAction.deleted,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+// ZIMFriendRelationCheckType Enum Extension
+extension ZIMFriendRelationCheckTypeExtension on ZIMFriendRelationCheckType {
+  static const valueMap = {
+    ZIMFriendRelationCheckType.unknown: -1,
+    ZIMFriendRelationCheckType.both: 0,
+    ZIMFriendRelationCheckType.sent: 1,
+  };
+
+  static const mapValue = {
+    -1: ZIMFriendRelationCheckType.unknown,
+    0: ZIMFriendRelationCheckType.both,
+    1: ZIMFriendRelationCheckType.sent,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+// ZIMUserRelationType Enum Extension
+extension ZIMUserRelationTypeExtension on ZIMUserRelationType {
+  static const valueMap = {
+    ZIMUserRelationType.unknown: 0,
+    ZIMUserRelationType.singleNO: 1,
+    ZIMUserRelationType.singleHave: 2,
+    ZIMUserRelationType.bothAllNo: 3,
+    ZIMUserRelationType.bothSelfHave: 4,
+    ZIMUserRelationType.bothOtherHave: 5,
+    ZIMUserRelationType.bothAllHave: 6,
+  };
+
+  static const mapValue = {
+    0: ZIMUserRelationType.unknown,
+    1: ZIMUserRelationType.singleNO,
+    2: ZIMUserRelationType.singleHave,
+    3: ZIMUserRelationType.bothAllNo,
+    4: ZIMUserRelationType.bothSelfHave,
+    5: ZIMUserRelationType.bothOtherHave,
+    6: ZIMUserRelationType.bothAllHave,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+// ZIMBlacklistChangedAction Enum Extension
+extension ZIMBlacklistChangedActionExtension on ZIMBlacklistChangedAction {
+  static const valueMap = {
+    ZIMBlacklistChangedAction.added: 0,
+    ZIMBlacklistChangedAction.deleted: 1,
+  };
+
+  static const mapValue = {
+    0: ZIMBlacklistChangedAction.added,
+    1: ZIMBlacklistChangedAction.deleted,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}

@@ -31,16 +31,20 @@ class ZIMConverter {
 
   static ZIMUserFullInfo oZIMUserFullInfo(Map userFullInfoBasicMap) {
     ZIMUserFullInfo userFullInfo = ZIMUserFullInfo();
-    userFullInfo.baseInfo = oZIMUserInfo(userFullInfoBasicMap['baseInfo']);
+    userFullInfo.baseInfo = oZIMUserInfo(userFullInfoBasicMap['baseInfo'])!;
     userFullInfo.extendedData = userFullInfoBasicMap['extendedData'];
     userFullInfo.userAvatarUrl = userFullInfoBasicMap['userAvatarUrl'];
     return userFullInfo;
   }
 
-  static ZIMUserInfo oZIMUserInfo(Map userInfoBasicMap) {
-    ZIMUserInfo userInfo = ZIMUserInfo();
+  static ZIMUserInfo? oZIMUserInfo(Map? userInfoBasicMap,[ZIMUserInfo? userInfo]) {
+    if(userInfoBasicMap == null){
+      return null;
+    }
+    userInfo ??= ZIMUserInfo();
     userInfo.userID = userInfoBasicMap['userID'];
     userInfo.userName = userInfoBasicMap['userName'];
+    userInfo.avatar = userInfoBasicMap['avatar'];
     return userInfo;
   }
 
@@ -662,7 +666,7 @@ class ZIMConverter {
   static List<ZIMUserInfo> oZIMUserInfoList(List memberListBasic) {
     List<ZIMUserInfo> memberList = [];
     for (Map memberInfoMap in memberListBasic) {
-      memberList.add(oZIMUserInfo(memberInfoMap));
+      memberList.add(oZIMUserInfo(memberInfoMap)!);
     }
     return memberList;
   }
@@ -1631,4 +1635,198 @@ class ZIMConverter {
       isDeleteConversationAllMessage: map['isDeleteConversationAllMessage'],
       messageList: ZIMConverter.oZIMMessageList(map['messageList']));
   }
+
+  static ZIMFriendApplicationInfo oZIMFriendApplicationInfo(Map map){
+    return ZIMFriendApplicationInfo(applyUser: oZIMUserInfo(map['applyUser']), wording: map['wording'], friendAlias: map['friendAlias'], createTime: map['createTime'], updateTime: map['updateTime'], friendAttributes: Map<String,String>.from(map['friendAttributes']), type: ZIMFriendApplicationTypeExtension.mapValue[map['type']]!, state: ZIMFriendApplicationStateExtension.mapValue[map['state']]!);
+  }
+
+  static List<ZIMFriendApplicationInfo> oZIMFriendApplicationInfoList(List list){
+    List<ZIMFriendApplicationInfo> infoList = [];
+    for(Map map in list){
+      infoList.add(oZIMFriendApplicationInfo(map));
+    }
+    return infoList;
+  }
+
+  static Map mZIMFriendApplicationAcceptConfig(ZIMFriendApplicationAcceptConfig config){
+    return {
+      'friendAlias':config.friendAlias,
+      'friendAttributes':config.friendAttributes,
+      'pushConfig':mZIMPushConfig(config.pushConfig)
+    };
+  }
+
+  static ZIMFriendApplicationAcceptedResult oZIMFriendApplicationAcceptedResult(Map map){
+    return ZIMFriendApplicationAcceptedResult(friendApplicationInfo: oZIMFriendApplicationInfo(map['friendApplicationInfo']));
+  }
+
+  static Map mZIMFriendAddConfig(ZIMFriendAddConfig config) {
+    return {
+      'wording': config.wording,
+      'alias': config.alias,
+      'attributes': config.attributes,
+    };
+  }
+
+  static Map mZIMFriendDeleteConfig(ZIMFriendDeleteConfig config) {
+    return {
+      'type': config.type.value, // Assuming ZIMFriendDeleteType has a value extension
+    };
+  }
+
+  static ZIMFriendInfo? oZIMFriendInfo(Map? map,[ZIMFriendInfo? friendInfo]) {
+    if(map == null){
+      return null;
+    }
+    friendInfo ??= ZIMFriendInfo();
+    oZIMUserInfo(map,friendInfo);
+    friendInfo.friendAlias = map['friendAlias'];
+    friendInfo.createTime = map['createTime'];
+    friendInfo.wording = map['wording'];
+    friendInfo.friendAttributes = Map<String,String>.from(map['friendAttributes']);
+    return friendInfo;
+  }
+
+  static List<ZIMFriendInfo>? oZIMFriendInfoList(List? list){
+    if(list == null){
+      return null;
+    }
+    List<ZIMFriendInfo> infoList = [];
+    for(Map map in list){
+      infoList.add(oZIMFriendInfo(map)!);
+    }
+    return infoList;
+  }
+
+  static Map mZIMFriendListQueryConfig(ZIMFriendListQueryConfig config) {
+    return {
+      'count': config.count,
+      'nextFlag': config.nextFlag,
+    };
+  }
+
+  static Map mZIMFriendRelationCheckConfig(ZIMFriendRelationCheckConfig config) {
+    return {
+      'type': ZIMFriendRelationCheckTypeExtension.valueMap[config.type],
+    };
+  }
+
+  static ZIMFriendRelationInfo oZIMFriendRelationInfo(Map map) {
+    return ZIMFriendRelationInfo()
+      ..type = ZIMUserRelationTypeExtension.mapValue[map['type']]!
+      ..userID = map['userID'] ?? "";
+  }
+  
+  static List<ZIMFriendRelationInfo> oZIMFriendRelationInfoList(List basicList){
+    List<ZIMFriendRelationInfo> infoList = [];
+    for(Map map in basicList){
+      infoList.add(oZIMFriendRelationInfo(map));
+    }
+    return infoList;
+  }
+
+  static Map mZIMSendFriendApplicationConfig(ZIMSendFriendApplicationConfig config) {
+    return {
+      'wording': config.wording,
+      'alias': config.alias,
+      'attributes': config.attributes,
+      'pushConfig': config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null, // Assuming mZIMPushConfig is defined
+    };
+  }
+
+  static Map mZIMFriendApplicationRejectConfig(ZIMFriendApplicationRejectConfig config) {
+    return {
+      'pushConfig': mZIMPushConfig(config.pushConfig),
+    };
+  }
+
+  static Map mZIMFriendApplicationListQueryConfig(ZIMFriendApplicationListQueryConfig config) {
+    return {
+      'count': config.count,
+      'nextFlag': config.nextFlag,
+    };
+  }
+
+  static Map mZIMBlacklistQueryConfig(ZIMBlacklistQueryConfig config) {
+    return {
+      'nextFlag': config.nextFlag,
+      'count': config.count,
+    };
+  }
+
+  static ZIMFriendAddedResult oZIMFriendAddedResult(Map map) {
+    return ZIMFriendAddedResult()
+      ..friendInfo = oZIMFriendInfo(map['friendInfo']);
+  }
+
+  static ZIMFriendAliasUpdatedResult oZIMFriendAliasUpdatedResult(Map map) {
+    return ZIMFriendAliasUpdatedResult()
+      ..friendInfo = oZIMFriendInfo(map['friendInfo']);
+  }
+
+  static ZIMFriendApplicationListQueriedResult oZIMFriendApplicationListQueriedResult(Map map) {
+    return ZIMFriendApplicationListQueriedResult()
+      ..infoArrayList = List<ZIMFriendApplicationInfo>.from(map['infoArrayList'].map((x) => oZIMFriendApplicationInfo(x)))
+      ..nextFlag = map['nextFlag'];
+  }
+
+  static ZIMFriendApplicationRejectedResult oZIMFriendApplicationRejectedResult(Map map) {
+    return ZIMFriendApplicationRejectedResult()
+      ..zimUserInfo = oZIMUserInfo(map['zimUserInfo']);
+  }
+
+  static ZIMFriendAttributesUpdatedResult oZIMFriendAttributesUpdatedResult(Map map) {
+    return ZIMFriendAttributesUpdatedResult()
+      ..friendInfo = oZIMFriendInfo(map['friendInfo']);
+  }
+
+  static ZIMFriendDeletedResult oZIMFriendDeletedResult(Map map) {
+    return ZIMFriendDeletedResult()
+      ..errorUserList = oZIMErrorUserInfoList(map['errorUserList']); // Assuming oZIMErrorUserInfo exists
+  }
+
+  static ZIMFriendListQueriedResult oZIMFriendListQueriedResult(Map map) {
+    return ZIMFriendListQueriedResult()
+      ..friendList = oZIMFriendInfoList(map['friendList'])
+      ..nextFlag = map['nextFlag'];
+  }
+
+  static ZIMFriendRelationCheckedResult oZIMFriendRelationCheckedResult(Map map) {
+    return ZIMFriendRelationCheckedResult()
+      ..friendRelationInfoArrayList = oZIMFriendRelationInfoList(map['friendRelationInfoArrayList'])
+      ..errorUserInfos = oZIMErrorUserInfoList(map['errorUserInfos']); // Assuming oZIMErrorUserInfo exists
+  }
+
+  static ZIMFriendsInfoQueriedResult oZIMFriendsInfoQueriedResult(Map map) {
+    return ZIMFriendsInfoQueriedResult()
+      ..zimFriendInfos = oZIMFriendInfoList(map['zimFriendInfos'])
+      ..errorUserInfos = oZIMErrorUserInfoList(map['errorUserInfos']); // Assuming oZIMErrorUserInfo exists
+  }
+
+  static ZIMSendFriendApplicationResult oZIMSendFriendApplicationResult(Map map) {
+    return ZIMSendFriendApplicationResult()
+      ..applicationInfo = oZIMFriendApplicationInfo(map['applicationInfo']);
+  }
+
+  static ZIMBlacklistCheckedResult oZIMBlacklistCheckedResult(Map map) {
+    return ZIMBlacklistCheckedResult()
+      ..isUserInBlacklist = map['isUserInBlacklist'];
+  }
+
+  static ZIMBlacklistQueriedResult oZIMBlacklistQueriedResult(Map map) {
+    return ZIMBlacklistQueriedResult()
+      ..blacklist = oZIMUserInfoList(map['blacklist'])
+      ..nextFlag = map['nextFlag'];
+  }
+
+  static ZIMBlacklistUsersAddedResult oZIMBlacklistUsersAddedResult(Map map) {
+    return ZIMBlacklistUsersAddedResult()
+      ..errorUserList = oZIMErrorUserInfoList(map['errorUserList']);
+  }
+
+  static ZIMBlacklistUsersRemovedResult oZIMBlacklistUsersRemovedResult(Map map) {
+    return ZIMBlacklistUsersRemovedResult()
+      ..errorUserInfoArrayList = oZIMErrorUserInfoList(map['errorUserInfoArrayList']); // Assuming oZIMErrorUserInfo exists
+  }
+
 }
