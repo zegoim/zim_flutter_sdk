@@ -2912,7 +2912,7 @@ void ZIMPluginMethodHandler::queryBlackList(flutter::EncodableMap& argument,std:
         return;
     }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    ZIMBlacklistQueryConfig config = ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(argument[FTValue("config")]);
+    ZIMBlacklistQueryConfig config = ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
     zim->queryBlackList(config, [=](const std::vector<ZIMUserInfo> &blacklist, long long nextFlag, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
