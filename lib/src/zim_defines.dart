@@ -523,7 +523,7 @@ class ZIMMessage {
   bool isBroadcastMessage = false;
   bool isServerMessage = false;
   bool isMentionAll = false;
-  List<String> mentionUserIds = [];
+  List<String> mentionedUserIds = [];
   List<ZIMMessageReaction> reactions = [];
 }
 
@@ -666,7 +666,7 @@ class ZIMConversation {
   ZIMMessage? lastMessage;
   int orderKey = 0;
   bool isPinned =false;
-  List<ZIMMessageMentionedInfo> mentionInfoList = [];
+  List<ZIMMessageMentionedInfo> mentionedInfoList = [];
   ZIMConversation();
 }
 

@@ -169,7 +169,7 @@ public class ZIMPluginConverter {
         conversationMap.put("unreadMessageCount",conversation.unreadMessageCount);
         conversationMap.put("orderKey",conversation.orderKey);
         conversationMap.put("notificationStatus",conversation.notificationStatus.value());
-        conversationMap.put("mentionInfoList",conversation.mentionedInfoList);
+        conversationMap.put("mentionedInfoList",conversation.mentionedInfoList);
         ArrayList<HashMap<String,Object>> mentionInfoList = new ArrayList<>();
         for (ZIMMessageMentionedInfo info : conversation.mentionedInfoList) {
             HashMap<String,Object> mentionInfo = new HashMap<String,Object>();
