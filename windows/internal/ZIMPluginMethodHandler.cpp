@@ -2859,8 +2859,13 @@ void ZIMPluginMethodHandler::addUsersToBlacklist(flutter::EncodableMap& argument
         return;
     }
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto& userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->addUsersToBlacklist(userIDs, [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo){
+    zim->addUsersToBlacklist(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("errorUserList")] = ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
@@ -2881,8 +2886,13 @@ void ZIMPluginMethodHandler::removeUsersFromBlacklist(flutter::EncodableMap& arg
     }
 
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto& userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->removeUsersFromBlacklist(userIDs, [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo){
+    zim->removeUsersFromBlacklist(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("errorUserList")] = ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
@@ -2922,7 +2932,7 @@ void ZIMPluginMethodHandler::checkUserIsInBlackList(flutter::EncodableMap& argum
         result->Error("-1", "no native instance");
         return;
     }
-    auto userID = std::get<FTValue>(argument[FTValue("userID")]);
+    auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim_->checkUserIsInBlackList(userID, [=](bool isUserInBlacklist, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
