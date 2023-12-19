@@ -124,8 +124,8 @@
     [conversationDic safeSetObject:[NSNumber numberWithLongLong:conversation.orderKey] forKey:@"orderKey"];
     [conversationDic safeSetObject:[ZIMPluginConverter mZIMMessage:conversation.lastMessage] forKey:@"lastMessage"];
     [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
+    [conversationDic safeSetObject:[ZIMPluginConverter mZIMMentionedInfoList:conversation.mentionedInfoList] forKey:@"mentionedInfoList"];
     return conversationDic;
-    
 }
 
 +(nullable NSArray *)mZIMConversationList:(nullable NSArray<ZIMConversation *> *)conversationList{
@@ -246,12 +246,13 @@
             ((ZIMSystemMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
             break;
         }
-        case ZIMMessageTypeCustom:
+        case ZIMMessageTypeCustom:{
             msg = [[ZIMCustomMessage alloc] init];
             ((ZIMCustomMessage *)msg).message = [messageDic safeObjectForKey:@"message"];
             ((ZIMCustomMessage *)msg).searchedContent = [messageDic safeObjectForKey:@"searchedContent"];
             ((ZIMCustomMessage *)msg).subType = ((NSNumber *)[messageDic safeObjectForKey:@"subType"]).unsignedIntValue;
             break;
+        }
         case ZIMMessageTypeRevoke:{
             msg = [[ZIMRevokeMessage alloc] init];
             [((ZIMRevokeMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"revokeType"]  forKey:@"revokeType"];
@@ -261,10 +262,22 @@
             [((ZIMRevokeMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"operatedUserID"]  forKey:@"operatedUserID"];
             [((ZIMRevokeMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"originalTextMessageContent"]  forKey:@"originalTextMessageContent"];
             [((ZIMRevokeMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"revokeExtendedData"]  forKey:@"revokeExtendedData"];
+            break;
+        }
+        case ZIMMessageTypeCombine:{
+            msg = [[ZIMCombineMessage alloc] init];
+            [((ZIMCombineMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"combindID"]  forKey:@"combineID"];
+            ((ZIMCombineMessage *)msg).title = [messageDic safeObjectForKey:@"title"];
+            ((ZIMCombineMessage *)msg).summary = [messageDic safeObjectForKey:@"summary"];
+            NSArray *messageList = [ZIMPluginConverter oZIMMessageList:[messageDic safeObjectForKey:@"messageList"]];
+            ((ZIMCombineMessage *)msg).messageList = messageList;
+            break;
         }
         default:
             break;
     }
+    ((ZIMCombineMessage *)msg).mentionedUserIDs = [messageDic safeObjectForKey:@"mentionUserIDs"];
+    ((ZIMCombineMessage *)msg).isMentionAll =[messageDic safeObjectForKey:@"isMentionAll"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"type"]  forKey:@"type"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"messageID"]  forKey:@"messageID"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"localMessageID"]  forKey:@"localMessageID"];
@@ -318,6 +331,9 @@
     [messageDic safeSetObject:message.localExtendedData forKey:@"localExtendedData"];
     [messageDic safeSetObject:[NSNumber numberWithBool:message.isBroadcastMessage] forKey:@"isBroadcastMessage"];
     [messageDic safeSetObject:[ZIMPluginConverter mZIMMessageReactionList:message.reactions] forKey:@"reactions"];
+    [messageDic safeSetObject:[NSNumber numberWithBool:message.isMentionAll] forKey:@"isMentionAll"];
+    [messageDic safeSetObject:message.mentionedUserIDs forKey:@"mentionedUserIDs"];
+    
     if([message isKindOfClass:[ZIMMediaMessage class]]){
         ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
         [messageDic safeSetObject:mediaMsg.fileLocalPath forKey:@"fileLocalPath"];
@@ -401,6 +417,14 @@
             [messageDic safeSetObject:revokeMsg.originalTextMessageContent forKey:@"originalTextMessageContent"];
             break;
         }
+        case ZIMMessageTypeCombine:{
+            ZIMCombineMessage *combineMessage = (ZIMCombineMessage *)message;
+            [messageDic safeSetObject:combineMessage.title forKey:@"title"];
+            [messageDic safeSetObject:combineMessage.summary forKey:@"summary"];
+            [messageDic safeSetObject:combineMessage.combineID forKey:@"combineID"];
+            [messageDic safeSetObject:[ZIMPluginConverter mZIMMessageList:combineMessage.messageList] forKey:@"messageList"];
+        }
+            break;
         default:
             break;
     }
@@ -414,6 +438,21 @@
     NSMutableArray *DicArr = [[NSMutableArray alloc] init];
     for (ZIMMessage *msg in messageList) {
         [DicArr addObject:[ZIMPluginConverter mZIMMessage:msg]];
+    }
+    return DicArr;
+}
+
++(nullable NSArray *)mZIMMentionedInfoList:(nullable NSArray<ZIMMessageMentionedInfo *>*)mentionedInfoList{
+    if(mentionedInfoList == nil || mentionedInfoList == NULL || [mentionedInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *DicArr = [[NSMutableArray alloc] init];
+    for (ZIMMessageMentionedInfo *info in mentionedInfoList) {
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        [dic safeSetObject:[NSNumber numberWithInt:(int)info.type] forKey:@"type"];
+        [dic safeSetObject:info.fromUserID forKey:@"fromeUserID"];
+        [dic safeSetObject:[NSNumber numberWithLongLong:info.messageID] forKey:@"messageID"];
+        [DicArr addObject:dic];
     }
     return DicArr;
 }

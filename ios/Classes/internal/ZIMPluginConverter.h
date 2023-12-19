@@ -47,6 +47,8 @@
 
 +(nullable NSArray *)mZIMMessageList:(nullable NSArray<ZIMMessage *>*)messageList;
 
++(nullable NSArray *)mZIMMentionedInfoList:(nullable NSArray<ZIMMessageMentionedInfo *>*)mentionedInfoList;
+
 +(nullable NSArray<ZIMMessage *>*)oZIMMessageList:(nullable NSArray *)basicList;
 
 +(nullable ZIMMessageDeleteConfig *)oZIMMessageDeleteConfig:(nullable NSDictionary *)configDic;
