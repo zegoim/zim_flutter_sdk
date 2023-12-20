@@ -727,6 +727,31 @@
     }];
 }
 
+- (void)setConversationDraft:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments safeObjectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+
+    NSString *draft = [call.arguments safeObjectForKey:@"draft"];
+    NSString *conversationID = [call.arguments safeObjectForKey:@"conversationID"];
+    ZIMConversationType conversationType = [[call.arguments safeObjectForKey:@"conversationType"] unsignedIntegerValue];
+    [zim setConversationDraft:draft conversationID:conversationID conversationType:conversationType callback:^(ZIMConversation *conversation,
+                                                                                                 ZIMError *errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMConversation:conversation]forKey:@"conversation"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
 - (void)sendMessageReceiptsRead:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments safeObjectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];

@@ -197,6 +197,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "sendConversationMessageReceiptRead") {
         ZIMPluginMethodHandler::getInstance().sendConversationMessageReceiptRead(argument, std::move(result));
     }
+	else if (method_call.method_name() == "setConversationDraft") {
+		ZIMPluginMethodHandler::getInstance().setConversationDraft(argument, std::move(result));
+	}
     else if (method_call.method_name() == "sendMessageReceiptsRead") {
         ZIMPluginMethodHandler::getInstance().sendMessageReceiptsRead(argument, std::move(result));
     }
