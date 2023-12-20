@@ -120,8 +120,7 @@ class ZIMConverter {
     }
     conversation.notificationStatus = ZIMConversationNotificationStatusExtension.mapValue[resultMap['notificationStatus']]!;
     conversation.isPinned = resultMap['isPinned'];
-    List<Map> mentionInfoList = resultMap['mentionInfoList'];
-    for (var value in mentionInfoList) {
+    for (var value in resultMap['mentionInfoList']) {
       ZIMMessageMentionedInfo info = ZIMMessageMentionedInfo();
       info.fromUserID = value['fromUserID'];
       info.messageID = value['messageID'];
