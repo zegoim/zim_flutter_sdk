@@ -214,11 +214,7 @@ public class ZIMPluginConverter {
         messageMap.put("reactions",mZIMMessageReactionList(message.getReactions()));
         messageMap.put("isBroadcastMessage",message.isBroadcastMessage());
         messageMap.put("isServerMessage",message.isServerMessage());
-        ArrayList<String> userIdMap = new ArrayList<>();
-        for (String userId : message.getMentionedUserIDs()) {
-            userIdMap.add(userId);
-        }
-        messageMap.put("mentionedUserIDs",userIdMap);
+        messageMap.put("mentionedUserIDs",message.getMentionedUserIDs());
         messageMap.put("isMentionAll",message.isMentionAll());
         switch(message.getType()){
             case TEXT:
