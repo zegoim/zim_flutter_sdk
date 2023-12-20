@@ -367,7 +367,7 @@ class ZIMConverter {
     message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
     message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
     message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
-    message.mentionedUserIds = resultMap['mentionedUserIDs'] is List<String> ? resultMap['mentionedUserIDs'] : [];
+    message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
     return message;
   }
 
