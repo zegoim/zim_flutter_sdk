@@ -707,7 +707,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("userName",userInfo.userName);
-        userInfoMap.put("avatar",userInfo.avatar);
+        userInfoMap.put("userAvatarUrl",userInfo.userAvatarUrl);
         return userInfoMap;
     }
 
@@ -717,7 +717,7 @@ public class ZIMPluginConverter {
         }
         userInfo.userID = (String) map.get("userID");
         userInfo.userName = (String) map.get("userName");
-        userInfo.avatar = (String) map.get("avatar");
+        userInfo.userAvatarUrl = (String) map.get("userAvatarUrl");
         return userInfo;
     }
 
