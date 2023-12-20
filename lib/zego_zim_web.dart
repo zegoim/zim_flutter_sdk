@@ -506,12 +506,6 @@ class ZegoZimPlugin {
 
     Map resultMap = jsObjectToMap(result);
 
-    resultMap["conversationList"].forEach((conversation) {
-      var index = resultMap["conversationList"].indexOf(conversation);
-      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(
-          resultMap["conversationList"][index]["lastMessage"]);
-    });
-
     return resultMap;
   }
 
@@ -604,12 +598,6 @@ class ZegoZimPlugin {
     });
 
     final resultMap = jsObjectToMap(result);
-
-    resultMap["messageList"].forEach((message) {
-      var index = resultMap["messageList"].indexOf(message);
-      resultMap["messageList"][index] =
-          convertZIMMessage(resultMap["messageList"][index]);
-    });
 
     return resultMap;
   }
@@ -797,7 +785,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return handleSendMessageResult(result);
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> downloadMediaFile(
@@ -816,7 +804,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return handleSendMessageResult(result);
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> sendRoomMessage(
@@ -830,7 +818,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return handleSendMessageResult(result);
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> sendGroupMessage(
@@ -844,7 +832,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return handleSendMessageResult(result);
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> deleteMessages(dynamic messageList,
@@ -1390,8 +1378,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    Map resultMap = handleSendMessageResult(result);
-    resultMap["messageID"] = messageID;
+    Map resultMap = jsObjectToMap(result);
 
     return resultMap;
   }
@@ -1411,8 +1398,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    Map resultMap = handleSendMessageResult(result);
-    resultMap["messageID"] = messageID;
+    Map resultMap = jsObjectToMap(result);
 
     return resultMap;
   }
@@ -1528,12 +1514,6 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    resultMap["conversationList"].forEach((conversation) {
-      var index = resultMap["conversationList"].indexOf(conversation);
-      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(
-          resultMap["conversationList"][index]["lastMessage"]);
-    });
-
     return resultMap;
   }
 
@@ -1572,9 +1552,6 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    resultMap["conversation"]["lastMessage"] =
-        convertZIMMessage(resultMap["conversation"]["lastMessage"]);
-
     return resultMap;
   }
 
@@ -1588,12 +1565,6 @@ class ZegoZimPlugin {
     });
 
     final resultMap = jsObjectToMap(result);
-
-    for (var infoMap in resultMap["conversationSearchInfoList"]) {
-      for (var messageMap in infoMap["messageList"]) {
-        messageMap = convertZIMMessage(messageMap);
-      }
-    }
 
     resultMap["nextFlag"] = resultMap["nextFlag"] is int ? resultMap["nextFlag"] : 0;
 
@@ -1611,14 +1582,6 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    for (var messageMap in resultMap["messageList"]) {
-      messageMap = convertZIMMessage(messageMap);
-    }
-
-    if (resultMap["nextMessage"] != null) {
-      resultMap["nextMessage"] = convertZIMMessage(resultMap["nextMessage"]);
-    }
-
     return resultMap;
   }
 
@@ -1632,14 +1595,6 @@ class ZegoZimPlugin {
     });
 
     final resultMap = jsObjectToMap(result);
-
-    for (var messageMap in resultMap["messageList"]) {
-      messageMap = convertZIMMessage(messageMap);
-    }
-
-    if (resultMap["nextMessage"] != null) {
-      resultMap["nextMessage"] = convertZIMMessage(resultMap["nextMessage"]);
-    }
 
     return resultMap;
   }
@@ -2069,13 +2024,6 @@ class ZegoZimPlugin {
 
     List<dynamic> infoList = data["infoList"];
 
-    infoList.forEach((info) {
-      if (info["conversation"]["lastMessage"] != null) {
-        info["conversation"]["lastMessage"] =
-          convertZIMMessage(info["conversation"]["lastMessage"]);
-      }
-    });
-
     List<ZIMConversationChangeInfo> conversationChangeInfoList =
         ZIMConverter.oZIMConversationChangeInfoList(infoList);
 
@@ -2152,10 +2100,7 @@ class ZegoZimPlugin {
       return;
     }
     final _infos = data["infos"];
-    _infos.forEach((info) {
-      info["message"] = convertZIMMessage(info["message"]);
-      info["reason"] = info["reason"] is String ? info["reason"]: "";
-    });
+
     List<ZIMMessageSentStatusChangeInfo> infos =
         ZIMConverter.oMessageSentStatusChangeInfoList(_infos);
 
@@ -2167,10 +2112,6 @@ class ZegoZimPlugin {
       return;
     }
 
-    data["reactions"].forEach((reactionMap) {
-      reactionMap["messageID"] = int.parse(reactionMap["messageID"]);
-    });
-
     List<ZIMMessageReaction> reactions =
         ZIMConverter.oZIMMessageReactionList(data["reactions"]);
 
@@ -2181,8 +2122,6 @@ class ZegoZimPlugin {
     if (ZIMEventHandler.onBroadcastMessageReceived == null) {
       return;
     }
-
-    data["message"] = convertZIMMessage(data["message"]);
 
     ZIMMessage message = ZIMConverter.oZIMMessage(data["message"]);
 
@@ -2217,32 +2156,6 @@ class ZegoZimPlugin {
     ZIMConversationsAllDeletedInfo deletedInfo = ZIMConverter.oZIMConversationsAllDeletedInfo(data);
 
     ZIMEventHandler.onConversationsAllDeleted!(zim, deletedInfo);
-  }
-
-  static Map handleSendMessageResult(dynamic result) {
-    Map resultMap = jsObjectToMap(result);
-    resultMap["message"]["localMessageID"] =
-        int.parse(resultMap["message"]["localMessageID"]);
-    resultMap["message"]["messageID"] =
-        int.parse(resultMap["message"]["messageID"]);
-    resultMap["message"]["isUserInserted"] =
-        resultMap["message"]["isUserInserted"] is bool
-            ? resultMap["message"]["isUserInserted"]
-            : false;
-
-    resultMap["message"]["reactions"] =
-        resultMap["message"]["reactions"] == null
-            ? [] : resultMap["reactions"].forEach((reactionMap) {
-                      reactionMap["messageID"] = reactionMap["messageID"] is int
-                          ? reactionMap["messageID"]
-                          : int.parse(reactionMap["messageID"]);
-                   });
-
-    resultMap["message"]["isBroadcastMessage"] = resultMap["message"]["isBroadcastMessage"] is bool
-      ? resultMap["message"]["isBroadcastMessage"]
-        : false;
-
-    return resultMap;
   }
 
   static void handleReceiveMessage(List<dynamic> messageList) {
@@ -2324,62 +2237,6 @@ class ZegoZimPlugin {
         messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
 
     return zimMessage;
-  }
-
-  static Map convertZIMMessage(Map messageMap) {
-    ZIMMessageType msgType =
-        ZIMMessageTypeExtension.mapValue[messageMap['type']]!;
-
-    messageMap["messageID"] = messageMap["messageID"] is int
-        ? messageMap["messageID"]
-        : int.parse(messageMap["messageID"]);
-    messageMap["localMessageID"] = int.parse((messageMap["localMessageID"]));
-    messageMap["isUserInserted"] = messageMap["isUserInserted"] is bool
-        ? messageMap["isUserInserted"]
-        : false;
-    messageMap["orderKey"] =
-        messageMap["orderKey"] is int ? messageMap["orderKey"] : 0;
-    messageMap["extendedData"] =
-        messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
-    messageMap["fileLocalPath"] = messageMap["fileLocalPath"] is String
-        ? messageMap["fileLocalPath"]
-        : "";
-    messageMap["isBroadcastMessage"] = messageMap["isBroadcastMessage"] is bool
-        ? messageMap["isBroadcastMessage"]
-        : false;
-
-    if (messageMap["reactions"] != null) {
-      messageMap["reactions"].forEach((reactionMap) {
-        reactionMap["messageID"] = reactionMap["messageID"] is int
-            ? reactionMap["messageID"]
-            : int.parse(reactionMap["messageID"]);
-      });
-    } else {
-      messageMap["reactions"] = [];
-    }
-
-    switch (msgType) {
-      case ZIMMessageType.image:
-        messageMap["thumbnailLocalPath"] =
-            messageMap["thumbnailLocalPath"] is String
-                ? messageMap["thumbnailLocalPath"]
-                : "";
-        messageMap["largeImageLocalPath"] =
-            messageMap["largeImageLocalPath"] is String
-                ? messageMap["largeImageLocalPath"]
-                : "";
-        break;
-      case ZIMMessageType.video:
-        messageMap["videoFirstFrameLocalPath"] =
-            messageMap["videoFirstFrameLocalPath"] is String
-                ? messageMap["videoFirstFrameLocalPath"]
-                : "";
-        break;
-      default:
-        break;
-    }
-
-    return messageMap;
   }
 
   static Uint8List convertToUint8List(dynamic data) {

@@ -1,3 +1,5 @@
+## 2.12.2
+Fix known problems.
 ## 2.12.1
 Fix known problems.
 ## 2.12.0
