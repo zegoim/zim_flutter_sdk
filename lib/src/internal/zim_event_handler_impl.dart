@@ -313,6 +313,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       case 'onMessageReceiptChanged':
         if (ZIMEventHandler.onMessageReceiptChanged == null) return;
         List<ZIMMessageReceiptInfo> infos = [];
+        ZIMManager.writeLog("Flutter onMessageReceiptChanged eventImpl,map:"+map.toString());
         for(Map infoModel in map['infos']){
           infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
         }

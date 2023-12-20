@@ -1,4 +1,5 @@
 import 'package:zego_zim/src/internal/zim_common_data.dart';
+import 'package:zego_zim/src/internal/zim_manager.dart';
 
 import '../zim_defines.dart';
 import 'zim_defines_extension.dart';
@@ -1344,6 +1345,7 @@ class ZIMConverter {
   }
 
   static ZIMMessageReceiptInfo oZIMMessageReceiptInfo(Map infoMap) {
+    ZIMManager.writeLog("Flutter oZIMMessageReceiptInfo:"+infoMap.toString());
     ZIMMessageReceiptInfo receiptInfo = ZIMMessageReceiptInfo(
         conversationID: infoMap['conversationID'],
         conversationType: ZIMConversationTypeExtension.mapValue[infoMap['conversationType']]!,

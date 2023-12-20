@@ -563,7 +563,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
 
     @Override
     public void onMessageReceiptChanged(ZIM zim, ArrayList<ZIMMessageReceiptInfo> infos) {
-        if(mysink == null){
+        if(mysink == null) {
             return;
         }
         String handle = engineMapForCallback.get(zim);
@@ -572,7 +572,10 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         ArrayList<HashMap<String,Object>> infosModel = new ArrayList<>();
         for (ZIMMessageReceiptInfo info:infos
         ) {
-            infosModel.add(ZIMPluginConverter.mZIMMessageReceiptInfo(info));
+            LogWriter.writeLog("isSelfOperated:"+info.isSelfOperated);
+            HashMap<String,Object> map = ZIMPluginConverter.mZIMMessageReceiptInfo(info);
+            infosModel.add(map);
+            LogWriter.writeLog("info:"+ map);
         }
         resultMap.put("infos",infosModel);
         resultMap.put("method","onMessageReceiptChanged");

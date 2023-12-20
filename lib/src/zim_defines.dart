@@ -87,6 +87,8 @@ enum ZIMRoomState {
 ///
 /// Caution: Please use it with the connection event parameter.
 enum ZIMConnectionEvent {
+
+  unknown,
   /// Description: Success.
   success,
 

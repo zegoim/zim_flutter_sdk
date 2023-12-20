@@ -1,8 +1,10 @@
 package im.zego.zim_flutter.internal;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.lang.*;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -190,6 +192,11 @@ public class ZIMPluginMethodHandler {
     private static final HashMap<String, ZIM> engineMap = new HashMap<>();
     public static void getVersion(MethodCall call,Result result){
         result.success(ZIM.getVersion());
+    }
+
+    public static void writeLog(MethodCall call,Result result){
+        String log = call.argument("log");
+        LogWriter.writeLog(log);
     }
 
     public static void create(MethodCall call, Result result, FlutterPlugin.FlutterPluginBinding binding,ZIMPluginEventHandler eventHandler){

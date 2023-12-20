@@ -50,6 +50,7 @@ extension ZIMRoomStateExtension on ZIMRoomState {
 
 extension ZIMConnectionEventExtension on ZIMConnectionEvent {
   static const valueMap = {
+    ZIMConnectionEvent.unknown:-1,
     ZIMConnectionEvent.success: 0,
     ZIMConnectionEvent.activeLogin: 1,
     ZIMConnectionEvent.loginTimeout: 2,
@@ -59,6 +60,7 @@ extension ZIMConnectionEventExtension on ZIMConnectionEvent {
     ZIMConnectionEvent.unregistered: 6
   };
   static const mapValue = {
+    -1: ZIMConnectionEvent.unknown,
     0: ZIMConnectionEvent.success,
     1: ZIMConnectionEvent.activeLogin,
     2: ZIMConnectionEvent.loginTimeout,

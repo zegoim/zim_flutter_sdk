@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/services.dart';
 import 'package:zego_zim/src/internal/zim_converter.dart';
@@ -23,6 +24,14 @@ class ZIMManager {
 
   static Future<String> getVersion() async {
     return await channel.invokeMethod('getVersion');
+  }
+
+  static writeLog(String logString){
+    try{
+      channel.invokeMethod('writeLog',logString);
+    }catch(e,s){
+      log("write log method not impl in current platform");
+    }
   }
 
   static setAdvancedConfig(String key, String value) async {
