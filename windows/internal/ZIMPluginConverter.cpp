@@ -180,7 +180,7 @@ FTMap ZIMPluginConverter::cnvZIMUserInfoObjectToMap(const ZIMUserInfo& userInfo)
 	FTMap userInfoMap;
 	userInfoMap[FTValue("userID")] = FTValue(userInfo.userID);
 	userInfoMap[FTValue("userName")] = FTValue(userInfo.userName);
-	userInfoMap[FTValue("userAvatarUrl")] = FTValue(userInfo.userAvatarUrl);
+	userInfoMap[FTValue("userAvatarUrl")] = FTValue(userInfo.userAvatar);
 
 	return userInfoMap;
 
