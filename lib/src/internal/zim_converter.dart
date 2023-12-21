@@ -1841,11 +1841,12 @@ class ZIMConverter {
 
   static ZIMBlacklistUsersRemovedResult oZIMBlacklistUsersRemovedResult(Map map) {
     return ZIMBlacklistUsersRemovedResult()
-      ..errorUserInfoArrayList = oZIMErrorUserInfoList(map['errorUserInfoArrayList'] ?? []); // Assuming oZIMErrorUserInfo exists
+      ..errorUserInfoArrayList = oZIMErrorUserInfoList(map['errorUserList'] ?? []); // Assuming oZIMErrorUserInfo exists
   }
 
   static ZIMConversationDraftSetResult oZIMConversationDraftSetResult(Map map) {
     return ZIMConversationDraftSetResult(conversationID: map["conversationID"], conversationType: ZIMConversationTypeExtension.mapValue[map['conversationType']]!);
+
   }
 
 }
