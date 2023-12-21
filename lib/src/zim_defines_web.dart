@@ -142,6 +142,26 @@ class ZIM {
   external PromiseJsImpl<dynamic> addMessageReaction(String reactionType, dynamic message);
   external PromiseJsImpl<dynamic> deleteMessageReaction(String reactionType, dynamic message);
   external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);
+  external PromiseJsImpl<dynamic> setConversationDraft(String draft, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> queryCombineMessage(dynamic message);
+  external PromiseJsImpl<dynamic> muteGroup(String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> muteGroupMemberList(dynamic userIDs, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> queryGroupMemberMutedList(String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> addFriend(String userID, dynamic config);
+  external PromiseJsImpl<dynamic> deleteFriends(dynamic userIDs, dynamic config);
+  external PromiseJsImpl<dynamic> checkFriendsRelation(dynamic userIDs, dynamic config);
+  external PromiseJsImpl<dynamic> updateFriendAlias(String friendAlias, String userID);
+  external PromiseJsImpl<dynamic> updateFriendAttributes(dynamic friendAttributes, String userID);
+  external PromiseJsImpl<dynamic> acceptFriendApplication(String userID, dynamic config);
+  external PromiseJsImpl<dynamic> rejectFriendApplication(String userID, dynamic config);
+  external PromiseJsImpl<dynamic> queryFriendsInfo(dynamic userIDs);
+  external PromiseJsImpl<dynamic> queryFriendList(dynamic config);
+  external PromiseJsImpl<dynamic> queryFriendApplicationList(dynamic config);
+  external PromiseJsImpl<dynamic> addUsersToBlacklist(dynamic userIDs);
+  external PromiseJsImpl<dynamic> removeUsersFromBlacklist(dynamic userIDs);
+  external PromiseJsImpl<dynamic> checkUserIsInBlackList(String userID);
+  external PromiseJsImpl<dynamic> queryBlackList(dynamic config);
+  external PromiseJsImpl<dynamic> deleteAllConversationMessages(dynamic config);
 }
 
 @JS()

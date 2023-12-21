@@ -196,15 +196,15 @@ abstract class ZIM {
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
   /// Available since: 2.12.0 and above.
-  /// 
+  ///
   /// Description: This interface is invoked when all sessions needs to be deleted. All members in sessions can invoke this interface.
-  /// 
+  ///
   /// Use cases: If you want to delete all sessions when they are no longer needed, you can call this interface implementation.
-  /// 
+  ///
   /// When to call /Trigger: his parameter is invoked when sessions needs to be deleted and can be invoked after a ZIM instance is created. The call takes effect after login and becomes invalid after logout.
-  /// 
+  ///
   /// Impacts on other APIs: If deleted sessions include unread message will trigger the [onConversationTotalUnreadMessageCountUpdated] callback, the call is successful at login, and the other end will trigger [onConversationsAllDeleted] callback.
-  /// 
+  ///
   /// Related callbacks: [ZIMConversationsAllDeletedCallback]
   Future<void> deleteAllConversations(ZIMConversationDeleteConfig config);
 
@@ -274,19 +274,19 @@ abstract class ZIM {
           String conversationID, ZIMConversationType conversationType);
 
   /// Available since: 2.12.0 and above.
-  /// 
+  ///
   /// Description: Used to clear unread for all sessions.
-  /// 
+  ///
   /// Use cases: You can call this interface when you need to clear all unread sessions to zero.
-  /// 
+  ///
   /// When to call /Trigger: Called when all session readings need to be cleared.
-  /// 
+  ///
   /// Restrictions: Valid after login, invalid after logout.
-  /// 
+  ///
   /// Impacts on other APIs: Calling this method will trigger a total readings not updated callback [onConversationTotalUnreadMessageCountUpdated].
-  /// 
+  ///
   /// Related callbacks:[ZIMConversationTotalUnreadMessageCountClearedCallback].
-  /// 
+  ///
   /// Related APIs:[onConversationTotalUnreadMessageCountUpdated].
   Future<void> clearConversationTotalUnreadMessageCount();
 
@@ -1532,4 +1532,6 @@ abstract class ZIM {
   Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config);
 
   Future<ZIMBlacklistCheckedResult> checkUserIsInBlackList(String userID);
+
+  Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
 }

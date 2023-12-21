@@ -674,6 +674,7 @@ class ZIMConversation {
   ZIMMessage? lastMessage;
   int orderKey = 0;
   bool isPinned =false;
+  String draft = '';
   ZIMConversation();
 }
 
@@ -2251,6 +2252,13 @@ class ZIMBlacklistUsersAddedResult {
 
 class ZIMBlacklistUsersRemovedResult {
   List<ZIMErrorUserInfo>? errorUserInfoArrayList;
+}
+
+class ZIMConversationDraftSetResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  ZIMConversationDraftSetResult(
+      {required this.conversationID, required this.conversationType});
 }
 
 class ZIMMessageDeletedInfo {
