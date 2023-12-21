@@ -3125,7 +3125,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> errorUserInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorUserInfo); // 假设存在 mZIMErrorUserInfo 转换函数
                         errorUsersMapList.add(errorUserInfoMap);
                     }
-                    resultMap.put("errorUserInfoArrayList", errorUsersMapList);
+                    resultMap.put("errorUserList", errorUsersMapList);
 
                     result.success(resultMap);
                 } else {
