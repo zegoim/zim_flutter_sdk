@@ -56,6 +56,7 @@
     NSMutableDictionary *userInfoDic = [[NSMutableDictionary alloc] init];
     [userInfoDic safeSetObject:userInfo.userID forKey:@"userID"];
     [userInfoDic safeSetObject:userInfo.userName forKey:@"userName"];
+    [userInfoDic safeSetObject:userInfo.userAvatarUrl forKey:@"userAvatarUrl"];
     return userInfoDic;
 }
 
@@ -1270,6 +1271,16 @@
     ZIMCallJoinConfig *config = [[ZIMCallJoinConfig alloc] init];
     config.extendedData = [configMap objectForKey:@"extendedData"];
     return config;
+}
+
++(nullable ZIMBlacklistQueryConfig *)oZIMBlacklistQueryConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMBlacklistQueryConfig *queryConfig = [[ZIMBlacklistQueryConfig alloc] init];
+    queryConfig.nextFlag = [[configMap objectForKey:@"nextFlag"] unsignedIntValue];
+    queryConfig.count = [[configMap objectForKey:@"count"] unsignedIntValue];
+    return queryConfig;
 }
 
 @end

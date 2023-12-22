@@ -320,7 +320,7 @@
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
         }
     }];
-
+    
 }
 
 - (void)deleteConversation:(FlutterMethodCall *)call result:(FlutterResult)result {
@@ -345,7 +345,7 @@
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
         }
     }];
-
+    
 }
 
 - (void)deleteAllConversations:(FlutterMethodCall *)call result:(FlutterResult)result {
@@ -366,7 +366,7 @@
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
         }
     }];
-
+    
 }
 
 - (void)queryConversationPinnedList:(FlutterMethodCall *)call result:(FlutterResult)result {
@@ -447,7 +447,7 @@
         result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
         return;
     }
-
+    
     [zim clearConversationTotalUnreadMessageCount:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
@@ -518,7 +518,7 @@
     }
     ZIMMessage *inputMessage = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
     NSString *inputLocalExtendedData = (NSString *)[call.arguments safeObjectForKey:@"localExtendedData"];
-
+    
     [zim updateMessageLocalExtendedData:inputLocalExtendedData message:inputMessage callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         NSDictionary *messageModel = [ZIMPluginConverter mZIMMessage:message];
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
@@ -550,7 +550,7 @@
             return;
         }
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
-
+        
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
         [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"onMessageAttached" forKey:@"method"];
@@ -682,7 +682,7 @@
             return;
         }
         NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
-
+        
         NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
         [resultDic safeSetObject:handle forKey:@"handle"];
         [resultDic safeSetObject:@"onMessageAttached" forKey:@"method"];
@@ -858,7 +858,7 @@
     ZIMMediaMessage *message = (ZIMMediaMessage *)[ZIMPluginConverter oZIMMessage:[call.arguments safeObjectForKey:@"message"]];
     int fileType = ((NSNumber *)[call.arguments safeObjectForKey:@"fileType"]).intValue;
     NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
-
+    
     [zim downloadMediaFileWithMessage:message  fileType:fileType progress:^(ZIMMessage * _Nonnull message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
         if(progressID == nil){
             return;
@@ -1189,9 +1189,9 @@
     NSString *roomID = [call.arguments objectForKey:@"roomID"];
     NSArray *userIDs = [call.arguments safeObjectForKey:@"userIDs"];
     [zim queryRoomMembersByUserIDs:userIDs roomID:roomID callback:^(NSString *roomID,
-                                                               NSArray<ZIMRoomMemberInfo *> *userList,
-                                                               NSArray<ZIMErrorUserInfo *> *errorUserList,
-                                                               ZIMError *errorInfo){
+                                                                    NSArray<ZIMRoomMemberInfo *> *userList,
+                                                                    NSArray<ZIMErrorUserInfo *> *errorUserList,
+                                                                    ZIMError *errorInfo){
         if(errorInfo.code == 0){
             NSArray *basicMemberList = [ZIMPluginConverter mZIMRoomMemberInfoList:userList];
             NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
@@ -1806,7 +1806,7 @@
     
     ZIMGroupMemberRole role = ((NSNumber *)[call.arguments safeObjectForKey:@"role"]).intValue;
     NSString *groupID = [call.arguments safeObjectForKey:@"groupID"];
-
+    
     NSString *forUserID = [call.arguments safeObjectForKey:@"forUserID"];
     [zim setGroupMemberRole:role forUserID:forUserID groupID:groupID callback:^(NSString * _Nonnull groupID, NSString * _Nonnull forUserID, ZIMGroupMemberRole role, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
@@ -2022,17 +2022,17 @@
     NSArray *invitees = [call.arguments safeObjectForKey:@"invitees"];
     ZIMCallingInviteConfig *config = [ZIMPluginConverter oZIMCallingInviteConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim callingInviteWithInvitees:invitees callID:callID config:config callback:^(NSString * _Nonnull callID, ZIMCallingInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
-       if(errorInfo.code == 0){
-           NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
-           [resultMtDic safeSetObject:callID forKey:@"callID"];
-           NSDictionary *infoDic = [ZIMPluginConverter mZIMCallingInvitationSentInfo:info];
-           [resultMtDic safeSetObject:infoDic forKey:@"info"];
-           result(resultMtDic);
-       }
-       else{
-           result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
-       }
-   }];
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            [resultMtDic safeSetObject:callID forKey:@"callID"];
+            NSDictionary *infoDic = [ZIMPluginConverter mZIMCallingInvitationSentInfo:info];
+            [resultMtDic safeSetObject:infoDic forKey:@"info"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
 }
 
 - (void)callQuit:(FlutterMethodCall *)call result:(FlutterResult)result {
@@ -2046,7 +2046,7 @@
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     ZIMCallQuitConfig *config = [ZIMPluginConverter oZIMCallQuitConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim callQuit:callID config:config callback:^(NSString *callID, ZIMCallQuitSentInfo *info,
-                                        ZIMError *errorInfo) {
+                                                  ZIMError *errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:callID forKey:@"callID"];
@@ -2071,7 +2071,7 @@
     NSString *callID = [call.arguments safeObjectForKey:@"callID"];
     ZIMCallEndConfig *config = [ZIMPluginConverter oZIMCallEndConfig:[call.arguments safeObjectForKey:@"config"]];
     [zim callEnd:callID config:config callback:^(NSString *callID, ZIMCallEndedSentInfo *info,
-                                       ZIMError *errorInfo) {
+                                                 ZIMError *errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             [resultMtDic safeSetObject:callID forKey:@"callID"];
@@ -2282,6 +2282,100 @@
     }];
 }
 
+-(void)addUsersToBlacklist:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
+    [zim addUsersToBlacklistWithUserIDs:userIDs callback:^(NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableArray *errorUserListBasic = [[NSMutableArray alloc] init];
+            for (ZIMErrorUserInfo *errorUserInfo in errorUserList) {
+                NSMutableDictionary *errorUserInfoDic = [[NSMutableDictionary alloc] init];
+                [errorUserInfoDic safeSetObject:errorUserInfo.userID forKey:@"userID"];
+                [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:errorUserInfo.reason] forKey:@"reason"];
+                [errorUserListBasic addObject:errorUserInfoDic];
+            }
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserList"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+-(void)removeUsersFromBlacklist:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
+    [zim removeUsersFromBlacklistWithUserIDs:userIDs callback:^(NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableArray *errorUserListBasic = [[NSMutableArray alloc] init];
+            for (ZIMErrorUserInfo *errorUserInfo in errorUserList) {
+                NSMutableDictionary *errorUserInfoDic = [[NSMutableDictionary alloc] init];
+                [errorUserInfoDic safeSetObject:errorUserInfo.userID forKey:@"userID"];
+                [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:errorUserInfo.reason] forKey:@"reason"];
+                [errorUserListBasic addObject:errorUserInfoDic];
+            }
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserList"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+-(void)checkUserIsInBlackList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    NSString *userID = [call.arguments objectForKey:@"userID"];
+    [zim checkUserIsInBlackListByUserID:userID callback:^(BOOL isUserInBlacklist, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:[NSNumber numberWithBool:isUserInBlacklist] forKey:@"isUserInBlacklist"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+-(void)queryBlackList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMBlacklistQueryConfig *queryConfig = [ZIMPluginConverter oZIMBlacklistQueryConfig:[call.arguments objectForKey:@"config"]];
+    [zim queryBlackListWithConfig:queryConfig callback:^(NSArray<ZIMUserInfo *> * _Nonnull blacklist, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMUserInfoList:blacklist] forKey:@"blacklist"];
+            [resultDic safeSetObject:[NSNumber numberWithUnsignedInt:nextFlag] forKey:@"nextFlag"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
 #pragma mark - Getter
 - (NSMutableDictionary *)engineMap {
     if (!_engineMap) {

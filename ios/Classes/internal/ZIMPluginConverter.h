@@ -180,4 +180,7 @@
 +(nullable NSDictionary *)mZIMMessageDeletedInfo:(nullable ZIMMessageDeletedInfo *)info;
 
 +(nullable ZIMCallJoinConfig *)oZIMCallJoinConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMBlacklistQueryConfig *)oZIMBlacklistQueryConfig:(nullable NSDictionary *)configMap;
+
 @end

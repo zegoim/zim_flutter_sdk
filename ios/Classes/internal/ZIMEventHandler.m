@@ -642,6 +642,21 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim blacklistChanged:(NSArray<ZIMUserInfo *> *)userInfos action:(ZIMBlacklistChangedAction)action{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *userInfoBasic = [ZIMPluginConverter mZIMUserInfoList:userInfos];
+    
+    [resultDic safeSetObject:@"onMessageReactionsChanged" forKey:@"method"];
+    [resultDic safeSetObject:userInfoBasic forKey:@"userInfos"];
+    [resultDic safeSetObject:[NSNumber numberWithInteger:action] forKey:@"action"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
 #pragma mark - Getter
 - (NSMapTable *)engineEventMap {
     if (!_engineEventMap) {
