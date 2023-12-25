@@ -1382,122 +1382,122 @@ public class ZIMPluginConverter {
         return infoMap;
     }
 
-//    static public ZIMFriendAddConfig oZIMFriendAddConfig(HashMap<String, Object> configMap) {
-//        ZIMFriendAddConfig config = new ZIMFriendAddConfig();
-//        config.wording = (String) configMap.get("wording");
-//        config.alias = (String) configMap.get("alias");
-//        config.attributes = (HashMap<String, String>) configMap.get("attributes");
-//        return config;
-//    }
-//
-//    static public ZIMFriendApplicationAcceptConfig oZIMFriendApplicationAcceptConfig(HashMap<String, Object> configMap) {
-//        ZIMFriendApplicationAcceptConfig config = new ZIMFriendApplicationAcceptConfig();
-//        config.friendAlias = (String) configMap.get("friendAlias");
-//        config.friendAttributes = (HashMap<String, String>) configMap.get("friendAttributes");
-//        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // 假设已有转换 pushConfig 的函数
-//        return config;
-//    }
-//
-//    static public ZIMFriendApplicationInfo oZIMFriendApplicationInfo(HashMap<String, Object> infoMap) {
-//        ZIMFriendApplicationInfo info = new ZIMFriendApplicationInfo();
-//        info.applyUser = ZIMPluginConverter.oZIMUserInfo((HashMap<String, Object>) infoMap.get("applyUser")); // 假设已有转换 ZIMUserInfo 的函数
-//        info.wording = (String) infoMap.get("wording");
-//        info.friendAlias = (String) infoMap.get("friendAlias");
-//        info.createTime = (long) infoMap.get("createTime");
-//        info.updateTime = (long) infoMap.get("updateTime");
-//        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
-//        info.type = ZIMFriendApplicationType.getZIMFriendApplicationType((Integer) infoMap.get("type")); // 假设 ZIMFriendApplicationType 可直接转换
-//        info.state = ZIMFriendApplicationState.getZIMFriendApplicationState((Integer) infoMap.get("state"));
-//        return info;
-//    }
-//
-//    static public HashMap<String, Object> mZIMFriendApplicationInfo(ZIMFriendApplicationInfo info) {
-//        HashMap<String, Object> infoMap = new HashMap<>();
-//        infoMap.put("applyUser", mZIMUserInfo(info.applyUser)); // Assuming mZIMUserInfo exists for ZIMUserInfo
-//        infoMap.put("wording", info.wording);
-//        infoMap.put("friendAlias", info.friendAlias);
-//        infoMap.put("createTime", info.createTime);
-//        infoMap.put("updateTime", info.updateTime);
-//        infoMap.put("friendAttributes", info.friendAttributes);
-//        infoMap.put("type", info.type.value()); // Assuming ZIMFriendApplicationType can be directly stored
-//        infoMap.put("state", info.state.value()); // Assuming ZIMFriendApplicationState can be directly stored
-//        return infoMap;
-//    }
-//
-//
-//    static public ZIMFriendApplicationListQueryConfig oZIMFriendApplicationListQueryConfig(HashMap<String, Object> configMap) {
-//        ZIMFriendApplicationListQueryConfig config = new ZIMFriendApplicationListQueryConfig();
-//        config.count = (int) configMap.get("count");
-//        config.nextFlag = (int) configMap.get("nextFlag");
-//        return config;
-//    }
-//
-//    static public ZIMFriendApplicationRejectConfig oZIMFriendApplicationRejectConfig(HashMap<String, Object> configMap) {
-//        ZIMFriendApplicationRejectConfig config = new ZIMFriendApplicationRejectConfig();
-//        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // Assuming oZIMPushConfig exists
-//        return config;
-//    }
-//
-//    static public ZIMFriendDeleteConfig oZIMFriendDeleteConfig(HashMap<String, Object> configMap) {
-//        ZIMFriendDeleteConfig config = new ZIMFriendDeleteConfig();
-//        config.type = ZIMFriendDeleteType.getZIMCallState((Integer) configMap.get("type")); // Assuming direct conversion is possible
-//        return config;
-//    }
-//
-//    static public HashMap<String, Object> mZIMFriendInfo(ZIMFriendInfo info) {
-//        HashMap<String, Object> infoMap = new HashMap<>(mZIMUserInfo(info)); // Assuming mZIMUserInfo for ZIMUserInfo inheritance
-//        infoMap.put("friendAlias", info.friendAlias);
-//        infoMap.put("createTime", info.createTime);
-//        infoMap.put("wording", info.wording);
-//        infoMap.put("friendAttributes", info.friendAttributes);
-//        return infoMap;
-//    }
-//
-//    static public ZIMFriendInfo oZIMFriendInfo(HashMap<String, Object> infoMap) {
-//        ZIMFriendInfo info = new ZIMFriendInfo();
-//        oZIMUserInfo(infoMap,info); // Assuming oZIMUserInfo for ZIMUserInfo inheritance
-//        info.friendAlias = (String) infoMap.get("friendAlias");
-//        info.createTime = (Long) infoMap.get("createTime");
-//        info.wording = (String) infoMap.get("wording");
-//        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
-//        return info;
-//    }
-//
-//    static public ZIMFriendListQueryConfig oZIMFriendListQueryConfig(HashMap<String, Object> configMap) {
-//        ZIMFriendListQueryConfig config = new ZIMFriendListQueryConfig();
-//        config.count = (int) configMap.get("count");
-//        config.nextFlag = (int) configMap.get("nextFlag");
-//        return config;
-//    }
-//
-//    static public ZIMFriendRelationCheckConfig oZIMFriendRelationCheckConfig(HashMap<String, Object> configMap) {
-//        ZIMFriendRelationCheckConfig config = new ZIMFriendRelationCheckConfig();
-//        config.type = ZIMFriendRelationCheckType.getZIMFriendCheckType ((Integer) configMap.get("type")); // Assuming direct conversion is possible
-//        return config;
-//    }
-//
-//    static public HashMap<String, Object> mZIMFriendRelationInfo(ZIMFriendRelationInfo info) {
-//        HashMap<String, Object> infoMap = new HashMap<>();
-//        infoMap.put("type", info.type.value()); // Assuming ZIMUserRelationType can be directly stored
-//        infoMap.put("userID", info.userID);
-//        return infoMap;
-//    }
-//
-//    static public ZIMFriendRelationInfo oZIMFriendRelationInfo(HashMap<String, Object> infoMap) {
-//        ZIMFriendRelationInfo info = new ZIMFriendRelationInfo();
-//        info.type = ZIMUserRelationType.getZIMUserRelationType ((Integer) infoMap.get("type")); // Assuming direct conversion is possible
-//        info.userID = (String) infoMap.get("userID");
-//        return info;
-//    }
-//
-//    static public ZIMSendFriendApplicationConfig oZIMSendFriendApplicationConfig(HashMap<String, Object> configMap) {
-//        ZIMSendFriendApplicationConfig config = new ZIMSendFriendApplicationConfig();
-//        config.wording = (String) configMap.get("wording");
-//        config.alias = (String) configMap.get("alias");
-//        config.attributes = (HashMap<String, String>) configMap.get("attributes");
-//        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // Assuming oZIMPushConfig exists
-//        return config;
-//    }
+    static public ZIMFriendAddConfig oZIMFriendAddConfig(HashMap<String, Object> configMap) {
+        ZIMFriendAddConfig config = new ZIMFriendAddConfig();
+        config.wording = (String) configMap.get("wording");
+        config.alias = (String) configMap.get("alias");
+        config.attributes = (HashMap<String, String>) configMap.get("attributes");
+        return config;
+    }
+
+    static public ZIMFriendApplicationAcceptConfig oZIMFriendApplicationAcceptConfig(HashMap<String, Object> configMap) {
+        ZIMFriendApplicationAcceptConfig config = new ZIMFriendApplicationAcceptConfig();
+        config.friendAlias = (String) configMap.get("friendAlias");
+        config.friendAttributes = (HashMap<String, String>) configMap.get("friendAttributes");
+        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // 假设已有转换 pushConfig 的函数
+        return config;
+    }
+
+    static public ZIMFriendApplicationInfo oZIMFriendApplicationInfo(HashMap<String, Object> infoMap) {
+        ZIMFriendApplicationInfo info = new ZIMFriendApplicationInfo();
+        info.applyUser = ZIMPluginConverter.oZIMUserInfo((HashMap<String, Object>) infoMap.get("applyUser")); // 假设已有转换 ZIMUserInfo 的函数
+        info.wording = (String) infoMap.get("wording");
+        info.friendAlias = (String) infoMap.get("friendAlias");
+        info.createTime = (long) infoMap.get("createTime");
+        info.updateTime = (long) infoMap.get("updateTime");
+        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
+        info.type = ZIMFriendApplicationType.getZIMFriendApplicationType((Integer) infoMap.get("type")); // 假设 ZIMFriendApplicationType 可直接转换
+        info.state = ZIMFriendApplicationState.getZIMFriendApplicationState((Integer) infoMap.get("state"));
+        return info;
+    }
+
+    static public HashMap<String, Object> mZIMFriendApplicationInfo(ZIMFriendApplicationInfo info) {
+        HashMap<String, Object> infoMap = new HashMap<>();
+        infoMap.put("applyUser", mZIMUserInfo(info.applyUser)); // Assuming mZIMUserInfo exists for ZIMUserInfo
+        infoMap.put("wording", info.wording);
+        infoMap.put("friendAlias", info.friendAlias);
+        infoMap.put("createTime", info.createTime);
+        infoMap.put("updateTime", info.updateTime);
+        infoMap.put("friendAttributes", info.friendAttributes);
+        infoMap.put("type", info.type.value()); // Assuming ZIMFriendApplicationType can be directly stored
+        infoMap.put("state", info.state.value()); // Assuming ZIMFriendApplicationState can be directly stored
+        return infoMap;
+    }
+
+
+    static public ZIMFriendApplicationListQueryConfig oZIMFriendApplicationListQueryConfig(HashMap<String, Object> configMap) {
+        ZIMFriendApplicationListQueryConfig config = new ZIMFriendApplicationListQueryConfig();
+        config.count = (int) configMap.get("count");
+        config.nextFlag = (int) configMap.get("nextFlag");
+        return config;
+    }
+
+    static public ZIMFriendApplicationRejectConfig oZIMFriendApplicationRejectConfig(HashMap<String, Object> configMap) {
+        ZIMFriendApplicationRejectConfig config = new ZIMFriendApplicationRejectConfig();
+        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // Assuming oZIMPushConfig exists
+        return config;
+    }
+
+    static public ZIMFriendDeleteConfig oZIMFriendDeleteConfig(HashMap<String, Object> configMap) {
+        ZIMFriendDeleteConfig config = new ZIMFriendDeleteConfig();
+        config.type = ZIMFriendDeleteType.getZIMCallState((Integer) configMap.get("type")); // Assuming direct conversion is possible
+        return config;
+    }
+
+    static public HashMap<String, Object> mZIMFriendInfo(ZIMFriendInfo info) {
+        HashMap<String, Object> infoMap = new HashMap<>(mZIMUserInfo(info)); // Assuming mZIMUserInfo for ZIMUserInfo inheritance
+        infoMap.put("friendAlias", info.friendAlias);
+        infoMap.put("createTime", info.createTime);
+        infoMap.put("wording", info.wording);
+        infoMap.put("friendAttributes", info.friendAttributes);
+        return infoMap;
+    }
+
+    static public ZIMFriendInfo oZIMFriendInfo(HashMap<String, Object> infoMap) {
+        ZIMFriendInfo info = new ZIMFriendInfo();
+        oZIMUserInfo(infoMap,info); // Assuming oZIMUserInfo for ZIMUserInfo inheritance
+        info.friendAlias = (String) infoMap.get("friendAlias");
+        info.createTime = (Long) infoMap.get("createTime");
+        info.wording = (String) infoMap.get("wording");
+        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
+        return info;
+    }
+
+    static public ZIMFriendListQueryConfig oZIMFriendListQueryConfig(HashMap<String, Object> configMap) {
+        ZIMFriendListQueryConfig config = new ZIMFriendListQueryConfig();
+        config.count = (int) configMap.get("count");
+        config.nextFlag = (int) configMap.get("nextFlag");
+        return config;
+    }
+
+    static public ZIMFriendRelationCheckConfig oZIMFriendRelationCheckConfig(HashMap<String, Object> configMap) {
+        ZIMFriendRelationCheckConfig config = new ZIMFriendRelationCheckConfig();
+        config.type = ZIMFriendRelationCheckType.getZIMFriendCheckType ((Integer) configMap.get("type")); // Assuming direct conversion is possible
+        return config;
+    }
+
+    static public HashMap<String, Object> mZIMFriendRelationInfo(ZIMFriendRelationInfo info) {
+        HashMap<String, Object> infoMap = new HashMap<>();
+        infoMap.put("type", info.type.value()); // Assuming ZIMUserRelationType can be directly stored
+        infoMap.put("userID", info.userID);
+        return infoMap;
+    }
+
+    static public ZIMFriendRelationInfo oZIMFriendRelationInfo(HashMap<String, Object> infoMap) {
+        ZIMFriendRelationInfo info = new ZIMFriendRelationInfo();
+        info.type = ZIMUserRelationType.getZIMUserRelationType ((Integer) infoMap.get("type")); // Assuming direct conversion is possible
+        info.userID = (String) infoMap.get("userID");
+        return info;
+    }
+
+    static public ZIMSendFriendApplicationConfig oZIMSendFriendApplicationConfig(HashMap<String, Object> configMap) {
+        ZIMSendFriendApplicationConfig config = new ZIMSendFriendApplicationConfig();
+        config.wording = (String) configMap.get("wording");
+        config.alias = (String) configMap.get("alias");
+        config.attributes = (HashMap<String, String>) configMap.get("attributes");
+        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // Assuming oZIMPushConfig exists
+        return config;
+    }
 
     static public ZIMBlacklistQueryConfig oZIMBlacklistQueryConfig(HashMap<String, Object> configMap) {
         ZIMBlacklistQueryConfig config = new ZIMBlacklistQueryConfig();
