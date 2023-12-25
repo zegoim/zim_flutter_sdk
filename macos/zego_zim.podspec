@@ -16,8 +16,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'FlutterMacOS'
-  s.dependency 'ZIM_macOS','2.12.1'
-  #s.vendored_frameworks = "ZIM.xcframework"
+  s.dependency 'ZIM_macOS-Private','2.12.4.2177'
 
   s.platform = :osx, '10.13'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
