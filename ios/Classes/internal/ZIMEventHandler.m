@@ -650,7 +650,7 @@ fromGroupID:(NSString *)fromGroupID{
     }
     NSString *handle = [_engineEventMap objectForKey:zim];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-    NSArray *userInfoBasic = [ZIMPluginConverter mZIMUserInfoList:userInfos];
+    NSArray *userInfoBasic = [ZIMPluginConverter mZIMUserInfoList:userList];
     
     [resultDic safeSetObject:@"onMessageReactionsChanged" forKey:@"method"];
     [resultDic safeSetObject:userInfoBasic forKey:@"userList"];
