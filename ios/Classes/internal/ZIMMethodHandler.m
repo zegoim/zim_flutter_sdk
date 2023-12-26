@@ -96,8 +96,8 @@
 - (void)setGeofencingConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSArray<NSNumber *> *areaList = [call.arguments objectForKey:@"areaList"];
     ZIMGeofencingType type = [[call.arguments objectForKey:@"type"] integerValue];
-    [ZIM setGeofencingConfigWithAreaList:areaList type:type];
-    result(nil);
+    BOOL callback = [ZIM setGeofencingConfigWithAreaList:areaList type:type];
+    result([NSNumber numberWithBool:callback]);
 }
 
 

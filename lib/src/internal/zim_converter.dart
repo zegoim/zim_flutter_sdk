@@ -298,14 +298,14 @@ class ZIMConverter {
         message ??= ZIMRevokeMessage();
         message as ZIMRevokeMessage;
         message.revokeType =
-            ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']]!;
+            ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']] ?? ZIMRevokeType.unknown;
         message.revokeStatus = ZIMMessageRevokeStatusExtension
-            .mapValue[resultMap['revokeStatus']]!;
+            .mapValue[resultMap['revokeStatus']] ?? ZIMMessageRevokeStatus.unknown;
         message.revokeTimestamp = resultMap['revokeTimestamp'];
         message.operatedUserID = resultMap['operatedUserID'];
         message.revokeExtendedData = resultMap['revokeExtendedData'] ?? '';
         message.originalMessageType =
-            ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']]!;
+            ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']] ?? ZIMMessageType.unknown;
         message.originalTextMessageContent =
             resultMap['originalTextMessageContent'];
         break;
@@ -720,7 +720,6 @@ class ZIMConverter {
 
   static ZIMRoomAttributesOperatedCallResult
       oZIMRoomAttributesOperatedCallResult(Map resultMap) {
-    resultMap['errorKeys'] = resultMap['errorKeys'] ?? [];
     return ZIMRoomAttributesOperatedCallResult(
         roomID: resultMap['roomID'],
         errorKeys: (resultMap['errorKeys'] as List).cast<String>());
