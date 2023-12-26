@@ -603,6 +603,7 @@
     sendConfig.priority = [[configDic objectForKey:@"priority"] unsignedIntegerValue];
     sendConfig.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic objectForKey:@"pushConfig"]];
     sendConfig.hasReceipt = [[configDic safeObjectForKey:@"hasReceipt"] boolValue];
+    sendConfig.isNotifyMentionedUsers = [[configDic safeObjectForKey:@"isNotifyMentionedUsers"] boolValue];
     return sendConfig;
 }
 

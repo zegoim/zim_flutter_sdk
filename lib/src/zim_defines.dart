@@ -448,6 +448,8 @@ class ZIMMessageSendConfig {
 
   bool hasReceipt = false;
 
+  bool isNotifyMentionedUsers = false;
+
   ZIMMessageSendConfig();
 }
 

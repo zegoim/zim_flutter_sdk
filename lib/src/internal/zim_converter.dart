@@ -563,6 +563,7 @@ class ZIMConverter {
     sendConfigMap['priority'] =
         ZIMMessagePriorityExtension.valueMap[sendConfig.priority];
     sendConfigMap['hasReceipt'] = sendConfig.hasReceipt;
+    sendConfigMap['isNotifyMentionedUsers'] = sendConfig.isNotifyMentionedUsers;
     return sendConfigMap;
   }
 

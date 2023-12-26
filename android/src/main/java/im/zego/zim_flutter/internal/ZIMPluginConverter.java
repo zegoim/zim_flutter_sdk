@@ -835,6 +835,7 @@ public class ZIMPluginConverter {
         config.priority = ZIMMessagePriority.getZIMMessagePriority(ZIMPluginCommonTools.safeGetIntValue(configMap.get("priority")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         config.hasReceipt = (boolean) configMap.get("hasReceipt");
+        config.isNotifyMentionedUsers = (boolean) configMap.get("isNotifyMentionedUsers");
         return config;
     }
 
