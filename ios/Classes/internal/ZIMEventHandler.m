@@ -652,7 +652,7 @@ fromGroupID:(NSString *)fromGroupID{
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     NSArray *userInfoBasic = [ZIMPluginConverter mZIMUserInfoList:userList];
     
-    [resultDic safeSetObject:@"onMessageReactionsChanged" forKey:@"method"];
+    [resultDic safeSetObject:@"onBlacklistChanged" forKey:@"method"];
     [resultDic safeSetObject:userInfoBasic forKey:@"userList"];
     [resultDic safeSetObject:[NSNumber numberWithInteger:action] forKey:@"action"];
     [resultDic safeSetObject:handle forKey:@"handle"];
