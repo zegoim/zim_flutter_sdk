@@ -673,6 +673,7 @@ class ZIMConverter {
     for (Map memberInfoMap in memberListBasic) {
       memberList.add(oZIMUserInfo(memberInfoMap)!);
     }
+    ZIMManager.writeLog("Flutter dart. oZIMUserInfoList success");
     return memberList;
   }
 
