@@ -198,6 +198,7 @@ public:
     static FTArray cnvZIMGroupAttributesUpdateInfoListToArray(const std::vector<ZIMGroupAttributesUpdateInfo>& updateInfoList);
     static FTMap cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInfo);
     static FTMap cnvZIMCallInfoToMap(const ZIMCallInfo& userInfo);
+    static FTMap cnvZIMCallInvitationCreatedInfoToMap(const ZIMCallInvitationCreatedInfo& info);
     static FTMap cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo& callEndSentInfo);
     static FTMap cnvZIMCallJoinSentInfoToMap(const ZIMCallJoinSentInfo& callJoinSentInfo);
     static FTMap cnvZIMCallQuitSentInfoToMap(const ZIMCallQuitSentInfo& callQuitSentInfo);
@@ -240,7 +241,6 @@ public:
     static ZIMMessageReactionUserQueryConfig cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap);
     static std::shared_ptr<ZIMVoIPConfig> cnvZIMVoIPConfigConfigToObject(FTMap configMap);
     static ZIMBlacklistQueryConfig cnvZIMBlacklistQueryConfigToObject(FTMap configMap);
-    
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static int32_t cnvFTMapToInt32(flutter::EncodableValue value);

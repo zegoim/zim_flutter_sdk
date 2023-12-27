@@ -1192,6 +1192,16 @@ class ZIMCallInvitationRejectedInfo {
   ZIMCallInvitationRejectedInfo();
 }
 
+class ZIMCallInvitationCreatedInfo{
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.unknown;
+  String caller = "";
+  String inviter = "";
+  String extendedData = "";
+  int timeout = 0;
+  int createTime = 0;
+  List<ZIMCallUserInfo> callUserList = [];
+}
+
 class ZIMCallInvitationEndedInfo{
   String caller = '';
   String operatedUserID = '';

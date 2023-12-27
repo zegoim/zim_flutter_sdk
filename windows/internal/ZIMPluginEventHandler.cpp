@@ -574,6 +574,22 @@ void ZIMPluginEventHandler::onCallInviteesAnsweredTimeout(ZIM* zim,
     }
 }
 
+void ZIMPluginEventHandler::onCallInvitationCreated(ZIM * zim,
+                                         const ZIMCallInvitationCreatedInfo & info,
+                                         const std::string & callID) override{
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onCallInvitationCreated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallInvitationCreatedInfoToMap(info);
+        retMap[FTValue("callID")] = FTValue(callID);
+
+        eventSink_->Success(retMap);
+    }
+
+}
+
 void ZIMPluginEventHandler::onCallInvitationEnded(ZIM* zim, const ZIMCallInvitationEndedInfo& info,
 	const std::string& callID) {
     if (eventSink_) {
@@ -623,3 +639,4 @@ void ZIMPluginEventHandler::onBlacklistChanged(ZIM * zim, const ZIMBlacklistChan
         eventSink_->Success(retMap);
     }
 }
+

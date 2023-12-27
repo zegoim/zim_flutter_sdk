@@ -825,6 +825,18 @@ FTMap ZIMPluginConverter::cnvZIMCallInfoToMap(const ZIMCallInfo& callInfo) {
 	return callInfoMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMCallInvitationCreatedInfoToMap(const ZIMCallInvitationCreatedInfo& info) {
+	FTMap infoMap;
+	infoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
+	infoMap[FTValue("caller")] = FTValue(info.caller);
+	infoMap[FTValue("inviter")] = FTValue(info.inviter);
+	infoMap[FTValue("extendedData")] = FTValue(info.extendedData);
+	infoMap[FTValue("timeout")] = FTValue((int32_t)info.timeout);
+	infoMap[FTValue("createTime")] = FTValue((int64_t)info.createTime);
+	infoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(info.callUserList);
+	return infoMap;
+}
+
 FTMap ZIMPluginConverter::cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo& callEndSentInfo) {
 	FTMap callInfoMap;
     callInfoMap[FTValue("createTime")] = FTValue((int64_t)callEndSentInfo.createTime);

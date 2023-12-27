@@ -1596,6 +1596,17 @@ class ZIMConverter {
     return configMap;
   }
 
+  static ZIMCallInvitationCreatedInfo oZIMCallInvitationCreatedInfo(Map infoMap) {
+    ZIMCallInvitationCreatedInfo info = ZIMCallInvitationCreatedInfo();
+    info.caller = infoMap['caller'];
+    info.inviter = infoMap['inviter'];
+    info.extendedData = infoMap['extendedData'];
+    info.timeout = infoMap['timeout'];
+    info.createTime = infoMap['createTime'];
+    info.callUserList = oZIMCallUserInfoList(infoMap['callUserList']);
+    return info;
+  }
+
   static ZIMCallInvitationEndedInfo oZIMCallInvitationEndedInfo(Map infoMap) {
     ZIMCallInvitationEndedInfo info = ZIMCallInvitationEndedInfo();
     info.caller = infoMap['caller'];

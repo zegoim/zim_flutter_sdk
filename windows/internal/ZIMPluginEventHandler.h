@@ -148,6 +148,10 @@ protected:
         const std::vector<std::string>& invitees,
         const std::string& callID);
 
+    void onCallInvitationCreated(ZIM * zim,
+                                         const ZIMCallInvitationCreatedInfo & info,
+                                         const std::string & callID);
+
     void onCallInvitationEnded(ZIM* zim, const ZIMCallInvitationEndedInfo& info,
         const std::string& callID);
 
