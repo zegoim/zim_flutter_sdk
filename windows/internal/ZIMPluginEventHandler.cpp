@@ -576,7 +576,7 @@ void ZIMPluginEventHandler::onCallInviteesAnsweredTimeout(ZIM* zim,
 
 void ZIMPluginEventHandler::onCallInvitationCreated(ZIM * zim,
                                          const ZIMCallInvitationCreatedInfo & info,
-                                         const std::string & callID) override{
+                                         const std::string & callID) {
     if (eventSink_) {
         FTMap retMap;
         retMap[FTValue("method")] = FTValue("onCallInvitationCreated");
