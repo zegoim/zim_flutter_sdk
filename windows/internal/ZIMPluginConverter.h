@@ -150,6 +150,10 @@ struct ZIM_FriendlyGet_revokeExtendedData {
     typedef std::string ZIMRevokeMessage::* type;
 };
 
+struct ZIM_FriendlyGet_combineID {
+	typedef std::string ZIMCombineMessage::* type;
+};
+
 struct ZIM_FriendlyGet_receiptStatus {
     typedef ZIMMessageReceiptStatus ZIMMessage::* type;
 };
