@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:zego_zim/src/internal/zim_common_data.dart';
 import 'package:zego_zim/src/internal/zim_manager.dart';
 
@@ -246,6 +248,7 @@ class ZIMConverter {
         message ??= ZIMTextMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.command:
+        resultMap['message'] = resultMap['message'] is Uint8List ? resultMap['message'] : convertToUint8List(resultMap['message']);
         message ??= ZIMCommandMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.barrage:
@@ -1847,6 +1850,16 @@ class ZIMConverter {
   static ZIMConversationDraftSetResult oZIMConversationDraftSetResult(Map map) {
     return ZIMConversationDraftSetResult(conversationID: map["conversationID"], conversationType: ZIMConversationTypeExtension.mapValue[map['conversationType']]!);
 
+  }
+
+  static Uint8List convertToUint8List(dynamic data) {
+    final list = <int>[];
+    for(int i = 0; i < data.length; i++) {
+      list.add(data[i.toString()]);
+    }
+
+    final uint8List = Uint8List.fromList(list);
+    return uint8List;
   }
 
 }
