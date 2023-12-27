@@ -266,7 +266,7 @@
         }
         case ZIMMessageTypeCombine:{
             msg = [[ZIMCombineMessage alloc] init];
-            [((ZIMCombineMessage *)msg) safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"combindID"]  forKey:@"combineID"];
+            [((ZIMCombineMessage *)msg) safeSetValue:(NSString *)[messageDic safeObjectForKey:@"combineID"]  forKey:@"combineID"];
             ((ZIMCombineMessage *)msg).title = [messageDic safeObjectForKey:@"title"];
             ((ZIMCombineMessage *)msg).summary = [messageDic safeObjectForKey:@"summary"];
             NSArray *messageList = [ZIMPluginConverter oZIMMessageList:[messageDic safeObjectForKey:@"messageList"]];
