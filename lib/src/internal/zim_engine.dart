@@ -1126,7 +1126,7 @@ class ZIMEngine implements ZIM {
       'handle': handle,
       'config': ZIMConverter.mZIMBlacklistQueryConfig(config),
     });
-
+    ZIMManager.writeLog("Flutter dart queryBlackList callback,result Map:"+resultMap.toString());
     return ZIMConverter.oZIMBlacklistQueriedResult(resultMap);
   }
 

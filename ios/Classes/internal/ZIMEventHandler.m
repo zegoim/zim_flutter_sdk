@@ -642,16 +642,18 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
-- (void)zim:(ZIM *)zim blacklistChanged:(NSArray<ZIMUserInfo *> *)userInfos action:(ZIMBlacklistChangedAction)action{
+
+
+- (void)zim:(ZIM *)zim blacklistChanged:(NSArray<ZIMUserInfo *> *)userList action:(ZIMBlacklistChangedAction)action{
     if(_events == nil){
         return;
     }
     NSString *handle = [_engineEventMap objectForKey:zim];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-    NSArray *userInfoBasic = [ZIMPluginConverter mZIMUserInfoList:userInfos];
+    NSArray *userInfoBasic = [ZIMPluginConverter mZIMUserInfoList:userList];
     
-    [resultDic safeSetObject:@"onMessageReactionsChanged" forKey:@"method"];
-    [resultDic safeSetObject:userInfoBasic forKey:@"userInfos"];
+    [resultDic safeSetObject:@"onBlacklistChanged" forKey:@"method"];
+    [resultDic safeSetObject:userInfoBasic forKey:@"userList"];
     [resultDic safeSetObject:[NSNumber numberWithInteger:action] forKey:@"action"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
