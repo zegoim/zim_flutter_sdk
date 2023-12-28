@@ -81,6 +81,18 @@
     return basicZIMUserInfoList;
 }
 
++(bool)wirteCustomLog:(NSString *)customLog{
+    Class ZIM = NSClassFromString(@"ZIM");
+    if ([[NSClassFromString(@"ZIM") alloc] init] != nil) {
+        SEL selector = NSSelectorFromString(@"writeCustomLog:moduleName:");
+        IMP imp = [ZIM methodForSelector:selector];
+        void (*func)(id, SEL, NSString *,NSString *) = (void (*)(id, SEL, NSString *, NSString *))imp;
+        func(ZIM, selector, customLog,@"Flutter sdk");
+        return true;
+    }
+    return false;
+}
+
 +(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList{
     if(userInfoList == nil || userInfoList == NULL || [userInfoList isEqual:[NSNull null]]){
         return nil;
@@ -124,6 +136,7 @@
     [conversationDic safeSetObject:[NSNumber numberWithLongLong:conversation.orderKey] forKey:@"orderKey"];
     [conversationDic safeSetObject:[ZIMPluginConverter mZIMMessage:conversation.lastMessage] forKey:@"lastMessage"];
     [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
+    [ZIMPluginConverter wirteCustomLog:[NSString stringWithFormat:@"mention info list size :%lu",(unsigned long)conversation.mentionedInfoList.count]];
     [conversationDic safeSetObject:[ZIMPluginConverter mZIMMentionedInfoList:conversation.mentionedInfoList] forKey:@"mentionedInfoList"];
     return conversationDic;
 }
@@ -454,6 +467,7 @@
         [dic safeSetObject:info.fromUserID forKey:@"fromUserID"];
         [dic safeSetObject:[NSNumber numberWithLongLong:info.messageID] forKey:@"messageID"];
         [DicArr addObject:dic];
+        [ZIMPluginConverter wirteCustomLog:[NSString stringWithFormat:@"type :%lu,frome user id :%@,message id:%lld",(unsigned long)info.type,info.fromUserID,info.messageID]];
     }
     return DicArr;
 }
