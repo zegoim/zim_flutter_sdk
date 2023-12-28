@@ -276,8 +276,9 @@
         default:
             break;
     }
-    ((ZIMCombineMessage *)msg).mentionedUserIDs = [messageDic safeObjectForKey:@"mentionUserIDs"];
-    ((ZIMCombineMessage *)msg).isMentionAll =[messageDic safeObjectForKey:@"isMentionAll"];
+    [msg safeSetValue:[messageDic safeObjectForKey:@"mentionedUserIDs"]  forKey:@"mentionedUserIDs"];
+    [msg safeSetValue:[messageDic safeObjectForKey:@"isMentionAll"]  forKey:@"isMentionAll"];
+    
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"type"]  forKey:@"type"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"messageID"]  forKey:@"messageID"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"localMessageID"]  forKey:@"localMessageID"];
