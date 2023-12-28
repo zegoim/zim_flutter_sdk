@@ -177,7 +177,7 @@ public class ZIMPluginConverter {
             mentionInfo.put("type",info.type.value());
             mentionInfoList.add(mentionInfo);
         }
-        conversationMap.put("mentionInfoList",mentionInfoList);
+        conversationMap.put("mentionedInfoList",mentionInfoList);
         if(conversation.lastMessage != null){
             conversationMap.put("lastMessage", mZIMMessage(conversation.lastMessage));
         }
