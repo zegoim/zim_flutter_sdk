@@ -1,4 +1,4 @@
-#include "ZIMPluginConverter.h"
+﻿#include "ZIMPluginConverter.h"
 
 ZIMMessageType ZIMMessage::* get(ZIM_FriendlyGet_msgType);
 template struct Rob<ZIM_FriendlyGet_msgType, &ZIMMessage::type>;
@@ -273,7 +273,7 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	conversationMap[FTValue("orderKey")] = FTValue(conversation->orderKey);
 	conversationMap[FTValue("lastMessage")] = cnvZIMMessageObjectToMap(conversation->lastMessage.get());
     conversationMap[FTValue("isPinned")] = FTValue(conversation->isPinned);
-
+	conversationMap[FTValue("mentionedInfoList")] = cnvZIMMessageMentionedInfoToMap(conversation->mentionedInfoList);
 	return conversationMap;
 }
 
@@ -1149,6 +1149,18 @@ FTMap ZIMPluginConverter::cnvZIMMessageReactionToMap(const ZIMMessageReaction& r
 	reactionMap[FTValue("isSelfIncluded")] = FTValue(reaction.isSelfIncluded);
 	reactionMap[FTValue("userList")] = FTValue(ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(reaction.userList));
 	return reactionMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList) {
+	FTArray array;
+	for (auto& info : infoList) {
+		FTMap map;
+		map[FTValue("type")] = FTValue(info.type);
+		map[FTValue("fromeUserID")] = FTValue(info.fromeUserID);
+		map[FTValue("messageID")] = FTValue(info.messageID);
+		array.emplace_back(map);
+	}
+	return array;
 }
 
 FTMap ZIMPluginConverter::cnvZIMMessageReactionUserInfoToMap(const ZIMMessageReactionUserInfo& userInfo) {
