@@ -1095,7 +1095,7 @@ class ZIMConverter {
   }
 
   static List mZIMCallUserInfoList(List<ZIMCallUserInfo> infoList){
-    List list = {};
+    List list = [];
     for(ZIMCallUserInfo userInfo in infoList){
       list.add(mZIMCallUserInfo(userInfo));
     }
@@ -1619,7 +1619,8 @@ class ZIMConverter {
     map['extendedData'] = info.extendedData;
     map['timeout'] = info.timeout;
     map['createTime'] = info.createTime;
-    map['callUserList'] =
+    map['callUserList'] = mZIMCallUserInfoList(info.callUserList);
+    return map;
   }
 
   static ZIMCallInvitationCreatedInfo oZIMCallInvitationCreatedInfo(Map infoMap) {
