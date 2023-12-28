@@ -1086,6 +1086,22 @@ class ZIMConverter {
     return callUserInfoList;
   }
 
+  static Map mZIMCallUserInfo(ZIMCallUserInfo userInfo){
+    Map map = {};
+    map['userID'] = userInfo.userID;
+    map['state'] = userInfo.state.value;
+    map['extendedData'] = userInfo.extendedData;
+    return map;
+  }
+
+  static List mZIMCallUserInfoList(List<ZIMCallUserInfo> infoList){
+    List list = {};
+    for(ZIMCallUserInfo userInfo in infoList){
+      list.add(mZIMCallUserInfo(userInfo));
+    }
+    return list;
+  }
+
   static ZIMCallQuitSentInfo oZIMCallQuitSentInfo(Map infoMap) {
     ZIMCallQuitSentInfo info = ZIMCallQuitSentInfo();
     info.createTime = infoMap['createTime'];
@@ -1594,6 +1610,16 @@ class ZIMConverter {
     Map configMap = {};
     configMap['extendedData'] = config.extendedData;
     return configMap;
+  }
+
+  static Map mZIMCallInvitationCreatedInfo(ZIMCallInvitationCreatedInfo info) {
+    Map map = {};
+    map['caller'] = info.caller;
+    map['inviter'] = info.inviter;
+    map['extendedData'] = info.extendedData;
+    map['timeout'] = info.timeout;
+    map['createTime'] = info.createTime;
+    map['callUserList'] =
   }
 
   static ZIMCallInvitationCreatedInfo oZIMCallInvitationCreatedInfo(Map infoMap) {
