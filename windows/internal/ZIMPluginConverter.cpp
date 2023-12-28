@@ -1151,12 +1151,12 @@ FTMap ZIMPluginConverter::cnvZIMMessageReactionToMap(const ZIMMessageReaction& r
 	return reactionMap;
 }
 
-FTMap ZIMPluginConverter::cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList) {
+FTArray ZIMPluginConverter::cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList) {
 	FTArray array;
 	for (auto& info : infoList) {
 		FTMap map;
 		map[FTValue("type")] = FTValue(info.type);
-		map[FTValue("fromeUserID")] = FTValue(info.fromeUserID);
+		map[FTValue("fromUserID")] = FTValue(info.fromUserID);
 		map[FTValue("messageID")] = FTValue(info.messageID);
 		array.emplace_back(map);
 	}

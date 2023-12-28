@@ -252,5 +252,5 @@ public:
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
-    static FTMap cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList);
+    static FTArray cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList);
 };

@@ -450,7 +450,7 @@
     for (ZIMMessageMentionedInfo *info in mentionedInfoList) {
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic safeSetObject:[NSNumber numberWithInt:(int)info.type] forKey:@"type"];
-        [dic safeSetObject:info.fromUserID forKey:@"fromeUserID"];
+        [dic safeSetObject:info.fromUserID forKey:@"fromUserID"];
         [dic safeSetObject:[NSNumber numberWithLongLong:info.messageID] forKey:@"messageID"];
         [DicArr addObject:dic];
     }
