@@ -2289,15 +2289,13 @@ class ZIMFriendInfo extends ZIMUserInfo {
 
 class ZIMFriendApplicationInfo {
   ZIMUserInfo? applyUser;
-  String wording;
-  String friendAlias;
-  int createTime;
-  int updateTime;
-  Map<String,String> friendAttributes;
-  ZIMFriendApplicationType type;
-  ZIMFriendApplicationState state;
-
-  ZIMFriendApplicationInfo({required this.applyUser,required this.wording,required this.friendAlias,required this.createTime,required this.updateTime,required this.friendAttributes,required this.type,required this.state});
+  String wording = "";
+  String friendAlias = "";
+  int createTime = 0;
+  int updateTime = 0;
+  Map<String,String> friendAttributes = {};
+  ZIMFriendApplicationType type = ZIMFriendApplicationType.unknown;
+  ZIMFriendApplicationState state = ZIMFriendApplicationState.unknown;
 }
 
 

@@ -2920,6 +2920,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> friendInfoMap = ZIMPluginConverter.mZIMFriendInfo(friendInfo); // 假设存在 mZIMFriendInfo 转换函数
                         friendInfoMapList.add(friendInfoMap);
                     }
+                    LogWriter.writeLog("flutter native android onFriendsInfoQueried,friendsInfos size:"+zimFriendInfos.size()+"friendsMapList size:"+friendInfoMapList.size());
                     resultMap.put("zimFriendInfos", friendInfoMapList);
 
                     // 转换错误用户信息
