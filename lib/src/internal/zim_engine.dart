@@ -1099,7 +1099,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMBlacklistCheckedResult> checkUserIsInBlackList(String userID) async {
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID) async {
     Map resultMap = await channel.invokeMethod('checkUserIsInBlackList', {
       'handle': handle,
       'userID': userID,
@@ -1121,7 +1121,7 @@ class ZIMEngine implements ZIM {
 
 
   @override
-  Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config) async {
+  Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryBlackList', {
       'handle': handle,
       'config': ZIMConverter.mZIMBlacklistQueryConfig(config),

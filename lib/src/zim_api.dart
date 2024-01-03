@@ -1529,9 +1529,9 @@ abstract class ZIM {
 
   Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs);
 
-  Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config);
+  Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config);
 
-  Future<ZIMBlacklistCheckedResult> checkUserIsInBlackList(String userID);
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
 
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
 }
