@@ -2925,7 +2925,7 @@ void ZIMPluginMethodHandler::queryBlacklist(flutter::EncodableMap& argument,std:
         }
     });
 }
-void ZIMPluginMethodHandler::checkUserIsInBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+void ZIMPluginMethodHandler::checkUserIsInBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
     auto zim = this->engineMap[handle];
     if (!zim) {
