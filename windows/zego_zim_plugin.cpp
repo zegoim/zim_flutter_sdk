@@ -390,10 +390,10 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().removeUsersFromBlacklist(argument, std::move(result));
     }
     else if (method_call.method_name() == "queryBlackList") {
-        ZIMPluginMethodHandler::getInstance().queryBlacklist(argument, std::move(result));
+        ZIMPluginMethodHandler::getInstance().queryBlackList(argument, std::move(result));
     }
     else if (method_call.method_name() == "checkUserIsInBlackList") {
-        ZIMPluginMethodHandler::getInstance().checkUserIsInBlacklist(argument, std::move(result));
+        ZIMPluginMethodHandler::getInstance().checkUserIsInBlackList(argument, std::move(result));
     }
     else {
         result->NotImplemented();
