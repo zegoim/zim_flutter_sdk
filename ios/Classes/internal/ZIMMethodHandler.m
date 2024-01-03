@@ -2344,7 +2344,7 @@
         return;
     }
     NSString *userID = [call.arguments objectForKey:@"userID"];
-    [zim checkUserIsInBlackListByUserID:userID callback:^(BOOL isUserInBlacklist, ZIMError * _Nonnull errorInfo) {
+    [zim checkUserIsInBlacklistByUserID:userID callback:^(BOOL isUserInBlacklist, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:[NSNumber numberWithBool:isUserInBlacklist] forKey:@"isUserInBlacklist"];

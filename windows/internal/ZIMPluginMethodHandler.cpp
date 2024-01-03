@@ -2934,7 +2934,7 @@ void ZIMPluginMethodHandler::checkUserIsInBlackList(flutter::EncodableMap& argum
     }
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->checkUserIsInBlackList(userID, [=](bool isUserInBlacklist, const ZIMError &errorInfo){
+    zim->checkUserIsInBlacklist(userID, [=](bool isUserInBlacklist, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("isUserInBlacklist")] = FTValue(isUserInBlacklist);

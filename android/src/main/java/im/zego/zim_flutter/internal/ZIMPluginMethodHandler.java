@@ -3180,7 +3180,7 @@ public class ZIMPluginMethodHandler {
             return;
         }
         String userID = call.argument("userID");
-        zim.checkUserIsInBlackList(userID, new ZIMBlacklistCheckedCallback() {
+        zim.checkUserIsInBlacklist(userID, new ZIMBlacklistCheckedCallback() {
             @Override
             public void onBlacklistChecked(boolean isUserInBlacklist, ZIMError errorInfo) {
                 if (errorInfo.code == ZIMErrorCode.SUCCESS) {
