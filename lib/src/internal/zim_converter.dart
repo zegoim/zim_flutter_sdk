@@ -1730,7 +1730,7 @@ class ZIMConverter {
 
   static ZIMFriendApplicationInfo oZIMFriendApplicationInfo(Map map) {
     ZIMFriendApplicationInfo info = ZIMFriendApplicationInfo();
-    info.applyUser = map['applyUser'];
+    info.applyUser = oZIMUserInfo(map['applyUser']);
     info.wording = map['wording'];
     info.friendAlias = map['friendAlias'];
     info.createTime = map['createTime'];
