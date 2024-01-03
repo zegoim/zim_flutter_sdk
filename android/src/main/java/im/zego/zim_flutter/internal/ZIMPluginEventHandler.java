@@ -9,6 +9,7 @@ import im.zego.zim.ZIM;
 import im.zego.zim.callback.ZIMEventHandler;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
+import im.zego.zim.entity.ZIMCallInvitationCreatedInfo;
 import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
@@ -529,6 +530,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         mysink.success(resultMap);
     }
 
+    public void onCallInvitationCreated(ZIM zim, ZIMCallInvitationCreatedInfo info, String callID) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onCallInvitationCreated");
+        resultMap.put("handle",handle);
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationCreatedInfo(info));
+        resultMap.put("callID",callID);
+        mysink.success(resultMap);
+    }
+
     @Override
     public void onCallInvitationEnded(ZIM zim, ZIMCallInvitationEndedInfo info, String callID) {
         if(mysink == null){
@@ -761,6 +776,8 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
 //        resultMap.put("friendApplicationInfoList", infoList);
 //        mysink.success(resultMap);
 //    }
+
+
 
 
     @Override
