@@ -616,15 +616,15 @@ extension ZIMUserRelationTypeExtension on ZIMUserRelationType {
 }
 
 // ZIMBlacklistChangedAction Enum Extension
-extension ZIMBlacklistChangedActionExtension on ZIMBlacklistChangedAction {
+extension ZIMBlacklistChangedActionExtension on ZIMBlacklistChangeAction {
   static const valueMap = {
-    ZIMBlacklistChangedAction.added: 0,
-    ZIMBlacklistChangedAction.deleted: 1,
+    ZIMBlacklistChangeAction.added: 0,
+    ZIMBlacklistChangeAction.removed: 1,
   };
 
   static const mapValue = {
-    0: ZIMBlacklistChangedAction.added,
-    1: ZIMBlacklistChangedAction.deleted,
+    0: ZIMBlacklistChangeAction.added,
+    1: ZIMBlacklistChangeAction.removed,
   };
 
   int get value => valueMap[this] ?? -1;

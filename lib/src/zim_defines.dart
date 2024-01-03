@@ -382,7 +382,7 @@ enum ZIMFriendRelationCheckType{unknown,both,sent}
 
 enum ZIMUserRelationType{unknown,singleNO,singleHave,bothAllNo,bothSelfHave,bothOtherHave,bothAllHave}
 
-enum ZIMBlacklistChangedAction{added,deleted}
+enum ZIMBlacklistChangeAction{added,removed}
 
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;

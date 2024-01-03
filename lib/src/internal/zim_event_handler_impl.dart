@@ -379,7 +379,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onBlacklistChanged':
         if (ZIMEventHandler.onBlacklistChanged == null) return;
-        ZIMBlacklistChangedAction action = ZIMBlacklistChangedActionExtension.mapValue[map['action']]!;
+        ZIMBlacklistChangeAction action = ZIMBlacklistChangedActionExtension.mapValue[map['action']]!;
         List<ZIMUserInfo>? userList = ZIMConverter.oZIMUserInfoList(map['userList']);
         ZIMEventHandler.onBlacklistChanged!(zim, action, userList);
         break;
