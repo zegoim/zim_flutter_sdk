@@ -644,7 +644,7 @@ fromGroupID:(NSString *)fromGroupID{
 
 
 
-- (void)zim:(ZIM *)zim blacklistChanged:(NSArray<ZIMUserInfo *> *)userList action:(ZIMBlacklistChangedAction)action{
+- (void)zim:(ZIM *)zim blacklistChanged:(NSArray<ZIMUserInfo *> *)userList action:(ZIMBlacklistChangeAction)action{
     if(_events == nil){
         return;
     }

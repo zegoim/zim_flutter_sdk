@@ -1179,6 +1179,6 @@ ZIMMessageReactionUserQueryConfig ZIMPluginConverter::cnvZIMMessageReactionUserQ
 ZIMBlacklistQueryConfig ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(FTMap configMap) {
 	ZIMBlacklistQueryConfig config;
 	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
-	config.nextFlag = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
+	config.nextFlag = (unsigned int)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
 	return config;
 }

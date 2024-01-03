@@ -2364,7 +2364,7 @@
         return;
     }
     ZIMBlacklistQueryConfig *queryConfig = [ZIMPluginConverter oZIMBlacklistQueryConfig:[call.arguments objectForKey:@"config"]];
-    [zim queryBlackListWithConfig:queryConfig callback:^(NSArray<ZIMUserInfo *> * _Nonnull blacklist, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+    [zim queryBlacklistWithConfig:queryConfig callback:^(NSArray<ZIMUserInfo *> * _Nonnull blacklist, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
         [self writeLog:[NSString stringWithFormat:@"FLutter Native queryBlackListWithConfig callback received,blackList:%@,next flag:%u",[ZIMPluginConverter mZIMUserInfoList:blacklist],nextFlag]];
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];

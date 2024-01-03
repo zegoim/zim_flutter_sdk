@@ -3147,7 +3147,7 @@ public class ZIMPluginMethodHandler {
         }
 
         ZIMBlacklistQueryConfig config = ZIMPluginConverter.oZIMBlacklistQueryConfig(Objects.requireNonNull(call.argument("config"))); // 从 call 中提取并转换配置
-        zim.queryBlackList(config, new ZIMBlacklistQueriedCallback() {
+        zim.queryBlacklist(config, new ZIMBlacklistQueriedCallback() {
             @Override
             public void onBlacklistQueried(ArrayList<ZIMUserInfo> blacklist, int nextFlag, ZIMError zimError) {
                 LogWriter.writeLog("Flutter Android onBlacklistQueried,size:%d "+ blacklist.size());
@@ -3182,15 +3182,15 @@ public class ZIMPluginMethodHandler {
         String userID = call.argument("userID");
         zim.checkUserIsInBlackList(userID, new ZIMBlacklistCheckedCallback() {
             @Override
-            public void onBlacklistChecked(boolean isUserInBlacklist, ZIMError zimError) {
-                if (zimError.code == ZIMErrorCode.SUCCESS) {
+            public void onBlacklistChecked(boolean isUserInBlacklist, ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
                     // 在成功的情况下，返回用户是否在黑名单中的信息
                     HashMap<String, Object> resultMap = new HashMap<>();
                     resultMap.put("isUserInBlacklist", isUserInBlacklist);
                     result.success(resultMap);
                 } else {
                     // 在出现错误的情况下，返回错误信息
-                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
                 }
             }
         });

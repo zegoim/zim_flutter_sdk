@@ -627,7 +627,7 @@ void ZIMPluginEventHandler::onMessageReactionsChanged(ZIM * zim,const std::vecto
     }
 }
 
-void ZIMPluginEventHandler::onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangedAction & action,
+void ZIMPluginEventHandler::onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangeAction & action,
                                 const std::vector<ZIMUserInfo> & userList) {
     if (eventSink_) {
         FTMap retMap;

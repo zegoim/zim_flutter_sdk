@@ -781,7 +781,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
 
 
     @Override
-    public void onBlacklistChanged(ZIM zim, ZIMBlacklistChangedAction action, ArrayList<ZIMUserInfo> userList) {
+    public void onBlacklistChanged(ZIM zim, ZIMBlacklistChangeAction action, ArrayList<ZIMUserInfo> userList) {
         super.onBlacklistChanged(zim, action, userList);
         if (mysink == null) {
             return;
