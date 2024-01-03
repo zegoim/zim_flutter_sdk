@@ -159,7 +159,7 @@ protected:
 
     void onMessageReactionsChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions);
 
-    void onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangedAction & action,
+    void onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangeAction & action,
                                 const std::vector<ZIMUserInfo> & userList);
 
 private:
