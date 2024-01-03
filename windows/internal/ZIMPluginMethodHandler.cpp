@@ -1,4 +1,4 @@
-#include "ZIMPluginMethodHandler.h"
+﻿#include "ZIMPluginMethodHandler.h"
 #include "ZIMPluginEventHandler.h"
 
 #include <variant>

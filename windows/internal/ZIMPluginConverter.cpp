@@ -1,4 +1,4 @@
-#include "ZIMPluginConverter.h"
+﻿#include "ZIMPluginConverter.h"
 
 ZIMMessageType ZIMMessage::* get(ZIM_FriendlyGet_msgType);
 template struct Rob<ZIM_FriendlyGet_msgType, &ZIMMessage::type>;

@@ -1,4 +1,4 @@
-#include "ZIMPluginEventHandler.h"
+﻿#include "ZIMPluginEventHandler.h"
 #include <flutter/encodable_value.h>
 #include <memory>
 

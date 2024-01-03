@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <flutter/method_channel.h>
 #include <flutter/encodable_value.h>
