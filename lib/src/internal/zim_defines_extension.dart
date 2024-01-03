@@ -616,7 +616,7 @@ extension ZIMUserRelationTypeExtension on ZIMUserRelationType {
 }
 
 // ZIMBlacklistChangedAction Enum Extension
-extension ZIMBlacklistChangedActionExtension on ZIMBlacklistChangeAction {
+extension ZIMBlacklistChangeActionExtension on ZIMBlacklistChangeAction {
   static const valueMap = {
     ZIMBlacklistChangeAction.added: 0,
     ZIMBlacklistChangeAction.removed: 1,
