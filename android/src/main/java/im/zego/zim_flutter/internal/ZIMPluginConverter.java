@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import im.zego.zim.entity.ZIMAppConfig;
+import im.zego.zim.entity.ZIMLoginConfig;
 import im.zego.zim.entity.ZIMAudioMessage;
 import im.zego.zim.entity.ZIMBarrageMessage;
 import im.zego.zim.entity.ZIMBlacklistQueryConfig;
@@ -67,6 +68,7 @@ import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMGroupSearchConfig;
 import im.zego.zim.entity.ZIMGroupSearchInfo;
 import im.zego.zim.entity.ZIMImageMessage;
+import im.zego.zim.entity.ZIMLogConfig;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
@@ -131,6 +133,14 @@ public class ZIMPluginConverter {
         ZIMAppConfig config = new ZIMAppConfig();
         config.appID = ZIMPluginCommonTools.safeGetLongValue(configMap.get("appID"));
         config.appSign = (String)(configMap.get("appSign"));
+        return config;
+    }
+
+    static public ZIMLoginConfig oZIMLoginConfig(HashMap<String,Object> configMap){
+        ZIMLoginConfig config = new ZIMLoginConfig();
+        config.userName = (String)(configMap.get("userName"));
+        config.token = (String)(configMap.get("token"));
+        config.isOfflineLogin =  ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isOfflineLogin"));
         return config;
     }
 

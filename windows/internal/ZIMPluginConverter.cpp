@@ -562,6 +562,14 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	return messagePtr;
 }
 
+ZIMLoginConfig ZIMPluginConverter::cnvZIMLoginConfigToObject(FTMap configMap){
+	ZIMLoginConfig loginConfig;
+	loginConfig.userName = std::get<std::string>(configMap[FTValue("userName")]);
+	loginConfig.token = std::get<std::string>(configMap[FTValue("token")]);
+	loginConfig.isOfflineLogin = std::get<bool>(configMap[FTValue("isOfflineLogin")]);
+	return loginConfig;
+}
+
 std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMap configMap,std::shared_ptr<ZIMVoIPConfig> &voIPConfigPtr) {
 	auto config = std::make_shared<ZIMPushConfig>();
 	config->title = std::get<std::string>(configMap[FTValue("title")]);

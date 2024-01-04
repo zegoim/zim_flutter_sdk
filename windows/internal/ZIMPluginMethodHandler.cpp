@@ -117,17 +117,11 @@ void ZIMPluginMethodHandler::login(flutter::EncodableMap& argument,
         result->Error("-1", "no native instance");
         return;
     }
-
-    ZIMUserInfo userInfo;
-    userInfo.userID = std::get<std::string>(argument[FTValue("userID")]);
-    userInfo.userName = std::get<std::string>(argument[FTValue("userName")]);
-    std::string token;
-    if (std::holds_alternative<std::string>(argument[FTValue("token")])) {
-        token = std::get<std::string>(argument[FTValue("token")]);
-    }
+    std::string userID = std::get<std::string>(argument[FTValue("userID")]);
+    ZIMLoginConfig loginConfig = ZIMPluginConverter::cnvZIMLoginConfigToObject(argument[FTMap("config")]);
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->login(userInfo, token, [=](const ZIMError& errorInfo) {
+    zim->login(userID, loginConfig, [=](const ZIMError& errorInfo) {
         if (errorInfo.code == 0) {
             sharedPtrResult->Success();
         }

@@ -106,6 +106,7 @@ import im.zego.zim.callback.ZIMUserExtendedDataUpdatedCallback;
 import im.zego.zim.callback.ZIMUserNameUpdatedCallback;
 import im.zego.zim.callback.ZIMUsersInfoQueriedCallback;
 import im.zego.zim.entity.ZIMAppConfig;
+import im.zego.zim.entity.ZIMLoginConfig;
 import im.zego.zim.entity.ZIMBlacklistQueryConfig;
 import im.zego.zim.entity.ZIMCacheConfig;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
@@ -263,12 +264,10 @@ public class ZIMPluginMethodHandler {
             result.error("-1", "no native instance",null);
             return;
         }
+        String userID = call.argument("userID");
+        ZIMLoginConfig loginConfig = ZIMPluginConverter.oZIMLoginConfig(call.argument("config"));
 
-        String token = call.argument("token");
-        ZIMUserInfo userInfo = new ZIMUserInfo();
-        userInfo.userID = call.argument("userID");
-        userInfo.userName = call.argument("userName");
-        zim.login(userInfo, token, new ZIMLoggedInCallback() {
+        zim.login(userID, loginConfig, new ZIMLoggedInCallback() {
             @Override
             public void onLoggedIn(ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
