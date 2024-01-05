@@ -118,7 +118,7 @@ void ZIMPluginMethodHandler::login(flutter::EncodableMap& argument,
         return;
     }
     std::string userID = std::get<std::string>(argument[FTValue("userID")]);
-    ZIMLoginConfig loginConfig = ZIMPluginConverter::cnvZIMLoginConfigToObject(argument[FTMap("config")]);
+    ZIMLoginConfig loginConfig = ZIMPluginConverter::cnvZIMLoginConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->login(userID, loginConfig, [=](const ZIMError& errorInfo) {
