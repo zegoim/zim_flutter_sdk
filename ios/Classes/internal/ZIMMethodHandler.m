@@ -2376,7 +2376,7 @@
 }
 
 -(void)writeLog:(FlutterMethodCall *)call result:(FlutterResult)result {
-    NSString *log = [call.arguments objectForKey:@"writeLog"];
+    NSString *log = [call.arguments objectForKey:@"logString"];
     [self writeLog:log];
 }
 

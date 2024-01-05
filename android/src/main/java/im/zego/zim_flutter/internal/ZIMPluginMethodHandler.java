@@ -196,7 +196,7 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void writeLog(MethodCall call,Result result){
-        String log = call.argument("log");
+        String log = call.argument("logString");
         LogWriter.writeLog(log);
     }
 
