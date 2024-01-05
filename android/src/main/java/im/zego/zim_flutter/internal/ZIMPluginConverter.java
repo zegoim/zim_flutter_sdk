@@ -124,7 +124,7 @@ import im.zego.zim.enums.ZIMMessageSentStatus;
 import im.zego.zim.enums.ZIMMessageType;
 import im.zego.zim.enums.ZIMRevokeType;
 import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
-//import im.zego.zim.enums.ZIMUserRelationType;
+import im.zego.zim.enums.ZIMUserRelationType;
 
 @SuppressWarnings({"unused","deprecation,unchecked,all"})
 public class ZIMPluginConverter {
