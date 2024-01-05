@@ -1247,6 +1247,14 @@ class ZIMConverter {
     return configMap;
   }
 
+  static Map mZIMLoginConfig(ZIMLoginConfig config) {
+    Map configMap = {};
+    configMap['userName']  = config.userName;
+    configMap['token'] = config.token;
+    configMap['isOfflineLogin'] = config.isOfflineLogin;
+    return configMap;
+  }
+
   static Map mZIMUserInfoQueryConfig(ZIMUserInfoQueryConfig config) {
     Map configMap = {};
     configMap['isQueryFromServer'] = config.isQueryFromServer;

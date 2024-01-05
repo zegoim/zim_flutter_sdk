@@ -433,6 +433,13 @@ class ZIMAppConfig {
   ZIMAppConfig();
 }
 
+class ZIMLoginConfig {
+  String userName = '';
+  /// The token issued by the developer's business server, used to ensure security. The generation rules are detailed in ZEGO document website.
+  String token = '';
+  bool isOfflineLogin = false;
+}
+
 class ZIMUserInfoQueryConfig {
   bool isQueryFromServer = false;
   ZIMUserInfoQueryConfig();

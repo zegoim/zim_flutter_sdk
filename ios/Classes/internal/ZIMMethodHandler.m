@@ -108,15 +108,12 @@
         result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
         return;
     }
+
     
-    ZIMUserInfo *userInfo = [[ZIMUserInfo alloc] init];
-    userInfo.userID = [call.arguments objectForKey:@"userID"];
-    userInfo.userName = [call.arguments objectForKey:@"userName"];
-    NSString *token = [call.arguments objectForKey:@"token"];
-    if(!token || [token isEqual:[NSNull null]]) {
-        token = @"";
-    }
-    [zim loginWithUserInfo:userInfo token:token callback:^(ZIMError * _Nonnull errorInfo) {
+    NSString *userID = [call.arguments objectForKey:@"userID"];
+    ZIMLoginConfig *loginConfig = [ZIMPluginConverter oZIMLoginConfig:[call.arguments objectForKey:@"config"]];
+
+    [zim loginWithUserID:userID config:loginConfig callback:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             result(nil);
         }

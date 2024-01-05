@@ -18,6 +18,17 @@
     return config;
 }
 
++(nullable ZIMLoginConfig*)oZIMLoginConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMLoginConfig *config = [[ZIMLogConfig alloc] init];
+    config.userName = [configDic objectForKey:@"userName"];
+    config.token = [configDic objectForKey:@"token"];
+    config.isOfflineLogin = [[configDic objectForKey:@"isOfflineLogin"] boolValue];
+    return config;
+}
+
 +(nullable ZIMUsersInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;

@@ -29,12 +29,11 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<void> login(ZIMUserInfo userInfo, [String? token]) async {
+  Future<void> login(String userID, ZIMLoginConfig config) async {
     return await channel.invokeMethod("login", {
       "handle": handle,
-      "userID": userInfo.userID,
-      "userName": userInfo.userName,
-      "token": token
+      "userID": userID,
+      "config":ZIMConverter.mZIMLoginConfig(config)
     });
   }
 
