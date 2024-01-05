@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import im.zego.zim.entity.ZIMAppConfig;
+import im.zego.zim.entity.ZIMLoginConfig;
 import im.zego.zim.entity.ZIMAudioMessage;
 import im.zego.zim.entity.ZIMBarrageMessage;
 import im.zego.zim.entity.ZIMBlacklistQueryConfig;
@@ -15,6 +16,7 @@ import im.zego.zim.entity.ZIMCallCancelConfig;
 import im.zego.zim.entity.ZIMCallEndedSentInfo;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
+import im.zego.zim.entity.ZIMCallInvitationCreatedInfo;
 import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
@@ -43,16 +45,16 @@ import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
 import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
-import im.zego.zim.entity.ZIMFriendAddConfig;
-import im.zego.zim.entity.ZIMFriendApplicationAcceptConfig;
-import im.zego.zim.entity.ZIMFriendApplicationInfo;
-import im.zego.zim.entity.ZIMFriendApplicationListQueryConfig;
-import im.zego.zim.entity.ZIMFriendApplicationRejectConfig;
-import im.zego.zim.entity.ZIMFriendDeleteConfig;
-import im.zego.zim.entity.ZIMFriendInfo;
-import im.zego.zim.entity.ZIMFriendListQueryConfig;
-import im.zego.zim.entity.ZIMFriendRelationCheckConfig;
-import im.zego.zim.entity.ZIMFriendRelationInfo;
+//import im.zego.zim.entity.ZIMFriendAddConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationAcceptConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationInfo;
+//import im.zego.zim.entity.ZIMFriendApplicationListQueryConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationRejectConfig;
+//import im.zego.zim.entity.ZIMFriendDeleteConfig;
+//import im.zego.zim.entity.ZIMFriendInfo;
+//import im.zego.zim.entity.ZIMFriendListQueryConfig;
+//import im.zego.zim.entity.ZIMFriendRelationCheckConfig;
+//import im.zego.zim.entity.ZIMFriendRelationInfo;
 import im.zego.zim.entity.ZIMGroup;
 import im.zego.zim.entity.ZIMGroupAdvancedConfig;
 import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
@@ -66,6 +68,7 @@ import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMGroupSearchConfig;
 import im.zego.zim.entity.ZIMGroupSearchInfo;
 import im.zego.zim.entity.ZIMImageMessage;
+import im.zego.zim.entity.ZIMLogConfig;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
@@ -96,7 +99,7 @@ import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomMemberInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
 import im.zego.zim.entity.ZIMRoomOperatedInfo;
-import im.zego.zim.entity.ZIMSendFriendApplicationConfig;
+//import im.zego.zim.entity.ZIMSendFriendApplicationConfig;
 import im.zego.zim.entity.ZIMSystemMessage;
 import im.zego.zim.entity.ZIMTextMessage;
 import im.zego.zim.entity.ZIMUserFullInfo;
@@ -108,10 +111,10 @@ import im.zego.zim.enums.ZIMCXHandleType;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
 import im.zego.zim.enums.ZIMCallInvitationMode;
-import im.zego.zim.enums.ZIMFriendApplicationState;
-import im.zego.zim.enums.ZIMFriendApplicationType;
-import im.zego.zim.enums.ZIMFriendDeleteType;
-import im.zego.zim.enums.ZIMFriendRelationCheckType;
+//import im.zego.zim.enums.ZIMFriendApplicationState;
+//import im.zego.zim.enums.ZIMFriendApplicationType;
+//import im.zego.zim.enums.ZIMFriendDeleteType;
+//import im.zego.zim.enums.ZIMFriendRelationCheckType;
 import im.zego.zim.enums.ZIMMessageDirection;
 import im.zego.zim.enums.ZIMMessageOrder;
 import im.zego.zim.enums.ZIMMessagePriority;
@@ -121,7 +124,7 @@ import im.zego.zim.enums.ZIMMessageSentStatus;
 import im.zego.zim.enums.ZIMMessageType;
 import im.zego.zim.enums.ZIMRevokeType;
 import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
-import im.zego.zim.enums.ZIMUserRelationType;
+//import im.zego.zim.enums.ZIMUserRelationType;
 
 @SuppressWarnings({"unused","deprecation,unchecked,all"})
 public class ZIMPluginConverter {
@@ -130,6 +133,14 @@ public class ZIMPluginConverter {
         ZIMAppConfig config = new ZIMAppConfig();
         config.appID = ZIMPluginCommonTools.safeGetLongValue(configMap.get("appID"));
         config.appSign = (String)(configMap.get("appSign"));
+        return config;
+    }
+
+    static public ZIMLoginConfig oZIMLoginConfig(HashMap<String,Object> configMap){
+        ZIMLoginConfig config = new ZIMLoginConfig();
+        config.userName = (String)(configMap.get("userName"));
+        config.token = (String)(configMap.get("token"));
+        config.isOfflineLogin =  ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isOfflineLogin"));
         return config;
     }
 
@@ -1269,6 +1280,17 @@ public class ZIMPluginConverter {
         return infoMap;
     }
 
+    static public HashMap<String,Object> mZIMCallInvitationCreatedInfo(ZIMCallInvitationCreatedInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("mode", info.mode.value());
+        infoMap.put("caller", info.caller);
+        infoMap.put("extendedData", info.extendedData);
+        infoMap.put("timeout",info.timeout);
+        infoMap.put("createTime",info.createTime);
+        infoMap.put("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
+        return infoMap;
+    }
+
     static public HashMap<String,Object> mZIMCallInvitationEndedInfo(ZIMCallInvitationEndedInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("endTime", info.endTime);
@@ -1509,5 +1531,4 @@ public class ZIMPluginConverter {
         }
         return config;
     }
-
 }

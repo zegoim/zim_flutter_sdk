@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <memory>
 #include <flutter/event_channel.h>
@@ -148,6 +148,10 @@ protected:
         const std::vector<std::string>& invitees,
         const std::string& callID);
 
+    void onCallInvitationCreated(ZIM * zim,
+                                         const ZIMCallInvitationCreatedInfo & info,
+                                         const std::string & callID);
+
     void onCallInvitationEnded(ZIM* zim, const ZIMCallInvitationEndedInfo& info,
         const std::string& callID);
 
@@ -155,7 +159,7 @@ protected:
 
     void onMessageReactionsChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions);
 
-    void onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangedAction & action,
+    void onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangeAction & action,
                                 const std::vector<ZIMUserInfo> & userList);
 
 private:

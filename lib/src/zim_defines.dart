@@ -382,7 +382,7 @@ enum ZIMFriendRelationCheckType{unknown,both,sent}
 
 enum ZIMUserRelationType{unknown,singleNO,singleHave,bothAllNo,bothSelfHave,bothOtherHave,bothAllHave}
 
-enum ZIMBlacklistChangedAction{added,deleted}
+enum ZIMBlacklistChangeAction{added,removed}
 
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
@@ -431,6 +431,13 @@ class ZIMAppConfig {
   int appID = 0;
   String appSign = '';
   ZIMAppConfig();
+}
+
+class ZIMLoginConfig {
+  String userName = '';
+  /// The token issued by the developer's business server, used to ensure security. The generation rules are detailed in ZEGO document website.
+  String token = '';
+  bool isOfflineLogin = false;
 }
 
 class ZIMUserInfoQueryConfig {
@@ -1190,6 +1197,15 @@ class ZIMCallInvitationRejectedInfo {
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
   ZIMCallInvitationRejectedInfo();
+}
+
+class ZIMCallInvitationCreatedInfo{
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.unknown;
+  String caller = "";
+  String extendedData = "";
+  int timeout = 0;
+  int createTime = 0;
+  List<ZIMCallUserInfo> callUserList = [];
 }
 
 class ZIMCallInvitationEndedInfo{

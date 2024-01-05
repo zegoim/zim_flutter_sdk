@@ -2428,14 +2428,4 @@ class ZegoZimPlugin {
 
     return zimMessage;
   }
-
-  static Uint8List convertToUint8List(dynamic data) {
-    final list = <int>[];
-    data.forEach((i) {
-      list.add(i);
-    });
-
-    final uint8List = Uint8List.fromList(list);
-    return uint8List;
-  }
 }

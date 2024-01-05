@@ -104,9 +104,9 @@ abstract class ZIM {
   destroy();
 
   /// Login, you must log in before using all functions.
-  /// [userInfo] Unique ID used to identify the user. Note that the userID must be unique under the same appID, otherwise mutual kicks out will occur.
-  /// [token] The token issued by the developer's business server, used to ensure security. The generation rules are detailed in ZEGO document website.
-  Future<void> login(ZIMUserInfo userInfo, [String? token]);
+  /// [userID] Unique ID used to identify the user. Note that the userID must be unique under the same appID, otherwise mutual kicks out will occur.
+  /// [config] login config.
+  Future<void> login(String userID,ZIMLoginConfig config);
 
   /// Log out of ZIM service.
   logout();
@@ -1529,9 +1529,9 @@ abstract class ZIM {
 
   Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs);
 
-  Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config);
+  Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config);
 
-  Future<ZIMBlacklistCheckedResult> checkUserIsInBlackList(String userID);
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
 
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
 }

@@ -96,8 +96,8 @@
 - (void)setGeofencingConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSArray<NSNumber *> *areaList = [call.arguments objectForKey:@"areaList"];
     ZIMGeofencingType type = [[call.arguments objectForKey:@"type"] integerValue];
-    [ZIM setGeofencingConfigWithAreaList:areaList type:type];
-    result(nil);
+    BOOL callback = [ZIM setGeofencingConfigWithAreaList:areaList type:type];
+    result([NSNumber numberWithBool:callback]);
 }
 
 
@@ -108,15 +108,12 @@
         result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
         return;
     }
+
     
-    ZIMUserInfo *userInfo = [[ZIMUserInfo alloc] init];
-    userInfo.userID = [call.arguments objectForKey:@"userID"];
-    userInfo.userName = [call.arguments objectForKey:@"userName"];
-    NSString *token = [call.arguments objectForKey:@"token"];
-    if(!token || [token isEqual:[NSNull null]]) {
-        token = @"";
-    }
-    [zim loginWithUserInfo:userInfo token:token callback:^(ZIMError * _Nonnull errorInfo) {
+    NSString *userID = [call.arguments objectForKey:@"userID"];
+    ZIMLoginConfig *loginConfig = [ZIMPluginConverter oZIMLoginConfig:[call.arguments objectForKey:@"config"]];
+
+    [zim loginWithUserID:userID config:loginConfig callback:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             result(nil);
         }
@@ -2344,7 +2341,7 @@
         return;
     }
     NSString *userID = [call.arguments objectForKey:@"userID"];
-    [zim checkUserIsInBlackListByUserID:userID callback:^(BOOL isUserInBlacklist, ZIMError * _Nonnull errorInfo) {
+    [zim checkUserIsInBlacklistByUserID:userID callback:^(BOOL isUserInBlacklist, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:[NSNumber numberWithBool:isUserInBlacklist] forKey:@"isUserInBlacklist"];
@@ -2364,7 +2361,8 @@
         return;
     }
     ZIMBlacklistQueryConfig *queryConfig = [ZIMPluginConverter oZIMBlacklistQueryConfig:[call.arguments objectForKey:@"config"]];
-    [zim queryBlackListWithConfig:queryConfig callback:^(NSArray<ZIMUserInfo *> * _Nonnull blacklist, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+    [zim queryBlacklistWithConfig:queryConfig callback:^(NSArray<ZIMUserInfo *> * _Nonnull blacklist, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+        [self writeLog:[NSString stringWithFormat:@"FLutter Native queryBlackListWithConfig callback received,blackList:%@,next flag:%u",[ZIMPluginConverter mZIMUserInfoList:blacklist],nextFlag]];
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:[ZIMPluginConverter mZIMUserInfoList:blacklist] forKey:@"blacklist"];
@@ -2375,6 +2373,21 @@
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
         }
     }];
+}
+
+-(void)writeLog:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *log = [call.arguments objectForKey:@"writeLog"];
+    [self writeLog:log];
+}
+
+-(void)writeLog:(NSString *)log{
+    Class ZIM = NSClassFromString(@"ZIM");
+    if ([[NSClassFromString(@"ZIM") alloc] init] != nil) {
+        SEL selector = NSSelectorFromString(@"writeCustomLog:moduleName:");
+        IMP imp = [ZIM methodForSelector:selector];
+        void (*func)(id, SEL, NSString *,NSString *) = (void (*)(id, SEL, NSString *, NSString *))imp;
+        func(ZIM, selector, log,@"Auto Test");
+    }
 }
 #pragma mark - Getter
 - (NSMutableDictionary *)engineMap {

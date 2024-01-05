@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <memory>
 
@@ -198,6 +198,7 @@ public:
     static FTArray cnvZIMGroupAttributesUpdateInfoListToArray(const std::vector<ZIMGroupAttributesUpdateInfo>& updateInfoList);
     static FTMap cnvZIMCallUserInfoToMap(const ZIMCallUserInfo& userInfo);
     static FTMap cnvZIMCallInfoToMap(const ZIMCallInfo& userInfo);
+    static FTMap cnvZIMCallInvitationCreatedInfoToMap(const ZIMCallInvitationCreatedInfo& info);
     static FTMap cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo& callEndSentInfo);
     static FTMap cnvZIMCallJoinSentInfoToMap(const ZIMCallJoinSentInfo& callJoinSentInfo);
     static FTMap cnvZIMCallQuitSentInfoToMap(const ZIMCallQuitSentInfo& callQuitSentInfo);
@@ -219,6 +220,7 @@ public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
     static std::shared_ptr<ZIMMessage> cnvZIMMessageToObject(FTMap messageMap);
+    static ZIMLoginConfig cnvZIMLoginConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMPushConfig> cnvZIMPushConfigToObject(FTMap configMap, std::shared_ptr<ZIMVoIPConfig> &voIPConfigPtr);
     static std::vector<std::shared_ptr<ZIMMessage>> cnvZIMMessageArrayToObjectList(FTArray messageArray);
     static ZIMRoomInfo cnvZIMRoomInfoToObject(FTMap infoMap);
@@ -240,7 +242,6 @@ public:
     static ZIMMessageReactionUserQueryConfig cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap);
     static std::shared_ptr<ZIMVoIPConfig> cnvZIMVoIPConfigConfigToObject(FTMap configMap);
     static ZIMBlacklistQueryConfig cnvZIMBlacklistQueryConfigToObject(FTMap configMap);
-    
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static int32_t cnvFTMapToInt32(flutter::EncodableValue value);

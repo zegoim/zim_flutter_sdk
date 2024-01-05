@@ -1,4 +1,4 @@
-#include "ZIMPluginConverter.h"
+﻿#include "ZIMPluginConverter.h"
 
 ZIMMessageType ZIMMessage::* get(ZIM_FriendlyGet_msgType);
 template struct Rob<ZIM_FriendlyGet_msgType, &ZIMMessage::type>;
@@ -562,6 +562,14 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	return messagePtr;
 }
 
+ZIMLoginConfig ZIMPluginConverter::cnvZIMLoginConfigToObject(FTMap configMap){
+	ZIMLoginConfig loginConfig;
+	loginConfig.userName = std::get<std::string>(configMap[FTValue("userName")]);
+	loginConfig.token = std::get<std::string>(configMap[FTValue("token")]);
+	loginConfig.isOfflineLogin = std::get<bool>(configMap[FTValue("isOfflineLogin")]);
+	return loginConfig;
+}
+
 std::shared_ptr<ZIMPushConfig> ZIMPluginConverter::cnvZIMPushConfigToObject(FTMap configMap,std::shared_ptr<ZIMVoIPConfig> &voIPConfigPtr) {
 	auto config = std::make_shared<ZIMPushConfig>();
 	config->title = std::get<std::string>(configMap[FTValue("title")]);
@@ -823,6 +831,17 @@ FTMap ZIMPluginConverter::cnvZIMCallInfoToMap(const ZIMCallInfo& callInfo) {
 	callInfoMap[FTValue("extendedData")] = FTValue(callInfo.extendedData);
 
 	return callInfoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMCallInvitationCreatedInfoToMap(const ZIMCallInvitationCreatedInfo& info) {
+	FTMap infoMap;
+	infoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
+	infoMap[FTValue("caller")] = FTValue(info.caller);
+	infoMap[FTValue("extendedData")] = FTValue(info.extendedData);
+	infoMap[FTValue("timeout")] = FTValue((int32_t)info.timeout);
+	infoMap[FTValue("createTime")] = FTValue((int64_t)info.createTime);
+	infoMap[FTValue("callUserList")] = cnvZIMCallUserInfoListToArray(info.callUserList);
+	return infoMap;
 }
 
 FTMap ZIMPluginConverter::cnvZIMCallEndSentInfoToMap(const ZIMCallEndedSentInfo& callEndSentInfo) {
@@ -1167,6 +1186,6 @@ ZIMMessageReactionUserQueryConfig ZIMPluginConverter::cnvZIMMessageReactionUserQ
 ZIMBlacklistQueryConfig ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(FTMap configMap) {
 	ZIMBlacklistQueryConfig config;
 	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
-	config.nextFlag = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
+	config.nextFlag = (unsigned int)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
 	return config;
 }

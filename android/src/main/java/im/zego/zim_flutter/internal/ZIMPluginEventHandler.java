@@ -9,6 +9,7 @@ import im.zego.zim.ZIM;
 import im.zego.zim.callback.ZIMEventHandler;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
+import im.zego.zim.entity.ZIMCallInvitationCreatedInfo;
 import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
@@ -17,8 +18,8 @@ import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
 import im.zego.zim.entity.ZIMError;
-import im.zego.zim.entity.ZIMFriendApplicationInfo;
-import im.zego.zim.entity.ZIMFriendInfo;
+//import im.zego.zim.entity.ZIMFriendApplicationInfo;
+//import im.zego.zim.entity.ZIMFriendInfo;
 import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMGroupFullInfo;
 import im.zego.zim.entity.ZIMGroupMemberInfo;
@@ -34,11 +35,11 @@ import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomOperatedInfo;
 import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
-import im.zego.zim.enums.ZIMBlacklistChangedAction;
+import im.zego.zim.enums.ZIMBlacklistChangeAction;
 import im.zego.zim.enums.ZIMConnectionEvent;
 import im.zego.zim.enums.ZIMConnectionState;
-import im.zego.zim.enums.ZIMFriendApplicationListChangeAction;
-import im.zego.zim.enums.ZIMFriendListChangeAction;
+//import im.zego.zim.enums.ZIMFriendApplicationListChangeAction;
+//import im.zego.zim.enums.ZIMFriendListChangeAction;
 import im.zego.zim.enums.ZIMGroupEvent;
 import im.zego.zim.enums.ZIMGroupMemberEvent;
 import im.zego.zim.enums.ZIMGroupMemberState;
@@ -529,6 +530,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         mysink.success(resultMap);
     }
 
+    public void onCallInvitationCreated(ZIM zim, ZIMCallInvitationCreatedInfo info, String callID) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onCallInvitationCreated");
+        resultMap.put("handle",handle);
+        resultMap.put("info",ZIMPluginConverter.mZIMCallInvitationCreatedInfo(info));
+        resultMap.put("callID",callID);
+        mysink.success(resultMap);
+    }
+
     @Override
     public void onCallInvitationEnded(ZIM zim, ZIMCallInvitationEndedInfo info, String callID) {
         if(mysink == null){
@@ -763,8 +778,10 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
 
+
+
     @Override
-    public void onBlacklistChanged(ZIM zim, ZIMBlacklistChangedAction action, ArrayList<ZIMUserInfo> userList) {
+    public void onBlacklistChanged(ZIM zim, ZIMBlacklistChangeAction action, ArrayList<ZIMUserInfo> userList) {
         super.onBlacklistChanged(zim, action, userList);
         if (mysink == null) {
             return;

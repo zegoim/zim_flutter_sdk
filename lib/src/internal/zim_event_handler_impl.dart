@@ -331,6 +331,10 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         }
         ZIMEventHandler.onConversationMessageReceiptChanged!(zim,infos);
         break;
+      case 'onCallInvitationCreated':
+        if(ZIMEventHandler.onCallInvitationCreated == null)return;
+        ZIMEventHandler.onCallInvitationCreated!(zim,ZIMConverter.oZIMCallInvitationCreatedInfo(map['info']),map['callID']);
+        break;
       case 'onCallInvitationEnded':
         if(ZIMEventHandler.onCallInvitationEnded == null) return;
         ZIMEventHandler.onCallInvitationEnded!(
@@ -375,7 +379,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onBlacklistChanged':
         if (ZIMEventHandler.onBlacklistChanged == null) return;
-        ZIMBlacklistChangedAction action = ZIMBlacklistChangedActionExtension.mapValue[map['action']]!;
+        ZIMBlacklistChangeAction action = ZIMBlacklistChangeActionExtension.mapValue[map['action']]!;
         List<ZIMUserInfo>? userList = ZIMConverter.oZIMUserInfoList(map['userList']);
         ZIMEventHandler.onBlacklistChanged!(zim, action, userList);
         break;

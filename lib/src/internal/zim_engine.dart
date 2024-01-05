@@ -29,12 +29,11 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<void> login(ZIMUserInfo userInfo, [String? token]) async {
+  Future<void> login(String userID, ZIMLoginConfig config) async {
     return await channel.invokeMethod("login", {
       "handle": handle,
-      "userID": userInfo.userID,
-      "userName": userInfo.userName,
-      "token": token
+      "userID": userID,
+      "config":ZIMConverter.mZIMLoginConfig(config)
     });
   }
 
@@ -1099,7 +1098,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMBlacklistCheckedResult> checkUserIsInBlackList(String userID) async {
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID) async {
     Map resultMap = await channel.invokeMethod('checkUserIsInBlackList', {
       'handle': handle,
       'userID': userID,
@@ -1121,12 +1120,12 @@ class ZIMEngine implements ZIM {
 
 
   @override
-  Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config) async {
+  Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryBlackList', {
       'handle': handle,
       'config': ZIMConverter.mZIMBlacklistQueryConfig(config),
     });
-
+    ZIMManager.writeLog("Flutter dart queryBlackList callback,result Map:"+resultMap.toString());
     return ZIMConverter.oZIMBlacklistQueriedResult(resultMap);
   }
 

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:zego_zim/src/internal/zim_common_data.dart';
 import 'package:zego_zim/src/internal/zim_manager.dart';
 
@@ -249,6 +251,7 @@ class ZIMConverter {
         message ??= ZIMTextMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.command:
+        resultMap['message'] = resultMap['message'] is Uint8List ? resultMap['message'] : convertToUint8List(resultMap['message']);
         message ??= ZIMCommandMessage(message: resultMap['message']);
         break;
       case ZIMMessageType.barrage:
@@ -303,14 +306,14 @@ class ZIMConverter {
         message ??= ZIMRevokeMessage();
         message as ZIMRevokeMessage;
         message.revokeType =
-            ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']]!;
+            ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']] ?? ZIMRevokeType.unknown;
         message.revokeStatus = ZIMMessageRevokeStatusExtension
-            .mapValue[resultMap['revokeStatus']]!;
+            .mapValue[resultMap['revokeStatus']] ?? ZIMMessageRevokeStatus.unknown;
         message.revokeTimestamp = resultMap['revokeTimestamp'];
         message.operatedUserID = resultMap['operatedUserID'];
         message.revokeExtendedData = resultMap['revokeExtendedData'] ?? '';
         message.originalMessageType =
-            ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']]!;
+            ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']] ?? ZIMMessageType.unknown;
         message.originalTextMessageContent =
             resultMap['originalTextMessageContent'];
         break;
@@ -713,6 +716,7 @@ class ZIMConverter {
     for (Map memberInfoMap in memberListBasic) {
       memberList.add(oZIMUserInfo(memberInfoMap)!);
     }
+    ZIMManager.writeLog("Flutter dart. oZIMUserInfoList success");
     return memberList;
   }
 
@@ -760,7 +764,6 @@ class ZIMConverter {
 
   static ZIMRoomAttributesOperatedCallResult
       oZIMRoomAttributesOperatedCallResult(Map resultMap) {
-    resultMap['errorKeys'] = resultMap['errorKeys'] ?? [];
     return ZIMRoomAttributesOperatedCallResult(
         roomID: resultMap['roomID'],
         errorKeys: (resultMap['errorKeys'] as List).cast<String>());
@@ -1135,6 +1138,22 @@ class ZIMConverter {
     return callUserInfoList;
   }
 
+  static Map mZIMCallUserInfo(ZIMCallUserInfo userInfo){
+    Map map = {};
+    map['userID'] = userInfo.userID;
+    map['state'] = userInfo.state.value;
+    map['extendedData'] = userInfo.extendedData;
+    return map;
+  }
+
+  static List mZIMCallUserInfoList(List<ZIMCallUserInfo> infoList){
+    List list = [];
+    for(ZIMCallUserInfo userInfo in infoList){
+      list.add(mZIMCallUserInfo(userInfo));
+    }
+    return list;
+  }
+
   static ZIMCallQuitSentInfo oZIMCallQuitSentInfo(Map infoMap) {
     ZIMCallQuitSentInfo info = ZIMCallQuitSentInfo();
     info.createTime = infoMap['createTime'];
@@ -1276,6 +1295,14 @@ class ZIMConverter {
     Map configMap = {};
     configMap['appID'] = config.appID;
     configMap['appSign'] = config.appSign;
+    return configMap;
+  }
+
+  static Map mZIMLoginConfig(ZIMLoginConfig config) {
+    Map configMap = {};
+    configMap['userName']  = config.userName;
+    configMap['token'] = config.token;
+    configMap['isOfflineLogin'] = config.isOfflineLogin;
     return configMap;
   }
 
@@ -1667,6 +1694,26 @@ class ZIMConverter {
     return configMap;
   }
 
+  static Map mZIMCallInvitationCreatedInfo(ZIMCallInvitationCreatedInfo info) {
+    Map map = {};
+    map['caller'] = info.caller;
+    map['extendedData'] = info.extendedData;
+    map['timeout'] = info.timeout;
+    map['createTime'] = info.createTime;
+    map['callUserList'] = mZIMCallUserInfoList(info.callUserList);
+    return map;
+  }
+
+  static ZIMCallInvitationCreatedInfo oZIMCallInvitationCreatedInfo(Map infoMap) {
+    ZIMCallInvitationCreatedInfo info = ZIMCallInvitationCreatedInfo();
+    info.caller = infoMap['caller'];
+    info.extendedData = infoMap['extendedData'];
+    info.timeout = infoMap['timeout'];
+    info.createTime = infoMap['createTime'];
+    info.callUserList = oZIMCallUserInfoList(infoMap['callUserList']);
+    return info;
+  }
+
   static ZIMCallInvitationEndedInfo oZIMCallInvitationEndedInfo(Map infoMap) {
     ZIMCallInvitationEndedInfo info = ZIMCallInvitationEndedInfo();
     info.caller = infoMap['caller'];
@@ -1979,4 +2026,15 @@ class ZIMConverter {
         conversationType:
             ZIMConversationTypeExtension.mapValue[map['conversationType']]!);
   }
+
+  static Uint8List convertToUint8List(dynamic data) {
+    final list = <int>[];
+    for(int i = 0; i < data.length; i++) {
+      list.add(data[i.toString()]);
+    }
+
+    final uint8List = Uint8List.fromList(list);
+    return uint8List;
+  }
+
 }
