@@ -1626,7 +1626,6 @@ class ZIMConverter {
   static Map mZIMCallInvitationCreatedInfo(ZIMCallInvitationCreatedInfo info) {
     Map map = {};
     map['caller'] = info.caller;
-    map['inviter'] = info.inviter;
     map['extendedData'] = info.extendedData;
     map['timeout'] = info.timeout;
     map['createTime'] = info.createTime;
@@ -1637,7 +1636,6 @@ class ZIMConverter {
   static ZIMCallInvitationCreatedInfo oZIMCallInvitationCreatedInfo(Map infoMap) {
     ZIMCallInvitationCreatedInfo info = ZIMCallInvitationCreatedInfo();
     info.caller = infoMap['caller'];
-    info.inviter = infoMap['inviter'];
     info.extendedData = infoMap['extendedData'];
     info.timeout = infoMap['timeout'];
     info.createTime = infoMap['createTime'];

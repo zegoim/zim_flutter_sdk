@@ -837,7 +837,6 @@ FTMap ZIMPluginConverter::cnvZIMCallInvitationCreatedInfoToMap(const ZIMCallInvi
 	FTMap infoMap;
 	infoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
 	infoMap[FTValue("caller")] = FTValue(info.caller);
-	infoMap[FTValue("inviter")] = FTValue(info.inviter);
 	infoMap[FTValue("extendedData")] = FTValue(info.extendedData);
 	infoMap[FTValue("timeout")] = FTValue((int32_t)info.timeout);
 	infoMap[FTValue("createTime")] = FTValue((int64_t)info.createTime);

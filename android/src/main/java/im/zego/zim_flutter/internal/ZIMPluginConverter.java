@@ -1284,7 +1284,6 @@ public class ZIMPluginConverter {
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("mode", info.mode.value());
         infoMap.put("caller", info.caller);
-        infoMap.put("inviter", info.inviter);
         infoMap.put("extendedData", info.extendedData);
         infoMap.put("timeout",info.timeout);
         infoMap.put("createTime",info.createTime);
