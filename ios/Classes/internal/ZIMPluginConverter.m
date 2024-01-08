@@ -22,7 +22,7 @@
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
-    ZIMLoginConfig *config = [[ZIMLogConfig alloc] init];
+    ZIMLoginConfig *config = [[ZIMLoginConfig alloc] init];
     config.userName = [configDic objectForKey:@"userName"];
     config.token = [configDic objectForKey:@"token"];
     config.isOfflineLogin = [[configDic objectForKey:@"isOfflineLogin"] boolValue];
@@ -1077,6 +1077,20 @@
     [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
     [infoDic safeSetObject:[NSNumber numberWithLongLong:info.endTime] forKey:@"endTime"];
     [infoDic safeSetObject:[NSNumber numberWithLongLong:info.acceptTime] forKey:@"acceptTime"];
+    return infoDic;
+}
+
++(nullable NSDictionary *)mZIMCallInvitationCreatedInfo:(nullable ZIMCallInvitationCreatedInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
+    [infoDic safeSetObject:info.caller forKey:@"caller"];
+    [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
     return infoDic;
 }
 

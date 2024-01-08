@@ -597,6 +597,19 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 - (void)zim:(ZIM *)zim
+    callInvitationCreated:(ZIMCallInvitationCreatedInfo *)info
+     callID:(NSString *)callID{
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSDictionary *infoMap = [ZIMPluginConverter mZIMCallInvitationCreatedInfo:info];
+    [resultDic safeSetObject:@"onCallInvitationCreated" forKey:@"method"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:infoMap forKey:@"info"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
     callInvitationEnded:(ZIMCallInvitationEndedInfo *)info
      callID:(NSString *)callID{
     NSString *handle = [_engineEventMap objectForKey:zim];

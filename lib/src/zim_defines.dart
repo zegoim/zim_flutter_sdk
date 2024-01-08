@@ -2418,7 +2418,8 @@ class ZIMFriendApplicationListQueryConfig {
   int count = 0;
   int nextFlag = 0;
 }
-
+/// [nextFlag] Not required, it is 0 by default for the first time, which means to start the query from the beginning.
+/// [count] count.
 class ZIMBlacklistQueryConfig {
   int nextFlag = 0;
   int count = 0;

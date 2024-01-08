@@ -1508,34 +1508,50 @@ abstract class ZIM {
   /// [config] Query the relevant configuration of the call invitation list.
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
-  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
-
-  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID,ZIMSendFriendApplicationConfig config);
-
-  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config);
-
-  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
-
-  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String alias, String userID);
-
-  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
-
-  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs);
-
-  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
-
-  Future<ZIMFriendApplicationRejectedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
-
-  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
-
-  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config);
-
+  /// Available since: 2.13.0 or above.
+  ///
+  /// Description:Through this interface, a user with the specified userID can be added to the blacklist.
+  ///  
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///    
+  /// Related callbacks: [ZIMBlacklistUsersAddedResult].
+  ///
+  /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
+  /// [userIDs] The list of userIDs to be added to blacklist.
   Future<ZIMBlacklistUsersAddedResult>  addUsersToBlacklist(List<String> userIDs);
 
+  /// Available since: 2.13.0 or above.
+  ///
+  /// Description: Through this interface, the user with the specified userID can be removed from the blacklist.
+  ///    
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///    
+  /// Related callbacks: [ZIMBlacklistUsersRemovedResult].
+  ///
+  /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
+  /// [userIDs] The list of userIDs to be removed to blacklist.
   Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs);
 
+  /// Available since: 2.13.0 or above.
+  ///
+  /// Description: Through this interface, the user with the specified userID can be removed from the blacklist.
+  ///  
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///  
+  /// Related callbacks: [ZIMBlacklistQueriedResult].
+  ///
+  /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
+  /// [config] Query the blacklist configuration.
   Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config);
 
+  /// Available since: 2.13.0 or above.
+  ///
+  /// Description: Through this interface, you can check whether a certain userID is on the blacklist.
+  ///    
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///    
+  /// Related callbacks: [ZIMBlacklistCheckedResult].
+  /// [userID] The user ID information that needs to be checked is required.
   Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
 
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
