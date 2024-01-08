@@ -17,7 +17,7 @@ class ZIM {
   external void setLogConfig(dynamic config);
   external PromiseJsImpl<void> uploadLog();
   external PromiseJsImpl<dynamic> renewToken(dynamic config);
-  external PromiseJsImpl<dynamic> login(ZIMUserInfoWeb userInfo, String token);
+  external PromiseJsImpl<dynamic> login(String userID, dynamic config);
   external void logout();
   external PromiseJsImpl<dynamic> updateUserName(String userName);
   external PromiseJsImpl<dynamic> updateUserAvatarUrl(String userAvatarUrl);
