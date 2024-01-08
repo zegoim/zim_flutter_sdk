@@ -354,9 +354,9 @@ class ZegoZimPlugin {
       case 'removeUsersFromBlacklist':
         return removeUsersFromBlacklist(call.arguments['userIDs']);
       case 'checkUserIsInBlackList':
-        return checkUserIsInBlackList(call.arguments['userID']);
+        return checkUserIsInBlacklist(call.arguments['userID']);
       case 'queryBlackList':
-        return queryBlackList(call.arguments['config']);
+        return queryBlacklist(call.arguments['config']);
       case 'deleteAllConversationMessages':
         return deleteAllConversationMessages(call.arguments['config']);
       default:
@@ -1812,16 +1812,16 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> checkUserIsInBlackList(String userID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.checkUserIsInBlackList(userID)).catchError((e) {
+  Future<Map<dynamic, dynamic>> checkUserIsInBlacklist(String userID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.checkUserIsInBlacklist(userID)).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryBlackList(dynamic config) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryBlackList(mapToJSObj(config))).catchError((e) {
+  Future<Map<dynamic, dynamic>> queryBlacklist(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryBlacklist(mapToJSObj(config))).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
