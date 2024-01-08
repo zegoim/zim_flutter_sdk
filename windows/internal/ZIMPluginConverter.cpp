@@ -958,6 +958,23 @@ FTMap ZIMPluginConverter::cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvi
     sentInfoMap[FTValue("mode")] = FTValue((int32_t)info.mode);
 	return sentInfoMap;
 }
+
+FTMap ZIMPluginConverter::cnvZIMGroupMemberMuteInfoToMap(const ZIMGroupMemberMuteInfo &info){
+	FTMap map;
+	map[FTValue("memberInfo")] = ZIMPluginConverter::cnvZIMGroupMemberInfoToMap(info.memberInfo);
+	map[FTValue("muteExpiredTimestamp")] = FTValue((int64_t)info.muteExpiredTimestamp);
+	return map;
+}
+
+FTArray ZIMPluginConverter::cnvZIMGroupMemberMuteInfoListToBasicList(const std::vector<ZIMGroupMemberMuteInfo> &infos){
+	FTArray infoList;
+	for (auto& info : infos) {
+		FTMap infoMap = cnvZIMGroupMemberMuteInfoToMap(info);
+		infoList.emplace_back(infoMap);
+	}
+	return infoList;
+}
+
 ZIMRoomAdvancedConfig ZIMPluginConverter::cnvZIMRoomAdvancedConfigToObject(FTMap configMap) {
 	ZIMRoomAdvancedConfig config;
 	config.roomDestroyDelayTime = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("roomDestroyDelayTime")]);
@@ -1234,5 +1251,12 @@ ZIMGroupMuteConfig ZIMPluginConverter::cnvZIMGroupMuteConfigToObject(FTMap confi
 ZIMGroupMemberMuteConfig ZIMPluginConverter::cnvZIMGroupMemberMuteConfigToObject(FTMap configMap){
 	ZIMGroupMemberMuteConfig config;
 	config.duration = std::get<int32_t>(configMap[FTValue("duration")]);
+	return config;
+}
+
+ZIMGroupMemberMutedListQueryConfig ZIMPluginConverter::cnvZIMGroupMemberMutedListQueryConfigToBbject(FTMap configMap){
+	ZIMGroupMemberMutedListQueryConfig config;
+	config.nextFlag = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
+	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
 	return config;
 }

@@ -2501,6 +2501,23 @@ void ZIMPluginMethodHandler::queryGroupMemberMutedList(flutter::EncodableMap& ar
         result->Error("-1", "no native instance");
         return;
     }
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto config = ZIMPluginConverter::cnvZIMGroupMemberMutedListQueryConfigToBbject(std::get<FTMap>(argument[FTValue("config")]));
+    zim->queryGroupMemberMutedList(groupID,config,[=](const std::string &groupID, unsigned long long nextFlag,
+                       const std::vector<ZIMGroupMemberMuteInfo> &info, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("groupID")] = FTValue(groupID);
+            retMap[FTValue("nextFlag")] = FTValue((int64_t)info.nextFlag);
+            retMap[FTValue("mutedMemberIDList")] = ZIMPluginConverter::cnvZIMGroupMemberMuteInfoToMap(mutedMemberIDList);
+            retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMGroupMemberMuteInfoListToBasicList(info);
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
 }
 
 void ZIMPluginMethodHandler::callInvite(flutter::EncodableMap& argument,

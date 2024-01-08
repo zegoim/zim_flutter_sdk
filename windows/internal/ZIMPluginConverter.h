@@ -219,6 +219,8 @@ public:
     static FTMap cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info);
     static FTMap cnvZIMGroupOperatedInfoToMap(const ZIMGroupOperatedInfo &info);
     static FTMap cnvZIMGroupMutedInfoToMap(const ZIMGroupMutedInfo &info);
+    static FTMap cnvZIMGroupMemberMuteInfoToMap(const ZIMGroupMemberMuteInfo &info);
+    static FTArray cnvZIMGroupMemberMuteInfoListToBasicList(const std::vector<ZIMGroupMemberMuteInfo> &infos);
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
@@ -247,6 +249,7 @@ public:
     static ZIMBlacklistQueryConfig cnvZIMBlacklistQueryConfigToObject(FTMap configMap);
     static ZIMGroupMuteConfig cnvZIMGroupMuteConfigToObject(FTMap configMap);
     static ZIMGroupMemberMuteConfig cnvZIMGroupMemberMuteConfigToObject(FTMap configMap);
+    static ZIMGroupMemberMutedListQueryConfig cnvZIMGroupMemberMutedListQueryConfigToBbject(FTMap configMap);
     
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
