@@ -597,6 +597,19 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 - (void)zim:(ZIM *)zim
+    callInvitationCreated:(ZIMCallInvitationCreatedInfo *)info
+     callID:(NSString *)callID{
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    ZIMCallInvitationCreatedInfo *info = [ZIMPluginConverter mZIMCallInvitationCreatedInfo:info];
+    [resultDic safeSetObject:@"onCallInvitationCreated" forKey:@"method"];
+    [resultDic safeSetObject:callID forKey:@"callID"];
+    [resultDic safeSetObject:info forKey:@"info"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
     callInvitationEnded:(ZIMCallInvitationEndedInfo *)info
      callID:(NSString *)callID{
     NSString *handle = [_engineEventMap objectForKey:zim];
@@ -638,6 +651,23 @@ fromGroupID:(NSString *)fromGroupID{
     
     [resultDic safeSetObject:@"onMessageReactionsChanged" forKey:@"method"];
     [resultDic safeSetObject:reactionsArray forKey:@"reactions"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+
+
+- (void)zim:(ZIM *)zim blacklistChanged:(NSArray<ZIMUserInfo *> *)userList action:(ZIMBlacklistChangeAction)action{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *userInfoBasic = [ZIMPluginConverter mZIMUserInfoList:userList];
+    
+    [resultDic safeSetObject:@"onBlacklistChanged" forKey:@"method"];
+    [resultDic safeSetObject:userInfoBasic forKey:@"userList"];
+    [resultDic safeSetObject:[NSNumber numberWithInteger:action] forKey:@"action"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }

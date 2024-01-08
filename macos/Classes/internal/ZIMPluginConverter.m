@@ -18,6 +18,17 @@
     return config;
 }
 
++(nullable ZIMLoginConfig*)oZIMLoginConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMLoginConfig *config = [[ZIMLogConfig alloc] init];
+    config.userName = [configDic objectForKey:@"userName"];
+    config.token = [configDic objectForKey:@"token"];
+    config.isOfflineLogin = [[configDic objectForKey:@"isOfflineLogin"] boolValue];
+    return config;
+}
+
 +(nullable ZIMUsersInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
@@ -56,6 +67,7 @@
     NSMutableDictionary *userInfoDic = [[NSMutableDictionary alloc] init];
     [userInfoDic safeSetObject:userInfo.userID forKey:@"userID"];
     [userInfoDic safeSetObject:userInfo.userName forKey:@"userName"];
+    [userInfoDic safeSetObject:userInfo.userAvatarUrl forKey:@"userAvatarUrl"];
     return userInfoDic;
 }
 
@@ -1068,6 +1080,20 @@
     return infoDic;
 }
 
++(nullable NSDictionary *)mZIMCallInvitationCreatedInfo:(nullable ZIMCallInvitationCreatedInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[NSNumber numberWithInt:(int)info.mode] forKey:@"mode"];
+    [infoDic safeSetObject:info.caller forKey:@"caller"];
+    [infoDic safeSetObject:info.extendedData forKey:@"extendedData"];
+    [infoDic safeSetObject:[NSNumber numberWithUnsignedInt:info.timeout] forKey:@"timeout"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMCallUserInfoList:info.callUserList] forKey:@"callUserList"];
+    return infoDic;
+}
+
 +(nullable NSDictionary *)mZIMCallInfo:(ZIMCallInfo *)callInfo{
     if(callInfo == nil || callInfo == NULL || [callInfo isEqual:[NSNull null]]){
         return nil;
@@ -1271,5 +1297,16 @@
     config.extendedData = [configMap objectForKey:@"extendedData"];
     return config;
 }
+
++(nullable ZIMBlacklistQueryConfig *)oZIMBlacklistQueryConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMBlacklistQueryConfig *queryConfig = [[ZIMBlacklistQueryConfig alloc] init];
+    queryConfig.nextFlag = [[configMap objectForKey:@"nextFlag"] unsignedIntValue];
+    queryConfig.count = [[configMap objectForKey:@"count"] unsignedIntValue];
+    return queryConfig;
+}
+
 
 @end
