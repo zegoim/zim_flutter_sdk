@@ -491,6 +491,8 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<String> invitees, String callID)?
       onCallInviteesAnsweredTimeout;
 
+
+  static void Function(ZIM zim, ZIMCallInvitationCreatedInfo info, String callID)? onCallInvitationCreated;
   /// Supported versions: 2.9.0 and above.
   ///
   /// Detail description: In an advanced call,  a participant ends the call, and all participants will receive this callback.
@@ -531,4 +533,6 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.addMessageReaction]、[ZIM.deleteMessageReaction]
   static void Function(ZIM zim, List<ZIMMessageReaction> infos)?
       onMessageReactionsChanged;
+
+  static void Function(ZIM zim, ZIMBlacklistChangeAction action, List<ZIMUserInfo>? userList)? onBlacklistChanged;
 }

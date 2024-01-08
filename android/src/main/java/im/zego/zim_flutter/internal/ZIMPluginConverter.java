@@ -7,13 +7,16 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import im.zego.zim.entity.ZIMAppConfig;
+import im.zego.zim.entity.ZIMLoginConfig;
 import im.zego.zim.entity.ZIMAudioMessage;
 import im.zego.zim.entity.ZIMBarrageMessage;
+import im.zego.zim.entity.ZIMBlacklistQueryConfig;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
 import im.zego.zim.entity.ZIMCallCancelConfig;
 import im.zego.zim.entity.ZIMCallEndedSentInfo;
 import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
 import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
+import im.zego.zim.entity.ZIMCallInvitationCreatedInfo;
 import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
 import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
 import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
@@ -42,6 +45,16 @@ import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
 import im.zego.zim.entity.ZIMCustomMessage;
 import im.zego.zim.entity.ZIMErrorUserInfo;
 import im.zego.zim.entity.ZIMFileMessage;
+//import im.zego.zim.entity.ZIMFriendAddConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationAcceptConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationInfo;
+//import im.zego.zim.entity.ZIMFriendApplicationListQueryConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationRejectConfig;
+//import im.zego.zim.entity.ZIMFriendDeleteConfig;
+//import im.zego.zim.entity.ZIMFriendInfo;
+//import im.zego.zim.entity.ZIMFriendListQueryConfig;
+//import im.zego.zim.entity.ZIMFriendRelationCheckConfig;
+//import im.zego.zim.entity.ZIMFriendRelationInfo;
 import im.zego.zim.entity.ZIMGroup;
 import im.zego.zim.entity.ZIMGroupAdvancedConfig;
 import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
@@ -55,6 +68,7 @@ import im.zego.zim.entity.ZIMGroupOperatedInfo;
 import im.zego.zim.entity.ZIMGroupSearchConfig;
 import im.zego.zim.entity.ZIMGroupSearchInfo;
 import im.zego.zim.entity.ZIMImageMessage;
+import im.zego.zim.entity.ZIMLogConfig;
 import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
@@ -85,6 +99,7 @@ import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMRoomMemberInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
 import im.zego.zim.entity.ZIMRoomOperatedInfo;
+//import im.zego.zim.entity.ZIMSendFriendApplicationConfig;
 import im.zego.zim.entity.ZIMSystemMessage;
 import im.zego.zim.entity.ZIMTextMessage;
 import im.zego.zim.entity.ZIMUserFullInfo;
@@ -96,6 +111,10 @@ import im.zego.zim.enums.ZIMCXHandleType;
 import im.zego.zim.enums.ZIMConversationNotificationStatus;
 import im.zego.zim.enums.ZIMConversationType;
 import im.zego.zim.enums.ZIMCallInvitationMode;
+//import im.zego.zim.enums.ZIMFriendApplicationState;
+//import im.zego.zim.enums.ZIMFriendApplicationType;
+//import im.zego.zim.enums.ZIMFriendDeleteType;
+//import im.zego.zim.enums.ZIMFriendRelationCheckType;
 import im.zego.zim.enums.ZIMMessageDirection;
 import im.zego.zim.enums.ZIMMessageOrder;
 import im.zego.zim.enums.ZIMMessagePriority;
@@ -105,6 +124,7 @@ import im.zego.zim.enums.ZIMMessageSentStatus;
 import im.zego.zim.enums.ZIMMessageType;
 import im.zego.zim.enums.ZIMRevokeType;
 import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
+//import im.zego.zim.enums.ZIMUserRelationType;
 
 @SuppressWarnings({"unused","deprecation,unchecked,all"})
 public class ZIMPluginConverter {
@@ -113,6 +133,14 @@ public class ZIMPluginConverter {
         ZIMAppConfig config = new ZIMAppConfig();
         config.appID = ZIMPluginCommonTools.safeGetLongValue(configMap.get("appID"));
         config.appSign = (String)(configMap.get("appSign"));
+        return config;
+    }
+
+    static public ZIMLoginConfig oZIMLoginConfig(HashMap<String,Object> configMap){
+        ZIMLoginConfig config = new ZIMLoginConfig();
+        config.userName = (String)(configMap.get("userName"));
+        config.token = (String)(configMap.get("token"));
+        config.isOfflineLogin =  ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isOfflineLogin"));
         return config;
     }
 
@@ -690,7 +718,22 @@ public class ZIMPluginConverter {
         HashMap<String,Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("userName",userInfo.userName);
+        userInfoMap.put("userAvatarUrl",userInfo.userAvatarUrl);
         return userInfoMap;
+    }
+
+    static public ZIMUserInfo oZIMUserInfo(HashMap<String,Object> map,ZIMUserInfo userInfo){
+        if(userInfo == null){
+            userInfo = new ZIMUserInfo();
+        }
+        userInfo.userID = (String) map.get("userID");
+        userInfo.userName = (String) map.get("userName");
+        userInfo.userAvatarUrl = (String) map.get("userAvatarUrl");
+        return userInfo;
+    }
+
+    static public ZIMUserInfo oZIMUserInfo(HashMap<String,Object> map){
+        return oZIMUserInfo(map,null);
     }
 
     static public HashMap<String,Object> mZIMRoomMemberInfo(ZIMRoomMemberInfo userInfo){
@@ -1237,6 +1280,17 @@ public class ZIMPluginConverter {
         return infoMap;
     }
 
+    static public HashMap<String,Object> mZIMCallInvitationCreatedInfo(ZIMCallInvitationCreatedInfo info){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("mode", info.mode.value());
+        infoMap.put("caller", info.caller);
+        infoMap.put("extendedData", info.extendedData);
+        infoMap.put("timeout",info.timeout);
+        infoMap.put("createTime",info.createTime);
+        infoMap.put("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
+        return infoMap;
+    }
+
     static public HashMap<String,Object> mZIMCallInvitationEndedInfo(ZIMCallInvitationEndedInfo info){
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("endTime", info.endTime);
@@ -1348,5 +1402,133 @@ public class ZIMPluginConverter {
         infoMap.put("joinTime",info.joinTime);
         infoMap.put("callUserList",ZIMPluginConverter.mZIMCallUserInfoList(info.callUserList));
         return infoMap;
+    }
+
+//    static public ZIMFriendAddConfig oZIMFriendAddConfig(HashMap<String, Object> configMap) {
+//        ZIMFriendAddConfig config = new ZIMFriendAddConfig();
+//        config.wording = (String) configMap.get("wording");
+//        config.alias = (String) configMap.get("alias");
+//        config.attributes = (HashMap<String, String>) configMap.get("attributes");
+//        return config;
+//    }
+//
+//    static public ZIMFriendApplicationAcceptConfig oZIMFriendApplicationAcceptConfig(HashMap<String, Object> configMap) {
+//        ZIMFriendApplicationAcceptConfig config = new ZIMFriendApplicationAcceptConfig();
+//        config.friendAlias = (String) configMap.get("friendAlias");
+//        config.friendAttributes = (HashMap<String, String>) configMap.get("friendAttributes");
+//        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // 假设已有转换 pushConfig 的函数
+//        return config;
+//    }
+//
+//    static public ZIMFriendApplicationInfo oZIMFriendApplicationInfo(HashMap<String, Object> infoMap) {
+//        ZIMFriendApplicationInfo info = new ZIMFriendApplicationInfo();
+//        info.applyUser = ZIMPluginConverter.oZIMUserInfo((HashMap<String, Object>) infoMap.get("applyUser")); // 假设已有转换 ZIMUserInfo 的函数
+//        info.wording = (String) infoMap.get("wording");
+//        info.friendAlias = (String) infoMap.get("friendAlias");
+//        info.createTime = (long) infoMap.get("createTime");
+//        info.updateTime = (long) infoMap.get("updateTime");
+//        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
+//        info.type = ZIMFriendApplicationType.getZIMFriendApplicationType((Integer) infoMap.get("type")); // 假设 ZIMFriendApplicationType 可直接转换
+//        info.state = ZIMFriendApplicationState.getZIMFriendApplicationState((Integer) infoMap.get("state"));
+//        return info;
+//    }
+//
+//    static public HashMap<String, Object> mZIMFriendApplicationInfo(ZIMFriendApplicationInfo info) {
+//        HashMap<String, Object> infoMap = new HashMap<>();
+//        infoMap.put("applyUser", mZIMUserInfo(info.applyUser)); // Assuming mZIMUserInfo exists for ZIMUserInfo
+//        infoMap.put("wording", info.wording);
+//        infoMap.put("friendAlias", info.friendAlias);
+//        infoMap.put("createTime", info.createTime);
+//        infoMap.put("updateTime", info.updateTime);
+//        infoMap.put("friendAttributes", info.friendAttributes);
+//        infoMap.put("type", info.type.value()); // Assuming ZIMFriendApplicationType can be directly stored
+//        infoMap.put("state", info.state.value()); // Assuming ZIMFriendApplicationState can be directly stored
+//        return infoMap;
+//    }
+//
+//
+//    static public ZIMFriendApplicationListQueryConfig oZIMFriendApplicationListQueryConfig(HashMap<String, Object> configMap) {
+//        ZIMFriendApplicationListQueryConfig config = new ZIMFriendApplicationListQueryConfig();
+//        config.count = (int) configMap.get("count");
+//        config.nextFlag = (int) configMap.get("nextFlag");
+//        return config;
+//    }
+//
+//    static public ZIMFriendApplicationRejectConfig oZIMFriendApplicationRejectConfig(HashMap<String, Object> configMap) {
+//        ZIMFriendApplicationRejectConfig config = new ZIMFriendApplicationRejectConfig();
+//        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // Assuming oZIMPushConfig exists
+//        return config;
+//    }
+//
+//    static public ZIMFriendDeleteConfig oZIMFriendDeleteConfig(HashMap<String, Object> configMap) {
+//        ZIMFriendDeleteConfig config = new ZIMFriendDeleteConfig();
+//        config.type = ZIMFriendDeleteType.getZIMCallState((Integer) configMap.get("type")); // Assuming direct conversion is possible
+//        return config;
+//    }
+//
+//    static public HashMap<String, Object> mZIMFriendInfo(ZIMFriendInfo info) {
+//        HashMap<String, Object> infoMap = new HashMap<>(mZIMUserInfo(info)); // Assuming mZIMUserInfo for ZIMUserInfo inheritance
+//        infoMap.put("friendAlias", info.friendAlias);
+//        infoMap.put("createTime", info.createTime);
+//        infoMap.put("wording", info.wording);
+//        infoMap.put("friendAttributes", info.friendAttributes);
+//        return infoMap;
+//    }
+//
+//    static public ZIMFriendInfo oZIMFriendInfo(HashMap<String, Object> infoMap) {
+//        ZIMFriendInfo info = new ZIMFriendInfo();
+//        oZIMUserInfo(infoMap,info); // Assuming oZIMUserInfo for ZIMUserInfo inheritance
+//        info.friendAlias = (String) infoMap.get("friendAlias");
+//        info.createTime = (Long) infoMap.get("createTime");
+//        info.wording = (String) infoMap.get("wording");
+//        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
+//        return info;
+//    }
+//
+//    static public ZIMFriendListQueryConfig oZIMFriendListQueryConfig(HashMap<String, Object> configMap) {
+//        ZIMFriendListQueryConfig config = new ZIMFriendListQueryConfig();
+//        config.count = (int) configMap.get("count");
+//        config.nextFlag = (int) configMap.get("nextFlag");
+//        return config;
+//    }
+//
+//    static public ZIMFriendRelationCheckConfig oZIMFriendRelationCheckConfig(HashMap<String, Object> configMap) {
+//        ZIMFriendRelationCheckConfig config = new ZIMFriendRelationCheckConfig();
+//        config.type = ZIMFriendRelationCheckType.getZIMFriendCheckType ((Integer) configMap.get("type")); // Assuming direct conversion is possible
+//        return config;
+//    }
+//
+//    static public HashMap<String, Object> mZIMFriendRelationInfo(ZIMFriendRelationInfo info) {
+//        HashMap<String, Object> infoMap = new HashMap<>();
+//        infoMap.put("type", info.type.value()); // Assuming ZIMUserRelationType can be directly stored
+//        infoMap.put("userID", info.userID);
+//        return infoMap;
+//    }
+//
+//    static public ZIMFriendRelationInfo oZIMFriendRelationInfo(HashMap<String, Object> infoMap) {
+//        ZIMFriendRelationInfo info = new ZIMFriendRelationInfo();
+//        info.type = ZIMUserRelationType.getZIMUserRelationType ((Integer) infoMap.get("type")); // Assuming direct conversion is possible
+//        info.userID = (String) infoMap.get("userID");
+//        return info;
+//    }
+//
+//    static public ZIMSendFriendApplicationConfig oZIMSendFriendApplicationConfig(HashMap<String, Object> configMap) {
+//        ZIMSendFriendApplicationConfig config = new ZIMSendFriendApplicationConfig();
+//        config.wording = (String) configMap.get("wording");
+//        config.alias = (String) configMap.get("alias");
+//        config.attributes = (HashMap<String, String>) configMap.get("attributes");
+//        config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // Assuming oZIMPushConfig exists
+//        return config;
+//    }
+
+    static public ZIMBlacklistQueryConfig oZIMBlacklistQueryConfig(HashMap<String, Object> configMap) {
+        ZIMBlacklistQueryConfig config = new ZIMBlacklistQueryConfig();
+        if (configMap.containsKey("nextFlag")) {
+            config.nextFlag = (int) configMap.get("nextFlag");
+        }
+        if (configMap.containsKey("count")) {
+            config.count = (int) configMap.get("count");
+        }
+        return config;
     }
 }

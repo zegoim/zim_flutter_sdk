@@ -29,12 +29,11 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<void> login(ZIMUserInfo userInfo, [String? token]) async {
+  Future<void> login(String userID, ZIMLoginConfig config) async {
     return await channel.invokeMethod("login", {
       "handle": handle,
-      "userID": userInfo.userID,
-      "userName": userInfo.userName,
-      "token": token
+      "userID": userID,
+      "config":ZIMConverter.mZIMLoginConfig(config)
     });
   }
 
@@ -1053,6 +1052,106 @@ class ZIMEngine implements ZIM {
       'config': ZIMConverter.mZIMCallJoinConfig(config)
     });
     return ZIMConverter.oZIMCallJoinSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID, ZIMFriendApplicationAcceptConfig config) async{
+    Map resultMap = await channel.invokeMethod('acceptFriendApplication',{
+      'handle':handle,
+      'userID':userID,
+      'config':ZIMConverter.mZIMFriendApplicationAcceptConfig(config)
+    });
+
+    return ZIMConverter.oZIMFriendApplicationAcceptedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config) async {
+    Map resultMap = await channel.invokeMethod('addFriend', {
+      'handle': handle,
+      'userID': userID,
+      'config': ZIMConverter.mZIMFriendAddConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendAddedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMBlacklistUsersAddedResult> addUsersToBlacklist(List<String> userIDs) async {
+    Map resultMap = await channel.invokeMethod('addUsersToBlacklist', {
+      'handle': handle,
+      'userIDs': userIDs,
+    });
+
+    return ZIMConverter.oZIMBlacklistUsersAddedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
+    Map resultMap = await channel.invokeMethod('checkFriendRelation', {
+      'handle': handle,
+      'userIDs': userIDs,
+      'config': ZIMConverter.mZIMFriendRelationCheckConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendRelationCheckedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID) async {
+    Map resultMap = await channel.invokeMethod('checkUserIsInBlackList', {
+      'handle': handle,
+      'userID': userID,
+    });
+
+    return ZIMConverter.oZIMBlacklistCheckedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config) async {
+    Map resultMap = await channel.invokeMethod('deleteFriend', {
+      'handle': handle,
+      'userIDs': userIDs,
+      'config': ZIMConverter.mZIMFriendDeleteConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendDeletedResult(resultMap);
+  }
+
+
+  @override
+  Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryBlackList', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMBlacklistQueryConfig(config),
+    });
+    ZIMManager.writeLog("Flutter dart queryBlackList callback,result Map:"+resultMap.toString());
+    return ZIMConverter.oZIMBlacklistQueriedResult(resultMap);
+  }
+
+
+
+  @override
+  Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs) async {
+    Map resultMap = await channel.invokeMethod('removeUsersFromBlacklist', {
+      'handle': handle,
+      'userIDs': userIDs,
+    });
+
+    return ZIMConverter.oZIMBlacklistUsersRemovedResult(resultMap);
+  }
+
+
+  @override
+  Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType) async {
+    Map resultMap = await channel.invokeMethod('setConversationDraft', {
+      'handle': handle,
+      'draft': draft,
+      'conversationID': conversationID,
+      'conversationType': ZIMConversationTypeExtension.valueMap[conversationType],
+    });
+
+    return ZIMConverter.oZIMConversationDraftSetResult(resultMap);
   }
 
 }
