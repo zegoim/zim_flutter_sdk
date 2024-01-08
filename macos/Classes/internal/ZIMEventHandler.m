@@ -601,10 +601,10 @@ fromGroupID:(NSString *)fromGroupID{
      callID:(NSString *)callID{
     NSString *handle = [_engineEventMap objectForKey:zim];
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-    ZIMCallInvitationCreatedInfo *info = [ZIMPluginConverter mZIMCallInvitationCreatedInfo:info];
+    NSDictionary *infoMap = [ZIMPluginConverter mZIMCallInvitationCreatedInfo:info];
     [resultDic safeSetObject:@"onCallInvitationCreated" forKey:@"method"];
     [resultDic safeSetObject:callID forKey:@"callID"];
-    [resultDic safeSetObject:info forKey:@"info"];
+    [resultDic safeSetObject:infoMap forKey:@"info"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }

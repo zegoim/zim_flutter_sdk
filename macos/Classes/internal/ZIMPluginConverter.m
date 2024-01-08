@@ -22,7 +22,7 @@
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
         return nil;
     }
-    ZIMLoginConfig *config = [[ZIMLogConfig alloc] init];
+    ZIMLoginConfig *config = [[ZIMLoginConfig alloc] init];
     config.userName = [configDic objectForKey:@"userName"];
     config.token = [configDic objectForKey:@"token"];
     config.isOfflineLogin = [[configDic objectForKey:@"isOfflineLogin"] boolValue];
