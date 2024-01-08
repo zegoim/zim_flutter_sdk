@@ -1,8 +1,10 @@
 package im.zego.zim_flutter.internal;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.lang.*;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,16 +37,16 @@ import im.zego.zim.callback.ZIMConversationQueriedCallback;
 import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
 import im.zego.zim.callback.ZIMConversationTotalUnreadMessageCountClearedCallback;
 import im.zego.zim.callback.ZIMConversationsSearchedCallback;
-import im.zego.zim.callback.ZIMFriendAddedCallback;
-import im.zego.zim.callback.ZIMFriendAliasUpdatedCallback;
-import im.zego.zim.callback.ZIMFriendApplicationAcceptedCallback;
-import im.zego.zim.callback.ZIMFriendApplicationListQueriedCallback;
-import im.zego.zim.callback.ZIMFriendApplicationRejectedCallback;
-import im.zego.zim.callback.ZIMFriendAttributesUpdatedCallback;
-import im.zego.zim.callback.ZIMFriendDeletedCallback;
-import im.zego.zim.callback.ZIMFriendListQueriedCallback;
-import im.zego.zim.callback.ZIMFriendRelationCheckedCallback;
-import im.zego.zim.callback.ZIMFriendsInfoQueriedCallback;
+//import im.zego.zim.callback.ZIMFriendAddedCallback;
+//import im.zego.zim.callback.ZIMFriendAliasUpdatedCallback;
+//import im.zego.zim.callback.ZIMFriendApplicationAcceptedCallback;
+//import im.zego.zim.callback.ZIMFriendApplicationListQueriedCallback;
+//import im.zego.zim.callback.ZIMFriendApplicationRejectedCallback;
+//import im.zego.zim.callback.ZIMFriendAttributesUpdatedCallback;
+//import im.zego.zim.callback.ZIMFriendDeletedCallback;
+//import im.zego.zim.callback.ZIMFriendListQueriedCallback;
+//import im.zego.zim.callback.ZIMFriendRelationCheckedCallback;
+//import im.zego.zim.callback.ZIMFriendsInfoQueriedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesQueriedCallback;
 import im.zego.zim.callback.ZIMGroupAvatarUrlUpdatedCallback;
@@ -97,13 +99,14 @@ import im.zego.zim.callback.ZIMRoomMembersAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMRoomMembersAttributesQueriedCallback;
 import im.zego.zim.callback.ZIMRoomMembersQueriedCallback;
 import im.zego.zim.callback.ZIMRoomOnlineMemberCountQueriedCallback;
-import im.zego.zim.callback.ZIMSendFriendApplicationCallback;
+//import im.zego.zim.callback.ZIMSendFriendApplicationCallback;
 import im.zego.zim.callback.ZIMTokenRenewedCallback;
 import im.zego.zim.callback.ZIMUserAvatarUrlUpdatedCallback;
 import im.zego.zim.callback.ZIMUserExtendedDataUpdatedCallback;
 import im.zego.zim.callback.ZIMUserNameUpdatedCallback;
 import im.zego.zim.callback.ZIMUsersInfoQueriedCallback;
 import im.zego.zim.entity.ZIMAppConfig;
+import im.zego.zim.entity.ZIMLoginConfig;
 import im.zego.zim.entity.ZIMBlacklistQueryConfig;
 import im.zego.zim.entity.ZIMCacheConfig;
 import im.zego.zim.entity.ZIMCallAcceptConfig;
@@ -128,16 +131,16 @@ import im.zego.zim.entity.ZIMConversationSearchConfig;
 import im.zego.zim.entity.ZIMConversationSearchInfo;
 import im.zego.zim.entity.ZIMError;
 import im.zego.zim.entity.ZIMErrorUserInfo;
-import im.zego.zim.entity.ZIMFriendAddConfig;
-import im.zego.zim.entity.ZIMFriendApplicationAcceptConfig;
-import im.zego.zim.entity.ZIMFriendApplicationInfo;
-import im.zego.zim.entity.ZIMFriendApplicationListQueryConfig;
-import im.zego.zim.entity.ZIMFriendApplicationRejectConfig;
-import im.zego.zim.entity.ZIMFriendDeleteConfig;
-import im.zego.zim.entity.ZIMFriendInfo;
-import im.zego.zim.entity.ZIMFriendListQueryConfig;
-import im.zego.zim.entity.ZIMFriendRelationCheckConfig;
-import im.zego.zim.entity.ZIMFriendRelationInfo;
+//import im.zego.zim.entity.ZIMFriendAddConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationAcceptConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationInfo;
+//import im.zego.zim.entity.ZIMFriendApplicationListQueryConfig;
+//import im.zego.zim.entity.ZIMFriendApplicationRejectConfig;
+//import im.zego.zim.entity.ZIMFriendDeleteConfig;
+//import im.zego.zim.entity.ZIMFriendInfo;
+//import im.zego.zim.entity.ZIMFriendListQueryConfig;
+//import im.zego.zim.entity.ZIMFriendRelationCheckConfig;
+//import im.zego.zim.entity.ZIMFriendRelationInfo;
 import im.zego.zim.entity.ZIMGroup;
 import im.zego.zim.entity.ZIMGroupAdvancedConfig;
 import im.zego.zim.entity.ZIMGroupFullInfo;
@@ -172,7 +175,7 @@ import im.zego.zim.entity.ZIMRoomMemberAttributesQueryConfig;
 import im.zego.zim.entity.ZIMRoomMemberAttributesSetConfig;
 import im.zego.zim.entity.ZIMRoomMemberInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
-import im.zego.zim.entity.ZIMSendFriendApplicationConfig;
+//import im.zego.zim.entity.ZIMSendFriendApplicationConfig;
 import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
@@ -190,6 +193,11 @@ public class ZIMPluginMethodHandler {
     private static final HashMap<String, ZIM> engineMap = new HashMap<>();
     public static void getVersion(MethodCall call,Result result){
         result.success(ZIM.getVersion());
+    }
+
+    public static void writeLog(MethodCall call,Result result){
+        String log = call.argument("log");
+        LogWriter.writeLog(log);
     }
 
     public static void create(MethodCall call, Result result, FlutterPlugin.FlutterPluginBinding binding,ZIMPluginEventHandler eventHandler){
@@ -245,8 +253,8 @@ public class ZIMPluginMethodHandler {
     public static void setGeofencingConfig(MethodCall call, Result result){
         ArrayList<Integer> areaList = call.argument("areaList");
         ZIMGeofencingType type = ZIMGeofencingType.getZIMGeofencingType(call.argument("type"));
-        ZIM.setGeofencingConfig(areaList,type);
-        result.success(null);
+        boolean ret = ZIM.setGeofencingConfig(areaList,type);
+        result.success(ret);
     }
 
     public static void login(MethodCall call ,Result result){
@@ -256,12 +264,10 @@ public class ZIMPluginMethodHandler {
             result.error("-1", "no native instance",null);
             return;
         }
+        String userID = call.argument("userID");
+        ZIMLoginConfig loginConfig = ZIMPluginConverter.oZIMLoginConfig(call.argument("config"));
 
-        String token = call.argument("token");
-        ZIMUserInfo userInfo = new ZIMUserInfo();
-        userInfo.userID = call.argument("userID");
-        userInfo.userName = call.argument("userName");
-        zim.login(userInfo, token, new ZIMLoggedInCallback() {
+        zim.login(userID, loginConfig, new ZIMLoggedInCallback() {
             @Override
             public void onLoggedIn(ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
@@ -3118,7 +3124,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> errorUserInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorUserInfo); // 假设存在 mZIMErrorUserInfo 转换函数
                         errorUsersMapList.add(errorUserInfoMap);
                     }
-                    resultMap.put("errorUserInfoArrayList", errorUsersMapList);
+                    resultMap.put("errorUserList", errorUsersMapList);
 
                     result.success(resultMap);
                 } else {
@@ -3140,7 +3146,7 @@ public class ZIMPluginMethodHandler {
         }
 
         ZIMBlacklistQueryConfig config = ZIMPluginConverter.oZIMBlacklistQueryConfig(Objects.requireNonNull(call.argument("config"))); // 从 call 中提取并转换配置
-        zim.queryBlackList(config, new ZIMBlacklistQueriedCallback() {
+        zim.queryBlacklist(config, new ZIMBlacklistQueriedCallback() {
             @Override
             public void onBlacklistQueried(ArrayList<ZIMUserInfo> blacklist, int nextFlag, ZIMError zimError) {
                 LogWriter.writeLog("Flutter Android onBlacklistQueried,size:%d "+ blacklist.size());
@@ -3173,17 +3179,17 @@ public class ZIMPluginMethodHandler {
             return;
         }
         String userID = call.argument("userID");
-        zim.checkUserIsInBlackList(userID, new ZIMBlacklistCheckedCallback() {
+        zim.checkUserIsInBlacklist(userID, new ZIMBlacklistCheckedCallback() {
             @Override
-            public void onBlacklistChecked(boolean isUserInBlacklist, ZIMError zimError) {
-                if (zimError.code == ZIMErrorCode.SUCCESS) {
+            public void onBlacklistChecked(boolean isUserInBlacklist, ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
                     // 在成功的情况下，返回用户是否在黑名单中的信息
                     HashMap<String, Object> resultMap = new HashMap<>();
                     resultMap.put("isUserInBlacklist", isUserInBlacklist);
                     result.success(resultMap);
                 } else {
                     // 在出现错误的情况下，返回错误信息
-                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
                 }
             }
         });

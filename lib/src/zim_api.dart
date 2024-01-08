@@ -104,9 +104,9 @@ abstract class ZIM {
   destroy();
 
   /// Login, you must log in before using all functions.
-  /// [userInfo] Unique ID used to identify the user. Note that the userID must be unique under the same appID, otherwise mutual kicks out will occur.
-  /// [token] The token issued by the developer's business server, used to ensure security. The generation rules are detailed in ZEGO document website.
-  Future<void> login(ZIMUserInfo userInfo, [String? token]);
+  /// [userID] Unique ID used to identify the user. Note that the userID must be unique under the same appID, otherwise mutual kicks out will occur.
+  /// [config] login config.
+  Future<void> login(String userID,ZIMLoginConfig config);
 
   /// Log out of ZIM service.
   logout();
@@ -196,15 +196,15 @@ abstract class ZIM {
       ZIMConversationType conversationType, ZIMConversationDeleteConfig config);
 
   /// Available since: 2.12.0 and above.
-  /// 
+  ///
   /// Description: This interface is invoked when all sessions needs to be deleted. All members in sessions can invoke this interface.
-  /// 
+  ///
   /// Use cases: If you want to delete all sessions when they are no longer needed, you can call this interface implementation.
-  /// 
+  ///
   /// When to call /Trigger: his parameter is invoked when sessions needs to be deleted and can be invoked after a ZIM instance is created. The call takes effect after login and becomes invalid after logout.
-  /// 
+  ///
   /// Impacts on other APIs: If deleted sessions include unread message will trigger the [onConversationTotalUnreadMessageCountUpdated] callback, the call is successful at login, and the other end will trigger [onConversationsAllDeleted] callback.
-  /// 
+  ///
   /// Related callbacks: [ZIMConversationsAllDeletedCallback]
   Future<void> deleteAllConversations(ZIMConversationDeleteConfig config);
 
@@ -274,19 +274,19 @@ abstract class ZIM {
           String conversationID, ZIMConversationType conversationType);
 
   /// Available since: 2.12.0 and above.
-  /// 
+  ///
   /// Description: Used to clear unread for all sessions.
-  /// 
+  ///
   /// Use cases: You can call this interface when you need to clear all unread sessions to zero.
-  /// 
+  ///
   /// When to call /Trigger: Called when all session readings need to be cleared.
-  /// 
+  ///
   /// Restrictions: Valid after login, invalid after logout.
-  /// 
+  ///
   /// Impacts on other APIs: Calling this method will trigger a total readings not updated callback [onConversationTotalUnreadMessageCountUpdated].
-  /// 
+  ///
   /// Related callbacks:[ZIMConversationTotalUnreadMessageCountClearedCallback].
-  /// 
+  ///
   /// Related APIs:[onConversationTotalUnreadMessageCountUpdated].
   Future<void> clearConversationTotalUnreadMessageCount();
 
@@ -1503,33 +1503,51 @@ abstract class ZIM {
   /// [config] Query the relevant configuration of the call invitation list.
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
-  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
-
-  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID,ZIMSendFriendApplicationConfig config);
-
-  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config);
-
-  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
-
-  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String alias, String userID);
-
-  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
-
-  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs);
-
-  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
-
-  Future<ZIMFriendApplicationRejectedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
-
-  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
-
-  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config);
-
+  /// Available since: 2.13.0 or above.
+  ///
+  /// Description:Through this interface, a user with the specified userID can be added to the blacklist.
+  ///  
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///    
+  /// Related callbacks: [ZIMBlacklistUsersAddedResult].
+  ///
+  /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
+  /// [userIDs] The list of userIDs to be added to blacklist.
   Future<ZIMBlacklistUsersAddedResult>  addUsersToBlacklist(List<String> userIDs);
 
+  /// Available since: 2.13.0 or above.
+  ///
+  /// Description: Through this interface, the user with the specified userID can be removed from the blacklist.
+  ///    
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///    
+  /// Related callbacks: [ZIMBlacklistUsersRemovedResult].
+  ///
+  /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
+  /// [userIDs] The list of userIDs to be removed to blacklist.
   Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs);
 
-  Future<ZIMBlacklistQueriedResult> queryBlackList(ZIMBlacklistQueryConfig config);
+  /// Available since: 2.13.0 or above.
+  ///
+  /// Description: Through this interface, the user with the specified userID can be removed from the blacklist.
+  ///  
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///  
+  /// Related callbacks: [ZIMBlacklistQueriedResult].
+  ///
+  /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
+  /// [config] Query the blacklist configuration.
+  Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config);
 
-  Future<ZIMBlacklistCheckedResult> checkUserIsInBlackList(String userID);
+  /// Available since: 2.13.0 or above.
+  ///
+  /// Description: Through this interface, you can check whether a certain userID is on the blacklist.
+  ///    
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///    
+  /// Related callbacks: [ZIMBlacklistCheckedResult].
+  /// [userID] The user ID information that needs to be checked is required.
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
+
+  Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
 }

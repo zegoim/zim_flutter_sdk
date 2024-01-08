@@ -87,6 +87,8 @@ enum ZIMRoomState {
 ///
 /// Caution: Please use it with the connection event parameter.
 enum ZIMConnectionEvent {
+
+  unknown,
   /// Description: Success.
   success,
 
@@ -380,7 +382,7 @@ enum ZIMFriendRelationCheckType{unknown,both,sent}
 
 enum ZIMUserRelationType{unknown,singleNO,singleHave,bothAllNo,bothSelfHave,bothOtherHave,bothAllHave}
 
-enum ZIMBlacklistChangedAction{added,deleted}
+enum ZIMBlacklistChangeAction{added,removed}
 
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
@@ -429,6 +431,13 @@ class ZIMAppConfig {
   int appID = 0;
   String appSign = '';
   ZIMAppConfig();
+}
+
+class ZIMLoginConfig {
+  String userName = '';
+  /// The token issued by the developer's business server, used to ensure security. The generation rules are detailed in ZEGO document website.
+  String token = '';
+  bool isOfflineLogin = false;
 }
 
 class ZIMUserInfoQueryConfig {
@@ -510,7 +519,7 @@ class ZIMUserInfo {
   /// User name, a string with a maximum length of 256 bytes or less.
   String userName = '';
 
-  String avatar = '';
+  String userAvatarUrl = '';
 
   ZIMUserInfo();
 }
@@ -672,6 +681,7 @@ class ZIMConversation {
   ZIMMessage? lastMessage;
   int orderKey = 0;
   bool isPinned =false;
+  String draft = '';
   ZIMConversation();
 }
 
@@ -1187,6 +1197,15 @@ class ZIMCallInvitationRejectedInfo {
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
   ZIMCallInvitationRejectedInfo();
+}
+
+class ZIMCallInvitationCreatedInfo{
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.unknown;
+  String caller = "";
+  String extendedData = "";
+  int timeout = 0;
+  int createTime = 0;
+  List<ZIMCallUserInfo> callUserList = [];
 }
 
 class ZIMCallInvitationEndedInfo{
@@ -2251,6 +2270,13 @@ class ZIMBlacklistUsersRemovedResult {
   List<ZIMErrorUserInfo>? errorUserInfoArrayList;
 }
 
+class ZIMConversationDraftSetResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  ZIMConversationDraftSetResult(
+      {required this.conversationID, required this.conversationType});
+}
+
 class ZIMMessageDeletedInfo {
   String conversationID;
   ZIMConversationType conversationType;
@@ -2326,7 +2352,8 @@ class ZIMFriendApplicationListQueryConfig {
   int count = 0;
   int nextFlag = 0;
 }
-
+/// [nextFlag] Not required, it is 0 by default for the first time, which means to start the query from the beginning.
+/// [count] count.
 class ZIMBlacklistQueryConfig {
   int nextFlag = 0;
   int count = 0;

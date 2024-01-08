@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <flutter/method_channel.h>
 #include <flutter/encodable_value.h>
@@ -209,6 +209,10 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryMessageReactionUserList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void addUsersToBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void removeUsersFromBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void queryBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void checkUserIsInBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 private:
     ZIMPluginMethodHandler() = default;
 private:

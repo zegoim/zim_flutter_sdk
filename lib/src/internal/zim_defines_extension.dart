@@ -50,6 +50,7 @@ extension ZIMRoomStateExtension on ZIMRoomState {
 
 extension ZIMConnectionEventExtension on ZIMConnectionEvent {
   static const valueMap = {
+    ZIMConnectionEvent.unknown:-1,
     ZIMConnectionEvent.success: 0,
     ZIMConnectionEvent.activeLogin: 1,
     ZIMConnectionEvent.loginTimeout: 2,
@@ -59,6 +60,7 @@ extension ZIMConnectionEventExtension on ZIMConnectionEvent {
     ZIMConnectionEvent.unregistered: 6
   };
   static const mapValue = {
+    -1: ZIMConnectionEvent.unknown,
     0: ZIMConnectionEvent.success,
     1: ZIMConnectionEvent.activeLogin,
     2: ZIMConnectionEvent.loginTimeout,
@@ -614,15 +616,15 @@ extension ZIMUserRelationTypeExtension on ZIMUserRelationType {
 }
 
 // ZIMBlacklistChangedAction Enum Extension
-extension ZIMBlacklistChangedActionExtension on ZIMBlacklistChangedAction {
+extension ZIMBlacklistChangeActionExtension on ZIMBlacklistChangeAction {
   static const valueMap = {
-    ZIMBlacklistChangedAction.added: 0,
-    ZIMBlacklistChangedAction.deleted: 1,
+    ZIMBlacklistChangeAction.added: 0,
+    ZIMBlacklistChangeAction.removed: 1,
   };
 
   static const mapValue = {
-    0: ZIMBlacklistChangedAction.added,
-    1: ZIMBlacklistChangedAction.deleted,
+    0: ZIMBlacklistChangeAction.added,
+    1: ZIMBlacklistChangeAction.removed,
   };
 
   int get value => valueMap[this] ?? -1;

@@ -1,4 +1,4 @@
-#include "ZIMPluginMethodHandler.h"
+﻿#include "ZIMPluginMethodHandler.h"
 #include "ZIMPluginEventHandler.h"
 
 #include <variant>
@@ -117,17 +117,11 @@ void ZIMPluginMethodHandler::login(flutter::EncodableMap& argument,
         result->Error("-1", "no native instance");
         return;
     }
-
-    ZIMUserInfo userInfo;
-    userInfo.userID = std::get<std::string>(argument[FTValue("userID")]);
-    userInfo.userName = std::get<std::string>(argument[FTValue("userName")]);
-    std::string token;
-    if (std::holds_alternative<std::string>(argument[FTValue("token")])) {
-        token = std::get<std::string>(argument[FTValue("token")]);
-    }
+    std::string userID = std::get<std::string>(argument[FTValue("userID")]);
+    ZIMLoginConfig loginConfig = ZIMPluginConverter::cnvZIMLoginConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
 
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->login(userInfo, token, [=](const ZIMError& errorInfo) {
+    zim->login(userID, loginConfig, [=](const ZIMError& errorInfo) {
         if (errorInfo.code == 0) {
             sharedPtrResult->Success();
         }
@@ -2848,6 +2842,101 @@ void ZIMPluginMethodHandler::queryMessageReactionUserList(flutter::EncodableMap&
         else {
             sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
         }
+    });
+}
+
+void ZIMPluginMethodHandler::addUsersToBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto& userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->addUsersToBlacklist(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("errorUserList")] = ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+
+}
+void ZIMPluginMethodHandler::removeUsersFromBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto& userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->removeUsersFromBlacklist(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("errorUserList")] = ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+
+}
+void ZIMPluginMethodHandler::queryBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    ZIMBlacklistQueryConfig config = ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    zim->queryBlacklist(config, [=](const std::vector<ZIMUserInfo> &blacklist, long long nextFlag, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("nextFlag")] = FTValue((int64_t)nextFlag);
+            retMap[FTValue("blacklist")] = ZIMPluginConverter::cnvZIMUserListToArray(blacklist);
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+void ZIMPluginMethodHandler::checkUserIsInBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto userID = std::get<std::string>(argument[FTValue("userID")]);
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->checkUserIsInBlacklist(userID, [=](bool isUserInBlacklist, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("isUserInBlacklist")] = FTValue(isUserInBlacklist);
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        } 
     });
 }
 

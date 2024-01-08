@@ -383,6 +383,18 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "addMessageReaction") {
         ZIMPluginMethodHandler::getInstance().addMessageReaction(argument, std::move(result));
     }
+    else if (method_call.method_name() == "addUsersToBlacklist") {
+        ZIMPluginMethodHandler::getInstance().addUsersToBlacklist(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "removeUsersFromBlacklist") {
+        ZIMPluginMethodHandler::getInstance().removeUsersFromBlacklist(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "queryBlackList") {
+        ZIMPluginMethodHandler::getInstance().queryBlackList(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "checkUserIsInBlackList") {
+        ZIMPluginMethodHandler::getInstance().checkUserIsInBlackList(argument, std::move(result));
+    }
     else {
         result->NotImplemented();
     

@@ -1,3 +1,47 @@
+## 2.13.0
+### 1. Feature
+1、Users can log in to the IM service offline and access local SDK data.
+2、Users can query their own blacklist, block the specified user (no longer receive messages from the user), remove the user from the blacklist, and check whether the specified user is in the blacklist.
+3、Support for inserting local messages into room sessions.
+4、Support for withdrawing single chat messages and group chat messages from the server-side call interface.
+5、Support from the server interface to modify user information, including user nicknames, avatars and so on.
+6、Roomids up to 128 bytes are now supported.
+7、ZIMUserInfo and ZIMGroupMemberInfo added the userAvatarUrl field, which is used to set or describe the user profile picture address.
+8、The SuccessList parameter was added. The member parameters include UserId, MsgId, and MsgSeq, indicating information about the user who successfully accepted the message. MsgSeq can be used to withdraw a single chat message.
+9、Added MsgSeq, which can be used to withdraw group chat messages.
+10、Added the user_list field to batch return information about the users who receive messages.This field has a value only if the developer invokes the server-side interface to send a single chat message.
+### 2. API Refactoring
+> 💥 Please note to developers that there are breaking changes starting from version 2.13.0, so please read the following guidelines when upgrading from the old version to the new version.
+
+  login have a breaking changed.
+
+* old version usage:
+```dart
+  var userInfo = { userID: 'xxxx', userName: 'xxxx' };
+  var token = '';
+  zim.login(userInfo, token)
+  .then(function () {
+  })
+  .catch(function (err) {
+  });
+```
+
+* new version usage:
+```dart
+  try{
+      ZIMLoginConfig loginConfig = ZIMLoginConfig();
+      loginConfig.userName = 'userName';
+      loginConfig.token = '';
+      loginConfig.isOfflineLogin = false;
+      await ZIM.getInstance()?.login('zego', loginConfig);
+  } on PlatformException catch(onError){
+      onError.code;
+      onError.message;
+  }
+```
+
+## 2.12.2
+Fix known problems.
 ## 2.12.1
 Fix known problems.
 ## 2.12.0

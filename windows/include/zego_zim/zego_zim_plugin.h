@@ -1,4 +1,4 @@
-#ifndef FLUTTER_PLUGIN_ZIM_FLUTTER_SDK_PLUGIN_H_
+﻿#ifndef FLUTTER_PLUGIN_ZIM_FLUTTER_SDK_PLUGIN_H_
 #define FLUTTER_PLUGIN_ZIM_FLUTTER_SDK_PLUGIN_H_
 
 #include <flutter_plugin_registrar.h>

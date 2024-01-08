@@ -8,6 +8,8 @@
 
 +(nullable ZIMAppConfig*)oZIMAppConfig:(nullable NSDictionary *)configDic;
 
++(nullable ZIMLoginConfig*)oZIMLoginConfig:(nullable NSDictionary *)configDic;
+
 +(nullable ZIMUsersInfoQueryConfig*)oZIMUserInfoQueryConfig:(nullable NSDictionary *)configDic;
 
 +(nullable NSDictionary *)mZIMErrorObject:(nullable ZIMError *)errorInfo;
@@ -163,6 +165,8 @@
 
 +(nullable NSDictionary *)mZIMCallEndSentInfo:(nullable ZIMCallEndedSentInfo *)info;
 
++(nullable NSDictionary *)mZIMCallInvitationCreatedInfo:(nullable ZIMCallInvitationCreatedInfo *)info;
+
 +(nullable NSDictionary *)mZIMCallQuitSentInfo:(nullable ZIMCallQuitSentInfo *)info;
 
 +(nullable NSDictionary *)mZIMCallInvitationTimeoutInfo:(nullable ZIMCallInvitationTimeoutInfo *)info;
@@ -180,4 +184,7 @@
 +(nullable NSDictionary *)mZIMMessageDeletedInfo:(nullable ZIMMessageDeletedInfo *)info;
 
 +(nullable ZIMCallJoinConfig *)oZIMCallJoinConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMBlacklistQueryConfig *)oZIMBlacklistQueryConfig:(nullable NSDictionary *)configMap;
+
 @end
