@@ -75,15 +75,18 @@ class _myState extends State<SplashPage> {
     if (userID != null && userID != '') {
       String token = await TokenPlugin.makeToken(userID);
       ZIMUserInfo userInfo = ZIMUserInfo();
+      ZIMLoginConfig config = ZIMLoginConfig();
       userInfo.userID = userID;
       if (userName != null) {
+        config.userName = userName;
         userInfo.userName = userName;
       }
       log('login');
       try {
         String token = await TokenPlugin.makeToken(userInfo.userID);
+        config.token = token;
 
-        await ZIM.getInstance()!.login(userInfo, token);
+        await ZIM.getInstance()!.login(userID, config);
         log('success');
         _countTimer?.cancel();
         _countTimer = null;

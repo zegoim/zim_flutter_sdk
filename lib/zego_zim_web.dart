@@ -70,8 +70,7 @@ class ZegoZimPlugin {
       case 'setAdvancedConfig':
         return setAdvancedConfig(call.arguments['key'], call.arguments['value']);
       case 'login':
-        return login(call.arguments['userID'], call.arguments['userName'],
-            call.arguments['token']);
+        return login(call.arguments['userID'], call.arguments['config']);
       case 'logout':
         return logout();
       case 'createRoom':
@@ -526,15 +525,10 @@ class ZegoZimPlugin {
     return ZIM.setGeofencingConfig(areaList, type);
   }
 
-  Future<void> login(String userID, String userName, String token) async {
-    ZIMUserInfoWeb _userInfo =
-        ZIMUserInfoWeb(userID: userID, userName: userName);
+  Future<void> login(String userID, dynamic config) async {
+    Object _config = mapToJSObj(config);
 
-    if (ZIM.getInstance() == null) {
-      return Future.value();
-    }
-
-    final promise = ZIM.getInstance()!.login(_userInfo, token);
+    final promise = ZIM.getInstance()!.login(userID, _config);
 
     final Future<void> loginFuture = promiseToFuture(promise);
 
@@ -2317,7 +2311,7 @@ class ZegoZimPlugin {
       return;
     }
 
-    ZIMBlacklistChangedAction action = ZIMBlacklistChangedActionExtension.mapValue[data['action']]!;
+    ZIMBlacklistChangeAction action = ZIMBlacklistChangeActionExtension.mapValue[data['action']]!;
     List<ZIMUserInfo> userList = ZIMConverter.oZIMUserInfoList(data['userList'] ?? []);
 
     ZIMEventHandler.onBlacklistChanged!(zim, action, userList);

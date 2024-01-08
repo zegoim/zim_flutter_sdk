@@ -724,6 +724,7 @@ class ZIMConverter {
 
   static ZIMRoomAttributesOperatedCallResult
       oZIMRoomAttributesOperatedCallResult(Map resultMap) {
+    resultMap['errorKeys'] = resultMap['errorKeys'] ?? [];
     return ZIMRoomAttributesOperatedCallResult(
         roomID: resultMap['roomID'],
         errorKeys: (resultMap['errorKeys'] as List).cast<String>());
@@ -1636,7 +1637,7 @@ class ZIMConverter {
   static ZIMCallInvitationCreatedInfo oZIMCallInvitationCreatedInfo(Map infoMap) {
     ZIMCallInvitationCreatedInfo info = ZIMCallInvitationCreatedInfo();
     info.caller = infoMap['caller'];
-    info.extendedData = infoMap['extendedData'];
+    info.extendedData = infoMap['extendedData'] ?? '';
     info.timeout = infoMap['timeout'];
     info.createTime = infoMap['createTime'];
     info.callUserList = oZIMCallUserInfoList(infoMap['callUserList']);
