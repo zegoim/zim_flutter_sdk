@@ -383,6 +383,13 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         List<ZIMUserInfo>? userList = ZIMConverter.oZIMUserInfoList(map['userList']);
         ZIMEventHandler.onBlacklistChanged!(zim, action, userList);
         break;
+      case 'onGroupMemberMuteInfoUpdated':
+        if(ZIMEventHandler.onGroupMemberMuteInfoUpdated == null) return;
+        List<ZIMGroupMemberMuteInfo> groupMemberMuteInfoList = ZIMConverter.oZIMGroupMemberMuteInfoList(map['groupMemberMuteInfoList']);
+        ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
+        String groupID = map['groupID'];
+        ZIMEventHandler.onGroupMemberMuteInfoUpdated!(zim,groupMemberMuteInfoList,operatedInfo,groupID);
+        break;
       default:
         break;
     }

@@ -543,4 +543,6 @@ class ZIMEventHandler {
   static void Function(ZIM zim,ZIMFriendApplicationListChangeAction action,List<ZIMFriendApplicationInfo>? friendApplicationInfoList)? onFriendApplicationListChanged;
 
   static void Function(ZIM zim, ZIMBlacklistChangeAction action, List<ZIMUserInfo>? userList)? onBlacklistChanged;
+
+  static void Function(ZIM zim,List<ZIMGroupMemberMuteInfo> groupMemberMuteInfolist,ZIMGroupOperatedInfo operatedInfo,String groupID)? onGroupMemberMuteInfoUpdated;
 }

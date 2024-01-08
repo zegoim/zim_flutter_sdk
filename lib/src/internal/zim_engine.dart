@@ -1225,4 +1225,35 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMConversationDraftSetResult(resultMap);
   }
 
+  @override
+  Future<ZIMGroupMutedResult> muteGroup(String groupID, ZIMGroupMuteConfig config) async{
+    Map resultMap = await channel.invokeMethod('muteGroup',{
+      'handle':handle,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMuteConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMutedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMemberListMutedResult> muteGroupMemberList(List<String> userIDs, String groupID, ZIMGroupMemberMuteConfig config) async{
+    Map resultMap = await channel.invokeMethod('muteGroupMemberList',{
+      'handle':handle,
+      'userIDs':userIDs,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMemberMuteConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMemberListMutedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID, ZIMGroupMemberMutedListQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryGroupMemberMutedList',{
+      'handle':handle,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMemberMutedListQueryConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMemberMutedListQueriedResult(resultMap);
+  }
+
 }
