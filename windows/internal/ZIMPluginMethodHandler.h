@@ -209,7 +209,7 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryMessageReactionUserList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void queryCombineMessage(flutter::EncodableMap& argument,
+	void queryCombineMessageDetail(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 private:
     ZIMPluginMethodHandler() = default;

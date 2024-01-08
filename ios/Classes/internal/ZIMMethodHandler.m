@@ -2281,7 +2281,7 @@
         }
     }];
 }
-- (void)queryCombineMessage:(FlutterMethodCall *)call result:(FlutterResult)result {
+- (void)queryCombineMessageDetail:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if(!zim) {
@@ -2290,7 +2290,7 @@
     }
     ZIMCombineMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
     
-    [zim queryCombineMessageByMessage:message callback:^(ZIMCombineMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+    [zim queryCombineMessageDetailByMessage:message callback:^(ZIMCombineMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
             NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];

@@ -1056,12 +1056,12 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMMessageCombineQueriedResult> queryCombineMessage(ZIMCombineMessage message) async{
+  Future<ZIMCombineMessageQueriedResult> queryCombineMessage(ZIMCombineMessage message) async{
     Map resultMap = await channel.invokeMethod('queryCombineMessage',{
       'handle':handle,
       'message': ZIMConverter.mZIMMessage(message)
     });
-    return ZIMMessageCombineQueriedResult(message:ZIMConverter.oZIMMessage(resultMap['message']) as ZIMCombineMessage);
+    return ZIMCombineMessageQueriedResult(message:ZIMConverter.oZIMMessage(resultMap['message']) as ZIMCombineMessage);
   }
 
 }

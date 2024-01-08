@@ -2196,9 +2196,9 @@ class ZIMMessageReactionUserListQueriedResult {
   ZIMMessageReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
 }
 
-class ZIMMessageCombineQueriedResult {
+class ZIMCombineMessageQueriedResult {
   ZIMCombineMessage message;
-  ZIMMessageCombineQueriedResult({required this.message});
+  ZIMCombineMessageQueriedResult({required this.message});
 }
 
 class ZIMMessageDeletedInfo {

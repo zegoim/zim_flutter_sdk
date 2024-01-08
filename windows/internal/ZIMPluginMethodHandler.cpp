@@ -2851,7 +2851,7 @@ void ZIMPluginMethodHandler::queryMessageReactionUserList(flutter::EncodableMap&
     });
 }
 
-void ZIMPluginMethodHandler::queryCombineMessage(flutter::EncodableMap& argument,
+void ZIMPluginMethodHandler::queryCombineMessageDetail(flutter::EncodableMap& argument,
 	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 	auto handle = std::get<std::string>(argument[FTValue("handle")]);
 	auto zim = this->engineMap[handle];
@@ -2864,7 +2864,7 @@ void ZIMPluginMethodHandler::queryCombineMessage(flutter::EncodableMap& argument
     auto combineMessagePtr = std::static_pointer_cast<ZIMCombineMessage>(message);
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 
-	zim->queryCombineMessage(combineMessagePtr, [=](const std::shared_ptr<ZIMCombineMessage>& message, ZIMError& errorInfo) {
+	zim->queryCombineMessageDetail(combineMessagePtr, [=](const std::shared_ptr<ZIMCombineMessage>& message, ZIMError& errorInfo) {
 		FTMap retMap;
 		auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
 		retMap[FTValue("message")] = messageMap;

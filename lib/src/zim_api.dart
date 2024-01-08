@@ -1504,5 +1504,5 @@ abstract class ZIM {
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
 
-  Future<ZIMMessageCombineQueriedResult> queryCombineMessage(ZIMCombineMessage message);
+  Future<ZIMCombineMessageQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
 }

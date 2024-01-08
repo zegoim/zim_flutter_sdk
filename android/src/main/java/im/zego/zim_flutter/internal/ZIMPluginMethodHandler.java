@@ -2676,7 +2676,7 @@ public class ZIMPluginMethodHandler {
         });
     }
 
-    public static void queryCombineMessage(MethodCall call,Result result){
+    public static void queryCombineMessageDetail(MethodCall call,Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if(zim == null) {
@@ -2685,9 +2685,9 @@ public class ZIMPluginMethodHandler {
         }
         ZIMCombineMessage message = (ZIMCombineMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
 
-        zim.queryCombineMessage(message, new ZIMMessageCombineQueriedCallback() {
+        zim.queryCombineMessageDetail(message, new ZIMCombineMessageDetailQueriedCallback() {
             @Override
-            public void onMessageCombineQueried(ZIMCombineMessage message, ZIMError error) {
+            public void onCombineMessageDetailQueried(ZIMCombineMessage message, ZIMError error) {
                 if (error.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
                     resultMap.put("message",ZIMPluginConverter.mZIMMessage(message));
