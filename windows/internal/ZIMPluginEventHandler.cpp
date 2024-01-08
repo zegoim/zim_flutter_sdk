@@ -640,3 +640,18 @@ void ZIMPluginEventHandler::onBlacklistChanged(ZIM * zim, const ZIMBlacklistChan
     }
 }
 
+void ZIMPluginEventHandler::onGroupMuteInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
+                                        const ZIMGroupOperatedInfo & operatedInfo,
+                                        const std::string & groupID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupMuteInfoUpdated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("groupMuteInfo")] = ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(groupMuteInfo);
+        retMap[FTValue("operatedInfo")] = ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(operatedInfo);
+        retMap[FTValue("groupID")] = FTValue("groupID");
+        eventSink_->Success(retMap);
+    }
+}
+

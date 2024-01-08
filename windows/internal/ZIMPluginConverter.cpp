@@ -157,6 +157,15 @@ FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<long long>& 
 	return ftArray;
 }
 
+FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<int>& vec) {
+	FTArray ftArray;
+	for (auto& value : vec) {
+		ftArray.emplace_back(FTValue(value));
+	}
+
+	return ftArray;
+}
+
 FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<std::string>& vec) {
 	FTArray ftArray;
 	for (auto& str : vec) {
@@ -173,6 +182,15 @@ std::vector<std::string> ZIMPluginConverter::cnvFTArrayToStlVector(FTArray ftArr
 		vec.emplace_back(str);
 	}
 
+	return vec;
+}
+
+std::vector<int> ZIMPluginConverter::cnvFTArrayToStlVector(FTArray ftArray) {
+	std::vector<int> vec;
+		for (auto& intObj : ftArray) {
+		auto intValue = std::get<int32_t>(intObj);
+		vec.emplace_back(intValue);
+	}
 	return vec;
 }
 
@@ -755,6 +773,14 @@ FTMap ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(const ZIMGroupOperatedInf
 	return infoMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMGroupMutedInfoToMap(const ZIMGroupMutedInfo &info) {
+	FTMap infoMap;
+	infoMap[FTValue("mode")] = FTValue(info.mode);
+	infoMap[FTValue("duration")] = FTValue((int32_t)info.duration);
+	infoMap(FTValue("roleList")) = ZIMPluginConverter::cnvStlVectorToFTArray(info.roleList);
+	return infoMap;
+}
+
 FTMap ZIMPluginConverter::cnvZIMGroupAttributesUpdateInfoToMap(const ZIMGroupAttributesUpdateInfo& updateInfo) {
 	FTMap updateInfoMap;
 	updateInfoMap[FTValue("action")] = FTValue(updateInfo.action);
@@ -1156,6 +1182,13 @@ FTMap ZIMPluginConverter::cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedI
 	return infoMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info){
+	FTMap infoMap;
+	infoMap[FTValue("muteMode")] = FTValue(info.muteMode);
+	infoMap[FTValue("muteExpiredTimestamp")] = FTValue((int64_t)info.muteExpiredTimestamp);
+	infoMap(FTValue("muteRoleList")) = ZIMPluginConverter::cnvStlVectorToFTArray(info.muteRoleList);
+	return infoMap;
+}
 
 FTArray ZIMPluginConverter::cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList) {
 	FTArray reactionArray;
@@ -1187,5 +1220,19 @@ ZIMBlacklistQueryConfig ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(F
 	ZIMBlacklistQueryConfig config;
 	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
 	config.nextFlag = (unsigned int)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
+	return config;
+}
+
+ZIMGroupMuteConfig ZIMPluginConverter::cnvZIMGroupMuteConfigToObject(FTMap configMap){
+	ZIMGroupMuteConfig config;
+	config.mode = (ZIMGroupMuteMode)std::get<int32_t>(configMap[FTValue("mode")]);
+	config.duration = std::get<int32_t>(configMap[FTValue("duration")]);
+	config.roleList = ZIMPluginConverter::cnvFTArrayToStlVector(configMap[FTValue("roleList")]);
+	return config;
+}
+
+ZIMGroupMemberMuteConfig ZIMPluginConverter::cnvZIMGroupMemberMuteConfigToObject(FTMap configMap){
+	ZIMGroupMemberMuteConfig config;
+	config.duration = std::get<int32_t>(configMap[FTValue("duration")]);
 	return config;
 }

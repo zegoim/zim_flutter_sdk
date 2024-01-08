@@ -216,6 +216,9 @@ public:
     static FTArray cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList);
     static FTArray cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList);
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo& info);
+    static FTMap cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info);
+    static FTMap cnvZIMGroupOperatedInfoToMap(const ZIMGroupOperatedInfo &info);
+    static FTMap cnvZIMGroupMutedInfoToMap(const ZIMGroupMutedInfo &info);
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
@@ -242,6 +245,9 @@ public:
     static ZIMMessageReactionUserQueryConfig cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap);
     static std::shared_ptr<ZIMVoIPConfig> cnvZIMVoIPConfigConfigToObject(FTMap configMap);
     static ZIMBlacklistQueryConfig cnvZIMBlacklistQueryConfigToObject(FTMap configMap);
+    static ZIMGroupMuteConfig cnvZIMGroupMuteConfigToObject(FTMap configMap);
+    static ZIMGroupMemberMuteConfig cnvZIMGroupMemberMuteConfigToObject(FTMap configMap);
+    
 public:
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static int32_t cnvFTMapToInt32(flutter::EncodableValue value);
@@ -249,5 +255,7 @@ public:
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
+    static FTArray cnvStlVectorToFTArray(const std::vector<int>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
+    static std::vector<int> cnvFTArrayToStlVector(FTArray ftArray);
 };

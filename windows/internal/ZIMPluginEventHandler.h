@@ -162,6 +162,10 @@ protected:
     void onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangeAction & action,
                                 const std::vector<ZIMUserInfo> & userList);
 
+    void onGroupMuteInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
+                                        const ZIMGroupOperatedInfo & operatedInfo,
+                                        const std::string & groupID);
+
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
 
