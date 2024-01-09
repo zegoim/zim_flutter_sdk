@@ -777,7 +777,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupMutedInfoToMap(const ZIMGroupMutedInfo &inf
 	FTMap infoMap;
 	infoMap[FTValue("mode")] = FTValue(info.mode);
 	infoMap[FTValue("duration")] = FTValue((int32_t)info.duration);
-	infoMap(FTValue("roleList")) = ZIMPluginConverter::cnvStlVectorToFTArray(info.roleList);
+	infoMap(FTValue("roleList")) = cnvStlVectorToFTArray(info.roleList);
 	return infoMap;
 }
 

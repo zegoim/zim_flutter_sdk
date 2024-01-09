@@ -2481,9 +2481,9 @@ void ZIMPluginMethodHandler::muteGroupMemberList(flutter::EncodableMap& argument
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("groupID")] = FTValue(groupID);
-            retMap[FTValue("duration")] = FTValue((int32_t)info.duration);
+            retMap[FTValue("duration")] = FTValue((int32_t)duration);
             retMap[FTValue("mutedMemberIDList")] = ZIMPluginConverter::cnvStlVectorToFTArray(mutedMemberIDList);
-            retMap[FTValue("")]
+            retMap[FTValue("errorUserList")] = ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
             retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMGroupMutedInfoToMap(info);
             sharedPtrResult->Success(retMap);
         }
@@ -2509,8 +2509,7 @@ void ZIMPluginMethodHandler::queryGroupMemberMutedList(flutter::EncodableMap& ar
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("groupID")] = FTValue(groupID);
-            retMap[FTValue("nextFlag")] = FTValue((int64_t)info.nextFlag);
-            retMap[FTValue("mutedMemberIDList")] = ZIMPluginConverter::cnvZIMGroupMemberMuteInfoToMap(mutedMemberIDList);
+            retMap[FTValue("nextFlag")] = FTValue((int64_t)nextFlag);
             retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMGroupMemberMuteInfoListToBasicList(info);
             sharedPtrResult->Success(retMap);
         }
