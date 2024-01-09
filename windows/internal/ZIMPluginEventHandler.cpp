@@ -650,7 +650,7 @@ void ZIMPluginEventHandler::onGroupMuteInfoUpdated(ZIM * zim, const ZIMGroupMute
         retMap[FTValue("handle")] = FTValue(handle);
         retMap[FTValue("groupMuteInfo")] = ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(groupMuteInfo);
         retMap[FTValue("operatedInfo")] = ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(operatedInfo);
-        retMap[FTValue("groupID")] = FTValue("groupID");
+        retMap[FTValue("groupID")] = FTValue(groupID);
         eventSink_->Success(retMap);
     }
 }
@@ -664,7 +664,7 @@ void ZIMPluginEventHandler::onGroupMemberMuteInfoUpdated(ZIM * zim, const std::v
         retMap[FTValue("handle")] = FTValue(handle);
         retMap[FTValue("groupMemberMuteInfoList")] = ZIMPluginConverter::cnvZIMGroupMemberMuteInfoListToBasicList(groupMemberMuteInfoList);
         retMap[FTValue("operatedInfo")] = ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(operatedInfo);
-        retMap[FTValue("groupID")] = FTValue("groupID");
+        retMap[FTValue("groupID")] = FTValue(groupID);
         eventSink_->Success(retMap);
     }
 }

@@ -166,6 +166,9 @@ protected:
                                         const ZIMGroupOperatedInfo & operatedInfo,
                                         const std::string & groupID);
 
+    void onGroupMemberMuteInfoUpdated(ZIM * zim, const std::vector<ZIMGroupMemberMuteInfo> & groupMemberMuteInfoList,
+        const ZIMGroupOperatedInfo & operatedInfo, const std::string & groupID);
+
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
 
