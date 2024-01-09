@@ -259,5 +259,5 @@ public:
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<int>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
-    static std::vector<int> cnvFTArrayToStlVectorInt(FTArray ftArray);
+    static std::vector<ZIMGroupMemberRole> cnvFTArrayToStlVectorInt(FTArray ftArray);
 };

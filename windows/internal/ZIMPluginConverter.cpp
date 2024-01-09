@@ -185,8 +185,8 @@ std::vector<std::string> ZIMPluginConverter::cnvFTArrayToStlVector(FTArray ftArr
 	return vec;
 }
 
-std::vector<int> ZIMPluginConverter::cnvFTArrayToStlVectorInt(FTArray ftArray) {
-	std::vector<int> vec;
+std::vector<ZIMGroupMemberRole> ZIMPluginConverter::cnvFTArrayToStlVectorInt(FTArray ftArray) {
+	std::vector<ZIMGroupMemberRole> vec;
 		for (auto& intObj : ftArray) {
 		auto intValue = std::get<int32_t>(intObj);
 		vec.emplace_back(intValue);
