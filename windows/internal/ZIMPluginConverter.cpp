@@ -185,7 +185,7 @@ std::vector<std::string> ZIMPluginConverter::cnvFTArrayToStlVector(FTArray ftArr
 	return vec;
 }
 
-std::vector<int> ZIMPluginConverter::cnvFTArrayToStlVector(FTArray ftArray) {
+std::vector<int> ZIMPluginConverter::cnvFTArrayToStlVectorInt(FTArray ftArray) {
 	std::vector<int> vec;
 		for (auto& intObj : ftArray) {
 		auto intValue = std::get<int32_t>(intObj);
@@ -1244,7 +1244,7 @@ ZIMGroupMuteConfig ZIMPluginConverter::cnvZIMGroupMuteConfigToObject(FTMap confi
 	ZIMGroupMuteConfig config;
 	config.mode = (ZIMGroupMuteMode)std::get<int32_t>(configMap[FTValue("mode")]);
 	config.duration = std::get<int32_t>(configMap[FTValue("duration")]);
-	config.roleList = ZIMPluginConverter::cnvFTArrayToStlVector(configMap[FTValue("roleList")]);
+	config.roleList = ZIMPluginConverter::cnvFTArrayToStlVectorInt(configMap[FTValue("roleList")]);
 	return config;
 }
 
