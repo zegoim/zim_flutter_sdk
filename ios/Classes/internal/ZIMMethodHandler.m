@@ -738,12 +738,11 @@
     NSString *draft = [call.arguments safeObjectForKey:@"draft"];
     NSString *conversationID = [call.arguments safeObjectForKey:@"conversationID"];
     ZIMConversationType conversationType = [[call.arguments safeObjectForKey:@"conversationType"] unsignedIntegerValue];
-    [zim setConversationDraft:draft conversationID:conversationID conversationType:conversationType callback:^(ZIMConversation *conversation,
-                                                                                                 ZIMError *errorInfo) {
+    [zim setConversationDraft:draft conversationID:conversationID conversationType:conversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            
-            [resultDic safeSetObject:[ZIMPluginConverter mZIMConversation:conversation]forKey:@"conversation"];
+            [resultMtDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInteger:conversationType] forKey:@"conversationType"];
             result(resultDic);
         }
         else{

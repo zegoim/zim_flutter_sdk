@@ -387,7 +387,10 @@ class ZIMConverter {
   }
 
   static ZIMConversationDraftSetResult oZIMConversationDraftSetResult(Map resultMap) {
-    return ZIMConversationDraftSetResult(conversation: oZIMConversation(resultMap['conversation']));
+    return ZIMConversationDraftSetResult(
+        conversationID: resultMap['conversationID'],
+        conversationType: ZIMConversationTypeExtension
+            .mapValue[resultMap['conversationType']]!);
   }
 
   static ZIMMessageLocalExtendedDataUpdatedResult oZIMMessageLocalExtendedDataUpdatedResult(Map resultMap) {

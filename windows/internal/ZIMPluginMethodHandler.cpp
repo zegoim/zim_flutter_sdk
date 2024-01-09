@@ -637,10 +637,11 @@ void ZIMPluginMethodHandler::setConversationDraft(flutter::EncodableMap& argumen
 	auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
 	int conversationType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-	zim->setConversationDraft(draft, conversationID, (ZIMConversationType)conversationType, [=](const std::shared_ptr<ZIMConversation>& conversation, const ZIMError& errorInfo) {
+	zim->setConversationDraft(draft, conversationID, (ZIMConversationType)conversationType, [=](const std::string &conversationID, ZIMConversationType conversationType,const ZIMError &errorInfo) {
 		if (errorInfo.code == 0) {
 			FTMap retMap;
-			retMap[FTValue("conversation")] = ZIMPluginConverter::cnvZIMConversationToMap(conversation);
+            retMap[FTValue("conversationID")] = FTValue(conversationID);
+            retMap[FTValue("conversationType")] = FTValue(conversationType);
 
 			sharedPtrResult->Success(retMap);
 		}

@@ -2137,9 +2137,10 @@ class ZIMConversationMessageReceiptReadSentResult {
 }
 
 class ZIMConversationDraftSetResult{
-  ZIMConversation conversation;
-
-  ZIMConversationDraftSetResult({required this.conversation});
+  String conversationID;
+  ZIMConversationType conversationType;
+  ZIMConversationDraftSetResult(
+      {required this.conversationID, required this.conversationType});
 }
 
 class ZIMMessageReceiptsReadSentResult {
