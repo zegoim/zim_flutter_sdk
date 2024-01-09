@@ -1916,6 +1916,14 @@ class ZIMConverter {
     return groupMuteInfo;
   }
 
+  static ZIMGroupMutedInfo oZIMGroupMutedInfo(Map map) {
+    ZIMGroupMutedInfo groupMutedInfo = ZIMGroupMutedInfo();
+    groupMutedInfo.mode = ZIMGroupMuteModeExtension.mapValue[map['mode']]!;
+    groupMutedInfo.duration = map['duration'];
+    groupMutedInfo.roleList = List<int>.from(map['muteRoleList']);
+    return groupMutedInfo;
+  }
+
   static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo){
     Map map = {};
     map['muteMode'] = muteInfo.muteMode.value;
@@ -1935,7 +1943,7 @@ class ZIMConverter {
   static ZIMGroupMutedResult oZIMGroupMutedResult(Map map){
     ZIMGroupMutedResult result = ZIMGroupMutedResult();
     result.groupID = map['groupID'];
-    result.info = ZIMConverter.oZIMGroupMuteInfo(map['info']);
+    result.info = ZIMConverter.oZIMGroupMutedInfo(map['info']);
     return result;
   }
 

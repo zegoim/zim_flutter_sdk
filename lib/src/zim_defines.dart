@@ -2324,8 +2324,8 @@ class ZIMConversationDraftSetResult {
 
 class ZIMGroupMutedResult {
   String groupID;
-  ZIMGroupMuteInfo info;
-  ZIMGroupMutedResult():groupID='',info=ZIMGroupMuteInfo();
+  ZIMGroupMutedInfo info;
+  ZIMGroupMutedResult():groupID='',info=ZIMGroupMutedInfo();
 }
 
 class ZIMGroupMemberListMutedResult {
