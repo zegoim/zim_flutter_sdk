@@ -1916,6 +1916,14 @@ class ZIMConverter {
     return groupMuteInfo;
   }
 
+  static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo){
+    Map map = {};
+    map['muteMode'] = muteInfo.muteMode.value;
+    map['muteExpiredTimestamp'] = muteInfo.muteExpiredTimestamp;
+    map['muteRoleList'] = muteInfo.muteRoleList;
+    return map;
+  }
+
   static Map mZIMGroupMuteConfig(ZIMGroupMuteConfig config){
     Map map = {};
     map['mode'] = ZIMGroupMuteModeExtension.valueMap[config.mode];
