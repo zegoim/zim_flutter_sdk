@@ -157,7 +157,7 @@ FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<long long>& 
 	return ftArray;
 }
 
-FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<int>& vec) {
+FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<ZIMGroupMemberRole>& vec) {
 	FTArray ftArray;
 	for (auto& value : vec) {
 		ftArray.emplace_back(FTValue(value));
@@ -1244,7 +1244,7 @@ ZIMGroupMuteConfig ZIMPluginConverter::cnvZIMGroupMuteConfigToObject(FTMap confi
 	ZIMGroupMuteConfig config;
 	config.mode = (ZIMGroupMuteMode)std::get<int32_t>(configMap[FTValue("mode")]);
 	config.duration = std::get<int32_t>(configMap[FTValue("duration")]);
-	config.roleList = ZIMPluginConverter::cnvFTArrayToStlVectorInt(configMap[FTValue("roleList")]);
+	config.roleList = ZIMPluginConverter::cnvFTArrayToStlVectorInt(std::get<FTArray>(configMap[FTValue("roleList")]));
 	return config;
 }
 
