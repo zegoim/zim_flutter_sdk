@@ -1,4 +1,4 @@
-#include "include/zego_zim/zego_zim_plugin.h"
+﻿#include "include/zego_zim/zego_zim_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>

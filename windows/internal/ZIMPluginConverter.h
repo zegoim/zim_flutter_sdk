@@ -217,7 +217,6 @@ public:
     static FTArray cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList);
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo& info);
     static FTMap cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info);
-    static FTMap cnvZIMGroupOperatedInfoToMap(const ZIMGroupOperatedInfo &info);
     static FTMap cnvZIMGroupMutedInfoToMap(const ZIMGroupMutedInfo &info);
     static FTMap cnvZIMGroupMemberMuteInfoToMap(const ZIMGroupMemberMuteInfo &info);
     static FTArray cnvZIMGroupMemberMuteInfoListToBasicList(const std::vector<ZIMGroupMemberMuteInfo> &infos);
