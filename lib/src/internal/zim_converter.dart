@@ -1935,7 +1935,7 @@ class ZIMConverter {
     ZIMGroupMemberListMutedResult result = ZIMGroupMemberListMutedResult();
     result.groupID = map['groupID'];
     result.errorUserList = oZIMErrorUserInfoList(map['errorUserList']);
-    result.mutedMemberIDList = map['mutedMemberIDList'];
+    result.mutedMemberIDList = List<String>.from(map['mutedMemberIDList']);
     result.duration = map['duration'];
     return result;
   }
