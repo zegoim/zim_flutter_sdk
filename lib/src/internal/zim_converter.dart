@@ -1928,7 +1928,7 @@ class ZIMConverter {
     Map map = {};
     map['muteMode'] = muteInfo.muteMode.value;
     map['muteExpiredTimestamp'] = muteInfo.muteExpiredTimestamp;
-    map['muteRoleList'] = muteInfo.muteRoleList;
+    map['muteRoles'] = muteInfo.muteRoleList;
     return map;
   }
 
