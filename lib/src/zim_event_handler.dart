@@ -536,5 +536,7 @@ class ZIMEventHandler {
 
   static void Function(ZIM zim, ZIMBlacklistChangeAction action, List<ZIMUserInfo>? userList)? onBlacklistChanged;
 
+  static void Function(ZIM zim, ZIMGroupMuteInfo groupMuteInfo, ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupMuteInfoUpdated;
+
   static void Function(ZIM zim,List<ZIMGroupMemberMuteInfo> groupMemberMuteInfolist,ZIMGroupOperatedInfo operatedInfo,String groupID)? onGroupMemberMuteInfoUpdated;
 }
