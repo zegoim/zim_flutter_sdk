@@ -696,10 +696,11 @@ public class ZIMPluginMethodHandler {
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
         zim.setConversationDraft(draft, conversationID, conversationType, new ZIMConversationDraftSetCallback() {
             @Override
-            public void onConversationDraftSet(ZIMConversation conversation, ZIMError errorInfo) {
+            public void onConversationDraftSet(String conversationID, ZIMConversationType conversationType, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
-                    resultMap.put("conversation", ZIMPluginConverter.mZIMConversation(conversation));
+                    resultMap.put("conversationID",conversationID);
+                    resultMap.put("conversationType",conversationType.value());
                     result.success(resultMap);
                 }
                 else{
