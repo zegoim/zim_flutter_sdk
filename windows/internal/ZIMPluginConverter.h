@@ -257,7 +257,7 @@ public:
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
-    static FTArray cnvStlVectorToFTArray(const std::vector<ZIMGroupMemberRole>& vec);
+    static FTArray cnvStlVectorToFTArrayRoleList(const std::vector<ZIMGroupMemberRole>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
     static std::vector<ZIMGroupMemberRole> cnvFTArrayToStlVectorInt(FTArray ftArray);
 };

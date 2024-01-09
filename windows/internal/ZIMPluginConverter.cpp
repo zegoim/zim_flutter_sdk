@@ -157,7 +157,7 @@ FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<long long>& 
 	return ftArray;
 }
 
-FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<ZIMGroupMemberRole>& vec) {
+FTArray ZIMPluginConverter::cnvStlVectorToFTArrayRoleList(const std::vector<ZIMGroupMemberRole>& vec) {
 	FTArray ftArray;
 	for (auto& value : vec) {
 		ftArray.emplace_back(FTValue(value));
@@ -777,7 +777,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupMutedInfoToMap(const ZIMGroupMutedInfo &inf
 	FTMap infoMap;
 	infoMap[FTValue("mode")] = FTValue(info.mode);
 	infoMap[FTValue("duration")] = FTValue((int32_t)info.duration);
-	infoMap(FTValue("roleList")) = cnvStlVectorToFTArray(info.roleList);
+	infoMap(FTValue("roleList")) = cnvStlVectorToFTArrayRoleList(info.roleList);
 	return infoMap;
 }
 
@@ -1203,7 +1203,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info)
 	FTMap infoMap;
 	infoMap[FTValue("muteMode")] = FTValue(info.muteMode);
 	infoMap[FTValue("muteExpiredTimestamp")] = FTValue((int64_t)info.muteExpiredTimestamp);
-	infoMap(FTValue("muteRoleList")) = ZIMPluginConverter::cnvStlVectorToFTArray(info.muteRoleList);
+	infoMap(FTValue("muteRoleList")) = ZIMPluginConverter::cnvStlVectorToFTArrayRoleList(info.muteRoleList);
 	return infoMap;
 }
 
