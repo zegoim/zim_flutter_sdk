@@ -830,7 +830,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& group
 	groupFullInfoMap[FTValue("groupNotice")] = FTValue(groupInfo.groupNotice);
 	groupFullInfoMap[FTValue("groupAttributes")] = cnvSTLMapToFTMap(groupInfo.groupAttributes);
 	groupFullInfoMap[FTValue("notificationStatus")] = FTValue((int32_t)groupInfo.notificationStatus);
-
+	groupFullInfoMap[FTValue("muteInfo")] = cnvZIMGroupMuteInfoToMap(groupInfo.muteInfo);
 	return groupFullInfoMap;
 }
 
