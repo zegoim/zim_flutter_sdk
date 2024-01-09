@@ -1910,7 +1910,7 @@ class ZIMConverter {
 
   static ZIMGroupMuteInfo oZIMGroupMuteInfo(Map map) {
     ZIMGroupMuteInfo groupMuteInfo = ZIMGroupMuteInfo();
-    groupMuteInfo.muteMode = map['muteMode'];
+    groupMuteInfo.muteMode = ZIMGroupMuteModeExtension.mapValue[map['muteMode']]!;
     groupMuteInfo.muteExpiredTimestamp = map['muteExpiredTimestamp'];
     groupMuteInfo.muteRoleList = List<int>.from(map['muteRoleList']);
     return groupMuteInfo;
