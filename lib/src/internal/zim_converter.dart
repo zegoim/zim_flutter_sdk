@@ -1924,10 +1924,11 @@ class ZIMConverter {
     return groupMutedInfo;
   }
 
+  //供自动化使用，sdk 使用前需要 check
   static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo){
     Map map = {};
     map['muteMode'] = muteInfo.muteMode.value;
-    map['muteExpiredTimestamp'] = muteInfo.muteExpiredTimestamp;
+    map['muteExpireTime'] = muteInfo.muteExpiredTimestamp;
     map['muteRoles'] = muteInfo.muteRoleList;
     return map;
   }
@@ -2010,7 +2011,7 @@ class ZIMConverter {
 
   static Map mZIMGroupMemberMuteInfo(ZIMGroupMemberMuteInfo muteInfo){
     Map map = {};
-    map['memberInfo'] = ZIMConverter.mZIMGroupMemberInfo(muteInfo.memberInfo);
+    map['member'] = ZIMConverter.mZIMGroupMemberInfo(muteInfo.memberInfo);
     map['muteExpiredTimestamp'] = muteInfo.muteExpiredTimestamp;
     return map;
   }
