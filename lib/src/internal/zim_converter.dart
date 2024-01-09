@@ -1920,7 +1920,7 @@ class ZIMConverter {
     ZIMGroupMutedInfo groupMutedInfo = ZIMGroupMutedInfo();
     groupMutedInfo.mode = ZIMGroupMuteModeExtension.mapValue[map['mode']]!;
     groupMutedInfo.duration = map['duration'];
-    groupMutedInfo.roleList = List<int>.from(map['muteRoleList']);
+    groupMutedInfo.roleList = List<int>.from(map['roleList']);
     return groupMutedInfo;
   }
 
