@@ -3011,7 +3011,6 @@ void ZIMPluginMethodHandler::deleteFriend(flutter::EncodableMap& argument, std::
 					errorUserInfoArray.emplace_back(errorUserInfoMap);
 				}
 
-				FTMap retMap;
 				retMap[FTValue("errorUserList")] = errorUserInfoArray;
 			}
 			else {
