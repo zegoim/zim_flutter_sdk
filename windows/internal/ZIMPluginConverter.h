@@ -169,6 +169,8 @@ public:
     static FTArray cnvZIMErrorUserInfoListToArray(const std::vector<ZIMErrorUserInfo>& errorUserInfoList);
     static FTMap cnvZIMErrorObjectToMap(const ZIMError& errorInfo);
     static FTArray cnvZIMUserListToArray(const std::vector<ZIMUserInfo>& userInfoList);
+    static FTArray cnvZIMFriendInfoToArray(const std::vector<ZIMFriendInfo>& infoList);
+    static FTArray cnvZIMFriendApplicationInfoToArray(const std::vector<ZIMFriendApplicationInfo>& infoList);
     static FTArray cnvZIMRoomMemberInfoListToArray(const std::vector<ZIMRoomMemberInfo>& roomMemberInfoList);
     static FTArray cnvZIMErrorUserListToArray(const std::vector<ZIMErrorUserInfo>& errorUserList);
     static FTArray cnvZIMConversationListToArray(const std::vector<std::shared_ptr<ZIMConversation>> &converationList);

@@ -230,6 +230,26 @@ FTArray ZIMPluginConverter::cnvZIMUserListToArray(const std::vector<ZIMUserInfo>
 	return userInfoListArray;
 }
 
+FTArray ZIMPluginConverter::cnvZIMFriendInfoToArray(const std::vector<ZIMFriendInfo>& infoList) {
+	FTArray userInfoListArray;
+	for (auto& userInfo : infoList) {
+		FTMap userInfoMap = cnvZIMFriendInfoToMap(userInfo);
+		userInfoListArray.emplace_back(userInfoMap);
+	}
+
+	return userInfoListArray;
+}
+
+FTArray ZIMPluginConverter::cnvZIMFriendApplicationInfoToArray(const std::vector<ZIMFriendApplicationInfo>& infoList) {
+	FTArray userInfoListArray;
+	for (auto& userInfo : infoList) {
+		FTMap userInfoMap = cnvZIMFriendApplicationInfoToMap(userInfo);
+		userInfoListArray.emplace_back(userInfoMap);
+	}
+
+	return userInfoListArray;
+}
+
 FTArray ZIMPluginConverter::cnvZIMRoomMemberInfoListToArray(const std::vector<ZIMRoomMemberInfo>& roomMemberInfoList) {
 	FTArray userInfoListArray;
 	for (auto& userInfo : roomMemberInfoList) {
@@ -1347,6 +1367,9 @@ FTMap ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplic
 
 FTMap ZIMPluginConverter::cnvZIMFriendInfoToMap(const ZIMFriendInfo& info) {
 	FTMap infoMap;
+	infoMap[FTValue("userID")] = FTValue(info.userID);
+	infoMap[FTValue("userName")] = FTValue(info.userName);
+	infoMap[FTValue("userAvatarUrl")] = FTValue(info.userAvatarUrl);
 	infoMap[FTValue("friendAlias")] = FTValue(info.friendAlias);
 	infoMap[FTValue("createTime")] = FTValue(info.createTime);
 	infoMap[FTValue("wording")] = FTValue(info.wording);

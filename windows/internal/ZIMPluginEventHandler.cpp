@@ -640,3 +640,55 @@ void ZIMPluginEventHandler::onBlacklistChanged(ZIM * zim, const ZIMBlacklistChan
     }
 }
 
+void ZIMPluginEventHandler::onFriendInfoUpdated(ZIM* zim,
+    const std::vector<ZIMFriendInfo>& friendInfoList) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onFriendInfoUpdated");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+		retMap[FTValue("friendInfoList")] = ZIMPluginConverter::cnvZIMFriendInfoToArray(friendInfoList);
+		eventSink_->Success(retMap);
+	}
+}
+
+void ZIMPluginEventHandler::onFriendListChanged(ZIM* zim, ZIMFriendListChangeAction& action,
+    const std::vector<ZIMFriendInfo>& friendInfoList) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onFriendListChanged");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("action")] = FTValue((int32_t)action);
+        retMap[FTValue("friendInfoList")] = ZIMPluginConverter::cnvZIMFriendInfoToArray(friendInfoList);
+		eventSink_->Success(retMap);
+	}
+}
+
+void ZIMPluginEventHandler::onFriendApplicationUpdated(
+    ZIM* zim,
+    const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onFriendApplicationUpdated");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+		retMap[FTValue("friendApplicationInfoList")] = ZIMPluginConverter::cnvZIMFriendApplicationInfoToArray(friendApplicationInfoList);
+		eventSink_->Success(retMap);
+	}
+}
+
+void ZIMPluginEventHandler::onFriendApplicationListChanged(
+    ZIM* zim, ZIMFriendApplicationListChangeAction& action,
+    const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onFriendApplicationListChanged");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("action")] = FTValue((int32_t)action);
+		retMap[FTValue("friendApplicationInfoList")] = ZIMPluginConverter::cnvZIMFriendApplicationInfoToArray(friendApplicationInfoList);
+		eventSink_->Success(retMap);
+	}
+}
+
