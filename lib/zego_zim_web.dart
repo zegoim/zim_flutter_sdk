@@ -2334,45 +2334,45 @@ class ZegoZimPlugin {
   }
 
   static void friendListChanged(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onFriendListChanged == null) {
-      return;
-    }
+    // if (ZIMEventHandler.onFriendListChanged == null) {
+    //   return;
+    // }
 
-    ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[data['action']]!;
-    List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
+    // ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[data['action']]!;
+    // List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
 
-    ZIMEventHandler.onFriendListChanged!(zim, action, friendList);
+    // ZIMEventHandler.onFriendListChanged!(zim, action, friendList);
   }
 
   static void friendInfoUpdated(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onFriendInfoUpdated == null) {
-      return;
-    }
+    // if (ZIMEventHandler.onFriendInfoUpdated == null) {
+    //   return;
+    // }
 
-    List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
+    // List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
 
-    ZIMEventHandler.onFriendInfoUpdated!(zim, friendList);
+    // ZIMEventHandler.onFriendInfoUpdated!(zim, friendList);
   }
 
   static void friendApplicationListChanged(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onFriendApplicationListChanged == null) {
-      return;
-    }
+    // if (ZIMEventHandler.onFriendApplicationListChanged == null) {
+    //   return;
+    // }
 
-    ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[data['action']]!;
-    List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
+    // ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[data['action']]!;
+    // List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
 
-    ZIMEventHandler.onFriendApplicationListChanged!(zim, action, applicationList);
+    // ZIMEventHandler.onFriendApplicationListChanged!(zim, action, applicationList);
   }
 
   static void friendApplicationUpdated(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onFriendApplicationUpdated == null) {
-      return;
-    }
+    // if (ZIMEventHandler.onFriendApplicationUpdated == null) {
+    //   return;
+    // }
 
-    List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
+    // List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
 
-    ZIMEventHandler.onFriendApplicationUpdated!(zim, applicationList);
+    // ZIMEventHandler.onFriendApplicationUpdated!(zim, applicationList);
   }
 
   static Object mapToJSObj(Map<dynamic, dynamic>? a) {
