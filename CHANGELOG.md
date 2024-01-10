@@ -1,3 +1,5 @@
+## 2.13.0+1
+    Fix some issue.
 ## 2.13.0
 ### 1. Feature
 1、Users can log in to the IM service offline and access local SDK data.
