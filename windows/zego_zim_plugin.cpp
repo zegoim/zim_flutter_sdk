@@ -383,6 +383,39 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "addMessageReaction") {
         ZIMPluginMethodHandler::getInstance().addMessageReaction(argument, std::move(result));
     }
+	else if (method_call.method_name() == "addFriend") {
+	ZIMPluginMethodHandler::getInstance().addFriend(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "sendFriendApplication") {
+	ZIMPluginMethodHandler::getInstance().sendFriendApplication(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "deleteFriend") {
+	ZIMPluginMethodHandler::getInstance().deleteFriend(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "checkFriendRelation") {
+	ZIMPluginMethodHandler::getInstance().checkFriendRelation(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "updateFriendAlias") {
+	ZIMPluginMethodHandler::getInstance().updateFriendAlias(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "updateFriendAttributes") {
+	ZIMPluginMethodHandler::getInstance().updateFriendAttributes(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "queryFriendsInfo") {
+	ZIMPluginMethodHandler::getInstance().queryFriendsInfo(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "acceptFriendApplication") {
+	ZIMPluginMethodHandler::getInstance().acceptFriendApplication(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "rejectFriendApplication") {
+	ZIMPluginMethodHandler::getInstance().rejectFriendApplication(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "queryFriendList") {
+	ZIMPluginMethodHandler::getInstance().queryFriendList(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "queryFriendApplicationList") {
+	ZIMPluginMethodHandler::getInstance().queryFriendApplicationList(argument, std::move(result));
+	}
     else if (method_call.method_name() == "addUsersToBlacklist") {
         ZIMPluginMethodHandler::getInstance().addUsersToBlacklist(argument, std::move(result));
     }
