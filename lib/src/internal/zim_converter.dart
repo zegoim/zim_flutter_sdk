@@ -954,6 +954,7 @@ class ZIMConverter {
     groupMemberInfo.memberRole = memberInfoMap['memberRole'];
     groupMemberInfo.memberNickname = memberInfoMap['memberNickname'] ?? '';
     groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'] ?? '';
+    groupMemberInfo.muteExpiredTimestamp = memberInfoMap['muteExpiredTimestamp'] ??0;
     return groupMemberInfo;
   }
 
@@ -1910,9 +1911,9 @@ class ZIMConverter {
 
   static ZIMGroupMuteInfo oZIMGroupMuteInfo(Map map) {
     ZIMGroupMuteInfo groupMuteInfo = ZIMGroupMuteInfo();
-    groupMuteInfo.muteMode = ZIMGroupMuteModeExtension.mapValue[map['muteMode']]!;
-    groupMuteInfo.muteExpiredTimestamp = map['muteExpiredTimestamp'];
-    groupMuteInfo.muteRoleList = List<int>.from(map['muteRoleList']);
+    groupMuteInfo.mode = ZIMGroupMuteModeExtension.mapValue[map['mode']]!;
+    groupMuteInfo.expiredTimestamp = map['expiredTimestamp'];
+    groupMuteInfo.roles = List<int>.from(map['roles']);
     return groupMuteInfo;
   }
 
@@ -1927,9 +1928,9 @@ class ZIMConverter {
   //供自动化使用，sdk 使用前需要 check
   static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo){
     Map map = {};
-    map['muteMode'] = muteInfo.muteMode.value;
-    map['muteExpireTime'] = muteInfo.muteExpiredTimestamp;
-    map['muteRoles'] = muteInfo.muteRoleList;
+    map['muteMode'] = muteInfo.mode.value;
+    map['muteExpireTime'] = muteInfo.expiredTimestamp;
+    map['muteRoles'] = muteInfo.roles;
     return map;
   }
 
@@ -1937,7 +1938,7 @@ class ZIMConverter {
     Map map = {};
     map['mode'] = ZIMGroupMuteModeExtension.valueMap[config.mode];
     map['duration'] = config.duration;
-    map['roleList'] = config.roleList;
+    map['roles'] = config.roles;
     return map;
   }
 
@@ -1945,38 +1946,25 @@ class ZIMConverter {
     ZIMGroupMutedResult result = ZIMGroupMutedResult();
     result.groupID = map['groupID'];
     result.info = ZIMConverter.oZIMGroupMutedInfo(map['info']);
+    result.isMute = map['isMute'];
     return result;
   }
 
   static ZIMGroupMemberListMutedResult oZIMGroupMemberListMutedResult(Map map){
     ZIMGroupMemberListMutedResult result = ZIMGroupMemberListMutedResult();
     result.groupID = map['groupID'];
+    result.isMute = map['isMute'];
     result.errorUserList = oZIMErrorUserInfoList(map['errorUserList']);
     result.mutedMemberIDList = List<String>.from(map['mutedMemberIDList']);
     result.duration = map['duration'];
     return result;
   }
 
-  static ZIMGroupMemberMuteInfo oZIMGroupMemberMuteInfo(Map map){
-    ZIMGroupMemberMuteInfo muteInfo = ZIMGroupMemberMuteInfo();
-    muteInfo.muteExpiredTimestamp = map['muteExpiredTimestamp'];
-    muteInfo.memberInfo = ZIMConverter.oZIMGroupMemberInfo(map['memberInfo']);
-    return muteInfo;
-  }
-
-  static List<ZIMGroupMemberMuteInfo> oZIMGroupMemberMuteInfoList(List basicList){
-    List<ZIMGroupMemberMuteInfo> muteInfoList = [];
-    for(Map map in basicList){
-      muteInfoList.add(ZIMConverter.oZIMGroupMemberMuteInfo(map));
-    }
-    return muteInfoList;
-  }
-
   static ZIMGroupMemberMutedListQueriedResult oZIMGroupMemberMutedListQueriedResult(Map map){
     ZIMGroupMemberMutedListQueriedResult result = ZIMGroupMemberMutedListQueriedResult();
     result.nextFlag = map['nextFlag'];
     result.groupID = map['groupID'];
-    result.info = ZIMConverter.oZIMGroupMemberMuteInfoList(map['info']);
+    result.userList = ZIMConverter.oZIMGroupMemberInfoList(map['userList']);
     return result;
   }
 
@@ -2006,13 +1994,7 @@ class ZIMConverter {
     map['memberNickname'] = memberInfo.memberNickname;
     map['memberRole'] = memberInfo.memberRole;
     map['memberAvatarUrl'] = memberInfo.memberAvatarUrl;
-    return map;
-  }
-
-  static Map mZIMGroupMemberMuteInfo(ZIMGroupMemberMuteInfo muteInfo){
-    Map map = {};
-    map['member'] = ZIMConverter.mZIMGroupMemberInfo(muteInfo.memberInfo);
-    map['muteExpiredTimestamp'] = muteInfo.muteExpiredTimestamp;
+    map['muteExpiredTimestamp'] = memberInfo.muteExpiredTimestamp;
     return map;
   }
 

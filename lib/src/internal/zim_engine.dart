@@ -1155,9 +1155,10 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMGroupMutedResult> muteGroup(String groupID, ZIMGroupMuteConfig config) async{
+  Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config) async{
     Map resultMap = await channel.invokeMethod('muteGroup',{
       'handle':handle,
+      'isMute':isMute,
       'groupID':groupID,
       'config':ZIMConverter.mZIMGroupMuteConfig(config)
     });
@@ -1165,9 +1166,10 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMGroupMemberListMutedResult> muteGroupMemberList(List<String> userIDs, String groupID, ZIMGroupMemberMuteConfig config) async{
+  Future<ZIMGroupMemberListMutedResult> muteGroupMemberList(bool isMute,List<String> userIDs, String groupID, ZIMGroupMemberMuteConfig config) async{
     Map resultMap = await channel.invokeMethod('muteGroupMemberList',{
       'handle':handle,
+      'isMute':isMute,
       'userIDs':userIDs,
       'groupID':groupID,
       'config':ZIMConverter.mZIMGroupMemberMuteConfig(config)

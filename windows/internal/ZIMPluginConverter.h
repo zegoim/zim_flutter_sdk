@@ -218,8 +218,6 @@ public:
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo& info);
     static FTMap cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info);
     static FTMap cnvZIMGroupMutedInfoToMap(const ZIMGroupMutedInfo &info);
-    static FTMap cnvZIMGroupMemberMuteInfoToMap(const ZIMGroupMemberMuteInfo &info);
-    static FTArray cnvZIMGroupMemberMuteInfoListToBasicList(const std::vector<ZIMGroupMemberMuteInfo> &infos);
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);

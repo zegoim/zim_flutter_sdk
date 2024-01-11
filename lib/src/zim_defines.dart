@@ -909,20 +909,20 @@ class ZIMGroupInfo {
 }
 
 class ZIMGroupMuteInfo {
-   ZIMGroupMuteMode muteMode;
+   ZIMGroupMuteMode mode;
 
-   int muteExpiredTimestamp;
+   int expiredTimestamp;
 
-   List<int> muteRoleList;
+   List<int> roles;
 
-   ZIMGroupMuteInfo():muteMode=ZIMGroupMuteMode.none,muteExpiredTimestamp=0,muteRoleList=[];
+   ZIMGroupMuteInfo():mode=ZIMGroupMuteMode.none,expiredTimestamp=0,roles=[];
 }
 
 class ZIMGroupMuteConfig {
   ZIMGroupMuteMode mode;
   int duration;
-  List<int> roleList;
-  ZIMGroupMuteConfig():mode=ZIMGroupMuteMode.none,duration=0,roleList=[];
+  List<int> roles;
+  ZIMGroupMuteConfig():mode=ZIMGroupMuteMode.none,duration=-1,roles=[];
 }
 
 class ZIMGroupMemberMuteConfig {
@@ -971,13 +971,10 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
 
   /// Description: group member avatar url.
   String memberAvatarUrl = "";
-  ZIMGroupMemberInfo();
-}
 
-class ZIMGroupMemberMuteInfo {
-  ZIMGroupMemberInfo memberInfo;
-  int muteExpiredTimestamp;
-  ZIMGroupMemberMuteInfo():memberInfo=ZIMGroupMemberInfo(),muteExpiredTimestamp=0;
+  int muteExpiredTimestamp = 0;
+
+  ZIMGroupMemberInfo();
 }
 
 /// Information that the group has operated on.
@@ -2323,24 +2320,26 @@ class ZIMConversationDraftSetResult {
 }
 
 class ZIMGroupMutedResult {
+  bool isMute;
   String groupID;
   ZIMGroupMutedInfo info;
-  ZIMGroupMutedResult():groupID='',info=ZIMGroupMutedInfo();
+  ZIMGroupMutedResult():groupID='',info=ZIMGroupMutedInfo(),isMute=false;
 }
 
 class ZIMGroupMemberListMutedResult {
   String groupID;
+  bool isMute;
   int duration;
   List<String> mutedMemberIDList;
   List<ZIMErrorUserInfo> errorUserList;
-  ZIMGroupMemberListMutedResult():groupID="",duration=0,mutedMemberIDList=[],errorUserList=[];
+  ZIMGroupMemberListMutedResult():groupID="",duration=0,mutedMemberIDList=[],errorUserList=[],isMute = false;
 }
 
 class ZIMGroupMemberMutedListQueriedResult {
   String groupID;
   int nextFlag;
-  List<ZIMGroupMemberMuteInfo> info;
-  ZIMGroupMemberMutedListQueriedResult():groupID="",nextFlag = 0,info=[];
+  List<ZIMGroupMemberInfo> userList;
+  ZIMGroupMemberMutedListQueriedResult():groupID="",nextFlag = 0,userList=[];
 }
 
 class ZIMMessageDeletedInfo {

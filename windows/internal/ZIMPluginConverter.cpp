@@ -807,7 +807,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& m
 	groupMemberInfoMap[FTValue("memberNickname")] = FTValue(memberInfo.memberNickname);
 	groupMemberInfoMap[FTValue("memberRole")] = FTValue((int32_t)memberInfo.memberRole);
 	groupMemberInfoMap[FTValue("memberAvatarUrl")] = FTValue(memberInfo.memberAvatarUrl);
-
+	groupMemberInfoMap[FTValue("muteExpiredTimestamp")] = FTValue((int64_t)memberInfo.muteExpiredTimestamp);
 	return groupMemberInfoMap;
 }
 
@@ -959,21 +959,7 @@ FTMap ZIMPluginConverter::cnvZIMCallInvitationTimeoutInfoToMap(const ZIMCallInvi
 	return sentInfoMap;
 }
 
-FTMap ZIMPluginConverter::cnvZIMGroupMemberMuteInfoToMap(const ZIMGroupMemberMuteInfo &info){
-	FTMap map;
-	map[FTValue("memberInfo")] = ZIMPluginConverter::cnvZIMGroupMemberInfoToMap(info.memberInfo);
-	map[FTValue("muteExpiredTimestamp")] = FTValue((int64_t)info.muteExpiredTimestamp);
-	return map;
-}
 
-FTArray ZIMPluginConverter::cnvZIMGroupMemberMuteInfoListToBasicList(const std::vector<ZIMGroupMemberMuteInfo> &infos){
-	FTArray infoList;
-	for (auto& info : infos) {
-		FTMap infoMap = cnvZIMGroupMemberMuteInfoToMap(info);
-		infoList.emplace_back(infoMap);
-	}
-	return infoList;
-}
 
 ZIMRoomAdvancedConfig ZIMPluginConverter::cnvZIMRoomAdvancedConfigToObject(FTMap configMap) {
 	ZIMRoomAdvancedConfig config;
@@ -1201,9 +1187,9 @@ FTMap ZIMPluginConverter::cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedI
 
 FTMap ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info){
 	FTMap infoMap;
-	infoMap[FTValue("muteMode")] = FTValue(info.muteMode);
-	infoMap[FTValue("muteExpiredTimestamp")] = FTValue((int64_t)info.muteExpiredTimestamp);
-	infoMap[FTValue("muteRoleList")] = ZIMPluginConverter::cnvStlVectorToFTArray(info.muteRoleList);
+	infoMap[FTValue("mode")] = FTValue(info.mode);
+	infoMap[FTValue("expiredTimestamp")] = FTValue((int64_t)info.expiredTimestamp);
+	infoMap[FTValue("roles")] = ZIMPluginConverter::cnvStlVectorToFTArray(info.roles);
 	return infoMap;
 }
 
@@ -1244,7 +1230,7 @@ ZIMGroupMuteConfig ZIMPluginConverter::cnvZIMGroupMuteConfigToObject(FTMap confi
 	ZIMGroupMuteConfig config;
 	config.mode = (ZIMGroupMuteMode)std::get<int32_t>(configMap[FTValue("mode")]);
 	config.duration = std::get<int32_t>(configMap[FTValue("duration")]);
-	config.roleList = ZIMPluginConverter::cnvFTArrayToStlVectorInt(std::get<FTArray>(configMap[FTValue("roleList")]));
+	config.roles = ZIMPluginConverter::cnvFTArrayToStlVectorInt(std::get<FTArray>(configMap[FTValue("roles")]));
 	return config;
 }
 
