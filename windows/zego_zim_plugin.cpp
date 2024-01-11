@@ -383,7 +383,7 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "addMessageReaction") {
         ZIMPluginMethodHandler::getInstance().addMessageReaction(argument, std::move(result));
     }
-	else if (method_call.method_name() == "queryCombineMessage") {
+	else if (method_call.method_name() == "queryCombineMessageDetail") {
 	ZIMPluginMethodHandler::getInstance().queryCombineMessage(argument, std::move(result));
 	}
     else {
