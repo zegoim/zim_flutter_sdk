@@ -2374,7 +2374,7 @@
     }];
 }
 
--(void)addFriendByUserID:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)addFriend:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2395,7 +2395,7 @@
     }];
 }
 
--(void)sendFriendApplicationByUserID:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)sendFriendApplication:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2417,7 +2417,7 @@
     }];
 }
 
--(void)deleteFriendWithUserIDs:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)deleteFriend:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2445,7 +2445,7 @@
     }];
 }
 
--(void)checkFriendRelationWithUserIDs:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)checkFriendRelation:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2547,7 +2547,7 @@
     }];
 }
 
--(void)acceptFriendApplicationByUserID:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)acceptFriendApplication:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2568,7 +2568,7 @@
     }];
 }
 
--(void)rejectFriendApplicationByUserID:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)rejectFriendApplication:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2589,7 +2589,7 @@
     }];
 }
 
--(void)queryFriendListWithConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)queryFriendList:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2610,7 +2610,7 @@
     }];
 }
 
--(void)queryFriendApplicationListWithConfig:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)queryFriendApplicationList:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
