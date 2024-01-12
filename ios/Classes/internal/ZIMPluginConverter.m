@@ -1339,9 +1339,9 @@
         return nil;
     }
     ZIMUserInfo *info = [[ZIMUserInfo alloc] init];
-    info.userID = (NSString *)[conversationDic objectForKey:@"userID"];
-    info.userName = (NSString *)[conversationDic objectForKey:@"userName"];
-    info.userAvatarUrl = (NSString *)[conversationDic objectForKey:@"userAvatarUrl"];
+    info.userID = (NSString *)[infoDic objectForKey:@"userID"];
+    info.userName = (NSString *)[infoDic objectForKey:@"userName"];
+    info.userAvatarUrl = (NSString *)[infoDic objectForKey:@"userAvatarUrl"];
 
     return info;
 }
@@ -1360,6 +1360,18 @@
     [infoDic safeSetObject:info.friendAttributes forKey:@"friendAttributes"];
     [infoDic safeSetObject:[NSNumber numberWithInteger:info.type] forKey:@"type"];
     [infoDic safeSetObject:[NSNumber numberWithInteger:info.state] forKey:@"state"];
+    return infoDic;
+}
+
++(nullable NSArray *)mZIMFriendApplicationInfoList:(nullable NSArray<ZIMFriendApplicationInfo *> *)infoList{
+    if(infoList == nil || infoList == NULL || [infoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *infoDic = [[NSMutableArray alloc] init];
+    for (ZIMFriendApplicationInfo *userInfo in infoList) {
+        NSDictionary *userInfoDic = [ZIMPluginConverter mZIMFriendApplicationInfo:userInfo];
+        [infoDic safeAddObject:userInfoDic];
+    }
     return infoDic;
 }
 
@@ -1403,6 +1415,18 @@
     [infoDic safeSetObject:info.wording forKey:@"wording"];
     [infoDic safeSetObject:info.friendAttributes forKey:@"friendAttributes"];
     return infoDic;
+}
+
++(nullable NSArray *)mZIMFriendInfoList:(nullable NSArray<ZIMFriendInfo *> *)infoList{
+    if(infoList == nil || infoList == NULL || [infoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicInfoList = [[NSMutableArray alloc] init];
+    for (ZIMFriendInfo *info in infoList) {
+        NSDictionary *infoDic = [ZIMPluginConverter mZIMFriendInfo:info];
+        [basicInfoList safeAddObject:infoDic];
+    }
+    return basicInfoList;
 }
 
 +(nullable ZIMFriendInfo *)oZIMFriendInfo:(nullable NSDictionary *)infoDic{
@@ -1451,6 +1475,18 @@
     [infoDic safeSetObject:[NSNumber numberWithInteger:info.type] forKey:@"type"];
     return infoDic;
 
+}
+
++(nullable NSArray *)mZIMFriendRelationInfoList:(nullable NSArray<ZIMFriendRelationInfo *> *)infoList{
+    if(infoList == nil || infoList == NULL || [infoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicInfoList = [[NSMutableArray alloc] init];
+    for (ZIMFriendRelationInfo *info in infoList) {
+        NSDictionary *infoDic = [ZIMPluginConverter mZIMFriendRelationInfo:info];
+        [basicInfoList safeAddObject:infoDic];
+    }
+    return basicInfoList;
 }
 
 +(nullable ZIMFriendRelationInfo *)oZIMFriendRelationInfo:(nullable NSDictionary *)infoDic{

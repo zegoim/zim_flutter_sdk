@@ -193,6 +193,8 @@
 
 +(nullable NSDictionary *)mZIMFriendApplicationInfo:(nullable ZIMFriendApplicationInfo *)info;
 
++(nullable NSArray *)mZIMFriendApplicationInfoList:(nullable NSArray<ZIMFriendApplicationInfo *> *)infoList;
+
 +(nullable ZIMFriendApplicationListQueryConfig *)oZIMFriendApplicationListQueryConfig:(nullable NSDictionary *)configMap;
 
 +(nullable ZIMFriendApplicationRejectConfig *)oZIMFriendApplicationRejectConfig:(nullable NSDictionary *)configMap;
@@ -201,6 +203,8 @@
 
 +(nullable NSDictionary *)mZIMFriendInfo:(nullable ZIMFriendInfo *)info;
 
++(nullable NSArray *)mZIMFriendInfoList:(nullable NSArray<ZIMFriendInfo *> *)infoList;
+
 +(nullable ZIMFriendInfo *)oZIMFriendInfo:(nullable NSDictionary *)infoDic;
 
 +(nullable ZIMFriendListQueryConfig *)oZIMFriendListQueryConfig:(nullable NSDictionary *)configMap;
@@ -208,6 +212,8 @@
 +(nullable ZIMFriendRelationCheckConfig *)oZIMFriendRelationCheckConfig:(nullable NSDictionary *)configMap;
 
 +(nullable NSDictionary *)mZIMFriendRelationInfo:(nullable ZIMFriendRelationInfo *)info;
+
++(nullable NSArray *)mZIMFriendRelationInfoList:(nullable NSArray<ZIMFriendRelationInfo *> *)infoList;
 
 +(nullable ZIMFriendRelationInfo *)oZIMFriendRelationInfo:(nullable NSDictionary *)infoDic;
 
