@@ -697,7 +697,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onMessageDeleted");
         resultMap.put("handle", handle);
-        resultMap.put("info",ZIMPluginConverter.mZIMMessageDeletedInfo(deletedInfo));
+        resultMap.put("deletedInfo",ZIMPluginConverter.mZIMMessageDeletedInfo(deletedInfo));
         mysink.success(resultMap);
     }
 

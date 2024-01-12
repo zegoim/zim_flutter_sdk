@@ -1,3 +1,12 @@
+## 2.13.1
+### Bug Fixes
+Avatar Update Issue: Fixed an issue where updating user avatars was not functioning properly. Users can now update their avatars without encountering any errors.
+Message Query Crash: Resolved a crash that occurred when querying messages with specific content. The message retrieval process is now robust and crash-free.
+Pre-embedded Logic Error: Corrected a pre-embedded logic flaw that would cause crashes when mixing SDK versions 2.13.0 and 2.14.0 in future use. Users are advised to update to the latest version to prevent potential instability.
+Media Message Error Status Code: Amended an issue where the incorrect status code was returned in the error messages for media download failures. Error responses now correctly reflect the accurate status code.
+Recommendations for Users
+Users who have upgraded to version 2.13.0 are strongly recommended to update to version 2.13.1 to address the aforementioned issues and ensure optimal performance and stability.
+
 ## 2.13.0+1
     Fix some issue.
 ## 2.13.0
