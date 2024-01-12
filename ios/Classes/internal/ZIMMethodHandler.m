@@ -2383,12 +2383,19 @@
     }
     ZIMFriendAddConfig *addConfig = [ZIMPluginConverter oZIMFriendAddConfig:[call.arguments objectForKey:@"config"]];
     NSString *userID = [call.arguments objectForKey:@"userID"];
+
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:addConfig.attributes options:NSJSONWritingPrettyPrinted error:&error];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    [self writeLog:@"input"];
+    [self writeLog:jsonString];
+
     [zim addFriendByUserID:userID config:addConfig callback:^(ZIMFriendInfo * _Nonnull friendInfo, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSError *error;
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:friendInfo.friendAttributes options:NSJSONWritingPrettyPrinted error:&error];
-            NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-            [self writeLog:jsonString];
+            NSString *jsonString0 = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [self writeLog:jsonString0];
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendInfo:friendInfo] forKey:@"friendInfo"];
             result(resultDic);
