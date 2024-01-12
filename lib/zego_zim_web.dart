@@ -70,8 +70,7 @@ class ZegoZimPlugin {
       case 'setAdvancedConfig':
         return setAdvancedConfig(call.arguments['key'], call.arguments['value']);
       case 'login':
-        return login(call.arguments['userID'], call.arguments['userName'],
-            call.arguments['token']);
+        return login(call.arguments['userID'], call.arguments['config']);
       case 'logout':
         return logout();
       case 'createRoom':
@@ -355,9 +354,9 @@ class ZegoZimPlugin {
       case 'removeUsersFromBlacklist':
         return removeUsersFromBlacklist(call.arguments['userIDs']);
       case 'checkUserIsInBlackList':
-        return checkUserIsInBlackList(call.arguments['userID']);
+        return checkUserIsInBlacklist(call.arguments['userID']);
       case 'queryBlackList':
-        return queryBlackList(call.arguments['config']);
+        return queryBlacklist(call.arguments['config']);
       case 'deleteAllConversationMessages':
         return deleteAllConversationMessages(call.arguments['config']);
       default:
@@ -526,15 +525,10 @@ class ZegoZimPlugin {
     return ZIM.setGeofencingConfig(areaList, type);
   }
 
-  Future<void> login(String userID, String userName, String token) async {
-    ZIMUserInfoWeb _userInfo =
-        ZIMUserInfoWeb(userID: userID, userName: userName);
+  Future<void> login(String userID, dynamic config) async {
+    Object _config = mapToJSObj(config);
 
-    if (ZIM.getInstance() == null) {
-      return Future.value();
-    }
-
-    final promise = ZIM.getInstance()!.login(_userInfo, token);
+    final promise = ZIM.getInstance()!.login(userID, _config);
 
     final Future<void> loginFuture = promiseToFuture(promise);
 
@@ -1818,16 +1812,16 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> checkUserIsInBlackList(String userID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.checkUserIsInBlackList(userID)).catchError((e) {
+  Future<Map<dynamic, dynamic>> checkUserIsInBlacklist(String userID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.checkUserIsInBlacklist(userID)).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryBlackList(dynamic config) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryBlackList(mapToJSObj(config))).catchError((e) {
+  Future<Map<dynamic, dynamic>> queryBlacklist(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryBlacklist(mapToJSObj(config))).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -2317,7 +2311,7 @@ class ZegoZimPlugin {
       return;
     }
 
-    ZIMBlacklistChangedAction action = ZIMBlacklistChangedActionExtension.mapValue[data['action']]!;
+    ZIMBlacklistChangeAction action = ZIMBlacklistChangeActionExtension.mapValue[data['action']]!;
     List<ZIMUserInfo> userList = ZIMConverter.oZIMUserInfoList(data['userList'] ?? []);
 
     ZIMEventHandler.onBlacklistChanged!(zim, action, userList);
@@ -2340,45 +2334,45 @@ class ZegoZimPlugin {
   }
 
   static void friendListChanged(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onFriendListChanged == null) {
-      return;
-    }
+    // if (ZIMEventHandler.onFriendListChanged == null) {
+    //   return;
+    // }
 
-    ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[data['action']]!;
-    List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
+    // ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[data['action']]!;
+    // List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
 
-    ZIMEventHandler.onFriendListChanged!(zim, action, friendList);
+    // ZIMEventHandler.onFriendListChanged!(zim, action, friendList);
   }
 
   static void friendInfoUpdated(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onFriendInfoUpdated == null) {
-      return;
-    }
+    // if (ZIMEventHandler.onFriendInfoUpdated == null) {
+    //   return;
+    // }
 
-    List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
+    // List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
 
-    ZIMEventHandler.onFriendInfoUpdated!(zim, friendList);
+    // ZIMEventHandler.onFriendInfoUpdated!(zim, friendList);
   }
 
   static void friendApplicationListChanged(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onFriendApplicationListChanged == null) {
-      return;
-    }
+    // if (ZIMEventHandler.onFriendApplicationListChanged == null) {
+    //   return;
+    // }
 
-    ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[data['action']]!;
-    List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
+    // ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[data['action']]!;
+    // List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
 
-    ZIMEventHandler.onFriendApplicationListChanged!(zim, action, applicationList);
+    // ZIMEventHandler.onFriendApplicationListChanged!(zim, action, applicationList);
   }
 
   static void friendApplicationUpdated(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onFriendApplicationUpdated == null) {
-      return;
-    }
+    // if (ZIMEventHandler.onFriendApplicationUpdated == null) {
+    //   return;
+    // }
 
-    List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
+    // List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
 
-    ZIMEventHandler.onFriendApplicationUpdated!(zim, applicationList);
+    // ZIMEventHandler.onFriendApplicationUpdated!(zim, applicationList);
   }
 
   static Object mapToJSObj(Map<dynamic, dynamic>? a) {

@@ -165,6 +165,8 @@
 
 +(nullable NSDictionary *)mZIMCallEndSentInfo:(nullable ZIMCallEndedSentInfo *)info;
 
++(nullable NSDictionary *)mZIMCallInvitationCreatedInfo:(nullable ZIMCallInvitationCreatedInfo *)info;
+
 +(nullable NSDictionary *)mZIMCallQuitSentInfo:(nullable ZIMCallQuitSentInfo *)info;
 
 +(nullable NSDictionary *)mZIMCallInvitationTimeoutInfo:(nullable ZIMCallInvitationTimeoutInfo *)info;

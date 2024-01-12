@@ -17,7 +17,7 @@ class ZIM {
   external void setLogConfig(dynamic config);
   external PromiseJsImpl<void> uploadLog();
   external PromiseJsImpl<dynamic> renewToken(dynamic config);
-  external PromiseJsImpl<dynamic> login(ZIMUserInfoWeb userInfo, String token);
+  external PromiseJsImpl<dynamic> login(String userID, dynamic config);
   external void logout();
   external PromiseJsImpl<dynamic> updateUserName(String userName);
   external PromiseJsImpl<dynamic> updateUserAvatarUrl(String userAvatarUrl);
@@ -159,8 +159,8 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryFriendApplicationList(dynamic config);
   external PromiseJsImpl<dynamic> addUsersToBlacklist(dynamic userIDs);
   external PromiseJsImpl<dynamic> removeUsersFromBlacklist(dynamic userIDs);
-  external PromiseJsImpl<dynamic> checkUserIsInBlackList(String userID);
-  external PromiseJsImpl<dynamic> queryBlackList(dynamic config);
+  external PromiseJsImpl<dynamic> checkUserIsInBlacklist(String userID);
+  external PromiseJsImpl<dynamic> queryBlacklist(dynamic config);
   external PromiseJsImpl<dynamic> deleteAllConversationMessages(dynamic config);
 }
 

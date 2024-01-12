@@ -83,9 +83,12 @@ class _MenuPageState extends State<MenuPage> {
                         widget.isConnecting = true;
                         widget.isDisConnected = false;
                       });
+                      ZIMLoginConfig config = ZIMLoginConfig();
+                      config.userName = UserModel.shared().userInfo!.userName ?? '';
+                      config.token = token;
                       await ZIM
                           .getInstance()
-                          !.login(UserModel.shared().userInfo!, token);
+                          !.login(UserModel.shared().userInfo!.userID, config);
                       setState(() {
                         widget.isConnecting = false;
                         widget.isDisConnected = false;
