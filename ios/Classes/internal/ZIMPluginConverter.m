@@ -1424,6 +1424,9 @@
         return nil;
     }
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.userID forKey:@"userID"];
+    [infoDic safeSetObject:info.userName forKey:@"userName"];
+    [infoDic safeSetObject:info.userAvatarUrl forKey:@"userAvatarUrl"];
     [infoDic safeSetObject:info.friendAlias forKey:@"friendAlias"];
     [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
     [infoDic safeSetObject:info.wording forKey:@"wording"];
