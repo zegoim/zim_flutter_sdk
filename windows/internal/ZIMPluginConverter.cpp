@@ -151,7 +151,7 @@ FTMap ZIMPluginConverter::cnvSTLMapToFTMap(const std::unordered_map<std::string,
 FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<long long>& vec) {
 	FTArray ftArray;
 	for (auto& value : vec) {
-		ftArray.emplace_back(FTValue(value));
+		ftArray.emplace_back(FTValue((int64_t)value));
 	}
 
 	return ftArray;
@@ -160,7 +160,7 @@ FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<long long>& 
 FTArray ZIMPluginConverter::cnvStlVectorToFTArray(const std::vector<int>& vec) {
 	FTArray ftArray;
 	for (auto& value : vec) {
-		ftArray.emplace_back(FTValue(value));
+		ftArray.emplace_back(FTValue((int32_t)value));
 	}
 
 	return ftArray;
