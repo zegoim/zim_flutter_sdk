@@ -951,6 +951,7 @@ class ZIMConverter {
     ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
     groupMemberInfo.userID = memberInfoMap['userID'];
     groupMemberInfo.userName = memberInfoMap['userName'] ?? '';
+    groupMemberInfo.userAvatarUrl = memberInfoMap['userAvatarUrl'] ?? '';
     groupMemberInfo.memberRole = memberInfoMap['memberRole'];
     groupMemberInfo.memberNickname = memberInfoMap['memberNickname'] ?? '';
     groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'] ?? '';
