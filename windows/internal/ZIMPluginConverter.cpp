@@ -1227,7 +1227,7 @@ ZIMFriendAddConfig ZIMPluginConverter::cnvZIMFriendAddConfigToObject(FTMap confi
 ZIMFriendApplicationAcceptConfig ZIMPluginConverter::cnvZIMFriendApplicationAcceptConfigToObject(FTMap configMap) {
 	ZIMFriendApplicationAcceptConfig config;
 	config.friendAlias = std::get<std::string>(configMap[FTValue("friendAlias")]);
-	auto attrsMap = std::get<FTMap>(configMap[FTValue("attributes")]);
+	auto attrsMap = std::get<FTMap>(configMap[FTValue("friendAttributes")]);
 	for (auto& attr : attrsMap) {
 		auto key = std::get<std::string>(attr.first);
 		auto value = std::get<std::string>(attr.second);

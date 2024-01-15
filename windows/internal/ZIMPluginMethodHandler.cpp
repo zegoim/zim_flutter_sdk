@@ -3012,6 +3012,7 @@ void ZIMPluginMethodHandler::deleteFriend(flutter::EncodableMap& argument, std::
 				}
 
 				retMap[FTValue("errorUserList")] = errorUserInfoArray;
+                sharedPtrResult->Success(retMap);
 			}
 			else {
 				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
@@ -3053,7 +3054,7 @@ void ZIMPluginMethodHandler::checkFriendRelation(flutter::EncodableMap& argument
 
 				FTMap retMap;
 				retMap[FTValue("friendRelationInfoArrayList")] = friendRelationInfoArray;
-				retMap[FTValue("errorUserList")] = errorUserInfoArray;
+				retMap[FTValue("errorUserInfos")] = errorUserInfoArray;
 
 				sharedPtrResult->Success(retMap);
 			}
@@ -3140,7 +3141,7 @@ void ZIMPluginMethodHandler::queryFriendsInfo(flutter::EncodableMap& argument, s
 
 				FTMap retMap;
 				retMap[FTValue("zimFriendInfos")] = friendInfoArray;
-				retMap[FTValue("errorUserList")] = errorUserInfoArray;
+				retMap[FTValue("errorUserInfos")] = errorUserInfoArray;
 
 				sharedPtrResult->Success(retMap);
 			}
