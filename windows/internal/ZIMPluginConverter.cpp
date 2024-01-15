@@ -804,6 +804,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& m
 
 	groupMemberInfoMap[FTValue("userID")] = FTValue(memberInfo.userID);
 	groupMemberInfoMap[FTValue("userName")] = FTValue(memberInfo.userName);
+	groupMemberInfoMap[FTValue("userAvatarUrl")] = FTValue(memberInfo.userAvatarUrl);
 	groupMemberInfoMap[FTValue("memberNickname")] = FTValue(memberInfo.memberNickname);
 	groupMemberInfoMap[FTValue("memberRole")] = FTValue((int32_t)memberInfo.memberRole);
 	groupMemberInfoMap[FTValue("memberAvatarUrl")] = FTValue(memberInfo.memberAvatarUrl);
