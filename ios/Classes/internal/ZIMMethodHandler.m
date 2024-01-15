@@ -2519,7 +2519,7 @@
     }];
 }
 
--(void)queryFriendsInfoWithUserIDs:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)queryFriendsInfo:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
