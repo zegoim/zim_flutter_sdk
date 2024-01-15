@@ -114,7 +114,14 @@ class ZIMErrorCode {
   static const int conversationModuleCommonError = 6000601;
   static const int conversationModuleServerError = 6000602;
   static const int conversationModuleConversationDoseNotExist = 6000603;
-
+  static const int conversationModuleConversationPinnedListReachedLimit = 6000604;
+  static const int conversationModuleC2CNotificationStatusLenError = 6000605;
+  static const int conversationModuleC2CNotificationStatusDuplicateUser = 6000606;
+  static const int conversationModuleC2CNotificationStatusUserIDEmpty = 6000607;
+  static const int conversationModuleC2CNotificationStatusSelf = 6000608;
+  static const int conversationModuleC2CNotificationStatusAlreadySet = 6000609;
+  static const int conversationModuleC2CNotificationStatusNotSet = 6000610;
+  static const int conversationModuleC2CNotificationStatusOverLimit = 6000611;
   static const int dataBaseModuleOpenDataBaseError = 6000701;
   static const int dataBaseModuleModifyDataBaseError = 6000702;
   static const int dataBaseModuleDeleteDataBaseError = 6000703;
