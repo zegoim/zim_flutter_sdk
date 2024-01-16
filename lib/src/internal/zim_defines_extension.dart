@@ -512,6 +512,7 @@ extension ZIMFriendApplicationStateExtension on ZIMFriendApplicationState {
 extension ZIMFriendApplicationTypeExtension on ZIMFriendApplicationType{
   static const valueMap = {
     ZIMFriendApplicationType.unknown : -1,
+    ZIMFriendApplicationType.none : 0,
     ZIMFriendApplicationType.received: 1,
     ZIMFriendApplicationType.sent: 2,
     ZIMFriendApplicationType.both:3
@@ -519,6 +520,7 @@ extension ZIMFriendApplicationTypeExtension on ZIMFriendApplicationType{
 
   static const mapValue = {
     -1: ZIMFriendApplicationType.unknown,
+    0: ZIMFriendApplicationType.none,
     1: ZIMFriendApplicationType.received,
     2:ZIMFriendApplicationType.sent,
     3:ZIMFriendApplicationType.both
@@ -532,11 +534,13 @@ extension ZIMFriendApplicationTypeExtension on ZIMFriendApplicationType{
 // ZIMFriendDeleteType Enum Extension
 extension ZIMFriendDeleteTypeExtension on ZIMFriendDeleteType {
   static const valueMap = {
+    ZIMFriendDeleteType.unknown: -1,
     ZIMFriendDeleteType.both: 0,
     ZIMFriendDeleteType.single: 1,
   };
 
   static const mapValue = {
+    -1: ZIMFriendDeleteType.unknown,
     0: ZIMFriendDeleteType.both,
     1: ZIMFriendDeleteType.single,
   };
@@ -594,7 +598,7 @@ extension ZIMFriendRelationCheckTypeExtension on ZIMFriendRelationCheckType {
 extension ZIMUserRelationTypeExtension on ZIMUserRelationType {
   static const valueMap = {
     ZIMUserRelationType.unknown: 0,
-    ZIMUserRelationType.singleNO: 1,
+    ZIMUserRelationType.singleNo: 1,
     ZIMUserRelationType.singleHave: 2,
     ZIMUserRelationType.bothAllNo: 3,
     ZIMUserRelationType.bothSelfHave: 4,
@@ -604,7 +608,7 @@ extension ZIMUserRelationTypeExtension on ZIMUserRelationType {
 
   static const mapValue = {
     0: ZIMUserRelationType.unknown,
-    1: ZIMUserRelationType.singleNO,
+    1: ZIMUserRelationType.singleNo,
     2: ZIMUserRelationType.singleHave,
     3: ZIMUserRelationType.bothAllNo,
     4: ZIMUserRelationType.bothSelfHave,
