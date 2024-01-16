@@ -721,7 +721,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
 
 
     @Override
-    public void onFriendListChanged(ZIM zim, ZIMFriendListChangeAction action, ArrayList<ZIMFriendInfo> friendInfoList) {
+    public void onFriendListChanged(ZIM zim,ArrayList<ZIMFriendInfo> friendInfoList,ZIMFriendListChangeAction action) {
         super.onFriendListChanged(zim, action, friendInfoList);
         if (mysink == null) {
             return;
@@ -759,7 +759,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
 
 
     @Override
-    public void onFriendApplicationListChanged(ZIM zim, ZIMFriendApplicationListChangeAction action, ArrayList<ZIMFriendApplicationInfo> friendApplicationInfoList) {
+    public void onFriendApplicationListChanged(ZIM zim, ArrayList<ZIMFriendApplicationInfo> friendApplicationInfoList,ZIMFriendApplicationListChangeAction action) {
         super.onFriendApplicationListChanged(zim, action,friendApplicationInfoList);
         if (mysink == null) {
             return;

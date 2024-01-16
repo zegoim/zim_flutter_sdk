@@ -175,7 +175,7 @@ import im.zego.zim.entity.ZIMRoomMemberAttributesQueryConfig;
 import im.zego.zim.entity.ZIMRoomMemberAttributesSetConfig;
 import im.zego.zim.entity.ZIMRoomMemberInfo;
 import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
-import im.zego.zim.entity.ZIMSendFriendApplicationConfig;
+import im.zego.zim.entity.ZIMFriendApplicationSendConfig;
 import im.zego.zim.entity.ZIMUserFullInfo;
 import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
@@ -2748,9 +2748,9 @@ public class ZIMPluginMethodHandler {
 
         String userID = call.argument("userID");
         HashMap<String, Object> configMap = call.argument("config");
-        ZIMSendFriendApplicationConfig config = ZIMPluginConverter.oZIMSendFriendApplicationConfig(configMap);
+        ZIMFriendApplicationSendConfig config = ZIMPluginConverter.oZIMFriendApplicationSendConfig(configMap);
         LogWriter.writeLog("Flutter Native Android invoke sendFriendApplication,attributes:"+config.attributes.toString());
-        zim.sendFriendApplication(applyUserID, config, new ZIMSendFriendApplicationCallback() {
+        zim.sendFriendApplication(userID, config, new ZIMSendFriendApplicationCallback() {
             @Override
             public void onSendFriendApplicationCallback(ZIMFriendApplicationInfo applicationInfo, ZIMError errorInfo) {
                 if (errorInfo.code == ZIMErrorCode.SUCCESS) {
@@ -2766,7 +2766,7 @@ public class ZIMPluginMethodHandler {
     }
 
     // deleteFriend
-    public static void deleteFriend(MethodCall call, Result result) {
+    public static void deleteFriends(MethodCall call, Result result) {
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if(zim == null) {
@@ -2778,9 +2778,9 @@ public class ZIMPluginMethodHandler {
         HashMap<String, Object> configMap = call.argument("config");
         ZIMFriendDeleteConfig config = ZIMPluginConverter.oZIMFriendDeleteConfig(configMap);
 
-        zim.deleteFriend(userIDs, config, new ZIMFriendDeletedCallback() {
+        zim.deleteFriends(userIDs, config, new ZIMFriendsDeletedCallback() {
             @Override
-            public void onFriendDeletedCallback(ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError zimError) {
+            public void onFriendsDeletedCallback(ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError zimError) {
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
                     ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
@@ -2799,7 +2799,7 @@ public class ZIMPluginMethodHandler {
     }
 
     // checkFriendRelation
-    public static void checkFriendRelation(MethodCall call, Result result) {
+    public static void checkFriendsRelation(MethodCall call, Result result) {
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if(zim == null) {
@@ -2811,9 +2811,9 @@ public class ZIMPluginMethodHandler {
         HashMap<String, Object> configMap = call.argument("config");
         ZIMFriendRelationCheckConfig config = ZIMPluginConverter.oZIMFriendRelationCheckConfig(configMap);
 
-        zim.checkFriendRelation(userIDs, config, new ZIMFriendRelationCheckedCallback() {
+        zim.checkFriendsRelation(userIDs, config, new ZIMFriendsRelationCheckedCallback() {
             @Override
-            public void onFriendChecked(ArrayList<ZIMFriendRelationInfo> friendRelationInfoArrayList, ArrayList<ZIMErrorUserInfo> errorUserInfos, ZIMError zimError) {
+            public void onFriendsChecked(ArrayList<ZIMFriendRelationInfo> friendRelationInfoArrayList, ArrayList<ZIMErrorUserInfo> errorUserInfos, ZIMError zimError) {
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
 
@@ -2851,10 +2851,10 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        String alias = call.argument("alias");
+        String friendAlias = call.argument("friendAlias");
         String userID = call.argument("userID");
 
-        zim.updateFriendAlias(alias, userID, new ZIMFriendAliasUpdatedCallback() {
+        zim.updateFriendAlias(friendAlias, userID, new ZIMFriendAliasUpdatedCallback() {
             @Override
             public void onFriendAliasUpdated(ZIMFriendInfo friendInfo, ZIMError zimError) {
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
