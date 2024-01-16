@@ -217,9 +217,9 @@ public:
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void sendFriendApplication(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void deleteFriend(flutter::EncodableMap& argument,
+	void deleteFriends(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void checkFriendRelation(flutter::EncodableMap& argument,
+	void checkFriendsRelation(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void updateFriendAlias(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);

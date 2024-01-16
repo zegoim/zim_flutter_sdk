@@ -2970,7 +2970,7 @@ void ZIMPluginMethodHandler::sendFriendApplication(flutter::EncodableMap& argume
 		return;
 	}
 	auto applyUserID = std::get<std::string>(argument[FTValue("applyUserID")]);
-    ZIMSendFriendApplicationConfig config = ZIMPluginConverter::cnvZIMSendFriendApplicationConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    ZIMFriendApplicationSendConfig config = ZIMPluginConverter::cnvZIMFriendApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 	zim->sendFriendApplication(applyUserID, config, [=](
 		const ZIMFriendApplicationInfo& friendApplicationInfo, const ZIMError& errorInfo) {
@@ -2985,7 +2985,7 @@ void ZIMPluginMethodHandler::sendFriendApplication(flutter::EncodableMap& argume
 		});
 }
 
-void ZIMPluginMethodHandler::deleteFriend(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+void ZIMPluginMethodHandler::deleteFriends(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 	auto handle = std::get<std::string>(argument[FTValue("handle")]);
 	auto zim = this->engineMap[handle];
 	if (!zim) {
@@ -3001,7 +3001,7 @@ void ZIMPluginMethodHandler::deleteFriend(flutter::EncodableMap& argument, std::
 
     ZIMFriendDeleteConfig config = ZIMPluginConverter::cnvZIMFriendDeleteConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-	zim->deleteFriend(userIDsVec, config, [=](
+	zim->deleteFriends(userIDsVec, config, [=](
 		const std::vector<ZIMErrorUserInfo>& errorUserList, const ZIMError& errorInfo) {
 			if (errorInfo.code == 0) {
 				FTMap retMap;
@@ -3020,7 +3020,7 @@ void ZIMPluginMethodHandler::deleteFriend(flutter::EncodableMap& argument, std::
 		});
 }
 
-void ZIMPluginMethodHandler::checkFriendRelation(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+void ZIMPluginMethodHandler::checkFriendsRelation(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 	auto handle = std::get<std::string>(argument[FTValue("handle")]);
 	auto zim = this->engineMap[handle];
 	if (!zim) {
@@ -3037,7 +3037,7 @@ void ZIMPluginMethodHandler::checkFriendRelation(flutter::EncodableMap& argument
     ZIMFriendRelationCheckConfig config;
     config.type = (ZIMFriendRelationCheckType)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("type")]);
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-	zim->checkFriendRelation(userIDsVec, config, [=](
+	zim->checkFriendsRelation(userIDsVec, config, [=](
 		const std::vector<ZIMFriendRelationInfo>& friendRelationInfoList, const std::vector<ZIMErrorUserInfo>& errorUserList, const ZIMError& errorInfo) {
 			if (errorInfo.code == 0) {
 				FTArray friendRelationInfoArray;
@@ -3072,9 +3072,9 @@ void ZIMPluginMethodHandler::updateFriendAlias(flutter::EncodableMap& argument, 
 		return;
 	}
 	auto userID = std::get<std::string>(argument[FTValue("userID")]);
-    auto alias = std::get<std::string>(argument[FTValue("alias")]);
+    auto friendAlias = std::get<std::string>(argument[FTValue("friendAlias")]);
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-	zim->updateFriendAlias(alias, userID, [=](const ZIMFriendInfo& friendInfo, const ZIMError& errorInfo) {
+	zim->updateFriendAlias(friendAlias, userID, [=](const ZIMFriendInfo& friendInfo, const ZIMError& errorInfo) {
 			if (errorInfo.code == 0) {
 				FTMap retMap;
 				retMap[FTValue("friendInfo")] = ZIMPluginConverter::cnvZIMFriendInfoToMap(friendInfo);

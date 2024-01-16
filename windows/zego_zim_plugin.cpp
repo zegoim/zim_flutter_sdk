@@ -1,4 +1,4 @@
-#include "include/zego_zim/zego_zim_plugin.h"
+﻿#include "include/zego_zim/zego_zim_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -389,11 +389,11 @@ void ZegoZimPlugin::HandleMethodCall(
 	else if (method_call.method_name() == "sendFriendApplication") {
 	ZIMPluginMethodHandler::getInstance().sendFriendApplication(argument, std::move(result));
 	}
-	else if (method_call.method_name() == "deleteFriend") {
-	ZIMPluginMethodHandler::getInstance().deleteFriend(argument, std::move(result));
+	else if (method_call.method_name() == "deleteFriends") {
+	ZIMPluginMethodHandler::getInstance().deleteFriends(argument, std::move(result));
 	}
-	else if (method_call.method_name() == "checkFriendRelation") {
-	ZIMPluginMethodHandler::getInstance().checkFriendRelation(argument, std::move(result));
+	else if (method_call.method_name() == "checkFriendsRelation") {
+	ZIMPluginMethodHandler::getInstance().checkFriendsRelation(argument, std::move(result));
 	}
 	else if (method_call.method_name() == "updateFriendAlias") {
 	ZIMPluginMethodHandler::getInstance().updateFriendAlias(argument, std::move(result));

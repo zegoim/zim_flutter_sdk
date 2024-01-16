@@ -652,8 +652,7 @@ void ZIMPluginEventHandler::onFriendInfoUpdated(ZIM* zim,
 	}
 }
 
-void ZIMPluginEventHandler::onFriendListChanged(ZIM* zim, ZIMFriendListChangeAction& action,
-    const std::vector<ZIMFriendInfo>& friendInfoList) {
+void ZIMPluginEventHandler::onFriendListChanged(ZIM* zim, const std::vector<ZIMFriendInfo>& friendInfoList,ZIMFriendListChangeAction& action) {
 	if (eventSink_) {
 		FTMap retMap;
 		retMap[FTValue("method")] = FTValue("onFriendListChanged");
@@ -679,8 +678,7 @@ void ZIMPluginEventHandler::onFriendApplicationUpdated(
 }
 
 void ZIMPluginEventHandler::onFriendApplicationListChanged(
-    ZIM* zim, ZIMFriendApplicationListChangeAction& action,
-    const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList) {
+    ZIM* zim, const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList ,ZIMFriendApplicationListChangeAction& action) {
 	if (eventSink_) {
 		FTMap retMap;
 		retMap[FTValue("method")] = FTValue("onFriendApplicationListChanged");

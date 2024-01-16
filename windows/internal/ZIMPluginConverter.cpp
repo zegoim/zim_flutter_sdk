@@ -1212,14 +1212,14 @@ ZIMBlacklistQueryConfig ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(F
 
 ZIMFriendAddConfig ZIMPluginConverter::cnvZIMFriendAddConfigToObject(FTMap configMap) {
 	ZIMFriendAddConfig config;
-	config.wording = std::get<std::string>(configMap[FTValue("wording")]);
-	config.alias = std::get<std::string>(configMap[FTValue("alias")]);
+	config.friendWording = std::get<std::string>(configMap[FTValue("friendWording")]);
+	config.friendAlias = std::get<std::string>(configMap[FTValue("friendAlias")]);
 
-	auto attrsMap = std::get<FTMap>(configMap[FTValue("attributes")]);
+	auto attrsMap = std::get<FTMap>(configMap[FTValue("friendAttributes")]);
 	for (auto& attr : attrsMap) {
 		auto key = std::get<std::string>(attr.first);
 		auto value = std::get<std::string>(attr.second);
-		config.attributes[key] = value;
+		config.friendAttributes[key] = value;
 	}
 	return config;
 }
@@ -1288,7 +1288,7 @@ ZIMFriendInfo ZIMPluginConverter::cnvZIMFriendInfoToObject(FTMap infoMap) {
 	info.userAvatarUrl = std::get<std::string>(infoMap[FTValue("userAvatarUrl")]);
 	info.friendAlias = std::get<std::string>(infoMap[FTValue("friendAlias")]);
 	info.createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
-	info.wording = std::get<std::string>(infoMap[FTValue("wording")]);
+	info.friendWording = std::get<std::string>(infoMap[FTValue("friendWording")]);
 	auto attrsMap = std::get<FTMap>(infoMap[FTValue("friendAttributes")]);
 	for (auto& attr : attrsMap) {
 		auto key = std::get<std::string>(attr.first);
@@ -1305,15 +1305,15 @@ ZIMFriendListQueryConfig ZIMPluginConverter::cnvZIMFriendListQueryConfigToObject
 	return config;
 }
 
-ZIMSendFriendApplicationConfig ZIMPluginConverter::cnvZIMSendFriendApplicationConfigToObject(FTMap infoMap) {
-	ZIMSendFriendApplicationConfig config;
-	config.wording = std::get<std::string>(infoMap[FTValue("wording")]);
-	config.alias = std::get<std::string>(infoMap[FTValue("alias")]);
-	auto attrsMap = std::get<FTMap>(infoMap[FTValue("attributes")]);
+ZIMFriendApplicationSendConfig ZIMPluginConverter::cnvZIMFriendApplicationSendConfigToObject(FTMap infoMap) {
+	ZIMFriendApplicationSendConfig config;
+	config.friendWording = std::get<std::string>(infoMap[FTValue("friendWording")]);
+	config.friendAlias = std::get<std::string>(infoMap[FTValue("friendAlias")]);
+	auto attrsMap = std::get<FTMap>(infoMap[FTValue("friendAttributes")]);
 	for (auto& attr : attrsMap) {
 		auto key = std::get<std::string>(attr.first);
 		auto value = std::get<std::string>(attr.second);
-		config.attributes[key] = value;
+		config.friendAttributes[key] = value;
 	}
 	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
 	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
@@ -1337,7 +1337,7 @@ ZIMFriendRelationInfo ZIMPluginConverter::cnvZIMFriendRelationInfoToObject(FTMap
 ZIMFriendApplicationInfo ZIMPluginConverter::cnvZIMFriendApplicationInfoToObject(FTMap infoMap) {
 	ZIMFriendApplicationInfo info;
 	info.applyUser = cnvZIMUserInfoToObject(std::get<FTMap>(infoMap[FTValue("applyUser")]));
-	info.wording = std::get<std::string>(infoMap[FTValue("wording")]);
+	info.friendWording = std::get<std::string>(infoMap[FTValue("friendWording")]);
 	info.friendAlias = std::get<std::string>(infoMap[FTValue("friendAlias")]);
 	info.createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
 	info.updateTime = cnvFTMapToInt64(infoMap[FTValue("updateTime")]);
@@ -1355,7 +1355,7 @@ ZIMFriendApplicationInfo ZIMPluginConverter::cnvZIMFriendApplicationInfoToObject
 FTMap ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplicationInfo& info) {
 	FTMap infoMap;
 	infoMap[FTValue("applyUser")] = cnvZIMUserInfoObjectToMap(info.applyUser);
-	infoMap[FTValue("wording")] = FTValue(info.wording);
+	infoMap[FTValue("friendWording")] = FTValue(info.friendWording);
 	infoMap[FTValue("friendAlias")] = FTValue(info.friendAlias);
 	infoMap[FTValue("createTime")] = FTValue(info.createTime);
 	infoMap[FTValue("updateTime")] = FTValue(info.updateTime);
@@ -1372,7 +1372,7 @@ FTMap ZIMPluginConverter::cnvZIMFriendInfoToMap(const ZIMFriendInfo& info) {
 	infoMap[FTValue("userAvatarUrl")] = FTValue(info.userAvatarUrl);
 	infoMap[FTValue("friendAlias")] = FTValue(info.friendAlias);
 	infoMap[FTValue("createTime")] = FTValue(info.createTime);
-	infoMap[FTValue("wording")] = FTValue(info.wording);
+	infoMap[FTValue("friendWording")] = FTValue(info.friendWording);
 	infoMap[FTValue("friendAttributes")] = cnvSTLMapToFTMap(info.friendAttributes);
 	return infoMap;
 }

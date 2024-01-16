@@ -165,16 +165,14 @@ protected:
     void onFriendInfoUpdated(ZIM* zim,
         const std::vector<ZIMFriendInfo>& friendInfoList) override;
 
-    void onFriendListChanged(ZIM* zim, ZIMFriendListChangeAction& action,
-        const std::vector<ZIMFriendInfo>& friendInfoList) override;
+    void onFriendListChanged(ZIM* zim, const std::vector<ZIMFriendInfo>& friendInfoList,ZIMFriendListChangeAction& action) override;
 
     void onFriendApplicationUpdated(
         ZIM* zim,
         const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList) override;
 
     void onFriendApplicationListChanged(
-        ZIM* zim, ZIMFriendApplicationListChangeAction& action,
-        const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList) override;
+        ZIM* zim, const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList,ZIMFriendApplicationListChangeAction& action) override;
 
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;

@@ -256,7 +256,7 @@ public:
     static ZIMFriendDeleteConfig cnvZIMFriendDeleteConfigToObject(FTMap infoMap);
     static ZIMFriendInfo cnvZIMFriendInfoToObject(FTMap infoMap);
     static ZIMFriendListQueryConfig cnvZIMFriendListQueryConfigToObject(FTMap infoMap);
-    static ZIMSendFriendApplicationConfig cnvZIMSendFriendApplicationConfigToObject(FTMap infoMap);
+    static ZIMFriendApplicationSendConfig cnvZIMFriendApplicationSendConfigToObject(FTMap infoMap);
     static ZIMFriendRelationInfo cnvZIMFriendRelationInfoToObject(FTMap infoMap);
 public: 
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
