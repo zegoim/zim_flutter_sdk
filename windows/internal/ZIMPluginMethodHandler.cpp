@@ -3053,8 +3053,8 @@ void ZIMPluginMethodHandler::checkFriendsRelation(flutter::EncodableMap& argumen
 				}
 
 				FTMap retMap;
-				retMap[FTValue("friendRelationInfoArrayList")] = friendRelationInfoArray;
-				retMap[FTValue("errorUserInfos")] = errorUserInfoArray;
+				retMap[FTValue("relationInfos")] = friendRelationInfoArray;
+				retMap[FTValue("errorUserList")] = errorUserInfoArray;
 
 				sharedPtrResult->Success(retMap);
 			}
@@ -3140,8 +3140,8 @@ void ZIMPluginMethodHandler::queryFriendsInfo(flutter::EncodableMap& argument, s
 				}
 
 				FTMap retMap;
-				retMap[FTValue("zimFriendInfos")] = friendInfoArray;
-				retMap[FTValue("errorUserInfos")] = errorUserInfoArray;
+				retMap[FTValue("friendInfos")] = friendInfoArray;
+				retMap[FTValue("errorUserList")] = errorUserInfoArray;
 
 				sharedPtrResult->Success(retMap);
 			}
@@ -3164,10 +3164,10 @@ void ZIMPluginMethodHandler::acceptFriendApplication(flutter::EncodableMap& argu
 
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 	zim->acceptFriendApplication(userID, config, [=](
-		const ZIMFriendApplicationInfo& friendApplicationInfo, const ZIMError& errorInfo) {
+		const ZIMFriendInfo& friendInfo, const ZIMError& errorInfo) {
 		if (errorInfo.code == 0) {
 			FTMap retMap;
-			retMap[FTValue("friendApplicationInfo")] = ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(friendApplicationInfo);
+			retMap[FTValue("friendInfo")] = ZIMPluginConverter::cnvZIMFriendInfoToMap(friendInfo);
 			sharedPtrResult->Success(retMap);
 		}
 		else {
@@ -3191,7 +3191,7 @@ void ZIMPluginMethodHandler::rejectFriendApplication(flutter::EncodableMap& argu
 	zim->rejectFriendApplication(userID, config, [=](const ZIMUserInfo& userInfo, const ZIMError& errorInfo) {
 			if (errorInfo.code == 0) {
 				FTMap retMap;
-				retMap[FTValue("zimUserInfo")] = ZIMPluginConverter::cnvZIMUserInfoObjectToMap(userInfo);
+				retMap[FTValue("userInfo")] = ZIMPluginConverter::cnvZIMUserInfoObjectToMap(userInfo);
 				sharedPtrResult->Success(retMap);
 			}
 			else {
@@ -3244,17 +3244,17 @@ void ZIMPluginMethodHandler::queryFriendApplicationList(flutter::EncodableMap& a
     ZIMFriendApplicationListQueryConfig config = ZIMPluginConverter::cnvZIMFriendApplicationListQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
 
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-	zim->queryFriendApplicationList(config, [=](const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList,
+	zim->queryFriendApplicationList(config, [=](const std::vector<ZIMFriendApplicationInfo>& applicationList,
 		unsigned int nextFlag, const ZIMError& errorInfo) {
 			if (errorInfo.code == 0) {
 				FTArray friendApplicationInfoArray;
-				for (auto& info : friendApplicationInfoList) {
+				for (auto& info : applicationList) {
 					auto infoMap = ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(info);
                     friendApplicationInfoArray.emplace_back(infoMap);
 				}
 
 				FTMap retMap;
-				retMap[FTValue("infoArrayList")] = friendApplicationInfoArray;
+				retMap[FTValue("applicationList")] = friendApplicationInfoArray;
 				retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
 				sharedPtrResult->Success(retMap);
 			}

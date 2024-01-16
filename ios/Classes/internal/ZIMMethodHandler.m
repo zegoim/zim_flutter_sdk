@@ -2466,8 +2466,8 @@
                 [errorUserListBasic addObject:errorUserInfoDic];
             }
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserInfos"];
-            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendRelationInfoList:friendRelationInfoList] forKey:@"friendRelationInfoArrayList"];
+            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserList"];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendRelationInfoList:friendRelationInfoList] forKey:@"relationInfos"];
             result(resultDic);
         }
         else {
@@ -2538,8 +2538,8 @@
                 [errorUserListBasic addObject:errorUserInfoDic];
             }
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserInfos"];
-            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendInfoList:friendInfoList] forKey:@"zimFriendInfos"];
+            [resultDic safeSetObject:errorUserListBasic forKey:@"errorUserList"];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendInfoList:friendInfoList] forKey:@"friendInfos"];
             result(resultDic);
         }
         else {
@@ -2557,10 +2557,10 @@
     }
     NSString *userID = [call.arguments objectForKey:@"userID"];
     ZIMFriendApplicationAcceptConfig *config = [ZIMPluginConverter oZIMFriendApplicationAcceptConfig:[call.arguments objectForKey:@"config"]];
-    [zim acceptFriendApplicationFromUserID:userID config:config callback:^(ZIMFriendApplicationInfo * _Nonnull friendApplicationInfo, ZIMError * _Nonnull errorInfo) {
+    [zim acceptFriendApplicationFromUserID:userID config:config callback:^(ZIMFriendInfo * _Nonnull friendInfo, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendApplicationInfo:friendApplicationInfo] forKey:@"friendApplicationInfo"];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendInfo:friendInfo] forKey:@"friendInfo"];
             result(resultDic);
         }
         else {
@@ -2581,7 +2581,7 @@
     [zim rejectFriendApplicationFromUserID:userID config:config callback:^(ZIMUserInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic safeSetObject:[ZIMPluginConverter mZIMUserInfo:userInfo] forKey:@"zimUserInfo"];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMUserInfo:userInfo] forKey:@"userInfo"];
             result(resultDic);
         }
         else {
@@ -2623,7 +2623,7 @@
     [zim queryFriendApplicationListWithConfig:config callback:^(NSArray<ZIMFriendApplicationInfo *> * _Nullable friendApplicationInfoList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendApplicationInfoList:friendApplicationInfoList] forKey:@"infoArrayList"];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendApplicationInfoList:friendApplicationInfoList] forKey:@"applicationList"];
             [resultDic safeSetObject:[NSNumber numberWithUnsignedInt:nextFlag] forKey:@"nextFlag"];
             result(resultDic);
         }

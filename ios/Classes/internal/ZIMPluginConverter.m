@@ -1314,7 +1314,7 @@
         return nil;
     }
     ZIMFriendAddConfig *config = [[ZIMFriendAddConfig alloc] init];
-    config.friendWording = [configMap objectForKey:@"friendWording"];
+    config.wording = [configMap objectForKey:@"wording"];
     config.friendAlias = [configMap objectForKey:@"friendAlias"];
     config.friendAttributes = [configMap safeObjectForKey:@"friendAttributes"];
     return config;
@@ -1337,11 +1337,9 @@
     }
     ZIMFriendApplicationInfo *info = [[ZIMFriendApplicationInfo alloc] init];
     info.applyUser = [ZIMPluginConverter oZIMUserInfo:[infoDic objectForKey:@"applyUser"]];
-    info.friendWording = (NSString *)[infoDic objectForKey:@"friendWording"];
-    info.friendAlias = (NSString *)[infoDic objectForKey:@"friendAlias"];
+    info.wording = (NSString *)[infoDic objectForKey:@"wording"];
     info.createTime = ((NSNumber *)[infoDic safeObjectForKey:@"createTime"]).unsignedLongLongValue;
     info.updateTime = ((NSNumber *)[infoDic safeObjectForKey:@"updateTime"]).unsignedLongLongValue;
-    info.friendAttributes = [infoDic safeObjectForKey:@"friendAttributes"];
     info.type = ((NSNumber *)[infoDic objectForKey:@"type"]).intValue;
     info.state = ((NSNumber *)[infoDic objectForKey:@"state"]).intValue;
 
@@ -1367,11 +1365,9 @@
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     NSDictionary *baseInfodic = [ZIMPluginConverter mZIMUserInfo:info.applyUser];
     [infoDic safeSetObject:baseInfodic forKey:@"applyUser"];
-    [infoDic safeSetObject:info.friendWording forKey:@"friendWording"];
-    [infoDic safeSetObject:info.friendAlias forKey:@"friendAlias"];
+    [infoDic safeSetObject:info.wording forKey:@"wording"];
     [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
     [infoDic safeSetObject:[NSNumber numberWithLongLong:info.updateTime] forKey:@"updateTime"];
-    [infoDic safeSetObject:info.friendAttributes forKey:@"friendAttributes"];
     [infoDic safeSetObject:[NSNumber numberWithInteger:info.type] forKey:@"type"];
     [infoDic safeSetObject:[NSNumber numberWithInteger:info.state] forKey:@"state"];
     return infoDic;
@@ -1429,7 +1425,7 @@
     [infoDic safeSetObject:info.userAvatarUrl forKey:@"userAvatarUrl"];
     [infoDic safeSetObject:info.friendAlias forKey:@"friendAlias"];
     [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
-    [infoDic safeSetObject:info.friendWording forKey:@"friendWording"];
+    [infoDic safeSetObject:info.wording forKey:@"wording"];
     [infoDic safeSetObject:info.friendAttributes forKey:@"friendAttributes"];
     return infoDic;
 }
@@ -1455,7 +1451,7 @@
     info.userName = (NSString *)[infoDic objectForKey:@"userName"];
     info.userAvatarUrl = (NSString *)[infoDic objectForKey:@"userAvatarUrl"];
 
-    info.friendWording = (NSString *)[infoDic objectForKey:@"friendWording"];
+    info.wording = (NSString *)[infoDic objectForKey:@"wording"];
     info.friendAlias = (NSString *)[infoDic objectForKey:@"friendAlias"];
     info.createTime = ((NSNumber *)[infoDic safeObjectForKey:@"createTime"]).unsignedLongLongValue;
     info.friendAttributes = [infoDic safeObjectForKey:@"friendAttributes"];
@@ -1521,7 +1517,7 @@
         return nil;
     }
     ZIMFriendApplicationSendConfig *config = [[ZIMFriendApplicationSendConfig alloc] init];
-    config.friendWording = [configMap objectForKey:@"friendWording"];
+    config.wording = [configMap objectForKey:@"wording"];
     config.friendAlias = [configMap safeObjectForKey:@"friendAlias"];
     config.friendAttributes = [configMap safeObjectForKey:@"friendAttributes"];
     config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];

@@ -99,7 +99,7 @@ import im.zego.zim.callback.ZIMRoomMembersAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMRoomMembersAttributesQueriedCallback;
 import im.zego.zim.callback.ZIMRoomMembersQueriedCallback;
 import im.zego.zim.callback.ZIMRoomOnlineMemberCountQueriedCallback;
-import im.zego.zim.callback.ZIMSendFriendApplicationCallback;
+import im.zego.zim.callback.ZIMFriendApplicationSentCallback;
 import im.zego.zim.callback.ZIMTokenRenewedCallback;
 import im.zego.zim.callback.ZIMUserAvatarUrlUpdatedCallback;
 import im.zego.zim.callback.ZIMUserExtendedDataUpdatedCallback;
@@ -2750,9 +2750,9 @@ public class ZIMPluginMethodHandler {
         HashMap<String, Object> configMap = call.argument("config");
         ZIMFriendApplicationSendConfig config = ZIMPluginConverter.oZIMFriendApplicationSendConfig(configMap);
         LogWriter.writeLog("Flutter Native Android invoke sendFriendApplication,attributes:"+config.friendAttributes.toString());
-        zim.sendFriendApplication(userID, config, new ZIMSendFriendApplicationCallback() {
+        zim.sendFriendApplication(userID, config, new ZIMFriendApplicationSentCallback() {
             @Override
-            public void onSendFriendApplicationCallback(ZIMFriendApplicationInfo applicationInfo, ZIMError errorInfo) {
+            public void onFriendApplicationSentCallback(ZIMFriendApplicationInfo applicationInfo, ZIMError errorInfo) {
                 if (errorInfo.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
                     resultMap.put("applicationInfo", ZIMPluginConverter.mZIMFriendApplicationInfo(applicationInfo)); // Assuming mZIMFriendApplicationInfo exists
@@ -2813,21 +2813,21 @@ public class ZIMPluginMethodHandler {
 
         zim.checkFriendsRelation(userIDs, config, new ZIMFriendsRelationCheckedCallback() {
             @Override
-            public void onFriendsChecked(ArrayList<ZIMFriendRelationInfo> friendRelationInfoArrayList, ArrayList<ZIMErrorUserInfo> errorUserInfos, ZIMError zimError) {
+            public void onFriendsChecked(ArrayList<ZIMFriendRelationInfo> relationInfos, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError zimError) {
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
 
                     // 转换关系信息列表
                     ArrayList<HashMap<String, Object>> relationInfoMapList = new ArrayList<>();
-                    for (ZIMFriendRelationInfo info : friendRelationInfoArrayList) {
+                    for (ZIMFriendRelationInfo info : relationInfos) {
                         HashMap<String, Object> infoMap = ZIMPluginConverter.mZIMFriendRelationInfo(info); // 假设存在 mZIMFriendRelationInfo 转换函数
                         relationInfoMapList.add(infoMap);
                     }
-                    resultMap.put("friendRelationInfoArrayList", relationInfoMapList);
+                    resultMap.put("relationInfos", relationInfos);
 
                     // 转换错误用户信息
                     ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
-                    for (ZIMErrorUserInfo errorInfo : errorUserInfos) {
+                    for (ZIMErrorUserInfo errorInfo : errorUserList) {
                         HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
                         errorUsersMapList.add(errorInfoMap);
                     }
@@ -2909,22 +2909,22 @@ public class ZIMPluginMethodHandler {
 
         zim.queryFriendsInfo(userIDs, new ZIMFriendsInfoQueriedCallback() {
             @Override
-            public void onFriendsInfoQueried(ArrayList<ZIMFriendInfo> zimFriendInfos, ArrayList<ZIMErrorUserInfo> errorUserInfos, ZIMError zimError) {
+            public void onFriendsInfoQueried(ArrayList<ZIMFriendInfo> friendInfos, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError zimError) {
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
 
                     // 转换朋友信息列表
                     ArrayList<HashMap<String, Object>> friendInfoMapList = new ArrayList<>();
-                    for (ZIMFriendInfo friendInfo : zimFriendInfos) {
+                    for (ZIMFriendInfo friendInfo : friendInfos) {
                         HashMap<String, Object> friendInfoMap = ZIMPluginConverter.mZIMFriendInfo(friendInfo); // 假设存在 mZIMFriendInfo 转换函数
                         friendInfoMapList.add(friendInfoMap);
                     }
-                    LogWriter.writeLog("flutter native android onFriendsInfoQueried,friendsInfos size:"+zimFriendInfos.size()+"friendsMapList size:"+friendInfoMapList.size());
+                    LogWriter.writeLog("flutter native android onFriendsInfoQueried,friendsInfos size:"+friendInfos.size()+"friendsMapList size:"+friendInfoMapList.size());
                     resultMap.put("zimFriendInfos", friendInfoMapList);
 
                     // 转换错误用户信息
                     ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
-                    for (ZIMErrorUserInfo errorInfo : errorUserInfos) {
+                    for (ZIMErrorUserInfo errorInfo : errorUserList) {
                         HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
                         errorUsersMapList.add(errorInfoMap);
                     }
@@ -2954,11 +2954,11 @@ public class ZIMPluginMethodHandler {
         LogWriter.writeLog("flutter native android acceptFriendApplication,attributes:"+config.friendAttributes.toString()+"alias:"+config.friendAlias);
         zim.acceptFriendApplication(userID, config, new ZIMFriendApplicationAcceptedCallback() {
             @Override
-            public void onFriendApplicationAccepted(ZIMFriendApplicationInfo friendApplicationInfo, ZIMError zimError) {
+            public void onFriendApplicationAccepted(ZIMFriendApplicationInfo friendInfo, ZIMError zimError) {
                 LogWriter.writeLog("flutter native android onFriendApplicationAccepted,attributes:"+friendApplicationInfo.friendAttributes.toString()+"alias:"+friendApplicationInfo.friendAlias);
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
-                    resultMap.put("friendApplicationInfo", ZIMPluginConverter.mZIMFriendApplicationInfo(friendApplicationInfo)); // 假设存在 mZIMFriendApplicationInfo 转换函数
+                    resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendApplicationInfo(friendInfo)); // 假设存在 mZIMFriendApplicationInfo 转换函数
                     result.success(resultMap);
                 } else {
                     result.error(String.valueOf(zimError.code.value()), zimError.message, null);
@@ -2983,11 +2983,11 @@ public class ZIMPluginMethodHandler {
 
         zim.rejectFriendApplication(userID, config, new ZIMFriendApplicationRejectedCallback() {
             @Override
-            public void onFriendApplicationRejected(ZIMUserInfo zimUserInfo, ZIMError zimError) {
-                LogWriter.writeLog("Flutter Android Native onFriendApplicationRejected,userInfo:"+zimUserInfo.toString());
+            public void onFriendApplicationRejected(ZIMUserInfo userInfo, ZIMError zimError) {
+                LogWriter.writeLog("Flutter Android Native onFriendApplicationRejected,userInfo:"+userInfo.toString());
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
-                    resultMap.put("zimUserInfo", ZIMPluginConverter.mZIMUserInfo(zimUserInfo)); // 假设存在 mZIMUserInfo 转换函数
+                    resultMap.put("userInfo", ZIMPluginConverter.mZIMUserInfo(userInfo)); // 假设存在 mZIMUserInfo 转换函数
                     result.success(resultMap);
                 } else {
                     result.error(String.valueOf(zimError.code.value()), zimError.message, null);
@@ -3047,17 +3047,17 @@ public class ZIMPluginMethodHandler {
 
         zim.queryFriendApplicationList(config, new ZIMFriendApplicationListQueriedCallback() {
             @Override
-            public void onFriendApplicationListQueried(ArrayList<ZIMFriendApplicationInfo> infoArrayList, int nextFlag, ZIMError zimError) {
+            public void onFriendApplicationListQueried(ArrayList<ZIMFriendApplicationInfo> applicationList, int nextFlag, ZIMError zimError) {
                 if (zimError.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String, Object> resultMap = new HashMap<>();
 
                     // 转换申请信息列表
                     ArrayList<HashMap<String, Object>> applicationInfoMapList = new ArrayList<>();
-                    for (ZIMFriendApplicationInfo applicationInfo : infoArrayList) {
+                    for (ZIMFriendApplicationInfo applicationInfo : applicationList) {
                         HashMap<String, Object> applicationInfoMap = ZIMPluginConverter.mZIMFriendApplicationInfo(applicationInfo); // 假设存在 mZIMFriendApplicationInfo 转换函数
                         applicationInfoMapList.add(applicationInfoMap);
                     }
-                    resultMap.put("infoArrayList", applicationInfoMapList);
+                    resultMap.put("applicationList", applicationInfoMapList);
                     resultMap.put("nextFlag", nextFlag);
 
                     result.success(resultMap);

@@ -1406,7 +1406,7 @@ public class ZIMPluginConverter {
 
     static public ZIMFriendAddConfig oZIMFriendAddConfig(HashMap<String, Object> configMap) {
         ZIMFriendAddConfig config = new ZIMFriendAddConfig();
-        config.friendWording = (String) configMap.get("friendWording");
+        config.wording = (String) configMap.get("wording");
         config.friendAlias = (String) configMap.get("friendAlias");
         config.friendAttributes = (HashMap<String, String>) configMap.get("friendAttributes");
         return config;
@@ -1423,11 +1423,9 @@ public class ZIMPluginConverter {
     static public ZIMFriendApplicationInfo oZIMFriendApplicationInfo(HashMap<String, Object> infoMap) {
         ZIMFriendApplicationInfo info = new ZIMFriendApplicationInfo();
         info.applyUser = ZIMPluginConverter.oZIMUserInfo((HashMap<String, Object>) infoMap.get("applyUser")); // 假设已有转换 ZIMUserInfo 的函数
-        info.friendWording = (String) infoMap.get("friendWording");
-        info.friendAlias = (String) infoMap.get("friendAlias");
+        info.wording = (String) infoMap.get("wording");
         info.createTime = (long) infoMap.get("createTime");
         info.updateTime = (long) infoMap.get("updateTime");
-        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
         info.type = ZIMFriendApplicationType.getZIMFriendApplicationType((Integer) infoMap.get("type")); // 假设 ZIMFriendApplicationType 可直接转换
         info.state = ZIMFriendApplicationState.getZIMFriendApplicationState((Integer) infoMap.get("state"));
         return info;
@@ -1436,11 +1434,9 @@ public class ZIMPluginConverter {
     static public HashMap<String, Object> mZIMFriendApplicationInfo(ZIMFriendApplicationInfo info) {
         HashMap<String, Object> infoMap = new HashMap<>();
         infoMap.put("applyUser", mZIMUserInfo(info.applyUser)); // Assuming mZIMUserInfo exists for ZIMUserInfo
-        infoMap.put("friendWording", info.friendWording);
-        infoMap.put("friendAlias", info.friendAlias);
+        infoMap.put("wording", info.wording);
         infoMap.put("createTime", info.createTime);
         infoMap.put("updateTime", info.updateTime);
-        infoMap.put("friendAttributes", info.friendAttributes);
         infoMap.put("type", info.type.value()); // Assuming ZIMFriendApplicationType can be directly stored
         infoMap.put("state", info.state.value()); // Assuming ZIMFriendApplicationState can be directly stored
         return infoMap;
@@ -1470,7 +1466,7 @@ public class ZIMPluginConverter {
         HashMap<String, Object> infoMap = new HashMap<>(mZIMUserInfo(info)); // Assuming mZIMUserInfo for ZIMUserInfo inheritance
         infoMap.put("friendAlias", info.friendAlias);
         infoMap.put("createTime", info.createTime);
-        infoMap.put("friendWording", info.friendWording);
+        infoMap.put("wording", info.wording);
         infoMap.put("friendAttributes", info.friendAttributes);
         return infoMap;
     }
@@ -1480,7 +1476,7 @@ public class ZIMPluginConverter {
         oZIMUserInfo(infoMap,info); // Assuming oZIMUserInfo for ZIMUserInfo inheritance
         info.friendAlias = (String) infoMap.get("friendAlias");
         info.createTime = (Long) infoMap.get("createTime");
-        info.friendWording = (String) infoMap.get("friendWording");
+        info.wording = (String) infoMap.get("wording");
         info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
         return info;
     }
@@ -1514,7 +1510,7 @@ public class ZIMPluginConverter {
 
     static public ZIMFriendApplicationSendConfig oZIMFriendApplicationSendConfig(HashMap<String, Object> configMap) {
         ZIMFriendApplicationSendConfig config = new ZIMFriendApplicationSendConfig();
-        config.friendWording = (String) configMap.get("friendWording");
+        config.wording = (String) configMap.get("wording");
         config.friendAlias = (String) configMap.get("friendAlias");
         config.friendAttributes = (HashMap<String, String>) configMap.get("friendAttributes");
         config.pushConfig = oZIMPushConfig((HashMap<String, Object>) configMap.get("pushConfig")); // Assuming oZIMPushConfig exists
