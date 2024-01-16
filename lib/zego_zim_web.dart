@@ -2314,7 +2314,7 @@ class ZegoZimPlugin {
     ZIMBlacklistChangeAction action = ZIMBlacklistChangeActionExtension.mapValue[data['action']]!;
     List<ZIMUserInfo> userList = ZIMConverter.oZIMUserInfoList(data['userList'] ?? []);
 
-    ZIMEventHandler.onBlacklistChanged!(zim, action, userList);
+    ZIMEventHandler.onBlacklistChanged!(zim, userList ,action);
   }
 
   static void groupMuteUpdated(ZIMEngine zim, dynamic data) {

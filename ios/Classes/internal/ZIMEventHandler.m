@@ -686,7 +686,8 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
-- (void)zim:(ZIM *)zim friendListChanged:(ZIMFriendListChangeAction)action friendInfoList:(NSArray<ZIMFriendInfo *> *)friendInfoList {
+- (void)zim:(ZIM *)zim friendListChanged:(NSArray<ZIMFriendInfo *> *)friendInfoList
+     action:(ZIMFriendListChangeAction)action{
     if (_events == nil) {
         return;
     }
@@ -715,7 +716,8 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
-- (void)zim:(ZIM *)zim friendApplicationListChanged:(ZIMFriendApplicationListChangeAction)action friendApplicationInfoList:(NSArray<ZIMFriendApplicationInfo *> *)friendApplicationInfoList {
+- (void)zim:(ZIM *)zim friendApplicationListChanged:(NSArray<ZIMFriendApplicationInfo *> *)friendApplicationInfoList
+     action:(ZIMFriendApplicationListChangeAction)action {
     if (_events == nil) {
         return;
     }

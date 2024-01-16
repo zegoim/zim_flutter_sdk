@@ -2403,9 +2403,9 @@
         result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
         return;
     }
-    ZIMSendFriendApplicationConfig *sendConfig = [ZIMPluginConverter oZIMSendFriendApplicationConfig:[call.arguments objectForKey:@"config"]];
+    ZIMFriendApplicationSendConfig *sendConfig = [ZIMPluginConverter oZIMFriendApplicationSendConfig:[call.arguments objectForKey:@"config"]];
     NSString *applyUserID = [call.arguments objectForKey:@"applyUserID"];
-    [zim sendFriendApplicationByUserID:applyUserID config:sendConfig callback:^(ZIMFriendApplicationInfo * _Nonnull friendApplicationInfo,
+    [zim sendFriendApplicationToUserID:applyUserID config:sendConfig callback:^(ZIMFriendApplicationInfo * _Nonnull friendApplicationInfo,
                                                  ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
@@ -2418,7 +2418,7 @@
     }];
 }
 
--(void)deleteFriend:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)deleteFriends:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2427,7 +2427,7 @@
     }
     ZIMFriendDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMFriendDeleteConfig:[call.arguments objectForKey:@"config"]];
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
-    [zim deleteFriendByUserIDs:userIDs config:deleteConfig callback:^(NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+    [zim deleteFriendsByUserIDs:userIDs config:deleteConfig callback:^(NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableArray *errorUserListBasic = [[NSMutableArray alloc] init];
             for (ZIMErrorUserInfo *errorUserInfo in errorUserList) {
@@ -2446,7 +2446,7 @@
     }];
 }
 
--(void)checkFriendRelation:(FlutterMethodCall *)call result:(FlutterResult)result {
+-(void)checkFriendsRelation:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
     if (!zim) {
@@ -2455,7 +2455,7 @@
     }
     ZIMFriendRelationCheckConfig *checkConfig = [ZIMPluginConverter oZIMFriendRelationCheckConfig:[call.arguments objectForKey:@"config"]];
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
-    [zim checkFriendRelationByUserIDs:userIDs config:checkConfig callback:^(
+    [zim checkFriendsRelationByUserIDs:userIDs config:checkConfig callback:^(
     NSArray<ZIMFriendRelationInfo *> *friendRelationInfoList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableArray *errorUserListBasic = [[NSMutableArray alloc] init];
@@ -2483,9 +2483,9 @@
         result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
         return;
     }
-    NSString *alias = [call.arguments objectForKey:@"alias"];
+    NSString *friendAlias = [call.arguments objectForKey:@"friendAlias"];
     NSString *userID = [call.arguments objectForKey:@"userID"];
-    [zim updateFriendAlias:alias userID:userID callback:^(ZIMFriendInfo * _Nonnull friendInfo, ZIMError * _Nonnull errorInfo) {
+    [zim updateFriendAlias:friendAlias userID:userID callback:^(ZIMFriendInfo * _Nonnull friendInfo, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendInfo:friendInfo] forKey:@"friendInfo"];
@@ -2557,7 +2557,7 @@
     }
     NSString *userID = [call.arguments objectForKey:@"userID"];
     ZIMFriendApplicationAcceptConfig *config = [ZIMPluginConverter oZIMFriendApplicationAcceptConfig:[call.arguments objectForKey:@"config"]];
-    [zim acceptFriendApplicationByUserID:userID config:config callback:^(ZIMFriendApplicationInfo * _Nonnull friendApplicationInfo, ZIMError * _Nonnull errorInfo) {
+    [zim acceptFriendApplicationFromUserID:userID config:config callback:^(ZIMFriendApplicationInfo * _Nonnull friendApplicationInfo, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendApplicationInfo:friendApplicationInfo] forKey:@"friendApplicationInfo"];
@@ -2578,7 +2578,7 @@
     }
     NSString *userID = [call.arguments objectForKey:@"userID"];
     ZIMFriendApplicationRejectConfig *config = [ZIMPluginConverter oZIMFriendApplicationRejectConfig:[call.arguments objectForKey:@"config"]];
-    [zim rejectFriendApplicationByUserID:userID config:config callback:^(ZIMUserInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
+    [zim rejectFriendApplicationFromUserID:userID config:config callback:^(ZIMUserInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:[ZIMPluginConverter mZIMUserInfo:userInfo] forKey:@"zimUserInfo"];

@@ -1779,7 +1779,7 @@ class ZIMConverter {
   static ZIMFriendApplicationInfo oZIMFriendApplicationInfo(Map map) {
     ZIMFriendApplicationInfo info = ZIMFriendApplicationInfo();
     info.applyUser = oZIMUserInfo(map['applyUser']);
-    info.wording = map['wording'];
+    info.friendWording = map['friendWording'];
     info.friendAlias = map['friendAlias'];
     info.createTime = map['createTime'];
     info.updateTime = map['updateTime'];
@@ -1818,9 +1818,9 @@ class ZIMConverter {
 
   static Map mZIMFriendAddConfig(ZIMFriendAddConfig config) {
     return {
-      'wording': config.wording,
-      'alias': config.alias,
-      'attributes': config.attributes,
+      'friendWording': config.friendWording,
+      'friendAlias': config.friendAlias,
+      'friendAttributes': config.friendAttributes,
     };
   }
 
@@ -1839,7 +1839,7 @@ class ZIMConverter {
     oZIMUserInfo(map, friendInfo);
     friendInfo.friendAlias = map['friendAlias'];
     friendInfo.createTime = map['createTime'];
-    friendInfo.wording = map['wording'];
+    friendInfo.friendWording = map['friendWording'];
     friendInfo.friendAttributes =
         Map<String, String>.from(map['friendAttributes']);
     return friendInfo;
@@ -1890,11 +1890,11 @@ class ZIMConverter {
   }
 
   static Map mZIMSendFriendApplicationConfig(
-      ZIMSendFriendApplicationConfig config) {
+      ZIMFriendApplicationSendConfig config) {
     return {
-      'wording': config.wording,
-      'alias': config.alias,
-      'attributes': config.attributes,
+      'friendWording': config.friendWording,
+      'friendAlias': config.friendAlias,
+      'friendAttributes': config.friendAttributes,
       'pushConfig': config.pushConfig != null
           ? mZIMPushConfig(config.pushConfig!)
           : null, // Assuming mZIMPushConfig is defined
@@ -1953,8 +1953,8 @@ class ZIMConverter {
       ..friendInfo = oZIMFriendInfo(map['friendInfo']);
   }
 
-  static ZIMFriendDeletedResult oZIMFriendDeletedResult(Map map) {
-    return ZIMFriendDeletedResult()
+  static ZIMFriendsDeletedResult oZIMFriendDeletedResult(Map map) {
+    return ZIMFriendsDeletedResult()
       ..errorUserList = oZIMErrorUserInfoList(
           map['errorUserList']); // Assuming oZIMErrorUserInfo exists
   }
@@ -1965,9 +1965,9 @@ class ZIMConverter {
       ..nextFlag = map['nextFlag'];
   }
 
-  static ZIMFriendRelationCheckedResult oZIMFriendRelationCheckedResult(
+  static ZIMFriendsRelationCheckedResult oZIMFriendRelationCheckedResult(
       Map map) {
-    return ZIMFriendRelationCheckedResult()
+    return ZIMFriendsRelationCheckedResult()
       ..friendRelationInfoArrayList =
           oZIMFriendRelationInfoList(map['friendRelationInfoArrayList'])
       ..errorUserInfos = oZIMErrorUserInfoList(

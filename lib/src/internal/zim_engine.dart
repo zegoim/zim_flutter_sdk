@@ -1087,8 +1087,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
-    Map resultMap = await channel.invokeMethod('checkFriendRelation', {
+  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
+    Map resultMap = await channel.invokeMethod('checkFriendsRelation', {
       'handle': handle,
       'userIDs': userIDs,
       'config': ZIMConverter.mZIMFriendRelationCheckConfig(config),
@@ -1108,8 +1108,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config) async {
-    Map resultMap = await channel.invokeMethod('deleteFriend', {
+  Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config) async {
+    Map resultMap = await channel.invokeMethod('deleteFriends', {
       'handle': handle,
       'userIDs': userIDs,
       'config': ZIMConverter.mZIMFriendDeleteConfig(config),
@@ -1181,7 +1181,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID, ZIMSendFriendApplicationConfig config) async {
+  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID, ZIMFriendApplicationSendConfig config) async {
     Map resultMap = await channel.invokeMethod('sendFriendApplication', {
       'handle': handle,
       'applyUserID': applyUserID,
@@ -1192,10 +1192,10 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String alias, String userID) async {
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID) async {
     Map resultMap = await channel.invokeMethod('updateFriendAlias', {
       'handle': handle,
-      'alias': alias,
+      'friendAlias': friendAlias,
       'userID': userID,
     });
 

@@ -378,7 +378,7 @@ enum ZIMFriendListChangeAction{added,deleted}
 
 enum ZIMFriendApplicationListChangeAction{added,deleted}
 
-enum ZIMFriendRelationCheckType{unknown,both,sent}
+enum ZIMFriendRelationCheckType{unknown,both,single}
 
 enum ZIMUserRelationType{unknown,singleNO,singleHave,bothAllNo,bothSelfHave,bothOtherHave,bothAllHave}
 
@@ -2230,7 +2230,7 @@ class ZIMFriendAttributesUpdatedResult {
    ZIMFriendInfo? friendInfo;
 }
 
-class ZIMFriendDeletedResult {
+class ZIMFriendsDeletedResult {
    List<ZIMErrorUserInfo>? errorUserList;
 }
 
@@ -2239,7 +2239,7 @@ class ZIMFriendListQueriedResult {
   int nextFlag = 0;
 }
 
-class ZIMFriendRelationCheckedResult {
+class ZIMFriendsRelationCheckedResult {
   List<ZIMFriendRelationInfo>? friendRelationInfoArrayList;
   List<ZIMErrorUserInfo>? errorUserInfos;
 }
@@ -2287,9 +2287,9 @@ class ZIMMessageDeletedInfo {
 }
 
 class ZIMFriendAddConfig {
-  String wording = "";
-  String alias = "";
-  Map<String,String> attributes = {};
+  String friendWording = "";
+  String friendAlias = "";
+  Map<String,String> friendAttributes = {};
 }
 
 class ZIMFriendDeleteConfig {
@@ -2299,13 +2299,13 @@ class ZIMFriendDeleteConfig {
 class ZIMFriendInfo extends ZIMUserInfo {
   String friendAlias = "";
   int createTime = 0;
-  String wording = "";
+  String friendWording = "";
   Map friendAttributes = {};
 }
 
 class ZIMFriendApplicationInfo {
   ZIMUserInfo? applyUser;
-  String wording = "";
+  String friendWording = "";
   String friendAlias = "";
   int createTime = 0;
   int updateTime = 0;
@@ -2329,10 +2329,10 @@ class ZIMFriendRelationInfo {
   String userID = "";
 }
 
-class ZIMSendFriendApplicationConfig {
-  String wording  = "";
-  String alias = "";
-  Map<String,String> attributes = {};
+class ZIMFriendApplicationSendConfig {
+  String friendWording  = "";
+  String friendAlias = "";
+  Map<String,String> friendAttributes = {};
   ZIMPushConfig? pushConfig;
 }
 

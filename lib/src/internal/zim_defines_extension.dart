@@ -578,13 +578,13 @@ extension ZIMFriendRelationCheckTypeExtension on ZIMFriendRelationCheckType {
   static const valueMap = {
     ZIMFriendRelationCheckType.unknown: -1,
     ZIMFriendRelationCheckType.both: 0,
-    ZIMFriendRelationCheckType.sent: 1,
+    ZIMFriendRelationCheckType.single: 1,
   };
 
   static const mapValue = {
     -1: ZIMFriendRelationCheckType.unknown,
     0: ZIMFriendRelationCheckType.both,
-    1: ZIMFriendRelationCheckType.sent,
+    1: ZIMFriendRelationCheckType.single,
   };
 
   int get value => valueMap[this] ?? -1;

@@ -219,6 +219,6 @@
 
 +(nullable ZIMFriendRelationInfo *)oZIMFriendRelationInfo:(nullable NSDictionary *)infoDic;
 
-+(nullable ZIMSendFriendApplicationConfig *)oZIMSendFriendApplicationConfig:(nullable NSDictionary *)configMap;
++(nullable ZIMFriendApplicationSendConfig *)oZIMFriendApplicationSendConfig:(nullable NSDictionary *)configMap;
 
 @end

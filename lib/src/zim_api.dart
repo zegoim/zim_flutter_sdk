@@ -1505,13 +1505,13 @@ abstract class ZIM {
 
   Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
 
-  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID,ZIMSendFriendApplicationConfig config);
+  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID,ZIMFriendApplicationSendConfig config);
 
-  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config);
+  Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config);
 
-  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
+  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
 
-  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String alias, String userID);
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID);
 
   Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
 
