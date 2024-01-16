@@ -43,9 +43,9 @@ import im.zego.zim.callback.ZIMFriendApplicationAcceptedCallback;
 import im.zego.zim.callback.ZIMFriendApplicationListQueriedCallback;
 import im.zego.zim.callback.ZIMFriendApplicationRejectedCallback;
 import im.zego.zim.callback.ZIMFriendAttributesUpdatedCallback;
-import im.zego.zim.callback.ZIMFriendDeletedCallback;
+import im.zego.zim.callback.ZIMFriendsDeletedCallback;
 import im.zego.zim.callback.ZIMFriendListQueriedCallback;
-import im.zego.zim.callback.ZIMFriendRelationCheckedCallback;
+import im.zego.zim.callback.ZIMFriendsRelationCheckedCallback;
 import im.zego.zim.callback.ZIMFriendsInfoQueriedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
 import im.zego.zim.callback.ZIMGroupAttributesQueriedCallback;
@@ -2720,7 +2720,7 @@ public class ZIMPluginMethodHandler {
         HashMap<String, Object> configMap = call.argument("config");
         ZIMFriendAddConfig config = ZIMPluginConverter.oZIMFriendAddConfig(configMap);
 
-        LogWriter.writeLog("Flutter Android invoke add Friend. attributes:"+config.attributes.toString());
+        LogWriter.writeLog("Flutter Android invoke add Friend. attributes:"+config.friendAttributes.toString());
         zim.addFriend(userID, config, new ZIMFriendAddedCallback() {
             @Override
             public void onFriendAddedCallback(ZIMFriendInfo friendInfo, ZIMError zimError) {
@@ -2749,7 +2749,7 @@ public class ZIMPluginMethodHandler {
         String userID = call.argument("userID");
         HashMap<String, Object> configMap = call.argument("config");
         ZIMFriendApplicationSendConfig config = ZIMPluginConverter.oZIMFriendApplicationSendConfig(configMap);
-        LogWriter.writeLog("Flutter Native Android invoke sendFriendApplication,attributes:"+config.attributes.toString());
+        LogWriter.writeLog("Flutter Native Android invoke sendFriendApplication,attributes:"+config.friendAttributes.toString());
         zim.sendFriendApplication(userID, config, new ZIMSendFriendApplicationCallback() {
             @Override
             public void onSendFriendApplicationCallback(ZIMFriendApplicationInfo applicationInfo, ZIMError errorInfo) {

@@ -1512,7 +1512,7 @@ public class ZIMPluginConverter {
         return info;
     }
 
-    static public ZIMSendFriendApplicationConfig oZIMFriendApplicationSendConfig(HashMap<String, Object> configMap) {
+    static public ZIMFriendApplicationSendConfig oZIMFriendApplicationSendConfig(HashMap<String, Object> configMap) {
         ZIMFriendApplicationSendConfig config = new ZIMFriendApplicationSendConfig();
         config.friendWording = (String) configMap.get("friendWording");
         config.friendAlias = (String) configMap.get("friendAlias");
