@@ -1181,10 +1181,10 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID, ZIMFriendApplicationSendConfig config) async {
+  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String userID, ZIMFriendApplicationSendConfig config) async {
     Map resultMap = await channel.invokeMethod('sendFriendApplication', {
       'handle': handle,
-      'applyUserID': applyUserID,
+      'userID': userID,
       'config': ZIMConverter.mZIMSendFriendApplicationConfig(config),
     });
 

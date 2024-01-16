@@ -2746,7 +2746,7 @@ public class ZIMPluginMethodHandler {
             return;
         }
 
-        String applyUserID = call.argument("applyUserID");
+        String userID = call.argument("userID");
         HashMap<String, Object> configMap = call.argument("config");
         ZIMSendFriendApplicationConfig config = ZIMPluginConverter.oZIMSendFriendApplicationConfig(configMap);
         LogWriter.writeLog("Flutter Native Android invoke sendFriendApplication,attributes:"+config.attributes.toString());

@@ -2404,8 +2404,8 @@
         return;
     }
     ZIMFriendApplicationSendConfig *sendConfig = [ZIMPluginConverter oZIMFriendApplicationSendConfig:[call.arguments objectForKey:@"config"]];
-    NSString *applyUserID = [call.arguments objectForKey:@"applyUserID"];
-    [zim sendFriendApplicationToUserID:applyUserID config:sendConfig callback:^(ZIMFriendApplicationInfo * _Nonnull friendApplicationInfo,
+    NSString *userID = [call.arguments objectForKey:@"userID"];
+    [zim sendFriendApplicationToUserID:userID config:sendConfig callback:^(ZIMFriendApplicationInfo * _Nonnull friendApplicationInfo,
                                                  ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];

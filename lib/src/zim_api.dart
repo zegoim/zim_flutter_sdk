@@ -1505,7 +1505,7 @@ abstract class ZIM {
 
   Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
 
-  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String applyUserID,ZIMFriendApplicationSendConfig config);
+  Future<ZIMSendFriendApplicationResult> sendFriendApplication(String userID,ZIMFriendApplicationSendConfig config);
 
   Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config);
 
