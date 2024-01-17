@@ -1571,4 +1571,6 @@ abstract class ZIM {
   Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
 
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
+
+  Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
 }

@@ -3199,5 +3199,29 @@ public class ZIMPluginMethodHandler {
 
     }
 
+    public static void queryCombineMessageDetail(MethodCall call,Result result){
+
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMCombineMessage message = (ZIMCombineMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
+
+        zim.queryCombineMessageDetail(message, new ZIMCombineMessageDetailQueriedCallback() {
+            @Override
+            public void onCombineMessageDetailQueried(ZIMCombineMessage message, ZIMError error) {
+                if (error.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("message",ZIMPluginConverter.mZIMMessage(message));
+                    result.success(resultMap);
+                }else {
+                    result.error(String.valueOf(error.code.value()),error.message,null);
+                }
+            }
+        });
+    }
+
 
 }
