@@ -1165,7 +1165,7 @@ abstract class ZIM {
 
   Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config);
 
-  Future<ZIMGroupMemberListMutedResult> muteGroupMemberList(bool isMute,List<String> userIDs,String groupID,ZIMGroupMemberMuteConfig config);
+  Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs,String groupID,ZIMGroupMemberMuteConfig config);
 
   Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID,ZIMGroupMemberMutedListQueryConfig config);
 

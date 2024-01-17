@@ -808,7 +808,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& m
 	groupMemberInfoMap[FTValue("memberNickname")] = FTValue(memberInfo.memberNickname);
 	groupMemberInfoMap[FTValue("memberRole")] = FTValue((int32_t)memberInfo.memberRole);
 	groupMemberInfoMap[FTValue("memberAvatarUrl")] = FTValue(memberInfo.memberAvatarUrl);
-	groupMemberInfoMap[FTValue("muteExpiredTimestamp")] = FTValue((int64_t)memberInfo.muteExpiredTimestamp);
+	groupMemberInfoMap[FTValue("muteExpiredTime")] = FTValue((int64_t)memberInfo.muteExpiredTime);
 	return groupMemberInfoMap;
 }
 
@@ -831,7 +831,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& group
 	groupFullInfoMap[FTValue("groupNotice")] = FTValue(groupInfo.groupNotice);
 	groupFullInfoMap[FTValue("groupAttributes")] = cnvSTLMapToFTMap(groupInfo.groupAttributes);
 	groupFullInfoMap[FTValue("notificationStatus")] = FTValue((int32_t)groupInfo.notificationStatus);
-	groupFullInfoMap[FTValue("muteInfo")] = cnvZIMGroupMuteInfoToMap(groupInfo.muteInfo);
+	groupFullInfoMap[FTValue("mutedInfo")] = cnvZIMGroupMuteInfoToMap(groupInfo.mutedInfo);
 	return groupFullInfoMap;
 }
 
@@ -1189,7 +1189,7 @@ FTMap ZIMPluginConverter::cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedI
 FTMap ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info){
 	FTMap infoMap;
 	infoMap[FTValue("mode")] = FTValue(info.mode);
-	infoMap[FTValue("expiredTimestamp")] = FTValue((int64_t)info.expiredTimestamp);
+	infoMap[FTValue("expiredTime")] = FTValue((int64_t)info.expiredTime);
 	infoMap[FTValue("roles")] = ZIMPluginConverter::cnvStlVectorToFTArray(info.roles);
 	return infoMap;
 }

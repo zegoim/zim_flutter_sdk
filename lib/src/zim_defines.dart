@@ -911,11 +911,11 @@ class ZIMGroupInfo {
 class ZIMGroupMuteInfo {
    ZIMGroupMuteMode mode;
 
-   int expiredTimestamp;
+   int expiredTime;
 
    List<int> roles;
 
-   ZIMGroupMuteInfo():mode=ZIMGroupMuteMode.none,expiredTimestamp=0,roles=[];
+   ZIMGroupMuteInfo():mode=ZIMGroupMuteMode.none,expiredTime=0,roles=[];
 }
 
 class ZIMGroupMuteConfig {
@@ -945,7 +945,7 @@ class ZIMGroupFullInfo {
   ZIMGroupMessageNotificationStatus notificationStatus =
       ZIMGroupMessageNotificationStatus.notify;
 
-  ZIMGroupMuteInfo muteInfo;
+  ZIMGroupMuteInfo mutedInfo;
 
   ZIMGroupFullInfo({required this.baseInfo}):muteInfo=ZIMGroupMuteInfo();
 }
@@ -972,7 +972,7 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
   /// Description: group member avatar url.
   String memberAvatarUrl = "";
 
-  int muteExpiredTimestamp = 0;
+  int muteExpiredTime = 0;
 
   ZIMGroupMemberInfo();
 }
@@ -2326,13 +2326,13 @@ class ZIMGroupMutedResult {
   ZIMGroupMutedResult():groupID='',info=ZIMGroupMutedInfo(),isMute=false;
 }
 
-class ZIMGroupMemberListMutedResult {
+class ZIMGroupMembersMutedResult {
   String groupID;
   bool isMute;
   int duration;
-  List<String> mutedMemberIDList;
+  List<String> mutedMemberIDs;
   List<ZIMErrorUserInfo> errorUserList;
-  ZIMGroupMemberListMutedResult():groupID="",duration=0,mutedMemberIDList=[],errorUserList=[],isMute = false;
+  ZIMGroupMembersMutedResult():groupID="",duration=0,mutedMemberIDs=[],errorUserList=[],isMute = false;
 }
 
 class ZIMGroupMemberMutedListQueriedResult {
