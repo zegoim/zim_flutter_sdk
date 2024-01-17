@@ -244,14 +244,14 @@ extension ZIMConversationTypeExtension on ZIMConversationType {
 
 extension ZIMMessageDeleteTypeExtension on ZIMMessageDeleteType {
   static const valueMap = {
-    ZIMMessageDeleteType.messageListDelete: 0,
-    ZIMMessageDeleteType.singleConversationAllMessagesDelete: 1,
-    ZIMMessageDeleteType.allMessagesDelete: 2,
+    ZIMMessageDeleteType.messageListDeleted: 0,
+    ZIMMessageDeleteType.conversationAllMessagesDeleted: 1,
+    ZIMMessageDeleteType.allConversationMessagesDeleted: 2,
   };
   static const mapValue = {
-    0: ZIMMessageDeleteType.messageListDelete,
-    1: ZIMMessageDeleteType.singleConversationAllMessagesDelete,
-    2: ZIMMessageDeleteType.allMessagesDelete,
+    0: ZIMMessageDeleteType.messageListDeleted,
+    1: ZIMMessageDeleteType.conversationAllMessagesDeleted,
+    2: ZIMMessageDeleteType.allConversationMessagesDeleted,
   };
   int get value => valueMap[this] ?? -1;
 }

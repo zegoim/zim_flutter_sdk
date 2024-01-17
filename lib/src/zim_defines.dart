@@ -304,7 +304,7 @@ enum ZIMMessageOrder {
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
 
-enum ZIMMessageDeleteType { messageListDelete, singleConversationAllMessagesDelete, allMessagesDelete }
+enum ZIMMessageDeleteType { messageListDeleted, conversationAllMessagesDeleted, allConversationMessagesDeleted }
 
 enum ZIMConversationEvent { added, updated, disabled, deleted}
 
