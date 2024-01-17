@@ -2278,6 +2278,27 @@
         }
     }];
 }
+- (void)queryCombineMessageDetail:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMCombineMessage *message = [ZIMPluginConverter oZIMMessage:[call.arguments objectForKey:@"message"]];
+    
+    [zim queryCombineMessageDetailByMessage:message callback:^(ZIMCombineMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultMtDic = [[NSMutableDictionary alloc] init];
+            NSDictionary *messageDic = [ZIMPluginConverter mZIMMessage:message];
+            [resultMtDic safeSetObject:messageDic forKey:@"message"];
+            result(resultMtDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
 
 -(void)addUsersToBlacklist:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];

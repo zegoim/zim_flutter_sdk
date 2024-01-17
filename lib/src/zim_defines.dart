@@ -226,7 +226,9 @@ enum ZIMMessageType {
 
   revoke,
 
-  custom
+  custom,
+
+  combine
 }
 
 enum ZIMMediaFileType {
@@ -477,6 +479,8 @@ class ZIMMessageSendConfig {
 
   bool hasReceipt = false;
 
+  bool isNotifyMentionedUsers = false;
+
   ZIMMessageSendConfig();
 }
 
@@ -544,7 +548,7 @@ class ZIMMessage {
   String conversationID = "";
   ZIMMessageDirection direction = ZIMMessageDirection.send;
   ZIMMessageSentStatus sentStatus = ZIMMessageSentStatus.sending;
-  ZIMConversationType conversationType = ZIMConversationType.peer;
+  ZIMConversationType conversationType = ZIMConversationType.unknown;
   int timestamp = 0;
   int conversationSeq = 0;
   int orderKey = 0;
@@ -553,6 +557,9 @@ class ZIMMessage {
   String extendedData = "";
   String localExtendedData = "";
   bool isBroadcastMessage = false;
+  bool isServerMessage = false;
+  bool isMentionAll = false;
+  List<String> mentionedUserIds = [];
   List<ZIMMessageReaction> reactions = [];
 }
 
@@ -571,6 +578,20 @@ class ZIMCommandMessage extends ZIMMessage {
     required this.message,
   }) {
     super.type = ZIMMessageType.command;
+  }
+}
+
+class ZIMCombineMessage extends ZIMMessage {
+  String title = '';
+  String summary = '';
+  String combineID = '';
+  List<ZIMMessage> messageList = [];
+  ZIMCombineMessage({
+    required this.title,
+    required this.summary,
+    required this.messageList,
+  }) {
+    super.type = ZIMMessageType.combine;
   }
 }
 
@@ -682,8 +703,23 @@ class ZIMConversation {
   int orderKey = 0;
   bool isPinned =false;
   String draft = '';
+  List<ZIMMessageMentionedInfo> mentionedInfoList = [];
   ZIMConversation();
 }
+
+enum ZIMMessageMentionedType{
+  unknown,
+  mention_me,
+  mention_all,
+  mention_all_and_me
+}
+
+class ZIMMessageMentionedInfo {
+  int messageID = 0;
+  String fromUserID = '';
+  ZIMMessageMentionedType type = ZIMMessageMentionedType.unknown;
+}
+
 
 class ZIMConversationQueryConfig {
   ZIMConversation? nextConversation;
@@ -2274,6 +2310,11 @@ class ZIMConversationDraftSetResult {
   ZIMConversationType conversationType;
   ZIMConversationDraftSetResult(
       {required this.conversationID, required this.conversationType});
+}
+
+class ZIMCombineMessageDetailQueriedResult {
+  ZIMCombineMessage message;
+  ZIMCombineMessageDetailQueriedResult({required this.message});
 }
 
 class ZIMMessageDeletedInfo {

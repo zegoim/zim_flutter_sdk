@@ -3265,4 +3265,30 @@ void ZIMPluginMethodHandler::queryFriendApplicationList(flutter::EncodableMap& a
 }
 
 
+void ZIMPluginMethodHandler::queryCombineMessageDetail(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+    std::shared_ptr<ZIMMessage> message = ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
+    auto combineMessagePtr = std::static_pointer_cast<ZIMCombineMessage>(message);
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+
+	zim->queryCombineMessageDetail(combineMessagePtr, [=](const std::shared_ptr<ZIMCombineMessage>& message, ZIMError& errorInfo) {
+		FTMap retMap;
+		auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
+		retMap[FTValue("message")] = messageMap;
+		if (errorInfo.code == 0) {
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message, retMap);
+		}
+		});
+}
+
 

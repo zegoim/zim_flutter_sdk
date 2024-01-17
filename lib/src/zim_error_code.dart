@@ -114,7 +114,8 @@ class ZIMErrorCode {
   static const int conversationModuleCommonError = 6000601;
   static const int conversationModuleServerError = 6000602;
   static const int conversationModuleConversationDoseNotExist = 6000603;
-
+  static const int conversationModuleConversationPinnedListReachedLimit = 6000604;
+  
   static const int dataBaseModuleOpenDataBaseError = 6000701;
   static const int dataBaseModuleModifyDataBaseError = 6000702;
   static const int dataBaseModuleDeleteDataBaseError = 6000703;

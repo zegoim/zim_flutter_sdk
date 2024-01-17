@@ -100,6 +100,9 @@ template struct Rob<ZIM_FriendlyGet_originalTextMessageContent, &ZIMRevokeMessag
 std::string ZIMRevokeMessage::* get(ZIM_FriendlyGet_revokeExtendedData);
 template struct Rob<ZIM_FriendlyGet_revokeExtendedData, &ZIMRevokeMessage::revokeExtendedData>;
 
+std::string ZIMCombineMessage::* get(ZIM_FriendlyGet_combineID);
+template struct Rob<ZIM_FriendlyGet_combineID, &ZIMCombineMessage::combineID>;
+
 ZIMMessageReceiptStatus ZIMMessage::* get(ZIM_FriendlyGet_receiptStatus);
 template struct Rob<ZIM_FriendlyGet_receiptStatus, &ZIMMessage::receiptStatus>;
 
@@ -291,7 +294,7 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	conversationMap[FTValue("orderKey")] = FTValue(conversation->orderKey);
 	conversationMap[FTValue("lastMessage")] = cnvZIMMessageObjectToMap(conversation->lastMessage.get());
     conversationMap[FTValue("isPinned")] = FTValue(conversation->isPinned);
-
+	conversationMap[FTValue("mentionedInfoList")] = cnvZIMMessageMentionedInfoToMap(conversation->mentionedInfoList);
 	return conversationMap;
 }
 
@@ -349,6 +352,9 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("localExtendedData")] = FTValue(message->localExtendedData);
 	messageMap[FTValue("reactions")] = ZIMPluginConverter::cnvZIMMessageReactionListToArray(message->reactions);
 	messageMap[FTValue("isBroadcastMessage")] = FTValue(message->isBroadcastMessage());
+	messageMap[FTValue("isMentionAll")] = FTValue(message->isMentionAll);
+	messageMap[FTValue("mentionedUserIDs")] = cnvStlVectorToFTArray(message->mentionedUserIDs);
+
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
 		messageMap[FTValue("fileLocalPath")] = FTValue(mediaMessage->fileLocalPath);
@@ -426,6 +432,15 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 		messageMap[FTValue("operatedUserID")] = FTValue(revokeMessage->getOperatedUserID());
 		messageMap[FTValue("originalTextMessageContent")] = FTValue(revokeMessage->getOriginalTextMessageContent());
 		messageMap[FTValue("revokeExtendedData")] = FTValue(revokeMessage->getRevokeExtendedData());
+		break;
+	}
+	case ZIM_MESSAGE_TYPE_COMBINE: {
+		auto combineMessage = (ZIMCombineMessage*)message;
+		messageMap[FTValue("title")] = FTValue(combineMessage->title);
+		messageMap[FTValue("summary")] = FTValue(combineMessage->summary);
+		messageMap[FTValue("combineID")] = FTValue(combineMessage->getCombineID());
+		auto messageArray = ZIMPluginConverter::cnvZIMMessageListToArray(combineMessage->messageList);
+		messageMap[FTValue("messageList")] = messageArray;
 		break;
 	}
 	case ZIM_MESSAGE_TYPE_UNKNOWN:
@@ -507,7 +522,6 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		messagePtr = std::make_shared<ZIMAudioMessage>(std::get<std::string>(messageMap[FTValue("fileLocalPath")]), (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("audioDuration")]));
 		break;
 	}
-		
 	case zim::ZIM_MESSAGE_TYPE_VIDEO: {
 		messagePtr = std::make_shared<ZIMVideoMessage>(std::get<std::string>(messageMap[FTValue("fileLocalPath")]), (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("videoDuration")]));
 		auto videoMessagePtr = std::static_pointer_cast<ZIMVideoMessage>(messagePtr);
@@ -522,14 +536,13 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		barrageMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
 		break;
 	}
-	case zim::ZIM_MESSAGE_TYPE_SYSTEM:{
+	case zim::ZIM_MESSAGE_TYPE_SYSTEM: {
 		messagePtr = std::make_shared<ZIMSystemMessage>();
 		auto systemMessage = std::static_pointer_cast<ZIMSystemMessage>(messagePtr);
 		systemMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
 		break;
 	}
-
-	case zim::ZIM_MESSAGE_TYPE_CUSTOM:{
+	case zim::ZIM_MESSAGE_TYPE_CUSTOM: {
 		messagePtr = std::make_shared<ZIMCustomMessage>("", 0);
 		auto customMessage = std::static_pointer_cast<ZIMCustomMessage>(messagePtr);
 		customMessage->message = std::get<std::string>(messageMap[FTValue("message")]);
@@ -537,7 +550,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		customMessage->subType = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("subType")]);
 		break;
 	}
-	case zim::ZIM_MESSAGE_TYPE_REVOKE:{
+	case zim::ZIM_MESSAGE_TYPE_REVOKE: {
 		messagePtr = std::make_shared<ZIMRevokeMessage>();
 		auto revokeMessagePtr = std::static_pointer_cast<ZIMRevokeMessage>(messagePtr);
 		(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeType()) = (ZIMRevokeType)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("revokeType")]);
@@ -549,10 +562,27 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		(*revokeMessagePtr.get()).*get(ZIM_FriendlyGet_revokeExtendedData()) = std::get<std::string>(messageMap[FTValue("revokeExtendedData")]);
 		break;
 	}
+	case zim::ZIM_MESSAGE_TYPE_COMBINE: {
+		messagePtr = std::make_shared<ZIMCombineMessage>();
+		auto combineMessagePtr = std::static_pointer_cast<ZIMCombineMessage>(messagePtr);
+		if (std::holds_alternative<FTArray>(messageMap[FTValue("messageList")]))
+		{
+			for (auto& msg : std::get<FTArray>(messageMap[FTValue("messageList")]))
+			{
+				if (std::holds_alternative<FTMap>(msg))
+				{
+					combineMessagePtr->messageList.emplace_back(cnvZIMMessageToObject(std::get<FTMap>(msg)));
+				}
+			}
+		}
+		combineMessagePtr->title = std::get<std::string>(messageMap[FTValue("title")]);
+		combineMessagePtr->summary = std::get<std::string>(messageMap[FTValue("summary")]);
+		(*combineMessagePtr.get()).*get(ZIM_FriendlyGet_combineID()) = std::get<std::string>(messageMap[FTValue("combineID")]);
+		break;
+	}
 	default:
 		break;
 	}
-
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_msgType()) = msgType;
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_senderUserID()) = std::get<std::string>(messageMap[FTValue("senderUserID")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationID()) = std::get<std::string>(messageMap[FTValue("conversationID")]);
@@ -569,7 +599,6 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_orderKey()) = (long long)ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("orderKey")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_receiptStatus()) = (ZIMMessageReceiptStatus)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("receiptStatus")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_isBroadcastMessage()) = (bool)std::get<bool>(messageMap[FTValue("isBroadcastMessage")]);
-
 	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
 		mediaMessagePtr->fileDownloadUrl = std::get<std::string>(messageMap[FTValue("fileDownloadUrl")]);
@@ -578,7 +607,8 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileSize()) = (long long)ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("fileSize")]);
 
 	}
-
+	messagePtr->isMentionAll = (bool)std::get<bool>(messageMap[FTValue("isMentionAll")]);
+	messagePtr->mentionedUserIDs = cnvFTArrayToStlVector(std::get<FTArray>(messageMap[FTValue("mentionedUserIDs")]));
 	return messagePtr;
 }
 
@@ -1159,6 +1189,18 @@ FTMap ZIMPluginConverter::cnvZIMMessageReactionToMap(const ZIMMessageReaction& r
 	reactionMap[FTValue("isSelfIncluded")] = FTValue(reaction.isSelfIncluded);
 	reactionMap[FTValue("userList")] = FTValue(ZIMPluginConverter::cnvZIMMessageReactionUserInfoListToArray(reaction.userList));
 	return reactionMap;
+}
+
+FTArray ZIMPluginConverter::cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList) {
+	FTArray array;
+	for (auto& info : infoList) {
+		FTMap map;
+		map[FTValue("type")] = FTValue(info.type);
+		map[FTValue("fromUserID")] = FTValue(info.fromUserID);
+		map[FTValue("messageID")] = FTValue(info.messageID);
+		array.emplace_back(map);
+	}
+	return array;
 }
 
 FTMap ZIMPluginConverter::cnvZIMMessageReactionUserInfoToMap(const ZIMMessageReactionUserInfo& userInfo) {

@@ -150,6 +150,10 @@ struct ZIM_FriendlyGet_revokeExtendedData {
     typedef std::string ZIMRevokeMessage::* type;
 };
 
+struct ZIM_FriendlyGet_combineID {
+	typedef std::string ZIMCombineMessage::* type;
+};
+
 struct ZIM_FriendlyGet_receiptStatus {
     typedef ZIMMessageReceiptStatus ZIMMessage::* type;
 };
@@ -266,4 +270,5 @@ public:
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
+    static FTArray cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList);
 };

@@ -131,6 +131,7 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.barrage: 20,
     ZIMMessageType.system:30,
     ZIMMessageType.revoke:31,
+    ZIMMessageType.combine:100,
     ZIMMessageType.custom:200,
   };
   static const mapValue = {
@@ -144,7 +145,25 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     20: ZIMMessageType.barrage,
     30: ZIMMessageType.system,
     31: ZIMMessageType.revoke,
+    100:ZIMMessageType.combine,
     200:ZIMMessageType.custom
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMMessageMentionedTypeExtension on ZIMMessageMentionedType {
+  static const valueMap = {
+    ZIMMessageMentionedType.unknown: -1,
+    ZIMMessageMentionedType.mention_me: 1,
+    ZIMMessageMentionedType.mention_all: 2,
+    ZIMMessageMentionedType.mention_all_and_me: 3,
+  };
+  static const mapValue = {
+    -1: ZIMMessageMentionedType.unknown,
+    1: ZIMMessageMentionedType.mention_me,
+    2: ZIMMessageMentionedType.mention_all,
+    3: ZIMMessageMentionedType.mention_all_and_me,
   };
 
   int get value => valueMap[this] ?? -1;

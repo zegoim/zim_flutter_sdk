@@ -125,10 +125,15 @@ class ZIMConverter {
     if (resultMap['lastMessage'] != null) {
       conversation.lastMessage = oZIMMessage(resultMap['lastMessage']);
     }
-    conversation.notificationStatus = ZIMConversationNotificationStatusExtension
-        .mapValue[resultMap['notificationStatus']]!;
-    conversation.isPinned = resultMap['isPinned'] ?? false;
-    conversation.draft = resultMap['draft'] ?? '';
+    conversation.notificationStatus = ZIMConversationNotificationStatusExtension.mapValue[resultMap['notificationStatus']]!;
+    conversation.isPinned = resultMap['isPinned'];
+    for (var value in resultMap['mentionedInfoList']??[]) {
+      ZIMMessageMentionedInfo info = ZIMMessageMentionedInfo();
+      info.fromUserID = value['fromUserID'];
+      info.messageID = value['messageID'];
+      info.type = ZIMMessageMentionedTypeExtension.mapValue[value['type']]!;
+      conversation.mentionedInfoList.add(info);
+    }
     return conversation;
   }
 
@@ -154,6 +159,9 @@ class ZIMConverter {
     messageMap['extendedData'] = message.extendedData;
     messageMap['localExtendedData'] = message.localExtendedData;
     messageMap['isBroadcastMessage'] = message.isBroadcastMessage;
+    messageMap['isServerMessage'] = message.isServerMessage;
+    messageMap['isMentionAll'] = message.isMentionAll;
+    messageMap['mentionedUserIDs'] = message.mentionedUserIds;
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -228,6 +236,17 @@ class ZIMConverter {
         messageMap['originalTextMessageContent'] =
             message.originalTextMessageContent;
         messageMap['revokeExtendedData'] = message.revokeExtendedData;
+        break;
+      case ZIMMessageType.combine:
+        message as ZIMCombineMessage;
+        messageMap['combineID'] = message.combineID;
+        messageMap['title'] = message.title;
+        messageMap['summary'] = message.summary;
+        List<Map> messageListMap = [];
+        for (var element in message.messageList) {
+          messageListMap.add(mZIMMessage(element));
+        }
+        messageMap['messageList'] = messageListMap;
         break;
       default:
         break;
@@ -314,6 +333,16 @@ class ZIMConverter {
         message.originalTextMessageContent =
             resultMap['originalTextMessageContent'];
         break;
+      case ZIMMessageType.combine:
+        List<ZIMMessage> messageList = [];
+        List<Map> messageListMap = List<Map>.from(resultMap['messageList']??[]) ;
+        for (var element in messageListMap) {
+          messageList.add(oZIMMessage(element));
+        }
+        message ??= ZIMCombineMessage(title:resultMap['title'], summary: resultMap['summary'], messageList: messageList);
+        message as ZIMCombineMessage;
+        message.combineID = resultMap['combineID'];
+        break;
       default:
         message ??= ZIMMessage();
         break;
@@ -348,12 +377,13 @@ class ZIMConverter {
       message.fileName = resultMap['fileName'] ?? '';
       message.fileSize = resultMap['fileSize'] ?? 0;
     }
-    message.extendedData = resultMap['extendedData'] ?? '';
-    message.reactions = oZIMMessageReactionList(resultMap['reactions'] ?? []);
-    message.localExtendedData = resultMap['localExtendedData'] ?? '';
-    message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool
-        ? resultMap['isBroadcastMessage']
-        : false;
+    message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
+    message.reactions = oZIMMessageReactionList(resultMap['reactions']);
+    message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
+    message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
+    message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
+    message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
+    message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
     return message;
   }
 
@@ -576,6 +606,7 @@ class ZIMConverter {
     sendConfigMap['priority'] =
         ZIMMessagePriorityExtension.valueMap[sendConfig.priority];
     sendConfigMap['hasReceipt'] = sendConfig.hasReceipt;
+    sendConfigMap['isNotifyMentionedUsers'] = sendConfig.isNotifyMentionedUsers;
     return sendConfigMap;
   }
 

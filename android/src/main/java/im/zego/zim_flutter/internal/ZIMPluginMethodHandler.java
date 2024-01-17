@@ -73,6 +73,7 @@ import im.zego.zim.callback.ZIMLogUploadedCallback;
 import im.zego.zim.callback.ZIMLoggedInCallback;
 import im.zego.zim.callback.ZIMMediaDownloadedCallback;
 import im.zego.zim.callback.ZIMMediaMessageSentCallback;
+import im.zego.zim.callback.ZIMMessageCombineQueriedCallback;
 import im.zego.zim.callback.ZIMMessageDeletedCallback;
 import im.zego.zim.callback.ZIMMessageInsertedCallback;
 import im.zego.zim.callback.ZIMMessageQueriedCallback;
@@ -124,6 +125,7 @@ import im.zego.zim.entity.ZIMCallingInviteConfig;
 import im.zego.zim.entity.ZIMCallRejectConfig;
 import im.zego.zim.entity.ZIMCallQuitConfig;
 import im.zego.zim.entity.ZIMCallEndConfig;
+import im.zego.zim.entity.ZIMCombineMessage;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationDeleteConfig;
 import im.zego.zim.entity.ZIMConversationQueryConfig;
@@ -3195,6 +3197,30 @@ public class ZIMPluginMethodHandler {
             }
         });
 
+    }
+
+    public static void queryCombineMessageDetail(MethodCall call,Result result){
+
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMCombineMessage message = (ZIMCombineMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
+
+        zim.queryCombineMessageDetail(message, new ZIMCombineMessageDetailQueriedCallback() {
+            @Override
+            public void onCombineMessageDetailQueried(ZIMCombineMessage message, ZIMError error) {
+                if (error.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("message",ZIMPluginConverter.mZIMMessage(message));
+                    result.success(resultMap);
+                }else {
+                    result.error(String.valueOf(error.code.value()),error.message,null);
+                }
+            }
+        });
     }
 
 

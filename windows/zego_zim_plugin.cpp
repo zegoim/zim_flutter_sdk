@@ -428,6 +428,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "checkUserIsInBlackList") {
         ZIMPluginMethodHandler::getInstance().checkUserIsInBlackList(argument, std::move(result));
     }
+	else if (method_call.method_name() == "queryCombineMessageDetail") {
+	ZIMPluginMethodHandler::getInstance().queryCombineMessageDetail(argument, std::move(result));
+	}
     else {
         result->NotImplemented();
     

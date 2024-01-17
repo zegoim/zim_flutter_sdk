@@ -34,6 +34,7 @@ import im.zego.zim.entity.ZIMCallQuitConfig;
 import im.zego.zim.entity.ZIMCallEndConfig;
 import im.zego.zim.entity.ZIMCallUserInfo;
 import im.zego.zim.entity.ZIMCallInfo;
+import im.zego.zim.entity.ZIMCombineMessage;
 import im.zego.zim.entity.ZIMCommandMessage;
 import im.zego.zim.entity.ZIMConversation;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
@@ -73,6 +74,7 @@ import im.zego.zim.entity.ZIMMediaMessage;
 import im.zego.zim.entity.ZIMMessage;
 import im.zego.zim.entity.ZIMMessageDeleteConfig;
 import im.zego.zim.entity.ZIMMessageDeletedInfo;
+import im.zego.zim.entity.ZIMMessageMentionedInfo;
 import im.zego.zim.entity.ZIMMessageQueryConfig;
 import im.zego.zim.entity.ZIMMessageReaction;
 import im.zego.zim.entity.ZIMMessageReactionUserInfo;
@@ -195,6 +197,15 @@ public class ZIMPluginConverter {
         conversationMap.put("unreadMessageCount",conversation.unreadMessageCount);
         conversationMap.put("orderKey",conversation.orderKey);
         conversationMap.put("notificationStatus",conversation.notificationStatus.value());
+        ArrayList<HashMap<String,Object>> mentionInfoList = new ArrayList<>();
+        for (ZIMMessageMentionedInfo info : conversation.mentionedInfoList) {
+            HashMap<String,Object> mentionInfo = new HashMap<String,Object>();
+            mentionInfo.put("fromUserID",info.fromUserID);
+            mentionInfo.put("messageID",info.messageID);
+            mentionInfo.put("type",info.type.value());
+            mentionInfoList.add(mentionInfo);
+        }
+        conversationMap.put("mentionedInfoList",mentionInfoList);
         if(conversation.lastMessage != null){
             conversationMap.put("lastMessage", mZIMMessage(conversation.lastMessage));
         }
@@ -229,6 +240,9 @@ public class ZIMPluginConverter {
         messageMap.put("localExtendedData",message.localExtendedData);
         messageMap.put("reactions",mZIMMessageReactionList(message.getReactions()));
         messageMap.put("isBroadcastMessage",message.isBroadcastMessage());
+        messageMap.put("isServerMessage",message.isServerMessage());
+        messageMap.put("mentionedUserIDs",message.getMentionedUserIDs());
+        messageMap.put("isMentionAll",message.isMentionAll());
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -289,6 +303,18 @@ public class ZIMPluginConverter {
                 messageMap.put("message",((ZIMCustomMessage)message).message);
                 messageMap.put("subType",((ZIMCustomMessage)message).subType);
                 messageMap.put("searchedContent",((ZIMCustomMessage)message).searchedContent);
+                break;
+            case COMBINE:
+                assert message instanceof ZIMCombineMessage;
+                messageMap.put("title",((ZIMCombineMessage)message).title);
+                messageMap.put("summary",((ZIMCombineMessage)message).summary);
+                ArrayList<HashMap<String,Object>> messageListMap = new ArrayList<>();
+                for (ZIMMessage zimMessage : ((ZIMCombineMessage) message).messageList) {
+                    messageListMap.add(mZIMMessage(zimMessage));
+                }
+                messageMap.put("messageList",messageListMap);
+                messageMap.put("combineID",((ZIMCombineMessage)message).getCombineID());
+                break;
             case UNKNOWN:
             default:
                 break;
@@ -467,6 +493,23 @@ public class ZIMPluginConverter {
                     e.printStackTrace();
                 }
                 break;
+            case COMBINE:
+                ArrayList<ZIMMessage> messagesList = new ArrayList<>();
+                for (HashMap<String, Object> map : (ArrayList<HashMap<String, Object>>) messageMap.get("messageList")) {
+                    messagesList.add(oZIMMessage(map));
+                }
+                message = new ZIMCombineMessage((String) messageMap.get("title"),(String) messageMap.get("summary"),messagesList);
+                try {
+                    Field combineID = ZIMCombineMessage.class.getDeclaredField("combineID");
+                    combineID.setAccessible(true);
+                    combineID.set(message,messageMap.get("combineID"));
+                    combineID.setAccessible(false);
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
             case UNKNOWN:
             default:
                 message = new ZIMMessage(ZIMMessageType.UNKNOWN);
@@ -553,6 +596,10 @@ public class ZIMPluginConverter {
             isBroadcastMessageField.set(message,ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isBroadcastMessage")));
             isBroadcastMessageField.setAccessible(false);
 
+            Field isServerMessageField = ZIMMessage.class.getDeclaredField("isServerMessage");
+            isServerMessageField.setAccessible(true);
+            isServerMessageField.set(message,ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isServerMessage")));
+            isServerMessageField.setAccessible(false);
         }
         catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -587,7 +634,12 @@ public class ZIMPluginConverter {
                 e.printStackTrace();
             }
         }
-
+        message.setIsMentionAll(ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isMentionAll")));
+        ArrayList<String> mentionedUserIds = new ArrayList<>();
+        for (String userId : (ArrayList<String>) messageMap.get("mentionedUserIDs")) {
+            mentionedUserIds.add(userId);
+        }
+        message.setMentionedUserIDs(mentionedUserIds);
         return message;
     }
 
@@ -826,6 +878,7 @@ public class ZIMPluginConverter {
         config.priority = ZIMMessagePriority.getZIMMessagePriority(ZIMPluginCommonTools.safeGetIntValue(configMap.get("priority")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         config.hasReceipt = (boolean) configMap.get("hasReceipt");
+        config.isNotifyMentionedUsers = (boolean) configMap.get("isNotifyMentionedUsers");
         return config;
     }
 
