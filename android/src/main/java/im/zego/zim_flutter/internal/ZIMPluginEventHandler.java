@@ -18,8 +18,8 @@ import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
 import im.zego.zim.entity.ZIMConversationChangeInfo;
 import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
 import im.zego.zim.entity.ZIMError;
-//import im.zego.zim.entity.ZIMFriendApplicationInfo;
-//import im.zego.zim.entity.ZIMFriendInfo;
+import im.zego.zim.entity.ZIMFriendApplicationInfo;
+import im.zego.zim.entity.ZIMFriendInfo;
 import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
 import im.zego.zim.entity.ZIMGroupFullInfo;
 import im.zego.zim.entity.ZIMGroupMemberInfo;
@@ -38,8 +38,8 @@ import im.zego.zim.entity.ZIMUserInfo;
 import im.zego.zim.enums.ZIMBlacklistChangeAction;
 import im.zego.zim.enums.ZIMConnectionEvent;
 import im.zego.zim.enums.ZIMConnectionState;
-//import im.zego.zim.enums.ZIMFriendApplicationListChangeAction;
-//import im.zego.zim.enums.ZIMFriendListChangeAction;
+import im.zego.zim.enums.ZIMFriendApplicationListChangeAction;
+import im.zego.zim.enums.ZIMFriendListChangeAction;
 import im.zego.zim.enums.ZIMGroupEvent;
 import im.zego.zim.enums.ZIMGroupMemberEvent;
 import im.zego.zim.enums.ZIMGroupMemberState;
@@ -701,88 +701,88 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         mysink.success(resultMap);
     }
 
-//    @Override
-//    public void onFriendInfoUpdated(ZIM zim, ArrayList<ZIMFriendInfo> friendInfoList) {
-//        super.onFriendInfoUpdated(zim, friendInfoList);
-//        if (mysink == null) {
-//            return;
-//        }
-//        String handle = engineMapForCallback.get(zim);
-//        HashMap<String, Object> resultMap = new HashMap<>();
-//        resultMap.put("method", "onFriendInfoUpdated");
-//        resultMap.put("handle", handle);
-//        ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
-//        for (ZIMFriendInfo info : friendInfoList) {
-//            infoList.add(ZIMPluginConverter.mZIMFriendInfo(info)); // 假设存在 mZIMFriendInfo 转换函数
-//        }
-//        resultMap.put("friendInfoList", infoList);
-//        mysink.success(resultMap);
-//    }
-//
-//
-//    @Override
-//    public void onFriendListChanged(ZIM zim, ZIMFriendListChangeAction action, ArrayList<ZIMFriendInfo> friendInfoList) {
-//        super.onFriendListChanged(zim, action, friendInfoList);
-//        if (mysink == null) {
-//            return;
-//        }
-//        String handle = engineMapForCallback.get(zim);
-//        HashMap<String, Object> resultMap = new HashMap<>();
-//        resultMap.put("method", "onFriendListChanged");
-//        resultMap.put("handle", handle);
-//        resultMap.put("action", action.value()); // 假设 ZIMFriendListChangeAction 可以直接存储
-//        ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
-//        for (ZIMFriendInfo info : friendInfoList) {
-//            infoList.add(ZIMPluginConverter.mZIMFriendInfo(info)); // 假设存在 mZIMFriendInfo 转换函数
-//        }
-//        resultMap.put("friendInfoList", infoList);
-//        mysink.success(resultMap);
-//    }
-//
-//    @Override
-//    public void onFriendApplicationUpdated(ZIM zim, ArrayList<ZIMFriendApplicationInfo> friendApplicationInfoList) {
-//        super.onFriendApplicationUpdated(zim, friendApplicationInfoList);
-//        if (mysink == null) {
-//            return;
-//        }
-//        String handle = engineMapForCallback.get(zim);
-//        HashMap<String, Object> resultMap = new HashMap<>();
-//        resultMap.put("method", "onFriendApplicationUpdated");
-//        resultMap.put("handle", handle);
-//        ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
-//        for (ZIMFriendApplicationInfo info : friendApplicationInfoList) {
-//            infoList.add(ZIMPluginConverter.mZIMFriendApplicationInfo(info)); // 假设存在 mZIMFriendApplicationInfo 转换函数
-//        }
-//        resultMap.put("friendApplicationInfoList", infoList);
-//        mysink.success(resultMap);
-//    }
-//
-//
-//    @Override
-//    public void onFriendApplicationListChanged(ZIM zim, ZIMFriendApplicationListChangeAction action, ArrayList<ZIMFriendApplicationInfo> friendApplicationInfoList) {
-//        super.onFriendApplicationListChanged(zim, action,friendApplicationInfoList);
-//        if (mysink == null) {
-//            return;
-//        }
-//        String handle = engineMapForCallback.get(zim);
-//        HashMap<String, Object> resultMap = new HashMap<>();
-//        resultMap.put("method", "onFriendApplicationListChanged");
-//        resultMap.put("handle", handle);
-//        ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
-//        for (ZIMFriendApplicationInfo info : friendApplicationInfoList) {
-//            infoList.add(ZIMPluginConverter.mZIMFriendApplicationInfo(info)); // 假设存在 mZIMFriendApplicationInfo 转换函数
-//        }
-//        resultMap.put("action",action.value());
-//        resultMap.put("friendApplicationInfoList", infoList);
-//        mysink.success(resultMap);
-//    }
+    @Override
+    public void onFriendInfoUpdated(ZIM zim, ArrayList<ZIMFriendInfo> friendInfoList) {
+        super.onFriendInfoUpdated(zim, friendInfoList);
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onFriendInfoUpdated");
+        resultMap.put("handle", handle);
+        ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
+        for (ZIMFriendInfo info : friendInfoList) {
+            infoList.add(ZIMPluginConverter.mZIMFriendInfo(info)); // 假设存在 mZIMFriendInfo 转换函数
+        }
+        resultMap.put("friendInfoList", infoList);
+        mysink.success(resultMap);
+    }
+
+
+    @Override
+    public void onFriendListChanged(ZIM zim,ArrayList<ZIMFriendInfo> friendInfoList,ZIMFriendListChangeAction action) {
+        super.onFriendListChanged(zim, friendInfoList ,action);
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onFriendListChanged");
+        resultMap.put("handle", handle);
+        resultMap.put("action", action.value()); // 假设 ZIMFriendListChangeAction 可以直接存储
+        ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
+        for (ZIMFriendInfo info : friendInfoList) {
+            infoList.add(ZIMPluginConverter.mZIMFriendInfo(info)); // 假设存在 mZIMFriendInfo 转换函数
+        }
+        resultMap.put("friendInfoList", infoList);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onFriendApplicationUpdated(ZIM zim, ArrayList<ZIMFriendApplicationInfo> friendApplicationInfoList) {
+        super.onFriendApplicationUpdated(zim, friendApplicationInfoList);
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onFriendApplicationUpdated");
+        resultMap.put("handle", handle);
+        ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
+        for (ZIMFriendApplicationInfo info : friendApplicationInfoList) {
+            infoList.add(ZIMPluginConverter.mZIMFriendApplicationInfo(info)); // 假设存在 mZIMFriendApplicationInfo 转换函数
+        }
+        resultMap.put("friendApplicationInfoList", infoList);
+        mysink.success(resultMap);
+    }
+
+
+    @Override
+    public void onFriendApplicationListChanged(ZIM zim, ArrayList<ZIMFriendApplicationInfo> friendApplicationInfoList,ZIMFriendApplicationListChangeAction action) {
+        super.onFriendApplicationListChanged(zim, friendApplicationInfoList ,action);
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onFriendApplicationListChanged");
+        resultMap.put("handle", handle);
+        ArrayList<HashMap<String, Object>> infoList = new ArrayList<>();
+        for (ZIMFriendApplicationInfo info : friendApplicationInfoList) {
+            infoList.add(ZIMPluginConverter.mZIMFriendApplicationInfo(info)); // 假设存在 mZIMFriendApplicationInfo 转换函数
+        }
+        resultMap.put("action",action.value());
+        resultMap.put("friendApplicationInfoList", infoList);
+        mysink.success(resultMap);
+    }
 
 
 
 
     @Override
-    public void onBlacklistChanged(ZIM zim, ZIMBlacklistChangeAction action, ArrayList<ZIMUserInfo> userList) {
-        super.onBlacklistChanged(zim, action, userList);
+    public void onBlacklistChanged(ZIM zim,ArrayList<ZIMUserInfo> userList,ZIMBlacklistChangeAction action) {
+        super.onBlacklistChanged(zim, userList ,action);
         if (mysink == null) {
             return;
         }

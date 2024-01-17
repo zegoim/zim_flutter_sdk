@@ -1087,8 +1087,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
-    Map resultMap = await channel.invokeMethod('checkFriendRelation', {
+  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
+    Map resultMap = await channel.invokeMethod('checkFriendsRelation', {
       'handle': handle,
       'userIDs': userIDs,
       'config': ZIMConverter.mZIMFriendRelationCheckConfig(config),
@@ -1108,8 +1108,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config) async {
-    Map resultMap = await channel.invokeMethod('deleteFriend', {
+  Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config) async {
+    Map resultMap = await channel.invokeMethod('deleteFriends', {
       'handle': handle,
       'userIDs': userIDs,
       'config': ZIMConverter.mZIMFriendDeleteConfig(config),
@@ -1141,6 +1141,79 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMBlacklistUsersRemovedResult(resultMap);
   }
 
+  @override
+  Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID, ZIMFriendApplicationSendConfig config) async {
+    Map resultMap = await channel.invokeMethod('sendFriendApplication', {
+      'handle': handle,
+      'userID': userID,
+      'config': ZIMConverter.mZIMSendFriendApplicationConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendApplicationSentResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID) async {
+    Map resultMap = await channel.invokeMethod('updateFriendAlias', {
+      'handle': handle,
+      'friendAlias': friendAlias,
+      'userID': userID,
+    });
+
+    return ZIMConverter.oZIMFriendAliasUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String, String> friendAttributes, String userID) async {
+    Map resultMap = await channel.invokeMethod('updateFriendAttributes', {
+      'handle': handle,
+      'friendAttributes': friendAttributes,
+      'userID': userID,
+    });
+
+    return ZIMConverter.oZIMFriendAttributesUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryFriendApplicationList', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMFriendApplicationListQueryConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendApplicationListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryFriendList', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMFriendListQueryConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs) async {
+    Map resultMap = await channel.invokeMethod('queryFriendsInfo', {
+      'handle': handle,
+      'userIDs': userIDs,
+    });
+
+    return ZIMConverter.oZIMFriendsInfoQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendApplicationRejectedResult> rejectFriendApplication(String userID, ZIMFriendApplicationRejectConfig config) async {
+    Map resultMap = await channel.invokeMethod('rejectFriendApplication', {
+      'handle': handle,
+      'userID': userID,
+      'config': ZIMConverter.mZIMFriendApplicationRejectConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendApplicationRejectedResult(resultMap);
+  }
 
   @override
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType) async {

@@ -672,6 +672,67 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim friendInfoUpdated:(NSArray<ZIMFriendInfo *> *)friendInfoList {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *friendInfoBasic = [ZIMPluginConverter mZIMFriendInfoList:friendInfoList];
+    
+    [resultDic safeSetObject:@"onFriendInfoUpdated" forKey:@"method"];
+    [resultDic safeSetObject:friendInfoBasic forKey:@"friendInfoList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim friendListChanged:(NSArray<ZIMFriendInfo *> *)friendInfoList
+     action:(ZIMFriendListChangeAction)action{
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *friendInfoBasic = [ZIMPluginConverter mZIMFriendInfoList:friendInfoList];
+    
+    [resultDic safeSetObject:@"onFriendListChanged" forKey:@"method"];
+    [resultDic safeSetObject:[NSNumber numberWithInteger:action] forKey:@"action"];
+    [resultDic safeSetObject:friendInfoBasic forKey:@"friendInfoList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim friendApplicationUpdated:(NSArray<ZIMFriendApplicationInfo *> *)friendApplicationInfoList {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *friendAppInfoBasic = [ZIMPluginConverter mZIMFriendApplicationInfoList:friendApplicationInfoList];
+    
+    [resultDic safeSetObject:@"onFriendApplicationUpdated" forKey:@"method"];
+    [resultDic safeSetObject:friendAppInfoBasic forKey:@"friendApplicationInfoList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim friendApplicationListChanged:(NSArray<ZIMFriendApplicationInfo *> *)friendApplicationInfoList
+     action:(ZIMFriendApplicationListChangeAction)action {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *friendAppInfoBasic = [ZIMPluginConverter mZIMFriendApplicationInfoList:friendApplicationInfoList];
+    
+    [resultDic safeSetObject:@"onFriendApplicationListChanged" forKey:@"method"];
+    [resultDic safeSetObject:[NSNumber numberWithInteger:action] forKey:@"action"];
+    [resultDic safeSetObject:friendAppInfoBasic forKey:@"friendApplicationInfoList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+
 #pragma mark - Getter
 - (NSMapTable *)engineEventMap {
     if (!_engineEventMap) {

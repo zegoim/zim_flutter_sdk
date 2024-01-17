@@ -2940,4 +2940,329 @@ void ZIMPluginMethodHandler::checkUserIsInBlackList(flutter::EncodableMap& argum
     });
 }
 
+void ZIMPluginMethodHandler::addFriend(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto userID = std::get<std::string>(argument[FTValue("userID")]);
+    ZIMFriendAddConfig config = ZIMPluginConverter::cnvZIMFriendAddConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->addFriend(userID, config,[=](const ZIMFriendInfo& friendInfo, const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			FTMap retMap;
+            retMap[FTValue("friendInfo")] = ZIMPluginConverter::cnvZIMFriendInfoToMap(friendInfo);
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
+void ZIMPluginMethodHandler::sendFriendApplication(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto applyUserID = std::get<std::string>(argument[FTValue("applyUserID")]);
+    ZIMFriendApplicationSendConfig config = ZIMPluginConverter::cnvZIMFriendApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->sendFriendApplication(applyUserID, config, [=](
+		const ZIMFriendApplicationInfo& friendApplicationInfo, const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			FTMap retMap;
+			retMap[FTValue("applicationInfo")] = ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(friendApplicationInfo);
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
+void ZIMPluginMethodHandler::deleteFriends(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+	std::vector<std::string> userIDsVec;
+	for (auto& userIDValue : userIDs) {
+		auto userID = std::get<std::string>(userIDValue);
+		userIDsVec.emplace_back(userID);
+	}
+
+    ZIMFriendDeleteConfig config = ZIMPluginConverter::cnvZIMFriendDeleteConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->deleteFriends(userIDsVec, config, [=](
+		const std::vector<ZIMErrorUserInfo>& errorUserList, const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				FTMap retMap;
+				FTArray errorUserInfoArray;
+				for (auto& errorUserInfo : errorUserList) {
+					auto errorUserInfoMap = ZIMPluginConverter::cnvZIMErrorUserInfoToMap(errorUserInfo);
+					errorUserInfoArray.emplace_back(errorUserInfoMap);
+				}
+
+				retMap[FTValue("errorUserList")] = errorUserInfoArray;
+                sharedPtrResult->Success(retMap);
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
+void ZIMPluginMethodHandler::checkFriendsRelation(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+	std::vector<std::string> userIDsVec;
+	for (auto& userIDValue : userIDs) {
+		auto userID = std::get<std::string>(userIDValue);
+		userIDsVec.emplace_back(userID);
+	}
+    auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+    ZIMFriendRelationCheckConfig config;
+    config.type = (ZIMFriendRelationCheckType)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("type")]);
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->checkFriendsRelation(userIDsVec, config, [=](
+		const std::vector<ZIMFriendRelationInfo>& friendRelationInfoList, const std::vector<ZIMErrorUserInfo>& errorUserList, const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				FTArray friendRelationInfoArray;
+				for (auto& info : friendRelationInfoList) {
+					auto infoMap = ZIMPluginConverter::cnvZIMFriendRelationInfoToMap(info);
+                    friendRelationInfoArray.emplace_back(infoMap);
+				}
+
+				FTArray errorUserInfoArray;
+				for (auto& errorUserInfo : errorUserList) {
+					auto errorUserInfoMap = ZIMPluginConverter::cnvZIMErrorUserInfoToMap(errorUserInfo);
+					errorUserInfoArray.emplace_back(errorUserInfoMap);
+				}
+
+				FTMap retMap;
+				retMap[FTValue("relationInfos")] = friendRelationInfoArray;
+				retMap[FTValue("errorUserList")] = errorUserInfoArray;
+
+				sharedPtrResult->Success(retMap);
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
+void ZIMPluginMethodHandler::updateFriendAlias(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto userID = std::get<std::string>(argument[FTValue("userID")]);
+    auto friendAlias = std::get<std::string>(argument[FTValue("friendAlias")]);
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->updateFriendAlias(friendAlias, userID, [=](const ZIMFriendInfo& friendInfo, const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				FTMap retMap;
+				retMap[FTValue("friendInfo")] = ZIMPluginConverter::cnvZIMFriendInfoToMap(friendInfo);
+				sharedPtrResult->Success(retMap);
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
+void ZIMPluginMethodHandler::updateFriendAttributes(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+    auto friendAttributes = ZIMPluginConverter::cnvFTMapToSTLMap(std::get<FTMap>(argument[FTValue("friendAttributes")]));
+    auto userID = std::get<std::string>(argument[FTValue("userID")]);
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->updateFriendAttributes(friendAttributes, userID, [=](const ZIMFriendInfo& friendInfo, const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			FTMap retMap;
+			retMap[FTValue("friendInfo")] = ZIMPluginConverter::cnvZIMFriendInfoToMap(friendInfo);
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
+void ZIMPluginMethodHandler::queryFriendsInfo(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+	std::vector<std::string> userIDsVec;
+	for (auto& userIDValue : userIDs) {
+		auto userID = std::get<std::string>(userIDValue);
+		userIDsVec.emplace_back(userID);
+	}
+
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->queryFriendsInfo(userIDsVec, [=](
+		const std::vector<ZIMFriendInfo>& friendInfoList,
+		const std::vector<ZIMErrorUserInfo>& errorUserList, const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				FTArray friendInfoArray;
+				for (auto& info : friendInfoList) {
+					auto infoMap = ZIMPluginConverter::cnvZIMFriendInfoToMap(info);
+                    friendInfoArray.emplace_back(infoMap);
+				}
+
+				FTArray errorUserInfoArray;
+				for (auto& errorUserInfo : errorUserList) {
+					auto errorUserInfoMap = ZIMPluginConverter::cnvZIMErrorUserInfoToMap(errorUserInfo);
+					errorUserInfoArray.emplace_back(errorUserInfoMap);
+				}
+
+				FTMap retMap;
+				retMap[FTValue("friendInfos")] = friendInfoArray;
+				retMap[FTValue("errorUserList")] = errorUserInfoArray;
+
+				sharedPtrResult->Success(retMap);
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
+void ZIMPluginMethodHandler::acceptFriendApplication(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto userID = std::get<std::string>(argument[FTValue("userID")]);
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+    ZIMFriendApplicationAcceptConfig config = ZIMPluginConverter::cnvZIMFriendApplicationAcceptConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->acceptFriendApplication(userID, config, [=](
+		const ZIMFriendInfo& friendInfo, const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			FTMap retMap;
+			retMap[FTValue("friendInfo")] = ZIMPluginConverter::cnvZIMFriendInfoToMap(friendInfo);
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
+void ZIMPluginMethodHandler::rejectFriendApplication(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+	auto userID = std::get<std::string>(argument[FTValue("userID")]);
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+    ZIMFriendApplicationRejectConfig config = ZIMPluginConverter::cnvZIMFriendApplicationRejectConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->rejectFriendApplication(userID, config, [=](const ZIMUserInfo& userInfo, const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				FTMap retMap;
+				retMap[FTValue("userInfo")] = ZIMPluginConverter::cnvZIMUserInfoObjectToMap(userInfo);
+				sharedPtrResult->Success(retMap);
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
+void ZIMPluginMethodHandler::queryFriendList(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+    ZIMFriendListQueryConfig config = ZIMPluginConverter::cnvZIMFriendListQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->queryFriendList(config, [=](const std::vector<ZIMFriendInfo>& friendInfoList, unsigned int nextFlag,
+		const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				FTArray friendInfoArray;
+				for (auto& info : friendInfoList) {
+					auto infoMap = ZIMPluginConverter::cnvZIMFriendInfoToMap(info);
+					friendInfoArray.emplace_back(infoMap);
+				}
+
+				FTMap retMap;
+				retMap[FTValue("friendList")] = friendInfoArray;
+                retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
+				sharedPtrResult->Success(retMap);
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
+void ZIMPluginMethodHandler::queryFriendApplicationList(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+    ZIMFriendApplicationListQueryConfig config = ZIMPluginConverter::cnvZIMFriendApplicationListQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->queryFriendApplicationList(config, [=](const std::vector<ZIMFriendApplicationInfo>& applicationList,
+		unsigned int nextFlag, const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				FTArray friendApplicationInfoArray;
+				for (auto& info : applicationList) {
+					auto infoMap = ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(info);
+                    friendApplicationInfoArray.emplace_back(infoMap);
+				}
+
+				FTMap retMap;
+				retMap[FTValue("applicationList")] = friendApplicationInfoArray;
+				retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
+				sharedPtrResult->Success(retMap);
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
+
 

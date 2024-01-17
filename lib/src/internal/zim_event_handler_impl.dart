@@ -358,9 +358,31 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onMessageReactionsChanged':
         if (ZIMEventHandler.onMessageReactionsChanged == null) return;
-        List<ZIMMessageReaction> reactions = List<ZIMMessageReaction>.from(
-            ZIMConverter.oZIMMessageReactionList(map['reactions']));
-        ZIMEventHandler.onMessageReactionsChanged!(zim, reactions);
+        List<ZIMMessageReaction> reactions = List<ZIMMessageReaction>.from(ZIMConverter.oZIMMessageReactionList(map['reactions']));
+        ZIMEventHandler.onMessageReactionsChanged!(zim,reactions);
+        break;
+      case 'onFriendInfoUpdated':
+        if (ZIMEventHandler.onFriendInfoUpdated == null) return;
+        List<ZIMFriendInfo>? friendInfoList =  ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
+        ZIMEventHandler.onFriendInfoUpdated!(zim, friendInfoList);
+        break;
+      case 'onFriendListChanged':
+        if (ZIMEventHandler.onFriendListChanged == null) return;
+        ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[map['action']]!;
+        List<ZIMFriendInfo>? friendInfoList = ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
+        ZIMEventHandler.onFriendListChanged!(zim, friendInfoList ,action);
+        break;
+
+      case 'onFriendApplicationUpdated':
+        if (ZIMEventHandler.onFriendApplicationUpdated == null) return;
+        List<ZIMFriendApplicationInfo>? friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
+        ZIMEventHandler.onFriendApplicationUpdated!(zim, friendApplicationInfoList);
+        break;
+      case 'onFriendApplicationListChanged':
+        if (ZIMEventHandler.onFriendApplicationListChanged == null) return;
+        List<ZIMFriendApplicationInfo>? friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
+        ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[map['action']]!;
+        ZIMEventHandler.onFriendApplicationListChanged!(zim,friendApplicationInfoList ,action);
         break;
       case 'onBlacklistChanged':
         if (ZIMEventHandler.onBlacklistChanged == null) return;
@@ -368,7 +390,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
             ZIMBlacklistChangeActionExtension.mapValue[map['action']]!;
         List<ZIMUserInfo>? userList =
             ZIMConverter.oZIMUserInfoList(map['userList']);
-        ZIMEventHandler.onBlacklistChanged!(zim, action, userList);
+        ZIMEventHandler.onBlacklistChanged!(zim, userList ,action);
         break;
       default:
         break;

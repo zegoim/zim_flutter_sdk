@@ -169,6 +169,8 @@ public:
     static FTArray cnvZIMErrorUserInfoListToArray(const std::vector<ZIMErrorUserInfo>& errorUserInfoList);
     static FTMap cnvZIMErrorObjectToMap(const ZIMError& errorInfo);
     static FTArray cnvZIMUserListToArray(const std::vector<ZIMUserInfo>& userInfoList);
+    static FTArray cnvZIMFriendInfoToArray(const std::vector<ZIMFriendInfo>& infoList);
+    static FTArray cnvZIMFriendApplicationInfoToArray(const std::vector<ZIMFriendApplicationInfo>& infoList);
     static FTArray cnvZIMRoomMemberInfoListToArray(const std::vector<ZIMRoomMemberInfo>& roomMemberInfoList);
     static FTArray cnvZIMErrorUserListToArray(const std::vector<ZIMErrorUserInfo>& errorUserList);
     static FTArray cnvZIMConversationListToArray(const std::vector<std::shared_ptr<ZIMConversation>> &converationList);
@@ -216,6 +218,9 @@ public:
     static FTArray cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList);
     static FTArray cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList);
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo& info);
+    static FTMap cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplicationInfo& info);
+    static FTMap cnvZIMFriendInfoToMap(const ZIMFriendInfo& info);
+    static FTMap cnvZIMFriendRelationInfoToMap(const ZIMFriendRelationInfo& info);
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
@@ -242,7 +247,18 @@ public:
     static ZIMMessageReactionUserQueryConfig cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap);
     static std::shared_ptr<ZIMVoIPConfig> cnvZIMVoIPConfigConfigToObject(FTMap configMap);
     static ZIMBlacklistQueryConfig cnvZIMBlacklistQueryConfigToObject(FTMap configMap);
-public:
+    static ZIMFriendAddConfig cnvZIMFriendAddConfigToObject(FTMap configMap);
+    static ZIMFriendApplicationAcceptConfig cnvZIMFriendApplicationAcceptConfigToObject(FTMap configMap);
+    static ZIMFriendApplicationInfo cnvZIMFriendApplicationInfoToObject(FTMap configMap);
+    static ZIMUserInfo cnvZIMUserInfoToObject(FTMap infoMap);
+    static ZIMFriendApplicationListQueryConfig cnvZIMFriendApplicationListQueryConfigToObject(FTMap infoMap);
+    static ZIMFriendApplicationRejectConfig cnvZIMFriendApplicationRejectConfigToObject(FTMap infoMap);
+    static ZIMFriendDeleteConfig cnvZIMFriendDeleteConfigToObject(FTMap infoMap);
+    static ZIMFriendInfo cnvZIMFriendInfoToObject(FTMap infoMap);
+    static ZIMFriendListQueryConfig cnvZIMFriendListQueryConfigToObject(FTMap infoMap);
+    static ZIMFriendApplicationSendConfig cnvZIMFriendApplicationSendConfigToObject(FTMap infoMap);
+    static ZIMFriendRelationInfo cnvZIMFriendRelationInfoToObject(FTMap infoMap);
+public: 
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static int32_t cnvFTMapToInt32(flutter::EncodableValue value);
     static int64_t cnvFTMapToInt64(flutter::EncodableValue value);

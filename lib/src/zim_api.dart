@@ -1503,6 +1503,27 @@ abstract class ZIM {
   /// [config] Query the relevant configuration of the call invitation list.
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
+  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
+
+  Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID,ZIMFriendApplicationSendConfig config);
+
+  Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config);
+
+  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
+
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID);
+
+  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
+
+  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs);
+
+  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
+
+  Future<ZIMFriendApplicationRejectedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
+
+  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
+
+  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config);
   /// Available since: 2.13.0 or above.
   ///
   /// Description:Through this interface, a user with the specified userID can be added to the blacklist.

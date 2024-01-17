@@ -1308,4 +1308,221 @@
     return queryConfig;
 }
 
+
++(nullable ZIMFriendAddConfig *)oZIMFriendAddConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendAddConfig *config = [[ZIMFriendAddConfig alloc] init];
+    config.wording = [configMap objectForKey:@"wording"];
+    config.friendAlias = [configMap objectForKey:@"friendAlias"];
+    config.friendAttributes = [configMap safeObjectForKey:@"friendAttributes"];
+    return config;
+}
+
++(nullable ZIMFriendApplicationAcceptConfig *)oZIMFriendApplicationAcceptConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendApplicationAcceptConfig *config = [[ZIMFriendApplicationAcceptConfig alloc] init];
+    config.friendAlias = [configMap objectForKey:@"friendAlias"];
+    config.friendAttributes = [configMap safeObjectForKey:@"friendAttributes"];
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return config;
+}
+
++(nullable ZIMFriendApplicationInfo *)oZIMFriendApplicationInfo:(nullable NSDictionary *)infoDic{
+    if(infoDic == nil || infoDic == NULL || [infoDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendApplicationInfo *info = [[ZIMFriendApplicationInfo alloc] init];
+    info.applyUser = [ZIMPluginConverter oZIMUserInfo:[infoDic objectForKey:@"applyUser"]];
+    info.wording = (NSString *)[infoDic objectForKey:@"wording"];
+    info.createTime = ((NSNumber *)[infoDic safeObjectForKey:@"createTime"]).unsignedLongLongValue;
+    info.updateTime = ((NSNumber *)[infoDic safeObjectForKey:@"updateTime"]).unsignedLongLongValue;
+    info.type = ((NSNumber *)[infoDic objectForKey:@"type"]).intValue;
+    info.state = ((NSNumber *)[infoDic objectForKey:@"state"]).intValue;
+
+    return info;
+}
+
++(nullable ZIMUserInfo *)oZIMUserInfo:(nullable NSDictionary *)infoDic{
+    if(infoDic == nil || infoDic == NULL || [infoDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMUserInfo *info = [[ZIMUserInfo alloc] init];
+    info.userID = (NSString *)[infoDic objectForKey:@"userID"];
+    info.userName = (NSString *)[infoDic objectForKey:@"userName"];
+    info.userAvatarUrl = (NSString *)[infoDic objectForKey:@"userAvatarUrl"];
+
+    return info;
+}
+
++(nullable NSDictionary *)mZIMFriendApplicationInfo:(nullable ZIMFriendApplicationInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    NSDictionary *baseInfodic = [ZIMPluginConverter mZIMUserInfo:info.applyUser];
+    [infoDic safeSetObject:baseInfodic forKey:@"applyUser"];
+    [infoDic safeSetObject:info.wording forKey:@"wording"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.updateTime] forKey:@"updateTime"];
+    [infoDic safeSetObject:[NSNumber numberWithInteger:info.type] forKey:@"type"];
+    [infoDic safeSetObject:[NSNumber numberWithInteger:info.state] forKey:@"state"];
+    return infoDic;
+}
+
++(nullable NSArray *)mZIMFriendApplicationInfoList:(nullable NSArray<ZIMFriendApplicationInfo *> *)infoList{
+    if(infoList == nil || infoList == NULL || [infoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *infoDic = [[NSMutableArray alloc] init];
+    for (ZIMFriendApplicationInfo *userInfo in infoList) {
+        NSDictionary *userInfoDic = [ZIMPluginConverter mZIMFriendApplicationInfo:userInfo];
+        [infoDic safeAddObject:userInfoDic];
+    }
+    return infoDic;
+}
+
++(nullable ZIMFriendApplicationListQueryConfig *)oZIMFriendApplicationListQueryConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendApplicationListQueryConfig *config = [[ZIMFriendApplicationListQueryConfig alloc] init];
+    config.nextFlag = [[configMap safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    config.count = [[configMap safeObjectForKey:@"count"] unsignedIntValue];
+
+    return config;
+}
+
++(nullable ZIMFriendApplicationRejectConfig *)oZIMFriendApplicationRejectConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendApplicationRejectConfig *config = [[ZIMFriendApplicationRejectConfig alloc] init];
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return config;
+}
+
++(nullable ZIMFriendDeleteConfig *)oZIMFriendDeleteConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendDeleteConfig *config = [[ZIMFriendDeleteConfig alloc] init];
+    config.type = [[configMap safeObjectForKey:@"type"] unsignedIntValue];
+
+    return config;
+}
+
++(nullable NSDictionary *)mZIMFriendInfo:(nullable ZIMFriendInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.userID forKey:@"userID"];
+    [infoDic safeSetObject:info.userName forKey:@"userName"];
+    [infoDic safeSetObject:info.userAvatarUrl forKey:@"userAvatarUrl"];
+    [infoDic safeSetObject:info.friendAlias forKey:@"friendAlias"];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.createTime] forKey:@"createTime"];
+    [infoDic safeSetObject:info.wording forKey:@"wording"];
+    [infoDic safeSetObject:info.friendAttributes forKey:@"friendAttributes"];
+    return infoDic;
+}
+
++(nullable NSArray *)mZIMFriendInfoList:(nullable NSArray<ZIMFriendInfo *> *)infoList{
+    if(infoList == nil || infoList == NULL || [infoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicInfoList = [[NSMutableArray alloc] init];
+    for (ZIMFriendInfo *info in infoList) {
+        NSDictionary *infoDic = [ZIMPluginConverter mZIMFriendInfo:info];
+        [basicInfoList safeAddObject:infoDic];
+    }
+    return basicInfoList;
+}
+
++(nullable ZIMFriendInfo *)oZIMFriendInfo:(nullable NSDictionary *)infoDic{
+    if(infoDic == nil || infoDic == NULL || [infoDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendInfo *info = [[ZIMFriendInfo alloc] init];
+    info.userID = (NSString *)[infoDic objectForKey:@"userID"];
+    info.userName = (NSString *)[infoDic objectForKey:@"userName"];
+    info.userAvatarUrl = (NSString *)[infoDic objectForKey:@"userAvatarUrl"];
+
+    info.wording = (NSString *)[infoDic objectForKey:@"wording"];
+    info.friendAlias = (NSString *)[infoDic objectForKey:@"friendAlias"];
+    info.createTime = ((NSNumber *)[infoDic safeObjectForKey:@"createTime"]).unsignedLongLongValue;
+    info.friendAttributes = [infoDic safeObjectForKey:@"friendAttributes"];
+    return info;
+}
+
++(nullable ZIMFriendListQueryConfig *)oZIMFriendListQueryConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendListQueryConfig *config = [[ZIMFriendListQueryConfig alloc] init];
+    config.nextFlag = [[configMap safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    config.count = [[configMap safeObjectForKey:@"count"] unsignedIntValue];
+
+    return config;
+}
+
++(nullable ZIMFriendRelationCheckConfig *)oZIMFriendRelationCheckConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendRelationCheckConfig *config = [[ZIMFriendRelationCheckConfig alloc] init];
+    config.type = [[configMap safeObjectForKey:@"type"] unsignedIntValue];
+
+    return config;
+}
+
++(nullable NSDictionary *)mZIMFriendRelationInfo:(nullable ZIMFriendRelationInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:info.userID forKey:@"userID"];
+    [infoDic safeSetObject:[NSNumber numberWithInteger:info.type] forKey:@"type"];
+    return infoDic;
+
+}
+
++(nullable NSArray *)mZIMFriendRelationInfoList:(nullable NSArray<ZIMFriendRelationInfo *> *)infoList{
+    if(infoList == nil || infoList == NULL || [infoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicInfoList = [[NSMutableArray alloc] init];
+    for (ZIMFriendRelationInfo *info in infoList) {
+        NSDictionary *infoDic = [ZIMPluginConverter mZIMFriendRelationInfo:info];
+        [basicInfoList safeAddObject:infoDic];
+    }
+    return basicInfoList;
+}
+
++(nullable ZIMFriendRelationInfo *)oZIMFriendRelationInfo:(nullable NSDictionary *)infoDic{
+    if(infoDic == nil || infoDic == NULL || [infoDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendRelationInfo *info = [[ZIMFriendRelationInfo alloc] init];
+    info.userID = (NSString *)[infoDic objectForKey:@"userID"];
+    info.type = [[infoDic safeObjectForKey:@"type"] unsignedIntValue];
+    return info;
+}
+
++(nullable ZIMFriendApplicationSendConfig *)oZIMFriendApplicationSendConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendApplicationSendConfig *config = [[ZIMFriendApplicationSendConfig alloc] init];
+    config.wording = [configMap objectForKey:@"wording"];
+    config.friendAlias = [configMap safeObjectForKey:@"friendAlias"];
+    config.friendAttributes = [configMap safeObjectForKey:@"friendAttributes"];
+    config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return config;
+}
+
+
 @end
