@@ -1168,6 +1168,12 @@ abstract class ZIM {
   Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
       String groupNotice, String groupID);
 
+  Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config);
+
+  Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs,String groupID,ZIMGroupMemberMuteConfig config);
+
+  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID,ZIMGroupMemberMutedListQueryConfig config);
+
   /// Available since: 2.1.5 and above.
   ///
   /// Description: Query information about a created group.
@@ -1374,7 +1380,6 @@ abstract class ZIM {
   /// [groupID] groupID.
   /// [config] Configuration for searching groups.
   Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(String groupID, ZIMGroupMemberSearchConfig config);
-
 //MARK: - CallInvite
 
   /// Supported versions: 2.1.5 and above.

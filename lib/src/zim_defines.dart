@@ -347,6 +347,8 @@ enum ZIMGroupAttributesUpdateAction { set, delete }
 
 enum ZIMGroupMessageNotificationStatus { notify, doNotDisturb }
 
+enum ZIMGroupMuteMode {none,normal,all,custom}
+
 enum ZIMMessageReceiptStatus { none, processing, done, expired, failed }
 
 enum ZIMCallUserState {
@@ -944,6 +946,28 @@ class ZIMGroupInfo {
   ZIMGroupInfo();
 }
 
+class ZIMGroupMuteInfo {
+   ZIMGroupMuteMode mode;
+
+   int expiredTime;
+
+   List<int> roles;
+
+   ZIMGroupMuteInfo():mode=ZIMGroupMuteMode.none,expiredTime=0,roles=[];
+}
+
+class ZIMGroupMuteConfig {
+  ZIMGroupMuteMode mode;
+  int duration;
+  List<int> roles;
+  ZIMGroupMuteConfig():mode=ZIMGroupMuteMode.none,duration=-1,roles=[];
+}
+
+class ZIMGroupMemberMuteConfig {
+  int duration;
+  ZIMGroupMemberMuteConfig():duration=0;
+}
+
 /// Description: complete group information.
 class ZIMGroupFullInfo {
   /// Description: basic group information.
@@ -959,7 +983,9 @@ class ZIMGroupFullInfo {
   ZIMGroupMessageNotificationStatus notificationStatus =
       ZIMGroupMessageNotificationStatus.notify;
 
-  ZIMGroupFullInfo({required this.baseInfo});
+  ZIMGroupMuteInfo mutedInfo;
+
+  ZIMGroupFullInfo({required this.baseInfo}):muteInfo=ZIMGroupMuteInfo();
 }
 
 /// Description:  group class.
@@ -983,6 +1009,9 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
 
   /// Description: group member avatar url.
   String memberAvatarUrl = "";
+
+  int muteExpiredTime = 0;
+
   ZIMGroupMemberInfo();
 }
 
@@ -1013,6 +1042,19 @@ class ZIMGroupMemberQueryConfig {
   /// Description: nextFlag.
   int nextFlag = 0;
   ZIMGroupMemberQueryConfig();
+}
+
+class ZIMGroupMemberMutedListQueryConfig{
+  int nextFlag = 0;
+  int count = 0;
+  ZIMGroupMemberMutedListQueryConfig():nextFlag=0,count=0;
+}
+
+class ZIMGroupMutedInfo{
+  ZIMGroupMuteMode mode;
+  int duration;
+  List<int> roleList;
+  ZIMGroupMutedInfo():mode=ZIMGroupMuteMode.none,duration=0,roleList=[];
 }
 
 /// Group advanced configuration.
@@ -2321,6 +2363,28 @@ class ZIMConversationDraftSetResult {
       {required this.conversationID, required this.conversationType});
 }
 
+class ZIMGroupMutedResult {
+  bool isMute;
+  String groupID;
+  ZIMGroupMutedInfo info;
+  ZIMGroupMutedResult():groupID='',info=ZIMGroupMutedInfo(),isMute=false;
+}
+
+class ZIMGroupMembersMutedResult {
+  String groupID;
+  bool isMute;
+  int duration;
+  List<String> mutedMemberIDs;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMGroupMembersMutedResult():groupID="",duration=0,mutedMemberIDs=[],errorUserList=[],isMute = false;
+}
+
+class ZIMGroupMemberMutedListQueriedResult {
+  String groupID;
+  int nextFlag;
+  List<ZIMGroupMemberInfo> userList;
+  ZIMGroupMemberMutedListQueriedResult():groupID="",nextFlag = 0,userList=[];
+}
 class ZIMCombineMessageDetailQueriedResult {
   ZIMCombineMessage message;
   ZIMCombineMessageDetailQueriedResult({required this.message});

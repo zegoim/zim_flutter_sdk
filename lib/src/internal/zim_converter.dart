@@ -911,6 +911,7 @@ class ZIMConverter {
     groupFullInfo.groupNotice = groupFullInfoMap['groupNotice'] ?? '';
     groupFullInfo.groupAttributes =
         (groupFullInfoMap['groupAttributes'] as Map).cast<String, String>();
+    groupFullInfo.mutedInfo = ZIMConverter.oZIMGroupMuteInfo(groupFullInfoMap['mutedInfo']);
     return groupFullInfo;
   }
 
@@ -1030,9 +1031,11 @@ class ZIMConverter {
     ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
     groupMemberInfo.userID = memberInfoMap['userID'];
     groupMemberInfo.userName = memberInfoMap['userName'] ?? '';
+    groupMemberInfo.userAvatarUrl = memberInfoMap['userAvatarUrl'] ?? '';
     groupMemberInfo.memberRole = memberInfoMap['memberRole'];
     groupMemberInfo.memberNickname = memberInfoMap['memberNickname'] ?? '';
     groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'] ?? '';
+    groupMemberInfo.muteExpiredTime = memberInfoMap['muteExpiredTime'] ??0;
     return groupMemberInfo;
   }
 
@@ -2054,6 +2057,106 @@ class ZIMConverter {
             ZIMConversationTypeExtension.mapValue[map['conversationType']]!);
   }
 
+  static Map mZIMGroupOperatedInfo(ZIMGroupOperatedInfo info){
+    Map map = {};
+    map['operatedUserInfo'] = ZIMConverter.mZIMGroupMemberInfo(info.operatedUserInfo);
+    map['userID'] = info.userID;
+    map['userName'] = info.userName;
+    map['memberNickname'] = info.memberNickname;
+    map['memberRole'] = info.memberRole;
+    return map;
+  }
+
+  static ZIMGroupMuteInfo oZIMGroupMuteInfo(Map map) {
+    ZIMGroupMuteInfo groupMuteInfo = ZIMGroupMuteInfo();
+    groupMuteInfo.mode = ZIMGroupMuteModeExtension.mapValue[map['mode']]!;
+    groupMuteInfo.expiredTime = map['expiredTime'];
+    groupMuteInfo.roles = List<int>.from(map['roles']);
+    return groupMuteInfo;
+  }
+
+  static ZIMGroupMutedInfo oZIMGroupMutedInfo(Map map) {
+    ZIMGroupMutedInfo groupMutedInfo = ZIMGroupMutedInfo();
+    groupMutedInfo.mode = ZIMGroupMuteModeExtension.mapValue[map['mode']]!;
+    groupMutedInfo.duration = map['duration'];
+    groupMutedInfo.roleList = List<int>.from(map['roleList']);
+    return groupMutedInfo;
+  }
+
+  //供自动化使用，sdk 使用前需要 check
+  static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo){
+    Map map = {};
+    map['muteMode'] = muteInfo.mode.value;
+    map['muteExpireTime'] = muteInfo.expiredTime;
+    map['muteRoles'] = muteInfo.roles;
+    return map;
+  }
+
+  static Map mZIMGroupMuteConfig(ZIMGroupMuteConfig config){
+    Map map = {};
+    map['mode'] = ZIMGroupMuteModeExtension.valueMap[config.mode];
+    map['duration'] = config.duration;
+    map['roles'] = config.roles;
+    return map;
+  }
+
+  static ZIMGroupMutedResult oZIMGroupMutedResult(Map map){
+    ZIMGroupMutedResult result = ZIMGroupMutedResult();
+    result.groupID = map['groupID'];
+    result.info = ZIMConverter.oZIMGroupMutedInfo(map['info']);
+    result.isMute = map['isMute'];
+    return result;
+  }
+
+  static ZIMGroupMembersMutedResult oZIMGroupMembersMutedResult(Map map){
+    ZIMGroupMembersMutedResult result = ZIMGroupMembersMutedResult();
+    result.groupID = map['groupID'];
+    result.isMute = map['isMute'];
+    result.errorUserList = oZIMErrorUserInfoList(map['errorUserList']);
+    result.mutedMemberIDs = List<String>.from(map['mutedMemberIDs']);
+    result.duration = map['duration'];
+    return result;
+  }
+
+  static ZIMGroupMemberMutedListQueriedResult oZIMGroupMemberMutedListQueriedResult(Map map){
+    ZIMGroupMemberMutedListQueriedResult result = ZIMGroupMemberMutedListQueriedResult();
+    result.nextFlag = map['nextFlag'];
+    result.groupID = map['groupID'];
+    result.userList = ZIMConverter.oZIMGroupMemberInfoList(map['userList']);
+    return result;
+  }
+
+  static Map mZIMGroupMemberMuteConfig(ZIMGroupMemberMuteConfig config){
+    Map map = {};
+    map['duration'] = config.duration;
+    return map;
+  }
+
+  static Map mZIMGroupMemberMutedListQueryConfig(ZIMGroupMemberMutedListQueryConfig config){
+    Map map = {};
+    map['nextFlag'] = config.nextFlag;
+    map['count'] = config.count;
+    return map;
+  }
+
+  static Map mZIMUserInfo(ZIMUserInfo userInfo){
+    Map map = {};
+    map['userID'] = userInfo.userID;
+    map['userName'] = userInfo.userName;
+    map['userAvatarUrl'] = userInfo.userAvatarUrl;
+    return map;
+  }
+
+  static Map mZIMGroupMemberInfo(ZIMGroupMemberInfo memberInfo){
+    Map map = ZIMConverter.mZIMUserInfo(memberInfo);
+    map['memberNickname'] = memberInfo.memberNickname;
+    map['memberRole'] = memberInfo.memberRole;
+    map['memberAvatarUrl'] = memberInfo.memberAvatarUrl;
+    map['muteExpiredTime'] = memberInfo.muteExpiredTime;
+    return map;
+  }
+
+
   static Uint8List convertToUint8List(dynamic data) {
     final list = <int>[];
     for(int i = 0; i < data.length; i++) {
@@ -2063,5 +2166,6 @@ class ZIMConverter {
     final uint8List = Uint8List.fromList(list);
     return uint8List;
   }
+
 
 }

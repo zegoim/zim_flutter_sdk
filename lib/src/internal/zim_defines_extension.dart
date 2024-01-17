@@ -666,3 +666,20 @@ extension ZIMBlacklistChangeActionExtension on ZIMBlacklistChangeAction {
 
   int get value => valueMap[this] ?? -1;
 }
+
+extension ZIMGroupMuteModeExtension on ZIMGroupMuteMode{
+  static const valueMap = {
+    ZIMGroupMuteMode.none : 0,
+    ZIMGroupMuteMode.normal : 1,
+    ZIMGroupMuteMode.all : 2,
+    ZIMGroupMuteMode.custom : 3
+  };
+
+  static const mapValue = {
+    0 : ZIMGroupMuteMode.none,
+    1 : ZIMGroupMuteMode.normal,
+    2 : ZIMGroupMuteMode.all,
+    3 : ZIMGroupMuteMode.custom
+  };
+  int get value => valueMap[this] ?? -1;
+}

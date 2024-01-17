@@ -437,6 +437,15 @@ void ZegoZimPlugin::HandleMethodCall(
 	else if (method_call.method_name() == "queryCombineMessageDetail") {
 	ZIMPluginMethodHandler::getInstance().queryCombineMessageDetail(argument, std::move(result));
 	}
+    else if (method_call.method_name() == "muteGroup") {
+        ZIMPluginMethodHandler::getInstance().muteGroup(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "muteGroupMembers") {
+        ZIMPluginMethodHandler::getInstance().muteGroupMemberList(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "queryGroupMemberMutedList") {
+        ZIMPluginMethodHandler::getInstance().queryGroupMemberMutedList(argument, std::move(result));
+    }
     else {
         result->NotImplemented();
     

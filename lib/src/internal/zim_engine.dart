@@ -1250,6 +1250,38 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config) async{
+    Map resultMap = await channel.invokeMethod('muteGroup',{
+      'handle':handle,
+      'isMute':isMute,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMuteConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMutedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs, String groupID, ZIMGroupMemberMuteConfig config) async{
+    Map resultMap = await channel.invokeMethod('muteGroupMembers',{
+      'handle':handle,
+      'isMute':isMute,
+      'userIDs':userIDs,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMemberMuteConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMembersMutedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID, ZIMGroupMemberMutedListQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryGroupMemberMutedList',{
+      'handle':handle,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMemberMutedListQueryConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMemberMutedListQueriedResult(resultMap);
+  }
+}
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message) async{
     Map resultMap = await channel.invokeMethod('queryCombineMessageDetail',{
       'handle':handle,
