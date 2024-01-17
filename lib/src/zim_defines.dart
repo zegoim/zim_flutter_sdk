@@ -87,6 +87,8 @@ enum ZIMRoomState {
 ///
 /// Caution: Please use it with the connection event parameter.
 enum ZIMConnectionEvent {
+
+  unknown,
   /// Description: Success.
   success,
 
@@ -100,7 +102,13 @@ enum ZIMConnectionEvent {
   interrupted,
 
   /// Description: Being kicked out.
-  kickedOut
+  kickedOut,
+
+  /// Description: Being token expierd.
+  tokenExpired,
+
+  /// Description: Being unregistered.
+  unregistered
 }
 
 /// The event that caused the room connection status to change.
@@ -362,6 +370,22 @@ enum ZIMCallState { unknown,started, ended }
 
 enum ZIMCXHandleType{generic,phoneNumber,emailAddress }
 
+enum ZIMFriendApplicationState{unknown,waiting,accepted,rejected,expired,disabled}
+
+enum ZIMFriendApplicationType{unknown,none,received,sent,both}
+
+enum ZIMFriendDeleteType{unknown,both,single}
+
+enum ZIMFriendListChangeAction{added,deleted}
+
+enum ZIMFriendApplicationListChangeAction{added,deleted}
+
+enum ZIMFriendRelationCheckType{unknown,both,single}
+
+enum ZIMUserRelationType{unknown,singleNo,singleHave,bothAllNo,bothSelfHave,bothOtherHave,bothAllHave}
+
+enum ZIMBlacklistChangeAction{added,removed}
+
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
   String iOSVoIPHandleValue = "";
@@ -409,6 +433,13 @@ class ZIMAppConfig {
   int appID = 0;
   String appSign = '';
   ZIMAppConfig();
+}
+
+class ZIMLoginConfig {
+  String userName = '';
+  /// The token issued by the developer's business server, used to ensure security. The generation rules are detailed in ZEGO document website.
+  String token = '';
+  bool isOfflineLogin = false;
 }
 
 class ZIMUserInfoQueryConfig {
@@ -491,6 +522,9 @@ class ZIMUserInfo {
 
   /// User name, a string with a maximum length of 256 bytes or less.
   String userName = '';
+
+  String userAvatarUrl = '';
+
   ZIMUserInfo();
 }
 
@@ -668,6 +702,7 @@ class ZIMConversation {
   ZIMMessage? lastMessage;
   int orderKey = 0;
   bool isPinned =false;
+  String draft = '';
   List<ZIMMessageMentionedInfo> mentionedInfoList = [];
   ZIMConversation();
 }
@@ -1198,6 +1233,15 @@ class ZIMCallInvitationRejectedInfo {
   /// Description: Extended field, through which the inviter can carry information to the invitee.
   String extendedData = "";
   ZIMCallInvitationRejectedInfo();
+}
+
+class ZIMCallInvitationCreatedInfo{
+  ZIMCallInvitationMode mode = ZIMCallInvitationMode.unknown;
+  String caller = "";
+  String extendedData = "";
+  int timeout = 0;
+  int createTime = 0;
+  List<ZIMCallUserInfo> callUserList = [];
 }
 
 class ZIMCallInvitationEndedInfo{
@@ -2196,6 +2240,78 @@ class ZIMMessageReactionUserListQueriedResult {
   ZIMMessageReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
 }
 
+class ZIMFriendAddedResult {
+  late ZIMFriendInfo friendInfo;
+}
+
+class ZIMFriendAliasUpdatedResult {
+  late ZIMFriendInfo friendInfo;
+}
+
+class ZIMFriendApplicationAcceptedResult {
+  late ZIMFriendInfo friendInfo;
+}
+
+class ZIMFriendApplicationListQueriedResult {
+  late List<ZIMFriendApplicationInfo> applicationList;
+  int nextFlag = 0;
+}
+
+class ZIMFriendApplicationRejectedResult {
+   late ZIMUserInfo userInfo;
+}
+
+class ZIMFriendAttributesUpdatedResult {
+   late ZIMFriendInfo friendInfo;
+}
+
+class ZIMFriendsDeletedResult {
+   late List<ZIMErrorUserInfo> errorUserList;
+}
+
+class ZIMFriendListQueriedResult {
+  late List<ZIMFriendInfo> friendList;
+  int nextFlag = 0;
+}
+
+class ZIMFriendsRelationCheckedResult {
+  late List<ZIMFriendRelationInfo> relationInfos;
+  late List<ZIMErrorUserInfo> errorUserList;
+}
+
+class ZIMFriendsInfoQueriedResult {
+  late List<ZIMFriendInfo> friendInfos;
+  late List<ZIMErrorUserInfo> errorUserList;
+}
+
+class ZIMFriendApplicationSentResult {
+  late ZIMFriendApplicationInfo applicationInfo;
+}
+
+class ZIMBlacklistCheckedResult {
+  late bool isUserInBlacklist;
+}
+
+class ZIMBlacklistQueriedResult {
+  late List<ZIMUserInfo> blacklist;
+  int nextFlag = 0;
+}
+
+class ZIMBlacklistUsersAddedResult {
+  late List<ZIMErrorUserInfo> errorUserList;
+}
+
+class ZIMBlacklistUsersRemovedResult {
+  late List<ZIMErrorUserInfo> errorUserInfoArrayList;
+}
+
+class ZIMConversationDraftSetResult {
+  String conversationID;
+  ZIMConversationType conversationType;
+  ZIMConversationDraftSetResult(
+      {required this.conversationID, required this.conversationType});
+}
+
 class ZIMCombineMessageDetailQueriedResult {
   ZIMCombineMessage message;
   ZIMCombineMessageDetailQueriedResult({required this.message});
@@ -2210,3 +2326,71 @@ class ZIMMessageDeletedInfo {
   ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.isDeleteConversationAllMessage,required this.messageList});
 }
 
+class ZIMFriendAddConfig {
+  String wording = "";
+  String friendAlias = "";
+  Map<String,String> friendAttributes = {};
+}
+
+class ZIMFriendDeleteConfig {
+  late ZIMFriendDeleteType type;
+}
+
+class ZIMFriendInfo extends ZIMUserInfo {
+  String friendAlias = "";
+  int createTime = 0;
+  String wording = "";
+  Map friendAttributes = {};
+}
+
+class ZIMFriendApplicationInfo {
+  ZIMUserInfo applyUser = ZIMUserInfo();
+  String wording = "";
+  int createTime = 0;
+  int updateTime = 0;
+  ZIMFriendApplicationType type = ZIMFriendApplicationType.unknown;
+  ZIMFriendApplicationState state = ZIMFriendApplicationState.unknown;
+}
+
+
+class ZIMFriendListQueryConfig {
+  int count = 0;
+  int nextFlag = 0;
+}
+
+class ZIMFriendRelationCheckConfig {
+  late ZIMFriendRelationCheckType type;
+}
+
+class ZIMFriendRelationInfo {
+  late ZIMUserRelationType type;
+  String userID = "";
+}
+
+class ZIMFriendApplicationSendConfig {
+  String wording  = "";
+  String friendAlias = "";
+  Map<String,String> friendAttributes = {};
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMFriendApplicationAcceptConfig {
+  String friendAlias = "";
+  Map<String,String> friendAttributes = {};
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMFriendApplicationRejectConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMFriendApplicationListQueryConfig {
+  int count = 0;
+  int nextFlag = 0;
+}
+/// [nextFlag] Not required, it is 0 by default for the first time, which means to start the query from the beginning.
+/// [count] count.
+class ZIMBlacklistQueryConfig {
+  int nextFlag = 0;
+  int count = 0;
+}

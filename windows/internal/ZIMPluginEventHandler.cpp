@@ -1,4 +1,4 @@
-#include "ZIMPluginEventHandler.h"
+﻿#include "ZIMPluginEventHandler.h"
 #include <flutter/encodable_value.h>
 #include <memory>
 
@@ -574,6 +574,22 @@ void ZIMPluginEventHandler::onCallInviteesAnsweredTimeout(ZIM* zim,
     }
 }
 
+void ZIMPluginEventHandler::onCallInvitationCreated(ZIM * zim,
+                                         const ZIMCallInvitationCreatedInfo & info,
+                                         const std::string & callID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onCallInvitationCreated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMCallInvitationCreatedInfoToMap(info);
+        retMap[FTValue("callID")] = FTValue(callID);
+
+        eventSink_->Success(retMap);
+    }
+
+}
+
 void ZIMPluginEventHandler::onCallInvitationEnded(ZIM* zim, const ZIMCallInvitationEndedInfo& info,
 	const std::string& callID) {
     if (eventSink_) {
@@ -610,3 +626,66 @@ void ZIMPluginEventHandler::onMessageReactionsChanged(ZIM * zim,const std::vecto
         eventSink_->Success(retMap);
     }
 }
+
+void ZIMPluginEventHandler::onBlacklistChanged(ZIM * zim, const std::vector<ZIMUserInfo> & userList ,const ZIMBlacklistChangeAction & action) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onBlacklistChanged");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("action")] = FTValue((int32_t)action);
+        retMap[FTValue("userList")] = ZIMPluginConverter::cnvZIMUserListToArray(userList);
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onFriendInfoUpdated(ZIM* zim,
+    const std::vector<ZIMFriendInfo>& friendInfoList) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onFriendInfoUpdated");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+		retMap[FTValue("friendInfoList")] = ZIMPluginConverter::cnvZIMFriendInfoToArray(friendInfoList);
+		eventSink_->Success(retMap);
+	}
+}
+
+void ZIMPluginEventHandler::onFriendListChanged(ZIM* zim, const std::vector<ZIMFriendInfo>& friendInfoList,ZIMFriendListChangeAction& action) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onFriendListChanged");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("action")] = FTValue((int32_t)action);
+        retMap[FTValue("friendInfoList")] = ZIMPluginConverter::cnvZIMFriendInfoToArray(friendInfoList);
+		eventSink_->Success(retMap);
+	}
+}
+
+void ZIMPluginEventHandler::onFriendApplicationUpdated(
+    ZIM* zim,
+    const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onFriendApplicationUpdated");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+		retMap[FTValue("friendApplicationInfoList")] = ZIMPluginConverter::cnvZIMFriendApplicationInfoToArray(friendApplicationInfoList);
+		eventSink_->Success(retMap);
+	}
+}
+
+void ZIMPluginEventHandler::onFriendApplicationListChanged(
+    ZIM* zim, const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList ,ZIMFriendApplicationListChangeAction& action) {
+	if (eventSink_) {
+		FTMap retMap;
+		retMap[FTValue("method")] = FTValue("onFriendApplicationListChanged");
+		auto handle = this->engineEventMap[zim];
+		retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("action")] = FTValue((int32_t)action);
+		retMap[FTValue("friendApplicationInfoList")] = ZIMPluginConverter::cnvZIMFriendApplicationInfoToArray(friendApplicationInfoList);
+		eventSink_->Success(retMap);
+	}
+}
+

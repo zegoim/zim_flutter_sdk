@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:js_util';
-// In order to *not* need this ignore, consider extracting the "web" version
+// In order to *not* need this ignore, consider extracting the 'web' version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
@@ -60,266 +60,305 @@ class ZegoZimPlugin {
       case 'getVersion':
         return getVersion();
       case 'create':
-        return create(call.arguments["handle"], call.arguments['config']);
+        return create(call.arguments['handle'], call.arguments['config']);
       case 'destroy':
         return destroy();
       case 'setLogConfig':
-        return setLogConfig(call.arguments["logLevel"]);
+        return setLogConfig(call.arguments['logLevel']);
       case 'setCacheConfig':
         return setCacheConfig();
       case 'setAdvancedConfig':
-        return setAdvancedConfig(call.arguments["key"], call.arguments["value"]);
+        return setAdvancedConfig(call.arguments['key'], call.arguments['value']);
       case 'login':
-        return login(call.arguments['userID'], call.arguments['userName'],
-            call.arguments['token']);
+        return login(call.arguments['userID'], call.arguments['config']);
       case 'logout':
         return logout();
       case 'createRoom':
-        return createRoom(call.arguments["roomInfo"], null);
+        return createRoom(call.arguments['roomInfo'], null);
       case 'enterRoom':
-        return enterRoom(call.arguments["roomInfo"], call.arguments["config"]);
+        return enterRoom(call.arguments['roomInfo'], call.arguments['config']);
       case 'joinRoom':
-        return joinRoom(call.arguments["roomID"]);
+        return joinRoom(call.arguments['roomID']);
       case 'leaveRoom':
-        return leaveRoom(call.arguments["roomID"]);
+        return leaveRoom(call.arguments['roomID']);
       case 'queryRoomMemberList':
         return queryRoomMemberList(
-            call.arguments["roomID"], call.arguments["config"]);
+            call.arguments['roomID'], call.arguments['config']);
       case 'queryRoomOnlineMemberCount':
-        return queryRoomOnlineMemberCount(call.arguments["roomID"]);
+        return queryRoomOnlineMemberCount(call.arguments['roomID']);
       case 'queryRoomAllAttributes':
-        return queryRoomAllAttributes(call.arguments["roomID"]);
+        return queryRoomAllAttributes(call.arguments['roomID']);
       case 'setRoomAttributes':
-        return setRoomAttributes(call.arguments["roomAttributes"],
-            call.arguments["roomID"], call.arguments["config"]);
+        return setRoomAttributes(call.arguments['roomAttributes'],
+            call.arguments['roomID'], call.arguments['config']);
       case 'deleteRoomAttributes':
-        return deleteRoomAttributes(call.arguments["keys"],
-            call.arguments["roomID"], call.arguments["config"]);
+        return deleteRoomAttributes(call.arguments['keys'],
+            call.arguments['roomID'], call.arguments['config']);
       case 'beginRoomAttributesBatchOperation':
         return beginRoomAttributesBatchOperation(
-            call.arguments["roomID"], call.arguments["config"]);
+            call.arguments['roomID'], call.arguments['config']);
       case 'endRoomAttributesBatchOperation':
-        return endRoomAttributesBatchOperation(call.arguments["roomID"]);
+        return endRoomAttributesBatchOperation(call.arguments['roomID']);
       case 'createRoomWithConfig':
-        return createRoom(call.arguments["roomInfo"], call.arguments["config"]);
+        return createRoom(call.arguments['roomInfo'], call.arguments['config']);
       case 'renewToken':
-        return renewToken(call.arguments["token"]);
+        return renewToken(call.arguments['token']);
       case 'queryUsersInfo':
         return queryUsersInfo(
-            call.arguments["userIDs"], call.arguments["config"]);
+            call.arguments['userIDs'], call.arguments['config']);
       case 'queryConversationList':
-        return queryConversationList(call.arguments["config"]);
+        return queryConversationList(call.arguments['config']);
       case 'updateUserName':
-        return updateUserName(call.arguments["userName"]);
+        return updateUserName(call.arguments['userName']);
       case 'updateUserAvatarUrl':
-        return updateUserAvatarUrl(call.arguments["userAvatarUrl"]);
+        return updateUserAvatarUrl(call.arguments['userAvatarUrl']);
       case 'updateUserExtendedData':
-        return updateUserExtendedData(call.arguments["extendedData"]);
+        return updateUserExtendedData(call.arguments['extendedData']);
       case 'clearConversationUnreadMessageCount':
         return clearConversationUnreadMessageCount(
-            call.arguments["conversationID"],
-            call.arguments["conversationType"]);
+            call.arguments['conversationID'],
+            call.arguments['conversationType']);
       case 'clearConversationTotalUnreadMessageCount':
         return clearConversationTotalUnreadMessageCount();
       case 'queryHistoryMessage':
-        return queryHistoryMessage(call.arguments["conversationID"],
-            call.arguments["conversationType"], call.arguments["config"]);
+        return queryHistoryMessage(call.arguments['conversationID'],
+            call.arguments['conversationType'], call.arguments['config']);
       case 'sendMediaMessage':
         return sendMediaMessage(
-            call.arguments["message"],
-            call.arguments["toConversationID"],
-            call.arguments["conversationType"],
-            call.arguments["config"],
-            call.arguments["messageID"],
-            call.arguments["progressID"],
-            call.arguments["messageAttachedCallbackID"]);
+            call.arguments['message'],
+            call.arguments['toConversationID'],
+            call.arguments['conversationType'],
+            call.arguments['config'],
+            call.arguments['messageID'],
+            call.arguments['progressID'],
+            call.arguments['messageAttachedCallbackID']);
       case 'downloadMediaFile':
-        return downloadMediaFile(call.arguments["message"],
-            call.arguments["fileType"], call.arguments["progressID"]);
+        return downloadMediaFile(call.arguments['message'],
+            call.arguments['fileType'], call.arguments['progressID']);
       case 'sendPeerMessage':
-        return sendPeerMessage(call.arguments["message"],
-            call.arguments["toUserID"], call.arguments["config"]);
+        return sendPeerMessage(call.arguments['message'],
+            call.arguments['toUserID'], call.arguments['config']);
       case 'sendRoomMessage':
-        return sendRoomMessage(call.arguments["message"],
-            call.arguments["toRoomID"], call.arguments["config"]);
+        return sendRoomMessage(call.arguments['message'],
+            call.arguments['toRoomID'], call.arguments['config']);
       case 'sendGroupMessage':
-        return sendGroupMessage(call.arguments["message"],
-            call.arguments["toGroupID"], call.arguments["config"]);
+        return sendGroupMessage(call.arguments['message'],
+            call.arguments['toGroupID'], call.arguments['config']);
       case 'deleteMessages':
         return deleteMessages(
-            call.arguments["messageList"],
-            call.arguments["conversationID"],
-            call.arguments["conversationType"],
-            call.arguments["config"]);
+            call.arguments['messageList'],
+            call.arguments['conversationID'],
+            call.arguments['conversationType'],
+            call.arguments['config']);
       case 'deleteAllMessage':
-        return deleteAllMessage(call.arguments["conversationID"],
-            call.arguments["conversationType"], call.arguments["config"]);
+        return deleteAllMessage(call.arguments['conversationID'],
+            call.arguments['conversationType'], call.arguments['config']);
       case 'createGroup':
-        return createGroup(call.arguments["groupInfo"],
-            call.arguments["userIDs"], call.arguments["config"]);
+        return createGroup(call.arguments['groupInfo'],
+            call.arguments['userIDs'], call.arguments['config']);
       case 'joinGroup':
-        return joinGroup(call.arguments["groupID"]);
+        return joinGroup(call.arguments['groupID']);
       case 'leaveGroup':
-        return leaveGroup(call.arguments["groupID"]);
+        return leaveGroup(call.arguments['groupID']);
       case 'dismissGroup':
-        return dismissGroup(call.arguments["groupID"]);
+        return dismissGroup(call.arguments['groupID']);
       case 'inviteUsersIntoGroup':
         return inviteUsersIntoGroup(
-            call.arguments["userIDs"], call.arguments["groupID"]);
+            call.arguments['userIDs'], call.arguments['groupID']);
       case 'kickGroupMembers':
         return kickGroupMembers(
-            call.arguments["userIDs"], call.arguments["groupID"]);
+            call.arguments['userIDs'], call.arguments['groupID']);
       case 'transferGroupOwner':
         return transferGroupOwner(
-            call.arguments["toUserID"], call.arguments["groupID"]);
+            call.arguments['toUserID'], call.arguments['groupID']);
       case 'updateGroupName':
         return updateGroupName(
-            call.arguments["groupName"], call.arguments["groupID"]);
+            call.arguments['groupName'], call.arguments['groupID']);
       case 'updateGroupAvatarUrl':
         return updateGroupAvatarUrl(
-            call.arguments["groupAvatarUrl"], call.arguments["groupID"]);
+            call.arguments['groupAvatarUrl'], call.arguments['groupID']);
       case 'updateGroupNotice':
         return updateGroupNotice(
-            call.arguments["groupNotice"], call.arguments["groupID"]);
+            call.arguments['groupNotice'], call.arguments['groupID']);
       case 'queryGroupInfo':
-        return queryGroupInfo(call.arguments["groupID"]);
+        return queryGroupInfo(call.arguments['groupID']);
       case 'queryGroupList':
         return queryGroupList();
       case 'setGroupAttributes':
         return setGroupAttributes(
-            call.arguments["groupAttributes"], call.arguments["groupID"]);
+            call.arguments['groupAttributes'], call.arguments['groupID']);
       case 'deleteGroupAttributes':
         return deleteGroupAttributes(
-            call.arguments["keys"], call.arguments["groupID"]);
+            call.arguments['keys'], call.arguments['groupID']);
       case 'queryGroupAttributes':
         return queryGroupAttributes(
-            call.arguments["keys"], call.arguments["groupID"]);
+            call.arguments['keys'], call.arguments['groupID']);
       case 'queryGroupAllAttributes':
-        return queryGroupAllAttributes(call.arguments["groupID"]);
+        return queryGroupAllAttributes(call.arguments['groupID']);
       case 'setGroupMemberRole':
-        return setGroupMemberRole(call.arguments["role"],
-            call.arguments["forUserID"], call.arguments["groupID"]);
+        return setGroupMemberRole(call.arguments['role'],
+            call.arguments['forUserID'], call.arguments['groupID']);
       case 'setGroupMemberNickname':
-        return setGroupMemberNickname(call.arguments["nickname"],
-            call.arguments["forUserID"], call.arguments["groupID"]);
+        return setGroupMemberNickname(call.arguments['nickname'],
+            call.arguments['forUserID'], call.arguments['groupID']);
       case 'queryGroupMemberInfo':
         return queryGroupMemberInfo(
-            call.arguments["userID"], call.arguments["groupID"]);
+            call.arguments['userID'], call.arguments['groupID']);
       case 'queryGroupMemberList':
         return queryGroupMemberList(
-            call.arguments["groupID"], call.arguments["config"]);
+            call.arguments['groupID'], call.arguments['config']);
       case 'deleteConversation':
-        return deleteConversation(call.arguments["conversationID"],
-            call.arguments["conversationType"], call.arguments["config"]);
+        return deleteConversation(call.arguments['conversationID'],
+            call.arguments['conversationType'], call.arguments['config']);
       case 'deleteAllConversations':
-        return deleteAllConversations(call.arguments["config"]);
+        return deleteAllConversations(call.arguments['config']);
       case 'setConversationNotificationStatus':
         return setConversationNotificationStatus(
-            call.arguments["status"],
-            call.arguments["conversationID"],
-            call.arguments["conversationType"]);
+            call.arguments['status'],
+            call.arguments['conversationID'],
+            call.arguments['conversationType']);
       case 'callInvite':
-        return callInvite(call.arguments["invitees"], call.arguments["config"]);
+        return callInvite(call.arguments['invitees'], call.arguments['config']);
       case 'callCancel':
-        return callCancel(call.arguments["invitees"], call.arguments["callID"],
-            call.arguments["config"]);
+        return callCancel(call.arguments['invitees'], call.arguments['callID'],
+            call.arguments['config']);
       case 'callAccept':
-        return callAccept(call.arguments["callID"], call.arguments["config"]);
+        return callAccept(call.arguments['callID'], call.arguments['config']);
       case 'callReject':
-        return callReject(call.arguments["callID"], call.arguments["config"]);
+        return callReject(call.arguments['callID'], call.arguments['config']);
       case 'callQuit':
-        return callQuit(call.arguments["callID"], call.arguments["config"]);
+        return callQuit(call.arguments['callID'], call.arguments['config']);
       case 'callEnd':
-        return callEnd(call.arguments["callID"], call.arguments["config"]);
+        return callEnd(call.arguments['callID'], call.arguments['config']);
       case 'callJoin':
-        return callJoin(call.arguments["callID"], call.arguments["config"]);
+        return callJoin(call.arguments['callID'], call.arguments['config']);
       case 'callingInvite':
-        return callingInvite(call.arguments["invitees"], call.arguments["callID"], call.arguments["config"]);
+        return callingInvite(call.arguments['invitees'], call.arguments['callID'], call.arguments['config']);
       case 'queryCallInvitationList':
-        return queryCallInvitationList(call.arguments["config"]);
+        return queryCallInvitationList(call.arguments['config']);
       case 'queryRoomMemberAttributesList':
         return queryRoomMemberAttributesList(
-            call.arguments["roomID"], call.arguments["config"]);
+            call.arguments['roomID'], call.arguments['config']);
       case 'queryRoomMembersAttributes':
         return queryRoomMembersAttributes(
-            call.arguments["userIDs"], call.arguments["roomID"]);
+            call.arguments['userIDs'], call.arguments['roomID']);
       case 'sendMessage':
         return sendMessage(
-            call.arguments["message"],
-            call.arguments["toConversationID"],
-            call.arguments["conversationType"],
-            call.arguments["config"],
-            call.arguments["messageAttachedCallbackID"],
-            call.arguments["messageID"]);
+            call.arguments['message'],
+            call.arguments['toConversationID'],
+            call.arguments['conversationType'],
+            call.arguments['config'],
+            call.arguments['messageAttachedCallbackID'],
+            call.arguments['messageID']);
       case 'insertMessageToLocalDB':
         return insertMessageToLocalDB(
-            call.arguments["message"],
-            call.arguments["messageID"],
-            call.arguments["conversationID"],
-            call.arguments["conversationType"],
-            call.arguments["senderUserID"]);
+            call.arguments['message'],
+            call.arguments['messageID'],
+            call.arguments['conversationID'],
+            call.arguments['conversationType'],
+            call.arguments['senderUserID']);
       case 'setRoomMembersAttributes':
         return setRoomMembersAttributes(
-            call.arguments["attributes"],
-            call.arguments["roomID"],
-            call.arguments["userIDs"],
-            call.arguments["config"]);
+            call.arguments['attributes'],
+            call.arguments['roomID'],
+            call.arguments['userIDs'],
+            call.arguments['config']);
       case 'sendConversationMessageReceiptRead':
         return sendConversationMessageReceiptRead(
-            call.arguments["conversationID"],
-            call.arguments["conversationType"]);
+            call.arguments['conversationID'],
+            call.arguments['conversationType']);
       case 'sendMessageReceiptsRead':
         return sendMessageReceiptsRead(
-            call.arguments["messageList"],
-            call.arguments["conversationID"],
-            call.arguments["conversationType"]);
+            call.arguments['messageList'],
+            call.arguments['conversationID'],
+            call.arguments['conversationType']);
       case 'queryMessageReceiptsInfo':
         return queryMessageReceiptsInfo(
-            call.arguments["messageList"],
-            call.arguments["conversationID"],
-            call.arguments["conversationType"]);
+            call.arguments['messageList'],
+            call.arguments['conversationID'],
+            call.arguments['conversationType']);
       case 'queryGroupMessageReceiptReadMemberList':
-        return queryGroupMessageReceiptReadMemberList(call.arguments["message"],
-            call.arguments["groupID"], call.arguments["config"]);
+        return queryGroupMessageReceiptReadMemberList(call.arguments['message'],
+            call.arguments['groupID'], call.arguments['config']);
       case 'queryGroupMessageReceiptUnreadMemberList':
         return queryGroupMessageReceiptUnreadMemberList(
-            call.arguments["message"],
-            call.arguments["groupID"],
-            call.arguments["config"]);
+            call.arguments['message'],
+            call.arguments['groupID'],
+            call.arguments['config']);
       case 'revokeMessage':
         return revokeMessage(
-            call.arguments["message"], call.arguments["config"]);
+            call.arguments['message'], call.arguments['config']);
       case 'queryConversationPinnedList':
-        return queryConversationPinnedList(call.arguments["config"]);
+        return queryConversationPinnedList(call.arguments['config']);
       case 'updateConversationPinnedState':
         return updateConversationPinnedState(
-            call.arguments["isPinned"],
-            call.arguments["conversationID"],
-            call.arguments["conversationType"]);
+            call.arguments['isPinned'],
+            call.arguments['conversationID'],
+            call.arguments['conversationType']);
       case 'queryRoomMembers':
         return queryRoomMembers(
-            call.arguments["userIDs"], call.arguments["roomID"]);
+            call.arguments['userIDs'], call.arguments['roomID']);
       case 'queryConversation':
-        return queryConversation(call.arguments["conversationID"],
-            call.arguments["conversationType"]);
+        return queryConversation(call.arguments['conversationID'],
+            call.arguments['conversationType']);
       case 'searchLocalConversations':
-        return searchLocalConversations(call.arguments["config"]);
+        return searchLocalConversations(call.arguments['config']);
       case 'searchGlobalLocalMessages':
-        return searchGlobalLocalMessages(call.arguments["config"]);
+        return searchGlobalLocalMessages(call.arguments['config']);
       case 'searchLocalMessages':
-        return searchLocalMessages(call.arguments["conversationID"], call.arguments["conversationType"], call.arguments["config"]);
+        return searchLocalMessages(call.arguments['conversationID'], call.arguments['conversationType'], call.arguments['config']);
       case 'searchLocalGroups':
-        return searchLocalGroups(call.arguments["config"]);
+        return searchLocalGroups(call.arguments['config']);
       case 'searchLocalGroupMembers':
-        return searchLocalGroupMembers(call.arguments["groupID"], call.arguments["config"]);
+        return searchLocalGroupMembers(call.arguments['groupID'], call.arguments['config']);
       case 'addMessageReaction':
-        return addMessageReaction(call.arguments["reactionType"], call.arguments["message"]);
+        return addMessageReaction(call.arguments['reactionType'], call.arguments['message']);
       case 'deleteMessageReaction':
-        return deleteMessageReaction(call.arguments["reactionType"], call.arguments["message"]);
+        return deleteMessageReaction(call.arguments['reactionType'], call.arguments['message']);
       case 'queryMessageReactionUserList':
-        return queryMessageReactionUserList(call.arguments["message"], call.arguments["config"]);
+        return queryMessageReactionUserList(call.arguments['message'], call.arguments['config']);
       case 'setGeofencingConfig':
-        return setGeofencingConfig(call.arguments["areaList"], call.arguments["type"]);
+        return setGeofencingConfig(call.arguments['areaList'], call.arguments['type']);
+      case 'setConversationDraft':
+        return setConversationDraft(call.arguments['draft'], call.arguments['conversationID'], call.arguments['conversationType']);
+      case 'queryCombineMessage':
+        return queryCombineMessage(call.arguments['message']);
+      case 'muteGroup':
+        return muteGroup(call.arguments['groupID'], call.arguments['config']);
+      case 'muteGroupMemberList':
+        return muteGroupMemberList(call.arguments['userIDs'], call.arguments['groupID'], call.arguments['config']);
+      case 'queryGroupMemberMutedList':
+        return queryGroupMemberMutedList(call.arguments['groupID'], call.arguments['config']);
+      case 'addFriend':
+        return addFriend(call.arguments['userID'], call.arguments['config']);
+      case 'deleteFriends':
+        return deleteFriends(call.arguments['userIDs'], call.arguments['config']);
+      case 'checkFriendsRelation':
+        return checkFriendsRelation(call.arguments['userIDs'], call.arguments['config']);
+      case 'updateFriendAlias':
+        return updateFriendAlias(call.arguments['friendAlias'], call.arguments['userID']);
+      case 'updateFriendAttributes':
+        return updateFriendAttributes(call.arguments['friendAttributes'], call.arguments['userID']);
+      case 'acceptFriendApplication':
+        return acceptFriendApplication(call.arguments['userID'], call.arguments['config']);
+      case 'rejectFriendApplication':
+        return rejectFriendApplication(call.arguments['userID'], call.arguments['config']);
+      case 'queryFriendsInfo':
+        return queryFriendsInfo(call.arguments['userIDs']);
+      case 'queryFriendList':
+        return queryFriendList(call.arguments['config']);
+      case 'queryFriendApplicationList':
+        return queryFriendApplicationList(call.arguments['config']);
+      case 'addUsersToBlacklist':
+        return addUsersToBlacklist(call.arguments['userIDs']);
+      case 'removeUsersFromBlacklist':
+        return removeUsersFromBlacklist(call.arguments['userIDs']);
+      case 'checkUserIsInBlackList':
+        return checkUserIsInBlacklist(call.arguments['userID']);
+      case 'queryBlackList':
+        return queryBlacklist(call.arguments['config']);
+      case 'deleteAllConversationMessages':
+        return deleteAllConversationMessages(call.arguments['config']);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -329,92 +368,106 @@ class ZegoZimPlugin {
   }
 
   static void _eventListener(dynamic event) {
-    final data = json.decode(event["data"]);
-    String handle = event["handle"];
+    final data = json.decode(event['data']);
+    String handle = event['handle'];
     ZIMEngine? _zim = ZIMManager.engineMap[handle];
 
     if (_zim != null) {
-      switch (event["ev"]) {
-        case "connectionStateChanged":
-          return connectionStateChangedHandle(_zim, data);
-        case "error":
-          return errorHandle(_zim, data);
-        case "tokenWillExpire":
-          return tokenWillExpireHandle(_zim, data);
-        case "receiveRoomMessage":
-          return receiveRoomMessageHandle(_zim, data);
-        case "roomStateChanged":
-          return roomStateChangedHandle(_zim, data);
-        case "roomAttributesUpdated":
-          return roomAttributesUpdatedHandle(_zim, data);
-        case "roomAttributesBatchUpdated":
-          return roomAttributesBatchUpdatedHandle(_zim, data);
-        case "roomMemberJoined":
-          return roomMemberJoinedHandle(_zim, data);
-        case "roomMemberLeft":
-          return roomMemberLeftHandle(_zim, data);
-        case "receivePeerMessage":
-          return receivePeerMessageHandle(_zim, data);
-        case "receiveGroupMessage":
-          return receiveGroupMessageHandle(_zim, data);
-        case "groupStateChanged":
-          return groupStateChangedHandle(_zim, data);
-        case "groupNameUpdated":
-          return groupNameUpdatedHandle(_zim, data);
-        case "groupAvatarUrlUpdated":
-          return groupAvatarUrlUpdatedHandle(_zim, data);
-        case "groupNoticeUpdated":
-          return groupNoticeUpdatedHandle(_zim, data);
-        case "groupAttributesUpdated":
-          return groupAttributesUpdatedHandle(_zim, data);
-        case "groupMemberStateChanged":
-          return groupMemberStateChangedHandle(_zim, data);
-        case "groupMemberInfoUpdated":
-          return groupMemberInfoUpdatedHandle(_zim, data);
-        case "callInvitationReceived":
-          return callInvitationReceivedHandle(_zim, data);
-        case "callInvitationCancelled":
-          return callInvitationCancelledHandle(_zim, data);
-        case "callInvitationTimeout":
-          return callInvitationTimeoutHandle(_zim, data);
-        case "callInvitationAccepted":
-          return callInvitationAcceptedHandle(_zim, data);
-        case "callInvitationRejected":
-          return callInvitationRejectedHandle(_zim, data);
-        case "callInviteesAnsweredTimeout":
-          return callInviteesAnsweredTimeoutHandle(_zim, data);
-        // case "callStateChanged":
-        //   return callStateChangedHandle(_zim, data);
-        case "callUserStateChanged":
-          return callUserStateChangedHandle(_zim, data);
-        case "callInvitationEnded":
-          return callInvitationEndedHandle(_zim, data);
-        case "conversationChanged":
-          return conversationChangedHandle(_zim, data);
-        case "conversationTotalUnreadMessageCountUpdated":
-          return conversationTotalUnreadMessageCountUpdatedHandle(_zim, data);
-        case "conversationMessageReceiptChanged":
-          return conversationMessageReceiptChangedHandle(_zim, data);
-        case "messageReceiptChanged":
-          return messageReceiptChangedHandle(_zim, data);
-        case "messageRevokeReceived":
-          return messageRevokeReceivedHandle(_zim, data);
-        case "messageSentStatusChanged":
-          return messageSentStatusChangedHandle(_zim, data);
-        case "messageReactionsChanged":
-          return messageReactionsChangedHandle(_zim, data);
-        case "userInfoUpdated":
-          return userInfoUpdatedHandle(_zim, data);
-        case "messageDeleted":
-          return messageDeletedHandle(_zim, data);
-        case "conversationsAllDeleted":
-          return conversationsAllDeletedHandle(_zim, data);
+      switch (event['ev']) {
+        case 'connectionStateChanged':
+          return connectionStateChanged(_zim, data);
+        case 'error':
+          return error(_zim, data);
+        case 'tokenWillExpire':
+          return tokenWillExpire(_zim, data);
+        case 'receiveRoomMessage':
+          return receiveRoomMessage(_zim, data);
+        case 'roomStateChanged':
+          return roomStateChanged(_zim, data);
+        case 'roomAttributesUpdated':
+          return roomAttributesUpdated(_zim, data);
+        case 'roomAttributesBatchUpdated':
+          return roomAttributesBatchUpdated(_zim, data);
+        case 'roomMemberJoined':
+          return roomMemberJoined(_zim, data);
+        case 'roomMemberLeft':
+          return roomMemberLeft(_zim, data);
+        case 'receivePeerMessage':
+          return receivePeerMessage(_zim, data);
+        case 'receiveGroupMessage':
+          return receiveGroupMessage(_zim, data);
+        case 'groupStateChanged':
+          return groupStateChanged(_zim, data);
+        case 'groupNameUpdated':
+          return groupNameUpdated(_zim, data);
+        case 'groupAvatarUrlUpdated':
+          return groupAvatarUrlUpdated(_zim, data);
+        case 'groupNoticeUpdated':
+          return groupNoticeUpdated(_zim, data);
+        case 'groupAttributesUpdated':
+          return groupAttributesUpdated(_zim, data);
+        case 'groupMemberStateChanged':
+          return groupMemberStateChanged(_zim, data);
+        case 'groupMemberInfoUpdated':
+          return groupMemberInfoUpdated(_zim, data);
+        case 'callInvitationReceived':
+          return callInvitationReceived(_zim, data);
+        case 'callInvitationCancelled':
+          return callInvitationCancelled(_zim, data);
+        case 'callInvitationTimeout':
+          return callInvitationTimeout(_zim, data);
+        case 'callInvitationAccepted':
+          return callInvitationAccepted(_zim, data);
+        case 'callInvitationRejected':
+          return callInvitationRejected(_zim, data);
+        case 'callInviteesAnsweredTimeout':
+          return callInviteesAnsweredTimeout(_zim, data);
+        // case 'callStateChanged':
+        //   return callStateChanged(_zim, data);
+        case 'callUserStateChanged':
+          return callUserStateChanged(_zim, data);
+        case 'callInvitationEnded':
+          return callInvitationEnded(_zim, data);
+        case 'conversationChanged':
+          return conversationChanged(_zim, data);
+        case 'conversationTotalUnreadMessageCountUpdated':
+          return conversationTotalUnreadMessageCountUpdated(_zim, data);
+        case 'conversationMessageReceiptChanged':
+          return conversationMessageReceiptChanged(_zim, data);
+        case 'messageReceiptChanged':
+          return messageReceiptChanged(_zim, data);
+        case 'messageRevokeReceived':
+          return messageRevokeReceived(_zim, data);
+        case 'messageSentStatusChanged':
+          return messageSentStatusChanged(_zim, data);
+        case 'messageReactionsChanged':
+          return messageReactionsChanged(_zim, data);
+        case 'userInfoUpdated':
+          return userInfoUpdated(_zim, data);
+        case 'messageDeleted':
+          return messageDeleted(_zim, data);
+        case 'conversationsAllDeleted':
+          return conversationsAllDeleted(_zim, data);
+        case 'blacklistChanged':
+          return blacklistChanged(_zim, data);
+        case 'groupMuteUpdated':
+          return groupMuteUpdated(_zim, data);
+        case 'groupMemberMuteUpdated':
+          return groupMemberMuteUpdated(_zim, data);
+        case 'friendListChanged':
+          return friendListChanged(_zim, data);
+        case 'friendInfoUpdated':
+          return friendInfoUpdated(_zim, data);
+        case 'friendApplicationListChanged':
+          return friendApplicationListChanged(_zim, data);
+        case 'friendApplicationUpdated':
+          return friendApplicationUpdated(_zim, data);
       }
     }
   }
 
   static String getHandle(ZIM zim) {
-    var handle = "";
+    var handle = '';
     handleMap.forEach((key, val) {
       if (val == zim) {
         handle = key;
@@ -453,7 +506,7 @@ class ZegoZimPlugin {
   }
 
   static Future<void> setLogConfig(int logLevel) {
-    Map config = {"logLevel": logLevel};
+    Map config = {'logLevel': logLevel};
 
     ZIM.getInstance()?.setLogConfig(mapToJSObj(config));
 
@@ -472,15 +525,10 @@ class ZegoZimPlugin {
     return ZIM.setGeofencingConfig(areaList, type);
   }
 
-  Future<void> login(String userID, String userName, String token) async {
-    ZIMUserInfoWeb _userInfo =
-        ZIMUserInfoWeb(userID: userID, userName: userName);
+  Future<void> login(String userID, dynamic config) async {
+    Object _config = mapToJSObj(config);
 
-    if (ZIM.getInstance() == null) {
-      return Future.value();
-    }
-
-    final promise = ZIM.getInstance()!.login(_userInfo, token);
+    final promise = ZIM.getInstance()!.login(userID, _config);
 
     final Future<void> loginFuture = promiseToFuture(promise);
 
@@ -505,12 +553,6 @@ class ZegoZimPlugin {
     });
 
     Map resultMap = jsObjectToMap(result);
-
-    resultMap["conversationList"].forEach((conversation) {
-      var index = resultMap["conversationList"].indexOf(conversation);
-      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(
-          resultMap["conversationList"][index]["lastMessage"]);
-    });
 
     return resultMap;
   }
@@ -605,12 +647,6 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    resultMap["messageList"].forEach((message) {
-      var index = resultMap["messageList"].indexOf(message);
-      resultMap["messageList"][index] =
-          convertZIMMessage(resultMap["messageList"][index]);
-    });
-
     return resultMap;
   }
 
@@ -670,8 +706,8 @@ class ZegoZimPlugin {
     });
     Map resultMap = jsObjectToMap(result);
 
-    resultMap["nextFlag"] =
-        resultMap["nextFlag"] is String ? resultMap["nextFlag"] : "";
+    resultMap['nextFlag'] =
+        resultMap['nextFlag'] is String ? resultMap['nextFlag'] : '';
 
     return resultMap;
   }
@@ -762,7 +798,7 @@ class ZegoZimPlugin {
     Object _config = mapToJSObj(config);
 
     Map notification = {
-      "onMessageAttached":
+      'onMessageAttached':
           allowInterop((message, currentFileSize, totalFileSize) {
         ZIMMessageAttachedCallback? callback = ZIMCommonData
             .zimMessageAttachedCallbackMap[messageAttachedCallbackID];
@@ -772,7 +808,7 @@ class ZegoZimPlugin {
           callback(zimMessage);
         }
       }),
-      "onMediaUploadingProgress":
+      'onMediaUploadingProgress':
           allowInterop((message, currentFileSize, totalFileSize) {
         ZIMMediaDownloadingProgress? progress =
             ZIMCommonData.mediaDownloadingProgressMap[progressID];
@@ -797,7 +833,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return handleSendMessageResult(result);
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> downloadMediaFile(
@@ -816,7 +852,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return handleSendMessageResult(result);
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> sendRoomMessage(
@@ -830,7 +866,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return handleSendMessageResult(result);
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> sendGroupMessage(
@@ -844,7 +880,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return handleSendMessageResult(result);
+    return jsObjectToMap(result);
   }
 
   Future<Map<dynamic, dynamic>> deleteMessages(dynamic messageList,
@@ -887,14 +923,6 @@ class ZegoZimPlugin {
 
     Map resultMap = jsObjectToMap(result);
 
-    resultMap["userList"].forEach((user) {
-      var index = resultMap["userList"].indexOf(user);
-      resultMap["userList"][index]["memberNickname"] =
-          isString(resultMap["userList"][index]["memberNickname"]);
-      resultMap["userList"][index]["memberAvatarUrl"] =
-          isString(resultMap["userList"][index]["memberAvatarUrl"]);
-    });
-
     return resultMap;
   }
 
@@ -905,9 +933,6 @@ class ZegoZimPlugin {
     });
 
     Map resultMap = jsObjectToMap(result);
-
-    resultMap["groupInfo"]["groupNotice"] =
-        isString(resultMap["groupInfo"]["groupNotice"]);
 
     return resultMap;
   }
@@ -940,14 +965,6 @@ class ZegoZimPlugin {
     });
 
     Map resultMap = jsObjectToMap(result);
-
-    resultMap["userList"].forEach((user) {
-      var index = resultMap["userList"].indexOf(user);
-      resultMap["userList"][index]["memberNickname"] =
-          isString(resultMap["userList"][index]["memberNickname"]);
-      resultMap["userList"][index]["memberAvatarUrl"] =
-          isString(resultMap["userList"][index]["memberAvatarUrl"]);
-    });
 
     return resultMap;
   }
@@ -1016,13 +1033,6 @@ class ZegoZimPlugin {
 
     Map resultMap = jsObjectToMap(result);
 
-    resultMap["groupInfo"]["baseInfo"]["groupAvatarUrl"] =
-        isString(resultMap["groupInfo"]["baseInfo"]["groupAvatarUrl"]);
-    resultMap["groupInfo"]["baseInfo"]["groupName"] =
-        isString(resultMap["groupInfo"]["baseInfo"]["groupName"]);
-    resultMap["groupInfo"]["groupNotice"] =
-        isString(resultMap["groupInfo"]["groupNotice"]);
-
     return resultMap;
   }
 
@@ -1033,14 +1043,6 @@ class ZegoZimPlugin {
     });
 
     Map resultMap = jsObjectToMap(result);
-
-    resultMap["groupList"].forEach((group) {
-      var index = resultMap["groupList"].indexOf(group);
-      resultMap["groupList"][index]["baseInfo"]["groupAvatarUrl"] =
-          isString(resultMap["groupList"][index]["baseInfo"]["groupAvatarUrl"]);
-      resultMap["groupList"][index]["baseInfo"]["groupName"] =
-          isString(resultMap["groupList"][index]["baseInfo"]["groupName"]);
-    });
 
     return resultMap;
   }
@@ -1127,11 +1129,6 @@ class ZegoZimPlugin {
 
     Map resultMap = jsObjectToMap(result);
 
-    resultMap["userInfo"]["memberNickname"] =
-        isString(resultMap["userInfo"]["memberNickname"]);
-    resultMap["userInfo"]["memberAvatarUrl"] =
-        isString(resultMap["userInfo"]["memberAvatarUrl"]);
-
     return resultMap;
   }
 
@@ -1146,14 +1143,6 @@ class ZegoZimPlugin {
     });
 
     Map resultMap = jsObjectToMap(result);
-
-    resultMap["userList"].forEach((user) {
-      var index = resultMap["userList"].indexOf(user);
-      resultMap["userList"][index]["memberNickname"] =
-          isString(resultMap["userList"][index]["memberNickname"]);
-      resultMap["userList"][index]["memberAvatarUrl"] =
-          isString(resultMap["userList"][index]["memberAvatarUrl"]);
-    });
 
     return resultMap;
   }
@@ -1211,14 +1200,14 @@ class ZegoZimPlugin {
     Map _resultMap = jsObjectToMap(result);
 
     Map resultMap = {
-      "callID": _resultMap["callID"],
-      "info": {"timeout": _resultMap["timeout"], "errorInvitees": []}
+      'callID': _resultMap['callID'],
+      'info': {'timeout': _resultMap['timeout'], 'errorInvitees': []}
     };
 
-    _resultMap["errorInvitees"].forEach((invite) {
-      resultMap["info"]["errorInvitees"].add({
-        "userID": invite["userID"],
-        "state": invite["state"] is int ? invite["state"] : invite["userState"]
+    _resultMap['errorInvitees'].forEach((invite) {
+      resultMap['info']['errorInvitees'].add({
+        'userID': invite['userID'],
+        'state': invite['state'] is int ? invite['state'] : invite['userState']
       });
     });
 
@@ -1238,14 +1227,14 @@ class ZegoZimPlugin {
     Map _resultMap = jsObjectToMap(result);
 
     Map resultMap = {
-      "callID": _resultMap["callID"],
-      "info": {"timeout": _resultMap["timeout"], "errorInvitees": []}
+      'callID': _resultMap['callID'],
+      'info': {'timeout': _resultMap['timeout'], 'errorInvitees': []}
     };
 
-    _resultMap["errorInvitees"].forEach((invite) {
-      resultMap["info"]["errorInvitees"].add({
-        "userID": invite["userID"],
-        "state": invite["state"] is int ? invite["state"] : invite["userState"]
+    _resultMap['errorInvitees'].forEach((invite) {
+      resultMap['info']['errorInvitees'].add({
+        'userID': invite['userID'],
+        'state': invite['state'] is int ? invite['state'] : invite['userState']
       });
     });
 
@@ -1368,7 +1357,7 @@ class ZegoZimPlugin {
     final _config = mapToJSObj(config);
 
     Map notification = {
-      "onMessageAttached": allowInterop((message) {
+      'onMessageAttached': allowInterop((message) {
         ZIMMessageAttachedCallback? callback = ZIMCommonData
             .zimMessageAttachedCallbackMap[messageAttachedCallbackID];
 
@@ -1390,8 +1379,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    Map resultMap = handleSendMessageResult(result);
-    resultMap["messageID"] = messageID;
+    Map resultMap = jsObjectToMap(result);
 
     return resultMap;
   }
@@ -1411,8 +1399,7 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    Map resultMap = handleSendMessageResult(result);
-    resultMap["messageID"] = messageID;
+    Map resultMap = jsObjectToMap(result);
 
     return resultMap;
   }
@@ -1528,12 +1515,6 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    resultMap["conversationList"].forEach((conversation) {
-      var index = resultMap["conversationList"].indexOf(conversation);
-      resultMap["conversationList"][index]["lastMessage"] = convertZIMMessage(
-          resultMap["conversationList"][index]["lastMessage"]);
-    });
-
     return resultMap;
   }
 
@@ -1572,9 +1553,6 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    resultMap["conversation"]["lastMessage"] =
-        convertZIMMessage(resultMap["conversation"]["lastMessage"]);
-
     return resultMap;
   }
 
@@ -1589,13 +1567,7 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    for (var infoMap in resultMap["conversationSearchInfoList"]) {
-      for (var messageMap in infoMap["messageList"]) {
-        messageMap = convertZIMMessage(messageMap);
-      }
-    }
-
-    resultMap["nextFlag"] = resultMap["nextFlag"] is int ? resultMap["nextFlag"] : 0;
+    resultMap['nextFlag'] = resultMap['nextFlag'] is int ? resultMap['nextFlag'] : 0;
 
     return resultMap;
   }
@@ -1611,14 +1583,6 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    for (var messageMap in resultMap["messageList"]) {
-      messageMap = convertZIMMessage(messageMap);
-    }
-
-    if (resultMap["nextMessage"] != null) {
-      resultMap["nextMessage"] = convertZIMMessage(resultMap["nextMessage"]);
-    }
-
     return resultMap;
   }
 
@@ -1632,14 +1596,6 @@ class ZegoZimPlugin {
     });
 
     final resultMap = jsObjectToMap(result);
-
-    for (var messageMap in resultMap["messageList"]) {
-      messageMap = convertZIMMessage(messageMap);
-    }
-
-    if (resultMap["nextMessage"] != null) {
-      resultMap["nextMessage"] = convertZIMMessage(resultMap["nextMessage"]);
-    }
 
     return resultMap;
   }
@@ -1695,7 +1651,7 @@ class ZegoZimPlugin {
 
   }
 
-  Future<Map<dynamic, dynamic>> queryMessageReactionUserList(dynamic message, dynamic config)async {
+  Future<Map<dynamic, dynamic>> queryMessageReactionUserList(dynamic message, dynamic config) async {
     Object _message = mapToJSObj(message);
     Object _config = mapToJSObj(config);
 
@@ -1705,94 +1661,252 @@ class ZegoZimPlugin {
 
     final resultMap = jsObjectToMap(result);
 
-    resultMap["message"]["reactions"] =
-        resultMap["message"]["reactions"] == null
-            ? [] : resultMap["reactions"].forEach((reactionMap) {
-                      reactionMap["messageID"] = reactionMap["messageID"] is int
-                          ? reactionMap["messageID"]
-                          : int.parse(reactionMap["messageID"]);
+    resultMap['message']['reactions'] =
+        resultMap['message']['reactions'] == null
+            ? [] : resultMap['reactions'].forEach((reactionMap) {
+                      reactionMap['messageID'] = reactionMap['messageID'] is int
+                          ? reactionMap['messageID']
+                          : int.parse(reactionMap['messageID']);
                    });
 
-    resultMap["message"]["isBroadcastMessage"] = resultMap["message"]["isBroadcastMessage"] is bool
-      ? resultMap["message"]["isBroadcastMessage"]
+    resultMap['message']['isBroadcastMessage'] = resultMap['message']['isBroadcastMessage'] is bool
+      ? resultMap['message']['isBroadcastMessage']
         : false;
 
     return resultMap;
   }
 
-  static void connectionStateChangedHandle(ZIMEngine zim, dynamic data) {
+  Future<Map<dynamic, dynamic>> setConversationDraft(String draft, String conversationID, dynamic conversationType) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.setConversationDraft(draft, conversationID, conversationType)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryCombineMessage(dynamic message) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryCombineMessage(mapToJSObj(message))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> muteGroup(String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.muteGroup(groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> muteGroupMemberList(dynamic userIDs, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.muteGroupMemberList(userIDs, groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryGroupMemberMutedList(String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupMemberMutedList(groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> addFriend(String userID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.addFriend(userID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+   Future<Map<dynamic, dynamic>> deleteFriends(dynamic userIDs, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.deleteFriends(userIDs, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> checkFriendsRelation(dynamic userIDs, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.checkFriendsRelation(userIDs, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateFriendAlias(String friendAlias, String userID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateFriendAlias(friendAlias, userID)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateFriendAttributes(dynamic friendAttributes, String userID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateFriendAttributes(friendAttributes, userID)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> acceptFriendApplication(String userID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.acceptFriendApplication(userID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> rejectFriendApplication(String userID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.rejectFriendApplication(userID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryFriendsInfo(dynamic userIDs) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryFriendsInfo(userIDs)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryFriendList(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryFriendList(mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryFriendApplicationList(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryFriendApplicationList(mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> addUsersToBlacklist(dynamic userIDs) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.addUsersToBlacklist(userIDs)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> removeUsersFromBlacklist(dynamic userIDs) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.removeUsersFromBlacklist(userIDs)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> checkUserIsInBlacklist(String userID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.checkUserIsInBlacklist(userID)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryBlacklist(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryBlacklist(mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> deleteAllConversationMessages(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.deleteAllConversationMessages(mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  static void connectionStateChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConnectionStateChanged == null) return;
 
     Map<dynamic, dynamic> extendedData = {};
 
-    if (data["extendedData"] != null && data["extendedData"] != "") {
-      extendedData = json.decode(data["extendedData"]);
+    if (data['extendedData'] != null && data['extendedData'] != '') {
+      extendedData = json.decode(data['extendedData']);
     }
 
-    ZIMConnectionState? _state = ZIMConnectionState.values[data["state"]];
-    ZIMConnectionEvent? _event = ZIMConnectionEvent.values[data["event"]];
+    ZIMConnectionState? _state = ZIMConnectionState.values[data['state']];
+    ZIMConnectionEvent? _event = ZIMConnectionEvent.values[data['event']];
 
     ZIMEventHandler.onConnectionStateChanged!(
         zim, _state, _event, extendedData);
   }
 
-  static void errorHandle(ZIMEngine zim, dynamic data) {
+  static void error(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onError == null) return;
 
-    final code = data["code"];
-    final message = data["message"];
+    final code = data['code'];
+    final message = data['message'];
 
     ZIMEventHandler.onError!(zim, ZIMError(code: code, message: message));
   }
 
-  static void tokenWillExpireHandle(ZIMEngine zim, dynamic data) {
+  static void tokenWillExpire(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onTokenWillExpire == null) return;
 
-    final second = data["second"];
+    final second = data['second'];
 
     ZIMEventHandler.onTokenWillExpire!(zim, second);
   }
 
-  static void receiveRoomMessageHandle(ZIMEngine zim, dynamic data) {
+  static void receiveRoomMessage(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onReceiveRoomMessage == null) return;
 
-    final fromConversationID = data["fromConversationID"];
-
-    handleReceiveMessage(data['messageList']);
+    final fromConversationID = data['fromConversationID'];
     List<ZIMMessage> messageList =
         ZIMConverter.oZIMMessageList(data['messageList']);
 
     ZIMEventHandler.onReceiveRoomMessage!(zim, messageList, fromConversationID);
   }
 
-  static void roomStateChangedHandle(ZIMEngine zim, dynamic data) {
+  static void roomStateChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onRoomStateChanged == null) return;
 
     Map<dynamic, dynamic> extendedData = {};
 
-    if (data["extendedData"] != null && data["extendedData"] != "") {
-      extendedData = Map.from(data["extendedData"]);
+    if (data['extendedData'] != null && data['extendedData'] != '') {
+      extendedData = jsonDecode(data['extendedData']);
     }
 
-    ZIMRoomState _state = ZIMRoomState.values[data["state"]];
-    ZIMRoomEvent _event = ZIMRoomEvent.values[data["event"]];
+    ZIMRoomState _state = ZIMRoomState.values[data['state']];
+    ZIMRoomEvent _event = ZIMRoomEvent.values[data['event']];
 
     ZIMEventHandler.onRoomStateChanged!(
-        zim, _state, _event, extendedData, data["roomID"]);
+        zim, _state, _event, extendedData, data['roomID']);
   }
 
-  static void roomAttributesUpdatedHandle(ZIMEngine zim, dynamic data) {
+  static void roomAttributesUpdated(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onRoomAttributesUpdated == null) return;
 
-    final infos = data["infos"];
-    String roomID = data["roomID"];
+    final infos = data['infos'];
+    String roomID = data['roomID'];
 
     infos.forEach((info) {
-      final roomAttributes = info["roomAttributes"];
+      final roomAttributes = info['roomAttributes'];
       Map<String, String> mapRoomAttributes =
           Map<String, String>.from(roomAttributes);
       ZIMRoomAttributesUpdateAction action =
-          ZIMRoomAttributesUpdateAction.values[info["action"]];
+          ZIMRoomAttributesUpdateActionExtension.mapValue[info['action']]!;
 
       ZIMEventHandler.onRoomAttributesUpdated!(
           zim,
@@ -1802,21 +1916,21 @@ class ZegoZimPlugin {
     });
   }
 
-  static void roomAttributesBatchUpdatedHandle(ZIMEngine zim, dynamic data) {
+  static void roomAttributesBatchUpdated(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onRoomAttributesBatchUpdated == null) return;
 
-    final infos = data["infos"];
-    String roomID = data["roomID"];
+    final infos = data['infos'];
+    String roomID = data['roomID'];
 
     List<ZIMRoomAttributesUpdateInfo> list = [];
 
     infos.forEach((info) {
-      final roomAttributes = info["roomAttributes"];
+      final roomAttributes = info['roomAttributes'];
       Map<String, String> mapRoomAttributes =
           Map<String, String>.from(roomAttributes);
 
       ZIMRoomAttributesUpdateAction action =
-          ZIMRoomAttributesUpdateAction.values[info["action"]];
+          ZIMRoomAttributesUpdateActionExtension.mapValue[info['action']]!;
 
       list.add(ZIMRoomAttributesUpdateInfo(
           action: action, roomAttributes: mapRoomAttributes));
@@ -1825,18 +1939,18 @@ class ZegoZimPlugin {
     ZIMEventHandler.onRoomAttributesBatchUpdated!(zim, list, roomID);
   }
 
-  static void roomMemberJoinedHandle(ZIMEngine zim, dynamic data) {
+  static void roomMemberJoined(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onRoomMemberJoined == null) return;
 
-    final memberList = data["memberList"];
-    String roomID = data["roomID"];
+    final memberList = data['memberList'];
+    String roomID = data['roomID'];
     List<ZIMUserInfo> list = [];
 
     memberList.forEach((member) {
       Map memberMap = Map.from(member);
       ZIMUserInfo userInfo = ZIMUserInfo();
-      userInfo.userID = memberMap["userID"];
-      userInfo.userName = memberMap["userName"];
+      userInfo.userID = memberMap['userID'];
+      userInfo.userName = memberMap['userName'];
 
       list.add(userInfo);
     });
@@ -1844,18 +1958,18 @@ class ZegoZimPlugin {
     ZIMEventHandler.onRoomMemberJoined!(zim, list, roomID);
   }
 
-  static void roomMemberLeftHandle(ZIMEngine zim, dynamic data) {
+  static void roomMemberLeft(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onRoomMemberLeft == null) return;
 
-    final memberList = data["memberList"];
-    String roomID = data["roomID"];
+    final memberList = data['memberList'];
+    String roomID = data['roomID'];
     List<ZIMUserInfo> list = [];
 
     memberList.forEach((member) {
       Map memberMap = Map.from(member);
       ZIMUserInfo userInfo = ZIMUserInfo();
-      userInfo.userID = memberMap["userID"];
-      userInfo.userName = memberMap["userName"];
+      userInfo.userID = memberMap['userID'];
+      userInfo.userName = memberMap['userName'];
 
       list.add(userInfo);
     });
@@ -1863,22 +1977,20 @@ class ZegoZimPlugin {
     ZIMEventHandler.onRoomMemberLeft!(zim, list, roomID);
   }
 
-  static void receivePeerMessageHandle(ZIMEngine zim, dynamic data) {
+  static void receivePeerMessage(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onReceivePeerMessage == null) return;
 
-    String fromConversationID = data["fromConversationID"];
-    handleReceiveMessage(data["messageList"]);
+    String fromConversationID = data['fromConversationID'];
     List<ZIMMessage> messageList =
         ZIMConverter.oZIMMessageList(data['messageList']);
 
     ZIMEventHandler.onReceivePeerMessage!(zim, messageList, fromConversationID);
   }
 
-  static void receiveGroupMessageHandle(ZIMEngine zim, dynamic data) {
+  static void receiveGroupMessage(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onReceiveGroupMessage == null) return;
 
-    String fromConversationID = data["fromConversationID"];
-    handleReceiveMessage(data["messageList"]);
+    String fromConversationID = data['fromConversationID'];
     List<ZIMMessage> messageList =
         ZIMConverter.oZIMMessageList(data['messageList']);
 
@@ -1886,11 +1998,11 @@ class ZegoZimPlugin {
         zim, messageList, fromConversationID);
   }
 
-  static void groupStateChangedHandle(ZIMEngine zim, dynamic data) {
+  static void groupStateChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupStateChanged == null) return;
 
-    final state = ZIMGroupState.values[data["state"]];
-    final event = ZIMGroupEvent.values[data["event"]];
+    final state = ZIMGroupState.values[data['state']];
+    final event = ZIMGroupEvent.values[data['event']];
 
     ZIMEventHandler.onGroupStateChanged!(
         zim,
@@ -1900,63 +2012,63 @@ class ZegoZimPlugin {
         ZIMConverter.oZIMGroupFullInfo(data['groupInfo'])!);
   }
 
-  static void groupNameUpdatedHandle(ZIMEngine zim, dynamic data) {
+  static void groupNameUpdated(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupNameUpdated == null) return;
 
-    final groupName = data["groupName"];
-    final groupID = data["groupID"];
+    final groupName = data['groupName'];
+    final groupID = data['groupID'];
 
     ZIMEventHandler.onGroupNameUpdated!(zim, groupName,
         ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
-  static void groupAvatarUrlUpdatedHandle(ZIMEngine zim, dynamic data) {
+  static void groupAvatarUrlUpdated(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupAvatarUrlUpdated == null) return;
 
-    final groupAvatarUrl = data["groupAvatarUrl"];
-    final groupID = data["groupID"];
+    final groupAvatarUrl = data['groupAvatarUrl'];
+    final groupID = data['groupID'];
 
     ZIMEventHandler.onGroupAvatarUrlUpdated!(zim, groupAvatarUrl,
         ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
-  static void groupNoticeUpdatedHandle(ZIMEngine zim, dynamic data) {
+  static void groupNoticeUpdated(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupNoticeUpdated == null) return;
 
-    final groupNotice = data["groupNotice"];
-    final groupID = data["groupID"];
+    final groupNotice = data['groupNotice'];
+    final groupID = data['groupID'];
 
     ZIMEventHandler.onGroupNoticeUpdated!(zim, groupNotice,
         ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
-  static void groupAttributesUpdatedHandle(ZIMEngine zim, dynamic data) {
+  static void groupAttributesUpdated(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupAttributesUpdated == null) return;
 
     List<ZIMGroupAttributesUpdateInfo> list = [];
-    List<dynamic> infoList = data["infoList"];
+    List<dynamic> infoList = data['infoList'];
 
     infoList.forEach((info) {
       Map<String, String> mapGroupAttributes =
-          Map.from(info["groupAttributes"]);
+          Map.from(info['groupAttributes']);
       ZIMGroupAttributesUpdateInfo atr = ZIMGroupAttributesUpdateInfo();
-      atr.action = ZIMGroupAttributesUpdateAction.values[info["action"]];
+      atr.action = ZIMGroupAttributesUpdateAction.values[info['action']];
       atr.groupAttributes = mapGroupAttributes;
       list.add(atr);
     });
 
-    final groupID = data["groupID"];
+    final groupID = data['groupID'];
 
     ZIMEventHandler.onGroupAttributesUpdated!(zim, list,
         ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']), groupID);
   }
 
-  static void groupMemberStateChangedHandle(ZIMEngine zim, dynamic data) {
+  static void groupMemberStateChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupMemberStateChanged == null) return;
 
-    final groupID = data["groupID"];
-    ZIMGroupMemberState state = ZIMGroupMemberState.values[data["state"]];
-    ZIMGroupMemberEvent event = ZIMGroupMemberEvent.values[data["event"]];
+    final groupID = data['groupID'];
+    ZIMGroupMemberState state = ZIMGroupMemberState.values[data['state']];
+    ZIMGroupMemberEvent event = ZIMGroupMemberEvent.values[data['event']];
 
     ZIMEventHandler.onGroupMemberStateChanged!(
         zim,
@@ -1967,10 +2079,10 @@ class ZegoZimPlugin {
         groupID);
   }
 
-  static void groupMemberInfoUpdatedHandle(ZIMEngine zim, dynamic data) {
+  static void groupMemberInfoUpdated(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onGroupMemberInfoUpdated == null) return;
 
-    final groupID = data["groupID"];
+    final groupID = data['groupID'];
 
     ZIMEventHandler.onGroupMemberInfoUpdated!(
         zim,
@@ -1979,165 +2091,150 @@ class ZegoZimPlugin {
         groupID);
   }
 
-  static void callInvitationReceivedHandle(ZIMEngine zim, dynamic data) {
+  static void callInvitationReceived(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationReceived == null) return;
 
-    String callID = data["callID"];
-    ZIMConverter.oZIMCallInvitationReceivedInfo(data);
+    String callID = data['callID'];
 
     ZIMEventHandler.onCallInvitationReceived!(zim, ZIMConverter.oZIMCallInvitationReceivedInfo(data), callID);
   }
 
-  static void callInvitationCancelledHandle(ZIMEngine zim, dynamic data) {
+  static void callInvitationCancelled(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationCancelled == null) return;
 
-    String callID = data["callID"];
+    String callID = data['callID'];
 
     ZIMEventHandler.onCallInvitationCancelled!(zim, ZIMConverter.oZIMCallInvitationCancelledInfo(data), callID);
   }
 
-  static void callInvitationTimeoutHandle(ZIMEngine zim, dynamic data) {
+  static void callInvitationTimeout(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationTimeout == null) return;
 
-    String callID = data["callID"];
+    String callID = data['callID'];
 
     ZIMEventHandler.onCallInvitationTimeout!(zim, ZIMConverter.oZIMCallInvitationTimeoutInfo(data), callID);
   }
 
-  static void callInvitationAcceptedHandle(ZIMEngine zim, dynamic data) {
+  static void callInvitationAccepted(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationAccepted == null) return;
 
     ZIMCallInvitationAcceptedInfo acceptedInfo =
         ZIMCallInvitationAcceptedInfo();
-    acceptedInfo.invitee = data["invitee"];
-    acceptedInfo.extendedData = data["extendedData"];
-    String callID = data["callID"];
+    acceptedInfo.invitee = data['invitee'];
+    acceptedInfo.extendedData = data['extendedData'] ?? '';
+    String callID = data['callID'];
 
     ZIMEventHandler.onCallInvitationAccepted!(zim, acceptedInfo, callID);
   }
 
-  static void callInvitationRejectedHandle(ZIMEngine zim, dynamic data) {
+  static void callInvitationRejected(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationRejected == null) return;
 
     ZIMCallInvitationRejectedInfo rejectedInfo =
         ZIMCallInvitationRejectedInfo();
-    rejectedInfo.invitee = data["invitee"];
-    rejectedInfo.extendedData = data["extendedData"];
-    String callID = data["callID"];
+    rejectedInfo.invitee = data['invitee'];
+    rejectedInfo.extendedData = data['extendedData'] ?? '';
+    String callID = data['callID'];
 
     ZIMEventHandler.onCallInvitationRejected!(zim, rejectedInfo, callID);
   }
 
-  static void callInviteesAnsweredTimeoutHandle(ZIMEngine zim, dynamic data) {
+  static void callInviteesAnsweredTimeout(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;
 
-    dynamic invitees = data["invitees"];
-    String callID = data["callID"];
+    dynamic invitees = data['invitees'];
+    String callID = data['callID'];
 
     ZIMEventHandler.onCallInviteesAnsweredTimeout!(zim, invitees, callID);
   }
 
-  // static void callStateChangedHandle(ZIMEngine zim, dynamic data) {
+  // static void callStateChanged(ZIMEngine zim, dynamic data) {
   //   if (ZIMEventHandler.onCallStateChanged == null) return;
   //   ZIMCallStateChangeInfo callStateChangeInfo = ZIMCallStateChangeInfo();
-  //   callStateChangeInfo.callID = data["callID"];
-  //   callStateChangeInfo.state = ZIMCallStateExtension.mapValue[data["state"]]!;
-  //   callStateChangeInfo.callDuration = data["callDuration"];
-  //   callStateChangeInfo.userDuration = data["userDuration"];
-  //   callStateChangeInfo.extendedData = data["extendedData"];
-  //   callStateChangeInfo.timeout = data["timeout"];
+  //   callStateChangeInfo.callID = data['callID'];
+  //   callStateChangeInfo.state = ZIMCallStateExtension.mapValue[data['state']]!;
+  //   callStateChangeInfo.callDuration = data['callDuration'];
+  //   callStateChangeInfo.userDuration = data['userDuration'];
+  //   callStateChangeInfo.extendedData = data['extendedData'];
+  //   callStateChangeInfo.timeout = data['timeout'];
   //   callStateChangeInfo.callUserInfo = ZIMConverter.oZIMCallUserInfo(data['callUserInfo']);
   //   ZIMEventHandler.onCallStateChanged!(zim, callStateChangeInfo);
   // }
 
-  static void callUserStateChangedHandle(ZIMEngine zim, dynamic data) {
+  static void callUserStateChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallUserStateChanged == null) return;
     String callID = data['callID'];
-    ZIMCallUserStateChangeInfo callUserStateChangedInfo = ZIMConverter.oZIMCallUserStateChangedInfo(data);
-    ZIMEventHandler.onCallUserStateChanged!(zim, ZIMConverter.oZIMCallUserStateChangedInfo(data),callID);
+    ZIMEventHandler.onCallUserStateChanged!(zim, ZIMConverter.oZIMCallUserStateChangedInfo(data), callID);
   }
 
-  static void callInvitationEndedHandle(ZIMEngine zim, dynamic data) {
+  static void callInvitationEnded(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallInvitationEnded == null) return;
-    String callID = data["callID"];
+    String callID = data['callID'];
 
     ZIMEventHandler.onCallInvitationEnded!(zim, ZIMConverter.oZIMCallInvitationEndedInfo(data), callID);
   }
 
-  static void conversationChangedHandle(ZIMEngine zim, dynamic data) {
+  static void conversationChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConversationChanged == null) return;
 
-    List<dynamic> infoList = data["infoList"];
-
-    infoList.forEach((info) {
-      if (info["conversation"]["lastMessage"] != null) {
-        info["conversation"]["lastMessage"] =
-          convertZIMMessage(info["conversation"]["lastMessage"]);
-      }
-    });
-
     List<ZIMConversationChangeInfo> conversationChangeInfoList =
-        ZIMConverter.oZIMConversationChangeInfoList(infoList);
+        ZIMConverter.oZIMConversationChangeInfoList(data['infoList']);
 
     ZIMEventHandler.onConversationChanged!(zim, conversationChangeInfoList);
   }
 
-  static void conversationTotalUnreadMessageCountUpdatedHandle(
+  static void conversationTotalUnreadMessageCountUpdated(
       ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated == null) {
       return;
     }
 
-    int count = data["totalUnreadMessageCount"];
+    int count = data['totalUnreadMessageCount'];
 
     ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated!(zim, count);
   }
 
-  static void messageReceiptChangedHandle(ZIMEngine zim, dynamic data) {
+  static void messageReceiptChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onMessageReceiptChanged == null) {
       return;
     }
 
-    final _infos = data["infos"];
     List<ZIMMessageReceiptInfo> infos = [];
 
-    _infos.forEach((map) {
+    data['infos'].forEach((map) {
       ZIMMessageReceiptInfo info = ZIMConverter.oZIMMessageReceiptInfo(map);
 
-      _infos.add(info);
+      infos.add(info);
     });
 
     ZIMEventHandler.onMessageReceiptChanged!(zim, infos);
   }
 
-  static void conversationMessageReceiptChangedHandle(
+  static void conversationMessageReceiptChanged(
       ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConversationMessageReceiptChanged == null) {
       return;
     }
 
-    final _infos = data["infos"];
     List<ZIMMessageReceiptInfo> infos = [];
 
-    _infos.forEach((map) {
+    data['infos'].forEach((map) {
       ZIMMessageReceiptInfo info = ZIMConverter.oZIMMessageReceiptInfo(map);
 
-      _infos.add(info);
+      infos.add(info);
     });
 
     ZIMEventHandler.onConversationMessageReceiptChanged!(zim, infos);
   }
 
-  static void messageRevokeReceivedHandle(ZIMEngine zim, dynamic data) {
+  static void messageRevokeReceived(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onMessageRevokeReceived == null) {
       return;
     }
-    final _messageList = data["messageList"];
+
     List<ZIMRevokeMessage> messageList = [];
 
-    handleReceiveMessage(_messageList);
-
-    _messageList.forEach((map) {
+    data['messageList'].forEach((map) {
       ZIMRevokeMessage message =
           ZIMConverter.oZIMMessage(map) as ZIMRevokeMessage;
 
@@ -2147,69 +2244,59 @@ class ZegoZimPlugin {
     ZIMEventHandler.onMessageRevokeReceived!(zim, messageList);
   }
 
-  static void messageSentStatusChangedHandle(ZIMEngine zim, dynamic data) {
+  static void messageSentStatusChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onMessageSentStatusChanged == null) {
       return;
     }
-    final _infos = data["infos"];
-    _infos.forEach((info) {
-      info["message"] = convertZIMMessage(info["message"]);
-      info["reason"] = info["reason"] is String ? info["reason"]: "";
-    });
+
     List<ZIMMessageSentStatusChangeInfo> infos =
-        ZIMConverter.oMessageSentStatusChangeInfoList(_infos);
+        ZIMConverter.oMessageSentStatusChangeInfoList(data['infos']);
 
     ZIMEventHandler.onMessageSentStatusChanged!(zim, infos);
   }
 
-  static void messageReactionsChangedHandle(ZIMEngine zim, dynamic data) {
+  static void messageReactionsChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onMessageReactionsChanged == null) {
       return;
     }
 
-    data["reactions"].forEach((reactionMap) {
-      reactionMap["messageID"] = int.parse(reactionMap["messageID"]);
-    });
-
     List<ZIMMessageReaction> reactions =
-        ZIMConverter.oZIMMessageReactionList(data["reactions"]);
+        ZIMConverter.oZIMMessageReactionList(data['reactions']);
 
     ZIMEventHandler.onMessageReactionsChanged!(zim, reactions);
   }
 
-  static void broadcastMessageReceivedHandle(ZIMEngine zim, dynamic data) {
+  static void broadcastMessageReceived(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onBroadcastMessageReceived == null) {
       return;
     }
 
-    data["message"] = convertZIMMessage(data["message"]);
-
-    ZIMMessage message = ZIMConverter.oZIMMessage(data["message"]);
+    ZIMMessage message = ZIMConverter.oZIMMessage(data['message']);
 
     ZIMEventHandler.onBroadcastMessageReceived!(zim, message);
   }
 
-  static void userInfoUpdatedHandle(ZIMEngine zim, dynamic data) {
+  static void userInfoUpdated(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onUserInfoUpdated == null) {
       return;
     }
 
-    ZIMUserFullInfo userFullInfo = ZIMConverter.oZIMUserFullInfo(data["info"]);
+    ZIMUserFullInfo userFullInfo = ZIMConverter.oZIMUserFullInfo(data['info']);
 
     ZIMEventHandler.onUserInfoUpdated!(zim, userFullInfo);
   }
 
-  static void messageDeletedHandle(ZIMEngine zim, dynamic data) {
+  static void messageDeleted(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onMessageDeleted == null) {
       return;
     }
-    handleReceiveMessage(data['messageList']);
+
     ZIMMessageDeletedInfo deletedInfo = ZIMConverter.oZIMMessageDeletedInfo(data);
 
     ZIMEventHandler.onMessageDeleted!(zim, deletedInfo);
   }
 
-  static void conversationsAllDeletedHandle(ZIMEngine zim, dynamic data) {
+  static void conversationsAllDeleted(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConversationsAllDeleted == null) {
       return;
     }
@@ -2219,60 +2306,74 @@ class ZegoZimPlugin {
     ZIMEventHandler.onConversationsAllDeleted!(zim, deletedInfo);
   }
 
-  static Map handleSendMessageResult(dynamic result) {
-    Map resultMap = jsObjectToMap(result);
-    resultMap["message"]["localMessageID"] =
-        int.parse(resultMap["message"]["localMessageID"]);
-    resultMap["message"]["messageID"] =
-        int.parse(resultMap["message"]["messageID"]);
-    resultMap["message"]["isUserInserted"] =
-        resultMap["message"]["isUserInserted"] is bool
-            ? resultMap["message"]["isUserInserted"]
-            : false;
+  static void blacklistChanged(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onBlacklistChanged == null) {
+      return;
+    }
 
-    resultMap["message"]["reactions"] =
-        resultMap["message"]["reactions"] == null
-            ? [] : resultMap["reactions"].forEach((reactionMap) {
-                      reactionMap["messageID"] = reactionMap["messageID"] is int
-                          ? reactionMap["messageID"]
-                          : int.parse(reactionMap["messageID"]);
-                   });
+    ZIMBlacklistChangeAction action = ZIMBlacklistChangeActionExtension.mapValue[data['action']]!;
+    List<ZIMUserInfo> userList = ZIMConverter.oZIMUserInfoList(data['userList'] ?? []);
 
-    resultMap["message"]["isBroadcastMessage"] = resultMap["message"]["isBroadcastMessage"] is bool
-      ? resultMap["message"]["isBroadcastMessage"]
-        : false;
-
-    return resultMap;
+    ZIMEventHandler.onBlacklistChanged!(zim, userList ,action);
   }
 
-  static void handleReceiveMessage(List<dynamic> messageList) {
-    messageList.forEach((msgMap) {
-      msgMap["messageID"] = int.parse(msgMap["messageID"]);
-      msgMap["localMessageID"] = msgMap["localMessageID"] is String
-          ? int.parse(msgMap["localMessageID"])
-          : 0;
-      msgMap["orderKey"] = msgMap["orderKey"] is int ? msgMap["orderKey"] : 0;
-      msgMap["isUserInserted"] =
-          msgMap["isUserInserted"] is bool ? msgMap["isUserInserted"] : false;
-      msgMap["extendedData"] =
-          msgMap["extendedData"] is String ? msgMap["extendedData"] : "";
-      msgMap["conversationSeq"] =
-          msgMap["conversationSeq"] is int ? msgMap["conversationSeq"] : 0;
-      msgMap["receiptStatus"] =
-          msgMap["receiptStatus"] is int ? msgMap["receiptStatus"] : 0;
+  static void groupMuteUpdated(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onGroupMuteUpdated == null) {
+    //   return;
+    // }
 
-      if (msgMap["type"] == 2) {
-        msgMap["message"] = convertToUint8List(msgMap["message"]);
-      }
-    });
+    // ZIMEventHandler.onGroupMuteUpdated!(zim, deletedInfo);
   }
 
-  // static Map handleGroupResultMap(Map groupBaseInfo) {
-  //   groupBaseInfo["groupAvatarUrl"] = isString(groupBaseInfo["groupAvatarUrl"]);
-  //   groupBaseInfo["groupNamne"] = isString(groupBaseInfo["groupNamne"]);
+  static void groupMemberMuteUpdated(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onGroupMemberMuteUpdated == null) {
+    //   return;
+    // }
 
-  //   return groupBaseInfo;
-  // }
+    // ZIMEventHandler.onGroupMemberMuteUpdated!(zim, deletedInfo);
+  }
+
+  static void friendListChanged(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onFriendListChanged == null) {
+    //   return;
+    // }
+
+    // ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[data['action']]!;
+    // List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
+
+    // ZIMEventHandler.onFriendListChanged!(zim, action, friendList);
+  }
+
+  static void friendInfoUpdated(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onFriendInfoUpdated == null) {
+    //   return;
+    // }
+
+    // List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
+
+    // ZIMEventHandler.onFriendInfoUpdated!(zim, friendList);
+  }
+
+  static void friendApplicationListChanged(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onFriendApplicationListChanged == null) {
+    //   return;
+    // }
+
+    // ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[data['action']]!;
+    // List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
+
+    // ZIMEventHandler.onFriendApplicationListChanged!(zim, action, applicationList);
+  }
+
+  static void friendApplicationUpdated(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onFriendApplicationUpdated == null) {
+    //   return;
+    // }
+
+    // List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
+
+    // ZIMEventHandler.onFriendApplicationUpdated!(zim, applicationList);
+  }
 
   static Object mapToJSObj(Map<dynamic, dynamic>? a) {
     var object = js.newObject();
@@ -2297,98 +2398,28 @@ class ZegoZimPlugin {
     return resultMap;
   }
 
-  static String isString(param) {
-    return param is String ? param : "";
-  }
-
   static ZIMMessage getZIMMessage(Object messageObj) {
     Map messageMap = jsObjectToMap(messageObj);
     ZIMMessage zimMessage = ZIMMessage();
-    zimMessage.conversationID = messageMap["conversationID"];
-    zimMessage.conversationSeq = messageMap["conversationSeq"];
-    zimMessage.messageID = int.parse(messageMap["messageID"]);
-    zimMessage.senderUserID = messageMap["senderUserID"];
-    zimMessage.timestamp = messageMap["timestamp"];
-    zimMessage.orderKey = messageMap["orderKey"];
-    zimMessage.localMessageID = int.parse(messageMap["localMessageID"]);
-    zimMessage.type = ZIMMessageType.values[messageMap["type"]];
-    zimMessage.direction = ZIMMessageDirection.values[messageMap["direction"]];
+    zimMessage.conversationID = messageMap['conversationID'];
+    zimMessage.conversationSeq = messageMap['conversationSeq'];
+    zimMessage.messageID = int.parse(messageMap['messageID']);
+    zimMessage.senderUserID = messageMap['senderUserID'];
+    zimMessage.timestamp = messageMap['timestamp'];
+    zimMessage.orderKey = messageMap['orderKey'];
+    zimMessage.localMessageID = int.parse(messageMap['localMessageID']);
+    zimMessage.type = ZIMMessageType.values[messageMap['type']];
+    zimMessage.direction = ZIMMessageDirection.values[messageMap['direction']];
     zimMessage.sentStatus =
-        ZIMMessageSentStatus.values[messageMap["sentStatus"]];
+        ZIMMessageSentStatus.values[messageMap['sentStatus']];
     zimMessage.conversationType =
-        ZIMConversationType.values[messageMap["conversationType"]];
-    zimMessage.isUserInserted = messageMap["isUserInserted"] is bool
-        ? messageMap["isUserInserted"]
+        ZIMConversationType.values[messageMap['conversationType']];
+    zimMessage.isUserInserted = messageMap['isUserInserted'] is bool
+        ? messageMap['isUserInserted']
         : false;
     zimMessage.extendedData =
-        messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
+        messageMap['extendedData'] is String ? messageMap['extendedData'] : '';
 
     return zimMessage;
-  }
-
-  static Map convertZIMMessage(Map messageMap) {
-    ZIMMessageType msgType =
-        ZIMMessageTypeExtension.mapValue[messageMap['type']]!;
-
-    messageMap["messageID"] = messageMap["messageID"] is int
-        ? messageMap["messageID"]
-        : int.parse(messageMap["messageID"]);
-    messageMap["localMessageID"] = int.parse((messageMap["localMessageID"]));
-    messageMap["isUserInserted"] = messageMap["isUserInserted"] is bool
-        ? messageMap["isUserInserted"]
-        : false;
-    messageMap["orderKey"] =
-        messageMap["orderKey"] is int ? messageMap["orderKey"] : 0;
-    messageMap["extendedData"] =
-        messageMap["extendedData"] is String ? messageMap["extendedData"] : "";
-    messageMap["fileLocalPath"] = messageMap["fileLocalPath"] is String
-        ? messageMap["fileLocalPath"]
-        : "";
-    messageMap["isBroadcastMessage"] = messageMap["isBroadcastMessage"] is bool
-        ? messageMap["isBroadcastMessage"]
-        : false;
-
-    if (messageMap["reactions"] != null) {
-      messageMap["reactions"].forEach((reactionMap) {
-        reactionMap["messageID"] = reactionMap["messageID"] is int
-            ? reactionMap["messageID"]
-            : int.parse(reactionMap["messageID"]);
-      });
-    } else {
-      messageMap["reactions"] = [];
-    }
-
-    switch (msgType) {
-      case ZIMMessageType.image:
-        messageMap["thumbnailLocalPath"] =
-            messageMap["thumbnailLocalPath"] is String
-                ? messageMap["thumbnailLocalPath"]
-                : "";
-        messageMap["largeImageLocalPath"] =
-            messageMap["largeImageLocalPath"] is String
-                ? messageMap["largeImageLocalPath"]
-                : "";
-        break;
-      case ZIMMessageType.video:
-        messageMap["videoFirstFrameLocalPath"] =
-            messageMap["videoFirstFrameLocalPath"] is String
-                ? messageMap["videoFirstFrameLocalPath"]
-                : "";
-        break;
-      default:
-        break;
-    }
-
-    return messageMap;
-  }
-
-  static Uint8List convertToUint8List(dynamic data) {
-    final list = <int>[];
-    data.forEach((i) {
-      list.add(i);
-    });
-
-    final uint8List = Uint8List.fromList(list);
-    return uint8List;
   }
 }

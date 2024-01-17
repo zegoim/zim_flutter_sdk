@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <memory>
 #include <flutter/event_channel.h>
@@ -148,12 +148,30 @@ protected:
         const std::vector<std::string>& invitees,
         const std::string& callID);
 
+    void onCallInvitationCreated(ZIM * zim,
+                                         const ZIMCallInvitationCreatedInfo & info,
+                                         const std::string & callID);
+
     void onCallInvitationEnded(ZIM* zim, const ZIMCallInvitationEndedInfo& info,
         const std::string& callID);
 
     void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo& info, const std::string & callID);
 
     void onMessageReactionsChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions);
+
+    void onBlacklistChanged(ZIM * zim, const std::vector<ZIMUserInfo> & userList ,const ZIMBlacklistChangeAction & action);
+
+    void onFriendInfoUpdated(ZIM* zim,
+        const std::vector<ZIMFriendInfo>& friendInfoList) override;
+
+    void onFriendListChanged(ZIM* zim, const std::vector<ZIMFriendInfo>& friendInfoList,ZIMFriendListChangeAction& action) override;
+
+    void onFriendApplicationUpdated(
+        ZIM* zim,
+        const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList) override;
+
+    void onFriendApplicationListChanged(
+        ZIM* zim, const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList,ZIMFriendApplicationListChangeAction& action) override;
 
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
