@@ -823,14 +823,6 @@ FTMap ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(const ZIMGroupOperatedInf
 	return infoMap;
 }
 
-FTMap ZIMPluginConverter::cnvZIMGroupMutedInfoToMap(const ZIMGroupMutedInfo &info) {
-	FTMap infoMap;
-	infoMap[FTValue("mode")] = FTValue(info.mode);
-	infoMap[FTValue("duration")] = FTValue((int32_t)info.duration);
-	infoMap[FTValue("roleList")] = cnvStlVectorToFTArray(info.roleList);
-	return infoMap;
-}
-
 FTMap ZIMPluginConverter::cnvZIMGroupAttributesUpdateInfoToMap(const ZIMGroupAttributesUpdateInfo& updateInfo) {
 	FTMap updateInfoMap;
 	updateInfoMap[FTValue("action")] = FTValue(updateInfo.action);
