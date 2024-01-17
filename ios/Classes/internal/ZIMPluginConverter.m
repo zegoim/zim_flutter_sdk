@@ -1325,6 +1325,7 @@
     NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
     [infoDic setObject:info.conversationID forKey:@"conversationID"];
     [infoDic setObject:[NSNumber numberWithInteger:info.conversationType] forKey:@"conversationType"];
+    [infoDic setObject:[NSNumber numberWithInteger:info.messageDeleteType] forKey:@"messageDeleteType"];
     [infoDic setObject:[NSNumber numberWithBool:info.isDeleteConversationAllMessage] forKey:@"isDeleteConversationAllMessage"];
     [infoDic setObject:[ZIMPluginConverter mZIMMessageList:info.messageList] forKey:@"messageList"];
     return infoDic;

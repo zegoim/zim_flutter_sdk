@@ -1130,6 +1130,31 @@ void ZIMPluginMethodHandler::deleteMessages(flutter::EncodableMap& argument,
 
 }
 
+void ZIMPluginMethodHandler::deleteAllConversationMessages(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
+	ZIMMessageDeleteConfig config;
+	config.isAlsoDeleteServerMessage = std::get<bool>(configMap[FTValue("isAlsoDeleteServerMessage")]);
+
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->deleteAllConversationMessages(config, [=](const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			sharedPtrResult->Success();
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
 
 void ZIMPluginMethodHandler::sendMessageReceiptsRead(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {

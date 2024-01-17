@@ -294,6 +294,15 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<void> deleteAllConversationMessages(
+      ZIMMessageDeleteConfig config) async {
+    return await channel.invokeMethod('deleteAllConversationMessages', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMMessageDeleteConfig(config)
+    });
+  }
+
+  @override
   Future<ZIMMessageDeletedResult> deleteMessages(
       List<ZIMMessage> messageList,
       String conversationID,

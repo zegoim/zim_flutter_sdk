@@ -1893,6 +1893,13 @@ class ZIMConverter {
     };
   }
 
+  }
+    return ZIMMessageDeletedInfo(conversationID: map['conversationID'],
+      conversationType: ZIMConversationTypeExtension.mapValue[map['conversationType']]!,
+      messageDeleteType: ZIMMessageDeleteTypeExtension.mapValue[map['messageDeleteType']]!,
+      isDeleteConversationAllMessage: map['isDeleteConversationAllMessage'],
+      messageList: ZIMConverter.oZIMMessageList(map['messageList']));
+  }
   static ZIMFriendRelationInfo oZIMFriendRelationInfo(Map map) {
     return ZIMFriendRelationInfo()
       ..type = ZIMUserRelationTypeExtension.mapValue[map['type']]!

@@ -933,6 +933,25 @@
     }];
 }
 
+- (void)deleteAllConversationMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
+    ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMMessageDeleteConfig:[call.arguments objectForKey:@"config"]];
+    [zim deleteAllConversationMessagesWithConfig:deleteConfig callback:^(ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            result(nil);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
 - (void)deleteMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];

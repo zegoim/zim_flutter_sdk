@@ -221,6 +221,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "deleteMessages") {
         ZIMPluginMethodHandler::getInstance().deleteMessages(argument, std::move(result));
     } 
+	else if (method_call.method_name() == "deleteAllConversationMessages") {
+	ZIMPluginMethodHandler::getInstance().deleteAllConversationMessages(argument, std::move(result));
+	}
     else if (method_call.method_name() == "searchLocalMessages") {
         ZIMPluginMethodHandler::getInstance().searchLocalMessages(argument, std::move(result));
     } 

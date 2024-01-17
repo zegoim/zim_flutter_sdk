@@ -242,6 +242,20 @@ extension ZIMConversationTypeExtension on ZIMConversationType {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMMessageDeleteTypeExtension on ZIMMessageDeleteType {
+  static const valueMap = {
+    ZIMMessageDeleteType.messageListDelete: 0,
+    ZIMMessageDeleteType.singleConversationAllMessagesDelete: 1,
+    ZIMMessageDeleteType.allMessagesDelete: 2,
+  };
+  static const mapValue = {
+    0: ZIMMessageDeleteType.messageListDelete,
+    1: ZIMMessageDeleteType.singleConversationAllMessagesDelete,
+    2: ZIMMessageDeleteType.allMessagesDelete,
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMConversationEventExtension on ZIMConversationEvent {
   static const valueMap = {
     ZIMConversationEvent.added: 0,

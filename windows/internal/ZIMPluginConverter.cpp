@@ -1213,6 +1213,7 @@ FTMap ZIMPluginConverter::cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedI
 	FTMap infoMap;
 	infoMap[FTValue("conversationID")] = FTValue(info.conversationID);
 	infoMap[FTValue("conversationType")] = FTValue(info.conversationType);
+	infoMap[FTValue("messageDeleteType")] = FTValue(info.messageDeleteType);
 	infoMap[FTValue("isDeleteConversationAllMessage")] = FTValue(info.isDeleteConversationAllMessage);
 	infoMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(info.messageList);
 	return infoMap;
