@@ -724,6 +724,30 @@
     }];
 }
 
+- (void)setConversationDraft:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments safeObjectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+
+    NSString *draft = [call.arguments safeObjectForKey:@"draft"];
+    NSString *conversationID = [call.arguments safeObjectForKey:@"conversationID"];
+    ZIMConversationType conversationType = [[call.arguments safeObjectForKey:@"conversationType"] unsignedIntegerValue];
+    [zim setConversationDraft:draft conversationID:conversationID conversationType:conversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultMtDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInteger:conversationType] forKey:@"conversationType"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
 - (void)sendMessageReceiptsRead:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments safeObjectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];

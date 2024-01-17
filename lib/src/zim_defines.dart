@@ -2193,6 +2193,13 @@ class ZIMConversationMessageReceiptReadSentResult {
       {required this.conversationID, required this.conversationType});
 }
 
+class ZIMConversationDraftSetResult{
+  String conversationID;
+  ZIMConversationType conversationType;
+  ZIMConversationDraftSetResult(
+      {required this.conversationID, required this.conversationType});
+}
+
 class ZIMMessageReceiptsReadSentResult {
   String conversationID;
   ZIMConversationType conversationType;

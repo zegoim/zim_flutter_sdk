@@ -443,6 +443,16 @@ class ZIMConverter {
     return ZIMMessageLocalExtendedDataUpdatedResult(
         message: oZIMMessage(resultMap['message']));
   }
+  static ZIMConversationDraftSetResult oZIMConversationDraftSetResult(Map resultMap) {
+    return ZIMConversationDraftSetResult(
+        conversationID: resultMap['conversationID'],
+        conversationType: ZIMConversationTypeExtension
+            .mapValue[resultMap['conversationType']]!);
+  }
+
+  static ZIMMessageLocalExtendedDataUpdatedResult oZIMMessageLocalExtendedDataUpdatedResult(Map resultMap) {
+    return ZIMMessageLocalExtendedDataUpdatedResult(message: oZIMMessage(resultMap['message']));
+  }
 
   static ZIMMessagesSearchedResult oZIMMessagesSearchedResult(Map resultMap) {
     List<ZIMMessage> messageList = [];

@@ -693,6 +693,32 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void setConversationDraft(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        String draft = Objects.requireNonNull(call.argument("draft"));
+        String conversationID = Objects.requireNonNull(call.argument("conversationID"));
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
+        zim.setConversationDraft(draft, conversationID, conversationType, new ZIMConversationDraftSetCallback() {
+            @Override
+            public void onConversationDraftSet(String conversationID, ZIMConversationType conversationType, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("conversationID",conversationID);
+                    resultMap.put("conversationType",conversationType.value());
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
     public static void sendMessageReceiptsRead(MethodCall call, Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
