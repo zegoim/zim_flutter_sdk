@@ -945,7 +945,7 @@
     }
     
     ZIMMessageDeleteConfig *deleteConfig = [ZIMPluginConverter oZIMMessageDeleteConfig:[call.arguments objectForKey:@"config"]];
-    [zim deleteAllConversationMessages:deleteConfig callback:^(ZIMError * _Nonnull errorInfo) {
+    [zim deleteAllConversationMessagesWithConfig:deleteConfig callback:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             result(nil);
         }
