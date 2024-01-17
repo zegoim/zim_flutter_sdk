@@ -983,9 +983,9 @@ class ZIMGroupFullInfo {
   ZIMGroupMessageNotificationStatus notificationStatus =
       ZIMGroupMessageNotificationStatus.notify;
 
-  ZIMGroupMuteInfo mutedInfo;
+  ZIMGroupMuteInfo mutedInfo = ZIMGroupMuteInfo();
 
-  ZIMGroupFullInfo({required this.baseInfo}):muteInfo=ZIMGroupMuteInfo();
+  ZIMGroupFullInfo({required this.baseInfo});
 }
 
 /// Description:  group class.
@@ -2232,13 +2232,6 @@ class ZIMConversationMessageReceiptReadSentResult {
   String conversationID;
   ZIMConversationType conversationType;
   ZIMConversationMessageReceiptReadSentResult(
-      {required this.conversationID, required this.conversationType});
-}
-
-class ZIMConversationDraftSetResult{
-  String conversationID;
-  ZIMConversationType conversationType;
-  ZIMConversationDraftSetResult(
       {required this.conversationID, required this.conversationType});
 }
 

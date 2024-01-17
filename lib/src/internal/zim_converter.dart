@@ -438,11 +438,6 @@ class ZIMConverter {
         conversation: oZIMConversation(resultMap['conversation']));
   }
 
-  static ZIMMessageLocalExtendedDataUpdatedResult
-      oZIMMessageLocalExtendedDataUpdatedResult(Map resultMap) {
-    return ZIMMessageLocalExtendedDataUpdatedResult(
-        message: oZIMMessage(resultMap['message']));
-  }
   static ZIMConversationDraftSetResult oZIMConversationDraftSetResult(Map resultMap) {
     return ZIMConversationDraftSetResult(
         conversationID: resultMap['conversationID'],
@@ -1813,6 +1808,7 @@ class ZIMConverter {
         conversationID: map['conversationID'],
         conversationType:
             ZIMConversationTypeExtension.mapValue[map['conversationType']]!,
+        messageDeleteType: ZIMMessageDeleteTypeExtension.mapValue[map['messageDeleteType']]!,
         isDeleteConversationAllMessage: map['isDeleteConversationAllMessage'],
         messageList: ZIMConverter.oZIMMessageList(map['messageList'] ?? []));
   }
@@ -1906,13 +1902,6 @@ class ZIMConverter {
     };
   }
 
-  }
-    return ZIMMessageDeletedInfo(conversationID: map['conversationID'],
-      conversationType: ZIMConversationTypeExtension.mapValue[map['conversationType']]!,
-      messageDeleteType: ZIMMessageDeleteTypeExtension.mapValue[map['messageDeleteType']]!,
-      isDeleteConversationAllMessage: map['isDeleteConversationAllMessage'],
-      messageList: ZIMConverter.oZIMMessageList(map['messageList']));
-  }
   static ZIMFriendRelationInfo oZIMFriendRelationInfo(Map map) {
     return ZIMFriendRelationInfo()
       ..type = ZIMUserRelationTypeExtension.mapValue[map['type']]!
@@ -2048,13 +2037,6 @@ class ZIMConverter {
     return ZIMBlacklistUsersRemovedResult()
       ..errorUserInfoArrayList = oZIMErrorUserInfoList(
           map['errorUserList'] ?? []); // Assuming oZIMErrorUserInfo exists
-  }
-
-  static ZIMConversationDraftSetResult oZIMConversationDraftSetResult(Map map) {
-    return ZIMConversationDraftSetResult(
-        conversationID: map["conversationID"],
-        conversationType:
-            ZIMConversationTypeExtension.mapValue[map['conversationType']]!);
   }
 
   static Map mZIMGroupOperatedInfo(ZIMGroupOperatedInfo info){

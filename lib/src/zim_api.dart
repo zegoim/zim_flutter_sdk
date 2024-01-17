@@ -334,9 +334,6 @@ abstract class ZIM {
   Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
       String conversationID, ZIMConversationType conversationType);
 
-  Future<ZIMConversationDraftSetResult> setConversationDraft(
-  String draft,String conversationID, ZIMConversationType conversationType);
-
   /// Supported versions: 2.4.0 and above.
   ///
   /// Detailed description: This method can be used to send messages in single chat, room and group chat.

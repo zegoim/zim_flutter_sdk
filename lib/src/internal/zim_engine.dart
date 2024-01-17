@@ -1238,18 +1238,6 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType) async {
-    Map resultMap = await channel.invokeMethod('setConversationDraft', {
-      'handle': handle,
-      'draft': draft,
-      'conversationID': conversationID,
-      'conversationType': ZIMConversationTypeExtension.valueMap[conversationType],
-    });
-
-    return ZIMConverter.oZIMConversationDraftSetResult(resultMap);
-  }
-
-  @override
   Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config) async{
     Map resultMap = await channel.invokeMethod('muteGroup',{
       'handle':handle,
@@ -1281,7 +1269,7 @@ class ZIMEngine implements ZIM {
     });
     return ZIMConverter.oZIMGroupMemberMutedListQueriedResult(resultMap);
   }
-}
+
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message) async{
     Map resultMap = await channel.invokeMethod('queryCombineMessageDetail',{
       'handle':handle,
