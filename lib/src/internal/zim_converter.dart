@@ -2057,14 +2057,6 @@ class ZIMConverter {
     return groupMuteInfo;
   }
 
-  static ZIMGroupMutedInfo oZIMGroupMutedInfo(Map map) {
-    ZIMGroupMutedInfo groupMutedInfo = ZIMGroupMutedInfo();
-    groupMutedInfo.mode = ZIMGroupMuteModeExtension.mapValue[map['mode']]!;
-    groupMutedInfo.duration = map['duration'];
-    groupMutedInfo.roleList = List<int>.from(map['roleList']);
-    return groupMutedInfo;
-  }
-
   //供自动化使用，sdk 使用前需要 check
   static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo){
     Map map = {};
@@ -2085,7 +2077,7 @@ class ZIMConverter {
   static ZIMGroupMutedResult oZIMGroupMutedResult(Map map){
     ZIMGroupMutedResult result = ZIMGroupMutedResult();
     result.groupID = map['groupID'];
-    result.info = ZIMConverter.oZIMGroupMutedInfo(map['info']);
+    result.info = ZIMConverter.oZIMGroupMuteInfo(map['info']);
     result.isMute = map['isMute'];
     return result;
   }

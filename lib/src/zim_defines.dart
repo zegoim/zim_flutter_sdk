@@ -1050,13 +1050,6 @@ class ZIMGroupMemberMutedListQueryConfig{
   ZIMGroupMemberMutedListQueryConfig():nextFlag=0,count=0;
 }
 
-class ZIMGroupMutedInfo{
-  ZIMGroupMuteMode mode;
-  int duration;
-  List<int> roleList;
-  ZIMGroupMutedInfo():mode=ZIMGroupMuteMode.none,duration=0,roleList=[];
-}
-
 /// Group advanced configuration.
 class ZIMGroupAdvancedConfig {
   String groupNotice = "";
@@ -2359,8 +2352,8 @@ class ZIMConversationDraftSetResult {
 class ZIMGroupMutedResult {
   bool isMute;
   String groupID;
-  ZIMGroupMutedInfo info;
-  ZIMGroupMutedResult():groupID='',info=ZIMGroupMutedInfo(),isMute=false;
+  ZIMGroupMuteInfo info;
+  ZIMGroupMutedResult():groupID='',info=ZIMGroupMuteInfo(),isMute=false;
 }
 
 class ZIMGroupMembersMutedResult {
