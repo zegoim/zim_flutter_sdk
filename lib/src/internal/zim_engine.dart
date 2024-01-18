@@ -1167,7 +1167,7 @@ class ZIMEngine implements ZIM {
   Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID, ZIMFriendApplicationSendConfig config) async {
     Map resultMap = await channel.invokeMethod('sendFriendApplication', {
       'handle': handle,
-      'userID': userID,
+      'applyUserID': userID,
       'config': ZIMConverter.mZIMSendFriendApplicationConfig(config),
     });
 
