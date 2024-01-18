@@ -747,7 +747,7 @@ class ZIMConverter {
   static List<ZIMUserInfo> oZIMUserInfoList(List memberListBasic) {
     List<ZIMUserInfo> memberList = [];
     for (Map memberInfoMap in memberListBasic) {
-      memberList.add(oZIMUserInfo(memberInfoMap)!);
+      memberList.add(oZIMUserInfo(memberInfoMap));
     }
     ZIMManager.writeLog("Flutter dart. oZIMUserInfoList success");
     return memberList;
@@ -1846,8 +1846,7 @@ class ZIMConverter {
 
   static ZIMFriendApplicationAcceptedResult oZIMFriendApplicationAcceptedResult(
       Map map) {
-    ZIMFriendApplicationAcceptedResult result = ZIMFriendApplicationAcceptedResult();
-    result.friendInfo = oZIMFriendInfo(map['friendInfo']);
+    ZIMFriendApplicationAcceptedResult result = ZIMFriendApplicationAcceptedResult(friendInfo: oZIMFriendInfo(map['friendInfo']));
     return result;
   }
 
@@ -1952,91 +1951,72 @@ class ZIMConverter {
   }
 
   static ZIMFriendAddedResult oZIMFriendAddedResult(Map map) {
-    return ZIMFriendAddedResult()
-      ..friendInfo = oZIMFriendInfo(map['friendInfo']);
+    return ZIMFriendAddedResult(friendInfo: oZIMFriendInfo(map['friendInfo']));
   }
 
   static ZIMFriendAliasUpdatedResult oZIMFriendAliasUpdatedResult(Map map) {
-    return ZIMFriendAliasUpdatedResult()
-      ..friendInfo = oZIMFriendInfo(map['friendInfo']);
+    return ZIMFriendAliasUpdatedResult(friendInfo: oZIMFriendInfo(map['friendInfo']));
   }
 
   static ZIMFriendApplicationListQueriedResult
       oZIMFriendApplicationListQueriedResult(Map map) {
-    ZIMFriendApplicationListQueriedResult result = ZIMFriendApplicationListQueriedResult();
-    result.applicationList = List<ZIMFriendApplicationInfo>.from(
-        map['applicationList'].map((x) => oZIMFriendApplicationInfo(x)));
-    result.nextFlag = map['nextFlag'];
+    ZIMFriendApplicationListQueriedResult result = ZIMFriendApplicationListQueriedResult(applicationList: List<ZIMFriendApplicationInfo>.from(
+        map['applicationList'].map((x) => oZIMFriendApplicationInfo(x))),nextFlag:map['nextFlag']);
     return result;
   }
 
   static ZIMFriendApplicationRejectedResult oZIMFriendApplicationRejectedResult(
       Map map) {
-    return ZIMFriendApplicationRejectedResult()
-      ..userInfo = oZIMUserInfo(map['userInfo']);
+    return ZIMFriendApplicationRejectedResult(userInfo: oZIMUserInfo(map['userInfo']));
   }
 
   static ZIMFriendAttributesUpdatedResult oZIMFriendAttributesUpdatedResult(
       Map map) {
-    return ZIMFriendAttributesUpdatedResult()
-      ..friendInfo = oZIMFriendInfo(map['friendInfo']);
+    return ZIMFriendAttributesUpdatedResult(friendInfo: oZIMFriendInfo(map['friendInfo']));
   }
 
   static ZIMFriendsDeletedResult oZIMFriendDeletedResult(Map map) {
-    return ZIMFriendsDeletedResult()
-      ..errorUserList = oZIMErrorUserInfoList(
-          map['errorUserList']); // Assuming oZIMErrorUserInfo exists
+    return ZIMFriendsDeletedResult(errorUserList: oZIMErrorUserInfoList(
+        map['errorUserList']));
   }
 
   static ZIMFriendListQueriedResult oZIMFriendListQueriedResult(Map map) {
-    return ZIMFriendListQueriedResult()
-      ..friendList = oZIMFriendInfoList(map['friendList'])
-      ..nextFlag = map['nextFlag'];
+    return ZIMFriendListQueriedResult(friendList: oZIMFriendInfoList(map['friendList']),nextFlag: map['nextFlag']);
   }
 
   static ZIMFriendsRelationCheckedResult oZIMFriendRelationCheckedResult(
       Map map) {
-    ZIMFriendsRelationCheckedResult result = ZIMFriendsRelationCheckedResult();
-    result.relationInfos = oZIMFriendRelationInfoList(map['relationInfos']);
-    result.errorUserList = oZIMErrorUserInfoList(map['errorUserList']);
+    ZIMFriendsRelationCheckedResult result = ZIMFriendsRelationCheckedResult(relationInfos: oZIMFriendRelationInfoList(map['relationInfos']),errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
     return result;
   }
 
   static ZIMFriendsInfoQueriedResult oZIMFriendsInfoQueriedResult(Map map) {
-    ZIMFriendsInfoQueriedResult result = ZIMFriendsInfoQueriedResult();
-    result.friendInfos = oZIMFriendInfoList(map['friendInfos']);
-    result.errorUserList = oZIMErrorUserInfoList(map['errorUserList']);
+    ZIMFriendsInfoQueriedResult result = ZIMFriendsInfoQueriedResult(friendInfos: oZIMFriendInfoList(map['friendInfos']),errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
     return result;
   }
 
   static ZIMFriendApplicationSentResult oZIMFriendApplicationSentResult(
       Map map) {
-    ZIMFriendApplicationSentResult result = ZIMFriendApplicationSentResult();
-    result.applicationInfo = oZIMFriendApplicationInfo(map['applicationInfo']);
+    ZIMFriendApplicationSentResult result = ZIMFriendApplicationSentResult(applicationInfo: oZIMFriendApplicationInfo(map['applicationInfo']));
     return result;
   }
 
   static ZIMBlacklistCheckedResult oZIMBlacklistCheckedResult(Map map) {
-    return ZIMBlacklistCheckedResult()
-      ..isUserInBlacklist = map['isUserInBlacklist'];
+    return ZIMBlacklistCheckedResult(isUserInBlacklist:map['isUserInBlacklist']);
   }
 
   static ZIMBlacklistQueriedResult oZIMBlacklistQueriedResult(Map map) {
-    return ZIMBlacklistQueriedResult()
-      ..blacklist = oZIMUserInfoList(map['blacklist'] ?? [])
-      ..nextFlag = map['nextFlag'];
+    return ZIMBlacklistQueriedResult(blacklist: oZIMUserInfoList(map['blacklist']),nextFlag:map['nextFlag']);
   }
 
   static ZIMBlacklistUsersAddedResult oZIMBlacklistUsersAddedResult(Map map) {
-    return ZIMBlacklistUsersAddedResult()
-      ..errorUserList = oZIMErrorUserInfoList(map['errorUserList'] ?? []);
+    return ZIMBlacklistUsersAddedResult(errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
   }
 
   static ZIMBlacklistUsersRemovedResult oZIMBlacklistUsersRemovedResult(
       Map map) {
-    return ZIMBlacklistUsersRemovedResult()
-      ..errorUserInfoArrayList = oZIMErrorUserInfoList(
-          map['errorUserList'] ?? []); // Assuming oZIMErrorUserInfo exists
+    return ZIMBlacklistUsersRemovedResult(errorUserInfoArrayList:oZIMErrorUserInfoList(
+        map['errorUserList']) );
   }
 
   static Map mZIMGroupOperatedInfo(ZIMGroupOperatedInfo info){
@@ -2075,28 +2055,17 @@ class ZIMConverter {
   }
 
   static ZIMGroupMutedResult oZIMGroupMutedResult(Map map){
-    ZIMGroupMutedResult result = ZIMGroupMutedResult();
-    result.groupID = map['groupID'];
-    result.info = ZIMConverter.oZIMGroupMuteInfo(map['info']);
-    result.isMute = map['isMute'];
+    ZIMGroupMutedResult result = ZIMGroupMutedResult(groupID: map['groupID'],info: ZIMConverter.oZIMGroupMuteInfo(map['info']),isMute:map['isMute']);
     return result;
   }
 
   static ZIMGroupMembersMutedResult oZIMGroupMembersMutedResult(Map map){
-    ZIMGroupMembersMutedResult result = ZIMGroupMembersMutedResult();
-    result.groupID = map['groupID'];
-    result.isMute = map['isMute'];
-    result.errorUserList = oZIMErrorUserInfoList(map['errorUserList']);
-    result.mutedMemberIDs = List<String>.from(map['mutedMemberIDs']);
-    result.duration = map['duration'];
+    ZIMGroupMembersMutedResult result = ZIMGroupMembersMutedResult(groupID:map['groupID'],isMute:map['isMute'],errorUserList:oZIMErrorUserInfoList(map['errorUserList']),mutedMemberIDs:List<String>.from(map['mutedMemberIDs']),duration:map['duration']);
     return result;
   }
 
   static ZIMGroupMemberMutedListQueriedResult oZIMGroupMemberMutedListQueriedResult(Map map){
-    ZIMGroupMemberMutedListQueriedResult result = ZIMGroupMemberMutedListQueriedResult();
-    result.nextFlag = map['nextFlag'];
-    result.groupID = map['groupID'];
-    result.userList = ZIMConverter.oZIMGroupMemberInfoList(map['userList']);
+    ZIMGroupMemberMutedListQueriedResult result = ZIMGroupMemberMutedListQueriedResult(nextFlag: map['nextFlag'],groupID: map['groupID'],userList: ZIMConverter.oZIMGroupMemberInfoList(map['userList']));
     return result;
   }
 

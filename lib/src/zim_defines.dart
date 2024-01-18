@@ -2278,68 +2278,83 @@ class ZIMMessageReactionUserListQueriedResult {
 }
 
 class ZIMFriendAddedResult {
-  late ZIMFriendInfo friendInfo;
+  ZIMFriendInfo friendInfo;
+  ZIMFriendAddedResult({required this.friendInfo});
 }
 
 class ZIMFriendAliasUpdatedResult {
-  late ZIMFriendInfo friendInfo;
+  ZIMFriendInfo friendInfo;
+  ZIMFriendAliasUpdatedResult({required this.friendInfo});
 }
 
 class ZIMFriendApplicationAcceptedResult {
-  late ZIMFriendInfo friendInfo;
+  ZIMFriendInfo friendInfo;
+  ZIMFriendApplicationAcceptedResult({required this.friendInfo});
 }
 
 class ZIMFriendApplicationListQueriedResult {
-  late List<ZIMFriendApplicationInfo> applicationList;
-  int nextFlag = 0;
+  List<ZIMFriendApplicationInfo> applicationList;
+  int nextFlag;
+  ZIMFriendApplicationListQueriedResult({required this.applicationList,required this.nextFlag});
 }
 
 class ZIMFriendApplicationRejectedResult {
-   late ZIMUserInfo userInfo;
+  ZIMUserInfo userInfo;
+  ZIMFriendApplicationRejectedResult({required this.userInfo});
 }
 
 class ZIMFriendAttributesUpdatedResult {
-   late ZIMFriendInfo friendInfo;
+  ZIMFriendInfo friendInfo;
+  ZIMFriendAttributesUpdatedResult({required this.friendInfo});
 }
 
 class ZIMFriendsDeletedResult {
-   late List<ZIMErrorUserInfo> errorUserList;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMFriendsDeletedResult({required this.errorUserList});
 }
 
 class ZIMFriendListQueriedResult {
-  late List<ZIMFriendInfo> friendList;
-  int nextFlag = 0;
+  List<ZIMFriendInfo> friendList;
+  int nextFlag;
+  ZIMFriendListQueriedResult({required this.friendList,required this.nextFlag});
 }
 
 class ZIMFriendsRelationCheckedResult {
-  late List<ZIMFriendRelationInfo> relationInfos;
-  late List<ZIMErrorUserInfo> errorUserList;
+  List<ZIMFriendRelationInfo> relationInfos;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMFriendsRelationCheckedResult({required this.relationInfos,required this.errorUserList});
 }
 
 class ZIMFriendsInfoQueriedResult {
-  late List<ZIMFriendInfo> friendInfos;
-  late List<ZIMErrorUserInfo> errorUserList;
+  List<ZIMFriendInfo> friendInfos;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMFriendsInfoQueriedResult({required this.friendInfos,required this.errorUserList});
 }
 
 class ZIMFriendApplicationSentResult {
-  late ZIMFriendApplicationInfo applicationInfo;
+  ZIMFriendApplicationInfo applicationInfo;
+  ZIMFriendApplicationSentResult({required this.applicationInfo});
 }
 
 class ZIMBlacklistCheckedResult {
-  late bool isUserInBlacklist;
+  bool isUserInBlacklist;
+  ZIMBlacklistCheckedResult({required this.isUserInBlacklist});
 }
 
 class ZIMBlacklistQueriedResult {
-  late List<ZIMUserInfo> blacklist;
-  int nextFlag = 0;
+  List<ZIMUserInfo> blacklist;
+  int nextFlag;
+  ZIMBlacklistQueriedResult({required this.blacklist, required this.nextFlag});
 }
 
 class ZIMBlacklistUsersAddedResult {
-  late List<ZIMErrorUserInfo> errorUserList;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMBlacklistUsersAddedResult({required this.errorUserList});
 }
 
 class ZIMBlacklistUsersRemovedResult {
-  late List<ZIMErrorUserInfo> errorUserInfoArrayList;
+  List<ZIMErrorUserInfo> errorUserInfoArrayList;
+  ZIMBlacklistUsersRemovedResult({required this.errorUserInfoArrayList});
 }
 
 class ZIMConversationDraftSetResult {
@@ -2353,7 +2368,7 @@ class ZIMGroupMutedResult {
   bool isMute;
   String groupID;
   ZIMGroupMuteInfo info;
-  ZIMGroupMutedResult():groupID='',info=ZIMGroupMuteInfo(),isMute=false;
+  ZIMGroupMutedResult({required this.isMute,required this.groupID,required this.info});
 }
 
 class ZIMGroupMembersMutedResult {
@@ -2362,14 +2377,14 @@ class ZIMGroupMembersMutedResult {
   int duration;
   List<String> mutedMemberIDs;
   List<ZIMErrorUserInfo> errorUserList;
-  ZIMGroupMembersMutedResult():groupID="",duration=0,mutedMemberIDs=[],errorUserList=[],isMute = false;
+  ZIMGroupMembersMutedResult({required this.groupID, required this.isMute, required this.duration, required this.mutedMemberIDs, required this.errorUserList});
 }
 
 class ZIMGroupMemberMutedListQueriedResult {
   String groupID;
   int nextFlag;
   List<ZIMGroupMemberInfo> userList;
-  ZIMGroupMemberMutedListQueriedResult():groupID="",nextFlag = 0,userList=[];
+  ZIMGroupMemberMutedListQueriedResult({required this.groupID,required this.nextFlag, required this.userList});
 }
 class ZIMCombineMessageDetailQueriedResult {
   ZIMCombineMessage message;
@@ -2393,7 +2408,7 @@ class ZIMFriendAddConfig {
 }
 
 class ZIMFriendDeleteConfig {
-  late ZIMFriendDeleteType type;
+  ZIMFriendDeleteType type = ZIMFriendDeleteType.unknown;
 }
 
 class ZIMFriendInfo extends ZIMUserInfo {
@@ -2419,11 +2434,11 @@ class ZIMFriendListQueryConfig {
 }
 
 class ZIMFriendRelationCheckConfig {
-  late ZIMFriendRelationCheckType type;
+  ZIMFriendRelationCheckType type = ZIMFriendRelationCheckType.unknown;
 }
 
 class ZIMFriendRelationInfo {
-  late ZIMUserRelationType type;
+  ZIMUserRelationType type = ZIMUserRelationType.unknown;
   String userID = "";
 }
 
