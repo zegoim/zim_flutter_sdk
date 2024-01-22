@@ -73,7 +73,7 @@ import im.zego.zim.callback.ZIMLogUploadedCallback;
 import im.zego.zim.callback.ZIMLoggedInCallback;
 import im.zego.zim.callback.ZIMMediaDownloadedCallback;
 import im.zego.zim.callback.ZIMMediaMessageSentCallback;
-import im.zego.zim.callback.ZIMMessageCombineQueriedCallback;
+import im.zego.zim.callback.ZIMCombineMessageDetailQueriedCallback;
 import im.zego.zim.callback.ZIMMessageDeletedCallback;
 import im.zego.zim.callback.ZIMMessageInsertedCallback;
 import im.zego.zim.callback.ZIMMessageQueriedCallback;
@@ -187,6 +187,7 @@ import im.zego.zim.enums.ZIMConversationType;
 import im.zego.zim.enums.ZIMErrorCode;
 import im.zego.zim.enums.ZIMGeofencingType;
 import im.zego.zim.enums.ZIMMediaFileType;
+import im.zego.zim.callback.ZIMConversationDraftSetCallback;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.Result;
@@ -1263,8 +1264,8 @@ public class ZIMPluginMethodHandler {
         });
     }
 
-    String handle = call.argument("handle");
     public static void searchLocalMessages(MethodCall call, Result result) {
+        String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if(zim == null) {
             result.error("-1", "no native instance",null);
