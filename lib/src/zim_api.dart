@@ -531,6 +531,24 @@ abstract class ZIM {
   Future<ZIMMessageDeletedResult> deleteAllMessage(String conversationID,
       ZIMConversationType conversationType, ZIMMessageDeleteConfig config);
 
+  ///Supported versions: 2.14.0 and above.
+  ///
+  ///Detail description: This method implements the function of deleting all messages for all sessions.
+  ///    
+  ///Business scenario: The user needs to delete a message. When the user does not need to display a message, this method can be used to delete it.
+  ///       
+  ///Call timing/Notification timing: Called when you need to delete all messages for all sessions.
+  ///
+  ///Note: IsAlsoDeleteServerMessage decided whether to delete a server message, the impact of deleting messages is limited to this account.
+  ///
+  ///Restrictions: Effective after login.
+  ///    
+  ///Impacts on other APIs: Call the interface trigger [onMessageDeleted] callback, if there are unread messages at this time, will trigger  [onConversationTotalUnreadMessageCountUpdated] callback.
+  ///
+  ///Related callbacks：[ZIMConversationMessagesAllDeletedCallback]、[onMessageDeleted]、[onConversationTotalUnreadMessageCountUpdated].
+  /// [config] Delete the configuration of message.
+  /// [callback] Returns the result of deleting all messages.
+
   Future<void> deleteAllConversationMessages(ZIMMessageDeleteConfig config);
 
   /// Supported versions: 2.1.5 and above.
@@ -1577,6 +1595,21 @@ abstract class ZIM {
   /// [userID] The user ID information that needs to be checked is required.
   Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
 
+  /// Available since: 2.14.0 and above.
+  ///
+  /// Description: When you need to set a draft for a session, call this interface, and members of the session can call this interface.
+  ///
+  /// Use cases: This interface can be invoked when you need to temporarily save the text message that the user is editing but has not yet sent.
+  ///
+  /// When to call /Trigger:  Call when you need to set session draft, call after creating ZIM instance, take effect after login, invalid after logout.
+  ///
+  /// Impacts on other APIs: A successful call triggers the [onConversationchanged] callback.
+  ///
+  /// Related callbacks: [ZIMConversationDraftSetCallback]
+  /// [draft] Drafts that need to be set.
+  /// [conversationID] Conversation ID.
+  /// [conversationType] Conversation type, only Peer type is supported.
+  /// [callback] Set Conversation draft callback.
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
 
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
