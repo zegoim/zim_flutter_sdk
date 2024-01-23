@@ -738,8 +738,8 @@
     [zim setConversationDraft:draft conversationID:conversationID conversationType:conversationType callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultMtDic safeSetObject:conversationID forKey:@"conversationID"];
-            [resultMtDic safeSetObject:[NSNumber numberWithUnsignedInteger:conversationType] forKey:@"conversationType"];
+            [resultDic safeSetObject:conversationID forKey:@"conversationID"];
+            [resultDic safeSetObject:[NSNumber numberWithUnsignedInteger:conversationType] forKey:@"conversationType"];
             result(resultDic);
         }
         else{
