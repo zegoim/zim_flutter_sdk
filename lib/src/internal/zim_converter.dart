@@ -136,6 +136,7 @@ class ZIMConverter {
       info.type = ZIMMessageMentionedTypeExtension.mapValue[value['type']]!;
       conversation.mentionedInfoList.add(info);
     }
+    conversation.draft = resultMap['draft'] ?? '';
     return conversation;
   }
 
