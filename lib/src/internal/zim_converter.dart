@@ -95,6 +95,7 @@ class ZIMConverter {
     Map conversationMap = {};
     conversationMap['conversationID'] = conversation.conversationID;
     conversationMap['conversationName'] = conversation.conversationName;
+    conversationMap['conversationAlias'] = conversation.conversationAlias;
     conversationMap['conversationAvatarUrl'] =
         conversation.conversationAvatarUrl;
     conversationMap['type'] =
@@ -115,6 +116,7 @@ class ZIMConverter {
   static ZIMConversation oZIMConversation(Map resultMap) {
     ZIMConversation conversation = ZIMConversation();
     conversation.conversationID = resultMap['conversationID'];
+    conversation.conversationAlias = resultMap['conversationAlias'] ?? '';
     conversation.conversationName = resultMap['conversationName'] ?? '';
     conversation.conversationAvatarUrl =
         resultMap['conversationAvatarUrl'] ?? '';

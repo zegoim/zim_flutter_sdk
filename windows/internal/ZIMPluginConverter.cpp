@@ -305,6 +305,7 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	FTMap conversationMap;
 	conversationMap[FTValue("conversationID")] = FTValue(conversation->conversationID);
 	conversationMap[FTValue("conversationName")] = FTValue(conversation->conversationName);
+	conversationMap[FTValue("conversationAlias")] = FTValue(conversation->conversationAlias);
 	conversationMap[FTValue("conversationAvatarUrl")] = FTValue(conversation->conversationAvatarUrl);
 	conversationMap[FTValue("type")] = FTValue(conversation->type);
 	conversationMap[FTValue("notificationStatus")] = FTValue(conversation->notificationStatus);
@@ -481,6 +482,7 @@ std::shared_ptr<ZIMConversation>  ZIMPluginConverter::cnvZIMConversationToObject
 
 	conversationPtr->conversationID = std::get<std::string>(conversationMap[FTValue("conversationID")]);
 	conversationPtr->conversationName = std::get<std::string>(conversationMap[FTValue("conversationName")]);
+    conversationPtr->conversationAlias = std::get<std::string>(conversationMap[FTValue("conversationAlias")]);
 	conversationPtr->conversationAvatarUrl = std::get<std::string>(conversationMap[FTValue("conversationAvatarUrl")]);
 	conversationPtr->isPinned = std::get<bool>(conversationMap[FTValue("isPinned")]);
 	conversationPtr->type = (ZIMConversationType)ZIMPluginConverter::cnvFTMapToInt32(conversationMap[FTValue("type")]);

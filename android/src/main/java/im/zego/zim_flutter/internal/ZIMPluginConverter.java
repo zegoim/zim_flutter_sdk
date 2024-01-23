@@ -192,6 +192,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> conversationMap = new HashMap<>();
         conversationMap.put("conversationID",conversation.conversationID);
         conversationMap.put("conversationName",conversation.conversationName);
+        conversationMap.put("conversationAlias",conversation.conversationAlias);
         conversationMap.put("conversationAvatarUrl",conversation.conversationAvatarUrl);
         conversationMap.put("type",conversation.type.value());
         conversationMap.put("unreadMessageCount",conversation.unreadMessageCount);
@@ -822,6 +823,7 @@ public class ZIMPluginConverter {
         if(resultMap == null) return null;
         ZIMConversation conversation = new ZIMConversation();
         conversation.conversationID = (String) resultMap.get("conversationID");
+        conversation.conversationAlias = (String) resultMap.get("conversationAlias");
         conversation.conversationName = (String) resultMap.get("conversationName");
         conversation.conversationAvatarUrl = (String) resultMap.get("conversationAvatarUrl");
         conversation.type = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(resultMap.get("type")));

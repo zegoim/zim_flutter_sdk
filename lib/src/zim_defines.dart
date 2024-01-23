@@ -698,6 +698,7 @@ class ZIMCustomMessage extends ZIMMessage {
 class ZIMConversation {
   String conversationID = '';
   String conversationName = '';
+  String conversationAlias = '';
   String conversationAvatarUrl = '';
   ZIMConversationType type = ZIMConversationType.peer;
   ZIMConversationNotificationStatus notificationStatus =

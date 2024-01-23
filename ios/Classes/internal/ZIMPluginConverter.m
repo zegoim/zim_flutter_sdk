@@ -112,6 +112,7 @@
     ZIMConversation *conversation = [[ZIMConversation alloc] init];
     conversation.conversationID = (NSString *)[conversationDic objectForKey:@"conversationID"];
     conversation.conversationName = (NSString *)[conversationDic objectForKey:@"conversationName"];
+    conversation.conversationAlias = (NSString *)[conversationDic objectForKey:@"conversationAlias"];
     conversation.conversationAvatarUrl = (NSString *)[conversationDic objectForKey:@"conversationAvatarUrl"];
     conversation.type = ((NSNumber *)[conversationDic objectForKey:@"type"]).intValue;
     conversation.notificationStatus = ((NSNumber *)[conversationDic objectForKey:@"notificationStatus"]).intValue;
@@ -129,6 +130,7 @@
     NSMutableDictionary *conversationDic = [[NSMutableDictionary alloc] init];
     [conversationDic safeSetObject:conversation.conversationID forKey:@"conversationID"];
     [conversationDic safeSetObject:conversation.conversationName forKey:@"conversationName"];
+    [conversationDic safeSetObject:conversation.conversationAlias forKey:@"conversationAlias"];
     [conversationDic safeSetObject:conversation.conversationAvatarUrl forKey:@"conversationAvatarUrl"];
     [conversationDic safeSetObject:[NSNumber numberWithInt:(int)conversation.type] forKey:@"type"];
     [conversationDic safeSetObject:[NSNumber numberWithInt:(int)conversation.notificationStatus] forKey:@"notificationStatus"];
