@@ -314,6 +314,7 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	conversationMap[FTValue("lastMessage")] = cnvZIMMessageObjectToMap(conversation->lastMessage.get());
     conversationMap[FTValue("isPinned")] = FTValue(conversation->isPinned);
 	conversationMap[FTValue("mentionedInfoList")] = cnvZIMMessageMentionedInfoToMap(conversation->mentionedInfoList);
+	conversationMap[FTValue("draft")] = FTValue(conversation->draft);
 	return conversationMap;
 }
 
@@ -489,7 +490,7 @@ std::shared_ptr<ZIMConversation>  ZIMPluginConverter::cnvZIMConversationToObject
 	conversationPtr->notificationStatus = (ZIMConversationNotificationStatus)ZIMPluginConverter::cnvFTMapToInt32(conversationMap[FTValue("notificationStatus")]);
 	conversationPtr->unreadMessageCount = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(conversationMap[FTValue("unreadMessageCount")]);
 	conversationPtr->orderKey = (long long)ZIMPluginConverter::cnvFTMapToInt64(conversationMap[FTValue("orderKey")]);
-
+	conversationPtr->draft = std::get<std::string>(conversationMap[FTValue("draft")]);
 	if (std::holds_alternative<std::monostate>(conversationMap[std::get<FTMap>(conversationMap[FTValue("lastMessage")])])) {
 		conversationPtr->lastMessage = nullptr;
 	}

@@ -214,6 +214,7 @@ public class ZIMPluginConverter {
             conversationMap.put("lastMessage",null);
         }
         conversationMap.put("isPinned",conversation.isPinned);
+        conversationMap.put("draft",conversation.draft);
         return conversationMap;
     }
 
@@ -836,6 +837,7 @@ public class ZIMPluginConverter {
             conversation.lastMessage = null;
         }
         conversation.isPinned = ZIMPluginCommonTools.safeGetBoolValue(resultMap.get("isPinned"));
+        conversation.draft = (String) resultMap.get("draft");
         return conversation;
     }
 
