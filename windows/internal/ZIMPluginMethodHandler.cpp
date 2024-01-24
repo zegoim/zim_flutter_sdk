@@ -3112,6 +3112,18 @@ void ZIMPluginMethodHandler::sendFriendApplication(flutter::EncodableMap& argume
 	}
 	auto applyUserID = std::get<std::string>(argument[FTValue("applyUserID")]);
     ZIMFriendApplicationSendConfig config = ZIMPluginConverter::cnvZIMFriendApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    
+    FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
+    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
+
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 	zim->sendFriendApplication(applyUserID, config, [=](
 		const ZIMFriendApplicationInfo& friendApplicationInfo, const ZIMError& errorInfo) {
@@ -3303,6 +3315,16 @@ void ZIMPluginMethodHandler::acceptFriendApplication(flutter::EncodableMap& argu
 	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendApplicationAcceptConfig config = ZIMPluginConverter::cnvZIMFriendApplicationAcceptConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
 
+	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
+
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 	zim->acceptFriendApplication(userID, config, [=](
 		const ZIMFriendInfo& friendInfo, const ZIMError& errorInfo) {
@@ -3327,6 +3349,16 @@ void ZIMPluginMethodHandler::rejectFriendApplication(flutter::EncodableMap& argu
 	auto userID = std::get<std::string>(argument[FTValue("userID")]);
 	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendApplicationRejectConfig config = ZIMPluginConverter::cnvZIMFriendApplicationRejectConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+
+	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
 
 	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 	zim->rejectFriendApplication(userID, config, [=](const ZIMUserInfo& userInfo, const ZIMError& errorInfo) {

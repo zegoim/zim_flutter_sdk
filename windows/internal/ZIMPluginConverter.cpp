@@ -1328,15 +1328,6 @@ ZIMFriendApplicationAcceptConfig ZIMPluginConverter::cnvZIMFriendApplicationAcce
 		auto value = std::get<std::string>(attr.second);
 		config.friendAttributes[key] = value;
 	}
-	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
-		config.pushConfig = nullptr;
-	}
-	else {
-		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
-		config.pushConfig = pushConfigPtr.get();
-	}
 
 	return config;
 }
@@ -1358,15 +1349,6 @@ ZIMFriendApplicationListQueryConfig ZIMPluginConverter::cnvZIMFriendApplicationL
 
 ZIMFriendApplicationRejectConfig ZIMPluginConverter::cnvZIMFriendApplicationRejectConfigToObject(FTMap infoMap) {
 	ZIMFriendApplicationRejectConfig config;
-	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-	if (std::holds_alternative<std::monostate>(infoMap[FTValue("pushConfig")])) {
-		config.pushConfig = nullptr;
-	}
-	else {
-		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(infoMap[FTValue("pushConfig")]), voIPConfigPtr);
-		config.pushConfig = pushConfigPtr.get();
-	}
 	return config;
 }
 
@@ -1409,15 +1391,6 @@ ZIMFriendApplicationSendConfig ZIMPluginConverter::cnvZIMFriendApplicationSendCo
 		auto key = std::get<std::string>(attr.first);
 		auto value = std::get<std::string>(attr.second);
 		config.friendAttributes[key] = value;
-	}
-	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-	if (std::holds_alternative<std::monostate>(infoMap[FTValue("pushConfig")])) {
-		config.pushConfig = nullptr;
-	}
-	else {
-		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(infoMap[FTValue("pushConfig")]), voIPConfigPtr);
-		config.pushConfig = pushConfigPtr.get();
 	}
 	return config;
 }
