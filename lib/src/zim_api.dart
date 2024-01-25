@@ -539,7 +539,9 @@ abstract class ZIM {
   ///       
   ///Call timing/Notification timing: Called when you need to delete all messages for all sessions.
   ///
-  ///Note: IsAlsoDeleteServerMessage decided whether to delete a server message, the impact of deleting messages is limited to this account.
+  ///Note: The sdk deletes lastMessage for each conversation, but does not trigger [onConversationChanged] for each conversation.
+  ///To update the last message of the conversation, call [queryConversationList] again to retrieve the conversation list from the sdk.
+  ///IsAlsoDeleteServerMessage decided whether to delete a server message, the impact of deleting messages is limited to this account.
   ///
   ///Restrictions: Effective after login.
   ///    
