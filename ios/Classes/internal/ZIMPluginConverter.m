@@ -787,6 +787,37 @@
     return groupInfoDic;
 }
 
++(nullable NSDictionary *)mZIMGroupMuteInfo:(nullable ZIMGroupMuteInfo *)muteInfo {
+    if(muteInfo == nil || muteInfo == NULL || [muteInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+
+    NSMutableDictionary *muteInfoMap = [[NSMutableDictionary alloc] init];
+    [muteInfoMap safeSetObject:[NSNumber numberWithInt:(int)muteInfo.mode] forKey:@"mode"];
+    [muteInfoMap safeSetObject:[NSNumber numberWithLongLong:muteInfo.expiredTime] forKey:@"expiredTime"];
+    [muteInfoMap safeSetObject:muteInfo.roles forKey:@"roles"];
+    
+    return muteInfoMap;
+}
+
++(nullable ZIMGroupMuteInfo *)oZIMGroupMuteInfo:(nullable NSDictionary *)muteInfoDic {
+    if(muteInfoDic == nil || muteInfoDic == NULL || [muteInfoDic isEqual:[NSNull null]]){
+        return nil;
+    }
+
+    ZIMGroupMuteInfo *muteInfo = [[ZIMGroupMuteInfo alloc] init];
+
+    muteInfo.mode = ((NSNumber *)[muteInfoDic objectForKey:@"mode"]).intValue;
+    muteInfo.expiredTime = [infoMap[@"expiredTime"] longValue];
+    NSMutableArray *roles = [[NSMutableArray alloc] init];
+    for (NSNumber *role in infoMap[@"roles"]) {
+        [roles addObject:role];
+    }
+    muteInfo.roles = roles;
+    
+    return muteInfo;
+}
+
 +(nullable NSDictionary *)mZIMGroupMemberInfo:(nullable ZIMGroupMemberInfo *)memberInfo{
     if(memberInfo == nil || memberInfo == NULL || [memberInfo isEqual:[NSNull null]]){
         return nil;
@@ -797,6 +828,8 @@
     [memberInfoDic safeSetObject:memberInfo.userID forKey:@"userID"];
     [memberInfoDic safeSetObject:memberInfo.userName forKey:@"userName"];
     [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl ? memberInfo.memberAvatarUrl : @"" forKey:@"memberAvatarUrl"];
+    [memberInfoDic safeSetObject:memberInfo.userAvatarUrl ? memberInfo.userAvatarUrl : @"" forKey:@"userAvatarUrl"];
+    [memberInfoDic safeSetObject:[NSNumber numberWithLongLong::memberInfo.muteExpiredTime] forKey:@"muteExpiredTime"];
     return memberInfoDic;
 }
 
@@ -895,10 +928,12 @@
     }
     NSMutableDictionary *groupFullInfoDic = [[NSMutableDictionary alloc] init];
     NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupInfo:groupFullInfo.baseInfo];
+    NSDictionary *groupMuteInfoDic = [ZIMPluginConverter mZIMGroupMuteInfo:groupFullInfo.mutedInfo];
     [groupFullInfoDic safeSetObject:groupInfoDic forKey:@"baseInfo"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupNotice forKey:@"groupNotice"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupAttributes forKey:@"groupAttributes"];
     [groupFullInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupFullInfo.notificationStatus] forKey:@"notificationStatus"];
+    [groupFullInfoDic safeSetObject:groupMuteInfoDic forKey:@"mutedInfo"];
     return groupFullInfoDic;
 }
 
