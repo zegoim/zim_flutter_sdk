@@ -921,7 +921,7 @@ public class ZIMPluginConverter {
         muteInfo.mode = ZIMGroupMuteMode.getZIMGroupMuteMode(ZIMPluginCommonTools.safeGetIntValue(infoMap.get("mode")));
         muteInfo.expiredTime = (long) infoMap.get("expiredTime");
         ArrayList<Integer> roles = new ArrayList<>();
-        for (Integer role : (ArrayList<Integer>) messageMap.get("roles")) {
+        for (Integer role : (ArrayList<Integer>) infoMap.get("roles")) {
             roles.add(role);
         }
         muteInfo.roles = roles;
@@ -933,7 +933,7 @@ public class ZIMPluginConverter {
         HashMap<String,Object> muteInfoMap = new HashMap<>();
         
         muteInfoMap.put("mode", muteInfo.mode.value());
-        muteInfoMap.put("expiredTime", muteInfo.mexpiredTime);
+        muteInfoMap.put("expiredTime", muteInfo.expiredTime);
         muteInfoMap.put("roles", muteInfo.roles);
 
         return muteInfoMap;
@@ -991,7 +991,7 @@ public class ZIMPluginConverter {
         ZIMGroupMuteConfig config = new ZIMGroupMuteConfig();
         config.mode = (ZIMGroupMuteMode) configMap.get("mode");
         config.duration = (int) configMap.get("duration");
-        config.roles = (ArrayList<String>) configMap.get("roles");
+        config.roles = (ArrayList<Integer>) configMap.get("roles");
         return config;
     }
 
