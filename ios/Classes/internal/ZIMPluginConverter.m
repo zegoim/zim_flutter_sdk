@@ -808,9 +808,9 @@
     ZIMGroupMuteInfo *muteInfo = [[ZIMGroupMuteInfo alloc] init];
 
     muteInfo.mode = ((NSNumber *)[muteInfoDic objectForKey:@"mode"]).intValue;
-    muteInfo.expiredTime = [infoMap[@"expiredTime"] longValue];
+    muteInfo.expiredTime = [muteInfoDic[@"expiredTime"] longValue];
     NSMutableArray *roles = [[NSMutableArray alloc] init];
-    for (NSNumber *role in infoMap[@"roles"]) {
+    for (NSNumber *role in muteInfoDic[@"roles"]) {
         [roles addObject:role];
     }
     muteInfo.roles = roles;
@@ -829,7 +829,7 @@
     [memberInfoDic safeSetObject:memberInfo.userName forKey:@"userName"];
     [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl ? memberInfo.memberAvatarUrl : @"" forKey:@"memberAvatarUrl"];
     [memberInfoDic safeSetObject:memberInfo.userAvatarUrl ? memberInfo.userAvatarUrl : @"" forKey:@"userAvatarUrl"];
-    [memberInfoDic safeSetObject:[NSNumber numberWithLongLong::memberInfo.muteExpiredTime] forKey:@"muteExpiredTime"];
+    [memberInfoDic safeSetObject:[NSNumber numberWithLongLong:memberInfo.muteExpiredTime] forKey:@"muteExpiredTime"];
     return memberInfoDic;
 }
 
