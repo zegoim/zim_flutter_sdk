@@ -1927,7 +1927,7 @@ public class ZIMPluginMethodHandler {
         String groupID = call.argument("groupID");
         ZIMGroupMuteConfig config = ZIMPluginConverter.oZIMGroupMuteConfig(Objects.requireNonNull(call.argument("config")));
 
-        zim.muteGroup(isMute, groupID, config new ZIMGroupMutedCallback() {
+        zim.muteGroup(isMute, groupID, config, new ZIMGroupMutedCallback() {
             @Override
             public void onGroupMuted(String groupID, boolean isMute, ZIMGroupMuteInfo info, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
@@ -1958,7 +1958,7 @@ public class ZIMPluginMethodHandler {
         ArrayList<String> userIDs = call.argument("userIDs");
         ZIMGroupMemberMuteConfig config = ZIMPluginConverter.oZIMGroupMemberMuteConfig(Objects.requireNonNull(call.argument("config")));
 
-        zim.muteGroupMembers(isMute, userIDs, groupID, config new ZIMGroupMembersMutedCallback() {
+        zim.muteGroupMembers(isMute, userIDs, groupID, config, new ZIMGroupMembersMutedCallback() {
             @Override
             public void onGroupMembersMuted(String groupID, boolean isMute, int duration,
                                             ArrayList<String> mutedMemberIDs,
