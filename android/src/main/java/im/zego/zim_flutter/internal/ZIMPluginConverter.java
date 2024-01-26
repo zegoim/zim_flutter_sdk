@@ -989,7 +989,7 @@ public class ZIMPluginConverter {
 
     static public ZIMGroupMuteConfig oZIMGroupMuteConfig(HashMap<String, Object> configMap) {
         ZIMGroupMuteConfig config = new ZIMGroupMuteConfig();
-        config.mode = (ZIMGroupMuteMode) configMap.get("mode");
+        config.mode = ZIMGroupMuteMode.getZIMGroupMuteMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
         config.duration = (int) configMap.get("duration");
         config.roles = (ArrayList<Integer>) configMap.get("roles");
         return config;
