@@ -1971,7 +1971,7 @@ public class ZIMPluginMethodHandler {
                     resultMap.put("groupID", groupID);
                     resultMap.put("isMute", isMute);
                     resultMap.put("duration", duration);
-                    resultMap.put("mutedMemberIDs",userList);
+                    resultMap.put("mutedMemberIDs",mutedMemberIDs);
                     resultMap.put("errorUserList",basicErrorUserList);
                     result.success(resultMap);
                 }
