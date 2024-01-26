@@ -2808,7 +2808,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
                         errorUsersMapList.add(errorInfoMap);
                     }
-                    resultMap.put("errorUserInfos", errorUsersMapList);
+                    resultMap.put("errorUserList", errorUsersMapList);
 
                     result.success(resultMap);
                 } else {
@@ -2905,7 +2905,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
                         errorUsersMapList.add(errorInfoMap);
                     }
-                    resultMap.put("errorUserInfos", errorUsersMapList);
+                    resultMap.put("errorUserList", errorUsersMapList);
 
                     result.success(resultMap);
                 } else {
