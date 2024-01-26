@@ -2897,7 +2897,7 @@ public class ZIMPluginMethodHandler {
                         friendInfoMapList.add(friendInfoMap);
                     }
                     LogWriter.writeLog("flutter native android onFriendsInfoQueried,friendsInfos size:"+friendInfos.size()+"friendsMapList size:"+friendInfoMapList.size());
-                    resultMap.put("FriendInfos", friendInfoMapList);
+                    resultMap.put("friendInfos", friendInfoMapList);
 
                     // 转换错误用户信息
                     ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
