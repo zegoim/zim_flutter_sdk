@@ -355,7 +355,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("method","onGroupMuteInfoUpdated");
         resultMap.put("handle", handle);
         resultMap.put("groupID",groupID);
-        resultMap.put("groupInfo",ZIMPluginConverter.mZIMGroupMuteInfo(muteInfo));
+        resultMap.put("groupMuteInfo",ZIMPluginConverter.mZIMGroupMuteInfo(muteInfo));
         resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         mysink.success(resultMap);
     }
