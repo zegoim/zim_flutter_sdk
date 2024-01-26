@@ -1966,13 +1966,12 @@ public class ZIMPluginMethodHandler {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
                     
-                    ArrayList<HashMap<String,Object>> basicUserList = ZIMPluginConverter.mZIMGroupMemberInfoList(userList);
                     ArrayList<HashMap<String,Object>> basicErrorUserList = ZIMPluginConverter.mZIMErrorUserInfoList(errorUserList);
 
                     resultMap.put("groupID", groupID);
                     resultMap.put("isMute", isMute);
                     resultMap.put("duration", duration);
-                    resultMap.put("mutedMemberIDs",basicUserList);
+                    resultMap.put("mutedMemberIDs",userList);
                     resultMap.put("errorUserList",basicErrorUserList);
                     result.success(resultMap);
                 }
