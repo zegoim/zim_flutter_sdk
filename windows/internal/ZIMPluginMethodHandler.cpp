@@ -3110,7 +3110,7 @@ void ZIMPluginMethodHandler::sendFriendApplication(flutter::EncodableMap& argume
 		result->Error("-1", "no native instance");
 		return;
 	}
-	auto applyUserID = std::get<std::string>(argument[FTValue("applyUserID")]);
+	auto applyUserID = std::get<std::string>(argument[FTValue("userID")]);
     ZIMFriendApplicationSendConfig config = ZIMPluginConverter::cnvZIMFriendApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
     
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
