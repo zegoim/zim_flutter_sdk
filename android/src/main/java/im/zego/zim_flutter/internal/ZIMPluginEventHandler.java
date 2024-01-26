@@ -380,6 +380,24 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onGroupMuteInfoUpdated(ZIM zim, ZIMGroupMuteInfo muteInfo,
+                                       ZIMGroupOperatedInfo operatedInfo, String groupID) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onGroupMuteInfoUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("groupID",groupID);
+        resultMap.put("groupInfo",ZIMPluginConverter.mZIMGroupMuteInfo(muteInfo));
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onGroupAttributesUpdated(ZIM zim, ArrayList<ZIMGroupAttributesUpdateInfo> infos, ZIMGroupOperatedInfo operatedInfo, String groupID) {
         if(mysink == null){
             return;

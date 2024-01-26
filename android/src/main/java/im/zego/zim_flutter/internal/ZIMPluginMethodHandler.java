@@ -1915,6 +1915,104 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void muteGroup(MethodCall call,Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        
+        boolean isMute  = call.argument("isMute");
+        String groupID = call.argument("groupID");
+        ZIMGroupMuteConfig config = ZIMPluginConverter.oZIMGroupMuteConfig(Objects.requireNonNull(call.argument("config")));
+
+        zim.muteGroup(isMute, groupID, config new ZIMGroupMutedCallback() {
+            @Override
+            public void onGroupMuted(String groupID, boolean isMute, ZIMGroupMuteInfo info, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    HashMap<String,Object> groupMuteInfoMap = ZIMPluginConverter.mZIMGroupMuteInfo(info);
+                    resultMap.put("isMute", isMute);
+                    resultMap.put("groupID", groupID);
+                    resultMap.put("info", groupMuteInfoMap);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void muteGroupMembers(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        
+        boolean isMute  = call.argument("isMute");
+        String groupID = call.argument("groupID");
+        ArrayList<String> userIDs = call.argument("userIDs");
+        ZIMGroupMemberMuteConfig config = ZIMPluginConverter.oZIMGroupMemberMuteConfig(Objects.requireNonNull(call.argument("config")));
+
+        zim.muteGroupMembers(isMute, userIDs, groupID, config new ZIMGroupMembersMutedCallback() {
+            @Override
+            public void onGroupMembersMuted(String groupID, boolean isMute, int duration,
+                                            ArrayList<String> mutedMemberIDs,
+                                            ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    
+                    ArrayList<HashMap<String,Object>> basicUserList = ZIMPluginConverter.mZIMGroupMemberInfoList(userList);
+                    ArrayList<HashMap<String,Object>> basicErrorUserList = ZIMPluginConverter.mZIMErrorUserInfoList(errorUserList);
+
+                    resultMap.put("groupID", groupID);
+                    resultMap.put("isMute", isMute);
+                    resultMap.put("duration", duration);
+                    resultMap.put("mutedMemberIDs",basicUserList);
+                    resultMap.put("errorUserList",basicErrorUserList);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryGroupMemberMutedList(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String groupID = call.argument("groupID");
+        ZIMGroupMemberMutedListQueryConfig config = ZIMPluginConverter.oZIMGroupMemberMutedListQueryConfig(Objects.requireNonNull(call.argument("config")));
+        zim.queryGroupMemberMutedList(groupID, config, new ZIMGroupMemberMutedListQueriedCallback() {
+            @Override
+            public void onGroupMemberListQueried(String groupID, long nextFlag,
+                                                 ArrayList<ZIMGroupMemberInfo> userList,
+                                                 ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    ArrayList<HashMap<String,Object>> basicUserList = ZIMPluginConverter.mZIMGroupMemberInfoList(userList);
+                    resultMap.put("groupID",groupID);
+                    resultMap.put("nextFlag",nextFlag);
+                    resultMap.put("userList",basicUserList);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
     public static void queryGroupInfo(MethodCall call,Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
