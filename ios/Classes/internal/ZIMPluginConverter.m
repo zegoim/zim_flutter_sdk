@@ -963,7 +963,7 @@
     }
     NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
     [configDic safeSetObject:[NSNumber numberWithInt:(int)config.mode] forKey:@"mode"];
-    [configDic safeSetObject:config.duration forKey:@"duration"];
+    [configDic safeSetObject:[NSNumber numberWithInt:config.duration] forKey:@"duration"];
     [configDic safeSetObject:config.roles forKey:@"roles"];
     return configDic;
 }
@@ -973,7 +973,7 @@
         return nil;
     }
     NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
-    [configDic safeSetObject:config.duration forKey:@"duration"];
+    [configDic safeSetObject:[NSNumber numberWithInt:config.duration] forKey:@"duration"];
     return configDic;
 }
 
