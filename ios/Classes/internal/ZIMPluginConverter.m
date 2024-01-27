@@ -957,6 +957,36 @@
     return config;
 }
 
++(nullable NSDictionary *)mZIMGroupMuteConfig:(nullable ZIMGroupMuteConfig *)config {
+    if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
+    [configDic safeSetObject:[NSNumber numberWithInt:(int)config.mode] forKey:@"mode"];
+    [configDic safeSetObject:config.duration forKey:@"duration"];
+    [configDic safeSetObject:config.roles forKey:@"roles"];
+    return configDic;
+}
+
++(nullable NSDictionary *)mZIMGroupMemberMuteConfig:(nullable ZIMGroupMemberMuteConfig *)config {
+    if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
+    [configDic safeSetObject:config.duration forKey:@"duration"];
+    return configDic;
+}
+
++(nullable NSDictionary *)mZIMGroupMemberMutedListQueryConfig:(nullable ZIMGroupMemberMutedListQueryConfig *)config{
+    if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
+    [configDic safeSetObject:[NSNumber numberWithUnsignedInt:config.count] forKey:@"count"];
+    [configDic safeSetObject:[NSNumber numberWithUnsignedLongLong:config.nextFlag] forKey:@"nextFlag"];
+    return configDic;
+}
+
 +(nullable NSDictionary*)mZIMGroup:(nullable ZIMGroup *)group{
     if(group == nil || group == NULL || [group isEqual:[NSNull null]]){
         return nil;
