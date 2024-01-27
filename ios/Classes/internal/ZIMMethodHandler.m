@@ -1739,7 +1739,7 @@
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             NSDictionary *groupMuteInfoDic = [ZIMPluginConverter mZIMGroupMuteInfo:info];
             [resultDic safeSetObject:groupID forKey:@"groupID"];
-            [resultDic safeSetObject:isMuted forKey:@"isMute"];
+            [resultDic safeSetObject:[NSNumber numberWithBool:isMuted] forKey:@"isMute"];
             [resultDic safeSetObject:groupMuteInfoDic forKey:@"info"];
             result(resultDic);
         }
@@ -1766,7 +1766,7 @@
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
             [resultDic safeSetObject:groupID forKey:@"groupID"];
-            [resultDic safeSetObject:isMuted forKey:@"isMute"];
+            [resultDic safeSetObject:[NSNumber numberWithBool:isMuted] forKey:@"isMute"];
             [resultDic safeSetObject:[NSNumber numberWithInt:duration] forKey:@"duration"];
             [resultDic safeSetObject:mutedMemberIDs forKey:@"mutedMemberIDs"];
             [resultDic safeSetObject:errorUserList forKey:@"errorUserList"];
