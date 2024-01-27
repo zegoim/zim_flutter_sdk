@@ -968,6 +968,17 @@
     return configDic;
 }
 
++(nullable ZIMGroupMuteConfig *)oZIMGroupMuteConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupMuteConfig *config = [[ZIMGroupMuteConfig alloc] init];
+    config.mode = ((NSNumber *)[configDic objectForKey:@"mode"]).intValue;
+    config.duration = ((NSNumber *)[configDic objectForKey:@"duration"]).intValue;
+    config.roles = [configDic safeObjectForKey:@"roles"];
+    return config;
+}
+
 +(nullable NSDictionary *)mZIMGroupMemberMuteConfig:(nullable ZIMGroupMemberMuteConfig *)config {
     if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
         return nil;
@@ -977,14 +988,33 @@
     return configDic;
 }
 
++(nullable ZIMGroupMemberMuteConfig *)oZIMGroupMemberMuteConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupMemberMuteConfig *config = [[ZIMGroupMemberMuteConfig alloc] init];
+    config.duration = ((NSNumber *)[configDic objectForKey:@"duration"]).intValue;
+    return config;
+}
+
 +(nullable NSDictionary *)mZIMGroupMemberMutedListQueryConfig:(nullable ZIMGroupMemberMutedListQueryConfig *)config{
     if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
         return nil;
     }
     NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
-    [configDic safeSetObject:[NSNumber numberWithUnsignedInt:config.count] forKey:@"count"];
     [configDic safeSetObject:[NSNumber numberWithUnsignedLongLong:config.nextFlag] forKey:@"nextFlag"];
+    [configDic safeSetObject:[NSNumber numberWithUnsignedInt:config.count] forKey:@"count"];
     return configDic;
+}
+
++(nullable ZIMGroupMemberMutedListQueryConfig *)oZIMGroupMemberMutedListQueryConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupMemberMutedListQueryConfig *config = [[ZIMGroupMemberMutedListQueryConfig alloc] init];
+    config.nextFlag = ((NSNumber *)[configDic safeObjectForKey:@"nextFlag"]).unsignedLongLongValue;
+    config.count = ((NSNumber *)[configDic safeObjectForKey:@"count"]).unsignedIntValue;
+    return config;
 }
 
 +(nullable NSDictionary*)mZIMGroup:(nullable ZIMGroup *)group{
