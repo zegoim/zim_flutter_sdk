@@ -2800,7 +2800,7 @@ public class ZIMPluginMethodHandler {
                         HashMap<String, Object> infoMap = ZIMPluginConverter.mZIMFriendRelationInfo(info); // 假设存在 mZIMFriendRelationInfo 转换函数
                         relationInfoMapList.add(infoMap);
                     }
-                    resultMap.put("relationInfos", relationInfos);
+                    resultMap.put("relationInfos", relationInfoMapList);
 
                     // 转换错误用户信息
                     ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
