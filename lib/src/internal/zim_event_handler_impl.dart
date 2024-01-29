@@ -399,6 +399,11 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         String groupID = map['groupID'];
         ZIMEventHandler.onGroupMuteInfoUpdated!(zim,muteInfo,operatedInfo,groupID);
         break;
+      case 'onUserRuleUpdated':
+        if(ZIMEventHandler.onUserRuleUpdated == null) return;
+        ZIMUserRule userRule = ZIMConverter.oZIMUserRule(map['userRule']);
+        ZIMEventHandler.onUserRuleUpdated!(zim,userRule);
+        break;
       default:
         break;
     }

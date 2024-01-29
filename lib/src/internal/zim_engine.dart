@@ -1270,12 +1270,32 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMGroupMemberMutedListQueriedResult(resultMap);
   }
 
+  @override
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message) async{
     Map resultMap = await channel.invokeMethod('queryCombineMessageDetail',{
       'handle':handle,
       'message': ZIMConverter.mZIMMessage(message)
     });
     return ZIMCombineMessageDetailQueriedResult(message:ZIMConverter.oZIMMessage(resultMap['message']) as ZIMCombineMessage);
+  }
+
+  @override
+  Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo() async{
+
+    Map resultMap = await channel.invokeMethod('querySelfUserInfo',{
+      'handle':handle
+    });
+
+    return ZIMConverter.oZIMSelfUserInfoQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMUserOfflinePushRuleInfoUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule) async{
+    Map resultMap = await channel.invokeMethod('updateUserOfflinePushRule',{
+      'handle':handle,
+      'offlinePushRule' : ZIMConverter.mZIMUserOfflinePushRule(offlinePushRule),
+    });
+    return ZIMConverter.oZIMUserOfflinePushRuleInfoUpdatedResult(resultMap);
   }
 
 

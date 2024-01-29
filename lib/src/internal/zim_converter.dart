@@ -2102,6 +2102,55 @@ class ZIMConverter {
     return map;
   }
 
+  static ZIMUserOfflinePushRule oZIMUserOfflinePushRule(Map map){
+    ZIMUserOfflinePushRule pushRule = ZIMUserOfflinePushRule();
+
+    List<int> basicOnlinePlatforms = List<int>.from(map['onlinePlatforms']);
+    List<int> basicNotToReceiveOfflinePushPlatforms = List<int>.from(map['notToReceiveOfflinePushPlatforms']);
+    List<ZIMPlatformType> onlinePlatforms = [];
+    List<ZIMPlatformType> notToReceiveOfflinePushPlatforms = [];
+    for(int i in basicOnlinePlatforms){
+      onlinePlatforms.add(ZIMPlatformTypeExtension.mapValue[i]??ZIMPlatformType.unknown);
+    }
+    for(int i in basicNotToReceiveOfflinePushPlatforms){
+      notToReceiveOfflinePushPlatforms.add(ZIMPlatformTypeExtension.mapValue[i]??ZIMPlatformType.unknown);
+    }
+    pushRule.onlinePlatforms = onlinePlatforms;
+    pushRule.notToReceiveOfflinePushPlatforms = notToReceiveOfflinePushPlatforms;
+    return pushRule;
+  }
+
+  static Map mZIMUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule){
+    Map map = {};
+    List<int> basicOnlinePlatforms = [];
+    List<int> basicNotToReceiveOfflinePushPlatforms = [];
+    for(ZIMPlatformType i in offlinePushRule.onlinePlatforms){
+      basicOnlinePlatforms.add(i.value);
+    }
+    for(ZIMPlatformType i in offlinePushRule.notToReceiveOfflinePushPlatforms){
+      basicNotToReceiveOfflinePushPlatforms.add(i.value);
+    }
+    map['onlinePlatforms'] = basicOnlinePlatforms;
+    map['notToReceiveOfflinePushPlatforms'] = basicNotToReceiveOfflinePushPlatforms;
+    return map;
+  }
+
+  static ZIMUserRule oZIMUserRule(Map map){
+    return ZIMUserRule(offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
+  }
+
+  static ZIMSelfUserInfo oZIMSelfUserInfo(Map map){
+    return ZIMSelfUserInfo(userRule: oZIMUserRule(map['userRule']), userFullInfo: oZIMUserFullInfo(map['userFullInfo']));
+  }
+
+  static ZIMSelfUserInfoQueriedResult oZIMSelfUserInfoQueriedResult(Map map){
+    return ZIMSelfUserInfoQueriedResult(selfUserInfo: oZIMSelfUserInfo(map['selfUserInfo']));
+  }
+
+  static ZIMUserOfflinePushRuleInfoUpdatedResult oZIMUserOfflinePushRuleInfoUpdatedResult(Map map){
+    return ZIMUserOfflinePushRuleInfoUpdatedResult(offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
+  }
+
 
   static Uint8List convertToUint8List(dynamic data) {
     final list = <int>[];
@@ -2112,6 +2161,5 @@ class ZIMConverter {
     final uint8List = Uint8List.fromList(list);
     return uint8List;
   }
-
 
 }

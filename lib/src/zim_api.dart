@@ -1615,4 +1615,8 @@ abstract class ZIM {
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
 
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
+
+  Future<ZIMUserOfflinePushRuleInfoUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule);
+
+  Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
 }
