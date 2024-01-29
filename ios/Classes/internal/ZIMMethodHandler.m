@@ -1769,7 +1769,7 @@
             [resultDic safeSetObject:[NSNumber numberWithBool:isMuted] forKey:@"isMute"];
             [resultDic safeSetObject:[NSNumber numberWithInt:duration] forKey:@"duration"];
             [resultDic safeSetObject:mutedMemberIDs forKey:@"mutedMemberIDs"];
-            [resultDic safeSetObject:errorUserList forKey:@"errorUserList"];
+            [resultDic safeSetObject:basicErrorUserList forKey:@"errorUserList"];
             result(resultDic);
         }
         else{
