@@ -1,6 +1,8 @@
 @JS('ZIM')
 library zim_web;
 
+import 'dart:html';
+
 import 'package:js/js.dart';
 import 'package:zego_zim/src/internal/zim_utils_web.dart';
 
@@ -143,9 +145,9 @@ class ZIM {
   external PromiseJsImpl<dynamic> deleteMessageReaction(String reactionType, dynamic message);
   external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);
   external PromiseJsImpl<dynamic> setConversationDraft(String draft, String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> queryCombineMessage(dynamic message);
+  external PromiseJsImpl<dynamic> queryCombineMessageDetail(dynamic message);
   external PromiseJsImpl<dynamic> muteGroup(String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> muteGroupMemberList(dynamic userIDs, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> muteGroupMembers(dynamic userIDs, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> queryGroupMemberMutedList(String groupID, dynamic config);
   external PromiseJsImpl<dynamic> addFriend(String userID, dynamic config);
   external PromiseJsImpl<dynamic> deleteFriends(dynamic userIDs, dynamic config);
@@ -162,6 +164,8 @@ class ZIM {
   external PromiseJsImpl<dynamic> checkUserIsInBlacklist(String userID);
   external PromiseJsImpl<dynamic> queryBlacklist(dynamic config);
   external PromiseJsImpl<dynamic> deleteAllConversationMessages(dynamic config);
+  external PromiseJsImpl<dynamic> searchLocalFriends(dynamic config);
+  external PromiseJsImpl<dynamic> sendFriendApplication(String userID, dynamic config);
 }
 
 @JS()

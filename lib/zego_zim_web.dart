@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
 import 'dart:js_util';
 // In order to *not* need this ignore, consider extracting the 'web' version
 // of your plugin as a separate package, instead of inlining it in the same
@@ -135,15 +136,15 @@ class ZegoZimPlugin {
       case 'downloadMediaFile':
         return downloadMediaFile(call.arguments['message'],
             call.arguments['fileType'], call.arguments['progressID']);
-      case 'sendPeerMessage':
-        return sendPeerMessage(call.arguments['message'],
-            call.arguments['toUserID'], call.arguments['config']);
-      case 'sendRoomMessage':
-        return sendRoomMessage(call.arguments['message'],
-            call.arguments['toRoomID'], call.arguments['config']);
-      case 'sendGroupMessage':
-        return sendGroupMessage(call.arguments['message'],
-            call.arguments['toGroupID'], call.arguments['config']);
+      // case 'sendPeerMessage':
+      //   return sendPeerMessage(call.arguments['message'],
+      //       call.arguments['toUserID'], call.arguments['config']);
+      // case 'sendRoomMessage':
+      //   return sendRoomMessage(call.arguments['message'],
+      //       call.arguments['toRoomID'], call.arguments['config']);
+      // case 'sendGroupMessage':
+      //   return sendGroupMessage(call.arguments['message'],
+      //       call.arguments['toGroupID'], call.arguments['config']);
       case 'deleteMessages':
         return deleteMessages(
             call.arguments['messageList'],
@@ -321,12 +322,10 @@ class ZegoZimPlugin {
         return setGeofencingConfig(call.arguments['areaList'], call.arguments['type']);
       case 'setConversationDraft':
         return setConversationDraft(call.arguments['draft'], call.arguments['conversationID'], call.arguments['conversationType']);
-      case 'queryCombineMessage':
-        return queryCombineMessage(call.arguments['message']);
       case 'muteGroup':
         return muteGroup(call.arguments['groupID'], call.arguments['config']);
-      case 'muteGroupMemberList':
-        return muteGroupMemberList(call.arguments['userIDs'], call.arguments['groupID'], call.arguments['config']);
+      case 'muteGroupMembers':
+        return muteGroupMembers(call.arguments['userIDs'], call.arguments['groupID'], call.arguments['config']);
       case 'queryGroupMemberMutedList':
         return queryGroupMemberMutedList(call.arguments['groupID'], call.arguments['config']);
       case 'addFriend':
@@ -359,6 +358,12 @@ class ZegoZimPlugin {
         return queryBlacklist(call.arguments['config']);
       case 'deleteAllConversationMessages':
         return deleteAllConversationMessages(call.arguments['config']);
+      case 'queryCombineMessageDetail':
+        return queryCombineMessageDetail(call.arguments['message']);
+      case 'searchLocalFriends':
+        return searchLocalFriends(call.arguments['config']);
+      case 'sendFriendApplication':
+        return sendFriendApplication(call.arguments['userID'], call.arguments['config']);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -416,14 +421,6 @@ class ZegoZimPlugin {
           return callInvitationCancelled(_zim, data);
         case 'callInvitationTimeout':
           return callInvitationTimeout(_zim, data);
-        case 'callInvitationAccepted':
-          return callInvitationAccepted(_zim, data);
-        case 'callInvitationRejected':
-          return callInvitationRejected(_zim, data);
-        case 'callInviteesAnsweredTimeout':
-          return callInviteesAnsweredTimeout(_zim, data);
-        // case 'callStateChanged':
-        //   return callStateChanged(_zim, data);
         case 'callUserStateChanged':
           return callUserStateChanged(_zim, data);
         case 'callInvitationEnded':
@@ -450,10 +447,8 @@ class ZegoZimPlugin {
           return conversationsAllDeleted(_zim, data);
         case 'blacklistChanged':
           return blacklistChanged(_zim, data);
-        case 'groupMuteUpdated':
-          return groupMuteUpdated(_zim, data);
-        case 'groupMemberMuteUpdated':
-          return groupMemberMuteUpdated(_zim, data);
+        case 'groupMutedInfoUpdated':
+          return groupMutedInfoUpdated(_zim, data);
         case 'friendListChanged':
           return friendListChanged(_zim, data);
         case 'friendInfoUpdated':
@@ -462,6 +457,8 @@ class ZegoZimPlugin {
           return friendApplicationListChanged(_zim, data);
         case 'friendApplicationUpdated':
           return friendApplicationUpdated(_zim, data);
+        case 'callInvitationCreated':
+          return callInvitationCreated(_zim, data);
       }
     }
   }
@@ -841,47 +838,47 @@ class ZegoZimPlugin {
     return {};
   }
 
-  Future<Map<dynamic, dynamic>> sendPeerMessage(
-      dynamic message, String toUserID, dynamic config) async {
-    Object _message = mapToJSObj(message);
-    Object _config = mapToJSObj(config);
+  // Future<Map<dynamic, dynamic>> sendPeerMessage(
+  //     dynamic message, String toUserID, dynamic config) async {
+  //   Object _message = mapToJSObj(message);
+  //   Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(
-            ZIM.getInstance()!.sendPeerMessage(_message, toUserID, _config))
-        .catchError((e) {
-      throw PlatformException(code: e.code.toString(), message: e.message);
-    });
+  //   final result = await promiseToFuture(
+  //           ZIM.getInstance()!.sendPeerMessage(_message, toUserID, _config))
+  //       .catchError((e) {
+  //     throw PlatformException(code: e.code.toString(), message: e.message);
+  //   });
 
-    return jsObjectToMap(result);
-  }
+  //   return jsObjectToMap(result);
+  // }
 
-  Future<Map<dynamic, dynamic>> sendRoomMessage(
-      dynamic message, String toRoomID, dynamic config) async {
-    Object _message = mapToJSObj(message);
-    Object _config = mapToJSObj(config);
+  // Future<Map<dynamic, dynamic>> sendRoomMessage(
+  //     dynamic message, String toRoomID, dynamic config) async {
+  //   Object _message = mapToJSObj(message);
+  //   Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(
-            ZIM.getInstance()!.sendRoomMessage(_message, toRoomID, _config))
-        .catchError((e) {
-      throw PlatformException(code: e.code.toString(), message: e.message);
-    });
+  //   final result = await promiseToFuture(
+  //           ZIM.getInstance()!.sendRoomMessage(_message, toRoomID, _config))
+  //       .catchError((e) {
+  //     throw PlatformException(code: e.code.toString(), message: e.message);
+  //   });
 
-    return jsObjectToMap(result);
-  }
+  //   return jsObjectToMap(result);
+  // }
 
-  Future<Map<dynamic, dynamic>> sendGroupMessage(
-      dynamic message, String toGroupID, dynamic config) async {
-    Object _message = mapToJSObj(message);
-    Object _config = mapToJSObj(config);
+  // Future<Map<dynamic, dynamic>> sendGroupMessage(
+  //     dynamic message, String toGroupID, dynamic config) async {
+  //   Object _message = mapToJSObj(message);
+  //   Object _config = mapToJSObj(config);
 
-    final result = await promiseToFuture(
-            ZIM.getInstance()!.sendGroupMessage(_message, toGroupID, _config))
-        .catchError((e) {
-      throw PlatformException(code: e.code.toString(), message: e.message);
-    });
+  //   final result = await promiseToFuture(
+  //           ZIM.getInstance()!.sendGroupMessage(_message, toGroupID, _config))
+  //       .catchError((e) {
+  //     throw PlatformException(code: e.code.toString(), message: e.message);
+  //   });
 
-    return jsObjectToMap(result);
-  }
+  //   return jsObjectToMap(result);
+  // }
 
   Future<Map<dynamic, dynamic>> deleteMessages(dynamic messageList,
       String conversationID, dynamic conversationType, dynamic config) async {
@@ -1684,14 +1681,6 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> queryCombineMessage(dynamic message) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.queryCombineMessage(mapToJSObj(message))).catchError((e) {
-      throw PlatformException(code: e.code.toString(), message: e.message);
-    });
-
-    return jsObjectToMap(result);
-  }
-
   Future<Map<dynamic, dynamic>> muteGroup(String groupID, dynamic config) async {
     final result = await promiseToFuture(ZIM.getInstance()!.muteGroup(groupID, mapToJSObj(config))).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
@@ -1700,8 +1689,8 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> muteGroupMemberList(dynamic userIDs, String groupID, dynamic config) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.muteGroupMemberList(userIDs, groupID, mapToJSObj(config))).catchError((e) {
+  Future<Map<dynamic, dynamic>> muteGroupMembers(dynamic userIDs, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.muteGroupMembers(userIDs, groupID, mapToJSObj(config))).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1835,6 +1824,32 @@ class ZegoZimPlugin {
 
     return jsObjectToMap(result);
   }
+
+  Future<Map<dynamic, dynamic>> queryCombineMessageDetail (dynamic message) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryCombineMessageDetail(mapToJSObj(message))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> searchLocalFriends(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.searchLocalFriends(mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> sendFriendApplication(String userID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.sendFriendApplication(userID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+
 
   static void connectionStateChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConnectionStateChanged == null) return;
@@ -2115,52 +2130,6 @@ class ZegoZimPlugin {
     ZIMEventHandler.onCallInvitationTimeout!(zim, ZIMConverter.oZIMCallInvitationTimeoutInfo(data), callID);
   }
 
-  static void callInvitationAccepted(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onCallInvitationAccepted == null) return;
-
-    ZIMCallInvitationAcceptedInfo acceptedInfo =
-        ZIMCallInvitationAcceptedInfo();
-    acceptedInfo.invitee = data['invitee'];
-    acceptedInfo.extendedData = data['extendedData'] ?? '';
-    String callID = data['callID'];
-
-    ZIMEventHandler.onCallInvitationAccepted!(zim, acceptedInfo, callID);
-  }
-
-  static void callInvitationRejected(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onCallInvitationRejected == null) return;
-
-    ZIMCallInvitationRejectedInfo rejectedInfo =
-        ZIMCallInvitationRejectedInfo();
-    rejectedInfo.invitee = data['invitee'];
-    rejectedInfo.extendedData = data['extendedData'] ?? '';
-    String callID = data['callID'];
-
-    ZIMEventHandler.onCallInvitationRejected!(zim, rejectedInfo, callID);
-  }
-
-  static void callInviteesAnsweredTimeout(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onCallInviteesAnsweredTimeout == null) return;
-
-    dynamic invitees = data['invitees'];
-    String callID = data['callID'];
-
-    ZIMEventHandler.onCallInviteesAnsweredTimeout!(zim, invitees, callID);
-  }
-
-  // static void callStateChanged(ZIMEngine zim, dynamic data) {
-  //   if (ZIMEventHandler.onCallStateChanged == null) return;
-  //   ZIMCallStateChangeInfo callStateChangeInfo = ZIMCallStateChangeInfo();
-  //   callStateChangeInfo.callID = data['callID'];
-  //   callStateChangeInfo.state = ZIMCallStateExtension.mapValue[data['state']]!;
-  //   callStateChangeInfo.callDuration = data['callDuration'];
-  //   callStateChangeInfo.userDuration = data['userDuration'];
-  //   callStateChangeInfo.extendedData = data['extendedData'];
-  //   callStateChangeInfo.timeout = data['timeout'];
-  //   callStateChangeInfo.callUserInfo = ZIMConverter.oZIMCallUserInfo(data['callUserInfo']);
-  //   ZIMEventHandler.onCallStateChanged!(zim, callStateChangeInfo);
-  // }
-
   static void callUserStateChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onCallUserStateChanged == null) return;
     String callID = data['callID'];
@@ -2317,62 +2286,69 @@ class ZegoZimPlugin {
     ZIMEventHandler.onBlacklistChanged!(zim, userList ,action);
   }
 
-  static void groupMuteUpdated(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onGroupMuteUpdated == null) {
-    //   return;
-    // }
+  static void groupMutedInfoUpdated(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onGroupMutedInfoUpdated == null) {
+      return;
+    }
 
-    // ZIMEventHandler.onGroupMuteUpdated!(zim, deletedInfo);
-  }
+    ZIMGroupMuteInfo groupMuteInfo = ZIMConverter.oZIMGroupMuteInfo(data['mutedInfo']);
+    ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']);
+    String groupID = data['groupID'];
 
-  static void groupMemberMuteUpdated(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onGroupMemberMuteUpdated == null) {
-    //   return;
-    // }
-
-    // ZIMEventHandler.onGroupMemberMuteUpdated!(zim, deletedInfo);
+    ZIMEventHandler.onGroupMutedInfoUpdated!(zim, groupMuteInfo, operatedInfo, groupID);
   }
 
   static void friendListChanged(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onFriendListChanged == null) {
-    //   return;
-    // }
+    if (ZIMEventHandler.onFriendListChanged == null) {
+      return;
+    }
 
-    // ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[data['action']]!;
-    // List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
+    ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[data['action']]!;
+    List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
 
-    // ZIMEventHandler.onFriendListChanged!(zim, action, friendList);
+    ZIMEventHandler.onFriendListChanged!(zim, friendList, action);
   }
 
   static void friendInfoUpdated(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onFriendInfoUpdated == null) {
-    //   return;
-    // }
+    if (ZIMEventHandler.onFriendInfoUpdated == null) {
+      return;
+    }
 
-    // List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
+    List<ZIMFriendInfo> friendList = ZIMConverter.oZIMFriendInfoList(data['friendList'] ?? []) ?? [];
 
-    // ZIMEventHandler.onFriendInfoUpdated!(zim, friendList);
+    ZIMEventHandler.onFriendInfoUpdated!(zim, friendList);
   }
 
   static void friendApplicationListChanged(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onFriendApplicationListChanged == null) {
-    //   return;
-    // }
+    if (ZIMEventHandler.onFriendApplicationListChanged == null) {
+      return;
+    }
 
-    // ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[data['action']]!;
-    // List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
+    ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[data['action']]!;
+    List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
 
-    // ZIMEventHandler.onFriendApplicationListChanged!(zim, action, applicationList);
+    ZIMEventHandler.onFriendApplicationListChanged!(zim, applicationList, action );
   }
 
   static void friendApplicationUpdated(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onFriendApplicationUpdated == null) {
-    //   return;
-    // }
+    if (ZIMEventHandler.onFriendApplicationUpdated == null) {
+      return;
+    }
 
-    // List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
+    List<ZIMFriendApplicationInfo> applicationList = ZIMConverter.oZIMFriendApplicationInfoList(data['applicationList']);
 
-    // ZIMEventHandler.onFriendApplicationUpdated!(zim, applicationList);
+    ZIMEventHandler.onFriendApplicationUpdated!(zim, applicationList);
+  }
+
+  static void callInvitationCreated(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onCallInvitationCreated == null) {
+      return;
+    }
+
+    ZIMCallInvitationCreatedInfo info = ZIMConverter.oZIMCallInvitationCreatedInfo(data);
+    String callID = data['callID'];
+
+    ZIMEventHandler.onCallInvitationCreated!(zim, info, callID);
   }
 
   static Object mapToJSObj(Map<dynamic, dynamic>? a) {

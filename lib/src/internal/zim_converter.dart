@@ -1746,10 +1746,10 @@ class ZIMConverter {
 
   static ZIMCallInvitationCreatedInfo oZIMCallInvitationCreatedInfo(Map infoMap) {
     ZIMCallInvitationCreatedInfo info = ZIMCallInvitationCreatedInfo();
-    info.caller = infoMap['caller'];
+    info.caller = infoMap['caller'] ?? '';
     info.extendedData = infoMap['extendedData'] ?? '';
-    info.timeout = infoMap['timeout'];
-    info.createTime = infoMap['createTime'];
+    info.timeout = infoMap['timeout'] ?? 0;
+    info.createTime = infoMap['createTime'] ?? 0;
     info.callUserList = oZIMCallUserInfoList(infoMap['callUserList']);
     return info;
   }
