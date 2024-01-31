@@ -1206,6 +1206,16 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMFriendApplicationListQueriedResult(resultMap);
   }
 
+    @override
+  Future<ZIMFriendsSearchedResult> searchLocalFriends(ZIMFriendSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalFriends', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMFriendSearchConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendsSearchedResult(resultMap);
+  }
+
   @override
   Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryFriendList', {

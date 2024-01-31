@@ -3046,6 +3046,37 @@ public class ZIMPluginMethodHandler {
 
     }
 
+    public static void searchLocalFriends(MethodCall call,Result result){
+
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+       
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendSearchConfig config = ZIMPluginConverter.oZIMFriendSearchConfig(configMap);
+        zim.searchLocalFriends(config, new ZIMFriendsSearchedCallback() {
+            @Override
+            public void onFriendsSearched(ArrayList<ZIMFriendInfo> friendInfos, int nextFlag, ZIMError errorInfo){
+                if (errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+
+                    ArrayList<HashMap<String, Object>> friendInfosMapList = new ArrayList<>();
+                    for (ZIMFriendInfo friendInfo : friendInfos) {
+                        HashMap<String, Object> friendHashMap = ZIMPluginConverter.mZIMFriendInfo(friendInfo);
+                        friendInfosMapList.add(friendHashMap);
+                    }
+                    resultMap.put("friendInfos", friendInfosMapList);
+                    result.success(resultMap);
+                }else {
+                    result.error(String.valueOf(error.code.value()),error.message,null);
+                }
+            }
+        });
+    }
+
     // addUsersToBlacklist
     public static void addUsersToBlacklist(MethodCall call, Result result) {
         String handle = call.argument("handle");

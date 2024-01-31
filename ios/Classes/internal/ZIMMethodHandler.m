@@ -2563,6 +2563,28 @@
     }];
 }
 
+
+-(void)searchLocalFriends:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if (!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMFriendSearchConfig *config = [ZIMPluginConverter oZIMFriendSearchConfig:[call.arguments objectForKey:@"config"]];
+    [zim searchLocalFriends:config callback:^(NSArray<ZIMFriendInfo *> * _Nonnull friendInfos,  long long nextFlag, ZIMError * _Nonnull errorInfo) {
+        if (errorInfo.code == 0) {
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendInfoList:friendInfos] forKey:@"friendInfos"];
+            [resultDic safeSetObject:[NSNumber numberWithUnsignedInt:nextFlag] forKey:@"nextFlag"];
+            result(resultDic);
+        }
+        else {
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
 -(void)deleteFriends:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];

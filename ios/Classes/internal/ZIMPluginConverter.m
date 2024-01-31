@@ -1665,5 +1665,17 @@
     return config;
 }
 
++(nullable ZIMFriendSearchConfig *)oZIMFriendSearchConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendSearchConfig *config = [[ZIMFriendSearchConfig alloc] init];
+    config.nextFlag = [[configMap safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    config.count = [[configMap safeObjectForKey:@"count"] unsignedIntValue];
+    config.keywords = [configDic safeObjectForKey:@"keywords"];
+    config.isAlsoMatchFriendAlias = [[configDic objectForKey:@"isAlsoMatchFriendAlias"] boolValue];
+    return config;
+
+}
 
 @end

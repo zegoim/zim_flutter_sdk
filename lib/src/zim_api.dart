@@ -1549,6 +1549,9 @@ abstract class ZIM {
   Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
 
   Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config);
+
+  Future<ZIMFriendsSearchedResult> searchLocalFriends(ZIMFriendSearchConfig config);
+
   /// Available since: 2.13.0 or above.
   ///
   /// Description:Through this interface, a user with the specified userID can be added to the blacklist.

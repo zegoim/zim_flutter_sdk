@@ -1332,6 +1332,15 @@ ZIMFriendApplicationAcceptConfig ZIMPluginConverter::cnvZIMFriendApplicationAcce
 	return config;
 }
 
+ZIMFriendSearchConfig ZIMPluginConverter::cnvZIMFriendSearchConfigToObject(FTMap configMap) {
+	ZIMFriendSearchConfig config;
+	config.count = cnvFTMapToInt32(infoMap[FTValue("count")]);
+	config.nextFlag = cnvFTMapToInt32(infoMap[FTValue("nextFlag")]);
+    config.keywords = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[FTValue("keywords")]));
+	config.isAlsoMatchFriendAlias = std::get<bool>(configMap[FTValue("isAlsoMatchFriendAlias")]);
+	return config;
+}
+
 ZIMUserInfo ZIMPluginConverter::cnvZIMUserInfoToObject(FTMap infoMap) {
 	ZIMUserInfo info;
 	info.userID = std::get<std::string>(infoMap[FTValue("userID")]);

@@ -575,6 +575,14 @@ public class ZIMPluginConverter {
         return config;
     }
 
+    static public ZIMFriendSearchConfig oZIMFriendSearchConfig(HashMap<String,Object> configMap) {
+        ZIMFriendSearchConfig config = new ZIMFriendSearchConfig();
+        config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
+        config.nextFlag =  ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
+        config.keywords = (ArrayList<String>) configMap.get("keywords");
+        config.isAlsoMatchFriendAlias =   ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoMatchFriendAlias"));
+    }
+
     static public ZIMConversationSearchConfig oZIMConversationMessageGlobalSearchConfig(HashMap<String,Object> configMap) {
         ZIMConversationSearchConfig config = new ZIMConversationSearchConfig();
         config.nextFlag = ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));

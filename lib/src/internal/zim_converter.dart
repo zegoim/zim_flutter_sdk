@@ -110,18 +110,33 @@ class ZIMConverter {
     if (conversation.lastMessage != null) {
       conversationMap['lastMessage'] = mZIMMessage(conversation.lastMessage!);
     }
+    if(conversation.type == ZIMConversationType.group){
+      conversationMap['mutedExpiryTime'] = conversation.mutedExpiryTime;
+      conversationMap['userSelfMutedExpiryTime'] = conversation.userSelfMutedExpiryTime;
+      conversationMap['isDisabled'] = conversation.isDisabled;
+    }
     return conversationMap;
   }
 
   static ZIMConversation oZIMConversation(Map resultMap) {
     ZIMConversation conversation = ZIMConversation();
+    conversation.type =
+        ZIMConversationTypeExtension.mapValue[resultMap['type']]!;
+    if(conversation.type == ZIMConversationType.group){
+       ZIMGroupConversation conv = ZIMGroupConversation();
+       conv.type = ZIMConversationTypeExtension.mapValue[resultMap['type']]!;
+       conv.mutedExpiryTime = resultMap['mutedExpiryTime'];
+       conv.userSelfMutedExpiryTime = resultMap['userSelfMutedExpiryTime'];
+       conv.isDisabled = resultMap['isDisabled'];
+       conversation = conv;
+    }
+
     conversation.conversationID = resultMap['conversationID'];
     conversation.conversationAlias = resultMap['conversationAlias'] ?? '';
     conversation.conversationName = resultMap['conversationName'] ?? '';
     conversation.conversationAvatarUrl =
         resultMap['conversationAvatarUrl'] ?? '';
-    conversation.type =
-        ZIMConversationTypeExtension.mapValue[resultMap['type']]!;
+  
     conversation.unreadMessageCount = resultMap['unreadMessageCount'];
     conversation.orderKey = resultMap['orderKey'];
     if (resultMap['lastMessage'] != null) {
@@ -1953,8 +1968,21 @@ class ZIMConverter {
     };
   }
 
+static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
+    return {
+      'nextFlag': config.nextFlag,
+      'count': config.count,
+      'keywords': config.keywords,
+      'isAlsoMatchFriendAlias': config.isAlsoMatchFriendAlias,
+    };
+  }
+
   static ZIMFriendAddedResult oZIMFriendAddedResult(Map map) {
     return ZIMFriendAddedResult(friendInfo: oZIMFriendInfo(map['friendInfo']));
+  }
+
+  static ZIMFriendsSearchedResult oZIMFriendsSearchedResult(Map map) {
+    return ZIMFriendsSearchedResult(friendInfos: oZIMFriendInfoList(map['friendInfos']), nextFlag: map['nextFlag']);
   }
 
   static ZIMFriendAliasUpdatedResult oZIMFriendAliasUpdatedResult(Map map) {
