@@ -110,11 +110,6 @@ class ZIMConverter {
     if (conversation.lastMessage != null) {
       conversationMap['lastMessage'] = mZIMMessage(conversation.lastMessage!);
     }
-    if(conversation.type == ZIMConversationType.group){
-      conversationMap['mutedExpiryTime'] = conversation.mutedExpiryTime;
-      conversationMap['userSelfMutedExpiryTime'] = conversation.userSelfMutedExpiryTime;
-      conversationMap['isDisabled'] = conversation.isDisabled;
-    }
     return conversationMap;
   }
 
@@ -122,15 +117,6 @@ class ZIMConverter {
     ZIMConversation conversation = ZIMConversation();
     conversation.type =
         ZIMConversationTypeExtension.mapValue[resultMap['type']]!;
-    if(conversation.type == ZIMConversationType.group){
-       ZIMGroupConversation conv = ZIMGroupConversation();
-       conv.type = ZIMConversationTypeExtension.mapValue[resultMap['type']]!;
-       conv.mutedExpiryTime = resultMap['mutedExpiryTime'];
-       conv.userSelfMutedExpiryTime = resultMap['userSelfMutedExpiryTime'];
-       conv.isDisabled = resultMap['isDisabled'];
-       conversation = conv;
-    }
-
     conversation.conversationID = resultMap['conversationID'];
     conversation.conversationAlias = resultMap['conversationAlias'] ?? '';
     conversation.conversationName = resultMap['conversationName'] ?? '';
