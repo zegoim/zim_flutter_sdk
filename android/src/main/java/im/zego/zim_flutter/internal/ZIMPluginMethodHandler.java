@@ -3069,6 +3069,7 @@ public class ZIMPluginMethodHandler {
                         friendInfosMapList.add(friendHashMap);
                     }
                     resultMap.put("friendInfos", friendInfosMapList);
+                    resultMap.put("nextFlag",nextFlag);
                     result.success(resultMap);
                 }else {
                     result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
