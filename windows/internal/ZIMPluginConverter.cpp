@@ -1334,8 +1334,8 @@ ZIMFriendApplicationAcceptConfig ZIMPluginConverter::cnvZIMFriendApplicationAcce
 
 ZIMFriendSearchConfig ZIMPluginConverter::cnvZIMFriendSearchConfigToObject(FTMap configMap) {
 	ZIMFriendSearchConfig config;
-	config.count = cnvFTMapToInt32(infoMap[FTValue("count")]);
-	config.nextFlag = cnvFTMapToInt32(infoMap[FTValue("nextFlag")]);
+	config.count = cnvFTMapToInt32(configMap[FTValue("count")]);
+	config.nextFlag = cnvFTMapToInt32(configMap[FTValue("nextFlag")]);
     config.keywords = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[FTValue("keywords")]));
 	config.isAlsoMatchFriendAlias = std::get<bool>(configMap[FTValue("isAlsoMatchFriendAlias")]);
 	return config;
