@@ -3458,7 +3458,7 @@ void ZIMPluginMethodHandler::searchLocalFriends(flutter::EncodableMap& argument,
 				}
                 
 				FTMap retMap;
-				retMap[FTValue("friendInfos")] = friendApplicationInfoArray;
+				retMap[FTValue("friendInfos")] = friendInfoArray;
 				retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
 				sharedPtrResult->Success(retMap);
 			}
