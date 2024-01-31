@@ -580,7 +580,8 @@ public class ZIMPluginConverter {
         config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
         config.nextFlag =  ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
         config.keywords = (ArrayList<String>) configMap.get("keywords");
-        config.isAlsoMatchFriendAlias =   ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoMatchFriendAlias"));
+        config.isAlsoMatchFriendAlias = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoMatchFriendAlias"));
+        return config;
     }
 
     static public ZIMConversationSearchConfig oZIMConversationMessageGlobalSearchConfig(HashMap<String,Object> configMap) {
