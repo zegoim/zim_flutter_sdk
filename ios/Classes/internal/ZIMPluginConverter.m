@@ -1672,8 +1672,8 @@
     ZIMFriendSearchConfig *config = [[ZIMFriendSearchConfig alloc] init];
     config.nextFlag = [[configMap safeObjectForKey:@"nextFlag"] unsignedIntValue];
     config.count = [[configMap safeObjectForKey:@"count"] unsignedIntValue];
-    config.keywords = [configDic safeObjectForKey:@"keywords"];
-    config.isAlsoMatchFriendAlias = [[configDic objectForKey:@"isAlsoMatchFriendAlias"] boolValue];
+    config.keywords = [configMap safeObjectForKey:@"keywords"];
+    config.isAlsoMatchFriendAlias = [[configMap objectForKey:@"isAlsoMatchFriendAlias"] boolValue];
     return config;
 
 }
