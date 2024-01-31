@@ -3071,7 +3071,7 @@ public class ZIMPluginMethodHandler {
                     resultMap.put("friendInfos", friendInfosMapList);
                     result.success(resultMap);
                 }else {
-                    result.error(String.valueOf(error.code.value()),error.message,null);
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
                 }
             }
         });
