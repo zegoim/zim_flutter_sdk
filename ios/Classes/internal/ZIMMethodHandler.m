@@ -2572,7 +2572,7 @@
         return;
     }
     ZIMFriendSearchConfig *config = [ZIMPluginConverter oZIMFriendSearchConfig:[call.arguments objectForKey:@"config"]];
-    [zim searchLocalFriends:config callback:^(NSArray<ZIMFriendInfo *> * _Nonnull friendInfos,  long long nextFlag, ZIMError * _Nonnull errorInfo) {
+    [zim searchLocalFriendsWithConfig:config callback:^(NSArray<ZIMFriendInfo *> * _Nonnull friendInfos,  long long nextFlag, ZIMError * _Nonnull errorInfo) {
         if (errorInfo.code == 0) {
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:[ZIMPluginConverter mZIMFriendInfoList:friendInfos] forKey:@"friendInfos"];
