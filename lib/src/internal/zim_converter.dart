@@ -1980,7 +1980,7 @@ class ZIMConverter {
 
   static ZIMFriendsDeletedResult oZIMFriendDeletedResult(Map map) {
     return ZIMFriendsDeletedResult(errorUserList: oZIMErrorUserInfoList(
-        map['errorUserList']));
+        map['errorUserList'] ?? []));
   }
 
   static ZIMFriendListQueriedResult oZIMFriendListQueriedResult(Map map) {
