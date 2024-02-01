@@ -46,6 +46,7 @@ class ZIMErrorCode {
   static const int messageModeCallInviteUserDoesNotExist = 6000281;
   static const int messageModuleMessageReceiptLimit = 6000282;
   static const int messageModuleUserAlreadyInTheCall = 6000283;
+  static const int messageModuleSenderInBlacklist = 6000284,
 
   static const int roomModuleCommonError = 6000301;
   static const int roomModuleServerError = 6000302;
@@ -120,4 +121,20 @@ class ZIMErrorCode {
   static const int dataBaseModuleModifyDataBaseError = 6000702;
   static const int dataBaseModuleDeleteDataBaseError = 6000703;
   static const int dataBaseModuleSeleteDataBaseError = 6000704;
+
+  static const int friendModuleFriendApplicationStatusError = 6000802,
+  static const int friendModuleIsAlreadyYourFriend = 6000803,
+  static const int friendModuleAlreadyAddToBlacklist = 6000804,
+  static const int friendModuleCannotAddSelfToBlacklist = 6000805,
+  static const int friendModuleAlreadyDeleteFromBlacklist = 6000806,
+  static const int friendModuleUserNotInBlacklist = 6000807,
+  static const int friendModuleBlacklistListQuantityLimit = 6000808,
+  static const int friendOperationLimitExceeded = 6000809,
+  static const int friendModuleCannotAddSelfToFriendList = 6000810,
+  static const int friendModuleFriendAreUnregistered = 6000811,
+  static const int friendModuleNotYourFriend = 6000812,
+  static const int friendModuleCannotDeleteSelf = 6000813,
+  static const int friendModuleFriendApplicationExpired = 6000814,
+  static const int friendModuleAddBlacklistFail = 6000815,
+  static const int friendModuleDelBlacklistFail = 6000816,
 }
