@@ -1167,7 +1167,7 @@ class ZIMEngine implements ZIM {
   Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID, ZIMFriendApplicationSendConfig config) async {
     Map resultMap = await channel.invokeMethod('sendFriendApplication', {
       'handle': handle,
-      'applyUserID': userID,
+      'userID': userID,
       'config': ZIMConverter.mZIMSendFriendApplicationConfig(config),
     });
 
@@ -1204,6 +1204,16 @@ class ZIMEngine implements ZIM {
     });
 
     return ZIMConverter.oZIMFriendApplicationListQueriedResult(resultMap);
+  }
+
+    @override
+  Future<ZIMFriendsSearchedResult> searchLocalFriends(ZIMFriendSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalFriends', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMFriendSearchConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendsSearchedResult(resultMap);
   }
 
   @override
