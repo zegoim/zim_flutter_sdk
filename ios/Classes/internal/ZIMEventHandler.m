@@ -430,6 +430,26 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 - (void)zim:(ZIM *)zim
+    groupMuteInfoUpdated:(ZIMGroupMuteInfo *)muteInfo
+            operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+                 groupID:(NSString *)groupID {
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
+    NSDictionary *muteInfoDic = [ZIMPluginConverter mZIMGroupMuteInfo:muteInfo];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
+    [resultDic safeSetObject:muteInfoDic forKey:@"groupMuteInfo"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupMuteInfoUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
     groupAttributesUpdated:(NSArray<ZIMGroupAttributesUpdateInfo *> *)updateInfo
               operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
     groupID:(NSString *)groupID{

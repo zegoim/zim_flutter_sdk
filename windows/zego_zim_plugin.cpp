@@ -395,6 +395,9 @@ void ZegoZimPlugin::HandleMethodCall(
 	else if (method_call.method_name() == "sendFriendApplication") {
 	ZIMPluginMethodHandler::getInstance().sendFriendApplication(argument, std::move(result));
 	}
+    else if (method_call.method_name() == "searchLocalFriends") {
+	ZIMPluginMethodHandler::getInstance().searchLocalFriends(argument, std::move(result));
+	}
 	else if (method_call.method_name() == "deleteFriends") {
 	ZIMPluginMethodHandler::getInstance().deleteFriends(argument, std::move(result));
 	}

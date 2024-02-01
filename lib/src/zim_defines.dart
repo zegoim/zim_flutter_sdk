@@ -712,6 +712,13 @@ class ZIMConversation {
   ZIMConversation();
 }
 
+class ZIMGroupConversation extends ZIMConversation{
+    int mutedExpiryTime = 0;
+    int userSelfMutedExpiryTime = 0;
+    bool isDisabled = false;
+    ZIMGroupConversation();
+}
+
 enum ZIMMessageMentionedType{
   unknown,
   mention_me,
@@ -2309,6 +2316,12 @@ class ZIMFriendAttributesUpdatedResult {
   ZIMFriendAttributesUpdatedResult({required this.friendInfo});
 }
 
+class ZIMFriendsSearchedResult {
+  List<ZIMFriendInfo> friendInfos;
+  int nextFlag;
+  ZIMFriendsSearchedResult({required this.friendInfos, required this.nextFlag});
+}
+
 class ZIMFriendsDeletedResult {
   List<ZIMErrorUserInfo> errorUserList;
   ZIMFriendsDeletedResult({required this.errorUserList});
@@ -2464,6 +2477,14 @@ class ZIMFriendApplicationListQueryConfig {
   int count = 0;
   int nextFlag = 0;
 }
+
+class ZIMFriendSearchConfig {
+  int count = 0;
+  int nextFlag = 0;
+  List<String> keywords = [];
+  bool isAlsoMatchFriendAlias = false;
+}
+
 /// [nextFlag] Not required, it is 0 by default for the first time, which means to start the query from the beginning.
 /// [count] count.
 class ZIMBlacklistQueryConfig {

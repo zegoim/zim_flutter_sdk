@@ -3110,7 +3110,7 @@ void ZIMPluginMethodHandler::sendFriendApplication(flutter::EncodableMap& argume
 		result->Error("-1", "no native instance");
 		return;
 	}
-	auto applyUserID = std::get<std::string>(argument[FTValue("applyUserID")]);
+	auto applyUserID = std::get<std::string>(argument[FTValue("userID")]);
     ZIMFriendApplicationSendConfig config = ZIMPluginConverter::cnvZIMFriendApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
     
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
@@ -3425,9 +3425,40 @@ void ZIMPluginMethodHandler::queryFriendApplicationList(flutter::EncodableMap& a
 					auto infoMap = ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(info);
                     friendApplicationInfoArray.emplace_back(infoMap);
 				}
-
 				FTMap retMap;
 				retMap[FTValue("applicationList")] = friendApplicationInfoArray;
+				retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
+				sharedPtrResult->Success(retMap);
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
+
+void ZIMPluginMethodHandler::searchLocalFriends(flutter::EncodableMap& argument, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+    ZIMFriendSearchConfig config = ZIMPluginConverter::cnvZIMFriendSearchConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->searchLocalFriends(config, [=](const std::vector<ZIMFriendInfo>& friendInfos,
+		unsigned int nextFlag, const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				FTArray friendInfoArray;
+				for (auto& info : friendInfos) {
+					auto infoMap = ZIMPluginConverter::cnvZIMFriendInfoToMap(info);
+                    friendInfoArray.emplace_back(infoMap);
+				}
+                
+				FTMap retMap;
+				retMap[FTValue("friendInfos")] = friendInfoArray;
 				retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
 				sharedPtrResult->Success(retMap);
 			}
