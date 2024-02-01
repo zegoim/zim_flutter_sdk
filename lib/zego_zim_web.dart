@@ -1738,7 +1738,7 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> updateFriendAttributes(dynamic friendAttributes, String userID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.updateFriendAttributes(friendAttributes, userID)).catchError((e) {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateFriendAttributes(mapToJSObj(friendAttributes), userID)).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
