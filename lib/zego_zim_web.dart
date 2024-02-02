@@ -323,9 +323,9 @@ class ZegoZimPlugin {
       case 'setConversationDraft':
         return setConversationDraft(call.arguments['draft'], call.arguments['conversationID'], call.arguments['conversationType']);
       case 'muteGroup':
-        return muteGroup(call.arguments['groupID'], call.arguments['config']);
+        return muteGroup(call.arguments['isMute'], call.arguments['groupID'], call.arguments['config']);
       case 'muteGroupMembers':
-        return muteGroupMembers(call.arguments['userIDs'], call.arguments['groupID'], call.arguments['config']);
+        return muteGroupMembers(call.arguments['isMute'], call.arguments['userIDs'], call.arguments['groupID'], call.arguments['config']);
       case 'queryGroupMemberMutedList':
         return queryGroupMemberMutedList(call.arguments['groupID'], call.arguments['config']);
       case 'addFriend':
@@ -363,13 +363,19 @@ class ZegoZimPlugin {
       case 'searchLocalFriends':
         return searchLocalFriends(call.arguments['config']);
       case 'sendFriendApplication':
-        return sendFriendApplication(call.arguments['userID'], call.arguments['config']);
+        return sendFriendApplication(call.arguments['applyUserID'], call.arguments['config']);
+      case 'writeLog':
+        return writeLog(call.arguments['logString']);
       default:
         throw PlatformException(
           code: 'Unimplemented',
           details: 'zim for web doesn\'t implement \'${call.method}\'',
         );
     }
+  }
+
+  static void writeLog(String logString) {
+    window.console.info(logString);
   }
 
   static void _eventListener(dynamic event) {
@@ -1681,16 +1687,16 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> muteGroup(String groupID, dynamic config) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.muteGroup(groupID, mapToJSObj(config))).catchError((e) {
+  Future<Map<dynamic, dynamic>> muteGroup(bool isMute, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.muteGroup(isMute, groupID, mapToJSObj(config))).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> muteGroupMembers(dynamic userIDs, String groupID, dynamic config) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.muteGroupMembers(userIDs, groupID, mapToJSObj(config))).catchError((e) {
+  Future<Map<dynamic, dynamic>> muteGroupMembers(bool isMute, dynamic userIDs, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.muteGroupMembers(isMute, userIDs, groupID, mapToJSObj(config))).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1738,7 +1744,7 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic, dynamic>> updateFriendAttributes(dynamic friendAttributes, String userID) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.updateFriendAttributes(friendAttributes, userID)).catchError((e) {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateFriendAttributes(mapToJSObj(friendAttributes), userID)).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
@@ -1817,12 +1823,12 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
-  Future<Map<dynamic, dynamic>> deleteAllConversationMessages(dynamic config) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.deleteAllConversationMessages(mapToJSObj(config))).catchError((e) {
+  Future<void> deleteAllConversationMessages(dynamic config) async {
+    promiseToFuture(ZIM.getInstance()!.deleteAllConversationMessages(mapToJSObj(config))).catchError((e) {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
-    return jsObjectToMap(result);
+    return;
   }
 
   Future<Map<dynamic, dynamic>> queryCombineMessageDetail (dynamic message) async {

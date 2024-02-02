@@ -27,11 +27,11 @@ class ZIMManager {
   }
 
   static writeLog(String logString){
-    try{
-      channel.invokeMethod('writeLog',{"logString":logString});
-    }catch(e,s){
-      log("write log method not impl in current platform");
-    }
+    // try{
+    //   channel.invokeMethod('writeLog',{"logString":logString});
+    // }catch(e,s){
+    //   log("write log method not impl in current platform");
+    // }
   }
 
   static setAdvancedConfig(String key, String value) async {
