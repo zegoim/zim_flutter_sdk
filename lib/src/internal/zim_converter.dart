@@ -260,7 +260,7 @@ class ZIMConverter {
 
   static ZIMMessage oZIMMessage(Map resultMap, [int? messageID]) {
     ZIMMessageType msgType =
-        ZIMMessageTypeExtension.mapValue[resultMap['type']]!;
+        ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
     ZIMMessage? message =
         messageID == null ? null : ZIMCommonData.messsageMap[messageID];
     switch (msgType) {
@@ -351,7 +351,7 @@ class ZIMConverter {
         message ??= ZIMMessage();
         break;
     }
-    message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']]!;
+    message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
     message.messageID = resultMap['messageID'] is String
         ? int.parse(resultMap['messageID'])
         : resultMap['messageID'];
@@ -1026,7 +1026,8 @@ class ZIMConverter {
         nickname: resultMap['nickname'] ?? '');
   }
 
-  static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map memberInfoMap) {
+  static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map? memberInfoMap) {
+    if (memberInfoMap == null) return ZIMGroupMemberInfo();
     ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
     groupMemberInfo.userID = memberInfoMap['userID'];
     groupMemberInfo.userName = memberInfoMap['userName'] ?? '';
