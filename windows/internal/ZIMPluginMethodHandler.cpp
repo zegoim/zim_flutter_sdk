@@ -3495,4 +3495,50 @@ void ZIMPluginMethodHandler::queryCombineMessageDetail(flutter::EncodableMap& ar
 		});
 }
 
+void ZIMPluginMethodHandler::clearLocalFileCache(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	ZIMFileCacheClearConfig config = ZIMPluginConverter::cnvZIMFileCacheClearConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->clearLocalFileCache(config, [=](const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			sharedPtrResult->Success();
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
+void ZIMPluginMethodHandler::queryLocalFileCache(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	ZIMFileCacheQueryConfig config = ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->queryLocalFileCache(config, [=](const ZIMFileCacheInfo& cacheInfo, const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			FTMap retMap;
+			retMap[FTValue("fileCacheInfo")] = ZIMPluginConverter::cnvZIMFileCacheInfoToMap(cacheInfo);
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
 

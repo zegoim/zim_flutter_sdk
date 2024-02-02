@@ -2405,6 +2405,26 @@ class ZIMCombineMessageDetailQueriedResult {
   ZIMCombineMessageDetailQueriedResult({required this.message});
 }
 
+class ZIMFileCacheQueriedResult {
+  ZIMFileCacheInfo fileCacheInfo;
+  ZIMFileCacheQueriedResult({required this.fileCacheInfo});
+}
+
+class ZIMFileCacheInfo {
+  int totalFileSize;
+  ZIMFileCacheInfo({required this.totalFileSize});
+}
+
+class ZIMFileCacheClearConfig {
+  int endTime;
+  ZIMFileCacheClearConfig({required this.endTime});
+}
+
+class ZIMFileCacheQueryConfig {
+  int endTime;
+  ZIMFileCacheQueryConfig({required this.endTime});
+}
+
 class ZIMMessageDeletedInfo {
   String conversationID;
   ZIMConversationType conversationType;

@@ -1616,4 +1616,9 @@ abstract class ZIM {
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
 
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
+
+  Future<void> clearLocalFileCache(ZIMFileCacheClearConfig config);
+
+  Future<ZIMFileCacheQueriedResult> queryLocalFileCache(ZIMFileCacheQueryConfig config);
+
 }

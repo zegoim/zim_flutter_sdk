@@ -509,6 +509,13 @@ class ZIMConverter {
     return info;
   }
 
+  static ZIMFileCacheInfo oZIMFileCacheInfo(
+      Map infoMap) {
+    ZIMFileCacheInfo info =
+    ZIMFileCacheInfo(totalFileSize: infoMap['totalFileSize']);
+    return info;
+  }
+
   static ZIMConversationsSearchedResult oZIMConversationsSearchedResult(
       Map resultMap) {
     List<ZIMConversationSearchInfo> conversationSearchInfoList = [];
@@ -2089,6 +2096,18 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
   static Map mZIMGroupMemberMuteConfig(ZIMGroupMemberMuteConfig config){
     Map map = {};
     map['duration'] = config.duration;
+    return map;
+  }
+
+  static Map mZIMFileCacheClearConfig(ZIMFileCacheClearConfig config){
+    Map map = {};
+    map['endTime'] = config.endTime;
+    return map;
+  }
+
+  static Map mZIMFileCacheQueryConfig(ZIMFileCacheQueryConfig config){
+    Map map = {};
+    map['endTime'] = config.endTime;
     return map;
   }
 

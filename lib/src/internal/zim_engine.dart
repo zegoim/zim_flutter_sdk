@@ -1288,5 +1288,19 @@ class ZIMEngine implements ZIM {
     return ZIMCombineMessageDetailQueriedResult(message:ZIMConverter.oZIMMessage(resultMap['message']) as ZIMCombineMessage);
   }
 
+  Future<void> clearLocalFileCache(ZIMFileCacheClearConfig config) async{
+    return await channel.invokeMethod('clearLocalFileCache',{
+      'handle':handle,
+      'config': ZIMConverter.mZIMFileCacheClearConfig(config)
+    });
+  }
+
+  Future<ZIMFileCacheQueriedResult> queryLocalFileCache(ZIMFileCacheQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryLocalFileCache',{
+      'handle':handle,
+      'config': ZIMConverter.mZIMFileCacheQueryConfig(config)
+    });
+    return ZIMFileCacheQueriedResult(fileCacheInfo: ZIMConverter.oZIMFileCacheInfo(resultMap['fileCacheInfo']));
+  }
 
 }

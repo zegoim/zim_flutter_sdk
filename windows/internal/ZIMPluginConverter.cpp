@@ -318,6 +318,12 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	return conversationMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMFileCacheInfoToMap(const ZIMFileCacheInfo& fileCacheInfo) {
+	FTMap fileCacheInfoMap;
+	fileCacheInfoMap[FTValue("totalFileSize")] = FTValue((int64_t)fileCacheInfo.totalFileSize);
+	return fileCacheInfoMap;
+}
+
 FTArray ZIMPluginConverter::cnvZIMConversationChangeInfoListToArray(const std::vector<ZIMConversationChangeInfo>& convInfoList) {
 	FTArray convInfoArray;
 	for (auto& convInfo : convInfoList) {
@@ -1305,6 +1311,19 @@ ZIMGroupMemberMutedListQueryConfig ZIMPluginConverter::cnvZIMGroupMemberMutedLis
 	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
 	return config;
 }
+
+ZIMFileCacheClearConfig ZIMPluginConverter::cnvZIMFileCacheClearConfigToObject(FTMap configMap) {
+	ZIMFileCacheClearConfig config;
+	config.endTime = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("endTime")]);
+	return config;
+}
+
+ZIMFileCacheQueryConfig ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(FTMap configMap) {
+	ZIMFileCacheQueryConfig config;
+	config.endTime = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("endTime")]);
+	return config;
+}
+
 ZIMFriendAddConfig ZIMPluginConverter::cnvZIMFriendAddConfigToObject(FTMap configMap) {
 	ZIMFriendAddConfig config;
 	config.wording = std::get<std::string>(configMap[FTValue("wording")]);

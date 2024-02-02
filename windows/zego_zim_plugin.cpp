@@ -449,6 +449,12 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "queryGroupMemberMutedList") {
         ZIMPluginMethodHandler::getInstance().queryGroupMemberMutedList(argument, std::move(result));
     }
+	else if (method_call.method_name() == "clearLocalFileCache") {
+	ZIMPluginMethodHandler::getInstance().clearLocalFileCache(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "queryLocalFileCache") {
+	ZIMPluginMethodHandler::getInstance().queryLocalFileCache(argument, std::move(result));
+	}
     else {
         result->NotImplemented();
     

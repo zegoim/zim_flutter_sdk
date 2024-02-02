@@ -226,6 +226,7 @@ public:
     static FTMap cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplicationInfo& info);
     static FTMap cnvZIMFriendInfoToMap(const ZIMFriendInfo& info);
     static FTMap cnvZIMFriendRelationInfoToMap(const ZIMFriendRelationInfo& info);
+    static FTMap cnvZIMFileCacheInfoToMap(const ZIMFileCacheInfo& fileCacheInfo);
     static ZIMFriendSearchConfig cnvZIMFriendSearchConfigToObject(FTMap configMap);
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
@@ -256,6 +257,8 @@ public:
     static ZIMGroupMuteConfig cnvZIMGroupMuteConfigToObject(FTMap configMap);
     static ZIMGroupMemberMuteConfig cnvZIMGroupMemberMuteConfigToObject(FTMap configMap);
     static ZIMGroupMemberMutedListQueryConfig cnvZIMGroupMemberMutedListQueryConfigToBbject(FTMap configMap);
+	static ZIMFileCacheClearConfig cnvZIMFileCacheClearConfigToObject(FTMap configMap);
+	static ZIMFileCacheQueryConfig cnvZIMFileCacheQueryConfigToObject(FTMap configMap);
     
 public:
     static ZIMFriendAddConfig cnvZIMFriendAddConfigToObject(FTMap configMap);
