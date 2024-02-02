@@ -146,8 +146,8 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);
   external PromiseJsImpl<dynamic> setConversationDraft(String draft, String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> queryCombineMessageDetail(dynamic message);
-  external PromiseJsImpl<dynamic> muteGroup(String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> muteGroupMembers(dynamic userIDs, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> muteGroup(bool isMute, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> muteGroupMembers(bool isMute, dynamic userIDs, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> queryGroupMemberMutedList(String groupID, dynamic config);
   external PromiseJsImpl<dynamic> addFriend(String userID, dynamic config);
   external PromiseJsImpl<dynamic> deleteFriends(dynamic userIDs, dynamic config);
