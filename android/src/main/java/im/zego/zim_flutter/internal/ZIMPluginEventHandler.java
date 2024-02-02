@@ -352,7 +352,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         String handle = engineMapForCallback.get(zim);
 
         HashMap<String,Object> resultMap = new HashMap<>();
-        resultMap.put("method","onGroupMuteInfoUpdated");
+        resultMap.put("method","onGroupMutedInfoUpdated");
         resultMap.put("handle", handle);
         resultMap.put("groupID",groupID);
         resultMap.put("groupMuteInfo",ZIMPluginConverter.mZIMGroupMuteInfo(muteInfo));
