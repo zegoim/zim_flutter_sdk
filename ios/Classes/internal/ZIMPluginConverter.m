@@ -294,7 +294,7 @@
     }
     [msg safeSetValue:[messageDic safeObjectForKey:@"mentionedUserIDs"]  forKey:@"mentionedUserIDs"];
     [msg safeSetValue:[messageDic safeObjectForKey:@"isMentionAll"]  forKey:@"isMentionAll"];
-    
+    [msg safeSetValue:[messageDic safeObjectForKey:@"isServerMessage"]  forKey:@"isServerMessage"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"type"]  forKey:@"type"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"messageID"]  forKey:@"messageID"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"localMessageID"]  forKey:@"localMessageID"];
@@ -349,6 +349,7 @@
     [messageDic safeSetObject:[NSNumber numberWithBool:message.isBroadcastMessage] forKey:@"isBroadcastMessage"];
     [messageDic safeSetObject:[ZIMPluginConverter mZIMMessageReactionList:message.reactions] forKey:@"reactions"];
     [messageDic safeSetObject:[NSNumber numberWithBool:message.isMentionAll] forKey:@"isMentionAll"];
+    [messageDic safeSetObject:[NSNumber numberWithBool:message.isServerMessage] forKey:@"isServerMessage"];
     [messageDic safeSetObject:message.mentionedUserIDs forKey:@"mentionedUserIDs"];
     
     if([message isKindOfClass:[ZIMMediaMessage class]]){
