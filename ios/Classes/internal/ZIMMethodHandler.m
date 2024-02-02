@@ -2868,6 +2868,50 @@
     }];
 }
 
+- (void)clearLocalFileCache:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+
+    ZIMFileCacheClearConfig *config = [ZIMPluginConverter oZIMFileCacheClearConfig:[call.arguments objectForKey:@"config"]];
+
+    [zim clearLocalFileCacheWithConfig:config callback:^(ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            result(nil);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)queryLocalFileCache:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
+    ZIMFileCacheQueryConfig *config = [ZIMPluginConverter oZIMFileCacheQueryConfig:[call.arguments objectForKey:@"config"]];
+
+    [zim queryLocalFileCacheWithConfig:config callback:^(ZIMFileCacheInfo *fileCacheInfo, ZIMError *errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMFileCacheInfo:fileCacheInfo]forKey:@"fileCacheInfo"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+    
+}
+
 -(void)writeLog:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *log = [call.arguments objectForKey:@"logString"];
     [self writeLog:log];

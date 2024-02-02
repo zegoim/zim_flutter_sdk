@@ -1665,6 +1665,34 @@
     return config;
 }
 
++(nullable ZIMFileCacheClearConfig *)oZIMFileCacheClearConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFileCacheClearConfig *config = [[ZIMFileCacheClearConfig alloc] init];
+    config.endTime = [[configDic safeObjectForKey:@"endTime"] longLongValue];
+    return config;
+}
+
++(nullable ZIMFileCacheQueryConfig *)oZIMFileCacheQueryConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFileCacheQueryConfig *config = [[ZIMFileCacheQueryConfig alloc] init];
+    config.endTime = [[configDic safeObjectForKey:@"endTime"] longLongValue];
+    return config;
+}
+
++(nullable NSDictionary *)mZIMFileCacheInfo:(nullable ZIMFileCacheInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.totalFileSize] forKey:@"totalFileSize"];
+    
+    return infoDic;
+}
+
 +(nullable ZIMFriendSearchConfig *)oZIMFriendSearchConfig:(nullable NSDictionary *)configMap{
     if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
         return nil;
@@ -1672,8 +1700,8 @@
     ZIMFriendSearchConfig *config = [[ZIMFriendSearchConfig alloc] init];
     config.nextFlag = [[configMap safeObjectForKey:@"nextFlag"] unsignedIntValue];
     config.count = [[configMap safeObjectForKey:@"count"] unsignedIntValue];
-    config.keywords = [configDic safeObjectForKey:@"keywords"];
-    config.isAlsoMatchFriendAlias = [[configDic objectForKey:@"isAlsoMatchFriendAlias"] boolValue];
+    config.keywords = [configMap safeObjectForKey:@"keywords"];
+    config.isAlsoMatchFriendAlias = [[configMap objectForKey:@"isAlsoMatchFriendAlias"] boolValue];
     return config;
 
 }

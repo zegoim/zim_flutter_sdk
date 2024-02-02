@@ -3306,5 +3306,49 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void clearLocalFileCache(MethodCall call ,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMFileCacheClearConfig config = ZIMPluginConverter.oZIMFileCacheClearConfig(call.argument("config"));
+        zim.clearLocalFileCache(config, new ZIMFileCacheClearedCallback() {
+            @Override
+            public void onFileCacheCleared(ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    result.success(null);
+                }else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryLocalFileCache(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMFileCacheQueryConfig config = ZIMPluginConverter.oZIMFileCacheQueryConfig(call.argument("config"));
+        zim.queryLocalFileCache(config, new ZIMFileCacheQueriedCallback() {
+            @Override
+            public void onFileCacheQueried(ZIMFileCacheInfo fileCacheInfo, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("fileCacheInfo", ZIMPluginConverter.mZIMFileCacheInfo(fileCacheInfo));
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
 
 }

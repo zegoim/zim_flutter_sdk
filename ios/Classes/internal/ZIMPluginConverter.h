@@ -125,6 +125,10 @@
 
 +(nullable ZIMGroupAdvancedConfig *)oZIMGroupAdvancedConfig:(nullable NSDictionary *)configDic;
 
++(nullable ZIMFileCacheClearConfig *)oZIMFileCacheClearConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMFileCacheQueryConfig *)oZIMFileCacheQueryConfig:(nullable NSDictionary *)configDic;
+
 +(nullable NSDictionary *)mZIMGroupMuteConfig:(nullable ZIMGroupMuteConfig *)config;
 
 +(nullable ZIMGroupMuteConfig *)oZIMGroupMuteConfig:(nullable NSDictionary *)configDic;

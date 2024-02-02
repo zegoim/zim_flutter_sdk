@@ -575,6 +575,25 @@ public class ZIMPluginConverter {
         return config;
     }
 
+    static public ZIMFileCacheClearConfig oZIMFileCacheClearConfig(HashMap<String,Object> configMap) {
+        ZIMFileCacheClearConfig config = new ZIMFileCacheClearConfig();
+        config.endTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("endTime"));
+        return config;
+    }
+
+    static public ZIMFileCacheQueryConfig oZIMFileCacheQueryConfig(HashMap<String,Object> configMap) {
+        ZIMFileCacheQueryConfig config = new ZIMFileCacheQueryConfig();
+        config.endTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("endTime"));
+        return config;
+    }
+
+    static public HashMap<String,Object> mZIMFileCacheInfo(ZIMFileCacheInfo fileCacheInfo){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("totalFileSize",fileCacheInfo.totalFileSize);
+
+        return  infoMap;
+    }
+
     static public ZIMFriendSearchConfig oZIMFriendSearchConfig(HashMap<String,Object> configMap) {
         ZIMFriendSearchConfig config = new ZIMFriendSearchConfig();
         config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
