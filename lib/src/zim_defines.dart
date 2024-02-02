@@ -2435,6 +2435,21 @@ class ZIMMessageDeletedInfo {
   ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.messageDeleteType,required this.isDeleteConversationAllMessage,required this.messageList});
 }
 
+typedef ZIMMessageImportingProgress = void Function(
+    int importedMessageCount, int totalMessageCount);
+
+typedef ZIMMessageExportingProgress = void Function(
+    int exportedMessageCount, int totalMessageCount);
+
+class ZIMMessageImportConfig {
+
+  ZIMMessageImportConfig();
+}
+
+class ZIMMessageExportConfig {
+
+  ZIMMessageExportConfig();
+}
 class ZIMFriendAddConfig {
   String wording = "";
   String friendAlias = "";

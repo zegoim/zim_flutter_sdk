@@ -5,6 +5,10 @@ class ZIMCommonData {
 
   static Map<int, ZIMMediaDownloadingProgress> mediaDownloadingProgressMap = {};
 
+  static Map<int, ZIMMessageImportingProgress> messageImportingProgressMap = {};
+
+  static Map<int, ZIMMessageExportingProgress> messageExportingProgressMap = {};
+
   static Map<int, ZIMMediaUploadingProgress> mediaUploadingProgressMap = {};
 
   static Map<int, ZIMMessage> messsageMap = {};

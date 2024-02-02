@@ -3230,4 +3230,81 @@ public class ZIMPluginMethodHandler {
     }
 
 
+    public static void exportLocalMessages(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String folderPath = call.argument("folderPath");
+        Integer progressID = call.argument("progressID");
+        ZIMMessageExportConfig config = new ZIMMessageExportConfig();
+
+        zim.exportLocalMessages(folderPath, config,new ZIMMessageExportedCallback() {
+            @Override
+            public void onMessageExported(ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    result.success(null);
+                }else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+
+            @Override
+            public void onMessageExportingProgress(long exportedMessageCount, long totalMessageCount) {
+                if(ZIMPluginEventHandler.mysink == null) {
+                    return;
+                }
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("handle",handle);
+                resultMap.put("method","messageExportingProgress");
+                resultMap.put("progressID",progressID);
+                resultMap.put("exportedMessageCount",exportedMessageCount);
+                resultMap.put("totalMessageCount",totalMessageCount);
+                ZIMPluginEventHandler.mysink.success(resultMap);
+            }
+        });
+    }
+
+    public static void importLocalMessages(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String folderPath = call.argument("folderPath");
+        Integer progressID = call.argument("progressID");
+        ZIMMessageImportConfig config = new ZIMMessageImportConfig();
+
+        zim.importLocalMessages(folderPath, config,new ZIMMessageImportedCallback() {
+            @Override
+            public void onMessageImported(ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    result.success(null);
+                }else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+
+            @Override
+            public void onMessageImportingProgress(long importedMessageCount, long totalMessageCount) {
+                if(ZIMPluginEventHandler.mysink == null) {
+                    return;
+                }
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("handle",handle);
+                resultMap.put("method","messageImportingProgress");
+                resultMap.put("progressID",progressID);
+                resultMap.put("importedMessageCount",importedMessageCount);
+                resultMap.put("totalMessageCount",totalMessageCount);
+                ZIMPluginEventHandler.mysink.success(resultMap);
+            }
+        });
+    }
+
+
 }
