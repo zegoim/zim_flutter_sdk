@@ -430,9 +430,9 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 - (void)zim:(ZIM *)zim
-    groupMuteInfoUpdated:(ZIMGroupMuteInfo *)muteInfo
-            operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
-                 groupID:(NSString *)groupID {
+    groupMutedInfoUpdated:(ZIMGroupMuteInfo *)muteInfo
+             operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+                  groupID:(NSString *)groupID {
     if(_events == nil){
         return;
     }

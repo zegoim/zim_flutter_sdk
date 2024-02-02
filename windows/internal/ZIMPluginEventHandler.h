@@ -173,9 +173,9 @@ protected:
     void onFriendApplicationListChanged(
         ZIM* zim, const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList,ZIMFriendApplicationListChangeAction& action) override;
 
-    void onGroupMuteInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
-                                        const ZIMGroupOperatedInfo & operatedInfo,
-                                        const std::string & groupID);
+    void onGroupMutedInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
+                                 const ZIMGroupOperatedInfo & operatedInfo,
+                                 const std::string & groupID);
 
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;

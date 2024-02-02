@@ -343,7 +343,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onGroupMuteInfoUpdated(ZIM zim, ZIMGroupMuteInfo muteInfo,
+    public void onGroupMutedInfoUpdated(ZIM zim, ZIMGroupMuteInfo muteInfo,
                                        ZIMGroupOperatedInfo operatedInfo, String groupID) {
         if(mysink == null){
             return;

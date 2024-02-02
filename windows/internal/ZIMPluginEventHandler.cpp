@@ -688,7 +688,7 @@ void ZIMPluginEventHandler::onFriendApplicationListChanged(
 		eventSink_->Success(retMap);
 	}
 }
-void ZIMPluginEventHandler::onGroupMuteInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
+void ZIMPluginEventHandler::onGroupMutedInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
                                         const ZIMGroupOperatedInfo & operatedInfo,
                                         const std::string & groupID) {
     if (eventSink_) {
