@@ -363,7 +363,7 @@ class ZegoZimPlugin {
       case 'searchLocalFriends':
         return searchLocalFriends(call.arguments['config']);
       case 'sendFriendApplication':
-        return sendFriendApplication(call.arguments['applyUserID'], call.arguments['config']);
+        return sendFriendApplication(call.arguments['userID'], call.arguments['config']);
       case 'writeLog':
         return writeLog(call.arguments['logString']);
       default:
