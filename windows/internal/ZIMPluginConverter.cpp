@@ -39,6 +39,9 @@ template struct Rob<ZIM_FriendlyGet_isUserInserted, &ZIMMessage::userInserted>;
 bool ZIMMessage::* get(ZIM_FriendlyGet_isBroadcastMessage);
 template struct Rob<ZIM_FriendlyGet_isBroadcastMessage, &ZIMMessage::broadcastMessage>;
 
+bool ZIMMessage::* get(ZIM_FriendlyGet_isServerMessage);
+template struct Rob<ZIM_FriendlyGet_isServerMessage, &ZIMMessage::broadcastMessage>;
+
 std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileUID);
 template struct Rob<ZIM_FriendlyGet_fileUID, &ZIMMediaMessage::fileUID>;
 
@@ -305,6 +308,7 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	FTMap conversationMap;
 	conversationMap[FTValue("conversationID")] = FTValue(conversation->conversationID);
 	conversationMap[FTValue("conversationName")] = FTValue(conversation->conversationName);
+	conversationMap[FTValue("conversationAlias")] = FTValue(conversation->conversationAlias);
 	conversationMap[FTValue("conversationAvatarUrl")] = FTValue(conversation->conversationAvatarUrl);
 	conversationMap[FTValue("type")] = FTValue(conversation->type);
 	conversationMap[FTValue("notificationStatus")] = FTValue(conversation->notificationStatus);
@@ -313,6 +317,7 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	conversationMap[FTValue("lastMessage")] = cnvZIMMessageObjectToMap(conversation->lastMessage.get());
     conversationMap[FTValue("isPinned")] = FTValue(conversation->isPinned);
 	conversationMap[FTValue("mentionedInfoList")] = cnvZIMMessageMentionedInfoToMap(conversation->mentionedInfoList);
+	conversationMap[FTValue("draft")] = FTValue(conversation->draft);
 	return conversationMap;
 }
 
@@ -371,6 +376,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("reactions")] = ZIMPluginConverter::cnvZIMMessageReactionListToArray(message->reactions);
 	messageMap[FTValue("isBroadcastMessage")] = FTValue(message->isBroadcastMessage());
 	messageMap[FTValue("isMentionAll")] = FTValue(message->isMentionAll);
+	messageMap[FTValue("isServerMessage")] = FTValue(message->isServerMessage());
 	messageMap[FTValue("mentionedUserIDs")] = cnvStlVectorToFTArray(message->mentionedUserIDs);
 
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
@@ -481,13 +487,14 @@ std::shared_ptr<ZIMConversation>  ZIMPluginConverter::cnvZIMConversationToObject
 
 	conversationPtr->conversationID = std::get<std::string>(conversationMap[FTValue("conversationID")]);
 	conversationPtr->conversationName = std::get<std::string>(conversationMap[FTValue("conversationName")]);
+    conversationPtr->conversationAlias = std::get<std::string>(conversationMap[FTValue("conversationAlias")]);
 	conversationPtr->conversationAvatarUrl = std::get<std::string>(conversationMap[FTValue("conversationAvatarUrl")]);
 	conversationPtr->isPinned = std::get<bool>(conversationMap[FTValue("isPinned")]);
 	conversationPtr->type = (ZIMConversationType)ZIMPluginConverter::cnvFTMapToInt32(conversationMap[FTValue("type")]);
 	conversationPtr->notificationStatus = (ZIMConversationNotificationStatus)ZIMPluginConverter::cnvFTMapToInt32(conversationMap[FTValue("notificationStatus")]);
 	conversationPtr->unreadMessageCount = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(conversationMap[FTValue("unreadMessageCount")]);
 	conversationPtr->orderKey = (long long)ZIMPluginConverter::cnvFTMapToInt64(conversationMap[FTValue("orderKey")]);
-
+	conversationPtr->draft = std::get<std::string>(conversationMap[FTValue("draft")]);
 	if (std::holds_alternative<std::monostate>(conversationMap[std::get<FTMap>(conversationMap[FTValue("lastMessage")])])) {
 		conversationPtr->lastMessage = nullptr;
 	}
@@ -626,6 +633,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 
 	}
 	messagePtr->isMentionAll = (bool)std::get<bool>(messageMap[FTValue("isMentionAll")]);
+	(*messagePtr.get()).*get(ZIM_FriendlyGet_isServerMessage()) = (bool)std::get<bool>(messageMap[FTValue("isServerMessage")]);
 	messagePtr->mentionedUserIDs = cnvFTArrayToStlVector(std::get<FTArray>(messageMap[FTValue("mentionedUserIDs")]));
 	return messagePtr;
 }
@@ -1325,16 +1333,16 @@ ZIMFriendApplicationAcceptConfig ZIMPluginConverter::cnvZIMFriendApplicationAcce
 		auto value = std::get<std::string>(attr.second);
 		config.friendAttributes[key] = value;
 	}
-	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
-		config.pushConfig = nullptr;
-	}
-	else {
-		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
-		config.pushConfig = pushConfigPtr.get();
-	}
 
+	return config;
+}
+
+ZIMFriendSearchConfig ZIMPluginConverter::cnvZIMFriendSearchConfigToObject(FTMap configMap) {
+	ZIMFriendSearchConfig config;
+	config.count = cnvFTMapToInt32(configMap[FTValue("count")]);
+	config.nextFlag = cnvFTMapToInt32(configMap[FTValue("nextFlag")]);
+    config.keywords = ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(configMap[FTValue("keywords")]));
+	config.isAlsoMatchFriendAlias = std::get<bool>(configMap[FTValue("isAlsoMatchFriendAlias")]);
 	return config;
 }
 
@@ -1355,15 +1363,6 @@ ZIMFriendApplicationListQueryConfig ZIMPluginConverter::cnvZIMFriendApplicationL
 
 ZIMFriendApplicationRejectConfig ZIMPluginConverter::cnvZIMFriendApplicationRejectConfigToObject(FTMap infoMap) {
 	ZIMFriendApplicationRejectConfig config;
-	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-	if (std::holds_alternative<std::monostate>(infoMap[FTValue("pushConfig")])) {
-		config.pushConfig = nullptr;
-	}
-	else {
-		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(infoMap[FTValue("pushConfig")]), voIPConfigPtr);
-		config.pushConfig = pushConfigPtr.get();
-	}
 	return config;
 }
 
@@ -1406,15 +1405,6 @@ ZIMFriendApplicationSendConfig ZIMPluginConverter::cnvZIMFriendApplicationSendCo
 		auto key = std::get<std::string>(attr.first);
 		auto value = std::get<std::string>(attr.second);
 		config.friendAttributes[key] = value;
-	}
-	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-	if (std::holds_alternative<std::monostate>(infoMap[FTValue("pushConfig")])) {
-		config.pushConfig = nullptr;
-	}
-	else {
-		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(infoMap[FTValue("pushConfig")]), voIPConfigPtr);
-		config.pushConfig = pushConfigPtr.get();
 	}
 	return config;
 }

@@ -247,6 +247,8 @@ public:
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void queryCombineMessageDetail(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void searchLocalFriends(flutter::EncodableMap& argument, 
+     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 private:
     ZIMPluginMethodHandler() = default;
 private:

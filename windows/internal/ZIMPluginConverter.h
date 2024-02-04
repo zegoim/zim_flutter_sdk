@@ -70,6 +70,10 @@ struct ZIM_FriendlyGet_isBroadcastMessage {
     typedef bool ZIMMessage::* type;
 };
 
+struct ZIM_FriendlyGet_isServerMessage {
+    typedef bool ZIMMessage::* type;
+};
+
 struct ZIM_FriendlyGet_fileUID {
     typedef std::string ZIMMediaMessage::* type;
 };
@@ -226,6 +230,7 @@ public:
     static FTMap cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplicationInfo& info);
     static FTMap cnvZIMFriendInfoToMap(const ZIMFriendInfo& info);
     static FTMap cnvZIMFriendRelationInfoToMap(const ZIMFriendRelationInfo& info);
+    static ZIMFriendSearchConfig cnvZIMFriendSearchConfigToObject(FTMap configMap);
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);

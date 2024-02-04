@@ -6,46 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import im.zego.zim.ZIM;
-import im.zego.zim.callback.ZIMEventHandler;
-import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
-import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
-import im.zego.zim.entity.ZIMCallInvitationCreatedInfo;
-import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
-import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
-import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
-import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
-import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
-import im.zego.zim.entity.ZIMConversationChangeInfo;
-import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
-import im.zego.zim.entity.ZIMError;
-import im.zego.zim.entity.ZIMFriendApplicationInfo;
-import im.zego.zim.entity.ZIMFriendInfo;
-import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
-import im.zego.zim.entity.ZIMGroupFullInfo;
-import im.zego.zim.entity.ZIMGroupMemberInfo;
-import im.zego.zim.entity.ZIMGroupOperatedInfo;
-import im.zego.zim.entity.ZIMMessage;
-import im.zego.zim.entity.ZIMMessageDeletedInfo;
-import im.zego.zim.entity.ZIMMessageReaction;
-import im.zego.zim.entity.ZIMMessageReceiptInfo;
-import im.zego.zim.entity.ZIMMessageSentStatusChangeInfo;
-import im.zego.zim.entity.ZIMRevokeMessage;
-import im.zego.zim.entity.ZIMRoomAttributesUpdateInfo;
-import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
-import im.zego.zim.entity.ZIMRoomOperatedInfo;
-import im.zego.zim.entity.ZIMUserFullInfo;
-import im.zego.zim.entity.ZIMUserInfo;
-import im.zego.zim.enums.ZIMBlacklistChangeAction;
-import im.zego.zim.enums.ZIMConnectionEvent;
-import im.zego.zim.enums.ZIMConnectionState;
-import im.zego.zim.enums.ZIMFriendApplicationListChangeAction;
-import im.zego.zim.enums.ZIMFriendListChangeAction;
-import im.zego.zim.enums.ZIMGroupEvent;
-import im.zego.zim.enums.ZIMGroupMemberEvent;
-import im.zego.zim.enums.ZIMGroupMemberState;
-import im.zego.zim.enums.ZIMGroupState;
-import im.zego.zim.enums.ZIMRoomEvent;
-import im.zego.zim.enums.ZIMRoomState;
+import im.zego.zim.callback.*;
+import im.zego.zim.entity.*;
+import im.zego.zim.enums.*;
 import io.flutter.plugin.common.EventChannel;
 
 public class ZIMPluginEventHandler extends ZIMEventHandler {
@@ -375,6 +338,24 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("handle", handle);
         resultMap.put("groupID",groupID);
         resultMap.put("groupAvatarUrl",groupAvatarUrl);
+        resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onGroupMutedInfoUpdated(ZIM zim, ZIMGroupMuteInfo muteInfo,
+                                       ZIMGroupOperatedInfo operatedInfo, String groupID) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onGroupMutedInfoUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("groupID",groupID);
+        resultMap.put("groupMuteInfo",ZIMPluginConverter.mZIMGroupMuteInfo(muteInfo));
         resultMap.put("operatedInfo",ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
         mysink.success(resultMap);
     }

@@ -531,6 +531,26 @@ abstract class ZIM {
   Future<ZIMMessageDeletedResult> deleteAllMessage(String conversationID,
       ZIMConversationType conversationType, ZIMMessageDeleteConfig config);
 
+  ///Supported versions: 2.14.0 and above.
+  ///
+  ///Detail description: This method implements the function of deleting all messages for all sessions.
+  ///    
+  ///Business scenario: The user needs to delete a message. When the user does not need to display a message, this method can be used to delete it.
+  ///       
+  ///Call timing/Notification timing: Called when you need to delete all messages for all sessions.
+  ///
+  ///Note: The sdk deletes lastMessage for each conversation, but does not trigger [onConversationChanged] for each conversation.
+  ///To update the last message of the conversation, call [queryConversationList] again to retrieve the conversation list from the sdk.
+  ///IsAlsoDeleteServerMessage decided whether to delete a server message, the impact of deleting messages is limited to this account.
+  ///
+  ///Restrictions: Effective after login.
+  ///    
+  ///Impacts on other APIs: Call the interface trigger [onMessageDeleted] callback, if there are unread messages at this time, will trigger  [onConversationTotalUnreadMessageCountUpdated] callback.
+  ///
+  ///Related callbacks：[ZIMConversationMessagesAllDeletedCallback]、[onMessageDeleted]、[onConversationTotalUnreadMessageCountUpdated].
+  /// [config] Delete the configuration of message.
+  /// [callback] Returns the result of deleting all messages.
+
   Future<void> deleteAllConversationMessages(ZIMMessageDeleteConfig config);
 
   /// Supported versions: 2.1.5 and above.
@@ -1510,27 +1530,108 @@ abstract class ZIM {
   /// [config] Query the relevant configuration of the call invitation list.
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description:Through this interface, a user with the specified userID can be added to the friend list.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMEventHandler.onFriendListChanged].
   Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
 
+  /// Supported versions: 2.14.0 and above.
+  ///
+  /// Detail description: When the user needs to initiate a friend application, he can initiate a friend application to the other party through [sendFriendApplication].
+  ///
+  /// Business scenario: When you need to initiate a friend request for a user, you can call this interface.
+  ///
+  /// When to call: It can be called after creating a ZIM instance through [create].
+  ///
+  /// Related callbacks: [ZIMEventHandler.onFriendApplicationListChanged].
   Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID,ZIMFriendApplicationSendConfig config);
 
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description:Through this interface, the specified user can be deleted from the friend list.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMEventHandler.onFriendListChanged].
   Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config);
 
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description:Through this interface, you can check the friend relationship with the specified user.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMEventHandler.ZIMFriendAddedResult].
   Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
 
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description: Through this interface, the specified userID user can update the alias.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMFriendAliasUpdatedResult].
   Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID);
 
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description: Through this interface, the specified userID user can update the attributes.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
 
+  ///
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description: If you need to query the information of a group of designated friends for display, you can query it through this interface.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMFriendListQueriedResult].
   Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs);
-
+  ///
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description: After receiving the friend application, accept the friend application through this interface.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMFriendApplicationAcceptedResult].
   Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
 
   Future<ZIMFriendApplicationRejectedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
 
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description: After receiving the friend application, reject the friend application through this interface.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMFriendApplicationRejectedResult].
   Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
-
+  ///
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description: If you need to paginate to query the list of friend applications, you can query through this interface.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMFriendApplicationListQueriedResult].
   Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config);
+  ///
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description:Through this interface, you can search for local friend information based on keywords.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMFriendsSearchedResult].
+  Future<ZIMFriendsSearchedResult> searchLocalFriends(ZIMFriendSearchConfig config);
+
   /// Available since: 2.13.0 or above.
   ///
   /// Description:Through this interface, a user with the specified userID can be added to the blacklist.
@@ -1577,7 +1678,29 @@ abstract class ZIM {
   /// [userID] The user ID information that needs to be checked is required.
   Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
 
+  /// Available since: 2.14.0 and above.
+  ///
+  /// Description: When you need to set a draft for a session, call this interface, and members of the session can call this interface.
+  ///
+  /// Use cases: This interface can be invoked when you need to temporarily save the text message that the user is editing but has not yet sent.
+  ///
+  /// When to call /Trigger:  Call when you need to set session draft, call after creating ZIM instance, take effect after login, invalid after logout.
+  ///
+  /// Impacts on other APIs: A successful call triggers the [onConversationchanged] callback.
+  ///
+  /// Related callbacks: [ZIMConversationDraftSetCallback]
+  /// [draft] Drafts that need to be set.
+  /// [conversationID] Conversation ID.
+  /// [conversationType] Conversation type, only Peer type is supported.
+  /// [callback] Set Conversation draft callback.
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
-
+  ///
+  /// Available sinces: 2.14.0 and above.
+  ///
+  /// Detail description: This method is used to query the sub-messages of the combine message.
+  ///
+  /// Use cases: If you need to obtain the specific sub-messages under the combine message, you can call this API to query.
+  ///
+  /// Restrictions: You can only use it after logging in.
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
 }

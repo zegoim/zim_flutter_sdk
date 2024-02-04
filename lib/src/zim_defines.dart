@@ -698,6 +698,7 @@ class ZIMCustomMessage extends ZIMMessage {
 class ZIMConversation {
   String conversationID = '';
   String conversationName = '';
+  String conversationAlias = '';
   String conversationAvatarUrl = '';
   ZIMConversationType type = ZIMConversationType.peer;
   ZIMConversationNotificationStatus notificationStatus =
@@ -709,6 +710,13 @@ class ZIMConversation {
   String draft = '';
   List<ZIMMessageMentionedInfo> mentionedInfoList = [];
   ZIMConversation();
+}
+
+class ZIMGroupConversation extends ZIMConversation{
+    int mutedExpiryTime = 0;
+    int userSelfMutedExpiryTime = 0;
+    bool isDisabled = false;
+    ZIMGroupConversation();
 }
 
 enum ZIMMessageMentionedType{
@@ -947,25 +955,21 @@ class ZIMGroupInfo {
 }
 
 class ZIMGroupMuteInfo {
-   ZIMGroupMuteMode mode;
+   ZIMGroupMuteMode mode = ZIMGroupMuteMode.none;
 
-   int expiredTime;
+   int expiredTime = 0;
 
-   List<int> roles;
-
-   ZIMGroupMuteInfo():mode=ZIMGroupMuteMode.none,expiredTime=0,roles=[];
+   List<int> roles = [];
 }
 
 class ZIMGroupMuteConfig {
-  ZIMGroupMuteMode mode;
-  int duration;
-  List<int> roles;
-  ZIMGroupMuteConfig():mode=ZIMGroupMuteMode.none,duration=-1,roles=[];
+  ZIMGroupMuteMode mode = ZIMGroupMuteMode.none;
+  int duration = -1;
+  List<int> roles = [];
 }
 
 class ZIMGroupMemberMuteConfig {
-  int duration;
-  ZIMGroupMemberMuteConfig():duration=0;
+  int duration = 0;
 }
 
 /// Description: complete group information.
@@ -2308,6 +2312,12 @@ class ZIMFriendAttributesUpdatedResult {
   ZIMFriendAttributesUpdatedResult({required this.friendInfo});
 }
 
+class ZIMFriendsSearchedResult {
+  List<ZIMFriendInfo> friendInfos;
+  int nextFlag;
+  ZIMFriendsSearchedResult({required this.friendInfos, required this.nextFlag});
+}
+
 class ZIMFriendsDeletedResult {
   List<ZIMErrorUserInfo> errorUserList;
   ZIMFriendsDeletedResult({required this.errorUserList});
@@ -2463,6 +2473,14 @@ class ZIMFriendApplicationListQueryConfig {
   int count = 0;
   int nextFlag = 0;
 }
+
+class ZIMFriendSearchConfig {
+  int count = 0;
+  int nextFlag = 0;
+  List<String> keywords = [];
+  bool isAlsoMatchFriendAlias = false;
+}
+
 /// [nextFlag] Not required, it is 0 by default for the first time, which means to start the query from the beginning.
 /// [count] count.
 class ZIMBlacklistQueryConfig {
