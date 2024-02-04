@@ -294,6 +294,15 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<void> deleteAllConversationMessages(
+      ZIMMessageDeleteConfig config) async {
+    return await channel.invokeMethod('deleteAllConversationMessages', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMMessageDeleteConfig(config)
+    });
+  }
+
+  @override
   Future<ZIMMessageDeletedResult> deleteMessages(
       List<ZIMMessage> messageList,
       String conversationID,
@@ -809,6 +818,19 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMConversationDraftSetResult> setConversationDraft(
+      String draft,String conversationID, ZIMConversationType conversationType) async {
+    Map resultMap = await channel.invokeMethod('setConversationDraft', {
+      'handle': handle,
+      'draft': draft,
+      'conversationID': conversationID,
+      'conversationType':
+      ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMConversationDraftSetResult(resultMap);
+  }
+
+  @override
   Future<ZIMMessageReceiptsReadSentResult> sendMessageReceiptsRead(
       List<ZIMMessage> messageList,
       String conversationID,
@@ -1087,8 +1109,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendRelationCheckedResult> checkFriendRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
-    Map resultMap = await channel.invokeMethod('checkFriendRelation', {
+  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
+    Map resultMap = await channel.invokeMethod('checkFriendsRelation', {
       'handle': handle,
       'userIDs': userIDs,
       'config': ZIMConverter.mZIMFriendRelationCheckConfig(config),
@@ -1108,8 +1130,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendDeletedResult> deleteFriend(List<String> userIDs, ZIMFriendDeleteConfig config) async {
-    Map resultMap = await channel.invokeMethod('deleteFriend', {
+  Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config) async {
+    Map resultMap = await channel.invokeMethod('deleteFriends', {
       'handle': handle,
       'userIDs': userIDs,
       'config': ZIMConverter.mZIMFriendDeleteConfig(config),
@@ -1141,17 +1163,130 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMBlacklistUsersRemovedResult(resultMap);
   }
 
-
   @override
-  Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType) async {
-    Map resultMap = await channel.invokeMethod('setConversationDraft', {
+  Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID, ZIMFriendApplicationSendConfig config) async {
+    Map resultMap = await channel.invokeMethod('sendFriendApplication', {
       'handle': handle,
-      'draft': draft,
-      'conversationID': conversationID,
-      'conversationType': ZIMConversationTypeExtension.valueMap[conversationType],
+      'userID': userID,
+      'config': ZIMConverter.mZIMSendFriendApplicationConfig(config),
     });
 
-    return ZIMConverter.oZIMConversationDraftSetResult(resultMap);
+    return ZIMConverter.oZIMFriendApplicationSentResult(resultMap);
   }
+
+  @override
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID) async {
+    Map resultMap = await channel.invokeMethod('updateFriendAlias', {
+      'handle': handle,
+      'friendAlias': friendAlias,
+      'userID': userID,
+    });
+
+    return ZIMConverter.oZIMFriendAliasUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String, String> friendAttributes, String userID) async {
+    Map resultMap = await channel.invokeMethod('updateFriendAttributes', {
+      'handle': handle,
+      'friendAttributes': friendAttributes,
+      'userID': userID,
+    });
+
+    return ZIMConverter.oZIMFriendAttributesUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryFriendApplicationList', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMFriendApplicationListQueryConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendApplicationListQueriedResult(resultMap);
+  }
+
+    @override
+  Future<ZIMFriendsSearchedResult> searchLocalFriends(ZIMFriendSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalFriends', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMFriendSearchConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendsSearchedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryFriendList', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMFriendListQueryConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs) async {
+    Map resultMap = await channel.invokeMethod('queryFriendsInfo', {
+      'handle': handle,
+      'userIDs': userIDs,
+    });
+
+    return ZIMConverter.oZIMFriendsInfoQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMFriendApplicationRejectedResult> rejectFriendApplication(String userID, ZIMFriendApplicationRejectConfig config) async {
+    Map resultMap = await channel.invokeMethod('rejectFriendApplication', {
+      'handle': handle,
+      'userID': userID,
+      'config': ZIMConverter.mZIMFriendApplicationRejectConfig(config),
+    });
+
+    return ZIMConverter.oZIMFriendApplicationRejectedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config) async{
+    Map resultMap = await channel.invokeMethod('muteGroup',{
+      'handle':handle,
+      'isMute':isMute,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMuteConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMutedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs, String groupID, ZIMGroupMemberMuteConfig config) async{
+    Map resultMap = await channel.invokeMethod('muteGroupMembers',{
+      'handle':handle,
+      'isMute':isMute,
+      'userIDs':userIDs,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMemberMuteConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMembersMutedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID, ZIMGroupMemberMutedListQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryGroupMemberMutedList',{
+      'handle':handle,
+      'groupID':groupID,
+      'config':ZIMConverter.mZIMGroupMemberMutedListQueryConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMemberMutedListQueriedResult(resultMap);
+  }
+
+  Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message) async{
+    Map resultMap = await channel.invokeMethod('queryCombineMessageDetail',{
+      'handle':handle,
+      'message': ZIMConverter.mZIMMessage(message)
+    });
+    return ZIMCombineMessageDetailQueriedResult(message:ZIMConverter.oZIMMessage(resultMap['message']) as ZIMCombineMessage);
+  }
+
 
 }

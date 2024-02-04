@@ -13,177 +13,9 @@ import java.util.Objects;
 //import javax.xml.transform.Result;
 
 import im.zego.zim.ZIM;
-import im.zego.zim.callback.ZIMBlacklistCheckedCallback;
-import im.zego.zim.callback.ZIMBlacklistQueriedCallback;
-import im.zego.zim.callback.ZIMBlacklistUsersAddedCallback;
-import im.zego.zim.callback.ZIMBlacklistUsersRemovedCallback;
-import im.zego.zim.callback.ZIMCallAcceptanceSentCallback;
-import im.zego.zim.callback.ZIMCallCancelSentCallback;
-import im.zego.zim.callback.ZIMCallInvitationListQueriedCallback;
-import im.zego.zim.callback.ZIMCallInvitationSentCallback;
-import im.zego.zim.callback.ZIMCallJoinSentCallback;
-import im.zego.zim.callback.ZIMCallingInvitationSentCallback;
-import im.zego.zim.callback.ZIMCallRejectionSentCallback;
-import im.zego.zim.callback.ZIMCallQuitSentCallback;
-import im.zego.zim.callback.ZIMCallEndSentCallback;
-import im.zego.zim.callback.ZIMConversationDeletedCallback;
-import im.zego.zim.callback.ZIMConversationsAllDeletedCallback;
-import im.zego.zim.callback.ZIMConversationListQueriedCallback;
-import im.zego.zim.callback.ZIMConversationPinnedStateUpdatedCallback;
-import im.zego.zim.callback.ZIMConversationPinnedListQueriedCallback;
-import im.zego.zim.callback.ZIMConversationMessageReceiptReadSentCallback;
-import im.zego.zim.callback.ZIMConversationNotificationStatusSetCallback;
-import im.zego.zim.callback.ZIMConversationQueriedCallback;
-import im.zego.zim.callback.ZIMConversationUnreadMessageCountClearedCallback;
-import im.zego.zim.callback.ZIMConversationTotalUnreadMessageCountClearedCallback;
-import im.zego.zim.callback.ZIMConversationsSearchedCallback;
-//import im.zego.zim.callback.ZIMFriendAddedCallback;
-//import im.zego.zim.callback.ZIMFriendAliasUpdatedCallback;
-//import im.zego.zim.callback.ZIMFriendApplicationAcceptedCallback;
-//import im.zego.zim.callback.ZIMFriendApplicationListQueriedCallback;
-//import im.zego.zim.callback.ZIMFriendApplicationRejectedCallback;
-//import im.zego.zim.callback.ZIMFriendAttributesUpdatedCallback;
-//import im.zego.zim.callback.ZIMFriendDeletedCallback;
-//import im.zego.zim.callback.ZIMFriendListQueriedCallback;
-//import im.zego.zim.callback.ZIMFriendRelationCheckedCallback;
-//import im.zego.zim.callback.ZIMFriendsInfoQueriedCallback;
-import im.zego.zim.callback.ZIMGroupAttributesOperatedCallback;
-import im.zego.zim.callback.ZIMGroupAttributesQueriedCallback;
-import im.zego.zim.callback.ZIMGroupAvatarUrlUpdatedCallback;
-import im.zego.zim.callback.ZIMGroupCreatedCallback;
-import im.zego.zim.callback.ZIMGroupDismissedCallback;
-import im.zego.zim.callback.ZIMGroupInfoQueriedCallback;
-import im.zego.zim.callback.ZIMGroupJoinedCallback;
-import im.zego.zim.callback.ZIMGroupLeftCallback;
-import im.zego.zim.callback.ZIMGroupListQueriedCallback;
-import im.zego.zim.callback.ZIMGroupMemberCountQueriedCallback;
-import im.zego.zim.callback.ZIMGroupMemberInfoQueriedCallback;
-import im.zego.zim.callback.ZIMGroupMemberKickedCallback;
-import im.zego.zim.callback.ZIMGroupMemberListQueriedCallback;
-import im.zego.zim.callback.ZIMGroupMemberNicknameUpdatedCallback;
-import im.zego.zim.callback.ZIMGroupMemberRoleUpdatedCallback;
-import im.zego.zim.callback.ZIMGroupMembersSearchedCallback;
-import im.zego.zim.callback.ZIMGroupMessageReceiptMemberListQueriedCallback;
-import im.zego.zim.callback.ZIMGroupNameUpdatedCallback;
-import im.zego.zim.callback.ZIMGroupNoticeUpdatedCallback;
-import im.zego.zim.callback.ZIMGroupOwnerTransferredCallback;
-import im.zego.zim.callback.ZIMGroupUsersInvitedCallback;
-import im.zego.zim.callback.ZIMGroupsSearchedCallback;
-import im.zego.zim.callback.ZIMLogUploadedCallback;
-import im.zego.zim.callback.ZIMLoggedInCallback;
-import im.zego.zim.callback.ZIMMediaDownloadedCallback;
-import im.zego.zim.callback.ZIMMediaMessageSentCallback;
-import im.zego.zim.callback.ZIMMessageDeletedCallback;
-import im.zego.zim.callback.ZIMMessageInsertedCallback;
-import im.zego.zim.callback.ZIMMessageQueriedCallback;
-import im.zego.zim.callback.ZIMMessageReactionAddedCallback;
-import im.zego.zim.callback.ZIMMessageReactionDeletedCallback;
-import im.zego.zim.callback.ZIMMessageReactionUserListQueriedCallback;
-import im.zego.zim.callback.ZIMMessageReceiptsInfoQueriedCallback;
-import im.zego.zim.callback.ZIMMessageReceiptsReadSentCallback;
-import im.zego.zim.callback.ZIMMessageRevokedCallback;
-import im.zego.zim.callback.ZIMMessageSentCallback;
-import im.zego.zim.callback.ZIMMessageLocalExtendedDataUpdatedCallback;
-import im.zego.zim.callback.ZIMMessagesGlobalSearchedCallback;
-import im.zego.zim.callback.ZIMMessagesSearchedCallback;
-import im.zego.zim.callback.ZIMRoomAttributesBatchOperatedCallback;
-import im.zego.zim.callback.ZIMRoomAttributesOperatedCallback;
-import im.zego.zim.callback.ZIMRoomAttributesQueriedCallback;
-import im.zego.zim.callback.ZIMRoomCreatedCallback;
-import im.zego.zim.callback.ZIMRoomEnteredCallback;
-import im.zego.zim.callback.ZIMRoomJoinedCallback;
-import im.zego.zim.callback.ZIMRoomLeftCallback;
-import im.zego.zim.callback.ZIMRoomMemberAttributesListQueriedCallback;
-import im.zego.zim.callback.ZIMRoomMemberQueriedCallback;
-import im.zego.zim.callback.ZIMRoomMembersAttributesOperatedCallback;
-import im.zego.zim.callback.ZIMRoomMembersAttributesQueriedCallback;
-import im.zego.zim.callback.ZIMRoomMembersQueriedCallback;
-import im.zego.zim.callback.ZIMRoomOnlineMemberCountQueriedCallback;
-//import im.zego.zim.callback.ZIMSendFriendApplicationCallback;
-import im.zego.zim.callback.ZIMTokenRenewedCallback;
-import im.zego.zim.callback.ZIMUserAvatarUrlUpdatedCallback;
-import im.zego.zim.callback.ZIMUserExtendedDataUpdatedCallback;
-import im.zego.zim.callback.ZIMUserNameUpdatedCallback;
-import im.zego.zim.callback.ZIMUsersInfoQueriedCallback;
-import im.zego.zim.entity.ZIMAppConfig;
-import im.zego.zim.entity.ZIMLoginConfig;
-import im.zego.zim.entity.ZIMBlacklistQueryConfig;
-import im.zego.zim.entity.ZIMCacheConfig;
-import im.zego.zim.entity.ZIMCallAcceptConfig;
-import im.zego.zim.entity.ZIMCallCancelConfig;
-import im.zego.zim.entity.ZIMCallEndedSentInfo;
-import im.zego.zim.entity.ZIMCallInfo;
-import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
-import im.zego.zim.entity.ZIMCallInvitationSentInfo;
-import im.zego.zim.entity.ZIMCallInviteConfig;
-import im.zego.zim.entity.ZIMCallJoinConfig;
-import im.zego.zim.entity.ZIMCallJoinSentInfo;
-import im.zego.zim.entity.ZIMCallQuitSentInfo;
-import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
-import im.zego.zim.entity.ZIMCallingInviteConfig;
-import im.zego.zim.entity.ZIMCallRejectConfig;
-import im.zego.zim.entity.ZIMCallQuitConfig;
-import im.zego.zim.entity.ZIMCallEndConfig;
-import im.zego.zim.entity.ZIMConversation;
-import im.zego.zim.entity.ZIMConversationDeleteConfig;
-import im.zego.zim.entity.ZIMConversationQueryConfig;
-import im.zego.zim.entity.ZIMConversationSearchConfig;
-import im.zego.zim.entity.ZIMConversationSearchInfo;
-import im.zego.zim.entity.ZIMError;
-import im.zego.zim.entity.ZIMErrorUserInfo;
-//import im.zego.zim.entity.ZIMFriendAddConfig;
-//import im.zego.zim.entity.ZIMFriendApplicationAcceptConfig;
-//import im.zego.zim.entity.ZIMFriendApplicationInfo;
-//import im.zego.zim.entity.ZIMFriendApplicationListQueryConfig;
-//import im.zego.zim.entity.ZIMFriendApplicationRejectConfig;
-//import im.zego.zim.entity.ZIMFriendDeleteConfig;
-//import im.zego.zim.entity.ZIMFriendInfo;
-//import im.zego.zim.entity.ZIMFriendListQueryConfig;
-//import im.zego.zim.entity.ZIMFriendRelationCheckConfig;
-//import im.zego.zim.entity.ZIMFriendRelationInfo;
-import im.zego.zim.entity.ZIMGroup;
-import im.zego.zim.entity.ZIMGroupAdvancedConfig;
-import im.zego.zim.entity.ZIMGroupFullInfo;
-import im.zego.zim.entity.ZIMGroupInfo;
-import im.zego.zim.entity.ZIMGroupMemberInfo;
-import im.zego.zim.entity.ZIMGroupMemberQueryConfig;
-import im.zego.zim.entity.ZIMGroupMemberSearchConfig;
-import im.zego.zim.entity.ZIMGroupMessageReceiptMemberQueryConfig;
-import im.zego.zim.entity.ZIMGroupSearchConfig;
-import im.zego.zim.entity.ZIMGroupSearchInfo;
-import im.zego.zim.entity.ZIMLogConfig;
-import im.zego.zim.entity.ZIMMediaMessage;
-import im.zego.zim.entity.ZIMMessage;
-import im.zego.zim.entity.ZIMMessageDeleteConfig;
-import im.zego.zim.entity.ZIMMessageQueryConfig;
-import im.zego.zim.entity.ZIMMessageReaction;
-import im.zego.zim.entity.ZIMMessageReactionUserInfo;
-import im.zego.zim.entity.ZIMMessageReactionUserQueryConfig;
-import im.zego.zim.entity.ZIMMessageReceiptInfo;
-import im.zego.zim.entity.ZIMMessageRevokeConfig;
-import im.zego.zim.entity.ZIMMessageSearchConfig;
-import im.zego.zim.entity.ZIMMessageSendConfig;
-import im.zego.zim.entity.ZIMRoomAdvancedConfig;
-import im.zego.zim.entity.ZIMRoomAttributesBatchOperationConfig;
-import im.zego.zim.entity.ZIMRoomAttributesDeleteConfig;
-import im.zego.zim.entity.ZIMRoomAttributesSetConfig;
-import im.zego.zim.entity.ZIMRoomFullInfo;
-import im.zego.zim.entity.ZIMRoomInfo;
-import im.zego.zim.entity.ZIMRoomMemberAttributesInfo;
-import im.zego.zim.entity.ZIMRoomMemberAttributesOperatedInfo;
-import im.zego.zim.entity.ZIMRoomMemberAttributesQueryConfig;
-import im.zego.zim.entity.ZIMRoomMemberAttributesSetConfig;
-import im.zego.zim.entity.ZIMRoomMemberInfo;
-import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
-//import im.zego.zim.entity.ZIMSendFriendApplicationConfig;
-import im.zego.zim.entity.ZIMUserFullInfo;
-import im.zego.zim.entity.ZIMUserInfo;
-import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
-import im.zego.zim.enums.ZIMConversationNotificationStatus;
-import im.zego.zim.enums.ZIMConversationType;
-import im.zego.zim.enums.ZIMErrorCode;
-import im.zego.zim.enums.ZIMGeofencingType;
-import im.zego.zim.enums.ZIMMediaFileType;
+import im.zego.zim.callback.*;
+import im.zego.zim.entity.*;
+import im.zego.zim.enums.*;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.Result;
@@ -196,7 +28,7 @@ public class ZIMPluginMethodHandler {
     }
 
     public static void writeLog(MethodCall call,Result result){
-        String log = call.argument("log");
+        String log = call.argument("logString");
         LogWriter.writeLog(log);
     }
 
@@ -677,6 +509,32 @@ public class ZIMPluginMethodHandler {
         zim.sendConversationMessageReceiptRead(conversationID, conversationType, new ZIMConversationMessageReceiptReadSentCallback() {
             @Override
             public void onConversationMessageReceiptReadSent(String conversationID, ZIMConversationType conversationType, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("conversationID",conversationID);
+                    resultMap.put("conversationType",conversationType.value());
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void setConversationDraft(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        String draft = Objects.requireNonNull(call.argument("draft"));
+        String conversationID = Objects.requireNonNull(call.argument("conversationID"));
+        ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
+        zim.setConversationDraft(draft, conversationID, conversationType, new ZIMConversationDraftSetCallback() {
+            @Override
+            public void onConversationDraftSet(String conversationID, ZIMConversationType conversationType, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
                     resultMap.put("conversationID",conversationID);
@@ -1177,6 +1035,28 @@ public class ZIMPluginMethodHandler {
                     result.success(resultMap);
                 }
                 else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void deleteAllConversationMessages(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMMessageDeleteConfig config = ZIMPluginConverter.oZIMMessageDeleteConfig(Objects.requireNonNull(call.argument("config")));
+
+        zim.deleteAllConversationMessages(config, new ZIMConversationMessagesAllDeletedCallback() {
+            @Override
+            public void onConversationMessagesAllDeleted(ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    result.success(null);
+                }else{
                     result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
                 }
             }
@@ -2035,6 +1915,103 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void muteGroup(MethodCall call,Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        
+        boolean isMute  = call.argument("isMute");
+        String groupID = call.argument("groupID");
+        ZIMGroupMuteConfig config = ZIMPluginConverter.oZIMGroupMuteConfig(Objects.requireNonNull(call.argument("config")));
+
+        zim.muteGroup(isMute, groupID, config, new ZIMGroupMutedCallback() {
+            @Override
+            public void onGroupMuted(String groupID, boolean isMute, ZIMGroupMuteInfo info, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    HashMap<String,Object> groupMuteInfoMap = ZIMPluginConverter.mZIMGroupMuteInfo(info);
+                    resultMap.put("isMute", isMute);
+                    resultMap.put("groupID", groupID);
+                    resultMap.put("info", groupMuteInfoMap);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void muteGroupMembers(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        
+        boolean isMute  = call.argument("isMute");
+        String groupID = call.argument("groupID");
+        ArrayList<String> userIDs = call.argument("userIDs");
+        ZIMGroupMemberMuteConfig config = ZIMPluginConverter.oZIMGroupMemberMuteConfig(Objects.requireNonNull(call.argument("config")));
+
+        zim.muteGroupMembers(isMute, userIDs, groupID, config, new ZIMGroupMembersMutedCallback() {
+            @Override
+            public void onGroupMembersMuted(String groupID, boolean isMute, int duration,
+                                            ArrayList<String> mutedMemberIDs,
+                                            ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    
+                    ArrayList<HashMap<String,Object>> basicErrorUserList = ZIMPluginConverter.mZIMErrorUserInfoList(errorUserList);
+
+                    resultMap.put("groupID", groupID);
+                    resultMap.put("isMute", isMute);
+                    resultMap.put("duration", duration);
+                    resultMap.put("mutedMemberIDs",mutedMemberIDs);
+                    resultMap.put("errorUserList",basicErrorUserList);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void queryGroupMemberMutedList(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String groupID = call.argument("groupID");
+        ZIMGroupMemberMutedListQueryConfig config = ZIMPluginConverter.oZIMGroupMemberMutedListQueryConfig(Objects.requireNonNull(call.argument("config")));
+        zim.queryGroupMemberMutedList(groupID, config, new ZIMGroupMemberMutedListQueriedCallback() {
+            @Override
+            public void onGroupMemberListQueried(String groupID, long nextFlag,
+                                                 ArrayList<ZIMGroupMemberInfo> userList,
+                                                 ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    ArrayList<HashMap<String,Object>> basicUserList = ZIMPluginConverter.mZIMGroupMemberInfoList(userList);
+                    resultMap.put("groupID",groupID);
+                    resultMap.put("nextFlag",nextFlag);
+                    resultMap.put("userList",basicUserList);
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
     public static void queryGroupInfo(MethodCall call,Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
@@ -2707,366 +2684,399 @@ public class ZIMPluginMethodHandler {
         });
     }
 
-//    // addFriend
-//    public static void addFriend(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        String userID = call.argument("userID");
-//        HashMap<String, Object> configMap = call.argument("config");
-//        ZIMFriendAddConfig config = ZIMPluginConverter.oZIMFriendAddConfig(configMap);
-//
-//        LogWriter.writeLog("Flutter Android invoke add Friend. attributes:"+config.attributes.toString());
-//        zim.addFriend(userID, config, new ZIMFriendAddedCallback() {
-//            @Override
-//            public void onFriendAddedCallback(ZIMFriendInfo friendInfo, ZIMError zimError) {
-//                LogWriter.writeLog("Flutter Android add Friend Callback receive.friendInfo attributes:"+friendInfo.friendAttributes.toString());
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//                    resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // Assuming mZIMFriendInfo exists
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // sendFriendApplication
-//    public static void sendFriendApplication(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        String applyUserID = call.argument("applyUserID");
-//        HashMap<String, Object> configMap = call.argument("config");
-//        ZIMSendFriendApplicationConfig config = ZIMPluginConverter.oZIMSendFriendApplicationConfig(configMap);
-//        LogWriter.writeLog("Flutter Native Android invoke sendFriendApplication,attributes:"+config.attributes.toString());
-//        zim.sendFriendApplication(applyUserID, config, new ZIMSendFriendApplicationCallback() {
-//            @Override
-//            public void onSendFriendApplicationCallback(ZIMFriendApplicationInfo applicationInfo, ZIMError errorInfo) {
-//                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//                    resultMap.put("applicationInfo", ZIMPluginConverter.mZIMFriendApplicationInfo(applicationInfo)); // Assuming mZIMFriendApplicationInfo exists
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // deleteFriend
-//    public static void deleteFriend(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        ArrayList<String> userIDs = call.argument("userIDs");
-//        HashMap<String, Object> configMap = call.argument("config");
-//        ZIMFriendDeleteConfig config = ZIMPluginConverter.oZIMFriendDeleteConfig(configMap);
-//
-//        zim.deleteFriend(userIDs, config, new ZIMFriendDeletedCallback() {
-//            @Override
-//            public void onFriendDeletedCallback(ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError zimError) {
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//                    ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
-//                    for (ZIMErrorUserInfo userInfo : errorUserList) {
-//                        HashMap<String, Object> userInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(userInfo); // 假设存在 mZIMErrorUserInfo 转换函数
-//                        errorUsersMapList.add(userInfoMap);
-//                    }
-//                    resultMap.put("errorUserList", errorUsersMapList);
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // checkFriendRelation
-//    public static void checkFriendRelation(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        ArrayList<String> userIDs = call.argument("userIDs");
-//        HashMap<String, Object> configMap = call.argument("config");
-//        ZIMFriendRelationCheckConfig config = ZIMPluginConverter.oZIMFriendRelationCheckConfig(configMap);
-//
-//        zim.checkFriendRelation(userIDs, config, new ZIMFriendRelationCheckedCallback() {
-//            @Override
-//            public void onFriendChecked(ArrayList<ZIMFriendRelationInfo> friendRelationInfoArrayList, ArrayList<ZIMErrorUserInfo> errorUserInfos, ZIMError zimError) {
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//
-//                    // 转换关系信息列表
-//                    ArrayList<HashMap<String, Object>> relationInfoMapList = new ArrayList<>();
-//                    for (ZIMFriendRelationInfo info : friendRelationInfoArrayList) {
-//                        HashMap<String, Object> infoMap = ZIMPluginConverter.mZIMFriendRelationInfo(info); // 假设存在 mZIMFriendRelationInfo 转换函数
-//                        relationInfoMapList.add(infoMap);
-//                    }
-//                    resultMap.put("friendRelationInfoArrayList", relationInfoMapList);
-//
-//                    // 转换错误用户信息
-//                    ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
-//                    for (ZIMErrorUserInfo errorInfo : errorUserInfos) {
-//                        HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
-//                        errorUsersMapList.add(errorInfoMap);
-//                    }
-//                    resultMap.put("errorUserInfos", errorUsersMapList);
-//
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // updateFriendAlias
-//    public static void updateFriendAlias(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        String alias = call.argument("alias");
-//        String userID = call.argument("userID");
-//
-//        zim.updateFriendAlias(alias, userID, new ZIMFriendAliasUpdatedCallback() {
-//            @Override
-//            public void onFriendAliasUpdated(ZIMFriendInfo friendInfo, ZIMError zimError) {
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//                    resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // 假设存在 mZIMFriendInfo 转换函数
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // updateFriendAttributes
-//    public static void updateFriendAttributes(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        HashMap<String, String> friendAttributes = call.argument("friendAttributes");
-//        String userID = call.argument("userID");
-//
-//        zim.updateFriendAttributes(friendAttributes, userID, new ZIMFriendAttributesUpdatedCallback() {
-//            @Override
-//            public void onFriendAttributesUpdated(ZIMFriendInfo friendInfo, ZIMError zimError) {
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//                    resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // 假设存在 mZIMFriendInfo 转换函数
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // queryFriendsInfo
-//    public static void queryFriendsInfo(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        ArrayList<String> userIDs = call.argument("userIDs");
-//
-//        zim.queryFriendsInfo(userIDs, new ZIMFriendsInfoQueriedCallback() {
-//            @Override
-//            public void onFriendsInfoQueried(ArrayList<ZIMFriendInfo> zimFriendInfos, ArrayList<ZIMErrorUserInfo> errorUserInfos, ZIMError zimError) {
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//
-//                    // 转换朋友信息列表
-//                    ArrayList<HashMap<String, Object>> friendInfoMapList = new ArrayList<>();
-//                    for (ZIMFriendInfo friendInfo : zimFriendInfos) {
-//                        HashMap<String, Object> friendInfoMap = ZIMPluginConverter.mZIMFriendInfo(friendInfo); // 假设存在 mZIMFriendInfo 转换函数
-//                        friendInfoMapList.add(friendInfoMap);
-//                    }
-//                    resultMap.put("zimFriendInfos", friendInfoMapList);
-//
-//                    // 转换错误用户信息
-//                    ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
-//                    for (ZIMErrorUserInfo errorInfo : errorUserInfos) {
-//                        HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
-//                        errorUsersMapList.add(errorInfoMap);
-//                    }
-//                    resultMap.put("errorUserInfos", errorUsersMapList);
-//
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // acceptFriendApplication
-//    public static void acceptFriendApplication(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        String userID = call.argument("userID");
-//        HashMap<String, Object> configMap = call.argument("config");
-//        ZIMFriendApplicationAcceptConfig config = ZIMPluginConverter.oZIMFriendApplicationAcceptConfig(configMap);
-//        LogWriter.writeLog("flutter native android acceptFriendApplication,attributes:"+config.friendAttributes.toString()+"alias:"+config.friendAlias);
-//        zim.acceptFriendApplication(userID, config, new ZIMFriendApplicationAcceptedCallback() {
-//            @Override
-//            public void onFriendApplicationAccepted(ZIMFriendApplicationInfo friendApplicationInfo, ZIMError zimError) {
-//                LogWriter.writeLog("flutter native android onFriendApplicationAccepted,attributes:"+friendApplicationInfo.friendAttributes.toString()+"alias:"+friendApplicationInfo.friendAlias);
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//                    resultMap.put("friendApplicationInfo", ZIMPluginConverter.mZIMFriendApplicationInfo(friendApplicationInfo)); // 假设存在 mZIMFriendApplicationInfo 转换函数
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // rejectFriendApplication
-//    public static void rejectFriendApplication(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        String userID = call.argument("userID");
-//        HashMap<String, Object> configMap = call.argument("config");
-//        ZIMFriendApplicationRejectConfig config = ZIMPluginConverter.oZIMFriendApplicationRejectConfig(configMap);
-//
-//        zim.rejectFriendApplication(userID, config, new ZIMFriendApplicationRejectedCallback() {
-//            @Override
-//            public void onFriendApplicationRejected(ZIMUserInfo zimUserInfo, ZIMError zimError) {
-//                LogWriter.writeLog("Flutter Android Native onFriendApplicationRejected,userInfo:"+zimUserInfo.toString());
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//                    resultMap.put("zimUserInfo", ZIMPluginConverter.mZIMUserInfo(zimUserInfo)); // 假设存在 mZIMUserInfo 转换函数
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // queryFriendList
-//    public static void queryFriendList(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        HashMap<String, Object> configMap = call.argument("config");
-//        ZIMFriendListQueryConfig config = ZIMPluginConverter.oZIMFriendListQueryConfig(configMap);
-//
-//        zim.queryFriendList(config, new ZIMFriendListQueriedCallback() {
-//            @Override
-//            public void onFriendListQueried(ArrayList<ZIMFriendInfo> friendList, int nextFlag, ZIMError zimError) {
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//
-//                    // 转换朋友信息列表
-//                    ArrayList<HashMap<String, Object>> friendInfoMapList = new ArrayList<>();
-//                    for (ZIMFriendInfo friendInfo : friendList) {
-//                        HashMap<String, Object> friendInfoMap = ZIMPluginConverter.mZIMFriendInfo(friendInfo); // 假设存在 mZIMFriendInfo 转换函数
-//                        friendInfoMapList.add(friendInfoMap);
-//                    }
-//                    resultMap.put("friendList", friendInfoMapList);
-//                    resultMap.put("nextFlag", nextFlag);
-//
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
-//
-//    // queryFriendApplicationList
-//    public static void queryFriendApplicationList(MethodCall call, Result result) {
-//        String handle = call.argument("handle");
-//        ZIM zim = engineMap.get(handle);
-//        if(zim == null) {
-//            result.error("-1", "no native instance",null);
-//            return;
-//        }
-//
-//        HashMap<String, Object> configMap = call.argument("config");
-//        ZIMFriendApplicationListQueryConfig config = ZIMPluginConverter.oZIMFriendApplicationListQueryConfig(configMap);
-//
-//        zim.queryFriendApplicationList(config, new ZIMFriendApplicationListQueriedCallback() {
-//            @Override
-//            public void onFriendApplicationListQueried(ArrayList<ZIMFriendApplicationInfo> infoArrayList, int nextFlag, ZIMError zimError) {
-//                if (zimError.code == ZIMErrorCode.SUCCESS) {
-//                    HashMap<String, Object> resultMap = new HashMap<>();
-//
-//                    // 转换申请信息列表
-//                    ArrayList<HashMap<String, Object>> applicationInfoMapList = new ArrayList<>();
-//                    for (ZIMFriendApplicationInfo applicationInfo : infoArrayList) {
-//                        HashMap<String, Object> applicationInfoMap = ZIMPluginConverter.mZIMFriendApplicationInfo(applicationInfo); // 假设存在 mZIMFriendApplicationInfo 转换函数
-//                        applicationInfoMapList.add(applicationInfoMap);
-//                    }
-//                    resultMap.put("infoArrayList", applicationInfoMapList);
-//                    resultMap.put("nextFlag", nextFlag);
-//
-//                    result.success(resultMap);
-//                } else {
-//                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
-//                }
-//            }
-//        });
-//
-//    }
+    // addFriend
+    public static void addFriend(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String userID = call.argument("userID");
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendAddConfig config = ZIMPluginConverter.oZIMFriendAddConfig(configMap);
+
+        LogWriter.writeLog("Flutter Android invoke add Friend. attributes:"+config.friendAttributes.toString());
+        zim.addFriend(userID, config, new ZIMFriendAddedCallback() {
+            @Override
+            public void onFriendAddedCallback(ZIMFriendInfo friendInfo, ZIMError zimError) {
+                LogWriter.writeLog("Flutter Android add Friend Callback receive.friendInfo attributes:"+friendInfo.friendAttributes.toString());
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // Assuming mZIMFriendInfo exists
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    // sendFriendApplication
+    public static void sendFriendApplication(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String userID = call.argument("userID");
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendApplicationSendConfig config = ZIMPluginConverter.oZIMFriendApplicationSendConfig(configMap);
+        LogWriter.writeLog("Flutter Native Android invoke sendFriendApplication,attributes:"+config.friendAttributes.toString());
+        zim.sendFriendApplication(userID, config, new ZIMFriendApplicationSentCallback() {
+            @Override
+            public void onFriendApplicationSentCallback(ZIMFriendApplicationInfo applicationInfo, ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("applicationInfo", ZIMPluginConverter.mZIMFriendApplicationInfo(applicationInfo)); // Assuming mZIMFriendApplicationInfo exists
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
+                }
+            }
+        });
+
+    }
+
+    // deleteFriend
+    public static void deleteFriends(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ArrayList<String> userIDs = call.argument("userIDs");
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendDeleteConfig config = ZIMPluginConverter.oZIMFriendDeleteConfig(configMap);
+
+        zim.deleteFriends(userIDs, config, new ZIMFriendsDeletedCallback() {
+            @Override
+            public void onFriendsDeletedCallback(ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError zimError) {
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
+                    for (ZIMErrorUserInfo userInfo : errorUserList) {
+                        HashMap<String, Object> userInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(userInfo); // 假设存在 mZIMErrorUserInfo 转换函数
+                        errorUsersMapList.add(userInfoMap);
+                    }
+                    resultMap.put("errorUserList", errorUsersMapList);
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    // checkFriendRelation
+    public static void checkFriendsRelation(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ArrayList<String> userIDs = call.argument("userIDs");
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendRelationCheckConfig config = ZIMPluginConverter.oZIMFriendRelationCheckConfig(configMap);
+
+        zim.checkFriendsRelation(userIDs, config, new ZIMFriendsRelationCheckedCallback() {
+            @Override
+            public void onFriendsChecked(ArrayList<ZIMFriendRelationInfo> relationInfos, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError zimError) {
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+
+                    // 转换关系信息列表
+                    ArrayList<HashMap<String, Object>> relationInfoMapList = new ArrayList<>();
+                    for (ZIMFriendRelationInfo info : relationInfos) {
+                        HashMap<String, Object> infoMap = ZIMPluginConverter.mZIMFriendRelationInfo(info); // 假设存在 mZIMFriendRelationInfo 转换函数
+                        relationInfoMapList.add(infoMap);
+                    }
+                    resultMap.put("relationInfos", relationInfoMapList);
+
+                    // 转换错误用户信息
+                    ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
+                    for (ZIMErrorUserInfo errorInfo : errorUserList) {
+                        HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
+                        errorUsersMapList.add(errorInfoMap);
+                    }
+                    resultMap.put("errorUserList", errorUsersMapList);
+
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    // updateFriendAlias
+    public static void updateFriendAlias(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String friendAlias = call.argument("friendAlias");
+        String userID = call.argument("userID");
+
+        zim.updateFriendAlias(friendAlias, userID, new ZIMFriendAliasUpdatedCallback() {
+            @Override
+            public void onFriendAliasUpdated(ZIMFriendInfo friendInfo, ZIMError zimError) {
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // 假设存在 mZIMFriendInfo 转换函数
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    // updateFriendAttributes
+    public static void updateFriendAttributes(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        HashMap<String, String> friendAttributes = call.argument("friendAttributes");
+        String userID = call.argument("userID");
+
+        zim.updateFriendAttributes(friendAttributes, userID, new ZIMFriendAttributesUpdatedCallback() {
+            @Override
+            public void onFriendAttributesUpdated(ZIMFriendInfo friendInfo, ZIMError zimError) {
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // 假设存在 mZIMFriendInfo 转换函数
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    // queryFriendsInfo
+    public static void queryFriendsInfo(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ArrayList<String> userIDs = call.argument("userIDs");
+
+        zim.queryFriendsInfo(userIDs, new ZIMFriendsInfoQueriedCallback() {
+            @Override
+            public void onFriendsInfoQueried(ArrayList<ZIMFriendInfo> friendInfos, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError zimError) {
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+
+                    // 转换朋友信息列表
+                    ArrayList<HashMap<String, Object>> friendInfoMapList = new ArrayList<>();
+                    for (ZIMFriendInfo friendInfo : friendInfos) {
+                        HashMap<String, Object> friendInfoMap = ZIMPluginConverter.mZIMFriendInfo(friendInfo); // 假设存在 mZIMFriendInfo 转换函数
+                        friendInfoMapList.add(friendInfoMap);
+                    }
+                    LogWriter.writeLog("flutter native android onFriendsInfoQueried,friendsInfos size:"+friendInfos.size()+"friendsMapList size:"+friendInfoMapList.size());
+                    resultMap.put("friendInfos", friendInfoMapList);
+
+                    // 转换错误用户信息
+                    ArrayList<HashMap<String, Object>> errorUsersMapList = new ArrayList<>();
+                    for (ZIMErrorUserInfo errorInfo : errorUserList) {
+                        HashMap<String, Object> errorInfoMap = ZIMPluginConverter.mZIMErrorUserInfo(errorInfo); // 假设存在 mZIMErrorUserInfo 转换函数
+                        errorUsersMapList.add(errorInfoMap);
+                    }
+                    resultMap.put("errorUserList", errorUsersMapList);
+
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    // acceptFriendApplication
+    public static void acceptFriendApplication(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String userID = call.argument("userID");
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendApplicationAcceptConfig config = ZIMPluginConverter.oZIMFriendApplicationAcceptConfig(configMap);
+        LogWriter.writeLog("flutter native android acceptFriendApplication,attributes:"+config.friendAttributes.toString()+"alias:"+config.friendAlias);
+        zim.acceptFriendApplication(userID, config, new ZIMFriendApplicationAcceptedCallback() {
+            @Override
+            public void onFriendApplicationAccepted(ZIMFriendInfo friendInfo, ZIMError errorInfo) {
+                LogWriter.writeLog("flutter native android onFriendApplicationAccepted,attributes:"+friendInfo.friendAttributes.toString()+"alias:"+friendInfo.friendAlias);
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("friendInfo", ZIMPluginConverter.mZIMFriendInfo(friendInfo)); // 假设存在 mZIMFriendApplicationInfo 转换函数
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
+                }
+            }
+        });
+
+    }
+
+    // rejectFriendApplication
+    public static void rejectFriendApplication(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        String userID = call.argument("userID");
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendApplicationRejectConfig config = ZIMPluginConverter.oZIMFriendApplicationRejectConfig(configMap);
+
+        zim.rejectFriendApplication(userID, config, new ZIMFriendApplicationRejectedCallback() {
+            @Override
+            public void onFriendApplicationRejected(ZIMUserInfo userInfo, ZIMError zimError) {
+                LogWriter.writeLog("Flutter Android Native onFriendApplicationRejected,userInfo:"+userInfo.toString());
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("userInfo", ZIMPluginConverter.mZIMUserInfo(userInfo)); // 假设存在 mZIMUserInfo 转换函数
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    // queryFriendList
+    public static void queryFriendList(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendListQueryConfig config = ZIMPluginConverter.oZIMFriendListQueryConfig(configMap);
+
+        zim.queryFriendList(config, new ZIMFriendListQueriedCallback() {
+            @Override
+            public void onFriendListQueried(ArrayList<ZIMFriendInfo> friendList, int nextFlag, ZIMError zimError) {
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+
+                    // 转换朋友信息列表
+                    ArrayList<HashMap<String, Object>> friendInfoMapList = new ArrayList<>();
+                    for (ZIMFriendInfo friendInfo : friendList) {
+                        HashMap<String, Object> friendInfoMap = ZIMPluginConverter.mZIMFriendInfo(friendInfo); // 假设存在 mZIMFriendInfo 转换函数
+                        friendInfoMapList.add(friendInfoMap);
+                    }
+                    resultMap.put("friendList", friendInfoMapList);
+                    resultMap.put("nextFlag", nextFlag);
+
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    // queryFriendApplicationList
+    public static void queryFriendApplicationList(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendApplicationListQueryConfig config = ZIMPluginConverter.oZIMFriendApplicationListQueryConfig(configMap);
+
+        zim.queryFriendApplicationList(config, new ZIMFriendApplicationListQueriedCallback() {
+            @Override
+            public void onFriendApplicationListQueried(ArrayList<ZIMFriendApplicationInfo> applicationList, int nextFlag, ZIMError zimError) {
+                if (zimError.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+
+                    // 转换申请信息列表
+                    ArrayList<HashMap<String, Object>> applicationInfoMapList = new ArrayList<>();
+                    for (ZIMFriendApplicationInfo applicationInfo : applicationList) {
+                        HashMap<String, Object> applicationInfoMap = ZIMPluginConverter.mZIMFriendApplicationInfo(applicationInfo); // 假设存在 mZIMFriendApplicationInfo 转换函数
+                        applicationInfoMapList.add(applicationInfoMap);
+                    }
+                    resultMap.put("applicationList", applicationInfoMapList);
+                    resultMap.put("nextFlag", nextFlag);
+
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(zimError.code.value()), zimError.message, null);
+                }
+            }
+        });
+
+    }
+
+    public static void searchLocalFriends(MethodCall call,Result result){
+
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+       
+        HashMap<String, Object> configMap = call.argument("config");
+        ZIMFriendSearchConfig config = ZIMPluginConverter.oZIMFriendSearchConfig(configMap);
+        zim.searchLocalFriends(config, new ZIMFriendsSearchedCallback() {
+            @Override
+            public void onFriendsSearched(ArrayList<ZIMFriendInfo> friendInfos, int nextFlag, ZIMError errorInfo){
+                if (errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+
+                    ArrayList<HashMap<String, Object>> friendInfosMapList = new ArrayList<>();
+                    for (ZIMFriendInfo friendInfo : friendInfos) {
+                        HashMap<String, Object> friendHashMap = ZIMPluginConverter.mZIMFriendInfo(friendInfo);
+                        friendInfosMapList.add(friendHashMap);
+                    }
+                    resultMap.put("friendInfos", friendInfosMapList);
+                    resultMap.put("nextFlag",nextFlag);
+                    result.success(resultMap);
+                }else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
 
     // addUsersToBlacklist
     public static void addUsersToBlacklist(MethodCall call, Result result) {
@@ -3194,6 +3204,30 @@ public class ZIMPluginMethodHandler {
             }
         });
 
+    }
+
+    public static void queryCombineMessageDetail(MethodCall call,Result result){
+
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMCombineMessage message = (ZIMCombineMessage) ZIMPluginConverter.oZIMMessage(Objects.requireNonNull(call.argument("message")));
+
+        zim.queryCombineMessageDetail(message, new ZIMCombineMessageDetailQueriedCallback() {
+            @Override
+            public void onCombineMessageDetailQueried(ZIMCombineMessage message, ZIMError error) {
+                if (error.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("message",ZIMPluginConverter.mZIMMessage(message));
+                    result.success(resultMap);
+                }else {
+                    result.error(String.valueOf(error.code.value()),error.message,null);
+                }
+            }
+        });
     }
 
 

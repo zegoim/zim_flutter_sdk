@@ -1,4 +1,4 @@
-#include "include/zego_zim/zego_zim_plugin.h"
+﻿#include "include/zego_zim/zego_zim_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -197,6 +197,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "sendConversationMessageReceiptRead") {
         ZIMPluginMethodHandler::getInstance().sendConversationMessageReceiptRead(argument, std::move(result));
     }
+	else if (method_call.method_name() == "setConversationDraft") {
+		ZIMPluginMethodHandler::getInstance().setConversationDraft(argument, std::move(result));
+	}
     else if (method_call.method_name() == "sendMessageReceiptsRead") {
         ZIMPluginMethodHandler::getInstance().sendMessageReceiptsRead(argument, std::move(result));
     }
@@ -221,6 +224,9 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "deleteMessages") {
         ZIMPluginMethodHandler::getInstance().deleteMessages(argument, std::move(result));
     } 
+	else if (method_call.method_name() == "deleteAllConversationMessages") {
+	ZIMPluginMethodHandler::getInstance().deleteAllConversationMessages(argument, std::move(result));
+	}
     else if (method_call.method_name() == "searchLocalMessages") {
         ZIMPluginMethodHandler::getInstance().searchLocalMessages(argument, std::move(result));
     } 
@@ -383,6 +389,42 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "addMessageReaction") {
         ZIMPluginMethodHandler::getInstance().addMessageReaction(argument, std::move(result));
     }
+	else if (method_call.method_name() == "addFriend") {
+	ZIMPluginMethodHandler::getInstance().addFriend(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "sendFriendApplication") {
+	ZIMPluginMethodHandler::getInstance().sendFriendApplication(argument, std::move(result));
+	}
+    else if (method_call.method_name() == "searchLocalFriends") {
+	ZIMPluginMethodHandler::getInstance().searchLocalFriends(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "deleteFriends") {
+	ZIMPluginMethodHandler::getInstance().deleteFriends(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "checkFriendsRelation") {
+	ZIMPluginMethodHandler::getInstance().checkFriendsRelation(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "updateFriendAlias") {
+	ZIMPluginMethodHandler::getInstance().updateFriendAlias(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "updateFriendAttributes") {
+	ZIMPluginMethodHandler::getInstance().updateFriendAttributes(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "queryFriendsInfo") {
+	ZIMPluginMethodHandler::getInstance().queryFriendsInfo(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "acceptFriendApplication") {
+	ZIMPluginMethodHandler::getInstance().acceptFriendApplication(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "rejectFriendApplication") {
+	ZIMPluginMethodHandler::getInstance().rejectFriendApplication(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "queryFriendList") {
+	ZIMPluginMethodHandler::getInstance().queryFriendList(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "queryFriendApplicationList") {
+	ZIMPluginMethodHandler::getInstance().queryFriendApplicationList(argument, std::move(result));
+	}
     else if (method_call.method_name() == "addUsersToBlacklist") {
         ZIMPluginMethodHandler::getInstance().addUsersToBlacklist(argument, std::move(result));
     }
@@ -394,6 +436,18 @@ void ZegoZimPlugin::HandleMethodCall(
     }
     else if (method_call.method_name() == "checkUserIsInBlackList") {
         ZIMPluginMethodHandler::getInstance().checkUserIsInBlackList(argument, std::move(result));
+    }
+	else if (method_call.method_name() == "queryCombineMessageDetail") {
+	ZIMPluginMethodHandler::getInstance().queryCombineMessageDetail(argument, std::move(result));
+	}
+    else if (method_call.method_name() == "muteGroup") {
+        ZIMPluginMethodHandler::getInstance().muteGroup(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "muteGroupMembers") {
+        ZIMPluginMethodHandler::getInstance().muteGroupMemberList(argument, std::move(result));
+    }
+    else if (method_call.method_name() == "queryGroupMemberMutedList") {
+        ZIMPluginMethodHandler::getInstance().queryGroupMemberMutedList(argument, std::move(result));
     }
     else {
         result->NotImplemented();

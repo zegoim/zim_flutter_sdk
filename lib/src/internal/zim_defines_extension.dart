@@ -131,6 +131,7 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.barrage: 20,
     ZIMMessageType.system:30,
     ZIMMessageType.revoke:31,
+    ZIMMessageType.combine:100,
     ZIMMessageType.custom:200,
   };
   static const mapValue = {
@@ -144,7 +145,25 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     20: ZIMMessageType.barrage,
     30: ZIMMessageType.system,
     31: ZIMMessageType.revoke,
+    100:ZIMMessageType.combine,
     200:ZIMMessageType.custom
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMMessageMentionedTypeExtension on ZIMMessageMentionedType {
+  static const valueMap = {
+    ZIMMessageMentionedType.unknown: -1,
+    ZIMMessageMentionedType.mention_me: 1,
+    ZIMMessageMentionedType.mention_all: 2,
+    ZIMMessageMentionedType.mention_all_and_me: 3,
+  };
+  static const mapValue = {
+    -1: ZIMMessageMentionedType.unknown,
+    1: ZIMMessageMentionedType.mention_me,
+    2: ZIMMessageMentionedType.mention_all,
+    3: ZIMMessageMentionedType.mention_all_and_me,
   };
 
   int get value => valueMap[this] ?? -1;
@@ -219,6 +238,20 @@ extension ZIMConversationTypeExtension on ZIMConversationType {
     0: ZIMConversationType.peer,
     1: ZIMConversationType.room,
     2: ZIMConversationType.group,
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMMessageDeleteTypeExtension on ZIMMessageDeleteType {
+  static const valueMap = {
+    ZIMMessageDeleteType.messageListDeleted: 0,
+    ZIMMessageDeleteType.conversationAllMessagesDeleted: 1,
+    ZIMMessageDeleteType.allConversationMessagesDeleted: 2,
+  };
+  static const mapValue = {
+    0: ZIMMessageDeleteType.messageListDeleted,
+    1: ZIMMessageDeleteType.conversationAllMessagesDeleted,
+    2: ZIMMessageDeleteType.allConversationMessagesDeleted,
   };
   int get value => valueMap[this] ?? -1;
 }
@@ -512,6 +545,7 @@ extension ZIMFriendApplicationStateExtension on ZIMFriendApplicationState {
 extension ZIMFriendApplicationTypeExtension on ZIMFriendApplicationType{
   static const valueMap = {
     ZIMFriendApplicationType.unknown : -1,
+    ZIMFriendApplicationType.none : 0,
     ZIMFriendApplicationType.received: 1,
     ZIMFriendApplicationType.sent: 2,
     ZIMFriendApplicationType.both:3
@@ -519,6 +553,7 @@ extension ZIMFriendApplicationTypeExtension on ZIMFriendApplicationType{
 
   static const mapValue = {
     -1: ZIMFriendApplicationType.unknown,
+    0: ZIMFriendApplicationType.none,
     1: ZIMFriendApplicationType.received,
     2:ZIMFriendApplicationType.sent,
     3:ZIMFriendApplicationType.both
@@ -532,11 +567,13 @@ extension ZIMFriendApplicationTypeExtension on ZIMFriendApplicationType{
 // ZIMFriendDeleteType Enum Extension
 extension ZIMFriendDeleteTypeExtension on ZIMFriendDeleteType {
   static const valueMap = {
+    ZIMFriendDeleteType.unknown: -1,
     ZIMFriendDeleteType.both: 0,
     ZIMFriendDeleteType.single: 1,
   };
 
   static const mapValue = {
+    -1: ZIMFriendDeleteType.unknown,
     0: ZIMFriendDeleteType.both,
     1: ZIMFriendDeleteType.single,
   };
@@ -578,13 +615,13 @@ extension ZIMFriendRelationCheckTypeExtension on ZIMFriendRelationCheckType {
   static const valueMap = {
     ZIMFriendRelationCheckType.unknown: -1,
     ZIMFriendRelationCheckType.both: 0,
-    ZIMFriendRelationCheckType.sent: 1,
+    ZIMFriendRelationCheckType.single: 1,
   };
 
   static const mapValue = {
     -1: ZIMFriendRelationCheckType.unknown,
     0: ZIMFriendRelationCheckType.both,
-    1: ZIMFriendRelationCheckType.sent,
+    1: ZIMFriendRelationCheckType.single,
   };
 
   int get value => valueMap[this] ?? -1;
@@ -594,7 +631,7 @@ extension ZIMFriendRelationCheckTypeExtension on ZIMFriendRelationCheckType {
 extension ZIMUserRelationTypeExtension on ZIMUserRelationType {
   static const valueMap = {
     ZIMUserRelationType.unknown: 0,
-    ZIMUserRelationType.singleNO: 1,
+    ZIMUserRelationType.singleNo: 1,
     ZIMUserRelationType.singleHave: 2,
     ZIMUserRelationType.bothAllNo: 3,
     ZIMUserRelationType.bothSelfHave: 4,
@@ -604,7 +641,7 @@ extension ZIMUserRelationTypeExtension on ZIMUserRelationType {
 
   static const mapValue = {
     0: ZIMUserRelationType.unknown,
-    1: ZIMUserRelationType.singleNO,
+    1: ZIMUserRelationType.singleNo,
     2: ZIMUserRelationType.singleHave,
     3: ZIMUserRelationType.bothAllNo,
     4: ZIMUserRelationType.bothSelfHave,
@@ -627,5 +664,22 @@ extension ZIMBlacklistChangeActionExtension on ZIMBlacklistChangeAction {
     1: ZIMBlacklistChangeAction.removed,
   };
 
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMGroupMuteModeExtension on ZIMGroupMuteMode{
+  static const valueMap = {
+    ZIMGroupMuteMode.none : 0,
+    ZIMGroupMuteMode.normal : 1,
+    ZIMGroupMuteMode.all : 2,
+    ZIMGroupMuteMode.custom : 3
+  };
+
+  static const mapValue = {
+    0 : ZIMGroupMuteMode.none,
+    1 : ZIMGroupMuteMode.normal,
+    2 : ZIMGroupMuteMode.all,
+    3 : ZIMGroupMuteMode.custom
+  };
   int get value => valueMap[this] ?? -1;
 }

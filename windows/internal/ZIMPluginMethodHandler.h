@@ -68,6 +68,8 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendConversationMessageReceiptRead(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void setConversationDraft(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendMessage(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void insertMessageToLocalDB(flutter::EncodableMap& argument,
@@ -90,6 +92,8 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void deleteMessages(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void deleteAllConversationMessages(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendMessageReceiptsRead(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryMessageReceiptsInfo(flutter::EncodableMap& argument,
@@ -185,6 +189,12 @@ public:
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void searchLocalGroupMembers(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void muteGroup(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void muteGroupMemberList(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void queryGroupMemberMutedList(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void callInvite(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void callingInvite(flutter::EncodableMap& argument,
@@ -213,6 +223,32 @@ public:
     void removeUsersFromBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void checkUserIsInBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void addFriend(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void sendFriendApplication(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void deleteFriends(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void checkFriendsRelation(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void updateFriendAlias(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void updateFriendAttributes(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void queryFriendsInfo(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void acceptFriendApplication(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void rejectFriendApplication(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void queryFriendList(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void queryFriendApplicationList(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void queryCombineMessageDetail(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void searchLocalFriends(flutter::EncodableMap& argument, 
+     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 private:
     ZIMPluginMethodHandler() = default;
 private:

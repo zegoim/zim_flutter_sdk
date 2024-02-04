@@ -70,6 +70,10 @@ struct ZIM_FriendlyGet_isBroadcastMessage {
     typedef bool ZIMMessage::* type;
 };
 
+struct ZIM_FriendlyGet_isServerMessage {
+    typedef bool ZIMMessage::* type;
+};
+
 struct ZIM_FriendlyGet_fileUID {
     typedef std::string ZIMMediaMessage::* type;
 };
@@ -150,6 +154,10 @@ struct ZIM_FriendlyGet_revokeExtendedData {
     typedef std::string ZIMRevokeMessage::* type;
 };
 
+struct ZIM_FriendlyGet_combineID {
+	typedef std::string ZIMCombineMessage::* type;
+};
+
 struct ZIM_FriendlyGet_receiptStatus {
     typedef ZIMMessageReceiptStatus ZIMMessage::* type;
 };
@@ -169,6 +177,8 @@ public:
     static FTArray cnvZIMErrorUserInfoListToArray(const std::vector<ZIMErrorUserInfo>& errorUserInfoList);
     static FTMap cnvZIMErrorObjectToMap(const ZIMError& errorInfo);
     static FTArray cnvZIMUserListToArray(const std::vector<ZIMUserInfo>& userInfoList);
+    static FTArray cnvZIMFriendInfoToArray(const std::vector<ZIMFriendInfo>& infoList);
+    static FTArray cnvZIMFriendApplicationInfoToArray(const std::vector<ZIMFriendApplicationInfo>& infoList);
     static FTArray cnvZIMRoomMemberInfoListToArray(const std::vector<ZIMRoomMemberInfo>& roomMemberInfoList);
     static FTArray cnvZIMErrorUserListToArray(const std::vector<ZIMErrorUserInfo>& errorUserList);
     static FTArray cnvZIMConversationListToArray(const std::vector<std::shared_ptr<ZIMConversation>> &converationList);
@@ -216,6 +226,11 @@ public:
     static FTArray cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList);
     static FTArray cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList);
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo& info);
+    static FTMap cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info);
+    static FTMap cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplicationInfo& info);
+    static FTMap cnvZIMFriendInfoToMap(const ZIMFriendInfo& info);
+    static FTMap cnvZIMFriendRelationInfoToMap(const ZIMFriendRelationInfo& info);
+    static ZIMFriendSearchConfig cnvZIMFriendSearchConfigToObject(FTMap configMap);
 public:
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
@@ -242,12 +257,31 @@ public:
     static ZIMMessageReactionUserQueryConfig cnvZIMMessageReactionUserQueryConfigMapToObject(FTMap configMap);
     static std::shared_ptr<ZIMVoIPConfig> cnvZIMVoIPConfigConfigToObject(FTMap configMap);
     static ZIMBlacklistQueryConfig cnvZIMBlacklistQueryConfigToObject(FTMap configMap);
+    static ZIMGroupMuteConfig cnvZIMGroupMuteConfigToObject(FTMap configMap);
+    static ZIMGroupMemberMuteConfig cnvZIMGroupMemberMuteConfigToObject(FTMap configMap);
+    static ZIMGroupMemberMutedListQueryConfig cnvZIMGroupMemberMutedListQueryConfigToBbject(FTMap configMap);
+    
 public:
+    static ZIMFriendAddConfig cnvZIMFriendAddConfigToObject(FTMap configMap);
+    static ZIMFriendApplicationAcceptConfig cnvZIMFriendApplicationAcceptConfigToObject(FTMap configMap);
+    static ZIMFriendApplicationInfo cnvZIMFriendApplicationInfoToObject(FTMap configMap);
+    static ZIMUserInfo cnvZIMUserInfoToObject(FTMap infoMap);
+    static ZIMFriendApplicationListQueryConfig cnvZIMFriendApplicationListQueryConfigToObject(FTMap infoMap);
+    static ZIMFriendApplicationRejectConfig cnvZIMFriendApplicationRejectConfigToObject(FTMap infoMap);
+    static ZIMFriendDeleteConfig cnvZIMFriendDeleteConfigToObject(FTMap infoMap);
+    static ZIMFriendInfo cnvZIMFriendInfoToObject(FTMap infoMap);
+    static ZIMFriendListQueryConfig cnvZIMFriendListQueryConfigToObject(FTMap infoMap);
+    static ZIMFriendApplicationSendConfig cnvZIMFriendApplicationSendConfigToObject(FTMap infoMap);
+    static ZIMFriendRelationInfo cnvZIMFriendRelationInfoToObject(FTMap infoMap);
+
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
     static int32_t cnvFTMapToInt32(flutter::EncodableValue value);
     static int64_t cnvFTMapToInt64(flutter::EncodableValue value);
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
+    static FTArray cnvStlVectorToFTArray(const std::vector<int>& vec);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
+    static std::vector<ZIMGroupMemberRole> cnvFTArrayToStlVectorInt(FTArray ftArray);
+    static FTArray cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList);
 };

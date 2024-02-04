@@ -531,6 +531,28 @@ abstract class ZIM {
   Future<ZIMMessageDeletedResult> deleteAllMessage(String conversationID,
       ZIMConversationType conversationType, ZIMMessageDeleteConfig config);
 
+  ///Supported versions: 2.14.0 and above.
+  ///
+  ///Detail description: This method implements the function of deleting all messages for all sessions.
+  ///    
+  ///Business scenario: The user needs to delete a message. When the user does not need to display a message, this method can be used to delete it.
+  ///       
+  ///Call timing/Notification timing: Called when you need to delete all messages for all sessions.
+  ///
+  ///Note: The sdk deletes lastMessage for each conversation, but does not trigger [onConversationChanged] for each conversation.
+  ///To update the last message of the conversation, call [queryConversationList] again to retrieve the conversation list from the sdk.
+  ///IsAlsoDeleteServerMessage decided whether to delete a server message, the impact of deleting messages is limited to this account.
+  ///
+  ///Restrictions: Effective after login.
+  ///    
+  ///Impacts on other APIs: Call the interface trigger [onMessageDeleted] callback, if there are unread messages at this time, will trigger  [onConversationTotalUnreadMessageCountUpdated] callback.
+  ///
+  ///Related callbacks：[ZIMConversationMessagesAllDeletedCallback]、[onMessageDeleted]、[onConversationTotalUnreadMessageCountUpdated].
+  /// [config] Delete the configuration of message.
+  /// [callback] Returns the result of deleting all messages.
+
+  Future<void> deleteAllConversationMessages(ZIMMessageDeleteConfig config);
+
   /// Supported versions: 2.1.5 and above.
 
   /// Detail description: This method implements the function of deleting messages.
@@ -1163,6 +1185,12 @@ abstract class ZIM {
   Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
       String groupNotice, String groupID);
 
+  Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config);
+
+  Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs,String groupID,ZIMGroupMemberMuteConfig config);
+
+  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID,ZIMGroupMemberMutedListQueryConfig config);
+
   /// Available since: 2.1.5 and above.
   ///
   /// Description: Query information about a created group.
@@ -1369,7 +1397,6 @@ abstract class ZIM {
   /// [groupID] groupID.
   /// [config] Configuration for searching groups.
   Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(String groupID, ZIMGroupMemberSearchConfig config);
-
 //MARK: - CallInvite
 
   /// Supported versions: 2.1.5 and above.
@@ -1503,6 +1530,30 @@ abstract class ZIM {
   /// [config] Query the relevant configuration of the call invitation list.
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
+  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
+
+  Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID,ZIMFriendApplicationSendConfig config);
+
+  Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config);
+
+  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
+
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID);
+
+  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
+
+  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs);
+
+  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
+
+  Future<ZIMFriendApplicationRejectedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
+
+  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
+
+  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config);
+
+  Future<ZIMFriendsSearchedResult> searchLocalFriends(ZIMFriendSearchConfig config);
+
   /// Available since: 2.13.0 or above.
   ///
   /// Description:Through this interface, a user with the specified userID can be added to the blacklist.
@@ -1549,5 +1600,22 @@ abstract class ZIM {
   /// [userID] The user ID information that needs to be checked is required.
   Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
 
+  /// Available since: 2.14.0 and above.
+  ///
+  /// Description: When you need to set a draft for a session, call this interface, and members of the session can call this interface.
+  ///
+  /// Use cases: This interface can be invoked when you need to temporarily save the text message that the user is editing but has not yet sent.
+  ///
+  /// When to call /Trigger:  Call when you need to set session draft, call after creating ZIM instance, take effect after login, invalid after logout.
+  ///
+  /// Impacts on other APIs: A successful call triggers the [onConversationchanged] callback.
+  ///
+  /// Related callbacks: [ZIMConversationDraftSetCallback]
+  /// [draft] Drafts that need to be set.
+  /// [conversationID] Conversation ID.
+  /// [conversationType] Conversation type, only Peer type is supported.
+  /// [callback] Set Conversation draft callback.
   Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
+
+  Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
 }

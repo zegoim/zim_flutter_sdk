@@ -159,8 +159,23 @@ protected:
 
     void onMessageReactionsChanged(ZIM * zim,const std::vector<ZIMMessageReaction> & reactions);
 
-    void onBlacklistChanged(ZIM * zim, const ZIMBlacklistChangeAction & action,
-                                const std::vector<ZIMUserInfo> & userList);
+    void onBlacklistChanged(ZIM * zim, const std::vector<ZIMUserInfo> & userList ,const ZIMBlacklistChangeAction & action);
+
+    void onFriendInfoUpdated(ZIM* zim,
+        const std::vector<ZIMFriendInfo>& friendInfoList) override;
+
+    void onFriendListChanged(ZIM* zim, const std::vector<ZIMFriendInfo>& friendInfoList,ZIMFriendListChangeAction& action) override;
+
+    void onFriendApplicationUpdated(
+        ZIM* zim,
+        const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList) override;
+
+    void onFriendApplicationListChanged(
+        ZIM* zim, const std::vector<ZIMFriendApplicationInfo>& friendApplicationInfoList,ZIMFriendApplicationListChangeAction& action) override;
+
+    void onGroupMutedInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
+                                 const ZIMGroupOperatedInfo & operatedInfo,
+                                 const std::string & groupID);
 
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;

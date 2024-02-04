@@ -47,11 +47,11 @@ class ZIMEventHandler {
       onConversationChanged;
 
   /// Available since: 2.12.0 and above.
-  /// 
+  ///
   /// Description: When multiple login ends delete all sessions, the local end triggers the callback to notify the local end that all sessions are deleted.
-  /// 
+  ///
   /// When to call /Trigger: When another end clears all unread sessions, the local end triggers a notification.
-  /// 
+  ///
   /// Related APIs: Triggered by [deleteAllConversations].
   static void Function(
       ZIM zim, ZIMConversationsAllDeletedInfo info)?
@@ -534,5 +534,15 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<ZIMMessageReaction> infos)?
       onMessageReactionsChanged;
 
-  static void Function(ZIM zim, ZIMBlacklistChangeAction action, List<ZIMUserInfo>? userList)? onBlacklistChanged;
+  static void Function(ZIM zim, List<ZIMUserInfo> userList, ZIMBlacklistChangeAction action)? onBlacklistChanged;
+
+  static void Function(ZIM zim, ZIMGroupMuteInfo groupMuteInfo, ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupMutedInfoUpdated;
+
+  static void Function(ZIM zim, List<ZIMFriendInfo> friendInfoList)? onFriendInfoUpdated;
+
+  static void Function(ZIM zim, List<ZIMFriendInfo> friendInfoList ,ZIMFriendListChangeAction action)? onFriendListChanged;
+
+  static void Function(ZIM zim,List<ZIMFriendApplicationInfo> friendApplicationInfoList)? onFriendApplicationUpdated;
+
+  static void Function(ZIM zim,List<ZIMFriendApplicationInfo> friendApplicationInfoList ,ZIMFriendApplicationListChangeAction action)? onFriendApplicationListChanged;
 }
