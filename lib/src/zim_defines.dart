@@ -955,25 +955,21 @@ class ZIMGroupInfo {
 }
 
 class ZIMGroupMuteInfo {
-   ZIMGroupMuteMode mode;
+   ZIMGroupMuteMode mode = ZIMGroupMuteMode.none;
 
-   int expiredTime;
+   int expiredTime = 0;
 
-   List<int> roles;
-
-   ZIMGroupMuteInfo():mode=ZIMGroupMuteMode.none,expiredTime=0,roles=[];
+   List<int> roles = [];
 }
 
 class ZIMGroupMuteConfig {
-  ZIMGroupMuteMode mode;
-  int duration;
-  List<int> roles;
-  ZIMGroupMuteConfig():mode=ZIMGroupMuteMode.none,duration=-1,roles=[];
+  ZIMGroupMuteMode mode = ZIMGroupMuteMode.none;
+  int duration = -1;
+  List<int> roles = [];
 }
 
 class ZIMGroupMemberMuteConfig {
-  int duration;
-  ZIMGroupMemberMuteConfig():duration=0;
+  int duration = 0;
 }
 
 /// Description: complete group information.

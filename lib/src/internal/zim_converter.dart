@@ -260,7 +260,7 @@ class ZIMConverter {
 
   static ZIMMessage oZIMMessage(Map resultMap, [int? messageID]) {
     ZIMMessageType msgType =
-        ZIMMessageTypeExtension.mapValue[resultMap['type']]!;
+        ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
     ZIMMessage? message =
         messageID == null ? null : ZIMCommonData.messsageMap[messageID];
     switch (msgType) {
@@ -351,7 +351,7 @@ class ZIMConverter {
         message ??= ZIMMessage();
         break;
     }
-    message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']]!;
+    message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
     message.messageID = resultMap['messageID'] is String
         ? int.parse(resultMap['messageID'])
         : resultMap['messageID'];
@@ -1033,7 +1033,8 @@ class ZIMConverter {
         nickname: resultMap['nickname'] ?? '');
   }
 
-  static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map memberInfoMap) {
+  static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map? memberInfoMap) {
+    if (memberInfoMap == null) return ZIMGroupMemberInfo();
     ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
     groupMemberInfo.userID = memberInfoMap['userID'];
     groupMemberInfo.userName = memberInfoMap['userName'] ?? '';
@@ -1754,10 +1755,10 @@ class ZIMConverter {
 
   static ZIMCallInvitationCreatedInfo oZIMCallInvitationCreatedInfo(Map infoMap) {
     ZIMCallInvitationCreatedInfo info = ZIMCallInvitationCreatedInfo();
-    info.caller = infoMap['caller'];
+    info.caller = infoMap['caller'] ?? '';
     info.extendedData = infoMap['extendedData'] ?? '';
-    info.timeout = infoMap['timeout'];
-    info.createTime = infoMap['createTime'];
+    info.timeout = infoMap['timeout'] ?? 0;
+    info.createTime = infoMap['createTime'] ?? 0;
     info.callUserList = oZIMCallUserInfoList(infoMap['callUserList']);
     return info;
   }
@@ -2001,7 +2002,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
 
   static ZIMFriendsDeletedResult oZIMFriendDeletedResult(Map map) {
     return ZIMFriendsDeletedResult(errorUserList: oZIMErrorUserInfoList(
-        map['errorUserList']));
+        map['errorUserList'] ?? []));
   }
 
   static ZIMFriendListQueriedResult oZIMFriendListQueriedResult(Map map) {

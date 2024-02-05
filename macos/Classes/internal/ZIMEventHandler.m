@@ -430,6 +430,26 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 - (void)zim:(ZIM *)zim
+    groupMutedInfoUpdated:(ZIMGroupMuteInfo *)muteInfo
+             operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+                  groupID:(NSString *)groupID {
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSDictionary *operatedInfoDic = [ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo];
+    NSDictionary *muteInfoDic = [ZIMPluginConverter mZIMGroupMuteInfo:muteInfo];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:operatedInfoDic forKey:@"operatedInfo"];
+    [resultDic safeSetObject:muteInfoDic forKey:@"groupMuteInfo"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupMutedInfoUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
     groupAttributesUpdated:(NSArray<ZIMGroupAttributesUpdateInfo *> *)updateInfo
               operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
     groupID:(NSString *)groupID{
@@ -671,6 +691,67 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:handle forKey:@"handle"];
     _events(resultDic);
 }
+
+- (void)zim:(ZIM *)zim friendInfoUpdated:(NSArray<ZIMFriendInfo *> *)friendInfoList {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *friendInfoBasic = [ZIMPluginConverter mZIMFriendInfoList:friendInfoList];
+    
+    [resultDic safeSetObject:@"onFriendInfoUpdated" forKey:@"method"];
+    [resultDic safeSetObject:friendInfoBasic forKey:@"friendInfoList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim friendListChanged:(NSArray<ZIMFriendInfo *> *)friendInfoList
+     action:(ZIMFriendListChangeAction)action{
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *friendInfoBasic = [ZIMPluginConverter mZIMFriendInfoList:friendInfoList];
+    
+    [resultDic safeSetObject:@"onFriendListChanged" forKey:@"method"];
+    [resultDic safeSetObject:[NSNumber numberWithInteger:action] forKey:@"action"];
+    [resultDic safeSetObject:friendInfoBasic forKey:@"friendInfoList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim friendApplicationUpdated:(NSArray<ZIMFriendApplicationInfo *> *)friendApplicationInfoList {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *friendAppInfoBasic = [ZIMPluginConverter mZIMFriendApplicationInfoList:friendApplicationInfoList];
+    
+    [resultDic safeSetObject:@"onFriendApplicationUpdated" forKey:@"method"];
+    [resultDic safeSetObject:friendAppInfoBasic forKey:@"friendApplicationInfoList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim friendApplicationListChanged:(NSArray<ZIMFriendApplicationInfo *> *)friendApplicationInfoList
+     action:(ZIMFriendApplicationListChangeAction)action {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSArray *friendAppInfoBasic = [ZIMPluginConverter mZIMFriendApplicationInfoList:friendApplicationInfoList];
+    
+    [resultDic safeSetObject:@"onFriendApplicationListChanged" forKey:@"method"];
+    [resultDic safeSetObject:[NSNumber numberWithInteger:action] forKey:@"action"];
+    [resultDic safeSetObject:friendAppInfoBasic forKey:@"friendApplicationInfoList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    _events(resultDic);
+}
+
 
 #pragma mark - Getter
 - (NSMapTable *)engineEventMap {
