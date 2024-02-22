@@ -2412,11 +2412,11 @@ class ZIMFileCacheInfo {
 }
 
 class ZIMFileCacheClearConfig {
-  int endTime;
+  int endTime = 0;
 }
 
 class ZIMFileCacheQueryConfig {
-  int endTime;
+  int endTime = 0;
 }
 
 class ZIMMessageDeletedInfo {
