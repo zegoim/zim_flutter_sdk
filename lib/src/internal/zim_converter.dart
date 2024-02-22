@@ -166,6 +166,7 @@ class ZIMConverter {
     messageMap['isServerMessage'] = message.isServerMessage;
     messageMap['isMentionAll'] = message.isMentionAll;
     messageMap['mentionedUserIDs'] = message.mentionedUserIds;
+    messageMap['cbInnerID'] = message.cbInnerID;
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -388,6 +389,7 @@ class ZIMConverter {
     message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
     message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
     message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
+    message.cbInnerID = resultMap['cbInnerID'];
     return message;
   }
 

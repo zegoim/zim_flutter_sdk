@@ -311,6 +311,7 @@
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"extendedData"]  forKey:@"extendedData"];
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"localExtendedData"]  forKey:@"localExtendedData"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isBroadcastMessage"] forKey:@"isBroadcastMessage"];
+    [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"cbInnerID"]  forKey:@"cbInnerID"];
     if([msg isKindOfClass:[ZIMMediaMessage class]]){
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileLocalPath"]  forKey:@"fileLocalPath"];
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileDownloadUrl"] forKey:@"fileDownloadUrl"];
@@ -351,7 +352,8 @@
     [messageDic safeSetObject:[NSNumber numberWithBool:message.isMentionAll] forKey:@"isMentionAll"];
     [messageDic safeSetObject:[NSNumber numberWithBool:message.isServerMessage] forKey:@"isServerMessage"];
     [messageDic safeSetObject:message.mentionedUserIDs forKey:@"mentionedUserIDs"];
-    
+    [messageDic safeSetObject:message.cbInnerID  forKey:@"cbInnerID"];
+
     if([message isKindOfClass:[ZIMMediaMessage class]]){
         ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
         [messageDic safeSetObject:mediaMsg.fileLocalPath forKey:@"fileLocalPath"];

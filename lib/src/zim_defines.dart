@@ -565,6 +565,7 @@ class ZIMMessage {
   bool isMentionAll = false;
   List<String> mentionedUserIds = [];
   List<ZIMMessageReaction> reactions = [];
+  String cbInnerID = "";
 }
 
 class ZIMTextMessage extends ZIMMessage {
