@@ -239,6 +239,8 @@
 
 +(nullable NSArray *)mZIMFriendRelationInfoList:(nullable NSArray<ZIMFriendRelationInfo *> *)infoList;
 
++(nullable NSDictionary *)mZIMFileCacheInfo:(nullable ZIMFileCacheInfo *)info;
+
 +(nullable ZIMFriendRelationInfo *)oZIMFriendRelationInfo:(nullable NSDictionary *)infoDic;
 
 +(nullable ZIMFriendApplicationSendConfig *)oZIMFriendApplicationSendConfig:(nullable NSDictionary *)configMap;
