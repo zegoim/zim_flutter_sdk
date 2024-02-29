@@ -1006,14 +1006,14 @@ class ZIMConverter {
       Map resultMap) {
     return ZIMGroupInviteModeUpdatedResult(
         groupID: resultMap['groupID'],
-        mode: ZIMGroupInviteModeUpdatedExtension.mapValue[resultMap['mode']]!);
+        mode: ZIMGroupInviteModeExtension.mapValue[resultMap['mode']]!);
   }
 
   static ZIMGroupBeInviteModeUpdatedResult oZIMGroupBeInviteModeUpdatedResult(
       Map resultMap) {
     return ZIMGroupBeInviteModeUpdatedResult(
         groupID: resultMap['groupID'],
-        mode: ZIMGroupBeInviteModeUpdatedExtension.mapValue[resultMap['mode']]!);
+        mode: ZIMGroupBeInviteModeExtension.mapValue[resultMap['mode']]!);
   }
 
   static ZIMGroupInfoQueriedResult oZIMGroupInfoQueriedResult(Map resultMap) {

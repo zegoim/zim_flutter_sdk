@@ -476,13 +476,13 @@ extension ZIMGroupJoinModeExtension on ZIMGroupJoinMode {
   static const mapValue = {
     0: ZIMGroupJoinMode.none,
     1: ZIMGroupJoinMode.auth,
-    2: ZIMGroupJoinMode.forbid
+    2: ZIMGroupJoinMode.forbid,
   };
 
   int get value => valueMap[this] ?? -1;
 }
 
-extension ZIMGroupInviteModeExtension on ZIMGroupInviteMode {
+extension ZIMGroupInviteModeUpdatedExtension on ZIMGroupInviteMode {
   static const valueMap = {
     ZIMGroupInviteMode.none: 0,
     ZIMGroupInviteMode.auth: 1,
