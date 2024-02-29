@@ -177,6 +177,10 @@ protected:
                                  const ZIMGroupOperatedInfo & operatedInfo,
                                  const std::string & groupID);
 
+    void onGroupVerifyInfoUpdated(ZIM * zim, const ZIMGroupVerifyInfo & groupMuteInfo,
+                                 const ZIMGroupOperatedInfo & operatedInfo,
+                                 const std::string & groupID);
+
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
 

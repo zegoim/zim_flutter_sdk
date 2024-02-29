@@ -2162,9 +2162,10 @@ void ZIMPluginMethodHandler::updateGroupInviteMode(flutter::EncodableMap& argume
     }
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
-    auto mode =  (ZIMGroupInviteMode)std::get<int32_t>(argument[FTValue("mode")]);
+  
+    int mode = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("mode")]);
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->updateGroupJoinMode(mode, groupID, [=](const std::string &groupID, ZIMGroupInviteMode mode, const ZIMError &errorInfo) {
+    zim->updateGroupJoinMode((ZIMGroupJoinMode)mode, groupID, [=](const std::string &groupID, ZIMGroupInviteMode mode, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("groupID")] = FTValue(groupID);
