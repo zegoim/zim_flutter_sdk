@@ -343,6 +343,12 @@ enum ZIMGroupMemberEvent { joined, left, kickedout, invited }
 
 enum ZIMGroupMemberState { quit, enter }
 
+enum ZIMGroupJoinMode { none, auth, forbid}
+
+enum ZIMGroupInviteMode { none, auth}
+
+enum ZIMGroupBeInviteMode { none, auth}
+
 enum ZIMGroupAttributesUpdateAction { set, delete }
 
 enum ZIMGroupMessageNotificationStatus { notify, doNotDisturb }
@@ -712,13 +718,6 @@ class ZIMConversation {
   ZIMConversation();
 }
 
-class ZIMGroupConversation extends ZIMConversation{
-    int mutedExpiryTime = 0;
-    int userSelfMutedExpiryTime = 0;
-    bool isDisabled = false;
-    ZIMGroupConversation();
-}
-
 enum ZIMMessageMentionedType{
   unknown,
   mention_me,
@@ -988,6 +987,9 @@ class ZIMGroupFullInfo {
       ZIMGroupMessageNotificationStatus.notify;
 
   ZIMGroupMuteInfo mutedInfo = ZIMGroupMuteInfo();
+  long createTime = 0; 
+  int maxMemberCount = 0;
+  ZIMGroupVerifyInfo verifyInfo;
 
   ZIMGroupFullInfo({required this.baseInfo});
 }
@@ -1054,10 +1056,22 @@ class ZIMGroupMemberMutedListQueryConfig{
   ZIMGroupMemberMutedListQueryConfig():nextFlag=0,count=0;
 }
 
+class ZIMGroupVerifyInfo {
+  ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.none; 
+  ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.none;
+  ZIMGroupBeInviteMode beInviteMode = ZIMGroupBeInviteMode.none;
+  ZIMGroupVerifyInfo();
+}
+
 /// Group advanced configuration.
 class ZIMGroupAdvancedConfig {
   String groupNotice = "";
   Map<String, String>? groupAttributes;
+  int maxMemberCount = 0; 
+  ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.none; 
+  ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.none;
+  ZIMGroupBeInviteMode beInviteMode = ZIMGroupBeInviteMode.none;
+
   ZIMGroupAdvancedConfig();
 }
 
@@ -1978,6 +1992,27 @@ class ZIMGroupNoticeUpdatedResult {
   String groupNotice;
   ZIMGroupNoticeUpdatedResult(
       {required this.groupID, required this.groupNotice});
+}
+
+class ZIMGroupJoinModeUpdatedResult {
+  String groupID;
+  ZIMGroupJoinMode mode;
+  ZIMGroupJoinModeUpdatedResult(
+      {required this.groupID, required this.mode});
+}
+
+class ZIMGroupInviteModeUpdatedResult {
+  String groupID;
+  ZIMGroupInviteMode mode;
+  ZIMGroupInviteModeUpdatedResult(
+      {required this.groupID, required this.mode});
+}
+
+class ZIMGroupBeInviteModeUpdatedResult {
+  String groupID;
+  ZIMGroupBeInviteMode mode;
+  ZIMGroupBeInviteModeUpdatedResult(
+      {required this.groupID, required this.mode});
 }
 
 /// Description: Returns the result of the group dismiss operation.

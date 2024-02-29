@@ -532,6 +532,34 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMGroupJoinModeUpdatedResult> updateGroupJoinMode(
+      ZIMGroupJoinMode mode, String groupID) async {
+    Map resultMap = await channel.invokeMethod('updateGroupJoinMode',
+        {'handle': handle, 'mode': ZIMGroupJoinModeExtension.valueMap[mode], 'groupID': groupID});
+    return ZIMConverter.oZIMGroupJoinModeUpdatedResult(resultMap);
+  }
+
+
+  @override
+  Future<ZIMGroupInviteModeUpdatedResult> updateGroupInviteMode(
+      ZIMGroupInviteMode mode, String groupID) async {
+    Map resultMap = await channel.invokeMethod('updateGroupInviteMode',
+        {'handle': handle, 'mode': ZIMGroupInviteModeExtension.valueMap[mode], 'groupID': groupID});
+    return ZIMConverter.oZIMGroupInviteModeUpdatedResult(resultMap);
+  }
+
+
+  @override
+  Future<ZIMGroupBeInviteModeUpdatedResult> updateGroupBeInviteMode(
+      ZIMGroupBeInviteMode mode, String groupID) async {
+    Map resultMap = await channel.invokeMethod('updateGroupBeInviteMode',
+        {'handle': handle, 'mode':ZIMGroupBeInviteModeExtension.valueMap[mode], 'groupID': groupID});
+    return ZIMConverter.oZIMGroupBeInviteModeUpdatedResult(resultMap);
+  }
+
+
+
+  @override
   Future<ZIMGroupInfoQueriedResult> queryGroupInfo(String groupID) async {
     Map resultMap = await channel
         .invokeMethod('queryGroupInfo', {'handle': handle, 'groupID': groupID});

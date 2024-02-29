@@ -467,6 +467,47 @@ extension ZIMRevokeTypeExtension on ZIMRevokeType {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMGroupJoinModeExtension on ZIMGroupJoinMode {
+  static const valueMap = {
+    ZIMGroupJoinMode.none: 0,
+    ZIMGroupJoinMode.auth: 1,
+     ZIMGroupJoinMode.forbid: 2,
+  };
+  static const mapValue = {
+    0: ZIMGroupJoinMode.none,
+    1: ZIMGroupJoinMode.auth
+    2: ZIMGroupJoinMode.forbid
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMGroupInviteModeExtension on ZIMGroupInviteMode {
+  static const valueMap = {
+    ZIMGroupInviteMode.none: 0,
+    ZIMGroupInviteMode.auth: 1,
+  };
+  static const mapValue = {
+    0: ZIMGroupInviteMode.none,
+    1: ZIMGroupInviteMode.auth
+  };
+  
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMGroupBeInviteModeExtension on ZIMGroupBeInviteMode {
+  static const valueMap = {
+    ZIMGroupBeInviteMode.none: 0,
+    ZIMGroupBeInviteMode.auth: 1,
+  };
+  static const mapValue = {
+    0: ZIMGroupBeInviteMode.none,
+    1: ZIMGroupBeInviteMode.auth
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMMessageRevokeStatusExtension on ZIMMessageRevokeStatus {
   static const valueMap = {
     ZIMMessageRevokeStatus.unknown: -1,

@@ -1185,6 +1185,15 @@ abstract class ZIM {
   Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
       String groupNotice, String groupID);
 
+  Future<ZIMGroupJoinModeUpdatedResult> updateGroupJoinMode(
+      ZIMGroupJoinMode mode, String groupID);
+
+  Future<ZIMGroupInviteModeUpdatedResult> updateGroupInviteMode(
+      ZIMGroupInviteMode mode, String groupID);
+
+  Future<ZIMGroupBeInviteModeUpdatedResult> updateGroupBeInviteMode(
+      ZIMGroupBeInviteMode mode, String groupID);
+
   Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config);
 
   Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs,String groupID,ZIMGroupMemberMuteConfig config);

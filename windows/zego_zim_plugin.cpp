@@ -317,6 +317,15 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "updateGroupNotice") {
         ZIMPluginMethodHandler::getInstance().updateGroupNotice(argument, std::move(result));
     }
+     else if (method_call.method_name() == "updateGroupJoinMode") {
+        ZIMPluginMethodHandler::getInstance().updateGroupJoinMode(argument, std::move(result));
+    }
+     else if (method_call.method_name() == "updateGroupInviteMode") {
+        ZIMPluginMethodHandler::getInstance().updateGroupInviteMode(argument, std::move(result));
+    }
+     else if (method_call.method_name() == "updateGroupBeInviteMode") {
+        ZIMPluginMethodHandler::getInstance().updateGroupBeInviteMode(argument, std::move(result));
+    }
     else if (method_call.method_name() == "queryGroupInfo") {
         ZIMPluginMethodHandler::getInstance().queryGroupInfo(argument, std::move(result));
     }

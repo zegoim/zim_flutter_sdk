@@ -703,3 +703,18 @@ void ZIMPluginEventHandler::onGroupMutedInfoUpdated(ZIM * zim, const ZIMGroupMut
     }
 }
 
+void ZIMPluginEventHandler::onGroupVerifyInfoUpdated(ZIM * zim, const ZIMGroupVerifyInfo & verifyInfo,
+                                        const ZIMGroupOperatedInfo & operatedInfo,
+                                        const std::string & groupID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupVerifyInfoUpdated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("verifyInfo")] = ZIMPluginConverter::cnvZIMGroupVerifyInfoToMap(verifyInfo);
+        retMap[FTValue("operatedInfo")] = ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(operatedInfo);
+        retMap[FTValue("groupID")] = FTValue(groupID);
+        eventSink_->Success(retMap);
+    }
+}
+

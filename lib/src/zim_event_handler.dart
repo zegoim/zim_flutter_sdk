@@ -373,6 +373,13 @@ class ZIMEventHandler {
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupMemberInfoUpdated;
 
+
+  static void Function(
+      ZIM zim,
+      ZIMGroupVerifyInfo verifyInfo,
+      ZIMGroupOperatedInfo operatedInfo,
+      String groupID)? onGroupVerifyInfoUpdated;
+
 /* Invite */
 
   /// Supported versions: 2.0.0 and above.

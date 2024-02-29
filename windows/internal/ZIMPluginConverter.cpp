@@ -831,6 +831,15 @@ FTMap ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(const ZIMGroupOperatedInf
 	return infoMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMGroupVerifyInfoToMap(const ZIMGroupVerifyInfo& info) {
+	FTMap infoMap;
+	infoMap[FTValue("joinMode")] = FTValue((int32_t)info.joinMode);
+	infoMap[FTValue("inviteMode")] = FTValue((int32_t)info.inviteMode);
+	infoMap[FTValue("beInviteMode")] = FTValue((int32_t)info.beInviteMode);
+	return infoMap;
+}
+
+
 FTMap ZIMPluginConverter::cnvZIMGroupAttributesUpdateInfoToMap(const ZIMGroupAttributesUpdateInfo& updateInfo) {
 	FTMap updateInfoMap;
 	updateInfoMap[FTValue("action")] = FTValue(updateInfo.action);
@@ -882,6 +891,10 @@ FTMap ZIMPluginConverter::cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo& group
 	groupFullInfoMap[FTValue("groupAttributes")] = cnvSTLMapToFTMap(groupInfo.groupAttributes);
 	groupFullInfoMap[FTValue("notificationStatus")] = FTValue((int32_t)groupInfo.notificationStatus);
 	groupFullInfoMap[FTValue("mutedInfo")] = cnvZIMGroupMuteInfoToMap(groupInfo.mutedInfo);
+    groupFullInfoMap[FTValue("verifyInfo")] = cnvZIMGroupVerifyInfoToMap(groupInfo.verifyInfo);
+    groupFullInfoMap[FTValue("createTime")] = FTValue(groupInfo.createTime);
+	groupFullInfoMap[FTValue("maxMemberCount")] = FTValue(groupInfo.maxMemberCount);
+
 	return groupFullInfoMap;
 }
 
@@ -1073,9 +1086,13 @@ ZIMGroupAdvancedConfig ZIMPluginConverter::cnvZIMGroupAdvancedConfigToObject(FTM
 	config.groupNotice = std::get<std::string>(configMap[FTValue("groupNotice")]);
 	if (std::holds_alternative<std::monostate>(configMap[FTValue("groupAttributes")])) {
         config.groupAttributes = std::unordered_map<std::string, std::string>();
-    }else{
+    } else{
 		config.groupAttributes = cnvFTMapToSTLMap(std::get<FTMap>(configMap[FTValue("groupAttributes")]));
 	}
+	config.maxMemberCount = (int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("maxMemberCount")]);
+	config.joinMode = (ZIMGroupJoinMode)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("joinMode")]);
+	config.inviteMode = (ZIMGroupInviteMode)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("inviteMode")]);
+	config.beInviteMode = (ZIMGroupBeInviteMode)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("beInviteMode")]);
 	return config;
 }
 

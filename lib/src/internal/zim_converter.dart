@@ -911,6 +911,9 @@ class ZIMConverter {
     groupFullInfo.groupAttributes =
         (groupFullInfoMap['groupAttributes'] as Map).cast<String, String>();
     groupFullInfo.mutedInfo = ZIMConverter.oZIMGroupMuteInfo(groupFullInfoMap['mutedInfo']);
+    groupFullInfo.verifyInfo =  ZIMConverter.oZIMGroupVerifyInfo(groupFullInfoMap['verifyInfo']);
+    groupFullInfo.maxMemberCount = groupFullInfoMap['maxMemberCount'];
+    groupFullInfo.createTime = groupFullInfoMap['createTime'];
     return groupFullInfo;
   }
 
@@ -921,6 +924,11 @@ class ZIMConverter {
     Map configMap = {};
     configMap['groupNotice'] = config.groupNotice;
     configMap['groupAttributes'] = config.groupAttributes;
+    configMap['joinMode'] = ZIMGroupJoinModeExtension.valueMap[config.joinMode];
+    configMap['inviteMode'] = ZIMGroupInviteModeExtension.valueMap[config.inviteMode];
+    configMap['beInviteMode'] = ZIMGroupBeInviteModeExtension.valueMap[config.beInviteMode];
+    configMap['createTime'] = config.createTime;
+    configMap['maxMemberCount'] = cinfig.maxMemberCount;
     return configMap;
   }
 
@@ -986,6 +994,29 @@ class ZIMConverter {
     return ZIMGroupNoticeUpdatedResult(
         groupID: resultMap['groupID'],
         groupNotice: resultMap['groupNotice'] ?? '');
+  }
+
+
+  static ZIMGroupJoinModeUpdatedResult oZIMGroupJoinModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupJoinModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupJoinModeExtension.mapValue[resultMap['joinMode']]);
+  }
+
+
+  static ZIMGroupInviteModeUpdatedResult oZIMGroupInviteModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupInviteModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupInviteModeUpdatedExtension.mapValue[resultMap['inviteMode']]);
+  }
+
+  static ZIMGroupBeInviteModeUpdatedResult oZIMGroupBeInviteModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupBeInviteModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupBeInviteModeUpdatedExtension.mapValue[resultMap['beInviteMode']]);
   }
 
   static ZIMGroupInfoQueriedResult oZIMGroupInfoQueriedResult(Map resultMap) {
@@ -2053,6 +2084,14 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     groupMuteInfo.expiredTime = map['expiredTime'];
     groupMuteInfo.roles = List<int>.from(map['roles']);
     return groupMuteInfo;
+  }
+
+  static ZIMGroupVerifyInfo oZIMGroupVerifyInfo(Map map) {
+    ZIMGroupVerifyInfo verifyInfo = ZIMGroupVerifyInfo();
+    verifyInfo.joinMode = ZIMGroupJoinModeExtension.mapValue[map['joinMode']]!;
+    verifyInfo.inviteMode = ZIMGroupInviteModeExtension.mapValue[map['inviteMode']]!;
+    verifyInfo.beInviteMode = ZIMGroupBeInviteModeExtension.mapValue[map['beInviteMode']]!;
+    return verifyInfo;
   }
 
   //供自动化使用，sdk 使用前需要 check
