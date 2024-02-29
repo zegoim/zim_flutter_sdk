@@ -482,7 +482,7 @@ extension ZIMGroupJoinModeExtension on ZIMGroupJoinMode {
   int get value => valueMap[this] ?? -1;
 }
 
-extension ZIMGroupInviteModeUpdatedExtension on ZIMGroupInviteMode {
+extension ZIMGroupInviteModeExtension on ZIMGroupInviteMode {
   static const valueMap = {
     ZIMGroupInviteMode.none: 0,
     ZIMGroupInviteMode.auth: 1,
