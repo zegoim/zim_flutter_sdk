@@ -999,21 +999,21 @@ class ZIMConverter {
       Map resultMap) {
     return ZIMGroupJoinModeUpdatedResult(
         groupID: resultMap['groupID'],
-        mode: ZIMGroupJoinModeExtension.mapValue[resultMap['mode'] ?? 0]);
+        mode: ZIMGroupJoinModeExtension.mapValue[resultMap['mode']]!);
   }
 
   static ZIMGroupInviteModeUpdatedResult oZIMGroupInviteModeUpdatedResult(
       Map resultMap) {
     return ZIMGroupInviteModeUpdatedResult(
         groupID: resultMap['groupID'],
-        mode: ZIMGroupInviteModeUpdatedExtension.mapValue[resultMap['mode'] ?? 0]);
+        mode: ZIMGroupInviteModeUpdatedExtension.mapValue[resultMap['mode']]!);
   }
 
   static ZIMGroupBeInviteModeUpdatedResult oZIMGroupBeInviteModeUpdatedResult(
       Map resultMap) {
     return ZIMGroupBeInviteModeUpdatedResult(
         groupID: resultMap['groupID'],
-        mode: ZIMGroupBeInviteModeUpdatedExtension.mapValue[resultMap['mode'] ?? 0]);
+        mode: ZIMGroupBeInviteModeUpdatedExtension.mapValue[resultMap['mode']]!);
   }
 
   static ZIMGroupInfoQueriedResult oZIMGroupInfoQueriedResult(Map resultMap) {
