@@ -987,9 +987,12 @@ class ZIMGroupFullInfo {
       ZIMGroupMessageNotificationStatus.notify;
 
   ZIMGroupMuteInfo mutedInfo = ZIMGroupMuteInfo();
-  long createTime = 0; 
+
+  int createTime = 0; 
+
   int maxMemberCount = 0;
-  ZIMGroupVerifyInfo verifyInfo;
+
+  ZIMGroupVerifyInfo verifyInfo = ZIMGroupVerifyInfo();
 
   ZIMGroupFullInfo({required this.baseInfo});
 }
@@ -1067,6 +1070,7 @@ class ZIMGroupVerifyInfo {
 class ZIMGroupAdvancedConfig {
   String groupNotice = "";
   Map<String, String>? groupAttributes;
+
   int maxMemberCount = 0; 
   ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.none; 
   ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.none;

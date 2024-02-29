@@ -402,7 +402,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMGroupVerifyInfo verifyInfo = ZIMConverter.oZIMGroupVerifyInfo(map['verifyInfo']);
         ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
         String groupID = map['groupID'];
-        ZIMEventHandler.onGroupMutedInfoUpdated!(zim, verifyInfo, operatedInfo, groupID);
+        ZIMEventHandler.onGroupVerifyInfoUpdated!(zim, verifyInfo, operatedInfo, groupID);
         break;
       default:
         break;
