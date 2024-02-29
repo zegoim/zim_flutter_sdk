@@ -12,6 +12,9 @@ template struct Rob<ZIM_FriendlyGet_localMessageID, &ZIMMessage::localMessageID>
 std::string ZIMMessage::* get(ZIM_FriendlyGet_senderUserID);
 template struct Rob<ZIM_FriendlyGet_senderUserID, &ZIMMessage::senderUserID>;
 
+std::string ZIMMessage::* get(ZIM_FriendlyGet_cbInnerID);
+template struct Rob<ZIM_FriendlyGet_cbInnerID, &ZIMMessage::cbInnerID>;
+
 std::string ZIMMessage::* get(ZIM_FriendlyGet_conversationID);
 template struct Rob<ZIM_FriendlyGet_conversationID, &ZIMMessage::conversationID>;
 
@@ -384,6 +387,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("isMentionAll")] = FTValue(message->isMentionAll);
 	messageMap[FTValue("isServerMessage")] = FTValue(message->isServerMessage());
 	messageMap[FTValue("mentionedUserIDs")] = cnvStlVectorToFTArray(message->mentionedUserIDs);
+	messageMap[FTValue("cbInnerID")] = FTValue(message->getCbInnerID());
 
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
@@ -630,6 +634,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_orderKey()) = (long long)ZIMPluginConverter::cnvFTMapToInt64(messageMap[FTValue("orderKey")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_receiptStatus()) = (ZIMMessageReceiptStatus)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("receiptStatus")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_isBroadcastMessage()) = (bool)std::get<bool>(messageMap[FTValue("isBroadcastMessage")]);
+	(*messagePtr.get()).*get(ZIM_FriendlyGet_cbInnerID()) = std::get<std::string>(messageMap[FTValue("cbInnerID")]);
 	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
 		mediaMessagePtr->fileDownloadUrl = std::get<std::string>(messageMap[FTValue("fileDownloadUrl")]);

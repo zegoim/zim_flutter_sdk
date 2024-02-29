@@ -34,6 +34,10 @@ struct ZIM_FriendlyGet_senderUserID {
     typedef std::string ZIMMessage::* type;
 };
 
+struct ZIM_FriendlyGet_cbInnerID {
+	typedef std::string ZIMMessage::* type;
+};
+
 struct ZIM_FriendlyGet_conversationID {
     typedef std::string ZIMMessage::* type;
 };

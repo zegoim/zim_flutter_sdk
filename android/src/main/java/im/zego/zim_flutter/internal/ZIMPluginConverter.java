@@ -126,6 +126,7 @@ public class ZIMPluginConverter {
         messageMap.put("isServerMessage",message.isServerMessage());
         messageMap.put("mentionedUserIDs",message.getMentionedUserIDs());
         messageMap.put("isMentionAll",message.isMentionAll());
+        messageMap.put("cbInnerID",message.getCbInnerID());
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -483,6 +484,11 @@ public class ZIMPluginConverter {
             isServerMessageField.setAccessible(true);
             isServerMessageField.set(message,ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isServerMessage")));
             isServerMessageField.setAccessible(false);
+
+            Field cbInnerIDField = ZIMMessage.class.getDeclaredField("cbInnerID");
+            cbInnerIDField.setAccessible(true);
+            cbInnerIDField.set(message,messageMap.get("cbInnerID"));
+            cbInnerIDField.setAccessible(false);
         }
         catch (NoSuchFieldException e) {
             e.printStackTrace();

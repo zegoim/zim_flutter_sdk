@@ -2812,7 +2812,7 @@
     NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
     ZIMMessageExportConfig *config = [[ZIMMessageExportConfig alloc] init];
 
-    [zim exportLocalMessages:folderPath config:config progress:^(unsigned long long exportedMessageCount, unsigned long long totalMessageCount) {
+    [zim exportLocalMessagesToFolderPath:folderPath config:config progress:^(unsigned long long exportedMessageCount, unsigned long long totalMessageCount) {
         if(progressID == nil){
             return;
         }
@@ -2846,7 +2846,7 @@
     NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
     ZIMMessageImportConfig *config = [[ZIMMessageImportConfig alloc] init];
 
-    [zim importLocalMessages:folderPath config:config progress:^(unsigned long long importedMessageCount, unsigned long long totalMessageCount) {
+    [zim importLocalMessagesFromFolderPath:folderPath config:config progress:^(unsigned long long importedMessageCount, unsigned long long totalMessageCount) {
         if(progressID == nil){
             return;
         }
