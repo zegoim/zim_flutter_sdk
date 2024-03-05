@@ -2691,7 +2691,7 @@ void ZIMPluginMethodHandler::sendGroupInviteApplication(flutter::EncodableMap& a
             FTMap retMap;
             retMap[FTValue("groupID")] = FTValue(groupID);
             retMap[FTValue("errorUserList")] = ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
-            retMap[FTValue("userID")] = FTValue(userID);
+
             sharedPtrResult->Success(retMap);
         } else {
             sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
@@ -2715,9 +2715,9 @@ void ZIMPluginMethodHandler::acceptGroupInviteApplication(flutter::EncodableMap&
             const ZIMGroupFullInfo &fullInfo, const std::string &inviterUserID, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
-            retMap[FTValue("fullInfo")] =  ZIMPluginConverter::cnvZIMGroupFullInfoToMap(groupInfo);
+            retMap[FTValue("fullInfo")] =  ZIMPluginConverter::cnvZIMGroupFullInfoToMap(fullInfo);
             retMap[FTValue("inviterUserID")] = FTValue(inviterUserID);
-            retMap[FTValue("groupID")] = FTValue(groupID);
+
             sharedPtrResult->Success(retMap);
         } else {
             sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
@@ -2765,7 +2765,7 @@ void ZIMPluginMethodHandler::queryGroupApplicationList(flutter::EncodableMap& ar
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("nextFlag")] = FTValue(nextFlag);
-            retMap[FTValue("applicationInfo")] = ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(friendApplicationInfoapplicationList);
+            retMap[FTValue("applicationInfo")] = ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(applicationList);
             sharedPtrResult->Success(retMap);
         } else {
             sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);

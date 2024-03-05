@@ -232,7 +232,7 @@ public:
     static FTMap cnvZIMFriendInfoToMap(const ZIMFriendInfo& info);
     static FTMap cnvZIMFriendRelationInfoToMap(const ZIMFriendRelationInfo& info);
     static FTMap cnvZIMGroupMemberSimpleInfoToMap(const ZIMGroupMemberSimpleInfo& info);
-    static FTMap cnvZIMGroupMemberSimpleInfoToMap(const ZIMGroupMemberSimpleInfo& info);
+
     static FTMap cnvZIMGroupApplicationInfoToMap(const ZIMGroupApplicationInfo& info);
     static FTArray cnvZIMGroupApplicationInfoToArray(const std::vector<ZIMGroupApplicationInfo>& infoList);
     
@@ -264,8 +264,8 @@ public:
     static std::shared_ptr<ZIMVoIPConfig> cnvZIMVoIPConfigConfigToObject(FTMap configMap);
     static ZIMBlacklistQueryConfig cnvZIMBlacklistQueryConfigToObject(FTMap configMap);
     static ZIMGroupMuteConfig cnvZIMGroupMuteConfigToObject(FTMap configMap);
-    static ZIMGroupJoinApplicationAcceptConfig cnvZIMGroupJoinApplicationAcceptConfigToObject(FTMap configMap)
-    static ZIMGroupJoinApplicationRejectConfig cnvZIMGroupJoinApplicationRejectConfigToObject(FTMap configMap)
+    static ZIMGroupJoinApplicationAcceptConfig cnvZIMGroupJoinApplicationAcceptConfigToObject(FTMap configMap);
+    static ZIMGroupJoinApplicationRejectConfig cnvZIMGroupJoinApplicationRejectConfigToObject(FTMap configMap);
     static ZIMGroupJoinApplicationSendConfig cnvZIMGroupJoinApplicationSendConfigToObject(FTMap configMap);
     static ZIMGroupInviteApplicationSendConfig cnvZIMGroupInviteApplicationSendConfigToObject(FTMap configMap);
     static ZIMGroupMemberMuteConfig cnvZIMGroupMemberMuteConfigToObject(FTMap configMap);
