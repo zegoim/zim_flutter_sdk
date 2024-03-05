@@ -136,6 +136,24 @@ extension ZIMGroupApplicationTypeExtension on ZIMGroupApplicationType {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMGroupApplicationStateExtension on ZIMGroupApplicationState {
+  static const valueMap = {
+    ZIMGroupApplicationState.waiting: 1,
+    ZIMGroupApplicationState.accepted: 2,
+    ZIMGroupApplicationState.rejected: 3,
+    ZIMGroupApplicationState.expired: 4,
+    ZIMGroupApplicationState.disabled: 5
+  };
+  static const mapValue = {
+    1: ZIMGroupApplicationState.waiting,
+    2: ZIMGroupApplicationState.accepted,
+    3: ZIMGroupApplicationState.rejected,
+    4: ZIMGroupApplicationState.expired,
+    5: ZIMGroupApplicationState.disabled
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMGroupApplicationListChangeActionExtension on ZIMGroupApplicationListChangeAction {
   static const valueMap = {
     ZIMGroupApplicationListChangeAction.added: 0,
