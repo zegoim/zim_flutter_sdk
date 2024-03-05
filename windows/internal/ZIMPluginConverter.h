@@ -231,7 +231,7 @@ public:
     static FTMap cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplicationInfo& info);
     static FTMap cnvZIMFriendInfoToMap(const ZIMFriendInfo& info);
     static FTMap cnvZIMFriendRelationInfoToMap(const ZIMFriendRelationInfo& info);
-    static FTMap cnvZIMGroupMemberSimpleInfoToMap(const ZIMGroupMemberSimpleInfo& info);
+    static FTMap cnvZIMGroupMemberSimpleInfoToMap(std::shared_ptr<ZIMGroupMemberSimpleInfo> operatedUser);
 
     static FTMap cnvZIMGroupApplicationInfoToMap(const ZIMGroupApplicationInfo& info);
     static FTArray cnvZIMGroupApplicationInfoToArray(const std::vector<ZIMGroupApplicationInfo>& infoList);
