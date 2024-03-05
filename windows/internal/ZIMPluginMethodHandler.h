@@ -253,8 +253,25 @@ public:
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void queryCombineMessageDetail(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void searchLocalFriends(flutter::EncodableMap& argument, 
+    void searchLocalFriends(flutter::EncodableMap& argument,
      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void sendGroupJoinApplication(flutter::EncodableMap& argument,
+							std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void acceptGroupJoinApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void rejectGroupJoinApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void sendGroupInviteApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void acceptGroupInviteApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void rejectGroupInviteApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void queryGroupApplicationList(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+
+
+
 private:
     ZIMPluginMethodHandler() = default;
 private:

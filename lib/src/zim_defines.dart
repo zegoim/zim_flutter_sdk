@@ -271,6 +271,11 @@ enum ZIMRoomAttributesUpdateAction {
   delete
 }
 
+enum ZIMGroupApplicationListChangeAction {
+  added
+}
+
+
 /// the direction of the message.
 ///
 /// Description: Describes whether the current message was sent or received.
@@ -725,6 +730,22 @@ enum ZIMMessageMentionedType{
   mention_all_and_me
 }
 
+enum ZIMGroupApplicationType{
+  none,
+  join,
+  invite,
+  beInvite,
+}
+
+enum ZIMGroupApplicationState{
+  waiting,
+  accepted,
+  rejected,
+  expired,
+  disabled,
+}
+
+
 class ZIMMessageMentionedInfo {
   int messageID = 0;
   String fromUserID = '';
@@ -944,13 +965,31 @@ class ZIMErrorUserInfo {
 class ZIMGroupInfo {
   /// Description: groupID.
   String groupID = "";
-
   /// Description: Group name.
   String groupName = "";
-
   /// Description: Group avatar url.
   String groupAvatarUrl = "";
   ZIMGroupInfo();
+}
+
+class ZIMGroupMemberSimpleInfo {
+  String memberNickname;
+  ZIMGroupMemberRole memberRole;
+  ZIMGroupMemberSimpleInfo(
+      {required this.memberNickname, required this.memberRole});
+}
+
+class ZIMGroupApplicationInfo {
+  ZIMGroupInfo groupInfo;
+  ZIMUserInfo applyUser;
+  List<ZIMGroupMemberSimpleInfo> operatedUser = [];
+  String wording = "";
+  int createTime = 0;
+  int updateTime = 0;
+  ZIMGroupApplicationType type = ZIMGroupApplicationType.none;
+  ZIMGroupApplicationState state = ZIMGroupApplicationState.waiting;
+
+  ZIMGroupApplicationInfo({required this.groupInfo, required this.applyUser});
 }
 
 class ZIMGroupMuteInfo {
@@ -1058,6 +1097,39 @@ class ZIMGroupMemberMutedListQueryConfig{
   int count = 0;
   ZIMGroupMemberMutedListQueryConfig():nextFlag=0,count=0;
 }
+
+class ZIMGroupJoinApplicationSendConfig {
+  ZIMPushConfig? pushConfig;
+  String wording = "";
+}
+
+class ZIMGroupJoinApplicationAcceptConfig {
+  ZIMPushConfig? pushConfig;
+
+}
+
+class ZIMGroupJoinApplicationRejectConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMGroupInviteApplicationSendConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMGroupInviteApplicationAcceptConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+
+class ZIMGroupInviteApplicationRejectConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMGroupApplicationListQueryConfig {
+  int count = 0;
+  int nextFlag = 0;
+}
+
 
 class ZIMGroupVerifyInfo {
   ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.none; 
@@ -2017,6 +2089,55 @@ class ZIMGroupBeInviteModeUpdatedResult {
   ZIMGroupBeInviteMode mode;
   ZIMGroupBeInviteModeUpdatedResult(
       {required this.groupID, required this.mode});
+}
+
+class ZIMGroupJoinApplicationSentResult {
+  String groupID;
+
+  ZIMGroupJoinApplicationSentResult(
+      {required this.groupID});
+}
+
+class ZIMGroupJoinApplicationAcceptedResult {
+  String groupID;
+  String userID;
+  ZIMGroupJoinApplicationAcceptedResult(
+      {required this.groupID, required this.userID});
+}
+
+class ZIMGroupJoinApplicationRejectedResult {
+  String groupID;
+  String userID;
+  ZIMGroupJoinApplicationRejectedResult(
+      {required this.groupID, required this.userID});
+}
+
+class ZIMGroupApplicationListQueriedResult {
+  List<ZIMGroupApplicationInfo> applicationList;
+  int nextFlag;
+  ZIMGroupApplicationListQueriedResult(
+      {required this.applicationList, required this.nextFlag});
+}
+
+class ZIMGroupInviteApplicationsSentResult {
+  String groupID;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMGroupInviteApplicationsSentResult(
+      {required this.groupID, required this.errorUserList});
+}
+
+class ZIMGroupInviteApplicationAcceptedResult {
+  String groupID;
+  String inviterUserID;
+  ZIMGroupInviteApplicationAcceptedResult(
+      {required this.groupID, required this.inviterUserID});
+}
+
+class ZIMGroupInviteApplicationRejectedResult {
+  String groupID;
+  String inviterUserID;
+  ZIMGroupInviteApplicationRejectedResult(
+      {required this.groupID, required this.inviterUserID});
 }
 
 /// Description: Returns the result of the group dismiss operation.

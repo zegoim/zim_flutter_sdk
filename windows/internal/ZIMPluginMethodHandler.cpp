@@ -2597,6 +2597,182 @@ void ZIMPluginMethodHandler::muteGroup(flutter::EncodableMap& argument,
     });
 }
 
+void ZIMPluginMethodHandler::sendGroupJoinApplication(flutter::EncodableMap& argument,
+                              std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->sendGroupJoinApplication(groupID,config,[=](const std::string &groupID, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("groupID")] = FTValue(groupID);
+            sharedPtrResult->Success(retMap);
+        } else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::acceptGroupJoinApplication(flutter::EncodableMap& argument,
+                                std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto userID = std::get<std::string>(argument[FTValue("userID")]);
+    auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationAcceptConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->acceptGroupJoinApplication(userID, groupID, config, [=](const std::string &groupID, const std::string &userID, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("groupID")] = FTValue(groupID);
+            retMap[FTValue("userID")] = FTValue(userID);
+            sharedPtrResult->Success(retMap);
+        } else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::rejectGroupJoinApplication(flutter::EncodableMap& argument,
+                                std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto userID = std::get<std::string>(argument[FTValue("userID")]);
+    auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationRejectConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->rejectGroupJoinApplication(userID, groupID, config, [=](const std::string &groupID, const std::string &userID, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("groupID")] = FTValue(groupID);
+            retMap[FTValue("userID")] = FTValue(userID);
+            sharedPtrResult->Success(retMap);
+        } else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::sendGroupInviteApplication(flutter::EncodableMap& argument,
+                                std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto& userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->sendGroupInviteApplication(userIDsVec, groupID, config, [=](
+            const std::string &groupID, const std::vector<ZIMErrorUserInfo> &errorUserList,
+            const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("groupID")] = FTValue(groupID);
+            retMap[FTValue("errorUserList")] = ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
+            retMap[FTValue("userID")] = FTValue(userID);
+            sharedPtrResult->Success(retMap);
+        } else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::acceptGroupInviteApplication(flutter::EncodableMap& argument,
+                                  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto inviterUserID = std::get<std::string>(argument[FTValue("inviterUserID")]);
+    auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationAcceptConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->acceptGroupInviteApplication(inviterUserID, groupID, config, [=](
+            const ZIMGroupFullInfo &fullInfo, const std::string &inviterUserID, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("fullInfo")] =  ZIMPluginConverter::cnvZIMGroupFullInfoToMap(groupInfo);
+            retMap[FTValue("inviterUserID")] = FTValue(inviterUserID);
+            retMap[FTValue("groupID")] = FTValue(groupID);
+            sharedPtrResult->Success(retMap);
+        } else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::rejectGroupInviteApplication(flutter::EncodableMap& argument,
+                                  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto inviterUserID = std::get<std::string>(argument[FTValue("inviterUserID")]);
+    auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationRejectConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->rejectGroupInviteApplication(inviterUserID, groupID, config, [=](
+            const std::string &groupID, const std::string &inviterUserID, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("groupID")] = FTValue(groupID);
+            retMap[FTValue("inviterUserID")] = FTValue(inviterUserID);
+            sharedPtrResult->Success(retMap);
+        } else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::queryGroupApplicationList(flutter::EncodableMap& argument,
+                               std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto config = ZIMPluginConverter::cnvZIMGroupApplicationListQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->queryGroupApplicationList(config, [=](const std::vector<ZIMGroupApplicationInfo> &applicationList,
+                                               unsigned long long nextFlag, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("nextFlag")] = FTValue(nextFlag);
+            retMap[FTValue("applicationInfo")] = ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(friendApplicationInfoapplicationList);
+            sharedPtrResult->Success(retMap);
+        } else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
 void ZIMPluginMethodHandler::muteGroupMemberList(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
@@ -2643,7 +2819,7 @@ void ZIMPluginMethodHandler::queryGroupMemberMutedList(flutter::EncodableMap& ar
     }
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
-    auto config = ZIMPluginConverter::cnvZIMGroupMemberMutedListQueryConfigToBbject(std::get<FTMap>(argument[FTValue("config")]));
+    auto config = ZIMPluginConverter::cnvZIMGroupMemberMutedListQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
     zim->queryGroupMemberMutedList(groupID,config,[=](const std::string &groupID, unsigned long long nextFlag,
                        const std::vector<ZIMGroupMemberInfo> &userList, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {

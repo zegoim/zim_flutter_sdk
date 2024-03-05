@@ -63,6 +63,17 @@ class ZIMConverter {
     return errorUserInfo;
   }
 
+  static ZIMGroupApplicationInfo oZIMGroupApplicationInfo(Map applicationInfoMap) {
+    ZIMGroupApplicationInfo applicationInfo = ZIMGroupApplicationInfo(groupInfo: oZIMGroupInfo(applicationInfoMap['groupInfo'])!, applyUser: oZIMUserInfo(applicationInfoMap['applyUser']));
+    applicationInfo.createTime = applicationInfoMap['createTime'];
+    applicationInfo.updateTime = applicationInfoMap['updateTime'];
+    applicationInfo.state = applicationInfoMap['state'];
+    applicationInfo.type = ZIMGroupApplicationTypeExtension.mapValue[applicationInfoMap['type']]!;
+    applicationInfo.wording = applicationInfoMap['wording'];
+    return applicationInfo;
+  }
+
+
   static ZIMUserExtendedDataUpdatedResult oZIMUserExtendedDataUpdatedResult(
       Map resultMap) {
     return ZIMUserExtendedDataUpdatedResult(
@@ -80,6 +91,15 @@ class ZIMConverter {
       errorUserInfoList.add(errorUserInfo);
     }
     return errorUserInfoList;
+  }
+
+  static List<ZIMGroupApplicationInfo> oZIMGroupApplicationInfoList(List applicationInfoList){
+    List<ZIMGroupApplicationInfo> groupApplicationInfo = [];
+    for (Map applicationInfoMap in applicationInfoList) {
+      ZIMGroupApplicationInfo applicationInfo = oZIMGroupApplicationInfo(applicationInfoMap);
+      groupApplicationInfo.add(applicationInfo);
+    }
+    return groupApplicationInfo;
   }
 
   static Map mZIMConversationQueryConfig(ZIMConversationQueryConfig config) {
@@ -2121,6 +2141,50 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
   static ZIMGroupMemberMutedListQueriedResult oZIMGroupMemberMutedListQueriedResult(Map map){
     ZIMGroupMemberMutedListQueriedResult result = ZIMGroupMemberMutedListQueriedResult(nextFlag: map['nextFlag'],groupID: map['groupID'],userList: ZIMConverter.oZIMGroupMemberInfoList(map['userList']));
     return result;
+  }
+
+  static Map mZIMGroupInviteApplicationAcceptConfig(ZIMGroupInviteApplicationAcceptConfig config){
+    Map map = {};
+    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationAcceptConfig(ZIMGroupJoinApplicationAcceptConfig config){
+    Map map = {};
+    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    return map;
+  }
+
+  static Map mZIMGroupApplicationListQueryConfig(ZIMGroupApplicationListQueryConfig config){
+    Map map = {};
+    map['count'] = config.count;
+    map['nextFlag'] = config.nextFlag;
+    return map;
+  }
+
+  static Map mZIMGroupInviteApplicationRejectConfig(ZIMGroupInviteApplicationRejectConfig config){
+    Map map = {};
+    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationRejectConfig(ZIMGroupJoinApplicationRejectConfig config){
+    Map map = {};
+    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    return map;
+  }
+
+  static Map mZIMGroupInviteApplicationSendConfig(ZIMGroupInviteApplicationSendConfig config){
+    Map map = {};
+    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationSendConfig(ZIMGroupJoinApplicationSendConfig config){
+    Map map = {};
+    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    map['wording'] = config.wording;
+    return map;
   }
 
   static Map mZIMGroupMemberMuteConfig(ZIMGroupMemberMuteConfig config){

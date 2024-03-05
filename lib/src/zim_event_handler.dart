@@ -380,6 +380,16 @@ class ZIMEventHandler {
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupVerifyInfoUpdated;
 
+
+  static void Function(
+      ZIM zim,
+      List<ZIMGroupApplicationInfo> applicationList,
+      ZIMGroupApplicationListChangeAction action)? onGroupApplicationListChanged;
+
+  static void Function(
+      ZIM zim,
+      List<ZIMGroupApplicationInfo> applicationList)? onGroupApplicationUpdated;
+
 /* Invite */
 
   /// Supported versions: 2.0.0 and above.

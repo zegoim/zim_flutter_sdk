@@ -119,6 +119,33 @@ extension ZIMMessagePriorityExtension on ZIMMessagePriority {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMGroupApplicationTypeExtension on ZIMGroupApplicationType {
+  static const valueMap = {
+    ZIMGroupApplicationType.none: 0,
+    ZIMGroupApplicationType.join: 1,
+    ZIMGroupApplicationType.invite: 2,
+    ZIMGroupApplicationType.beInvite: 3,
+  };
+  static const mapValue = {
+    0: ZIMGroupApplicationType.none,
+    1: ZIMGroupApplicationType.join,
+    2: ZIMGroupApplicationType.invite,
+    3: ZIMGroupApplicationType.beInvite,
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMGroupApplicationListChangeActionExtension on ZIMGroupApplicationListChangeAction {
+  static const valueMap = {
+    ZIMGroupApplicationListChangeAction.added: 0,
+  };
+  static const mapValue = {
+    0: ZIMGroupApplicationListChangeAction.added
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMMessageTypeExtension on ZIMMessageType {
   static const valueMap = {
     ZIMMessageType.unknown: 0,

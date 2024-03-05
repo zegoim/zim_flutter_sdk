@@ -181,6 +181,13 @@ protected:
                                  const ZIMGroupOperatedInfo & operatedInfo,
                                  const std::string & groupID);
 
+    void onGroupApplicationListChanged(ZIM * zim, const std::vector<ZIMGroupApplicationInfo> & applicationList, ZIMGroupApplicationListChangeAction action);
+
+
+    void onGroupApplicationUpdated(ZIM * zim, const std::vector<ZIMGroupApplicationInfo> & applicationList);
+
+
+
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
 
