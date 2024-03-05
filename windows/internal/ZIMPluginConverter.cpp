@@ -1322,6 +1322,7 @@ ZIMGroupJoinApplicationSendConfig ZIMPluginConverter::cnvZIMGroupJoinApplication
 		config.pushConfig = nullptr;
 	}
 	else {
+		std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
 		std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
 		config.pushConfig = pushConfigPtr.get();
@@ -1335,6 +1336,7 @@ ZIMGroupJoinApplicationAcceptConfig ZIMPluginConverter::cnvZIMGroupJoinApplicati
 		config.pushConfig = nullptr;
 	}
 	else {
+		std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
 		std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
 		config.pushConfig = pushConfigPtr.get();
@@ -1349,6 +1351,7 @@ ZIMGroupJoinApplicationRejectConfig ZIMPluginConverter::cnvZIMGroupJoinApplicati
 		config.pushConfig = nullptr;
 	}
 	else {
+		std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
 		std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
 		config.pushConfig = pushConfigPtr.get();
@@ -1362,6 +1365,7 @@ ZIMGroupInviteApplicationSendConfig ZIMPluginConverter::cnvZIMGroupInviteApplica
 		config.pushConfig = nullptr;
 	}
 	else {
+		std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
 		std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
 		config.pushConfig = pushConfigPtr.get();
@@ -1375,6 +1379,7 @@ ZIMGroupInviteApplicationAcceptConfig ZIMPluginConverter::cnvZIMGroupInviteAppli
 		config.pushConfig = nullptr;
 	}
 	else {
+		std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
 		std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
 		config.pushConfig = pushConfigPtr.get();
@@ -1389,6 +1394,7 @@ ZIMGroupInviteApplicationRejectConfig ZIMPluginConverter::cnvZIMGroupInviteAppli
 		config.pushConfig = nullptr;
 	}
 	else {
+		std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
 		std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
 		config.pushConfig = pushConfigPtr.get();
