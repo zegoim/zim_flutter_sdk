@@ -974,7 +974,7 @@ class ZIMGroupInfo {
 
 class ZIMGroupMemberSimpleInfo {
   String memberNickname;
-  ZIMGroupMemberRole memberRole;
+  int memberRole = ZIMGroupMemberRole.member;
   ZIMGroupMemberSimpleInfo(
       {required this.memberNickname, required this.memberRole});
 }
