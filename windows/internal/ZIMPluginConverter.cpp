@@ -1566,8 +1566,8 @@ FTMap ZIMPluginConverter::cnvZIMGroupApplicationInfoToMap(const ZIMGroupApplicat
 	infoMap[FTValue("applyUser")] = cnvZIMUserInfoObjectToMap(info.applyUser);
 	infoMap[FTValue("operatedUser")] = cnvZIMGroupMemberSimpleInfoToMap(info.operatedUser);
 	infoMap[FTValue("wording")] = FTValue(info.wording);
-	infoMap[FTValue("createTime")] = FTValue(info.createTime);
-	infoMap[FTValue("updateTime")] = FTValue(info.updateTime);
+	infoMap[FTValue("createTime")] = FTValue((int64_t)info.createTime);
+	infoMap[FTValue("updateTime")] = FTValue((int64_t)info.updateTime);
 	infoMap[FTValue("type")] = FTValue((int32_t)info.type);
 	infoMap[FTValue("state")] = FTValue((int32_t)info.state);
 	return infoMap;
