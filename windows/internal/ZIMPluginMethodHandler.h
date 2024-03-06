@@ -261,7 +261,7 @@ public:
 								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void rejectGroupJoinApplication(flutter::EncodableMap& argument,
 								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void sendGroupInviteApplication(flutter::EncodableMap& argument,
+	void sendGroupInviteApplications(flutter::EncodableMap& argument,
 								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void acceptGroupInviteApplication(flutter::EncodableMap& argument,
 								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
