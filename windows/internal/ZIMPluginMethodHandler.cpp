@@ -2667,7 +2667,7 @@ void ZIMPluginMethodHandler::rejectGroupJoinApplication(flutter::EncodableMap& a
     });
 }
 
-void ZIMPluginMethodHandler::sendGroupInviteApplication(flutter::EncodableMap& argument,
+void ZIMPluginMethodHandler::sendGroupInviteApplications(flutter::EncodableMap& argument,
                                 std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
     auto handle = std::get<std::string>(argument[FTValue("handle")]);
     auto zim = this->engineMap[handle];
@@ -2684,7 +2684,7 @@ void ZIMPluginMethodHandler::sendGroupInviteApplication(flutter::EncodableMap& a
     }
     auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
-    zim->sendGroupInviteApplication(userIDsVec, groupID, config, [=](
+    zim->sendGroupInviteApplications(userIDsVec, groupID, config, [=](
             const std::string &groupID, const std::vector<ZIMErrorUserInfo> &errorUserList,
             const ZIMError &errorInfo){
         if (errorInfo.code == 0) {

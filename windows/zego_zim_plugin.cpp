@@ -464,30 +464,12 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "acceptGroupJoinApplication") {
         ZIMPluginMethodHandler::getInstance().acceptGroupJoinApplication(argument, std::move(result));
     }
-    //else if (method_call.method_name() == "rejectGroupJoinApplication") {
-    //    ZIMPluginMethodHandler::getInstance().rejectGroupJoinApplication(argument, std::move(result));
-    //}
-    //else if (method_call.method_name() == "sendGroupInviteApplication") {
-    //    ZIMPluginMethodHandler::getInstance().sendGroupInviteApplication(argument, std::move(result));
-    //}
-    //else if (method_call.method_name() == "acceptGroupInviteApplication") {
-    //    ZIMPluginMethodHandler::getInstance().queryGroupMemberMutedList(argument, std::move(result));
-    //}
-    //else if (method_call.method_name() == "rejectGroupInviteApplication") {
-    //    ZIMPluginMethodHandler::getInstance().queryGroupMemberMutedList(argument, std::move(result));
-    //}
-    //else if (method_call.method_name() == "queryGroupApplicationList") {
-    //    ZIMPluginMethodHandler::getInstance().queryGroupApplicationList(argument, std::move(result));
-    //}
- //   else {
-	//result->NotImplemented();
- //   }
 
 	if (method_call.method_name() == "rejectGroupJoinApplication") {
 		ZIMPluginMethodHandler::getInstance().rejectGroupJoinApplication(argument, std::move(result));
 	}
-	else if (method_call.method_name() == "sendGroupInviteApplication") {
-		ZIMPluginMethodHandler::getInstance().sendGroupInviteApplication(argument, std::move(result));
+	else if (method_call.method_name() == "sendGroupInviteApplications") {
+		ZIMPluginMethodHandler::getInstance().sendGroupInviteApplications(argument, std::move(result));
 	}
 	else if (method_call.method_name() == "acceptGroupInviteApplication") {
 		ZIMPluginMethodHandler::getInstance().queryGroupMemberMutedList(argument, std::move(result));
