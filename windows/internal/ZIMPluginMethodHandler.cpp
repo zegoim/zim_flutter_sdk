@@ -2607,6 +2607,16 @@ void ZIMPluginMethodHandler::sendGroupJoinApplication(flutter::EncodableMap& arg
     }
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+    auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->sendGroupJoinApplication(groupID,config,[=](const std::string &groupID, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
@@ -2630,6 +2640,16 @@ void ZIMPluginMethodHandler::acceptGroupJoinApplication(flutter::EncodableMap& a
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationAcceptConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->acceptGroupJoinApplication(userID, groupID, config, [=](const std::string &groupID, const std::string &userID, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
@@ -2654,6 +2674,16 @@ void ZIMPluginMethodHandler::rejectGroupJoinApplication(flutter::EncodableMap& a
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationRejectConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->rejectGroupJoinApplication(userID, groupID, config, [=](const std::string &groupID, const std::string &userID, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
@@ -2683,6 +2713,16 @@ void ZIMPluginMethodHandler::sendGroupInviteApplications(flutter::EncodableMap& 
         userIDsVec.emplace_back(userID);
     }
     auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationSendConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->sendGroupInviteApplications(userIDsVec, groupID, config, [=](
             const std::string &groupID, const std::vector<ZIMErrorUserInfo> &errorUserList,
@@ -2710,6 +2750,16 @@ void ZIMPluginMethodHandler::acceptGroupInviteApplication(flutter::EncodableMap&
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto inviterUserID = std::get<std::string>(argument[FTValue("inviterUserID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationAcceptConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->acceptGroupInviteApplication(inviterUserID, groupID, config, [=](
             const ZIMGroupFullInfo &fullInfo, const std::string &inviterUserID, const ZIMError &errorInfo){
@@ -2736,6 +2786,16 @@ void ZIMPluginMethodHandler::rejectGroupInviteApplication(flutter::EncodableMap&
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto inviterUserID = std::get<std::string>(argument[FTValue("inviterUserID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationRejectConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+	std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+	if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
+		config.pushConfig = nullptr;
+	}
+	else {
+		pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
+		config.pushConfig = pushConfigPtr.get();
+	}
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
     zim->rejectGroupInviteApplication(inviterUserID, groupID, config, [=](
             const std::string &groupID, const std::string &inviterUserID, const ZIMError &errorInfo){
