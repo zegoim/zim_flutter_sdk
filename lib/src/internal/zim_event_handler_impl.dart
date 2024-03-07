@@ -8,6 +8,8 @@ import '../zim_defines.dart';
 import 'zim_defines_extension.dart';
 import 'zim_converter.dart';
 import 'zim_manager.dart';
+import 'package:flutter/material.dart';
+GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
 class ZIMEventHandlerImpl implements ZIMEventHandler {
   static const EventChannel _event = EventChannel('zim_event_handler');
@@ -405,10 +407,14 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMEventHandler.onGroupVerifyInfoUpdated!(zim, verifyInfo, operatedInfo, groupID);
         break;
       case 'onGroupApplicationListChanged':
-        if(ZIMEventHandler.onGroupApplicationListChanged == null) return;
-        List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
-        ZIMGroupApplicationListChangeAction action = ZIMGroupApplicationListChangeActionExtension.mapValue[map['action']]!;
-        ZIMEventHandler.onGroupApplicationListChanged!(zim, applicationList, action);
+        try{
+          if(ZIMEventHandler.onGroupApplicationListChanged == null) return;
+          List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+          ZIMGroupApplicationListChangeAction action = ZIMGroupApplicationListChangeActionExtension.mapValue[map['action']]!;
+          ZIMEventHandler.onGroupApplicationListChanged!(zim, applicationList, action);
+        }catch (error,trackbase){
+          ErrorDiaLog.showFailedDialog(_scaffoldKey.currentContext!, error.toString(), trackbase.toString());
+        }
         break;
       case 'onGroupApplicationUpdated':
         if(ZIMEventHandler.onGroupApplicationUpdated == null) return;
@@ -419,5 +425,29 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       default:
         break;
     }
+  }
+}
+
+
+class ErrorDiaLog {
+  static Future<bool?> showFailedDialog(BuildContext context,
+      String code, String message) {
+    return showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+              "Error",
+            ),
+            content: Text('code:' + code + '\n\n' + 'message:' + message),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: (() {
+                    Navigator.of(context).pop();
+                  }),
+                  child: const Text('OK'))
+            ],
+          );
+        });
   }
 }
