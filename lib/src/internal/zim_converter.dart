@@ -73,7 +73,7 @@ class ZIMConverter {
     ZIMGroupApplicationInfo applicationInfo = ZIMGroupApplicationInfo(groupInfo: oZIMGroupInfo(applicationInfoMap['groupInfo'])!, applyUser: oZIMUserInfo(applicationInfoMap['applyUser']));
     applicationInfo.createTime = applicationInfoMap['createTime'];
     applicationInfo.updateTime = applicationInfoMap['updateTime'];
-    applicationInfo.state = applicationInfoMap['state'];
+    applicationInfo.state = ZIMGroupApplicationStateExtension.mapValue[applicationInfoMap['state']]!;
     if(applicationInfoMap.containsKey('operatedUser')){
       applicationInfo.operatedUser = oZIMGroupMemberSimpleInfo(applicationInfoMap['operatedUser']);
     }
