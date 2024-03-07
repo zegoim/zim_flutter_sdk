@@ -1510,8 +1510,11 @@ FTMap ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplic
 
 FTMap ZIMPluginConverter::cnvZIMGroupMemberSimpleInfoToMap(std::shared_ptr<ZIMGroupMemberSimpleInfo> operatedUser) {
 	FTMap infoMap;
-	infoMap[FTValue("memberNickname")] = FTValue(operatedUser->memberNickname);
-	infoMap[FTValue("memberRole")] = FTValue((int32_t)operatedUser->memberRole);
+	if (operatedUser != nullptr)
+	{
+		infoMap[FTValue("memberNickname")] = FTValue(operatedUser->memberNickname);
+		infoMap[FTValue("memberRole")] = FTValue((int32_t)operatedUser->memberRole);
+	}
 	return infoMap;
 }
 
