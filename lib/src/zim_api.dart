@@ -1200,8 +1200,8 @@ abstract class ZIM {
    Future<ZIMGroupJoinApplicationAcceptedResult> acceptGroupJoinApplication(String userID,
    String groupID, ZIMGroupJoinApplicationAcceptConfig config);
 
-  Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(
-  String groupID, ZIMGroupJoinApplicationRejectConfig config);
+  Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(String userID,
+      String groupID, ZIMGroupJoinApplicationRejectConfig config);
 
   Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(List<String> userIDs,
   String groupID, ZIMGroupInviteApplicationSendConfig config);
