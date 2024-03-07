@@ -1368,9 +1368,10 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(String groupID, ZIMGroupInviteApplicationSendConfig config) async{
+  Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(List<String> userIDs, String groupID, ZIMGroupInviteApplicationSendConfig config) async{
     Map resultMap = await channel.invokeMethod('sendGroupInviteApplications',{
       'handle':handle,
+      'userIDs': userIDs,
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupInviteApplicationSendConfig(config)
     });

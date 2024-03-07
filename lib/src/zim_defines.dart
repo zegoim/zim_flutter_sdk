@@ -1114,6 +1114,7 @@ class ZIMGroupJoinApplicationRejectConfig {
 
 class ZIMGroupInviteApplicationSendConfig {
   ZIMPushConfig? pushConfig;
+  String wording = "";
 }
 
 class ZIMGroupInviteApplicationAcceptConfig {

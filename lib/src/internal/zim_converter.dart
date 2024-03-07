@@ -2186,6 +2186,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
   static Map mZIMGroupInviteApplicationSendConfig(ZIMGroupInviteApplicationSendConfig config){
     Map map = {};
     map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    map['wording'] = config.wording;
     return map;
   }
 
