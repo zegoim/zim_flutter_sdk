@@ -982,7 +982,7 @@ class ZIMGroupMemberSimpleInfo {
 class ZIMGroupApplicationInfo {
   ZIMGroupInfo groupInfo;
   ZIMUserInfo applyUser;
-  List<ZIMGroupMemberSimpleInfo> operatedUser = [];
+  ZIMGroupMemberSimpleInfo? operatedUser;
   String wording = "";
   int createTime = 0;
   int updateTime = 0;

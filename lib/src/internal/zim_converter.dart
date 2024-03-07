@@ -63,11 +63,20 @@ class ZIMConverter {
     return errorUserInfo;
   }
 
+  static ZIMGroupMemberSimpleInfo oZIMGroupMemberSimpleInfo(Map zimGroupMemberSimpleInfoMap) {
+    ZIMGroupMemberSimpleInfo groupMemberSimpleInfo = ZIMGroupMemberSimpleInfo(memberNickname: zimGroupMemberSimpleInfoMap['memberNickname'], memberRole: zimGroupMemberSimpleInfoMap['memberRole']);
+    return groupMemberSimpleInfo;
+  }
+
+
   static ZIMGroupApplicationInfo oZIMGroupApplicationInfo(Map applicationInfoMap) {
     ZIMGroupApplicationInfo applicationInfo = ZIMGroupApplicationInfo(groupInfo: oZIMGroupInfo(applicationInfoMap['groupInfo'])!, applyUser: oZIMUserInfo(applicationInfoMap['applyUser']));
     applicationInfo.createTime = applicationInfoMap['createTime'];
     applicationInfo.updateTime = applicationInfoMap['updateTime'];
     applicationInfo.state = applicationInfoMap['state'];
+    if(applicationInfoMap.containsKey('operatedUser')){
+      applicationInfo.operatedUser = oZIMGroupMemberSimpleInfo(applicationInfoMap['operatedUser']);
+    }
     applicationInfo.type = ZIMGroupApplicationTypeExtension.mapValue[applicationInfoMap['type']]!;
     applicationInfo.wording = applicationInfoMap['wording'];
     return applicationInfo;
