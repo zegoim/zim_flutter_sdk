@@ -1335,7 +1335,7 @@ class ZIMEngine implements ZIM {
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupJoinApplicationAcceptConfig(config)
     });
-    return ZIMGroupJoinApplicationAcceptedResult(groupID:resultMap['message'], userID:resultMap['userID']);
+    return ZIMGroupJoinApplicationAcceptedResult(groupID:resultMap['groupID'], userID:resultMap['userID']);
   }
 
   @override
