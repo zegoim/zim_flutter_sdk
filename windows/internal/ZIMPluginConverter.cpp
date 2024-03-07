@@ -1510,11 +1510,8 @@ FTMap ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplic
 
 FTMap ZIMPluginConverter::cnvZIMGroupMemberSimpleInfoToMap(std::shared_ptr<ZIMGroupMemberSimpleInfo> operatedUser) {
 	FTMap infoMap;
-	if (operatedUser != nullptr)
-	{
-		infoMap[FTValue("memberNickname")] = FTValue(operatedUser->memberNickname);
-		infoMap[FTValue("memberRole")] = FTValue((int32_t)operatedUser->memberRole);
-	}
+	infoMap[FTValue("memberNickname")] = FTValue(operatedUser->memberNickname);
+	infoMap[FTValue("memberRole")] = FTValue((int32_t)operatedUser->memberRole);
 	return infoMap;
 }
 
@@ -1522,7 +1519,10 @@ FTMap ZIMPluginConverter::cnvZIMGroupApplicationInfoToMap(const ZIMGroupApplicat
 	FTMap infoMap;
 	infoMap[FTValue("groupInfo")] = cnvZIMGroupInfoToMap(info.groupInfo);
 	infoMap[FTValue("applyUser")] = cnvZIMUserInfoObjectToMap(info.applyUser);
-	infoMap[FTValue("operatedUser")] = cnvZIMGroupMemberSimpleInfoToMap(info.operatedUser);
+	if (info.operatedUser != nullptr)
+	{
+		infoMap[FTValue("operatedUser")] = cnvZIMGroupMemberSimpleInfoToMap(info.operatedUser);
+	}
 	infoMap[FTValue("wording")] = FTValue(info.wording);
 	infoMap[FTValue("createTime")] = FTValue((int64_t)info.createTime);
 	infoMap[FTValue("updateTime")] = FTValue((int64_t)info.updateTime);
