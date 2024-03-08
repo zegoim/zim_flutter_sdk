@@ -1350,10 +1350,11 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String groupID, ZIMGroupInviteApplicationRejectConfig config) async{
+  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String inviterUserID, String groupID, ZIMGroupInviteApplicationRejectConfig config) async{
     Map resultMap = await channel.invokeMethod('rejectGroupInviteApplication',{
       'handle':handle,
       'groupID': groupID,
+      'inviterUserID': inviterUserID,
       'config': ZIMConverter.mZIMGroupInviteApplicationRejectConfig(config)
     });
     return ZIMGroupInviteApplicationRejectedResult(groupID:resultMap['groupID'], inviterUserID: resultMap['inviterUserID']);

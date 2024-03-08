@@ -1209,7 +1209,7 @@ abstract class ZIM {
   Future<ZIMGroupInviteApplicationAcceptedResult> acceptGroupInviteApplication(String inviterUserID,
   String groupID, ZIMGroupInviteApplicationAcceptConfig config);
 
-  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(
+  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String inviterUserID,
   String groupID, ZIMGroupInviteApplicationRejectConfig config);
 
   Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(
