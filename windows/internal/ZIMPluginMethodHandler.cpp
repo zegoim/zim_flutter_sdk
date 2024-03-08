@@ -2765,7 +2765,7 @@ void ZIMPluginMethodHandler::acceptGroupInviteApplication(flutter::EncodableMap&
             const ZIMGroupFullInfo &fullInfo, const std::string &inviterUserID, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
-            retMap[FTValue("fullInfo")] =  ZIMPluginConverter::cnvZIMGroupFullInfoToMap(fullInfo);
+            retMap[FTValue("groupInfo")] =  ZIMPluginConverter::cnvZIMGroupFullInfoToMap(fullInfo);
             retMap[FTValue("inviterUserID")] = FTValue(inviterUserID);
 
             sharedPtrResult->Success(retMap);
