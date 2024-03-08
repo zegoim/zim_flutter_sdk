@@ -2154,13 +2154,14 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
 
   static Map mZIMGroupInviteApplicationAcceptConfig(ZIMGroupInviteApplicationAcceptConfig config){
     Map map = {};
-    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+
     return map;
   }
 
   static Map mZIMGroupJoinApplicationAcceptConfig(ZIMGroupJoinApplicationAcceptConfig config){
     Map map = {};
-    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
     return map;
   }
 
@@ -2173,26 +2174,26 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
 
   static Map mZIMGroupInviteApplicationRejectConfig(ZIMGroupInviteApplicationRejectConfig config){
     Map map = {};
-    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
     return map;
   }
 
   static Map mZIMGroupJoinApplicationRejectConfig(ZIMGroupJoinApplicationRejectConfig config){
     Map map = {};
-    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
     return map;
   }
 
   static Map mZIMGroupInviteApplicationSendConfig(ZIMGroupInviteApplicationSendConfig config){
     Map map = {};
-    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
     map['wording'] = config.wording;
     return map;
   }
 
   static Map mZIMGroupJoinApplicationSendConfig(ZIMGroupJoinApplicationSendConfig config){
     Map map = {};
-    map['pushConfig'] = mZIMPushConfig(config.pushConfig);
+    map['pushConfig'] =config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
     map['wording'] = config.wording;
     return map;
   }
