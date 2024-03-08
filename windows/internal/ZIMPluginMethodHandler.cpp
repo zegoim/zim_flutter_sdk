@@ -2825,7 +2825,7 @@ void ZIMPluginMethodHandler::queryGroupApplicationList(flutter::EncodableMap& ar
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("nextFlag")] = FTValue((int64_t)nextFlag);
-            retMap[FTValue("applicationInfo")] = ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(applicationList);
+            retMap[FTValue("applicationList")] = ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(applicationList);
             sharedPtrResult->Success(retMap);
         } else {
             sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
