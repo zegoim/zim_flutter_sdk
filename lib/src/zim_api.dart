@@ -1212,8 +1212,7 @@ abstract class ZIM {
   Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String inviterUserID,
   String groupID, ZIMGroupInviteApplicationRejectConfig config);
 
-  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(
-  String groupID, ZIMGroupApplicationListQueryConfig config);
+  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(ZIMGroupApplicationListQueryConfig config);
 
 
   Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config);

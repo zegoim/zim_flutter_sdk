@@ -1340,10 +1340,9 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(String groupID, ZIMGroupApplicationListQueryConfig config) async{
+  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(ZIMGroupApplicationListQueryConfig config) async{
     Map resultMap = await channel.invokeMethod('queryGroupApplicationList',{
       'handle':handle,
-      'groupID': groupID,
       'config': ZIMConverter.mZIMGroupApplicationListQueryConfig(config)
     });
     return ZIMGroupApplicationListQueriedResult(nextFlag:resultMap['nextFlag'], applicationList: ZIMConverter.oZIMGroupApplicationInfoList(resultMap['applicationList']));
