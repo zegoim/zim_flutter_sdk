@@ -592,10 +592,10 @@ void ZegoZimPlugin::HandleMethodCall(
 		ZIMPluginMethodHandler::getInstance().sendGroupInviteApplications(argument, std::move(result));
 	}
 	else if (method_call.method_name() == "acceptGroupInviteApplication") {
-		ZIMPluginMethodHandler::getInstance().queryGroupMemberMutedList(argument, std::move(result));
+		ZIMPluginMethodHandler::getInstance().acceptGroupInviteApplication(argument, std::move(result));
 	}
 	else if (method_call.method_name() == "rejectGroupInviteApplication") {
-		ZIMPluginMethodHandler::getInstance().queryGroupMemberMutedList(argument, std::move(result));
+		ZIMPluginMethodHandler::getInstance().rejectGroupInviteApplication(argument, std::move(result));
 	}
 	else if (method_call.method_name() == "queryGroupApplicationList") {
 		ZIMPluginMethodHandler::getInstance().queryGroupApplicationList(argument, std::move(result));
