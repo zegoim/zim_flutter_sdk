@@ -2128,10 +2128,10 @@ class ZIMGroupInviteApplicationsSentResult {
 }
 
 class ZIMGroupInviteApplicationAcceptedResult {
-  String groupID;
+  ZIMGroupFullInfo groupInfo;
   String inviterUserID;
   ZIMGroupInviteApplicationAcceptedResult(
-      {required this.groupID, required this.inviterUserID});
+      {required this.groupInfo, required this.inviterUserID});
 }
 
 class ZIMGroupInviteApplicationRejectedResult {
