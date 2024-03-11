@@ -1200,7 +1200,7 @@
         return;
     }
     [zim leaveAllRoom:^(NSArray<NSString *> * _Nonnull roomIDList, ZIMError * _Nonnull errorInfo) {
-        if(errorinfo.code == 0){
+        if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic setObject:roomIDList forKey:@"roomIDList"];
             result(resultDic);
