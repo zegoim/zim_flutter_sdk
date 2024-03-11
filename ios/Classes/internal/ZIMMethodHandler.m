@@ -1199,7 +1199,7 @@
         result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
         return;
     }
-    [zim leaveAllRoom:^(NSArray<NSString *> * _Nonnull roomIDList, ZIMError * _Nonnull errorinfo) {
+    [zim leaveAllRoom:^(NSArray<NSString *> * _Nonnull roomIDList, ZIMError * _Nonnull errorInfo) {
         if(errorinfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic setObject:roomIDList forKey:@"roomIDList"];
