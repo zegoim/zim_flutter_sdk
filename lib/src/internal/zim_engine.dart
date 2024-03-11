@@ -364,6 +364,14 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMAllRoomLeftResult> leaveAllRoom() async {
+    Map resultMap = await channel.invokeMethod('leaveAllRoom',{
+      'handle':handle
+    });
+    return ZIMConverter.oZIMAllRoomLeftResult(resultMap);
+  }
+
+  @override
   Future<ZIMRoomMemberQueriedResult> queryRoomMemberList(
       String roomID, ZIMRoomMemberQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryRoomMemberList', {
