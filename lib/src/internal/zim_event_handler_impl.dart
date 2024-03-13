@@ -412,9 +412,14 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMEventHandler.onGroupApplicationListChanged!(zim, applicationList, action);
         break;
       case 'onGroupApplicationUpdated':
-        if(ZIMEventHandler.onGroupApplicationUpdated == null) return;
-        List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
-        ZIMEventHandler.onGroupApplicationUpdated!(zim, applicationList);
+        try{
+          if(ZIMEventHandler.onGroupApplicationUpdated == null) return;
+          List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+          ZIMEventHandler.onGroupApplicationUpdated!(zim, applicationList);
+        } catch (error,e) {
+          ZIMError error = ZIMError(code: -1, message: error.toString()+e.toString());
+          ZIMEventHandler.onError!(zim,error);
+        };
         break;
       default:
         break;
