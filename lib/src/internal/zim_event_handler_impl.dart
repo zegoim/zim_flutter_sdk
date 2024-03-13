@@ -417,8 +417,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
           ZIMEventHandler.onGroupApplicationUpdated!(zim, applicationList);
         } catch (error,e) {
-          ZIMError error = ZIMError(code: -1, message: error.toString()+e.toString());
-          ZIMEventHandler.onError!(zim,error);
+          ZIMError zim_error = ZIMError(code: -1, message: error.toString()+e.toString());
+          ZIMEventHandler.onError!(zim,zim_error);
         };
         break;
       default:
