@@ -1505,6 +1505,26 @@ void ZIMPluginMethodHandler::leaveRoom(flutter::EncodableMap& argument,
     });
 }
 
+void ZIMPluginMethodHandler::leaveAllRoom(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+    zim->leaveAllRoom([=](const std::vector<std::string> &roomIDList, const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("roomIDList")] = ZIMPluginConverter::cnvStlVectorToFTArray(roomIDList);
+            sharedPtrResult->Success(retMap);
+        } else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
 void ZIMPluginMethodHandler::queryRoomMemberList(flutter::EncodableMap& argument,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
 
