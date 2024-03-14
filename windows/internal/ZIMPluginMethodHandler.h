@@ -227,6 +227,9 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryMessageReactionUserList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void importLocalMessages(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void exportLocalMessages(flutter::EncodableMap& argument,
     void addUsersToBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void removeUsersFromBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
@@ -257,6 +260,10 @@ public:
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void searchLocalFriends(flutter::EncodableMap& argument,
      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void clearLocalFileCache(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void queryLocalFileCache(flutter::EncodableMap& argument,
+		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void sendGroupJoinApplication(flutter::EncodableMap& argument,
 							std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void acceptGroupJoinApplication(flutter::EncodableMap& argument,

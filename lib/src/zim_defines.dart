@@ -589,6 +589,7 @@ class ZIMMessage {
   bool isMentionAll = false;
   List<String> mentionedUserIds = [];
   List<ZIMMessageReaction> reactions = [];
+  String cbInnerID = "";
 }
 
 class ZIMTextMessage extends ZIMMessage {
@@ -2605,6 +2606,24 @@ class ZIMCombineMessageDetailQueriedResult {
   ZIMCombineMessageDetailQueriedResult({required this.message});
 }
 
+class ZIMFileCacheQueriedResult {
+  ZIMFileCacheInfo fileCacheInfo;
+  ZIMFileCacheQueriedResult({required this.fileCacheInfo});
+}
+
+class ZIMFileCacheInfo {
+  int totalFileSize;
+  ZIMFileCacheInfo({required this.totalFileSize});
+}
+
+class ZIMFileCacheClearConfig {
+  int endTime = 0;
+}
+
+class ZIMFileCacheQueryConfig {
+  int endTime = 0;
+}
+
 class ZIMMessageDeletedInfo {
   String conversationID;
   ZIMConversationType conversationType;
@@ -2620,6 +2639,21 @@ class ZIMMessageDeletedInfo {
       required this.messageList});
 }
 
+typedef ZIMMessageImportingProgress = void Function(
+    int importedMessageCount, int totalMessageCount);
+
+typedef ZIMMessageExportingProgress = void Function(
+    int exportedMessageCount, int totalMessageCount);
+
+class ZIMMessageImportConfig {
+
+  ZIMMessageImportConfig();
+}
+
+class ZIMMessageExportConfig {
+
+  ZIMMessageExportConfig();
+}
 class ZIMFriendAddConfig {
   String wording = "";
   String friendAlias = "";

@@ -3831,4 +3831,116 @@ void ZIMPluginMethodHandler::queryCombineMessageDetail(flutter::EncodableMap& ar
 		});
 }
 
+void ZIMPluginMethodHandler::clearLocalFileCache(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	ZIMFileCacheClearConfig config = ZIMPluginConverter::cnvZIMFileCacheClearConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->clearLocalFileCache(config, [=](const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			sharedPtrResult->Success();
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
+void ZIMPluginMethodHandler::queryLocalFileCache(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto configMap = std::get<FTMap>(argument[FTValue("config")]);
+	ZIMFileCacheQueryConfig config = ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+	zim->queryLocalFileCache(config, [=](const ZIMFileCacheInfo& cacheInfo, const ZIMError& errorInfo) {
+		if (errorInfo.code == 0) {
+			FTMap retMap;
+			retMap[FTValue("fileCacheInfo")] = ZIMPluginConverter::cnvZIMFileCacheInfoToMap(cacheInfo);
+			sharedPtrResult->Success(retMap);
+		}
+		else {
+			sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+		}
+		});
+}
+
+void ZIMPluginMethodHandler::importLocalMessages(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+
+    auto folderPath = std::get<std::string>(argument[FTValue("folderPath")]);
+    ZIMMessageImportConfig config;
+    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+
+	zim->importLocalMessages(folderPath, config, [=](unsigned long long importedMessageCount,
+		unsigned long long totalMessageCount) {
+			FTMap progressRetMap;
+			progressRetMap[FTValue("handle")] = FTValue(handle);
+			progressRetMap[FTValue("method")] = FTValue("messageImportingProgress");
+			progressRetMap[FTValue("progressID")] = FTValue(progressID);
+			progressRetMap[FTValue("importedMessageCount")] = FTValue((int64_t)importedMessageCount);
+			progressRetMap[FTValue("totalMessageCount")] = FTValue((int64_t)totalMessageCount);
+			ZIMPluginEventHandler::getInstance()->sendEvent(progressRetMap);
+        }, [=](const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				sharedPtrResult->Success();
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+    });
+}
+
+void ZIMPluginMethodHandler::exportLocalMessages(flutter::EncodableMap& argument,
+	std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+	auto handle = std::get<std::string>(argument[FTValue("handle")]);
+	auto zim = this->engineMap[handle];
+	if (!zim) {
+		result->Error("-1", "no native instance");
+		return;
+	}
+
+	auto folderPath = std::get<std::string>(argument[FTValue("folderPath")]);
+	ZIMMessageExportConfig config;
+	auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+	auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+
+	zim->exportLocalMessages(folderPath, config, [=](unsigned long long exportedMessageCount,
+		unsigned long long totalMessageCount) {
+			FTMap progressRetMap;
+			progressRetMap[FTValue("handle")] = FTValue(handle);
+			progressRetMap[FTValue("method")] = FTValue("messageExportingProgress");
+			progressRetMap[FTValue("progressID")] = FTValue(progressID);
+			progressRetMap[FTValue("exportedMessageCount")] = FTValue((int64_t)exportedMessageCount);
+			progressRetMap[FTValue("totalMessageCount")] = FTValue((int64_t)totalMessageCount);
+			ZIMPluginEventHandler::getInstance()->sendEvent(progressRetMap);
+		}, [=](const ZIMError& errorInfo) {
+			if (errorInfo.code == 0) {
+				sharedPtrResult->Success();
+			}
+			else {
+				sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+			}
+		});
+}
+
 

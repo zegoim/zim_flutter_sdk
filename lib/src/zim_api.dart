@@ -1562,6 +1562,8 @@ abstract class ZIM {
   /// [config] Query the relevant configuration of the call invitation list.
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
+//MARK: - Cache
+  Future<void> importLocalMessages(String folderPath, ZIMMessageImportConfig config, ZIMMessageImportingProgress? progress);
   /// Available since: 2.14.0 or above.
   ///
   /// Description:Through this interface, a user with the specified userID can be added to the friend list.
@@ -1735,4 +1737,10 @@ abstract class ZIM {
   ///
   /// Restrictions: You can only use it after logging in.
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
+
+  Future<void> clearLocalFileCache(ZIMFileCacheClearConfig config);
+
+  Future<ZIMFileCacheQueriedResult> queryLocalFileCache(ZIMFileCacheQueryConfig config);
+
+  Future<void> exportLocalMessages(String folderPath, ZIMMessageExportConfig config, ZIMMessageExportingProgress? progress);
 }

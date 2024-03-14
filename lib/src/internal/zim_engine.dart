@@ -1113,6 +1113,48 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<void> importLocalMessages(String folderPath, ZIMMessageImportConfig config, ZIMMessageImportingProgress? progress) async {
+    if (progress != null) {
+      int progressID = ZIMCommonData.getSequence();
+      ZIMCommonData.messageImportingProgressMap[progressID] = progress;
+      return await channel.invokeMethod("importLocalMessages", {
+        "handle": handle,
+        "folderPath": folderPath,
+        "config": {},
+        'progressID': progressID
+      });
+      ZIMCommonData.messageImportingProgressMap.remove(progressID);
+    } else {
+      return await channel.invokeMethod("importLocalMessages", {
+        "handle": handle,
+        "folderPath": folderPath,
+        "config": {}
+      });
+    }
+  }
+
+  @override
+  Future<void> exportLocalMessages(String folderPath, ZIMMessageExportConfig config, ZIMMessageExportingProgress? progress) async{
+    if (progress != null) {
+      int progressID = ZIMCommonData.getSequence();
+      ZIMCommonData.messageExportingProgressMap[progressID] = progress;
+      return await channel.invokeMethod("exportLocalMessages", {
+        "handle": handle,
+        "folderPath": folderPath,
+        "config": {},
+        'progressID': progressID
+      });
+      ZIMCommonData.messageExportingProgressMap.remove(progressID);
+    } else {
+      return await channel.invokeMethod("exportLocalMessages", {
+        "handle": handle,
+        "folderPath": folderPath,
+        "config": {}
+      });
+    }
+  }
+
+  @override
   Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID, ZIMFriendApplicationAcceptConfig config) async{
     Map resultMap = await channel.invokeMethod('acceptFriendApplication',{
       'handle':handle,
@@ -1399,5 +1441,19 @@ class ZIMEngine implements ZIM {
     return ZIMGroupJoinApplicationSentResult(groupID:resultMap['groupID']);
   }
 
+  Future<void> clearLocalFileCache(ZIMFileCacheClearConfig config) async{
+    return await channel.invokeMethod('clearLocalFileCache',{
+      'handle':handle,
+      'config': ZIMConverter.mZIMFileCacheClearConfig(config)
+    });
+  }
+
+  Future<ZIMFileCacheQueriedResult> queryLocalFileCache(ZIMFileCacheQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryLocalFileCache',{
+      'handle':handle,
+      'config': ZIMConverter.mZIMFileCacheQueryConfig(config)
+    });
+    return ZIMFileCacheQueriedResult(fileCacheInfo: ZIMConverter.oZIMFileCacheInfo(resultMap['fileCacheInfo']));
+  }
 
 }
