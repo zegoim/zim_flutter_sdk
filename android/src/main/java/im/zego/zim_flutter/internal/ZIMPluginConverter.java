@@ -1454,7 +1454,7 @@ public class ZIMPluginConverter {
 
     static public ZIMFriendDeleteConfig oZIMFriendDeleteConfig(HashMap<String, Object> configMap) {
         ZIMFriendDeleteConfig config = new ZIMFriendDeleteConfig();
-        config.type = ZIMFriendDeleteType.getZIMCallState((Integer) configMap.get("type")); // Assuming direct conversion is possible
+        config.type = ZIMFriendDeleteType.getZIMFriendDeleteType((Integer) configMap.get("type")); // Assuming direct conversion is possible
         return config;
     }
 
@@ -1486,7 +1486,7 @@ public class ZIMPluginConverter {
 
     static public ZIMFriendRelationCheckConfig oZIMFriendRelationCheckConfig(HashMap<String, Object> configMap) {
         ZIMFriendRelationCheckConfig config = new ZIMFriendRelationCheckConfig();
-        config.type = ZIMFriendRelationCheckType.getZIMFriendCheckType ((Integer) configMap.get("type")); // Assuming direct conversion is possible
+        config.type = ZIMFriendRelationCheckType.getZIMFriendRelationCheckType ((Integer) configMap.get("type")); // Assuming direct conversion is possible
         return config;
     }
 
