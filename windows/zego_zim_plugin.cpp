@@ -265,8 +265,8 @@ void ZegoZimPlugin::HandleMethodCall(
         return;
     } 
 	else if (method_call.method_name() == "deleteAllConversationMessages") {
-	ZIMPluginMethodHandler::getInstance().deleteAllConversationMessages(argument, std::move(result));
-    return;
+	    ZIMPluginMethodHandler::getInstance().deleteAllConversationMessages(argument, std::move(result));
+        return;
 	}
     else if (method_call.method_name() == "searchLocalMessages") {
         ZIMPluginMethodHandler::getInstance().searchLocalMessages(argument, std::move(result));
@@ -304,7 +304,9 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().leaveAllRoom(argument, std::move(result));
         return;
     }
-    else if (method_call.method_name() == "queryRoomMemberList") {
+    
+    
+    if (method_call.method_name() == "queryRoomMemberList") {
         ZIMPluginMethodHandler::getInstance().queryRoomMemberList(argument, std::move(result));
         return;
     }
@@ -476,7 +478,9 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().queryCallList(argument, std::move(result));
         return;
     }
-    else if (method_call.method_name() == "callCancel") {
+
+    
+    if (method_call.method_name() == "callCancel") {
         ZIMPluginMethodHandler::getInstance().callCancel(argument, std::move(result));
         return;
     }
