@@ -1312,6 +1312,28 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void leaveAllRoom(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        zim.leaveAllRoom(new ZIMAllRoomLeftCallback() {
+            @Override
+            public void onAllRoomLeft(ArrayList<String> roomIDList, ZIMError errorInfo) {
+                // 这里处理离开所有房间的结果
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("roomIDList",roomIDList);
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
     public static void queryRoomMemberList(MethodCall call,Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);

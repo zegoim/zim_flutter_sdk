@@ -82,6 +82,12 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendGroupMessage(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void updateGroupJoinMode(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void updateGroupInviteMode(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void updateGroupBeInviteMode(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void sendMediaMessage(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void downloadMediaFile(flutter::EncodableMap& argument,
@@ -118,6 +124,8 @@ public:
     void joinRoom(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void leaveRoom(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void leaveAllRoom(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryRoomMemberList(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
@@ -250,12 +258,29 @@ public:
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void queryCombineMessageDetail(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void searchLocalFriends(flutter::EncodableMap& argument, 
+    void searchLocalFriends(flutter::EncodableMap& argument,
      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void clearLocalFileCache(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 	void queryLocalFileCache(flutter::EncodableMap& argument,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void sendGroupJoinApplication(flutter::EncodableMap& argument,
+							std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void acceptGroupJoinApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void rejectGroupJoinApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void sendGroupInviteApplications(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void acceptGroupInviteApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void rejectGroupInviteApplication(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+	void queryGroupApplicationList(flutter::EncodableMap& argument,
+								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+
+
+
 private:
     ZIMPluginMethodHandler() = default;
 private:

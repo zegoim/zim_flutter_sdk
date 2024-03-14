@@ -63,6 +63,28 @@ class ZIMConverter {
     return errorUserInfo;
   }
 
+  static ZIMGroupMemberSimpleInfo oZIMGroupMemberSimpleInfo(Map zimGroupMemberSimpleInfoMap) {
+    ZIMGroupMemberSimpleInfo groupMemberSimpleInfo = ZIMGroupMemberSimpleInfo(memberNickname: zimGroupMemberSimpleInfoMap['memberNickname'], memberRole: zimGroupMemberSimpleInfoMap['memberRole']);
+    groupMemberSimpleInfo.userID = zimGroupMemberSimpleInfoMap['userID'];
+    groupMemberSimpleInfo.userName = zimGroupMemberSimpleInfoMap['userName'] ?? '';
+    return groupMemberSimpleInfo;
+  }
+
+
+  static ZIMGroupApplicationInfo oZIMGroupApplicationInfo(Map applicationInfoMap) {
+    ZIMGroupApplicationInfo applicationInfo = ZIMGroupApplicationInfo(groupInfo: oZIMGroupInfo(applicationInfoMap['groupInfo'])!, applyUser: oZIMUserInfo(applicationInfoMap['applyUser']));
+    applicationInfo.createTime = applicationInfoMap['createTime'];
+    applicationInfo.updateTime = applicationInfoMap['updateTime'];
+    applicationInfo.state = ZIMGroupApplicationStateExtension.mapValue[applicationInfoMap['state']]!;
+    if(applicationInfoMap.containsKey('operatedUser')){
+      applicationInfo.operatedUser = oZIMGroupMemberSimpleInfo(applicationInfoMap['operatedUser']);
+    }
+    applicationInfo.type = ZIMGroupApplicationTypeExtension.mapValue[applicationInfoMap['type']]!;
+    applicationInfo.wording = applicationInfoMap['wording'];
+    return applicationInfo;
+  }
+
+
   static ZIMUserExtendedDataUpdatedResult oZIMUserExtendedDataUpdatedResult(
       Map resultMap) {
     return ZIMUserExtendedDataUpdatedResult(
@@ -80,6 +102,15 @@ class ZIMConverter {
       errorUserInfoList.add(errorUserInfo);
     }
     return errorUserInfoList;
+  }
+
+  static List<ZIMGroupApplicationInfo> oZIMGroupApplicationInfoList(List applicationInfoList){
+    List<ZIMGroupApplicationInfo> groupApplicationInfo = [];
+    for (Map applicationInfoMap in applicationInfoList) {
+      ZIMGroupApplicationInfo applicationInfo = oZIMGroupApplicationInfo(applicationInfoMap);
+      groupApplicationInfo.add(applicationInfo);
+    }
+    return groupApplicationInfo;
   }
 
   static Map mZIMConversationQueryConfig(ZIMConversationQueryConfig config) {
@@ -743,6 +774,10 @@ class ZIMConverter {
     return ZIMRoomLeftResult(roomID: resultMap['roomID']);
   }
 
+  static ZIMAllRoomLeftResult oZIMAllRoomLeftResult(Map resultMap) {
+    return ZIMAllRoomLeftResult(roomIDList: List<String>.from(resultMap['roomIDList']));
+  }
+
   static Map mZIMRoomMemberQueryConfig(ZIMRoomMemberQueryConfig config) {
     Map configMap = {};
     configMap['nextFlag'] = config.nextFlag;
@@ -920,6 +955,9 @@ class ZIMConverter {
     groupFullInfo.groupAttributes =
         (groupFullInfoMap['groupAttributes'] as Map).cast<String, String>();
     groupFullInfo.mutedInfo = ZIMConverter.oZIMGroupMuteInfo(groupFullInfoMap['mutedInfo']);
+    groupFullInfo.verifyInfo =  ZIMConverter.oZIMGroupVerifyInfo(groupFullInfoMap['verifyInfo']);
+    groupFullInfo.maxMemberCount = groupFullInfoMap['maxMemberCount'];
+    groupFullInfo.createTime = groupFullInfoMap['createTime'];
     return groupFullInfo;
   }
 
@@ -930,6 +968,10 @@ class ZIMConverter {
     Map configMap = {};
     configMap['groupNotice'] = config.groupNotice;
     configMap['groupAttributes'] = config.groupAttributes;
+    configMap['joinMode'] = ZIMGroupJoinModeExtension.valueMap[config.joinMode];
+    configMap['inviteMode'] = ZIMGroupInviteModeExtension.valueMap[config.inviteMode];
+    configMap['beInviteMode'] = ZIMGroupBeInviteModeExtension.valueMap[config.beInviteMode];
+    configMap['maxMemberCount'] = config.maxMemberCount;
     return configMap;
   }
 
@@ -995,6 +1037,27 @@ class ZIMConverter {
     return ZIMGroupNoticeUpdatedResult(
         groupID: resultMap['groupID'],
         groupNotice: resultMap['groupNotice'] ?? '');
+  }
+
+  static ZIMGroupJoinModeUpdatedResult oZIMGroupJoinModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupJoinModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupJoinModeExtension.mapValue[resultMap['mode']]!);
+  }
+
+  static ZIMGroupInviteModeUpdatedResult oZIMGroupInviteModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupInviteModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupInviteModeExtension.mapValue[resultMap['mode']]!);
+  }
+
+  static ZIMGroupBeInviteModeUpdatedResult oZIMGroupBeInviteModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupBeInviteModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupBeInviteModeExtension.mapValue[resultMap['mode']]!);
   }
 
   static ZIMGroupInfoQueriedResult oZIMGroupInfoQueriedResult(Map resultMap) {
@@ -2064,6 +2127,14 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     return groupMuteInfo;
   }
 
+  static ZIMGroupVerifyInfo oZIMGroupVerifyInfo(Map map) {
+    ZIMGroupVerifyInfo verifyInfo = ZIMGroupVerifyInfo();
+    verifyInfo.joinMode = ZIMGroupJoinModeExtension.mapValue[map['joinMode']]!;
+    verifyInfo.inviteMode = ZIMGroupInviteModeExtension.mapValue[map['inviteMode']]!;
+    verifyInfo.beInviteMode = ZIMGroupBeInviteModeExtension.mapValue[map['beInviteMode']]!;
+    return verifyInfo;
+  }
+
   //供自动化使用，sdk 使用前需要 check
   static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo){
     Map map = {};
@@ -2094,6 +2165,52 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
   static ZIMGroupMemberMutedListQueriedResult oZIMGroupMemberMutedListQueriedResult(Map map){
     ZIMGroupMemberMutedListQueriedResult result = ZIMGroupMemberMutedListQueriedResult(nextFlag: map['nextFlag'],groupID: map['groupID'],userList: ZIMConverter.oZIMGroupMemberInfoList(map['userList']));
     return result;
+  }
+
+  static Map mZIMGroupInviteApplicationAcceptConfig(ZIMGroupInviteApplicationAcceptConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationAcceptConfig(ZIMGroupJoinApplicationAcceptConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    return map;
+  }
+
+  static Map mZIMGroupApplicationListQueryConfig(ZIMGroupApplicationListQueryConfig config){
+    Map map = {};
+    map['count'] = config.count;
+    map['nextFlag'] = config.nextFlag;
+    return map;
+  }
+
+  static Map mZIMGroupInviteApplicationRejectConfig(ZIMGroupInviteApplicationRejectConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationRejectConfig(ZIMGroupJoinApplicationRejectConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    return map;
+  }
+
+  static Map mZIMGroupInviteApplicationSendConfig(ZIMGroupInviteApplicationSendConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    map['wording'] = config.wording;
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationSendConfig(ZIMGroupJoinApplicationSendConfig config){
+    Map map = {};
+    map['pushConfig'] =config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    map['wording'] = config.wording;
+    return map;
   }
 
   static Map mZIMGroupMemberMuteConfig(ZIMGroupMemberMuteConfig config){
