@@ -397,8 +397,33 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         String groupID = map['groupID'];
         ZIMEventHandler.onGroupMutedInfoUpdated!(zim,muteInfo,operatedInfo,groupID);
         break;
+      case 'onGroupVerifyInfoUpdated':
+        if(ZIMEventHandler.onGroupVerifyInfoUpdated == null) return;
+        ZIMGroupVerifyInfo verifyInfo = ZIMConverter.oZIMGroupVerifyInfo(map['verifyInfo']);
+        ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
+        String groupID = map['groupID'];
+        ZIMEventHandler.onGroupVerifyInfoUpdated!(zim, verifyInfo, operatedInfo, groupID);
+        break;
+      case 'onGroupApplicationListChanged':
+
+        if(ZIMEventHandler.onGroupApplicationListChanged == null) return;
+        List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+        ZIMGroupApplicationListChangeAction action = ZIMGroupApplicationListChangeActionExtension.mapValue[map['action']]!;
+        ZIMEventHandler.onGroupApplicationListChanged!(zim, applicationList, action);
+        break;
+      case 'onGroupApplicationUpdated':
+        try{
+          if(ZIMEventHandler.onGroupApplicationUpdated == null) return;
+          List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+          ZIMEventHandler.onGroupApplicationUpdated!(zim, applicationList);
+        } catch (error,e) {
+          ZIMError zim_error = ZIMError(code: -1, message: error.toString()+e.toString());
+          ZIMEventHandler.onError!(zim,zim_error);
+        };
+        break;
       default:
         break;
     }
   }
 }
+

@@ -540,6 +540,34 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMGroupJoinModeUpdatedResult> updateGroupJoinMode(
+      ZIMGroupJoinMode mode, String groupID) async {
+    Map resultMap = await channel.invokeMethod('updateGroupJoinMode',
+        {'handle': handle, 'mode': ZIMGroupJoinModeExtension.valueMap[mode], 'groupID': groupID});
+    return ZIMConverter.oZIMGroupJoinModeUpdatedResult(resultMap);
+  }
+
+
+  @override
+  Future<ZIMGroupInviteModeUpdatedResult> updateGroupInviteMode(
+      ZIMGroupInviteMode mode, String groupID) async {
+    Map resultMap = await channel.invokeMethod('updateGroupInviteMode',
+        {'handle': handle, 'mode': ZIMGroupInviteModeExtension.valueMap[mode], 'groupID': groupID});
+    return ZIMConverter.oZIMGroupInviteModeUpdatedResult(resultMap);
+  }
+
+
+  @override
+  Future<ZIMGroupBeInviteModeUpdatedResult> updateGroupBeInviteMode(
+      ZIMGroupBeInviteMode mode, String groupID) async {
+    Map resultMap = await channel.invokeMethod('updateGroupBeInviteMode',
+        {'handle': handle, 'mode':ZIMGroupBeInviteModeExtension.valueMap[mode], 'groupID': groupID});
+    return ZIMConverter.oZIMGroupBeInviteModeUpdatedResult(resultMap);
+  }
+
+
+
+  @override
   Future<ZIMGroupInfoQueriedResult> queryGroupInfo(String groupID) async {
     Map resultMap = await channel
         .invokeMethod('queryGroupInfo', {'handle': handle, 'groupID': groupID});
@@ -1288,12 +1316,87 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMGroupMemberMutedListQueriedResult(resultMap);
   }
 
+  @override
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message) async{
     Map resultMap = await channel.invokeMethod('queryCombineMessageDetail',{
       'handle':handle,
       'message': ZIMConverter.mZIMMessage(message)
     });
     return ZIMCombineMessageDetailQueriedResult(message:ZIMConverter.oZIMMessage(resultMap['message']) as ZIMCombineMessage);
+  }
+
+  @override
+  Future<ZIMGroupInviteApplicationAcceptedResult> acceptGroupInviteApplication(String inviterUserID, String groupID, ZIMGroupInviteApplicationAcceptConfig config) async{
+    Map resultMap = await channel.invokeMethod('acceptGroupInviteApplication',{
+      'handle':handle,
+      'inviterUserID': inviterUserID,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupInviteApplicationAcceptConfig(config)
+    });
+    return ZIMGroupInviteApplicationAcceptedResult(groupInfo:ZIMConverter.oZIMGroupFullInfo(resultMap['groupInfo'])!, inviterUserID:resultMap['inviterUserID']);
+  }
+
+  @override
+  Future<ZIMGroupJoinApplicationAcceptedResult> acceptGroupJoinApplication(String userID, String groupID, ZIMGroupJoinApplicationAcceptConfig config) async{
+    Map resultMap = await channel.invokeMethod('acceptGroupJoinApplication',{
+      'handle':handle,
+      'userID': userID,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupJoinApplicationAcceptConfig(config)
+    });
+    return ZIMGroupJoinApplicationAcceptedResult(groupID:resultMap['groupID'], userID:resultMap['userID']);
+  }
+
+  @override
+  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(ZIMGroupApplicationListQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryGroupApplicationList',{
+      'handle':handle,
+      'config': ZIMConverter.mZIMGroupApplicationListQueryConfig(config)
+    });
+    return ZIMGroupApplicationListQueriedResult(nextFlag:resultMap['nextFlag'], applicationList: ZIMConverter.oZIMGroupApplicationInfoList(resultMap['applicationList']));
+  }
+
+  @override
+  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String inviterUserID, String groupID, ZIMGroupInviteApplicationRejectConfig config) async{
+    Map resultMap = await channel.invokeMethod('rejectGroupInviteApplication',{
+      'handle':handle,
+      'groupID': groupID,
+      'inviterUserID': inviterUserID,
+      'config': ZIMConverter.mZIMGroupInviteApplicationRejectConfig(config)
+    });
+    return ZIMGroupInviteApplicationRejectedResult(groupID:resultMap['groupID'], inviterUserID: resultMap['inviterUserID']);
+  }
+
+  @override
+  Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(String userID, String groupID, ZIMGroupJoinApplicationRejectConfig config) async{
+    Map resultMap = await channel.invokeMethod('rejectGroupJoinApplication',{
+      'handle':handle,
+      'userID': userID,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupJoinApplicationRejectConfig(config)
+    });
+    return ZIMGroupJoinApplicationRejectedResult(groupID:resultMap['groupID'], userID: resultMap['userID']);
+  }
+
+  @override
+  Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(List<String> userIDs, String groupID, ZIMGroupInviteApplicationSendConfig config) async{
+    Map resultMap = await channel.invokeMethod('sendGroupInviteApplications',{
+      'handle':handle,
+      'userIDs': userIDs,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupInviteApplicationSendConfig(config)
+    });
+    return ZIMGroupInviteApplicationsSentResult(groupID:resultMap['groupID'], errorUserList: ZIMConverter.oZIMErrorUserInfoList(resultMap['errorUserList']));
+  }
+
+  @override
+  Future<ZIMGroupJoinApplicationSentResult> sendGroupJoinApplication(String groupID, ZIMGroupJoinApplicationSendConfig config) async{
+    Map resultMap = await channel.invokeMethod('sendGroupJoinApplication',{
+      'handle':handle,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupJoinApplicationSendConfig(config)
+    });
+    return ZIMGroupJoinApplicationSentResult(groupID:resultMap['groupID']);
   }
 
 

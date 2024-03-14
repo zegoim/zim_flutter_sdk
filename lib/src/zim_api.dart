@@ -1187,6 +1187,36 @@ abstract class ZIM {
   Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
       String groupNotice, String groupID);
 
+  Future<ZIMGroupJoinModeUpdatedResult> updateGroupJoinMode(
+      ZIMGroupJoinMode mode, String groupID);
+
+  Future<ZIMGroupInviteModeUpdatedResult> updateGroupInviteMode(
+      ZIMGroupInviteMode mode, String groupID);
+
+  Future<ZIMGroupBeInviteModeUpdatedResult> updateGroupBeInviteMode(
+      ZIMGroupBeInviteMode mode, String groupID);
+
+  Future<ZIMGroupJoinApplicationSentResult> sendGroupJoinApplication(
+   String groupID, ZIMGroupJoinApplicationSendConfig config);
+
+   Future<ZIMGroupJoinApplicationAcceptedResult> acceptGroupJoinApplication(String userID,
+   String groupID, ZIMGroupJoinApplicationAcceptConfig config);
+
+  Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(String userID,
+      String groupID, ZIMGroupJoinApplicationRejectConfig config);
+
+  Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(List<String> userIDs,
+  String groupID, ZIMGroupInviteApplicationSendConfig config);
+
+  Future<ZIMGroupInviteApplicationAcceptedResult> acceptGroupInviteApplication(String inviterUserID,
+  String groupID, ZIMGroupInviteApplicationAcceptConfig config);
+
+  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String inviterUserID,
+  String groupID, ZIMGroupInviteApplicationRejectConfig config);
+
+  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(ZIMGroupApplicationListQueryConfig config);
+
+
   Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config);
 
   Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs,String groupID,ZIMGroupMemberMuteConfig config);
