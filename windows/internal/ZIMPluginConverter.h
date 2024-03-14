@@ -274,6 +274,10 @@ public:
     static ZIMGroupJoinApplicationSendConfig cnvZIMGroupJoinApplicationSendConfigToObject(FTMap configMap);
     static ZIMGroupInviteApplicationSendConfig cnvZIMGroupInviteApplicationSendConfigToObject(FTMap configMap);
     static ZIMGroupMemberMuteConfig cnvZIMGroupMemberMuteConfigToObject(FTMap configMap);
+    static ZIMGroupInviteApplicationAcceptConfig cnvZIMGroupInviteApplicationAcceptConfigToObject(FTMap configMap);
+    static ZIMGroupInviteApplicationRejectConfig cnvZIMGroupInviteApplicationRejectConfigToObject(FTMap configMap);
+    static ZIMGroupApplicationListQueryConfig cnvZIMGroupApplicationListQueryConfigToObject(FTMap configMap);
+    static ZIMGroupMemberMutedListQueryConfig cnvZIMGroupMemberMutedListQueryConfigToObject(FTMap configMap);
     static ZIMGroupMemberMutedListQueryConfig cnvZIMGroupMemberMutedListQueryConfigToBbject(FTMap configMap);
 	static ZIMFileCacheClearConfig cnvZIMFileCacheClearConfigToObject(FTMap configMap);
 	static ZIMFileCacheQueryConfig cnvZIMFileCacheQueryConfigToObject(FTMap configMap);
