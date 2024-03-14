@@ -300,6 +300,10 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().leaveRoom(argument, std::move(result));
         return;
     }
+    else if (method_call.method_name() == "leaveAllRoom") {
+        ZIMPluginMethodHandler::getInstance().leaveAllRoom(argument, std::move(result));
+        return;
+    }
     else if (method_call.method_name() == "queryRoomMemberList") {
         ZIMPluginMethodHandler::getInstance().queryRoomMemberList(argument, std::move(result));
         return;
