@@ -1410,7 +1410,7 @@ ZIMGroupInviteApplicationRejectConfig ZIMPluginConverter::cnvZIMGroupInviteAppli
 
 ZIMGroupApplicationListQueryConfig ZIMPluginConverter::cnvZIMGroupApplicationListQueryConfigToObject(FTMap configMap){
 	ZIMGroupApplicationListQueryConfig config;
-	config.nextFlag = (unsigned long long)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("nextFlag")]);
+	config.nextFlag = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("nextFlag")]);
 	config.count = (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
 	return config;
 }
