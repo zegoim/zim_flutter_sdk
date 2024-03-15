@@ -6,127 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import im.zego.zim.entity.ZIMAppConfig;
-import im.zego.zim.entity.ZIMLoginConfig;
-import im.zego.zim.entity.ZIMAudioMessage;
-import im.zego.zim.entity.ZIMBarrageMessage;
-import im.zego.zim.entity.ZIMBlacklistQueryConfig;
-import im.zego.zim.entity.ZIMCallAcceptConfig;
-import im.zego.zim.entity.ZIMCallCancelConfig;
-import im.zego.zim.entity.ZIMCallEndedSentInfo;
-import im.zego.zim.entity.ZIMCallInvitationAcceptedInfo;
-import im.zego.zim.entity.ZIMCallInvitationCancelledInfo;
-import im.zego.zim.entity.ZIMCallInvitationCreatedInfo;
-import im.zego.zim.entity.ZIMCallInvitationEndedInfo;
-import im.zego.zim.entity.ZIMCallInvitationReceivedInfo;
-import im.zego.zim.entity.ZIMCallInvitationRejectedInfo;
-import im.zego.zim.entity.ZIMCallInvitationTimeoutInfo;
-import im.zego.zim.entity.ZIMCallJoinConfig;
-import im.zego.zim.entity.ZIMCallJoinSentInfo;
-import im.zego.zim.entity.ZIMCallQuitSentInfo;
-import im.zego.zim.entity.ZIMCallUserStateChangeInfo;
-import im.zego.zim.entity.ZIMCallInvitationSentInfo;
-import im.zego.zim.entity.ZIMCallingInvitationSentInfo;
-import im.zego.zim.entity.ZIMCallInviteConfig;
-import im.zego.zim.entity.ZIMCallingInviteConfig;
-import im.zego.zim.entity.ZIMCallRejectConfig;
-import im.zego.zim.entity.ZIMCallQuitConfig;
-import im.zego.zim.entity.ZIMCallEndConfig;
-import im.zego.zim.entity.ZIMCallUserInfo;
-import im.zego.zim.entity.ZIMCallInfo;
-import im.zego.zim.entity.ZIMCombineMessage;
-import im.zego.zim.entity.ZIMCommandMessage;
-import im.zego.zim.entity.ZIMConversation;
-import im.zego.zim.entity.ZIMConversationChangeInfo;
-import im.zego.zim.entity.ZIMConversationDeleteConfig;
-import im.zego.zim.entity.ZIMConversationQueryConfig;
-import im.zego.zim.entity.ZIMConversationSearchConfig;
-import im.zego.zim.entity.ZIMConversationSearchInfo;
-import im.zego.zim.entity.ZIMConversationsAllDeletedInfo;
-import im.zego.zim.entity.ZIMCustomMessage;
-import im.zego.zim.entity.ZIMErrorUserInfo;
-import im.zego.zim.entity.ZIMFileMessage;
-import im.zego.zim.entity.ZIMFriendAddConfig;
-import im.zego.zim.entity.ZIMFriendApplicationAcceptConfig;
-import im.zego.zim.entity.ZIMFriendApplicationInfo;
-import im.zego.zim.entity.ZIMFriendApplicationListQueryConfig;
-import im.zego.zim.entity.ZIMFriendApplicationRejectConfig;
-import im.zego.zim.entity.ZIMFriendDeleteConfig;
-import im.zego.zim.entity.ZIMFriendInfo;
-import im.zego.zim.entity.ZIMFriendListQueryConfig;
-import im.zego.zim.entity.ZIMFriendRelationCheckConfig;
-import im.zego.zim.entity.ZIMFriendRelationInfo;
-import im.zego.zim.entity.ZIMGroup;
-import im.zego.zim.entity.ZIMGroupAdvancedConfig;
-import im.zego.zim.entity.ZIMGroupAttributesUpdateInfo;
-import im.zego.zim.entity.ZIMGroupFullInfo;
-import im.zego.zim.entity.ZIMGroupInfo;
-import im.zego.zim.entity.ZIMGroupMemberInfo;
-import im.zego.zim.entity.ZIMGroupMemberQueryConfig;
-import im.zego.zim.entity.ZIMGroupMemberSearchConfig;
-import im.zego.zim.entity.ZIMGroupMessageReceiptMemberQueryConfig;
-import im.zego.zim.entity.ZIMGroupOperatedInfo;
-import im.zego.zim.entity.ZIMGroupSearchConfig;
-import im.zego.zim.entity.ZIMGroupSearchInfo;
-import im.zego.zim.entity.ZIMImageMessage;
-import im.zego.zim.entity.ZIMLogConfig;
-import im.zego.zim.entity.ZIMMediaMessage;
-import im.zego.zim.entity.ZIMMessage;
-import im.zego.zim.entity.ZIMMessageDeleteConfig;
-import im.zego.zim.entity.ZIMMessageDeletedInfo;
-import im.zego.zim.entity.ZIMMessageMentionedInfo;
-import im.zego.zim.entity.ZIMMessageQueryConfig;
-import im.zego.zim.entity.ZIMMessageReaction;
-import im.zego.zim.entity.ZIMMessageReactionUserInfo;
-import im.zego.zim.entity.ZIMMessageReactionUserQueryConfig;
-import im.zego.zim.entity.ZIMMessageReceiptInfo;
-import im.zego.zim.entity.ZIMMessageRevokeConfig;
-import im.zego.zim.entity.ZIMMessageSearchConfig;
-import im.zego.zim.entity.ZIMMessageSendConfig;
-import im.zego.zim.entity.ZIMMessageSentStatusChangeInfo;
-import im.zego.zim.entity.ZIMPushConfig;
-import im.zego.zim.entity.ZIMRevokeMessage;
-import im.zego.zim.entity.ZIMRoomAdvancedConfig;
-import im.zego.zim.entity.ZIMRoomAttributesBatchOperationConfig;
-import im.zego.zim.entity.ZIMRoomAttributesDeleteConfig;
-import im.zego.zim.entity.ZIMRoomAttributesSetConfig;
-import im.zego.zim.entity.ZIMRoomAttributesUpdateInfo;
-import im.zego.zim.entity.ZIMRoomFullInfo;
-import im.zego.zim.entity.ZIMRoomInfo;
-import im.zego.zim.entity.ZIMRoomMemberAttributesInfo;
-import im.zego.zim.entity.ZIMRoomMemberAttributesOperatedInfo;
-import im.zego.zim.entity.ZIMRoomMemberAttributesQueryConfig;
-import im.zego.zim.entity.ZIMRoomMemberAttributesSetConfig;
-import im.zego.zim.entity.ZIMRoomMemberAttributesUpdateInfo;
-import im.zego.zim.entity.ZIMRoomMemberInfo;
-import im.zego.zim.entity.ZIMRoomMemberQueryConfig;
-import im.zego.zim.entity.ZIMRoomOperatedInfo;
-import im.zego.zim.entity.ZIMFriendApplicationSendConfig;
-import im.zego.zim.entity.ZIMSystemMessage;
-import im.zego.zim.entity.ZIMTextMessage;
-import im.zego.zim.entity.ZIMUserFullInfo;
-import im.zego.zim.entity.ZIMUserInfo;
-import im.zego.zim.entity.ZIMUsersInfoQueryConfig;
-import im.zego.zim.entity.ZIMVideoMessage;
-import im.zego.zim.entity.ZIMVoIPConfig;
-import im.zego.zim.enums.ZIMCXHandleType;
-import im.zego.zim.enums.ZIMConversationNotificationStatus;
-import im.zego.zim.enums.ZIMConversationType;
-import im.zego.zim.enums.ZIMCallInvitationMode;
-import im.zego.zim.enums.ZIMFriendApplicationState;
-import im.zego.zim.enums.ZIMFriendApplicationType;
-import im.zego.zim.enums.ZIMFriendDeleteType;
-import im.zego.zim.enums.ZIMFriendRelationCheckType;
-import im.zego.zim.enums.ZIMMessageDirection;
-import im.zego.zim.enums.ZIMMessageOrder;
-import im.zego.zim.enums.ZIMMessagePriority;
-import im.zego.zim.enums.ZIMMessageReceiptStatus;
-import im.zego.zim.enums.ZIMMessageRevokeStatus;
-import im.zego.zim.enums.ZIMMessageSentStatus;
-import im.zego.zim.enums.ZIMMessageType;
-import im.zego.zim.enums.ZIMRevokeType;
-import im.zego.zim.entity.ZIMCallInvitationQueryConfig;
-import im.zego.zim.enums.ZIMUserRelationType;
+import im.zego.zim.entity.*;
+import im.zego.zim.enums.*;
 
 @SuppressWarnings({"unused","deprecation,unchecked,all"})
 public class ZIMPluginConverter {
@@ -245,6 +126,7 @@ public class ZIMPluginConverter {
         messageMap.put("isServerMessage",message.isServerMessage());
         messageMap.put("mentionedUserIDs",message.getMentionedUserIDs());
         messageMap.put("isMentionAll",message.isMentionAll());
+        messageMap.put("cbInnerID",message.getCbInnerID());
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -602,6 +484,11 @@ public class ZIMPluginConverter {
             isServerMessageField.setAccessible(true);
             isServerMessageField.set(message,ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isServerMessage")));
             isServerMessageField.setAccessible(false);
+
+            Field cbInnerIDField = ZIMMessage.class.getDeclaredField("cbInnerID");
+            cbInnerIDField.setAccessible(true);
+            cbInnerIDField.set(message,messageMap.get("cbInnerID"));
+            cbInnerIDField.setAccessible(false);
         }
         catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -691,6 +578,34 @@ public class ZIMPluginConverter {
         config.startTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("startTime"));
         config.endTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("endTime"));
 
+        return config;
+    }
+
+    static public ZIMFileCacheClearConfig oZIMFileCacheClearConfig(HashMap<String,Object> configMap) {
+        ZIMFileCacheClearConfig config = new ZIMFileCacheClearConfig();
+        config.endTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("endTime"));
+        return config;
+    }
+
+    static public ZIMFileCacheQueryConfig oZIMFileCacheQueryConfig(HashMap<String,Object> configMap) {
+        ZIMFileCacheQueryConfig config = new ZIMFileCacheQueryConfig();
+        config.endTime = ZIMPluginCommonTools.safeGetLongValue(configMap.get("endTime"));
+        return config;
+    }
+
+    static public HashMap<String,Object> mZIMFileCacheInfo(ZIMFileCacheInfo fileCacheInfo){
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("totalFileSize",fileCacheInfo.totalFileSize);
+
+        return  infoMap;
+    }
+
+    static public ZIMFriendSearchConfig oZIMFriendSearchConfig(HashMap<String,Object> configMap) {
+        ZIMFriendSearchConfig config = new ZIMFriendSearchConfig();
+        config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
+        config.nextFlag =  ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
+        config.keywords = (ArrayList<String>) configMap.get("keywords");
+        config.isAlsoMatchFriendAlias = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("isAlsoMatchFriendAlias"));
         return config;
     }
 
@@ -1034,12 +949,37 @@ public class ZIMPluginConverter {
         return groupInfoMap;
     }
 
+    static public ZIMGroupMuteInfo oZIMGroupMuteInfo(HashMap<String,Object> infoMap){
+        ZIMGroupMuteInfo muteInfo = new ZIMGroupMuteInfo();
+
+        muteInfo.mode = ZIMGroupMuteMode.getZIMGroupMuteMode(ZIMPluginCommonTools.safeGetIntValue(infoMap.get("mode")));
+        muteInfo.expiredTime = (long) infoMap.get("expiredTime");
+        ArrayList<Integer> roles = new ArrayList<>();
+        for (Integer role : (ArrayList<Integer>) infoMap.get("roles")) {
+            roles.add(role);
+        }
+        muteInfo.roles = roles;
+
+        return muteInfo;
+    }
+
+    static public HashMap<String, Object> mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo) {
+        HashMap<String,Object> muteInfoMap = new HashMap<>();
+        
+        muteInfoMap.put("mode", muteInfo.mode.value());
+        muteInfoMap.put("expiredTime", muteInfo.expiredTime);
+        muteInfoMap.put("roles", muteInfo.roles);
+
+        return muteInfoMap;
+    }
+
     static public HashMap<String,Object> mZIMGroupFullInfo(ZIMGroupFullInfo groupFullInfo){
         HashMap<String,Object> groupFullInfoMap = new HashMap<>();
         groupFullInfoMap.put("groupNotice",groupFullInfo.groupNotice);
         groupFullInfoMap.put("groupAttributes",groupFullInfo.groupAttributes);
         groupFullInfoMap.put("notificationStatus",groupFullInfo.notificationStatus.value());
         groupFullInfoMap.put("baseInfo", mZIMGroupInfo(groupFullInfo.baseInfo));
+        groupFullInfoMap.put("mutedInfo", mZIMGroupMuteInfo(groupFullInfo.mutedInfo));
         return groupFullInfoMap;
     }
 
@@ -1049,7 +989,9 @@ public class ZIMPluginConverter {
         groupMemberInfoMap.put("memberRole",groupMemberInfo.memberRole);
         groupMemberInfoMap.put("userID",groupMemberInfo.userID);
         groupMemberInfoMap.put("userName",groupMemberInfo.userName);
+        groupMemberInfoMap.put("userAvatarUrl",groupMemberInfo.memberAvatarUrl != null?groupMemberInfo.userAvatarUrl:"");
         groupMemberInfoMap.put("memberAvatarUrl",groupMemberInfo.memberAvatarUrl != null?groupMemberInfo.memberAvatarUrl:"");
+        groupMemberInfoMap.put("muteExpiredTime",groupMemberInfo.muteExpiredTime);
         return groupMemberInfoMap;
     }
 
@@ -1076,6 +1018,27 @@ public class ZIMPluginConverter {
             config.groupAttributes = (HashMap<String, String>) attributesObj;
         }
         config.groupNotice = (String) configMap.get("groupNotice");
+        return config;
+    }
+
+    static public ZIMGroupMuteConfig oZIMGroupMuteConfig(HashMap<String, Object> configMap) {
+        ZIMGroupMuteConfig config = new ZIMGroupMuteConfig();
+        config.mode = ZIMGroupMuteMode.getZIMGroupMuteMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
+        config.duration = (int) configMap.get("duration");
+        config.roles = (ArrayList<Integer>) configMap.get("roles");
+        return config;
+    }
+
+    static public ZIMGroupMemberMuteConfig oZIMGroupMemberMuteConfig(HashMap<String, Object> configMap) {
+        ZIMGroupMemberMuteConfig  config = new ZIMGroupMemberMuteConfig ();
+        config.duration = (int) configMap.get("duration");
+        return config;
+    }
+
+    static public ZIMGroupMemberMutedListQueryConfig oZIMGroupMemberMutedListQueryConfig(HashMap<String,Object> configMap){
+        ZIMGroupMemberMutedListQueryConfig config = new ZIMGroupMemberMutedListQueryConfig();
+        config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
+        config.nextFlag = ZIMPluginCommonTools.safeGetIntValue(configMap.get("nextFlag"));
         return config;
     }
 
@@ -1516,7 +1479,7 @@ public class ZIMPluginConverter {
 
     static public ZIMFriendDeleteConfig oZIMFriendDeleteConfig(HashMap<String, Object> configMap) {
         ZIMFriendDeleteConfig config = new ZIMFriendDeleteConfig();
-        config.type = ZIMFriendDeleteType.getZIMCallState((Integer) configMap.get("type")); // Assuming direct conversion is possible
+        config.type = ZIMFriendDeleteType.getZIMFriendDeleteType((Integer) configMap.get("type")); // Assuming direct conversion is possible
         return config;
     }
 
@@ -1548,7 +1511,7 @@ public class ZIMPluginConverter {
 
     static public ZIMFriendRelationCheckConfig oZIMFriendRelationCheckConfig(HashMap<String, Object> configMap) {
         ZIMFriendRelationCheckConfig config = new ZIMFriendRelationCheckConfig();
-        config.type = ZIMFriendRelationCheckType.getZIMFriendCheckType ((Integer) configMap.get("type")); // Assuming direct conversion is possible
+        config.type = ZIMFriendRelationCheckType.getZIMFriendRelationCheckType ((Integer) configMap.get("type")); // Assuming direct conversion is possible
         return config;
     }
 

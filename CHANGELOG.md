@@ -1,3 +1,113 @@
+## 2.14.1
+### Fix some issue.
+
+## 2.14.0
+### New Features
+
+- **Merge Forwarding**
+  - Support users in forwarding and merging messages after sending or receiving messages. Users can construct a merged message body and pass it to the send message interface for forwarding and merging. Query the detailed contents of merged messages.
+
+  **Related Interfaces:**
+  - `ZIMCombineMessage`
+  - `sendMessage`
+  - `queryCombineMessageDetail`
+
+- **Mention in Messages**
+  - Allow users to mention specific users (even if not in the current conversation) or mention all members in a conversation when sending messages.
+
+  **Related Interfaces:**
+  - `ZIMMessage > mentionedUserIDs`
+  - `ZIMMessage > isMentionAll`
+
+- **Delete Messages**
+  - Enable users to delete all messages in a conversation at once.
+
+  **Related Interface:**
+  - `deleteAllConversationMessages`
+
+- **Save Conversation Draft**
+  - ZIM supports saving conversation drafts locally even after exiting individual and group chat sessions for later editing.
+
+  **Related Interface:**
+  - `setConversationDraft`
+
+- **Individual Chat Mute**
+  - In addition to "Group Chat Mute," now support muting individual chat sessions. No notification will be pushed when new messages are received in individual chat sessions.
+
+  **Related Interface:**
+  - `setConversationNotificationStatus`
+
+- **Speech Prohibition**
+  - Support group owners in implementing group muting and muting specific group members. Group muting includes muting all members, regular members, and members with specific roles.
+
+  **Related Interfaces:**
+  - `muteGroup`
+  - `muteGroupMembers`
+
+- **Friend Management**
+  - Users can directly add and delete friends, view friend lists, send friend requests, accept or reject friend requests, view friend request lists, check other users' friend relationships, query or modify friend information, and search for friends.
+
+  **Related Interfaces:**
+  - `addFriend`
+  - `deleteFriends`
+  - `sendFriendApplication`
+  - `acceptFriendApplication`
+  - `rejectFriendApplication`
+  - `checkFriendsRelation`
+  - `queryFriendList`
+  - `queryFriendApplicationList`
+  - `updateFriendAlias`
+  - `updateFriendAttributes`
+  - `queryFriendsInfo`
+  - `searchLocalFriends`
+
+- **Set Security Audit Sensitive Words**
+  - With security audit enabled, support developers in adding additional sensitive words. When users send messages containing sensitive words, the message is audited, and the content is replaced or intercepted.
+
+- **Server-Side Conversation Mute**
+  - Support setting server-side mute status for group chat and individual chat sessions.
+
+  **Related Interface:**
+  - `setConversationMessageMute`
+
+- **Server-Side Pin Conversations**
+  - Support setting the pinned status of conversations on the server.
+
+  **Related Interface:**
+  - `pinConversation`
+
+- **Server-Side Modify Group Information**
+  - Support modifying the avatar, name, and announcement of a pinned group on the server.
+
+- **Server-Side Friend Management**
+  - Support adding and deleting friends, querying friend lists, checking friend relationships, updating friend remarks, and updating friend attributes on the server.
+
+  **Related Interfaces:**
+  - `batchAddFriends`
+  - `batchSendFriendApplication`
+  - `batchDeleteFriends`
+  - `queryFriendList`
+  - `checkFriendsRelation`
+  - `updateFriendAlias`
+  - `updateFriendAttributes`
+
+- **Server-Side Blacklist Management**
+  - Support batch blocking, unblocking, querying, and checking blacklist relationships on the server.
+
+  **Related Interfaces:**
+  - `batchBlockUsers`
+  - `batchUnblockUsers`
+  - `queryBlacklist`
+  - `checkBlacklistRelation`
+
+- **Help Translate the Above Chinese Release Notes into Markdown**
+
+---
+
+### Recommendations for Users
+
+Users who have upgraded to version 2.13.0 are strongly recommended to update to version 2.13.1 to address the aforementioned issues and ensure optimal performance and stability.
+
 ## 2.13.1
 ### Bug Fixes
 Avatar Update Issue: Fixed an issue where updating user avatars was not functioning properly. Users can now update their avatars without encountering any errors.

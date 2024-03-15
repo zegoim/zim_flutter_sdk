@@ -1,5 +1,5 @@
 group 'im.zego.zim_flutter'
-version '2.13.1'
+version '2.14.1'
 
 buildscript {
     repositories {
@@ -41,5 +41,5 @@ android {
 }
 dependencies {
     // for other module visit
-    api 'im.zego:zim:2.13.1'
+    api 'im.zego:zim:2.14.1'
 }

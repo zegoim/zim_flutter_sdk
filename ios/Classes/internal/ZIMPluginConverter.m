@@ -294,7 +294,7 @@
     }
     [msg safeSetValue:[messageDic safeObjectForKey:@"mentionedUserIDs"]  forKey:@"mentionedUserIDs"];
     [msg safeSetValue:[messageDic safeObjectForKey:@"isMentionAll"]  forKey:@"isMentionAll"];
-    
+    [msg safeSetValue:[messageDic safeObjectForKey:@"isServerMessage"]  forKey:@"isServerMessage"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"type"]  forKey:@"type"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"messageID"]  forKey:@"messageID"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"localMessageID"]  forKey:@"localMessageID"];
@@ -311,6 +311,7 @@
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"extendedData"]  forKey:@"extendedData"];
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"localExtendedData"]  forKey:@"localExtendedData"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isBroadcastMessage"] forKey:@"isBroadcastMessage"];
+    [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"cbInnerID"]  forKey:@"cbInnerID"];
     if([msg isKindOfClass:[ZIMMediaMessage class]]){
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileLocalPath"]  forKey:@"fileLocalPath"];
         [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"fileDownloadUrl"] forKey:@"fileDownloadUrl"];
@@ -349,8 +350,10 @@
     [messageDic safeSetObject:[NSNumber numberWithBool:message.isBroadcastMessage] forKey:@"isBroadcastMessage"];
     [messageDic safeSetObject:[ZIMPluginConverter mZIMMessageReactionList:message.reactions] forKey:@"reactions"];
     [messageDic safeSetObject:[NSNumber numberWithBool:message.isMentionAll] forKey:@"isMentionAll"];
+    [messageDic safeSetObject:[NSNumber numberWithBool:message.isServerMessage] forKey:@"isServerMessage"];
     [messageDic safeSetObject:message.mentionedUserIDs forKey:@"mentionedUserIDs"];
-    
+    [messageDic safeSetObject:message.cbInnerID  forKey:@"cbInnerID"];
+
     if([message isKindOfClass:[ZIMMediaMessage class]]){
         ZIMMediaMessage *mediaMsg = (ZIMMediaMessage *)message;
         [messageDic safeSetObject:mediaMsg.fileLocalPath forKey:@"fileLocalPath"];
@@ -787,6 +790,37 @@
     return groupInfoDic;
 }
 
++(nullable NSDictionary *)mZIMGroupMuteInfo:(nullable ZIMGroupMuteInfo *)muteInfo {
+    if(muteInfo == nil || muteInfo == NULL || [muteInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+
+    NSMutableDictionary *muteInfoMap = [[NSMutableDictionary alloc] init];
+    [muteInfoMap safeSetObject:[NSNumber numberWithInt:(int)muteInfo.mode] forKey:@"mode"];
+    [muteInfoMap safeSetObject:[NSNumber numberWithLongLong:muteInfo.expiredTime] forKey:@"expiredTime"];
+    [muteInfoMap safeSetObject:muteInfo.roles forKey:@"roles"];
+    
+    return muteInfoMap;
+}
+
++(nullable ZIMGroupMuteInfo *)oZIMGroupMuteInfo:(nullable NSDictionary *)muteInfoDic {
+    if(muteInfoDic == nil || muteInfoDic == NULL || [muteInfoDic isEqual:[NSNull null]]){
+        return nil;
+    }
+
+    ZIMGroupMuteInfo *muteInfo = [[ZIMGroupMuteInfo alloc] init];
+
+    muteInfo.mode = ((NSNumber *)[muteInfoDic objectForKey:@"mode"]).intValue;
+    muteInfo.expiredTime = [muteInfoDic[@"expiredTime"] longValue];
+    NSMutableArray *roles = [[NSMutableArray alloc] init];
+    for (NSNumber *role in muteInfoDic[@"roles"]) {
+        [roles addObject:role];
+    }
+    muteInfo.roles = roles;
+    
+    return muteInfo;
+}
+
 +(nullable NSDictionary *)mZIMGroupMemberInfo:(nullable ZIMGroupMemberInfo *)memberInfo{
     if(memberInfo == nil || memberInfo == NULL || [memberInfo isEqual:[NSNull null]]){
         return nil;
@@ -797,6 +831,8 @@
     [memberInfoDic safeSetObject:memberInfo.userID forKey:@"userID"];
     [memberInfoDic safeSetObject:memberInfo.userName forKey:@"userName"];
     [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl ? memberInfo.memberAvatarUrl : @"" forKey:@"memberAvatarUrl"];
+    [memberInfoDic safeSetObject:memberInfo.userAvatarUrl ? memberInfo.userAvatarUrl : @"" forKey:@"userAvatarUrl"];
+    [memberInfoDic safeSetObject:[NSNumber numberWithLongLong:memberInfo.muteExpiredTime] forKey:@"muteExpiredTime"];
     return memberInfoDic;
 }
 
@@ -895,10 +931,12 @@
     }
     NSMutableDictionary *groupFullInfoDic = [[NSMutableDictionary alloc] init];
     NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupInfo:groupFullInfo.baseInfo];
+    NSDictionary *groupMuteInfoDic = [ZIMPluginConverter mZIMGroupMuteInfo:groupFullInfo.mutedInfo];
     [groupFullInfoDic safeSetObject:groupInfoDic forKey:@"baseInfo"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupNotice forKey:@"groupNotice"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupAttributes forKey:@"groupAttributes"];
     [groupFullInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupFullInfo.notificationStatus] forKey:@"notificationStatus"];
+    [groupFullInfoDic safeSetObject:groupMuteInfoDic forKey:@"mutedInfo"];
     return groupFullInfoDic;
 }
 
@@ -919,6 +957,66 @@
     ZIMGroupAdvancedConfig *config = [[ZIMGroupAdvancedConfig alloc] init];
     config.groupAttributes = [configDic safeObjectForKey:@"groupAttributes"];
     config.groupNotice = [configDic safeObjectForKey:@"groupNotice"];
+    return config;
+}
+
++(nullable NSDictionary *)mZIMGroupMuteConfig:(nullable ZIMGroupMuteConfig *)config {
+    if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
+    [configDic safeSetObject:[NSNumber numberWithInt:(int)config.mode] forKey:@"mode"];
+    [configDic safeSetObject:[NSNumber numberWithInt:config.duration] forKey:@"duration"];
+    [configDic safeSetObject:config.roles forKey:@"roles"];
+    return configDic;
+}
+
++(nullable ZIMGroupMuteConfig *)oZIMGroupMuteConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupMuteConfig *config = [[ZIMGroupMuteConfig alloc] init];
+    config.mode = ((NSNumber *)[configDic objectForKey:@"mode"]).intValue;
+    config.duration = ((NSNumber *)[configDic objectForKey:@"duration"]).intValue;
+    config.roles = [configDic safeObjectForKey:@"roles"];
+    return config;
+}
+
++(nullable NSDictionary *)mZIMGroupMemberMuteConfig:(nullable ZIMGroupMemberMuteConfig *)config {
+    if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
+    [configDic safeSetObject:[NSNumber numberWithInt:config.duration] forKey:@"duration"];
+    return configDic;
+}
+
++(nullable ZIMGroupMemberMuteConfig *)oZIMGroupMemberMuteConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupMemberMuteConfig *config = [[ZIMGroupMemberMuteConfig alloc] init];
+    config.duration = ((NSNumber *)[configDic objectForKey:@"duration"]).intValue;
+    return config;
+}
+
++(nullable NSDictionary *)mZIMGroupMemberMutedListQueryConfig:(nullable ZIMGroupMemberMutedListQueryConfig *)config{
+    if(config == nil || config == NULL || [config isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *configDic = [[NSMutableDictionary alloc] init];
+    [configDic safeSetObject:[NSNumber numberWithUnsignedLongLong:config.nextFlag] forKey:@"nextFlag"];
+    [configDic safeSetObject:[NSNumber numberWithUnsignedInt:config.count] forKey:@"count"];
+    return configDic;
+}
+
++(nullable ZIMGroupMemberMutedListQueryConfig *)oZIMGroupMemberMutedListQueryConfig:(nullable NSDictionary *)configDic {
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupMemberMutedListQueryConfig *config = [[ZIMGroupMemberMutedListQueryConfig alloc] init];
+    config.nextFlag = ((NSNumber *)[configDic safeObjectForKey:@"nextFlag"]).unsignedLongLongValue;
+    config.count = ((NSNumber *)[configDic safeObjectForKey:@"count"]).unsignedIntValue;
     return config;
 }
 
@@ -1570,5 +1668,45 @@
     return config;
 }
 
++(nullable ZIMFileCacheClearConfig *)oZIMFileCacheClearConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFileCacheClearConfig *config = [[ZIMFileCacheClearConfig alloc] init];
+    config.endTime = [[configDic safeObjectForKey:@"endTime"] longLongValue];
+    return config;
+}
+
++(nullable ZIMFileCacheQueryConfig *)oZIMFileCacheQueryConfig:(nullable NSDictionary *)configDic{
+    if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFileCacheQueryConfig *config = [[ZIMFileCacheQueryConfig alloc] init];
+    config.endTime = [[configDic safeObjectForKey:@"endTime"] longLongValue];
+    return config;
+}
+
++(nullable NSDictionary *)mZIMFileCacheInfo:(nullable ZIMFileCacheInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc] init];
+    [infoDic safeSetObject:[NSNumber numberWithLongLong:info.totalFileSize] forKey:@"totalFileSize"];
+    
+    return infoDic;
+}
+
++(nullable ZIMFriendSearchConfig *)oZIMFriendSearchConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMFriendSearchConfig *config = [[ZIMFriendSearchConfig alloc] init];
+    config.nextFlag = [[configMap safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    config.count = [[configMap safeObjectForKey:@"count"] unsignedIntValue];
+    config.keywords = [configMap safeObjectForKey:@"keywords"];
+    config.isAlsoMatchFriendAlias = [[configMap objectForKey:@"isAlsoMatchFriendAlias"] boolValue];
+    return config;
+
+}
 
 @end

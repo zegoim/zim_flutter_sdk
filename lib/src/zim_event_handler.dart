@@ -49,11 +49,11 @@ class ZIMEventHandler {
       onConversationChanged;
 
   /// Available since: 2.12.0 and above.
-  /// 
+  ///
   /// Description: When multiple login ends delete all sessions, the local end triggers the callback to notify the local end that all sessions are deleted.
-  /// 
+  ///
   /// When to call /Trigger: When another end clears all unread sessions, the local end triggers a notification.
-  /// 
+  ///
   /// Related APIs: Triggered by [deleteAllConversations].
   static void Function(
       ZIM zim, ZIMConversationsAllDeletedInfo info)?
@@ -375,6 +375,23 @@ class ZIMEventHandler {
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupMemberInfoUpdated;
 
+
+  static void Function(
+      ZIM zim,
+      ZIMGroupVerifyInfo verifyInfo,
+      ZIMGroupOperatedInfo operatedInfo,
+      String groupID)? onGroupVerifyInfoUpdated;
+
+
+  static void Function(
+      ZIM zim,
+      List<ZIMGroupApplicationInfo> applicationList,
+      ZIMGroupApplicationListChangeAction action)? onGroupApplicationListChanged;
+
+  static void Function(
+      ZIM zim,
+      List<ZIMGroupApplicationInfo> applicationList)? onGroupApplicationUpdated;
+
 /* Invite */
 
   /// Supported versions: 2.0.0 and above.
@@ -535,16 +552,58 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.addMessageReaction]、[ZIM.deleteMessageReaction]
   static void Function(ZIM zim, List<ZIMMessageReaction> infos)?
       onMessageReactionsChanged;
+  ///
+  /// Supported versions: 2.13.0 and above.
+  ///
+  /// Detail description: his method will be called back when changes occur in the blacklist.
+  ///
+  /// When to call: After creating a ZIM instance through [create].
+  ///
+  /// Related APIs: [addUsersToBlacklist].
+  static void Function(ZIM zim, List<ZIMUserInfo> userList, ZIMBlacklistChangeAction action)? onBlacklistChanged;
+  ///
+  /// Description: Callback notification for changes in group mute information.
+  ///
+  /// Use cases: To know the details of changes when group mute information changes.
+  ///
+  /// When to trigger: When group mute information changes.
+  ///
+  /// Related APIs: [muteGroup], Group Mute.
+  static void Function(ZIM zim, ZIMGroupMuteInfo groupMuteInfo, ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupMutedInfoUpdated;
 
-  static void Function(ZIM zim, List<ZIMUserInfo>? userList, ZIMBlacklistChangeAction action)? onBlacklistChanged;
+  /// Supported versions: 2.14.0 and above.
+  ///
+  /// Detail description: This callback will be triggered when there is an update in the friend information.
+  ///
+  /// When to call: After creating a ZIM instance through [create].
+  ///
+  /// Related APIs: [updateFriendAlias] [updateFriendAttributes]
+  static void Function(ZIM zim, List<ZIMFriendInfo> friendInfoList)? onFriendInfoUpdated;
+  ///
+  /// Supported versions: 2.14.0 and above.
+  ///
+  /// Detail description: his method will be called back when changes occur in the friend list.
+  ///
+  /// When to call: After creating a ZIM instance through [create].
+  ///
+  /// Related APIs: [addFriend].
+  static void Function(ZIM zim, List<ZIMFriendInfo> friendInfoList ,ZIMFriendListChangeAction action)? onFriendListChanged;
 
-  static void Function(ZIM zim, ZIMGroupMuteInfo groupMuteInfo, ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupMuteInfoUpdated;
-
-  static void Function(ZIM zim, List<ZIMFriendInfo>? friendInfoList)? onFriendInfoUpdated;
-
-  static void Function(ZIM zim, List<ZIMFriendInfo>? friendInfoList ,ZIMFriendListChangeAction action)? onFriendListChanged;
-
-  static void Function(ZIM zim,List<ZIMFriendApplicationInfo>? friendApplicationInfoList)? onFriendApplicationUpdated;
-
-  static void Function(ZIM zim,List<ZIMFriendApplicationInfo>? friendApplicationInfoList ,ZIMFriendApplicationListChangeAction action)? onFriendApplicationListChanged;
+  /// Supported versions: 2.14.0 and above.
+  ///
+  /// Detail description: The current method will be called when there is an update in the friend request list.
+  ///
+  /// When to call: After creating a ZIM instance through [create].
+  ///
+  /// Related APIs: [acceptFriendApplication] [rejectFriendApplication]
+  static void Function(ZIM zim,List<ZIMFriendApplicationInfo> friendApplicationInfoList)? onFriendApplicationUpdated;
+  ///
+  /// Supported versions: 2.14.0 and above.
+  ///
+  /// Detail description: This method will be called back when the friend application list changes.
+  ///
+  /// When to call: After creating a ZIM instance through [create].
+  ///
+  /// Related APIs: [sendFriendApplication].
+  static void Function(ZIM zim,List<ZIMFriendApplicationInfo> friendApplicationInfoList ,ZIMFriendApplicationListChangeAction action)? onFriendApplicationListChanged;
 }

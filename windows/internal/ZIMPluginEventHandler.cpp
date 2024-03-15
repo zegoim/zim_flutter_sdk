@@ -688,12 +688,12 @@ void ZIMPluginEventHandler::onFriendApplicationListChanged(
 		eventSink_->Success(retMap);
 	}
 }
-void ZIMPluginEventHandler::onGroupMuteInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
+void ZIMPluginEventHandler::onGroupMutedInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
                                         const ZIMGroupOperatedInfo & operatedInfo,
                                         const std::string & groupID) {
     if (eventSink_) {
         FTMap retMap;
-        retMap[FTValue("method")] = FTValue("onGroupMuteInfoUpdated");
+        retMap[FTValue("method")] = FTValue("onGroupMutedInfoUpdated");
         auto handle = this->engineEventMap[zim];
         retMap[FTValue("handle")] = FTValue(handle);
         retMap[FTValue("groupMuteInfo")] = ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(groupMuteInfo);
@@ -703,3 +703,42 @@ void ZIMPluginEventHandler::onGroupMuteInfoUpdated(ZIM * zim, const ZIMGroupMute
     }
 }
 
+void ZIMPluginEventHandler::onGroupVerifyInfoUpdated(ZIM * zim, const ZIMGroupVerifyInfo & verifyInfo,
+                                        const ZIMGroupOperatedInfo & operatedInfo,
+                                        const std::string & groupID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupVerifyInfoUpdated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("verifyInfo")] = ZIMPluginConverter::cnvZIMGroupVerifyInfoToMap(verifyInfo);
+        retMap[FTValue("operatedInfo")] = ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(operatedInfo);
+        retMap[FTValue("groupID")] = FTValue(groupID);
+        eventSink_->Success(retMap);
+    }
+}
+
+
+void ZIMPluginEventHandler::onGroupApplicationListChanged(ZIM * zim, const std::vector<ZIMGroupApplicationInfo> & applicationList, ZIMGroupApplicationListChangeAction action) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupApplicationListChanged");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("applicationList")] = ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(applicationList);
+        retMap[FTValue("action")] = FTValue((int32_t)action);
+        eventSink_->Success(retMap);
+    }
+}
+
+
+void ZIMPluginEventHandler::onGroupApplicationUpdated(ZIM * zim, const std::vector<ZIMGroupApplicationInfo> & applicationList) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupApplicationUpdated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("applicationList")] = ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(applicationList);
+        eventSink_->Success(retMap);
+    }
+}

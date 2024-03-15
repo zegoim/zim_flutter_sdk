@@ -293,6 +293,26 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           progress(message, currentFileSize, totalFileSize);
         }
         break;
+      case 'messageExportingProgress':
+        int? progressID = map['progressID'];
+        int exportedMessageCount = map['exportedMessageCount'];
+        int totalMessageCount = map['totalMessageCount'];
+        ZIMMessageExportingProgress? progress =
+        ZIMCommonData.messageExportingProgressMap[progressID ?? 0];
+        if (progress != null) {
+          progress(exportedMessageCount, totalMessageCount);
+        }
+        break;
+      case 'messageImportingProgress':
+        int? progressID = map['progressID'];
+        int importedMessageCount = map['importedMessageCount'];
+        int totalMessageCount = map['totalMessageCount'];
+        ZIMMessageImportingProgress? progress =
+        ZIMCommonData.messageImportingProgressMap[progressID ?? 0];
+        if (progress != null) {
+          progress(importedMessageCount, totalMessageCount);
+        }
+        break;
       case 'uploadMediaProgress':
         int? progressID = map['progressID'];
         ZIMMessage message =
@@ -350,8 +370,6 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onCallUserStateChanged':
         if (ZIMEventHandler.onCallUserStateChanged == null) return;
-        ZIMCallUserStateChangeInfo userStateChangedInfo =
-            ZIMConverter.oZIMCallUserStateChangedInfo(map['info']);
         String callID = map['callID'];
         ZIMEventHandler.onCallUserStateChanged!(zim,
             ZIMConverter.oZIMCallUserStateChangedInfo(map['info']), callID);
@@ -363,24 +381,24 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         break;
       case 'onFriendInfoUpdated':
         if (ZIMEventHandler.onFriendInfoUpdated == null) return;
-        List<ZIMFriendInfo>? friendInfoList =  ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
+        List<ZIMFriendInfo> friendInfoList =  ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
         ZIMEventHandler.onFriendInfoUpdated!(zim, friendInfoList);
         break;
       case 'onFriendListChanged':
         if (ZIMEventHandler.onFriendListChanged == null) return;
         ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[map['action']]!;
-        List<ZIMFriendInfo>? friendInfoList = ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
+        List<ZIMFriendInfo> friendInfoList = ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
         ZIMEventHandler.onFriendListChanged!(zim, friendInfoList ,action);
         break;
 
       case 'onFriendApplicationUpdated':
         if (ZIMEventHandler.onFriendApplicationUpdated == null) return;
-        List<ZIMFriendApplicationInfo>? friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
+        List<ZIMFriendApplicationInfo> friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
         ZIMEventHandler.onFriendApplicationUpdated!(zim, friendApplicationInfoList);
         break;
       case 'onFriendApplicationListChanged':
         if (ZIMEventHandler.onFriendApplicationListChanged == null) return;
-        List<ZIMFriendApplicationInfo>? friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
+        List<ZIMFriendApplicationInfo> friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
         ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[map['action']]!;
         ZIMEventHandler.onFriendApplicationListChanged!(zim,friendApplicationInfoList ,action);
         break;
@@ -388,16 +406,40 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         if (ZIMEventHandler.onBlacklistChanged == null) return;
         ZIMBlacklistChangeAction action =
             ZIMBlacklistChangeActionExtension.mapValue[map['action']]!;
-        List<ZIMUserInfo>? userList =
+        List<ZIMUserInfo> userList =
             ZIMConverter.oZIMUserInfoList(map['userList']);
         ZIMEventHandler.onBlacklistChanged!(zim, userList ,action);
         break;
-      case 'onGroupMuteInfoUpdated':
-        if(ZIMEventHandler.onGroupMuteInfoUpdated == null) return;
+      case 'onGroupMutedInfoUpdated':
+        if(ZIMEventHandler.onGroupMutedInfoUpdated == null) return;
         ZIMGroupMuteInfo muteInfo = ZIMConverter.oZIMGroupMuteInfo(map['groupMuteInfo']);
         ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
         String groupID = map['groupID'];
-        ZIMEventHandler.onGroupMuteInfoUpdated!(zim,muteInfo,operatedInfo,groupID);
+        ZIMEventHandler.onGroupMutedInfoUpdated!(zim,muteInfo,operatedInfo,groupID);
+        break;
+      case 'onGroupVerifyInfoUpdated':
+        if(ZIMEventHandler.onGroupVerifyInfoUpdated == null) return;
+        ZIMGroupVerifyInfo verifyInfo = ZIMConverter.oZIMGroupVerifyInfo(map['verifyInfo']);
+        ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
+        String groupID = map['groupID'];
+        ZIMEventHandler.onGroupVerifyInfoUpdated!(zim, verifyInfo, operatedInfo, groupID);
+        break;
+      case 'onGroupApplicationListChanged':
+
+        if(ZIMEventHandler.onGroupApplicationListChanged == null) return;
+        List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+        ZIMGroupApplicationListChangeAction action = ZIMGroupApplicationListChangeActionExtension.mapValue[map['action']]!;
+        ZIMEventHandler.onGroupApplicationListChanged!(zim, applicationList, action);
+        break;
+      case 'onGroupApplicationUpdated':
+        try{
+          if(ZIMEventHandler.onGroupApplicationUpdated == null) return;
+          List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+          ZIMEventHandler.onGroupApplicationUpdated!(zim, applicationList);
+        } catch (error,e) {
+          ZIMError zim_error = ZIMError(code: -1, message: error.toString()+e.toString());
+          ZIMEventHandler.onError!(zim,zim_error);
+        };
         break;
       case 'onUserRuleUpdated':
         if(ZIMEventHandler.onUserRuleUpdated == null) return;
@@ -409,3 +451,4 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
     }
   }
 }
+

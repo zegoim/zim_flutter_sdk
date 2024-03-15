@@ -32,6 +32,14 @@ class ZIMErrorCode {
   static const int messageModuleTargetDoseNotExist = 6000204;
   static const int messageModuleAuditRejected = 6000221;
   static const int messageModuleAuditFailed = 6000222;
+
+  static const int messageModuleCacheFileOpenFailed = 6000240;
+  static const int messageModuleCacheFileExportOrImportIsInProgressCurrently = 6000241;
+  static const int messageModuleCacheFileOnlyCanImportCacheOfOneself = 6000242;
+  static const int messageModuleCacheFileExportFailed = 6000243;
+  static const int messageModuleCacheFileImportFailed = 6000244;
+  static const int messageModuleCacheFileJsonParseFailed = 6000245;
+
   static const int messageModuleCallError = 6000270;
   static const int messageModuleCancelCallError = 6000271;
   static const int messageModuleCallServerError = 6000272;
@@ -46,6 +54,7 @@ class ZIMErrorCode {
   static const int messageModeCallInviteUserDoesNotExist = 6000281;
   static const int messageModuleMessageReceiptLimit = 6000282;
   static const int messageModuleUserAlreadyInTheCall = 6000283;
+  static const int messageModuleSenderInBlacklist = 6000284;
 
   static const int roomModuleCommonError = 6000301;
   static const int roomModuleServerError = 6000302;
@@ -114,10 +123,27 @@ class ZIMErrorCode {
   static const int conversationModuleCommonError = 6000601;
   static const int conversationModuleServerError = 6000602;
   static const int conversationModuleConversationDoseNotExist = 6000603;
-  static const int conversationModuleConversationPinnedListReachedLimit = 6000604;
-  
+  static const int conversationModuleConversationPinnedListReachedLimit =
+      6000604;
+
   static const int dataBaseModuleOpenDataBaseError = 6000701;
   static const int dataBaseModuleModifyDataBaseError = 6000702;
   static const int dataBaseModuleDeleteDataBaseError = 6000703;
   static const int dataBaseModuleSeleteDataBaseError = 6000704;
+
+  static const int friendModuleFriendApplicationStatusError = 6000802;
+  static const int friendModuleIsAlreadyYourFriend = 6000803;
+  static const int friendModuleAlreadyAddToBlacklist = 6000804;
+  static const int friendModuleCannotAddSelfToBlacklist = 6000805;
+  static const int friendModuleAlreadyDeleteFromBlacklist = 6000806;
+  static const int friendModuleUserNotInBlacklist = 6000807;
+  static const int friendModuleBlacklistListQuantityLimit = 6000808;
+  static const int friendOperationLimitExceeded = 6000809;
+  static const int friendModuleCannotAddSelfToFriendList = 6000810;
+  static const int friendModuleFriendAreUnregistered = 6000811;
+  static const int friendModuleNotYourFriend = 6000812;
+  static const int friendModuleCannotDeleteSelf = 6000813;
+  static const int friendModuleFriendApplicationExpired = 6000814;
+  static const int friendModuleAddBlacklistFail = 6000815;
+  static const int friendModuleDelBlacklistFail = 6000816;
 }
