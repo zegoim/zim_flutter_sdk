@@ -1616,7 +1616,7 @@ abstract class ZIM {
 
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
 
-  Future<ZIMUserOfflinePushRuleInfoUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule);
+  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule);
 
   Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
 }

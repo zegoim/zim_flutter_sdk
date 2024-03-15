@@ -2491,9 +2491,9 @@ class ZIMSelfUserInfo {
   ZIMSelfUserInfo({required this.userRule,required this.userFullInfo});
 }
 
-class ZIMUserOfflinePushRuleInfoUpdatedResult {
+class ZIMUserOfflinePushRuleUpdatedResult {
   ZIMUserOfflinePushRule offlinePushRule;
-  ZIMUserOfflinePushRuleInfoUpdatedResult({required this.offlinePushRule});
+  ZIMUserOfflinePushRuleUpdatedResult({required this.offlinePushRule});
 }
 
 class ZIMSelfUserInfoQueriedResult {

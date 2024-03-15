@@ -2147,8 +2147,8 @@ class ZIMConverter {
     return ZIMSelfUserInfoQueriedResult(selfUserInfo: oZIMSelfUserInfo(map['selfUserInfo']));
   }
 
-  static ZIMUserOfflinePushRuleInfoUpdatedResult oZIMUserOfflinePushRuleInfoUpdatedResult(Map map){
-    return ZIMUserOfflinePushRuleInfoUpdatedResult(offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
+  static ZIMUserOfflinePushRuleUpdatedResult oZIMUserOfflinePushRuleInfoUpdatedResult(Map map){
+    return ZIMUserOfflinePushRuleUpdatedResult(offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
   }
 
 

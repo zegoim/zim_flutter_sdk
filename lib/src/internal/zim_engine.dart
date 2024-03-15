@@ -1290,7 +1290,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMUserOfflinePushRuleInfoUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule) async{
+  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule) async{
     Map resultMap = await channel.invokeMethod('updateUserOfflinePushRule',{
       'handle':handle,
       'offlinePushRule' : ZIMConverter.mZIMUserOfflinePushRule(offlinePushRule),
