@@ -1603,4 +1603,11 @@ public class ZIMPluginConverter {
         return userInfoMap;
     }
 
+    public static Object mZIMGroupVerifyInfo(ZIMGroupVerifyInfo verifyInfo) {
+        HashMap<String, Object> userInfoMap = new HashMap<>();
+        userInfoMap.put("beInviteMode", verifyInfo.beInviteMode.value());
+        userInfoMap.put("joinMode", verifyInfo.joinMode.value());
+        userInfoMap.put("inviteMode", verifyInfo.inviteMode.value());
+        return userInfoMap;
+    }
 }
