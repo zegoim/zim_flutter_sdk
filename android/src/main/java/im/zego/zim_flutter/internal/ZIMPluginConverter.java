@@ -955,6 +955,9 @@ public class ZIMPluginConverter {
         groupFullInfoMap.put("notificationStatus",groupFullInfo.notificationStatus.value());
         groupFullInfoMap.put("baseInfo", mZIMGroupInfo(groupFullInfo.baseInfo));
         groupFullInfoMap.put("mutedInfo", mZIMGroupMuteInfo(groupFullInfo.mutedInfo));
+        groupFullInfoMap.put("createTime", groupFullInfo.createTime);
+        groupFullInfoMap.put("maxMemberCount", groupFullInfo.maxMemberCount);
+        groupFullInfoMap.put("verifyInfo", mZIMGroupVerifyInfo(groupFullInfo.verifyInfo));
         return groupFullInfoMap;
     }
 
@@ -989,6 +992,10 @@ public class ZIMPluginConverter {
     static public ZIMGroupAdvancedConfig oZIMGroupAdvancedConfig(HashMap<String,Object> configMap){
         ZIMGroupAdvancedConfig config = new ZIMGroupAdvancedConfig();
         Object attributesObj = configMap.get("groupAttributes");
+        config.inviteMode = ZIMGroupInviteMode.getZIMGroupInviteMode((int)configMap.get("inviteMode"));
+        config.joinMode = ZIMGroupJoinMode.getZIMGroupJoinMode((int)configMap.get("joinMode"));
+        config.beInviteMode = ZIMGroupBeInviteMode.getZIMGroupBeInviteMode((int)configMap.get("beInviteMode"));
+        config.maxMemberCount = (int)configMap.get("maxMemberCount");
         if(attributesObj instanceof HashMap<?,?>){
             config.groupAttributes = (HashMap<String, String>) attributesObj;
         }
