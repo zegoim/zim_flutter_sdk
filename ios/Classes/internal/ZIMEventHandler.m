@@ -80,6 +80,17 @@ extendedData:(NSDictionary *)extendedData{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim userRuleUpdated:(ZIMUserRule *)userRule{
+    if(_events == nil){
+        return;
+    }
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic setObject:[ZIMPluginConverter mZIMUserRule:userRule] forKey:@"userRule"];
+    [resultDic safeSetObject:[_engineEventMap objectForKey:zim] forKey:@"handle"];
+    [resultDic setObject:@"userRuleUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
 - (void)zim:(ZIM *)zim messageDeleted:(ZIMMessageDeletedInfo *)deletedInfo{
     if(_events == nil){
         return;

@@ -108,11 +108,11 @@
         result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
         return;
     }
-
+    
     
     NSString *userID = [call.arguments objectForKey:@"userID"];
     ZIMLoginConfig *loginConfig = [ZIMPluginConverter oZIMLoginConfig:[call.arguments objectForKey:@"config"]];
-
+    
     [zim loginWithUserID:userID config:loginConfig callback:^(ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             result(nil);
@@ -214,6 +214,8 @@
     }];
 }
 
+
+
 - (void)updateUserExtendedData:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
@@ -227,6 +229,26 @@
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:extendedData forKey:@"extendedData"];
+            result(resultDic);
+        }else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)updateUserOfflinePushRule:(FlutterMethodCall *)call result:(FlutterResult)result{
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMUserOfflinePushRule *offlinePushRule = [ZIMPluginConverter oZIMUserOfflinePushRule:[call.arguments objectForKey:@"offlinePushRule"]];
+    
+    [zim updateUserOfflinePushRule:offlinePushRule callback:^(ZIMUserOfflinePushRule * _Nonnull offlinePushRule, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMUserOfflinePushRule:offlinePushRule] forKey:@"offlinePushRule"];
             result(resultDic);
         }else{
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
@@ -264,6 +286,24 @@
             result(resultDic);
         }
         else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)querySelfUserInfo:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    [zim querySelfUserInfo:^(ZIMSelfUserInfo * _Nonnull selfUserInfo, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic setObject:[ZIMPluginConverter mZIMSelfUserInfo:selfUserInfo] forKey:@"selfUserInfo"];
+            result(resultDic);
+        }else{
             result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
         }
     }];

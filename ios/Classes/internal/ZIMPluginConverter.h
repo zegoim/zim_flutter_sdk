@@ -21,6 +21,14 @@
 
 +(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList;
 
++(nullable NSDictionary *)mZIMUserOfflinePushRule:(nullable ZIMUserOfflinePushRule *)offlinePushRule;
+
++(nullable ZIMUserOfflinePushRule *)oZIMUserOfflinePushRule:(nullable NSDictionary *)ruleDic;
+
++(nullable NSDictionary *)mZIMUserRule:(nullable ZIMUserRule *)userRule;
+
++(nullable NSDictionary *)mZIMSelfUserInfo:(nullable ZIMSelfUserInfo *)selfUserInfo;
+
 +(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList;
 
 +(nullable ZIMConversation *)oZIMConversation:(nullable NSDictionary *)conversationDic;
