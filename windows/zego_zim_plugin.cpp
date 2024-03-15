@@ -615,10 +615,16 @@ void ZegoZimPlugin::HandleMethodCall(
 		ZIMPluginMethodHandler::getInstance().queryGroupApplicationList(argument, std::move(result));
     }
 	else if (method_call.method_name() == "clearLocalFileCache") {
-	ZIMPluginMethodHandler::getInstance().clearLocalFileCache(argument, std::move(result));
+	    ZIMPluginMethodHandler::getInstance().clearLocalFileCache(argument, std::move(result));
 	}
 	else if (method_call.method_name() == "queryLocalFileCache") {
-	ZIMPluginMethodHandler::getInstance().queryLocalFileCache(argument, std::move(result));
+	    ZIMPluginMethodHandler::getInstance().queryLocalFileCache(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "updateUserOfflinePushRule") {
+	    ZIMPluginMethodHandler::getInstance().updateUserOfflinePushRule(argument, std::move(result));
+	}
+	else if (method_call.method_name() == "querySelfUserInfo") {
+	    ZIMPluginMethodHandler::getInstance().querySelfUserInfo(argument, std::move(result));
 	}
     else {
         result->NotImplemented();
