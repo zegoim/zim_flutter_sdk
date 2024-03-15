@@ -1523,4 +1523,84 @@ public class ZIMPluginConverter {
         }
         return config;
     }
+
+
+    public static ZIMGroupJoinApplicationSendConfig oZIMGroupJoinApplicationSendConfig(HashMap<String, Object> configMap) {
+        ZIMGroupJoinApplicationSendConfig config = new ZIMGroupJoinApplicationSendConfig();
+        if (configMap.containsKey("wording")) {
+            config.wording = (String) configMap.get("wording");
+        }
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
+    }
+
+    public static ZIMGroupJoinApplicationAcceptConfig oZIMGroupJoinApplicationAcceptConfig(HashMap<String, Object> configMap) {
+        ZIMGroupJoinApplicationAcceptConfig config = new ZIMGroupJoinApplicationAcceptConfig();
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
+    }
+
+    public static ZIMGroupJoinApplicationRejectConfig oZIMGroupJoinApplicationRejectConfig(HashMap<String, Object> configMap) {
+        ZIMGroupJoinApplicationRejectConfig config = new ZIMGroupJoinApplicationRejectConfig();
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
+    }
+
+    public static ZIMGroupInviteApplicationSendConfig oZIMGroupInviteApplicationSendConfig(HashMap<String, Object> configMap) {
+        ZIMGroupInviteApplicationSendConfig config = new ZIMGroupInviteApplicationSendConfig();
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        if (configMap.containsKey("wording")) {
+            config.wording = (String) configMap.get("wording");
+        }
+        return config;
+    }
+
+    public static ZIMGroupInviteApplicationAcceptConfig oZIMGroupInviteApplicationAcceptConfig(HashMap<String, Object> configMap) {
+        ZIMGroupInviteApplicationAcceptConfig config = new ZIMGroupInviteApplicationAcceptConfig();
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
+    }
+
+    public static ZIMGroupInviteApplicationRejectConfig oZIMGroupInviteApplicationRejectConfig(HashMap<String, Object> configMap) {
+        ZIMGroupInviteApplicationRejectConfig config = new ZIMGroupInviteApplicationRejectConfig();
+        config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig")));
+        return config;
+    }
+
+    public static ZIMGroupApplicationListQueryConfig oZIMGroupApplicationListQueryConfig(HashMap<String, Object> configMap) {
+        ZIMGroupApplicationListQueryConfig config = new ZIMGroupApplicationListQueryConfig();
+        if (configMap.containsKey("nextFlag")) {
+            config.nextFlag = (int) configMap.get("nextFlag");
+        }
+        if (configMap.containsKey("count")) {
+            config.count = (int) configMap.get("count");
+        }
+        return config;
+    }
+
+    public static HashMap<String, Object> mZIMGroupApplicationInfo(ZIMGroupApplicationInfo applicationInfo) {
+        HashMap<String, Object> infoMap = new HashMap<>();
+        infoMap.put("applyUser", mZIMUserInfo(applicationInfo.applyUser));
+        infoMap.put("groupInfo", mZIMGroupInfo(applicationInfo.groupInfo));
+        if("".equals(applicationInfo.operatedUser.userID)) {
+            infoMap.put("operatedUser", mZIMGroupMemberSimpleInfo(applicationInfo.operatedUser));
+        }
+        infoMap.put("wording", applicationInfo.wording);
+        infoMap.put("createTime", applicationInfo.createTime);
+        infoMap.put("updateTime", applicationInfo.updateTime);
+        infoMap.put("type", applicationInfo.type.value());
+        infoMap.put("state", applicationInfo.state.value());
+        return infoMap;
+    }
+
+    private static Object mZIMGroupMemberSimpleInfo(ZIMGroupMemberSimpleInfo operatedUser) {
+        HashMap<String, Object> userInfoMap = new HashMap<>();
+        userInfoMap.put("userID", operatedUser.userID);
+        userInfoMap.put("userName", operatedUser.userName);
+        userInfoMap.put("userAvatarUrl", operatedUser.userAvatarUrl);
+        userInfoMap.put("memberNickName", operatedUser.memberNickName);
+        userInfoMap.put("memberRole", operatedUser.memberRole);
+        return userInfoMap;
+    }
+
 }
