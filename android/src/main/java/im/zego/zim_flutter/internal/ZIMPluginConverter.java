@@ -1589,9 +1589,7 @@ public class ZIMPluginConverter {
         HashMap<String, Object> infoMap = new HashMap<>();
         infoMap.put("applyUser", mZIMUserInfo(applicationInfo.applyUser));
         infoMap.put("groupInfo", mZIMGroupInfo(applicationInfo.groupInfo));
-        if("".equals(applicationInfo.operatedUser.userID)) {
-            infoMap.put("operatedUser", mZIMGroupMemberSimpleInfo(applicationInfo.operatedUser));
-        }
+        infoMap.put("operatedUser", mZIMGroupMemberSimpleInfo(applicationInfo.operatedUser));
         infoMap.put("wording", applicationInfo.wording);
         infoMap.put("createTime", applicationInfo.createTime);
         infoMap.put("updateTime", applicationInfo.updateTime);
@@ -1601,6 +1599,9 @@ public class ZIMPluginConverter {
     }
 
     private static Object mZIMGroupMemberSimpleInfo(ZIMGroupMemberSimpleInfo operatedUser) {
+        if(operatedUser == null){
+            return null;
+        }
         HashMap<String, Object> userInfoMap = new HashMap<>();
         userInfoMap.put("userID", operatedUser.userID);
         userInfoMap.put("userName", operatedUser.userName);
