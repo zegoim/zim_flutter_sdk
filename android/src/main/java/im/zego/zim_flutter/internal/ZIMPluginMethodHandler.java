@@ -2039,7 +2039,7 @@ public class ZIMPluginMethodHandler {
             if (errorInfo.code == ZIMErrorCode.SUCCESS) {
                 HashMap<String,Object> resultMap = new HashMap<>();
                 resultMap.put("groupID", groupID1);
-                resultMap.put("userID1", userID1);
+                resultMap.put("userID", userID1);
                 result.success(resultMap);
             } else {
                 result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
@@ -2062,7 +2062,7 @@ public class ZIMPluginMethodHandler {
             if (errorInfo.code == ZIMErrorCode.SUCCESS) {
                 HashMap<String,Object> resultMap = new HashMap<>();
                 resultMap.put("groupID", groupID1);
-                resultMap.put("userID1", userID1);
+                resultMap.put("userID", userID1);
                 result.success(resultMap);
             } else {
                 result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
