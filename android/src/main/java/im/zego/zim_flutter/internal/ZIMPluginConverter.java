@@ -1606,7 +1606,7 @@ public class ZIMPluginConverter {
         userInfoMap.put("userID", operatedUser.userID);
         userInfoMap.put("userName", operatedUser.userName);
         userInfoMap.put("userAvatarUrl", operatedUser.userAvatarUrl);
-        userInfoMap.put("memberNickName", operatedUser.memberNickName);
+        userInfoMap.put("memberNickname", operatedUser.memberNickName);
         userInfoMap.put("memberRole", operatedUser.memberRole);
         return userInfoMap;
     }
