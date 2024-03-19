@@ -71,6 +71,18 @@
     return userInfoDic;
 }
 
++(nullable NSDictionary *)mZIMGroupMemberSimpleInfo:(nullable ZIMGroupMemberSimpleInfo *)groupMemberSimpleInfo{
+    if(groupMemberSimpleInfo == nil || groupMemberSimpleInfo == NULL || [groupMemberSimpleInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *groupMemberSimpleInfoDic = [[NSMutableDictionary alloc] init];
+    [groupMemberSimpleInfoDic safeSetObject:groupMemberSimpleInfo.memberNickname forKey:@"memberNickname"];
+    [groupMemberSimpleInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupMemberSimpleInfo.memberRole]  forKey:@"memberRole"];
+    return groupMemberSimpleInfoDic;
+}
+
+
+
 +(nullable NSDictionary *)mZIMRoomMemberInfo:(nullable ZIMRoomMemberInfo *)userInfo{
     if(userInfo == nil || userInfo == NULL || [userInfo isEqual:[NSNull null]]){
         return nil;
@@ -788,6 +800,17 @@
     return groupInfoDic;
 }
 
++(nullable NSDictionary *)mZIMGroupVerifyInfo:(nullable ZIMGroupVerifyInfo *)verifyInfo{
+    if(verifyInfo == nil || verifyInfo == NULL || [verifyInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *verifyInfoDic = [[NSMutableDictionary alloc] init];
+    [verifyInfoDic safeSetObject:[NSNumber numberWithInt:(int)verifyInfo.joinMode] forKey:@"joinMode"];
+    [verifyInfoDic safeSetObject:[NSNumber numberWithInt:(int)verifyInfo.inviteMode] forKey:@"inviteMode"];
+    [verifyInfoDic safeSetObject:[NSNumber numberWithInt:(int)verifyInfo.beInviteMode] forKey:@"beInviteMode"];
+    return verifyInfoDic;
+}
+
 +(nullable NSDictionary *)mZIMGroupMuteInfo:(nullable ZIMGroupMuteInfo *)muteInfo {
     if(muteInfo == nil || muteInfo == NULL || [muteInfo isEqual:[NSNull null]]){
         return nil;
@@ -800,6 +823,7 @@
     
     return muteInfoMap;
 }
+
 
 +(nullable ZIMGroupMuteInfo *)oZIMGroupMuteInfo:(nullable NSDictionary *)muteInfoDic {
     if(muteInfoDic == nil || muteInfoDic == NULL || [muteInfoDic isEqual:[NSNull null]]){
@@ -923,6 +947,38 @@
     return basicList;
 }
 
++(nullable NSDictionary *)mZIMGroupApplicationInfo:(nullable ZIMGroupApplicationInfo *)groupApplicationInfo{
+    if(groupApplicationInfo == nil || groupApplicationInfo == NULL || [groupApplicationInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *errorUserInfoDic = [[NSMutableDictionary alloc] init];
+    [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedLongLong:groupApplicationInfo.updateTime] forKey:@"updateTime"];
+    [errorUserInfoDic safeSetObject:groupApplicationInfo.wording forKey:@"wording"];
+    [errorUserInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupInfo:groupApplicationInfo.groupInfo] forKey:@"groupInfo"];
+    
+    [errorUserInfoDic safeSetObject:[ZIMPluginConverter mZIMUserInfo:groupApplicationInfo.applyUser] forKey:@"applyUser"];
+    
+    [errorUserInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupMemberSimpleInfo:groupApplicationInfo.operatedUser] forKey:@"operatedUser"];
+
+    [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedLongLong:groupApplicationInfo.createTime] forKey:@"createTime"];
+    [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:(int)groupApplicationInfo.type] forKey:@"type"];
+    [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:(int)groupApplicationInfo.state] forKey:@"state"];
+    return errorUserInfoDic;
+}
+
++(nullable NSArray *)mZIMGroupApplicationInfoList:(nullable NSArray<ZIMGroupApplicationInfo *> *)groupApplicationInfoList{
+    if(groupApplicationInfoList == nil || groupApplicationInfoList == NULL || [groupApplicationInfoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicList = [[NSMutableArray alloc] init];
+    for (ZIMGroupApplicationInfo *applicationInfo in groupApplicationInfoList) {
+        NSDictionary *applicationInfoDic = [ZIMPluginConverter mZIMGroupApplicationInfo:applicationInfo];
+        [basicList safeAddObject:applicationInfoDic];
+    }
+    return basicList;
+}
+
+
 +(nullable NSDictionary *)mZIMGroupFullInfo:(nullable ZIMGroupFullInfo *)groupFullInfo{
     if(groupFullInfo == nil || groupFullInfo == NULL || [groupFullInfo isEqual:[NSNull null]]){
         return nil;
@@ -935,6 +991,8 @@
     [groupFullInfoDic safeSetObject:groupFullInfo.groupAttributes forKey:@"groupAttributes"];
     [groupFullInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupFullInfo.notificationStatus] forKey:@"notificationStatus"];
     [groupFullInfoDic safeSetObject:groupMuteInfoDic forKey:@"mutedInfo"];
+    [groupFullInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupFullInfo.maxMemberCount] forKey:@"maxMemberCount"];
+    [groupFullInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupVerifyInfo:groupFullInfo.verifyInfo] forKey:@"verifyInfo"];
     return groupFullInfoDic;
 }
 
@@ -955,6 +1013,10 @@
     ZIMGroupAdvancedConfig *config = [[ZIMGroupAdvancedConfig alloc] init];
     config.groupAttributes = [configDic safeObjectForKey:@"groupAttributes"];
     config.groupNotice = [configDic safeObjectForKey:@"groupNotice"];
+    config.maxMemberCount = ((NSNumber *)[configDic objectForKey:@"maxMemberCount"]).intValue;
+    config.joinMode = ((NSNumber *)[configDic objectForKey:@"joinMode"]).intValue;
+    config.inviteMode = ((NSNumber *)[configDic objectForKey:@"inviteMode"]).intValue;
+    config.beInviteMode = ((NSNumber *)[configDic objectForKey:@"beInviteMode"]).intValue;
     return config;
 }
 
@@ -1272,6 +1334,73 @@
     config.extendedData = [configDic safeObjectForKey:@"extendedData"];
     return config;
 }
+
++(nullable ZIMGroupInviteApplicationSendConfig *)oZIMGroupInviteApplicationSendConfig:(nullable NSDictionary *)configMap; {
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupInviteApplicationSendConfig *groupInviteApplicationSendConfig = [[ZIMGroupInviteApplicationSendConfig alloc] init];
+    groupInviteApplicationSendConfig.wording = [configMap safeObjectForKey:@"wording"];
+    groupInviteApplicationSendConfig.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return groupInviteApplicationSendConfig;
+}
+
++(nullable ZIMGroupJoinApplicationSendConfig *)oZIMGroupJoinApplicationSendConfig:(nullable NSDictionary *)configMap {
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupJoinApplicationSendConfig *joinApplicationSendConfig = [[ZIMGroupJoinApplicationSendConfig alloc] init];
+    joinApplicationSendConfig.wording = [configMap safeObjectForKey:@"wording"];
+    joinApplicationSendConfig.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return joinApplicationSendConfig;
+}
+
++(nullable ZIMGroupInviteApplicationAcceptConfig *)oZIMGroupInviteApplicationAcceptConfig:(nullable NSDictionary *)configMap {
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupInviteApplicationAcceptConfig *inviteApplicationAcceptConfig = [[ZIMGroupInviteApplicationAcceptConfig alloc] init];
+    inviteApplicationAcceptConfig.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return inviteApplicationAcceptConfig;
+}
+
++(nullable ZIMGroupJoinApplicationAcceptConfig *)oZIMGroupJoinApplicationAcceptConfig:(nullable NSDictionary *)configMap {
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupJoinApplicationAcceptConfig *joinApplicationAcceptConfig = [[ZIMGroupJoinApplicationAcceptConfig alloc] init];
+    joinApplicationAcceptConfig.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return joinApplicationAcceptConfig;
+}
+
++(nullable ZIMGroupJoinApplicationRejectConfig *)oZIMGroupJoinApplicationRejectConfig:(nullable NSDictionary *)configMap {
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupJoinApplicationRejectConfig *joinApplicationRejectConfig = [[ZIMGroupJoinApplicationRejectConfig alloc] init];
+    joinApplicationRejectConfig.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return joinApplicationRejectConfig;
+}
+
++(nullable ZIMGroupInviteApplicationRejectConfig *)oZIMGroupInviteApplicationRejectConfig:(nullable NSDictionary *)configMap {
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupInviteApplicationRejectConfig *inviteApplicationRejectConfig = [[ZIMGroupInviteApplicationRejectConfig alloc] init];
+    inviteApplicationRejectConfig.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configMap safeObjectForKey:@"pushConfig"]];
+    return inviteApplicationRejectConfig;
+}
+
++(nullable ZIMGroupApplicationListQueryConfig *)oZIMGroupApplicationListQueryConfig:(nullable NSDictionary *)configMap {
+    if(configMap == nil || configMap == NULL || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMGroupApplicationListQueryConfig *queryConfig = [[ZIMGroupApplicationListQueryConfig alloc] init];
+    queryConfig.count = [[configMap safeObjectForKey:@"count"] unsignedIntValue];
+    queryConfig.nextFlag = [[configMap safeObjectForKey:@"nextFlag"] unsignedIntValue];
+    return queryConfig;
+}
+
 
 +(nullable ZIMCallAcceptConfig *)oZIMCallAcceptConfig:(nullable NSDictionary *)configDic{
     if(configDic == nil || configDic == NULL || [configDic isEqual:[NSNull null]]){

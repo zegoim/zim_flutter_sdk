@@ -227,11 +227,17 @@
 
 +(nullable ZIMFriendInfo *)oZIMFriendInfo:(nullable NSDictionary *)infoDic;
 
++(nullable NSDictionary *)mZIMGroupMemberSimpleInfo:(nullable ZIMGroupMemberSimpleInfo *)groupMemberSimpleInfo;
+
 +(nullable ZIMFriendListQueryConfig *)oZIMFriendListQueryConfig:(nullable NSDictionary *)configMap;
 
 +(nullable ZIMFriendRelationCheckConfig *)oZIMFriendRelationCheckConfig:(nullable NSDictionary *)configMap;
 
 +(nullable NSDictionary *)mZIMFriendRelationInfo:(nullable ZIMFriendRelationInfo *)info;
+
++(nullable NSArray *)mZIMGroupApplicationInfoList:(nullable NSArray<ZIMGroupApplicationInfo *> *)groupApplicationInfoList;
+
++(nullable NSDictionary *)mZIMGroupApplicationInfo:(nullable ZIMGroupApplicationInfo *)groupApplicationInfo;
 
 +(nullable NSArray *)mZIMFriendRelationInfoList:(nullable NSArray<ZIMFriendRelationInfo *> *)infoList;
 
@@ -240,5 +246,21 @@
 +(nullable ZIMFriendApplicationSendConfig *)oZIMFriendApplicationSendConfig:(nullable NSDictionary *)configMap;
 
 +(nullable ZIMFriendSearchConfig *)oZIMFriendSearchConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupJoinApplicationSendConfig *)oZIMGroupJoinApplicationSendConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupJoinApplicationAcceptConfig *)oZIMGroupJoinApplicationAcceptConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupJoinApplicationRejectConfig *)oZIMGroupJoinApplicationRejectConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupInviteApplicationSendConfig *)oZIMGroupInviteApplicationSendConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupInviteApplicationAcceptConfig *)oZIMGroupInviteApplicationAcceptConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupInviteApplicationRejectConfig *)oZIMGroupInviteApplicationRejectConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupApplicationListQueryConfig *)oZIMGroupApplicationListQueryConfig:(nullable NSDictionary *)configMap;
+
++(nullable NSDictionary *)mZIMGroupVerifyInfo:(nullable ZIMGroupVerifyInfo *)verifyInfo;
 
 @end

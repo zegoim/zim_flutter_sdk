@@ -1718,6 +1718,223 @@
     }];
 }
 
+
+- (void)updateGroupJoinMode:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    int mode = ((NSNumber *)[call.arguments objectForKey:@"mode"]).intValue;
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    [zim updateGroupJoinMode:mode groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupJoinMode mode, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:@(mode) forKey:@"mode"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)updateGroupInviteMode:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    int mode = ((NSNumber *)[call.arguments objectForKey:@"mode"]).intValue;
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    [zim updateGroupInviteMode:mode groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupInviteMode mode, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:@(mode) forKey:@"mode"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)updateGroupBeInviteMode:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    int mode = ((NSNumber *)[call.arguments objectForKey:@"mode"]).intValue;
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    [zim updateGroupBeInviteMode:mode groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupBeInviteMode mode, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:@(mode) forKey:@"mode"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)sendGroupJoinApplication:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMGroupJoinApplicationSendConfig *config = [ZIMPluginConverter oZIMGroupJoinApplicationSendConfig:[call.arguments objectForKey:@"config"]];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    [zim sendGroupJoinApplicationToGroupID:groupID config:config callback:^(NSString * _Nonnull groupID, ZIMError *errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)acceptGroupJoinApplication:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMGroupJoinApplicationAcceptConfig *config = [ZIMPluginConverter oZIMGroupJoinApplicationAcceptConfig:[call.arguments objectForKey:@"config"]];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    NSString *userID = [call.arguments objectForKey:@"userID"];
+    [zim acceptGroupJoinApplicationFromUserID:userID groupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSString * _Nonnull userID, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:userID forKey:@"userID"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)rejectGroupJoinApplication:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMGroupJoinApplicationRejectConfig *config = [ZIMPluginConverter oZIMGroupJoinApplicationRejectConfig:[call.arguments objectForKey:@"config"]];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    NSString *userID = [call.arguments objectForKey:@"userID"];
+    [zim rejectGroupJoinApplicationFromUserID:userID groupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSString * _Nonnull userID, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:userID forKey:@"userID"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)sendGroupInviteApplications:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMGroupInviteApplicationSendConfig *config = [ZIMPluginConverter oZIMGroupInviteApplicationSendConfig:[call.arguments objectForKey:@"config"]];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    NSArray *userIDs = [call.arguments safeObjectForKey:@"userIDs"];
+    [zim sendGroupInviteApplicationsToUserIDs:userIDs groupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSArray *basicErrorUserList = [ZIMPluginConverter mZIMErrorUserInfoList:errorUserList];
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            [resultDic safeSetObject:basicErrorUserList forKey:@"errorUserList"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)acceptGroupInviteApplication:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMGroupInviteApplicationAcceptConfig *config = [ZIMPluginConverter oZIMGroupInviteApplicationAcceptConfig:[call.arguments objectForKey:@"config"]];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    NSString *inviterUserID = [call.arguments objectForKey:@"inviterUserID"];
+    [zim acceptGroupInviteApplicationFromInviterUserID:inviterUserID groupID:groupID config:config callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, NSString * _Nonnull inviterUserID, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupFullInfo:groupInfo];
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:inviterUserID forKey:@"inviterUserID"];
+            [resultDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)rejectGroupInviteApplication:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMGroupInviteApplicationRejectConfig *config = [ZIMPluginConverter oZIMGroupInviteApplicationRejectConfig:[call.arguments objectForKey:@"config"]];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    NSString *inviterUserID = [call.arguments objectForKey:@"inviterUserID"];
+    [zim rejectGroupInviteApplicationFromInviterUserID:inviterUserID groupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSString * _Nonnull inviterUserID, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:inviterUserID forKey:@"inviterUserID"];
+            [resultDic safeSetObject:groupID forKey:@"groupID"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)queryGroupApplicationList:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMGroupApplicationListQueryConfig *config = [ZIMPluginConverter oZIMGroupApplicationListQueryConfig:[call.arguments objectForKey:@"config"]];
+    [zim queryGroupApplicationListWithConfig:config callback:^(NSArray<ZIMGroupApplicationInfo *> * _Nonnull applicationList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSArray *applicationListDic = [ZIMPluginConverter mZIMGroupApplicationInfoList:applicationList];
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:nextFlag] forKey:@"nextFlag"];
+            [resultDic safeSetObject:applicationListDic forKey:@"applicationList"];
+            result(resultDic);
+        } else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
 - (void)updateGroupNotice:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
