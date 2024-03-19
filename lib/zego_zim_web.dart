@@ -496,13 +496,13 @@ class ZegoZimPlugin {
         case 'callInvitationCreated':
           return callInvitationCreated(_zim, data);
         case 'userRuleUpdated':
-          // return userRuleUpdated(_zim, data);
+          return userRuleUpdated(_zim, data);
         case 'groupVerifyInfoUpdated':
-          // return groupVerifyInfoUpdated(_zim, data);
+          return groupVerifyInfoUpdated(_zim, data);
         case 'groupApplicationListChanged':
-          // return groupApplicationListChanged(_zim, data);
+          return groupApplicationListChanged(_zim, data);
         case 'groupApplicationUpdated':
-          // return groupApplicationUpdated(_zim, data);
+          return groupApplicationUpdated(_zim, data);
       }
     }
   }
@@ -2511,6 +2511,44 @@ class ZegoZimPlugin {
     String callID = data['callID'];
 
     ZIMEventHandler.onCallInvitationCreated!(zim, info, callID);
+  }
+
+  static void userRuleUpdated(ZIMEngine zim, dynamic data) {
+    // if (ZIMEventHandler.onUserRuleUpdated == null) {
+    //   return;
+    // }
+  }
+
+  static void groupVerifyInfoUpdated(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onGroupVerifyInfoUpdated == null) {
+      return;
+    }
+    ZIMGroupVerifyInfo verifyInfo = ZIMConverter.oZIMGroupVerifyInfo(data['verifyInfo']);
+    ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(data['operatedInfo']);
+    String groupID = data['groupID'] ?? '';
+
+    ZIMEventHandler.onGroupVerifyInfoUpdated!(zim, verifyInfo, operatedInfo, groupID);
+  }
+
+  static void groupApplicationListChanged(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onGroupApplicationListChanged == null) {
+      return;
+    }
+
+    List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(data['applicationList'] ?? []);
+    ZIMGroupApplicationListChangeAction action =
+          ZIMGroupApplicationListChangeActionExtension.mapValue[data['action']]!;
+
+    ZIMEventHandler.onGroupApplicationListChanged!(zim, applicationList, action);
+  }
+
+  static void groupApplicationUpdated(ZIMEngine zim, dynamic data) {
+    if (ZIMEventHandler.onGroupApplicationUpdated == null) {
+      return;
+    }
+    List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(data['applicationList'] ?? []);
+
+    ZIMEventHandler.onGroupApplicationUpdated!(zim, applicationList);
   }
 
   static Object mapToJSObj(Map<dynamic, dynamic>? a) {
