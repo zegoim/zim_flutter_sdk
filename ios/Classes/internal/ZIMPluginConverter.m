@@ -992,6 +992,7 @@
     [groupFullInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupFullInfo.notificationStatus] forKey:@"notificationStatus"];
     [groupFullInfoDic safeSetObject:groupMuteInfoDic forKey:@"mutedInfo"];
     [groupFullInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupFullInfo.maxMemberCount] forKey:@"maxMemberCount"];
+    [groupFullInfoDic safeSetObject:[NSNumber numberWithLongLong:(int)groupFullInfo.createTime] forKey:@"createTime"];
     [groupFullInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupVerifyInfo:groupFullInfo.verifyInfo] forKey:@"verifyInfo"];
     return groupFullInfoDic;
 }
