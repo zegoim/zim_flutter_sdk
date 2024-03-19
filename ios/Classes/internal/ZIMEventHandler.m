@@ -383,6 +383,7 @@ fromGroupID:(NSString *)fromGroupID{
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupVerifyInfo:verifyInfo] forKey:@"verifyInfo"];
     [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo] forKey:@"operatedInfo"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupVerifyInfoUpdated" forKey:@"method"];
     _events(resultDic);
