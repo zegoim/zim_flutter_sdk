@@ -955,11 +955,10 @@
     [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedLongLong:groupApplicationInfo.updateTime] forKey:@"updateTime"];
     [errorUserInfoDic safeSetObject:groupApplicationInfo.wording forKey:@"wording"];
     [errorUserInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupInfo:groupApplicationInfo.groupInfo] forKey:@"groupInfo"];
-    
     [errorUserInfoDic safeSetObject:[ZIMPluginConverter mZIMUserInfo:groupApplicationInfo.applyUser] forKey:@"applyUser"];
-    
-    [errorUserInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupMemberSimpleInfo:groupApplicationInfo.operatedUser] forKey:@"operatedUser"];
-
+    if(groupApplicationInfo.operatedUser != nil && groupApplicationInfo.operatedUser != NULL){
+        [errorUserInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupMemberSimpleInfo:groupApplicationInfo.operatedUser] forKey:@"operatedUser"];
+    }
     [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedLongLong:groupApplicationInfo.createTime] forKey:@"createTime"];
     [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:(int)groupApplicationInfo.type] forKey:@"type"];
     [errorUserInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:(int)groupApplicationInfo.state] forKey:@"state"];
