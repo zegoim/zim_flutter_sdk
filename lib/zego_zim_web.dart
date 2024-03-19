@@ -364,6 +364,36 @@ class ZegoZimPlugin {
         return searchLocalFriends(call.arguments['config']);
       case 'sendFriendApplication':
         return sendFriendApplication(call.arguments['userID'], call.arguments['config']);
+      case 'updateUserOfflinePushRule':
+        return updateUserOfflinePushRule(call.arguments['offlinePushRule']);
+      case 'querySelfUserInfo':
+        return querySelfUserInfo();
+      case 'replyMessage':
+        return replyMessage(call.arguments['message'], call.arguments['repliedMessage'], call.arguments['config']);
+      case 'queryRepliedMessageList':
+        return queryRepliedMessageList(call.arguments['message'], call.arguments['config']);
+      case 'queryRepliedMessageCount':
+        return queryRepliedMessageCount(call.arguments['message']);
+      case 'updateGroupJoinMode':
+        return updateGroupJoinMode(call.arguments['mode'], call.arguments['groupID']);
+      case 'updateGroupInviteMode':
+        return updateGroupInviteMode(call.arguments['mode'], call.arguments['groupID']);
+      case 'updateGroupBeInviteMode':
+        return updateGroupBeInviteMode(call.arguments['mode'], call.arguments['groupID']);
+      case 'sendGroupJoinApplication':
+        return sendGroupJoinApplication(call.arguments['groupID'], call.arguments['config']);
+      case 'acceptGroupJoinApplication':
+        return acceptGroupJoinApplication(call.arguments['userID'], call.arguments['groupID'], call.arguments['config']);
+      case 'rejectGroupJoinApplication':
+        return rejectGroupJoinApplication(call.arguments['userID'], call.arguments['groupID'], call.arguments['config']);
+      case 'sendGroupInviteApplications':
+        return sendGroupInviteApplications(call.arguments['userIDs'], call.arguments['groupID'], call.arguments['config']);
+      case 'acceptGroupInviteApplication':
+        return acceptGroupInviteApplication(call.arguments['inviterUserID'], call.arguments['groupID'], call.arguments['config']);
+      case 'rejectGroupInviteApplication':
+        return rejectGroupInviteApplication(call.arguments['inviterUserID'], call.arguments['groupID'], call.arguments['config']);
+      case 'queryGroupApplicationList':
+        return queryGroupApplicationList(call.arguments['config']);
       case 'writeLog':
         return writeLog(call.arguments['logString']);
       default:
@@ -465,6 +495,14 @@ class ZegoZimPlugin {
           return friendApplicationUpdated(_zim, data);
         case 'callInvitationCreated':
           return callInvitationCreated(_zim, data);
+        case 'userRuleUpdated':
+          // return userRuleUpdated(_zim, data);
+        case 'groupVerifyInfoUpdated':
+          // return groupVerifyInfoUpdated(_zim, data);
+        case 'groupApplicationListChanged':
+          // return groupApplicationListChanged(_zim, data);
+        case 'groupApplicationUpdated':
+          // return groupApplicationUpdated(_zim, data);
       }
     }
   }
@@ -1855,7 +1893,125 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
+  Future<Map<dynamic, dynamic>> updateUserOfflinePushRule(dynamic offlinePushRule) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateUserOfflinePushRule(mapToJSObj(offlinePushRule))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
 
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> querySelfUserInfo() async {
+    final result = await promiseToFuture(ZIM.getInstance()!.querySelfUserInfo()).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> replyMessage(dynamic message, dynamic replyMessage, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.replyMessage(mapToJSObj(message), mapToJSObj(replyMessage), mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryRepliedMessageList(dynamic message, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryRepliedMessageList(mapToJSObj(message), mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryRepliedMessageCount(dynamic message) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryRepliedMessageCount(mapToJSObj(message))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateGroupJoinMode(dynamic mode, String groupID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateGroupJoinMode(mode, groupID)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateGroupInviteMode(dynamic mode, String groupID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateGroupInviteMode(mode, groupID)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> updateGroupBeInviteMode(dynamic mode, String groupID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateGroupBeInviteMode(mode, groupID)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> sendGroupJoinApplication(String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.sendGroupJoinApplication(groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> acceptGroupJoinApplication(String userID, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.acceptGroupJoinApplication(userID, groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> rejectGroupJoinApplication(String userID, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.rejectGroupJoinApplication(userID, groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> sendGroupInviteApplications(dynamic userIDs, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.sendGroupInviteApplications(userIDs, groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> acceptGroupInviteApplication(String inviterUserID, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.acceptGroupInviteApplication(inviterUserID, groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> rejectGroupInviteApplication(String inviterUserID, String groupID, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.rejectGroupInviteApplication(inviterUserID, groupID, mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic, dynamic>> queryGroupApplicationList(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryGroupApplicationList(mapToJSObj(config))).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+
+    return jsObjectToMap(result);
+  }
 
   static void connectionStateChanged(ZIMEngine zim, dynamic data) {
     if (ZIMEventHandler.onConnectionStateChanged == null) return;
