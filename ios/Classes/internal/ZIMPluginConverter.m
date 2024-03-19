@@ -77,6 +77,9 @@
     }
     NSMutableDictionary *groupMemberSimpleInfoDic = [[NSMutableDictionary alloc] init];
     [groupMemberSimpleInfoDic safeSetObject:groupMemberSimpleInfo.memberNickname forKey:@"memberNickname"];
+    [groupMemberSimpleInfoDic safeSetObject:groupMemberSimpleInfo.userID forKey:@"userID"];
+    [groupMemberSimpleInfoDic safeSetObject:groupMemberSimpleInfo.userName forKey:@"userName"];
+    [groupMemberSimpleInfoDic safeSetObject:groupMemberSimpleInfo.userAvatarUrl forKey:@"userAvatarUrl"];
     [groupMemberSimpleInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupMemberSimpleInfo.memberRole]  forKey:@"memberRole"];
     return groupMemberSimpleInfoDic;
 }

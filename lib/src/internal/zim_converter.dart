@@ -67,6 +67,7 @@ class ZIMConverter {
     ZIMGroupMemberSimpleInfo groupMemberSimpleInfo = ZIMGroupMemberSimpleInfo(memberNickname: zimGroupMemberSimpleInfoMap['memberNickname'], memberRole: zimGroupMemberSimpleInfoMap['memberRole']);
     groupMemberSimpleInfo.userID = zimGroupMemberSimpleInfoMap['userID'];
     groupMemberSimpleInfo.userName = zimGroupMemberSimpleInfoMap['userName'] ?? '';
+    groupMemberSimpleInfo.userAvatarUrl = zimGroupMemberSimpleInfoMap['userAvatarUrl'] ?? '';
     return groupMemberSimpleInfo;
   }
 
