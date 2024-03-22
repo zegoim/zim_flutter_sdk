@@ -1937,6 +1937,238 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void updateGroupJoinMode(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupJoinMode mode = ZIMGroupJoinMode.getZIMGroupJoinMode(ZIMPluginCommonTools.safeGetIntValue(call.argument("mode")));
+        String groupID = call.argument("groupID");
+        zim.updateGroupJoinMode(mode, groupID, (groupID1, mode1, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("groupID", groupID1);
+                resultMap.put("mode", mode1.value());
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+    public static void updateGroupInviteMode(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupInviteMode mode = ZIMGroupInviteMode.getZIMGroupInviteMode(ZIMPluginCommonTools.safeGetIntValue(call.argument("mode")));
+        String groupID = call.argument("groupID");
+        zim.updateGroupInviteMode(mode, groupID, (groupID1, mode1, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("groupID", groupID1);
+                resultMap.put("mode", mode1.value());
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+    public static void updateGroupBeInviteMode(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupBeInviteMode mode = ZIMGroupBeInviteMode.getZIMGroupBeInviteMode(ZIMPluginCommonTools.safeGetIntValue(call.argument("mode")));
+        String groupID = call.argument("groupID");
+        zim.updateGroupBeInviteMode(mode, groupID, (groupID1, mode1, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("groupID", groupID1);
+                resultMap.put("mode", mode1.value());
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+    public static void sendGroupJoinApplication(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupJoinApplicationSendConfig  config = ZIMPluginConverter.oZIMGroupJoinApplicationSendConfig(Objects.requireNonNull(call.argument("config")));
+        String groupID = call.argument("groupID");
+        zim.sendGroupJoinApplication(groupID, config, (groupID1, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("groupID", groupID1);
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+    public static void acceptGroupJoinApplication(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupJoinApplicationAcceptConfig  config = ZIMPluginConverter.oZIMGroupJoinApplicationAcceptConfig(Objects.requireNonNull(call.argument("config")));
+        String groupID = call.argument("groupID");
+        String userID = call.argument("userID");
+        zim.acceptGroupJoinApplication(userID, groupID, config, (groupID1,userID1, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("groupID", groupID1);
+                resultMap.put("userID", userID1);
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+    public static void rejectGroupJoinApplication(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupJoinApplicationRejectConfig  config = ZIMPluginConverter.oZIMGroupJoinApplicationRejectConfig(Objects.requireNonNull(call.argument("config")));
+        String groupID = call.argument("groupID");
+        String userID = call.argument("userID");
+        zim.rejectGroupJoinApplication(userID, groupID, config, (groupID1,userID1, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("groupID", groupID1);
+                resultMap.put("userID", userID1);
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+    public static void sendGroupInviteApplications(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupInviteApplicationSendConfig  config = ZIMPluginConverter.oZIMGroupInviteApplicationSendConfig(Objects.requireNonNull(call.argument("config")));
+        String groupID = call.argument("groupID");
+        ArrayList<String> userIDs = call.argument("userIDs");
+        zim.sendGroupInviteApplications(userIDs, groupID, config, (groupID1, errorUserList, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("groupID", groupID1);
+                ArrayList<HashMap<String,Object>> basicErrorUserList = ZIMPluginConverter.mZIMErrorUserInfoList(errorUserList);
+                resultMap.put("errorUserList", basicErrorUserList);
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+
+    public static void acceptGroupInviteApplication(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupInviteApplicationAcceptConfig  config = ZIMPluginConverter.oZIMGroupInviteApplicationAcceptConfig(Objects.requireNonNull(call.argument("config")));
+        String groupID = call.argument("groupID");
+        String inviterUserID = call.argument("inviterUserID");
+        zim.acceptGroupInviteApplication(inviterUserID, groupID, config, (groupInfo, inviterUserID1, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                HashMap<String,Object> groupInfoMap = ZIMPluginConverter.mZIMGroupFullInfo(groupInfo);
+                resultMap.put("groupInfo", groupInfoMap);
+                resultMap.put("inviterUserID", inviterUserID1);
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+    public static void rejectGroupInviteApplication(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupInviteApplicationRejectConfig  config = ZIMPluginConverter.oZIMGroupInviteApplicationRejectConfig(Objects.requireNonNull(call.argument("config")));
+        String groupID = call.argument("groupID");
+        String inviterUserID = call.argument("inviterUserID");
+        zim.rejectGroupInviteApplication(inviterUserID, groupID, config, (groupID1, inviterUserID1, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                resultMap.put("groupID", groupID1);
+                resultMap.put("inviterUserID", inviterUserID1);
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
+    public static void queryGroupApplicationList(MethodCall call,Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        ZIMGroupApplicationListQueryConfig  config = ZIMPluginConverter.oZIMGroupApplicationListQueryConfig(Objects.requireNonNull(call.argument("config")));
+        zim.queryGroupApplicationList(config, (applicationList, nextFlag, errorInfo) -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                HashMap<String,Object> resultMap = new HashMap<>();
+                ArrayList<HashMap<String, Object>> applicationInfoMapList = new ArrayList<>();
+                for (ZIMGroupApplicationInfo applicationInfo : applicationList) {
+                    HashMap<String, Object> applicationInfoMap = ZIMPluginConverter.mZIMGroupApplicationInfo(applicationInfo); // 假设存在 mZIMFriendApplicationInfo 转换函数
+                    applicationInfoMapList.add(applicationInfoMap);
+                }
+                resultMap.put("nextFlag",nextFlag);
+                resultMap.put("applicationList", applicationInfoMapList);
+
+                result.success(resultMap);
+            } else {
+                result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+            }
+        });
+    }
+
     public static void muteGroup(MethodCall call,Result result) {
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);

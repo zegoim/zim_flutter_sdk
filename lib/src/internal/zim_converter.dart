@@ -67,6 +67,7 @@ class ZIMConverter {
     ZIMGroupMemberSimpleInfo groupMemberSimpleInfo = ZIMGroupMemberSimpleInfo(memberNickname: zimGroupMemberSimpleInfoMap['memberNickname'], memberRole: zimGroupMemberSimpleInfoMap['memberRole']);
     groupMemberSimpleInfo.userID = zimGroupMemberSimpleInfoMap['userID'];
     groupMemberSimpleInfo.userName = zimGroupMemberSimpleInfoMap['userName'] ?? '';
+    groupMemberSimpleInfo.userAvatarUrl = zimGroupMemberSimpleInfoMap['userAvatarUrl'] ?? '';
     return groupMemberSimpleInfo;
   }
 
@@ -76,7 +77,7 @@ class ZIMConverter {
     applicationInfo.createTime = applicationInfoMap['createTime'];
     applicationInfo.updateTime = applicationInfoMap['updateTime'];
     applicationInfo.state = ZIMGroupApplicationStateExtension.mapValue[applicationInfoMap['state']]!;
-    if(applicationInfoMap.containsKey('operatedUser')){
+    if(applicationInfoMap.containsKey('operatedUser') && applicationInfoMap['operatedUser'] != null){
       applicationInfo.operatedUser = oZIMGroupMemberSimpleInfo(applicationInfoMap['operatedUser']);
     }
     applicationInfo.type = ZIMGroupApplicationTypeExtension.mapValue[applicationInfoMap['type']]!;

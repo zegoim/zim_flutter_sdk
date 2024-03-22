@@ -422,6 +422,7 @@ class ZIMVoIPConfig {
 
 class ZIMGroupMemberRole {
   static const int owner = 1;
+  static const int admin = 2;
   static const int member = 3;
 }
 // Model
