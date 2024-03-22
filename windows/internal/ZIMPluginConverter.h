@@ -34,6 +34,10 @@ struct ZIM_FriendlyGet_senderUserID {
     typedef std::string ZIMMessage::* type;
 };
 
+struct ZIM_FriendlyGet_cbInnerID {
+	typedef std::string ZIMMessage::* type;
+};
+
 struct ZIM_FriendlyGet_conversationID {
     typedef std::string ZIMMessage::* type;
 };
@@ -237,6 +241,7 @@ public:
     static FTArray cnvZIMGroupApplicationInfoToArray(const std::vector<ZIMGroupApplicationInfo>& infoList);
     
 public:
+    static FTMap cnvZIMFileCacheInfoToMap(const ZIMFileCacheInfo& fileCacheInfo);
     static ZIMFriendSearchConfig cnvZIMFriendSearchConfigToObject(FTMap configMap);
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);
@@ -273,8 +278,8 @@ public:
     static ZIMGroupInviteApplicationRejectConfig cnvZIMGroupInviteApplicationRejectConfigToObject(FTMap configMap);
     static ZIMGroupApplicationListQueryConfig cnvZIMGroupApplicationListQueryConfigToObject(FTMap configMap);
     static ZIMGroupMemberMutedListQueryConfig cnvZIMGroupMemberMutedListQueryConfigToObject(FTMap configMap);
-
-
+	static ZIMFileCacheClearConfig cnvZIMFileCacheClearConfigToObject(FTMap configMap);
+	static ZIMFileCacheQueryConfig cnvZIMFileCacheQueryConfigToObject(FTMap configMap);
     
 public:
     static ZIMFriendAddConfig cnvZIMFriendAddConfigToObject(FTMap configMap);

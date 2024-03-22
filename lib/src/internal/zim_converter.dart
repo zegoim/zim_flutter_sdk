@@ -198,6 +198,7 @@ class ZIMConverter {
     messageMap['isServerMessage'] = message.isServerMessage;
     messageMap['isMentionAll'] = message.isMentionAll;
     messageMap['mentionedUserIDs'] = message.mentionedUserIds;
+    messageMap['cbInnerID'] = message.cbInnerID;
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -420,6 +421,7 @@ class ZIMConverter {
     message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
     message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
     message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
+    message.cbInnerID = resultMap['cbInnerID'];
     return message;
   }
 
@@ -538,6 +540,13 @@ class ZIMConverter {
       Map infoMap) {
     ZIMConversationsAllDeletedInfo info =
         ZIMConversationsAllDeletedInfo(count: infoMap['count']);
+    return info;
+  }
+
+  static ZIMFileCacheInfo oZIMFileCacheInfo(
+      Map infoMap) {
+    ZIMFileCacheInfo info =
+    ZIMFileCacheInfo(totalFileSize: infoMap['totalFileSize']);
     return info;
   }
 
@@ -2208,6 +2217,18 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
   static Map mZIMGroupMemberMuteConfig(ZIMGroupMemberMuteConfig config){
     Map map = {};
     map['duration'] = config.duration;
+    return map;
+  }
+
+  static Map mZIMFileCacheClearConfig(ZIMFileCacheClearConfig config){
+    Map map = {};
+    map['endTime'] = config.endTime;
+    return map;
+  }
+
+  static Map mZIMFileCacheQueryConfig(ZIMFileCacheQueryConfig config){
+    Map map = {};
+    map['endTime'] = config.endTime;
     return map;
   }
 

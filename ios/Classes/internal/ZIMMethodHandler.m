@@ -3035,6 +3035,118 @@
     }];
 }
 
+- (void)exportLocalMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
+    NSString *folderPath = [call.arguments objectForKey:@"folderPath"];
+    NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
+    ZIMMessageExportConfig *config = [[ZIMMessageExportConfig alloc] init];
+
+    [zim exportLocalMessagesToFolderPath:folderPath config:config progress:^(unsigned long long exportedMessageCount, unsigned long long totalMessageCount) {
+        if(progressID == nil){
+            return;
+        }
+        
+        NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
+        [resultDic safeSetObject:@"messageExportingProgress" forKey:@"method"];
+        [resultDic safeSetObject:progressID forKey:@"progressID"];
+        [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:exportedMessageCount] forKey:@"exportedMessageCount"];
+        [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:totalMessageCount] forKey:@"totalMessageCount"];
+        self.events(resultDic);
+    } callback:^(ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            result(nil);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)importLocalMessages:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
+    NSString *folderPath = [call.arguments objectForKey:@"folderPath"];
+    NSNumber *progressID = [call.arguments safeObjectForKey:@"progressID"];
+    ZIMMessageImportConfig *config = [[ZIMMessageImportConfig alloc] init];
+
+    [zim importLocalMessagesFromFolderPath:folderPath config:config progress:^(unsigned long long importedMessageCount, unsigned long long totalMessageCount) {
+        if(progressID == nil){
+            return;
+        }
+        
+        NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+        [resultDic safeSetObject:handle forKey:@"handle"];
+        [resultDic safeSetObject:@"messageImportingProgress" forKey:@"method"];
+        [resultDic safeSetObject:progressID forKey:@"progressID"];
+        [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:importedMessageCount] forKey:@"importedMessageCount"];
+        [resultDic safeSetObject:[NSNumber numberWithUnsignedLongLong:totalMessageCount] forKey:@"totalMessageCount"];
+        self.events(resultDic);
+    } callback:^(ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            result(nil);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)clearLocalFileCache:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+
+    ZIMFileCacheClearConfig *config = [ZIMPluginConverter oZIMFileCacheClearConfig:[call.arguments objectForKey:@"config"]];
+
+    [zim clearLocalFileCacheWithConfig:config callback:^(ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            result(nil);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+- (void)queryLocalFileCache:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    
+    ZIMFileCacheQueryConfig *config = [ZIMPluginConverter oZIMFileCacheQueryConfig:[call.arguments objectForKey:@"config"]];
+
+    [zim queryLocalFileCacheWithConfig:config callback:^(ZIMFileCacheInfo *fileCacheInfo, ZIMError *errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMFileCacheInfo:fileCacheInfo]forKey:@"fileCacheInfo"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+    
+}
+
 -(void)writeLog:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *log = [call.arguments objectForKey:@"logString"];
     [self writeLog:log];
