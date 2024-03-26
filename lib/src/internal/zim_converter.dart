@@ -43,8 +43,8 @@ class ZIMConverter {
   static ZIMUserInfo oZIMUserInfo(Map userInfoBasicMap,
       [ZIMUserInfo? userInfo]) {
 
-    String? userType = userInfoBasicMap['userType'];
-    switch(userType){
+    String? classType = userInfoBasicMap['classType'];
+    switch(classType){
       case 'ZIMGroupMemberSimpleInfo':
         userInfo ??= ZIMGroupMemberSimpleInfo();
         break;
@@ -2293,7 +2293,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
         userInfo as ZIMGroupMemberSimpleInfo;
         map['memberNickname'] = userInfo.memberNickname;
         map['memberRole'] = userInfo.memberRole;
-        map['userClassType'] = 'ZIMGroupMemberSimpleInfo';
+        map['classType'] = 'ZIMGroupMemberSimpleInfo';
         break;
       case ZIMGroupMemberInfo:
         userInfo as ZIMGroupMemberInfo;
@@ -2301,7 +2301,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
         map['memberRole'] = userInfo.memberRole;
         map['memberAvatarUrl'] = userInfo.memberAvatarUrl;
         map['muteExpiredTime'] = userInfo.muteExpiredTime;
-        map['userClassType'] = 'ZIMGroupMemberInfo';
+        map['classType'] = 'ZIMGroupMemberInfo';
         break;
       case ZIMFriendInfo:
         userInfo as ZIMFriendInfo;
@@ -2309,10 +2309,10 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
         map['createTime'] = userInfo.createTime;
         map['wording'] = userInfo.wording;
         map['friendAttributes'] = userInfo.friendAttributes;
-        map['userClassType'] = 'ZIMFriendInfo';
+        map['classType'] = 'ZIMFriendInfo';
         break;
       default:
-        map['userClassType'] = 'ZIMUserInfo';
+        map['classType'] = 'ZIMUserInfo';
         break;
     }
     return map;
