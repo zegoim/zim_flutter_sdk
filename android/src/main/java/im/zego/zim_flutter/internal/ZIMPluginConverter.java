@@ -991,6 +991,7 @@ public class ZIMPluginConverter {
         groupEnterInfoMap.put("operatedUser", mZIMGroupMemberSimpleInfo(groupEnterInfo.operatedUser));
         groupEnterInfoMap.put("enterTime", groupEnterInfo.enterTime);
         groupEnterInfoMap.put("enterType", groupEnterInfo.enterType.value());
+        return groupEnterInfoMap;
     }
 
     static public HashMap<String,Object> mZIMGroupMemberInfo(ZIMGroupMemberInfo groupMemberInfo){

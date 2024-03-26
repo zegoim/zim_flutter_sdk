@@ -872,7 +872,7 @@ FTArray ZIMPluginConverter::cnvZIMGroupAttributesUpdateInfoListToArray(const std
 FTMap ZIMPluginConverter::convZIMGroupEnterInfo(const ZIMGroupEnterInfo& groupEnterInfo) {
 	FTMap groupEnterInfoMap;
 
-	groupEnterInfoMap[FTValue("enterTime")] = cnvZIMGroupInfoToMap(groupEnterInfo.enterTime);
+	groupEnterInfoMap[FTValue("enterTime")] = FTValue((int64_t)groupEnterInfo.enterTime);
 	groupEnterInfoMap[FTValue("enterType")] = FTValue((int32_t)groupEnterInfo.enterType);
 	if (groupEnterInfo.operatedUser != nullptr)
 	{
