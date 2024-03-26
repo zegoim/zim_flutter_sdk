@@ -1102,7 +1102,9 @@ class ZIMConverter {
   static ZIMGroupEnterInfo oZIMGroupEnterInfo(Map? groupEnterInfoMap) {
     if (groupEnterInfoMap == null) return ZIMGroupEnterInfo();
     ZIMGroupEnterInfo groupEnterInfo = ZIMGroupEnterInfo();
-    groupEnterInfo.operatedUser = oZIMGroupMemberSimpleInfo(groupEnterInfoMap['operatedUser']);
+    if(groupEnterInfoMap.containsKey('operatedUser') && groupEnterInfoMap['operatedUser'] != null){
+      groupEnterInfo.operatedUser  = oZIMGroupMemberSimpleInfo(groupEnterInfoMap['operatedUser']);
+    }
     groupEnterInfo.enterTime = groupEnterInfoMap['enterTime'] ?? 0;
     groupEnterInfo.enterType = ZIMGroupEnterTypeExtension.mapValue[groupEnterInfoMap['enterType']]!;
     return groupEnterInfo;
