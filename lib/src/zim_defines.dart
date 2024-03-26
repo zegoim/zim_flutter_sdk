@@ -751,6 +751,15 @@ enum ZIMGroupApplicationType {
   beInvite,
 }
 
+enum ZIMGroupEnterType {
+  Unknown,
+  Created,
+  JoinApply,
+  Joined,
+  Invited,
+  InviteApply,
+}
+
 enum ZIMGroupApplicationState {
   waiting,
   accepted,
@@ -1061,6 +1070,14 @@ class ZIMGroup {
   ZIMGroup();
 }
 
+/// Description:  group class.
+class ZIMGroupEnterInfo {
+  int enterTime = 0;
+  ZIMGroupEnterType enterType = ZIMGroupEnterType.Unknown;
+  ZIMGroupMemberSimpleInfo? operatedUser;
+  ZIMGroupEnterInfo();
+}
+
 /// Group member information.
 class ZIMGroupMemberInfo extends ZIMUserInfo {
   /// Description: Group nickname.
@@ -1073,6 +1090,8 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
   String memberAvatarUrl = "";
 
   int muteExpiredTime = 0;
+
+  ZIMGroupEnterInfo? groupEnterInfo;
 
   ZIMGroupMemberInfo();
 }

@@ -1099,6 +1099,15 @@ class ZIMConverter {
         nickname: resultMap['nickname'] ?? '');
   }
 
+  static ZIMGroupEnterInfo oZIMGroupEnterInfo(Map? groupEnterInfoMap) {
+    if (groupEnterInfoMap == null) return ZIMGroupEnterInfo();
+    ZIMGroupEnterInfo groupEnterInfo = ZIMGroupEnterInfo();
+    groupEnterInfo.operatedUser = oZIMGroupMemberSimpleInfo(groupEnterInfoMap['operatedUser']);
+    groupEnterInfo.enterTime = groupEnterInfoMap['enterTime'] ?? 0;
+    groupEnterInfo.enterType = ZIMGroupEnterTypeExtension.mapValue[groupEnterInfoMap['enterType']]!;
+    return groupEnterInfo;
+  }
+
   static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map? memberInfoMap) {
     if (memberInfoMap == null) return ZIMGroupMemberInfo();
     ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
@@ -1109,6 +1118,7 @@ class ZIMConverter {
     groupMemberInfo.memberNickname = memberInfoMap['memberNickname'] ?? '';
     groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'] ?? '';
     groupMemberInfo.muteExpiredTime = memberInfoMap['muteExpiredTime'] ??0;
+    groupMemberInfo.groupEnterInfo = oZIMGroupEnterInfo(memberInfoMap['groupEnterInfo']);
     return groupMemberInfo;
   }
 

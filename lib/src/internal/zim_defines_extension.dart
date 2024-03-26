@@ -527,6 +527,26 @@ extension ZIMGroupJoinModeExtension on ZIMGroupJoinMode {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMGroupEnterTypeExtension on ZIMGroupEnterType {
+  static const valueMap = {
+    ZIMGroupEnterType.Unknown: 0,
+    ZIMGroupEnterType.Created: 1,
+    ZIMGroupEnterType.JoinApply: 2,
+    ZIMGroupEnterType.Joined: 3,
+    ZIMGroupEnterType.Invited: 4,
+    ZIMGroupEnterType.InviteApply: 5,
+  };
+  static const mapValue = {
+    0: ZIMGroupEnterType.Unknown,
+    1: ZIMGroupEnterType.Created,
+    2: ZIMGroupEnterType.JoinApply,
+    3: ZIMGroupEnterType.Joined,
+    4: ZIMGroupEnterType.Invited,
+    5: ZIMGroupEnterType.InviteApply,
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMGroupInviteModeExtension on ZIMGroupInviteMode {
   static const valueMap = {
     ZIMGroupInviteMode.none: 0,

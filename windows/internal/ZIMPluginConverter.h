@@ -236,12 +236,13 @@ public:
     static FTMap cnvZIMFriendInfoToMap(const ZIMFriendInfo& info);
     static FTMap cnvZIMFriendRelationInfoToMap(const ZIMFriendRelationInfo& info);
     static FTMap cnvZIMGroupMemberSimpleInfoToMap(std::shared_ptr<ZIMGroupMemberSimpleInfo> operatedUser);
-
     static FTMap cnvZIMGroupApplicationInfoToMap(const ZIMGroupApplicationInfo& info);
     static FTArray cnvZIMGroupApplicationInfoToArray(const std::vector<ZIMGroupApplicationInfo>& infoList);
-    
+	static FTMap  convZIMGroupEnterInfo(const ZIMGroupEnterInfo& groupEnterInfo);
+	static FTMap cnvZIMFileCacheInfoToMap(const ZIMFileCacheInfo& fileCacheInfo);
+
 public:
-    static FTMap cnvZIMFileCacheInfoToMap(const ZIMFileCacheInfo& fileCacheInfo);
+
     static ZIMFriendSearchConfig cnvZIMFriendSearchConfigToObject(FTMap configMap);
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);

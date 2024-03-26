@@ -848,6 +848,19 @@
     return muteInfo;
 }
 
+
++(nullable NSDictionary *)mZIMGroupEnterInfo:(nullable ZIMGroupEnterInfo *)enterInfo{
+    if(enterInfo == nil || enterInfo == NULL || [enterInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *enterInfoMap = [[NSMutableDictionary alloc] init];
+    [enterInfoMap safeSetObject:[NSNumber numberWithLongLong:enterInfo.enterTime] forKey:@"enterTime"];
+    [enterInfoMap safeSetObject:[NSNumber numberWithInt:(int)enterInfo.enterType] forKey:@"enterType"];
+    [enterInfoMap safeSetObject:[ZIMPluginConverter mZIMGroupMemberSimpleInfo:enterInfo.operatedUser] forKey:@"operatedUser"];
+    return enterInfoMap;
+}
+
+
 +(nullable NSDictionary *)mZIMGroupMemberInfo:(nullable ZIMGroupMemberInfo *)memberInfo{
     if(memberInfo == nil || memberInfo == NULL || [memberInfo isEqual:[NSNull null]]){
         return nil;
@@ -860,6 +873,7 @@
     [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl ? memberInfo.memberAvatarUrl : @"" forKey:@"memberAvatarUrl"];
     [memberInfoDic safeSetObject:memberInfo.userAvatarUrl ? memberInfo.userAvatarUrl : @"" forKey:@"userAvatarUrl"];
     [memberInfoDic safeSetObject:[NSNumber numberWithLongLong:memberInfo.muteExpiredTime] forKey:@"muteExpiredTime"];
+    [memberInfoDic safeSetObject:memberInfo.groupEnterInfo ? [ZIMPluginConverter mZIMGroupEnterInfo:memberInfo.groupEnterInfo] : @"" forKey:@"groupEnterInfo"];
     return memberInfoDic;
 }
 

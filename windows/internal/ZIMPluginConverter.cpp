@@ -869,6 +869,19 @@ FTArray ZIMPluginConverter::cnvZIMGroupAttributesUpdateInfoListToArray(const std
 	return updateInfoArray;
 }
 
+FTMap ZIMPluginConverter::convZIMGroupEnterInfo(const ZIMGroupEnterInfo& groupEnterInfo) {
+	FTMap groupEnterInfoMap;
+
+	groupEnterInfoMap[FTValue("enterTime")] = cnvZIMGroupInfoToMap(groupEnterInfo.enterTime);
+	groupEnterInfoMap[FTValue("enterType")] = FTValue((int32_t)groupEnterInfo.enterType);
+	if (groupEnterInfo.operatedUser != nullptr)
+	{
+		infoMap[FTValue("operatedUser")] = cnvZIMGroupMemberSimpleInfoToMap(groupEnterInfo.operatedUser);
+	}
+	return groupEnterInfoMap;
+}
+
+
 FTMap ZIMPluginConverter::cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& memberInfo) {
 	FTMap groupMemberInfoMap;
 
@@ -879,6 +892,8 @@ FTMap ZIMPluginConverter::cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo& m
 	groupMemberInfoMap[FTValue("memberRole")] = FTValue((int32_t)memberInfo.memberRole);
 	groupMemberInfoMap[FTValue("memberAvatarUrl")] = FTValue(memberInfo.memberAvatarUrl);
 	groupMemberInfoMap[FTValue("muteExpiredTime")] = FTValue((int64_t)memberInfo.muteExpiredTime);
+	groupMemberInfoMap[FTValue("groupEnterInfo")] = convZIMGroupEnterInfo(memberInfo.groupEnterInfo);
+
 	return groupMemberInfoMap;
 }
 
@@ -889,7 +904,6 @@ FTArray ZIMPluginConverter::cnvZIMGroupMemberInfoListToArray(const std::vector<Z
 		FTMap groupMemberMap = cnvZIMGroupMemberInfoToMap(groupMemberInfo);
 		groupMemberArray.emplace_back(groupMemberMap);
 	}
-
 	return groupMemberArray;
 
 }
