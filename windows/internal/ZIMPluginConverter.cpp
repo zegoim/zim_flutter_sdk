@@ -876,7 +876,7 @@ FTMap ZIMPluginConverter::convZIMGroupEnterInfo(const ZIMGroupEnterInfo& groupEn
 	groupEnterInfoMap[FTValue("enterType")] = FTValue((int32_t)groupEnterInfo.enterType);
 	if (groupEnterInfo.operatedUser != nullptr)
 	{
-		infoMap[FTValue("operatedUser")] = cnvZIMGroupMemberSimpleInfoToMap(groupEnterInfo.operatedUser);
+		groupEnterInfoMap[FTValue("operatedUser")] = cnvZIMGroupMemberSimpleInfoToMap(groupEnterInfo.operatedUser);
 	}
 	return groupEnterInfoMap;
 }
@@ -1581,8 +1581,6 @@ FTMap ZIMPluginConverter::cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplic
 	infoMap[FTValue("state")] = FTValue((int32_t)info.state);
 	return infoMap;
 }
-
-
 
 FTMap ZIMPluginConverter::cnvZIMGroupMemberSimpleInfoToMap(std::shared_ptr<ZIMGroupMemberSimpleInfo> operatedUser) {
 	FTMap infoMap;
