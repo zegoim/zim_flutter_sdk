@@ -228,7 +228,30 @@ enum ZIMMessageType {
 
   custom,
 
+  tips,
+
   combine
+}
+
+enum ZIMTipsMessageEvent {
+  groupCreated,
+  groupDismissed,
+  groupJoined,
+  groupInvited,
+  groupLeft,
+  groupKickout,
+  groupInfoChanged,
+  groupMemberInfoChanged
+}
+
+enum ZIMTipsMessageChangeInfoType {
+  groupDatas,
+  groupNotice,
+  groupName,
+  groupAvatar,
+  groupOwnerTransferred,
+  groupMemberRoleChanged,
+  groupMemberMuted,
 }
 
 enum ZIMMediaFileType {
@@ -720,6 +743,17 @@ class ZIMCustomMessage extends ZIMMessage {
   }
 }
 
+class ZIMTipsMessage extends ZIMMessage {
+
+  ZIMTipsMessageEvent event = ZIMTipsMessageEvent.groupCreated;
+
+  ZIMUserInfo operatedUser = ZIMUserInfo();
+
+  List<ZIMUserInfo> targetUserList = [];
+
+  ZIMTipsMessageChangeInfo changeInfo = ZIMTipsMessageChangeInfo();
+}
+
 class ZIMConversation {
   String conversationID = '';
   String conversationName = '';
@@ -987,10 +1021,9 @@ class ZIMGroupInfo {
 }
 
 class ZIMGroupMemberSimpleInfo extends ZIMUserInfo {
-  String memberNickname;
+  String memberNickname = '';
   int memberRole = ZIMGroupMemberRole.member;
-  ZIMGroupMemberSimpleInfo(
-      {required this.memberNickname, required this.memberRole});
+  ZIMGroupMemberSimpleInfo();
 }
 
 class ZIMGroupApplicationInfo {
@@ -2729,4 +2762,21 @@ class ZIMFriendSearchConfig {
 class ZIMBlacklistQueryConfig {
   int nextFlag = 0;
   int count = 0;
+}
+
+class ZIMTipsMessageChangeInfo {
+  ZIMTipsMessageChangeInfoType type = ZIMTipsMessageChangeInfoType.groupMemberMuted;
+}
+
+class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
+  int groupDataFlag = 0;
+  String groupName = '';
+  String groupNotice = '';
+  String groupAvatarUrl = '';
+  ZIMGroupMuteInfo groupMuteInfo = ZIMGroupMuteInfo();
+}
+
+class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo{
+  int role = 0;
+  int muteExpiredTime = 0;
 }

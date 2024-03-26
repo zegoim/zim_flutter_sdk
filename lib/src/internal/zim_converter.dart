@@ -42,12 +42,58 @@ class ZIMConverter {
 
   static ZIMUserInfo oZIMUserInfo(Map userInfoBasicMap,
       [ZIMUserInfo? userInfo]) {
-    userInfo ??= ZIMUserInfo();
+
+    String? userType = userInfoBasicMap['userType'];
+    switch(userType){
+      case 'ZIMGroupMemberSimpleInfo':
+        userInfo ??= ZIMGroupMemberSimpleInfo();
+        break;
+      case 'ZIMGroupMemberInfo':
+        userInfo ??= ZIMGroupMemberInfo();
+        break;
+      case 'ZIMFriendInfo':
+        userInfo ??= ZIMFriendInfo();
+        break;
+      case 'ZIMRoomMemberInfo':
+        userInfo ??= ZIMRoomMemberInfo();
+        break;
+      default:
+        userInfo ??= ZIMUserInfo();
+        break;
+    }
     userInfo.userID = userInfoBasicMap['userID'];
     userInfo.userName = userInfoBasicMap['userName'];
     userInfo.userAvatarUrl = userInfoBasicMap['userAvatarUrl'];
+
+    switch(userInfo.runtimeType){
+      case ZIMGroupMemberSimpleInfo:
+        userInfo as ZIMGroupMemberSimpleInfo;
+        userInfo.memberNickname = userInfoBasicMap['memberNickname'];
+        userInfo.memberRole = userInfoBasicMap['memberRole'];
+        break;
+      case ZIMGroupMemberInfo:
+        userInfo as ZIMGroupMemberInfo;
+        userInfo.memberNickname = userInfoBasicMap['memberNickname'];
+        userInfo.memberRole = userInfoBasicMap['memberRole'];
+        userInfo.memberAvatarUrl = userInfoBasicMap['memberAvatarUrl'];
+        userInfo.muteExpiredTime = userInfoBasicMap['muteExpiredTime'];
+        break;
+      case ZIMFriendInfo:
+        userInfo as ZIMFriendInfo;
+        userInfo.friendAlias = userInfoBasicMap['friendAlias'];
+        userInfo.createTime = userInfoBasicMap['createTime'];
+        userInfo.wording = userInfoBasicMap['wording'];
+        userInfo.friendAttributes =
+        Map<String, String>.from(userInfoBasicMap['friendAttributes']);
+        break;
+      default:
+        break;
+    }
     return userInfo;
   }
+
+
+
 
   static ZIMRoomMemberInfo oZIMRoomMemberInfo(Map userInfoBasicMap) {
     ZIMRoomMemberInfo userInfo = ZIMRoomMemberInfo();
@@ -64,10 +110,8 @@ class ZIMConverter {
   }
 
   static ZIMGroupMemberSimpleInfo oZIMGroupMemberSimpleInfo(Map zimGroupMemberSimpleInfoMap) {
-    ZIMGroupMemberSimpleInfo groupMemberSimpleInfo = ZIMGroupMemberSimpleInfo(memberNickname: zimGroupMemberSimpleInfoMap['memberNickname'], memberRole: zimGroupMemberSimpleInfoMap['memberRole']);
-    groupMemberSimpleInfo.userID = zimGroupMemberSimpleInfoMap['userID'];
-    groupMemberSimpleInfo.userName = zimGroupMemberSimpleInfoMap['userName'] ?? '';
-    groupMemberSimpleInfo.userAvatarUrl = zimGroupMemberSimpleInfoMap['userAvatarUrl'] ?? '';
+    ZIMGroupMemberSimpleInfo info = ZIMGroupMemberSimpleInfo();
+    ZIMGroupMemberSimpleInfo groupMemberSimpleInfo = oZIMUserInfo(zimGroupMemberSimpleInfoMap,info) as ZIMGroupMemberSimpleInfo;
     return groupMemberSimpleInfo;
   }
 
@@ -139,6 +183,7 @@ class ZIMConverter {
     conversationMap['orderKey'] = conversation.orderKey;
     conversationMap['isPinned'] = conversation.isPinned;
     conversationMap['draft'] = conversation.draft;
+    conversationMap['conversationAlias'] = conversation.conversationAlias;
     if (conversation.lastMessage != null) {
       conversationMap['lastMessage'] = mZIMMessage(conversation.lastMessage!);
     }
@@ -285,6 +330,9 @@ class ZIMConverter {
         }
         messageMap['messageList'] = messageListMap;
         break;
+      case ZIMMessageType.tips:
+        message as ZIMTipsMessage;
+        break;
       default:
         break;
     }
@@ -379,6 +427,14 @@ class ZIMConverter {
         message ??= ZIMCombineMessage(title:resultMap['title'], summary: resultMap['summary'], messageList: messageList);
         message as ZIMCombineMessage;
         message.combineID = resultMap['combineID'];
+        break;
+      case ZIMMessageType.tips:
+        message ??= ZIMTipsMessage();
+        message as ZIMTipsMessage;
+        message.event = ZIMTipsMessageEventExtension.mapValue[resultMap['event']]!;
+        message.operatedUser = oZIMUserInfo(resultMap['operatedUser']);
+        message.targetUserList = oZIMUserInfoList(resultMap['targetUserList']);
+        message.changeInfo = oZIMTipsMessageChangeInfo(resultMap['changeInfo']);
         break;
       default:
         message ??= ZIMMessage();
@@ -798,7 +854,6 @@ class ZIMConverter {
     for (Map memberInfoMap in memberListBasic) {
       memberList.add(oZIMUserInfo(memberInfoMap));
     }
-    ZIMManager.writeLog("Flutter dart. oZIMUserInfoList success");
     return memberList;
   }
 
@@ -1101,15 +1156,9 @@ class ZIMConverter {
 
   static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map? memberInfoMap) {
     if (memberInfoMap == null) return ZIMGroupMemberInfo();
-    ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
-    groupMemberInfo.userID = memberInfoMap['userID'];
-    groupMemberInfo.userName = memberInfoMap['userName'] ?? '';
-    groupMemberInfo.userAvatarUrl = memberInfoMap['userAvatarUrl'] ?? '';
-    groupMemberInfo.memberRole = memberInfoMap['memberRole'];
-    groupMemberInfo.memberNickname = memberInfoMap['memberNickname'] ?? '';
-    groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'] ?? '';
-    groupMemberInfo.muteExpiredTime = memberInfoMap['muteExpiredTime'] ??0;
-    return groupMemberInfo;
+
+    ZIMUserInfo info = oZIMUserInfo(memberInfoMap,ZIMGroupMemberInfo());
+    return info as ZIMGroupMemberInfo;
   }
 
   static List<ZIMGroupMemberInfo> oZIMGroupMemberInfoList(List basicList) {
@@ -1945,13 +1994,8 @@ class ZIMConverter {
 
   static ZIMFriendInfo oZIMFriendInfo(Map map, [ZIMFriendInfo? friendInfo]) {
     friendInfo ??= ZIMFriendInfo();
-    oZIMUserInfo(map, friendInfo);
-    friendInfo.friendAlias = map['friendAlias'];
-    friendInfo.createTime = map['createTime'];
-    friendInfo.wording = map['wording'];
-    friendInfo.friendAttributes =
-        Map<String, String>.from(map['friendAttributes']);
-    return friendInfo;
+    ZIMUserInfo info = oZIMUserInfo(map, friendInfo);
+    return info as ZIMFriendInfo;
   }
 
   static List<ZIMFriendInfo> oZIMFriendInfoList(List list) {
@@ -2244,16 +2288,71 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     map['userID'] = userInfo.userID;
     map['userName'] = userInfo.userName;
     map['userAvatarUrl'] = userInfo.userAvatarUrl;
+    switch(userInfo.runtimeType){
+      case ZIMGroupMemberSimpleInfo:
+        userInfo as ZIMGroupMemberSimpleInfo;
+        map['memberNickname'] = userInfo.memberNickname;
+        map['memberRole'] = userInfo.memberRole;
+        map['userClassType'] = 'ZIMGroupMemberSimpleInfo';
+        break;
+      case ZIMGroupMemberInfo:
+        userInfo as ZIMGroupMemberInfo;
+        map['memberNickname'] = userInfo.memberNickname;
+        map['memberRole'] = userInfo.memberRole;
+        map['memberAvatarUrl'] = userInfo.memberAvatarUrl;
+        map['muteExpiredTime'] = userInfo.muteExpiredTime;
+        map['userClassType'] = 'ZIMGroupMemberInfo';
+        break;
+      case ZIMFriendInfo:
+        userInfo as ZIMFriendInfo;
+        map['friendAlias'] = userInfo.friendAlias;
+        map['createTime'] = userInfo.createTime;
+        map['wording'] = userInfo.wording;
+        map['friendAttributes'] = userInfo.friendAttributes;
+        map['userClassType'] = 'ZIMFriendInfo';
+        break;
+      default:
+        map['userClassType'] = 'ZIMUserInfo';
+        break;
+    }
     return map;
   }
 
   static Map mZIMGroupMemberInfo(ZIMGroupMemberInfo memberInfo){
     Map map = ZIMConverter.mZIMUserInfo(memberInfo);
-    map['memberNickname'] = memberInfo.memberNickname;
-    map['memberRole'] = memberInfo.memberRole;
-    map['memberAvatarUrl'] = memberInfo.memberAvatarUrl;
-    map['muteExpiredTime'] = memberInfo.muteExpiredTime;
     return map;
+  }
+
+  static ZIMTipsMessageChangeInfo oZIMTipsMessageChangeInfo(Map map,[ZIMTipsMessageChangeInfo? info]){
+    String? classType = map['classType'];
+    switch(classType){
+      case 'ZIMTipsMessageGroupChangeInfo':
+        info ??= ZIMTipsMessageGroupChangeInfo();
+        break;
+      case 'ZIMTipsMessageGroupMemberChangeInfo':
+        info ??= ZIMTipsMessageGroupMemberChangeInfo();
+        break;
+      default:
+        info ??= ZIMTipsMessageChangeInfo();
+        break;
+    }
+    info.type = ZIMTipsMessageChangeInfoTypeExtension.mapValue[map['type']]!;
+    switch(info.runtimeType){
+      case ZIMTipsMessageGroupChangeInfo:
+        info as ZIMTipsMessageGroupChangeInfo;
+        info.groupDataFlag = map['groupDataFlag'];
+        info.groupName = map['groupName'];
+        info.groupNotice = map['groupNotice'];
+        info.groupAvatarUrl = map['groupAvatarUrl'];
+        info.groupMuteInfo = oZIMGroupMuteInfo(map['groupMuteInfo']);
+        break;
+      case ZIMTipsMessageGroupMemberChangeInfo:
+        info as ZIMTipsMessageGroupMemberChangeInfo;
+        info.role = map['role'];
+        info.muteExpiredTime = map['muteExpiredTime'];
+        break;
+    }
+    return info;
   }
 
 
