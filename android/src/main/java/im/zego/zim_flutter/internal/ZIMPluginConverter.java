@@ -199,6 +199,12 @@ public class ZIMPluginConverter {
                 messageMap.put("messageList",messageListMap);
                 messageMap.put("combineID",((ZIMCombineMessage)message).getCombineID());
                 break;
+            case TIPS:
+                assert message instanceof ZIMTipsMessage;
+                messageMap.put("event",((ZIMTipsMessage) message).event.value());
+                messageMap.put("operatedUser",mZIMUserInfo(((ZIMTipsMessage) message).operatedUser));
+                messageMap.put("targetUserList",mZIMUserInfoList(((ZIMTipsMessage) message).targetUserList));
+                messageMap.put("changeInfo",mZIMTip)
             case UNKNOWN:
             default:
                 break;
@@ -393,6 +399,9 @@ public class ZIMPluginConverter {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
+                break;
+            case TIPS:
+                message = new ZIMTipsMessage();
                 break;
             case UNKNOWN:
             default:
@@ -688,16 +697,64 @@ public class ZIMPluginConverter {
         userInfoMap.put("userID",userInfo.userID);
         userInfoMap.put("userName",userInfo.userName);
         userInfoMap.put("userAvatarUrl",userInfo.userAvatarUrl);
+        if(userInfo instanceof ZIMGroupMemberSimpleInfo){
+            userInfoMap.put("memberNickname",((ZIMGroupMemberSimpleInfo) userInfo).memberNickName);
+            userInfoMap.put("memberRole",((ZIMGroupMemberSimpleInfo) userInfo).memberRole);
+            userInfoMap.put("classType","ZIMGroupMemberSimpleInfo");
+        } else if (userInfo instanceof ZIMGroupMemberInfo) {
+            userInfoMap.put("memberNickname",((ZIMGroupMemberInfo) userInfo).memberNickname);
+            userInfoMap.put("memberRole",((ZIMGroupMemberInfo) userInfo).memberRole);
+            userInfoMap.put("memberAvatarUrl",((ZIMGroupMemberInfo) userInfo).memberAvatarUrl);
+            userInfoMap.put("muteExpiredTime",((ZIMGroupMemberInfo) userInfo).muteExpiredTime);
+            userInfoMap.put("classType","ZIMGroupMemberInfo");
+        } else if (userInfo instanceof ZIMFriendInfo) {
+            userInfoMap.put("friendAlias",((ZIMFriendInfo) userInfo).friendAlias);
+            userInfoMap.put("createTime",((ZIMFriendInfo) userInfo).createTime);
+            userInfoMap.put("wording",((ZIMFriendInfo) userInfo).wording);
+            userInfoMap.put("friendAttributes",((ZIMFriendInfo) userInfo).friendAttributes);
+            userInfoMap.put("classType","ZIMFriendInfo");
+        }
         return userInfoMap;
     }
 
     static public ZIMUserInfo oZIMUserInfo(HashMap<String,Object> map,ZIMUserInfo userInfo){
         if(userInfo == null){
-            userInfo = new ZIMUserInfo();
+            String classType = "";
+            if(map.containsKey("classType")){
+                classType = (String) map.get("classType");
+            }
+            switch (classType){
+                case "ZIMGroupMemberSimpleInfo":
+                    userInfo = new ZIMGroupMemberSimpleInfo();
+                    break;
+                case "ZIMGroupMemberInfo":
+                    userInfo = new ZIMGroupMemberInfo();
+                    break;
+                case "ZIMFriendInfo":
+                    userInfo = new ZIMFriendInfo();
+                    break;
+                default:
+                    userInfo = new ZIMUserInfo();
+            }
         }
+
         userInfo.userID = (String) map.get("userID");
         userInfo.userName = (String) map.get("userName");
         userInfo.userAvatarUrl = (String) map.get("userAvatarUrl");
+        if(userInfo instanceof ZIMGroupMemberSimpleInfo){
+            ((ZIMGroupMemberSimpleInfo) userInfo).memberNickName = (String) map.get("memberNickname");
+            ((ZIMGroupMemberSimpleInfo) userInfo).memberRole = (int) map.get("memberRole");
+        }else if(userInfo instanceof ZIMGroupMemberInfo){
+            ((ZIMGroupMemberInfo) userInfo).memberNickname = (String) map.get("memberNickname");
+            ((ZIMGroupMemberInfo) userInfo).memberRole = (int) map.get("memberRole");
+            ((ZIMGroupMemberInfo) userInfo).memberAvatarUrl = (String) map.get("memberAvatarUrl");
+            ((ZIMGroupMemberInfo) userInfo).muteExpiredTime = (long) map.get("muteExpiredTime");
+        } else if (userInfo instanceof ZIMFriendInfo) {
+            ((ZIMFriendInfo) userInfo).friendAlias = (String) map.get("friendAlias");
+            ((ZIMFriendInfo) userInfo).createTime = (long) map.get("createTime");
+            ((ZIMFriendInfo) userInfo).wording = (String) map.get("wording");
+            ((ZIMFriendInfo) userInfo).friendAttributes = (HashMap<String, String>) map.get("friendAttributes");
+        }
         return userInfo;
     }
 
@@ -1491,21 +1548,22 @@ public class ZIMPluginConverter {
     }
 
     static public HashMap<String, Object> mZIMFriendInfo(ZIMFriendInfo info) {
-        HashMap<String, Object> infoMap = new HashMap<>(mZIMUserInfo(info)); // Assuming mZIMUserInfo for ZIMUserInfo inheritance
-        infoMap.put("friendAlias", info.friendAlias);
-        infoMap.put("createTime", info.createTime);
-        infoMap.put("wording", info.wording);
-        infoMap.put("friendAttributes", info.friendAttributes);
-        return infoMap;
+        return mZIMUserInfo(info);
+//        HashMap<String, Object> infoMap = new HashMap<>(mZIMUserInfo(info)); // Assuming mZIMUserInfo for ZIMUserInfo inheritance
+//        infoMap.put("friendAlias", info.friendAlias);
+//        infoMap.put("createTime", info.createTime);
+//        infoMap.put("wording", info.wording);
+//        infoMap.put("friendAttributes", info.friendAttributes);
+//        return infoMap;
     }
 
     static public ZIMFriendInfo oZIMFriendInfo(HashMap<String, Object> infoMap) {
         ZIMFriendInfo info = new ZIMFriendInfo();
-        oZIMUserInfo(infoMap,info); // Assuming oZIMUserInfo for ZIMUserInfo inheritance
-        info.friendAlias = (String) infoMap.get("friendAlias");
-        info.createTime = (Long) infoMap.get("createTime");
-        info.wording = (String) infoMap.get("wording");
-        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
+        oZIMUserInfo(infoMap,info);
+//        info.friendAlias = (String) infoMap.get("friendAlias");
+//        info.createTime = (Long) infoMap.get("createTime");
+//        info.wording = (String) infoMap.get("wording");
+//        info.friendAttributes = (HashMap<String, String>) infoMap.get("friendAttributes");
         return info;
     }
 
@@ -1627,13 +1685,14 @@ public class ZIMPluginConverter {
         if(operatedUser == null){
             return null;
         }
-        HashMap<String, Object> userInfoMap = new HashMap<>();
-        userInfoMap.put("userID", operatedUser.userID);
-        userInfoMap.put("userName", operatedUser.userName);
-        userInfoMap.put("userAvatarUrl", operatedUser.userAvatarUrl);
-        userInfoMap.put("memberNickname", operatedUser.memberNickName);
-        userInfoMap.put("memberRole", operatedUser.memberRole);
-        return userInfoMap;
+        return mZIMUserInfo(operatedUser);
+//        HashMap<String, Object> userInfoMap = new HashMap<>();
+//        userInfoMap.put("userID", operatedUser.userID);
+//        userInfoMap.put("userName", operatedUser.userName);
+//        userInfoMap.put("userAvatarUrl", operatedUser.userAvatarUrl);
+//        userInfoMap.put("memberNickname", operatedUser.memberNickName);
+//        userInfoMap.put("memberRole", operatedUser.memberRole);
+//        return userInfoMap;
     }
 
     public static Object mZIMGroupVerifyInfo(ZIMGroupVerifyInfo verifyInfo) {
@@ -1642,5 +1701,10 @@ public class ZIMPluginConverter {
         userInfoMap.put("joinMode", verifyInfo.joinMode.value());
         userInfoMap.put("inviteMode", verifyInfo.inviteMode.value());
         return userInfoMap;
+    }
+
+    public static HashMap<String,Object> mZIMTipsMessageChangeInfo（ZIMTipsMessageChangeInfo info）{
+        HashMap<String, Object> userInfoMap = new HashMap<>();
+        userInfoMap.put("")
     }
 }
