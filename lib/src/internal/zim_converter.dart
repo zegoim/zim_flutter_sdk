@@ -1246,6 +1246,7 @@ class ZIMConverter {
     configMap['mode'] = ZIMInvitationModeExtension.valueMap[config.mode];
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
     configMap['extendedData'] = config.extendedData;
+    configMap['enableNotReceivedCheck'] = config.enableNotReceivedCheck;
     return configMap;
   }
 

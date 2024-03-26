@@ -1118,6 +1118,7 @@ public class ZIMPluginConverter {
         ZIMCallInviteConfig config = new ZIMCallInviteConfig();
         config.timeout = ZIMPluginCommonTools.safeGetIntValue(configMap.get("timeout"));
         config.extendedData = (String) configMap.get("extendedData");
+        config.enableNotReceivedCheck = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("enableNotReceivedCheck"));
         config.mode = ZIMCallInvitationMode.getZIMCallInvitationMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         return config;

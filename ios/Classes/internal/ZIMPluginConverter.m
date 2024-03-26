@@ -1214,7 +1214,7 @@
     config.extendedData = [configDic safeObjectForKey:@"extendedData"];
     config.mode = ((NSNumber *)[configDic objectForKey:@"mode"]).intValue;
     config.pushConfig = [ZIMPluginConverter oZIMPushConfig:[configDic safeObjectForKey:@"pushConfig"]];
-    
+    config.enableNotReceivedCheck = [[configDic objectForKey:@"enableNotReceivedCheck"] boolValue];
     return config;
 }
 

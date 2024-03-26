@@ -431,7 +431,8 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
     ZIMCallUserState.received: 5,
     ZIMCallUserState.timeout:6,
     ZIMCallUserState.quited:7,
-    ZIMCallUserState.ended:8
+    ZIMCallUserState.ended:8,
+    ZIMCallUserState.notYetReceived:9,
   };
   static const mapValue = {
     -1: ZIMCallUserState.unknown,
@@ -443,7 +444,8 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
     5: ZIMCallUserState.received,
     6: ZIMCallUserState.timeout,
     7: ZIMCallUserState.quited,
-    8: ZIMCallUserState.ended
+    8: ZIMCallUserState.ended,
+    9: ZIMCallUserState.notYetReceived
   };
 
   int get value => valueMap[this] ?? -1;
@@ -514,12 +516,12 @@ extension ZIMRevokeTypeExtension on ZIMRevokeType {
 
 extension ZIMGroupJoinModeExtension on ZIMGroupJoinMode {
   static const valueMap = {
-    ZIMGroupJoinMode.none: 0,
+    ZIMGroupJoinMode.any: 0,
     ZIMGroupJoinMode.auth: 1,
      ZIMGroupJoinMode.forbid: 2,
   };
   static const mapValue = {
-    0: ZIMGroupJoinMode.none,
+    0: ZIMGroupJoinMode.any,
     1: ZIMGroupJoinMode.auth,
     2: ZIMGroupJoinMode.forbid,
   };
@@ -549,12 +551,12 @@ extension ZIMGroupEnterTypeExtension on ZIMGroupEnterType {
 
 extension ZIMGroupInviteModeExtension on ZIMGroupInviteMode {
   static const valueMap = {
-    ZIMGroupInviteMode.none: 0,
-    ZIMGroupInviteMode.auth: 1,
+    ZIMGroupInviteMode.any: 0,
+    ZIMGroupInviteMode.admin: 1,
   };
   static const mapValue = {
-    0: ZIMGroupInviteMode.none,
-    1: ZIMGroupInviteMode.auth
+    0: ZIMGroupInviteMode.any,
+    1: ZIMGroupInviteMode.admin
   };
 
   int get value => valueMap[this] ?? -1;
