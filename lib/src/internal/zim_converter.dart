@@ -831,8 +831,8 @@ class ZIMConverter {
     return ZIMRoomLeftResult(roomID: resultMap['roomID']);
   }
 
-  static ZIMAllRoomLeftResult oZIMAllRoomLeftResult(Map resultMap) {
-    return ZIMAllRoomLeftResult(roomIDList: List<String>.from(resultMap['roomIDList']));
+  static ZIMRoomAllLeftResult oZIMAllRoomLeftResult(Map resultMap) {
+    return ZIMRoomAllLeftResult(roomIDs: List<String>.from(resultMap['roomIDList']));
   }
 
   static Map mZIMRoomMemberQueryConfig(ZIMRoomMemberQueryConfig config) {
@@ -1154,11 +1154,29 @@ class ZIMConverter {
         nickname: resultMap['nickname'] ?? '');
   }
 
+  static ZIMGroupEnterInfo oZIMGroupEnterInfo(Map? groupEnterInfoMap) {
+    if (groupEnterInfoMap == null) return ZIMGroupEnterInfo();
+    ZIMGroupEnterInfo groupEnterInfo = ZIMGroupEnterInfo();
+    if(groupEnterInfoMap.containsKey('operatedUser') && groupEnterInfoMap['operatedUser'] != null){
+      groupEnterInfo.operatedUser  = oZIMGroupMemberSimpleInfo(groupEnterInfoMap['operatedUser']);
+    }
+    groupEnterInfo.enterTime = groupEnterInfoMap['enterTime'] ?? 0;
+    groupEnterInfo.enterType = ZIMGroupEnterTypeExtension.mapValue[groupEnterInfoMap['enterType']]!;
+    return groupEnterInfo;
+  }
+
   static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map? memberInfoMap) {
     if (memberInfoMap == null) return ZIMGroupMemberInfo();
-
-    ZIMUserInfo info = oZIMUserInfo(memberInfoMap,ZIMGroupMemberInfo());
-    return info as ZIMGroupMemberInfo;
+    ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
+    groupMemberInfo.userID = memberInfoMap['userID'];
+    groupMemberInfo.userName = memberInfoMap['userName'] ?? '';
+    groupMemberInfo.userAvatarUrl = memberInfoMap['userAvatarUrl'] ?? '';
+    groupMemberInfo.memberRole = memberInfoMap['memberRole'];
+    groupMemberInfo.memberNickname = memberInfoMap['memberNickname'] ?? '';
+    groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'] ?? '';
+    groupMemberInfo.muteExpiredTime = memberInfoMap['muteExpiredTime'] ??0;
+    groupMemberInfo.groupEnterInfo = oZIMGroupEnterInfo(memberInfoMap['groupEnterInfo']);
+    return groupMemberInfo;
   }
 
   static List<ZIMGroupMemberInfo> oZIMGroupMemberInfoList(List basicList) {
@@ -1283,6 +1301,7 @@ class ZIMConverter {
     configMap['mode'] = ZIMInvitationModeExtension.valueMap[config.mode];
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
     configMap['extendedData'] = config.extendedData;
+    configMap['enableNotReceivedCheck'] = config.enableNotReceivedCheck;
     return configMap;
   }
 

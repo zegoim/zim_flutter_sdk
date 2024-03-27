@@ -1319,9 +1319,9 @@ public class ZIMPluginMethodHandler {
             result.error("-1", "no native instance",null);
             return;
         }
-        zim.leaveAllRoom(new ZIMAllRoomLeftCallback() {
+        zim.leaveAllRoom(new ZIMRoomAllLeftCallback() {
             @Override
-            public void onAllRoomLeft(ArrayList<String> roomIDList, ZIMError errorInfo) {
+            public void onRoomAllLeft(ArrayList<String> roomIDList, ZIMError errorInfo) {
                 // 这里处理离开所有房间的结果
                 if (errorInfo.code == ZIMErrorCode.SUCCESS) {
                     HashMap<String,Object> resultMap = new HashMap<>();

@@ -1043,6 +1043,14 @@ public class ZIMPluginConverter {
         return groupFullInfoMap;
     }
 
+    static public HashMap<String,Object> mZIMGroupEnterInfo(ZIMGroupEnterInfo groupEnterInfo) {
+        HashMap<String,Object> groupEnterInfoMap = new HashMap<>();
+        groupEnterInfoMap.put("operatedUser", mZIMGroupMemberSimpleInfo(groupEnterInfo.operatedUser));
+        groupEnterInfoMap.put("enterTime", groupEnterInfo.enterTime);
+        groupEnterInfoMap.put("enterType", groupEnterInfo.enterType.value());
+        return groupEnterInfoMap;
+    }
+
     static public HashMap<String,Object> mZIMGroupMemberInfo(ZIMGroupMemberInfo groupMemberInfo){
         HashMap<String,Object> groupMemberInfoMap = new HashMap<>();
         groupMemberInfoMap.put("memberNickname",groupMemberInfo.memberNickname);
@@ -1052,6 +1060,7 @@ public class ZIMPluginConverter {
         groupMemberInfoMap.put("userAvatarUrl",groupMemberInfo.memberAvatarUrl != null?groupMemberInfo.userAvatarUrl:"");
         groupMemberInfoMap.put("memberAvatarUrl",groupMemberInfo.memberAvatarUrl != null?groupMemberInfo.memberAvatarUrl:"");
         groupMemberInfoMap.put("muteExpiredTime",groupMemberInfo.muteExpiredTime);
+        groupMemberInfoMap.put("groupEnterInfo", mZIMGroupEnterInfo(groupMemberInfo.groupEnterInfo));
         return groupMemberInfoMap;
     }
 
@@ -1166,6 +1175,7 @@ public class ZIMPluginConverter {
         ZIMCallInviteConfig config = new ZIMCallInviteConfig();
         config.timeout = ZIMPluginCommonTools.safeGetIntValue(configMap.get("timeout"));
         config.extendedData = (String) configMap.get("extendedData");
+        config.enableNotReceivedCheck = ZIMPluginCommonTools.safeGetBoolValue(configMap.get("enableNotReceivedCheck"));
         config.mode = ZIMCallInvitationMode.getZIMCallInvitationMode(ZIMPluginCommonTools.safeGetIntValue(configMap.get("mode")));
         config.pushConfig = oZIMPushConfig(ZIMPluginCommonTools.safeGetHashMap(configMap.get("pushConfig"))) ;
         return config;

@@ -2932,6 +2932,7 @@ void ZIMPluginMethodHandler::callInvite(flutter::EncodableMap& argument,
     config.mode = (ZIMCallInvitationMode)std::get<int32_t>(configMap[FTValue("mode")]);
     config.timeout = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("timeout")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
+    config.enableNotReceivedCheck = std::get<bool>(configMap[FTValue("enableNotReceivedCheck")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
