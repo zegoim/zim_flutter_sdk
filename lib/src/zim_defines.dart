@@ -748,11 +748,11 @@ class ZIMTipsMessage extends ZIMMessage {
 
   ZIMTipsMessageEvent event = ZIMTipsMessageEvent.groupCreated;
 
-  ZIMUserInfo operatedUser = ZIMUserInfo();
+  ZIMUserInfo? operatedUser;
 
   List<ZIMUserInfo> targetUserList = [];
 
-  ZIMTipsMessageChangeInfo changeInfo = ZIMTipsMessageChangeInfo();
+  ZIMTipsMessageChangeInfo? changeInfo;
 }
 
 class ZIMConversation {
@@ -2795,7 +2795,7 @@ class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
   String groupName = '';
   String groupNotice = '';
   String groupAvatarUrl = '';
-  ZIMGroupMuteInfo groupMuteInfo = ZIMGroupMuteInfo();
+  ZIMGroupMuteInfo? groupMuteInfo;
 }
 
 class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo{

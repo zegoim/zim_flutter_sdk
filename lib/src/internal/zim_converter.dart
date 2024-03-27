@@ -432,9 +432,13 @@ class ZIMConverter {
         message ??= ZIMTipsMessage();
         message as ZIMTipsMessage;
         message.event = ZIMTipsMessageEventExtension.mapValue[resultMap['event']]!;
-        message.operatedUser = oZIMUserInfo(resultMap['operatedUser']);
+        if(resultMap['operatedUser'] != null){
+          message.operatedUser = oZIMUserInfo(resultMap['operatedUser']);
+        }
         message.targetUserList = oZIMUserInfoList(resultMap['targetUserList']);
-        message.changeInfo = oZIMTipsMessageChangeInfo(resultMap['changeInfo']);
+        if(resultMap['changeInfo'] != null){
+          message.changeInfo = oZIMTipsMessageChangeInfo(resultMap['changeInfo']);
+        }
         break;
       default:
         message ??= ZIMMessage();
@@ -2363,7 +2367,9 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
         info.groupName = map['groupName'];
         info.groupNotice = map['groupNotice'];
         info.groupAvatarUrl = map['groupAvatarUrl'];
-        info.groupMuteInfo = oZIMGroupMuteInfo(map['groupMuteInfo']);
+        if(map['groupMuteInfo'] != null){
+          info.groupMuteInfo = oZIMGroupMuteInfo(map['groupMuteInfo']);
+        }
         break;
       case ZIMTipsMessageGroupMemberChangeInfo:
         info as ZIMTipsMessageGroupMemberChangeInfo;
