@@ -420,19 +420,19 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(std
 	auto groupChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupChangeInfo>(changeInfo);
 	if (groupChangeInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupChangeInfo");
-		changeInfoMap[FTValue("groupDataFlag")] = FTValue(groupChangeInfo->GetGroupDataFlag());
-		changeInfoMap[FTValue("groupName")] = FTValue(groupChangeInfo->GetGroupName());
-		changeInfoMap[FTValue("groupNotice")] = FTValue(groupChangeInfo->GetGroupNotice());
-		changeInfoMap[FTValue("groupAvatarUrl")] = FTValue(groupChangeInfo->GetGroupAvatarUrl());
-		changeInfoMap[FTValue("groupMuteInfo")] = FTValue(cnvZIMGroupMuteInfoPtrToObj(groupChangeInfo->GetGroupMutedInfo()));
+		changeInfoMap[FTValue("groupDataFlag")] = FTValue(groupChangeInfo->getGroupDataFlag());
+		changeInfoMap[FTValue("groupName")] = FTValue(groupChangeInfo->getGroupName());
+		changeInfoMap[FTValue("groupNotice")] = FTValue(groupChangeInfo->getGroupNotice());
+		changeInfoMap[FTValue("groupAvatarUrl")] = FTValue(groupChangeInfo->getGroupAvatarUrl());
+		changeInfoMap[FTValue("groupMuteInfo")] = FTValue(cnvZIMGroupMuteInfoPtrToObj(groupChangeInfo->getGroupMutedInfo()));
 		return changeInfoMap;
 	}
 
 	auto groupMemberChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupMemberChangeInfo>(changeInfo);
 	if (groupMemberChangeInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupMemberChangeInfo");
-		changeInfoMap[FTValue("muteExpiredTime")] = FTValue((int64_t)(groupMemberChangeInfo->GetMuteExpiredTime()));
-		changeInfoMap[FTValue("role")] = FTValue((int32_t)(groupMemberChangeInfo->GetMemberRole()));
+		changeInfoMap[FTValue("muteExpiredTime")] = FTValue((int64_t)(groupMemberChangeInfo->getMuteExpiredTime()));
+		changeInfoMap[FTValue("role")] = FTValue((int32_t)(groupMemberChangeInfo->getMemberRole()));
 		return changeInfoMap;
 	}
 
