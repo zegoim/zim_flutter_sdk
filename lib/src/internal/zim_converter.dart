@@ -775,8 +775,8 @@ class ZIMConverter {
     return ZIMRoomLeftResult(roomID: resultMap['roomID']);
   }
 
-  static ZIMAllRoomLeftResult oZIMAllRoomLeftResult(Map resultMap) {
-    return ZIMAllRoomLeftResult(roomIDList: List<String>.from(resultMap['roomIDList']));
+  static ZIMRoomAllLeftResult oZIMAllRoomLeftResult(Map resultMap) {
+    return ZIMRoomAllLeftResult(roomIDs: List<String>.from(resultMap['roomIDList']));
   }
 
   static Map mZIMRoomMemberQueryConfig(ZIMRoomMemberQueryConfig config) {

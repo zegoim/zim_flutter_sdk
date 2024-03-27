@@ -1823,9 +1823,9 @@ class ZIMRoomLeftResult {
   ZIMRoomLeftResult({required this.roomID});
 }
 
-class ZIMAllRoomLeftResult {
-  List<String> roomIDList;
-  ZIMAllRoomLeftResult({required this.roomIDList});
+class ZIMRoomAllLeftResult {
+  List<String> roomIDs;
+  ZIMRoomAllLeftResult({required this.roomIDs});
 }
 
 /// Callback of the result of querying the room members list.
