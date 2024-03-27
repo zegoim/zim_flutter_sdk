@@ -210,7 +210,55 @@ FTMap ZIMPluginConverter::cnvZIMUserInfoObjectToMap(const ZIMUserInfo& userInfo)
 	userInfoMap[FTValue("userAvatarUrl")] = FTValue(userInfo.userAvatarUrl);
 
 	return userInfoMap;
+}
 
+flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(std::shared_ptr<ZIMUserInfo> userPtr) {
+	if (!userPtr) {
+		return FTValue(std::monostate());
+	}
+
+	FTMap userInfoMap;
+	userInfoMap[FTValue("userID")] = FTValue(userPtr->userID);
+	userInfoMap[FTValue("userName")] = FTValue(userPtr->userName);
+	userInfoMap[FTValue("userAvatarUrl")] = FTValue(userPtr->userAvatarUrl);
+
+	auto groupMemberSimpleInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMGroupMemberSimpleInfo>>(userPtr);
+	if (groupMemberSimpleInfo) {
+		userInfoMap[FTValue("memberNickname")] = FTValue(groupMemberSimpleInfo->memberNickname);
+		userInfoMap[FTValue("memberRole")] = FTValue(groupMemberSimpleInfo->memberRole);
+		userInfoMap[FTValue("classType")] = FTValue("ZIMGroupMemberSimpleInfo");
+		return userInfoMap;
+	}
+
+	auto groupMemberInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMGroupMemberInfo>>(userPtr);
+	if (groupMemberInfo) {
+		userInfoMap[FTValue("memberNickname")] = FTValue(groupMemberInfo->memberNickname);
+		userInfoMap[FTValue("memberRole")] = FTValue(groupMemberInfo->memberRole);
+		userInfoMap[FTValue("memberAvatarUrl")] = FTValue(groupMemberInfo->memberAvatarUrl);
+		userInfoMap[FTValue("muteExpiredTime")] = FTValue(groupMemberInfo->muteExpiredTime);
+		userInfoMap[FTValue("classType")] = FTValue("ZIMGroupMemberInfo");
+		return userInfoMap;
+	}
+
+	auto friendInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMFriendInfo>>(userPtr);
+	if (friendInfo) {
+		userInfoMap[FTValue("friendAlias")] = FTValue(friendInfo->friendAlias);
+		userInfoMap[FTValue("createTime")] = FTValue(friendInfo->createTime);
+		userInfoMap[FTValue("wording")] = FTValue(friendInfo->wording);
+		userInfoMap[FTValue("friendAttributes")] = cnvSTLMapToFTMap(friendInfo->friendAttributes);
+		userInfoMap[FTValue("classType")] = FTValue("ZIMFriendInfo");
+		return userInfoMap;
+	}
+}
+
+FTArray ZIMPluginConverter::cnvZIMUserInfoPtrListToArray(std::vector<std::shared_ptr<ZIMUserInfo>> userInfoList) {
+	FTArray userInfoListArray;
+
+	for (const auto& userInfo : userInfoList) {
+		userInfoListArray.emplace_back(cnvZIMUserInfoPtrToObj(userInfo));
+	}
+
+	return userInfoListArray;
 }
 
 FTMap ZIMPluginConverter::cnvZIMRoomMemberInfoObjectToMap(const ZIMRoomMemberInfo& userInfo) {
@@ -361,6 +409,36 @@ FTArray ZIMPluginConverter::cnvZIMMessageSentStatusChangeInfoListToArray(const s
 	return messageSentStatusInfoArray;
 }
 
+flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(std::shared_ptr<ZIMTipsMessageChangeInfo> changeInfo) {
+	if (!changeInfo) {
+		return FTValue(std::monostate());
+	}
+
+	FTMap changeInfoMap;
+	changeInfoMap[FTValue("type")] = FTValue(changeInfo->getType());
+
+	auto groupChangeInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMTipsMessageGroupChangeInfo>>(changeInfo);
+	if (groupChangeInfo) {
+		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupChangeInfo");
+		changeInfoMap[FTValue("groupDataFlag")] = FTValue(groupChangeInfo->getGroupDataFlag());
+		changeInfoMap[FTValue("groupName")] = FTValue(groupChangeInfo->getGroupName());
+		changeInfoMap[FTValue("groupNotice")] = FTValue(groupChangeInfo->getGroupNotice());
+		changeInfoMap[FTValue("groupAvatarUrl")] = FTValue(groupChangeInfo->getGroupAvatarUrl());
+		changeInfoMap[FTValue("groupMuteInfo")] = FTValue(cnvZIMGroupMuteInfoPtrToObj(groupChangeInfo->getGroupName()));
+		return changeInfoMap;
+	}
+
+	auto groupMemberChangeInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMTipsMessageGroupMemberChangeInfo>>(changeInfo);
+	if (groupMemberInfo) {
+		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupMemberChangeInfo");
+		changeInfoMap[FTValue("muteExpiredTime")] = FTValue(groupMemberChangeInfo->getMuteExpiredTime());
+		changeInfoMap[FTValue("role")] = FTValue(groupMemberChangeInfo->getMemberRole());
+		return changeInfoMap;
+	}
+
+	return changeInfoMap;
+}
+
 flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage* message) {
 	FTMap messageMap;
 	if (!message) {
@@ -475,6 +553,14 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 		messageMap[FTValue("combineID")] = FTValue(combineMessage->getCombineID());
 		auto messageArray = ZIMPluginConverter::cnvZIMMessageListToArray(combineMessage->messageList);
 		messageMap[FTValue("messageList")] = messageArray;
+		break;
+	}
+	case ZIM_MESSAGE_TYPE_TIPS: {
+		auto tipsMessage = static_cast<ZIMTipsMessage *>(message);
+		messageMap[FTValue("event")] = FTValue(tipsMessage->getEvent());
+		messageMap[FTValue("operatedUser")] = FTValue(cnvZIMUserInfoPtrToObj(tipsMessage->getOperatedUser()));
+		messageMap[FTValue("targetUserList")] = FTValue(cnvZIMUserInfoPtrListToArray(tipsMessage->getTargetUserList()));
+		messageMap[FTValue("changeInfo")] = FTValue(cnvZIMTipsMessageChangeInfoToMap(tipsMessage->getChangeInfo()));
 		break;
 	}
 	case ZIM_MESSAGE_TYPE_UNKNOWN:
@@ -613,6 +699,10 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 		combineMessagePtr->title = std::get<std::string>(messageMap[FTValue("title")]);
 		combineMessagePtr->summary = std::get<std::string>(messageMap[FTValue("summary")]);
 		(*combineMessagePtr.get()).*get(ZIM_FriendlyGet_combineID()) = std::get<std::string>(messageMap[FTValue("combineID")]);
+		break;
+	}
+	case zim::ZIM_MESSAGE_TYPE_TIPS: {
+		messagePtr = std::make_shared<ZIMTipsMessage>();
 		break;
 	}
 	default:
@@ -1299,6 +1389,19 @@ FTMap ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info)
 	return infoMap;
 }
 
+flutter::EncodableValue ZIMPluginConverter::cnvZIMGroupMuteInfoPtrToObj(std::shared_ptr<ZIMGroupMuteInfo> infoPtr) {
+	if (!infoPtr) {
+		return FTValue(std::monostate());
+	}
+
+	FTMap muteInfoMap;
+
+	muteInfoMap[FTValue("mode")] = FTValue(infoPtr->mode);
+	muteInfoMap[FTValue("expiredTime")] = FTValue((int64_t)infoPtr->expiredTime);
+	muteInfoMap[FTValue("roles")] = ZIMPluginConverter::cnvStlVectorToFTArray(infoPtr->roles);
+	return muteInfoMap;
+}
+
 FTArray ZIMPluginConverter::cnvZIMMessageReactionListToArray(const std::vector<ZIMMessageReaction>& reactionList) {
 	FTArray reactionArray;
 	for (auto& reaction : reactionList) {
@@ -1490,11 +1593,38 @@ ZIMFriendSearchConfig ZIMPluginConverter::cnvZIMFriendSearchConfigToObject(FTMap
 	return config;
 }
 
-ZIMUserInfo ZIMPluginConverter::cnvZIMUserInfoToObject(FTMap infoMap) {
-	ZIMUserInfo info;
-	info.userID = std::get<std::string>(infoMap[FTValue("userID")]);
-	info.userName = std::get<std::string>(infoMap[FTValue("userName")]);
-	info.userAvatarUrl = std::get<std::string>(infoMap[FTValue("userAvatarUrl")]);
+std::shared_ptr<ZIMUserInfo> ZIMPluginConverter::cnvZIMUserInfoToObject(FTMap infoMap) {
+	std::shared_ptr<ZIMUserInfo> info;
+
+	std::string classType = std::get<std::string>(infoMap[FTValue("classType")]);
+	
+	if (classType == "ZIMGroupMemberSimpleInfo") {
+		info = std::make_shared<ZIMGroupMemberSimpleInfo>();
+		info->memberNickname = std::get<std::string>(infoMap[FTValue("memberNickname")]);
+		info->memberRole = cnvFTMapToInt32(infoMap[FTValue("memberRole")]);
+	} else if (classType == "ZIMGroupMemberInfo") {
+		info = std::make_shared<ZIMGroupMemberInfo>();
+		info->memberNickname = std::get<std::string>(infoMap[FTValue("memberNickname")]);
+		info->memberRole = cnvFTMapToInt32(infoMap[FTValue("memberRole")]);
+		info->memberAvatarUrl = std::get<std::string>(infoMap[FTValue("memberAvatarUrl")]);
+		info->muteExpiredTime = cnvFTMapToInt64(infoMap[FTValue("muteExpiredTime")]);
+	} else if (lassType ==  "ZIMFriendInfo") {
+		info = std::make_shared<ZIMFriendInfo>();
+		info->friendAlias = std::get<std::string>(infoMap[FTValue("friendAlias")]);
+		info->createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
+		info->wording = std::get<std::string>(infoMap[FTValue("wording")]);
+		auto attrsMap = std::get<FTMap>(infoMap[FTValue("friendAttributes")]);
+		for (auto& attr : attrsMap) {
+			auto key = std::get<std::string>(attr.first);
+			auto value = std::get<std::string>(attr.second);
+			info->friendAttributes[key] = value;
+		}
+	}
+
+	info->userID = std::get<std::string>(infoMap[FTValue("userID")]);
+	info->userName = std::get<std::string>(infoMap[FTValue("userName")]);
+	info->userAvatarUrl = std::get<std::string>(infoMap[FTValue("userAvatarUrl")]);
+
 	return info;
 }
 
@@ -1562,7 +1692,8 @@ ZIMFriendRelationInfo ZIMPluginConverter::cnvZIMFriendRelationInfoToObject(FTMap
 
 ZIMFriendApplicationInfo ZIMPluginConverter::cnvZIMFriendApplicationInfoToObject(FTMap infoMap) {
 	ZIMFriendApplicationInfo info;
-	info.applyUser = cnvZIMUserInfoToObject(std::get<FTMap>(infoMap[FTValue("applyUser")]));
+	auto apUser = cnvZIMUserInfoToObject(std::get<FTMap>(infoMap[FTValue("applyUser")]))
+	info.applyUser = apUser ? *apUser : ZIMUserInfo();
 	info.wording = std::get<std::string>(infoMap[FTValue("wording")]);
 	info.createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
 	info.updateTime = cnvFTMapToInt64(infoMap[FTValue("updateTime")]);
