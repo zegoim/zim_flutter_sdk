@@ -1610,7 +1610,7 @@ std::shared_ptr<ZIMUserInfo> ZIMPluginConverter::cnvZIMUserInfoToObject(FTMap in
 		memberInfo->memberAvatarUrl = std::get<std::string>(infoMap[FTValue("memberAvatarUrl")]);
 		memberInfo->muteExpiredTime = cnvFTMapToInt64(infoMap[FTValue("muteExpiredTime")]);
 		info = memberInfo;
-	} else if (lassType ==  "ZIMFriendInfo") {
+	} else if (classType ==  "ZIMFriendInfo") {
 		auto friendInfo = std::make_shared<ZIMFriendInfo>();
 		friendInfo->friendAlias = std::get<std::string>(infoMap[FTValue("friendAlias")]);
 		friendInfo->createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
