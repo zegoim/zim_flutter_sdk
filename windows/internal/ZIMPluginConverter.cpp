@@ -415,24 +415,24 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(std
 	}
 
 	FTMap changeInfoMap;
-	changeInfoMap[FTValue("type")] = FTValue(changeInfo->getType());
+	changeInfoMap[FTValue("type")] = FTValue(changeInfo->GetType());
 
 	auto groupChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupChangeInfo>(changeInfo);
 	if (groupChangeInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupChangeInfo");
-		changeInfoMap[FTValue("groupDataFlag")] = FTValue(groupChangeInfo->getGroupDataFlag());
-		changeInfoMap[FTValue("groupName")] = FTValue(groupChangeInfo->getGroupName());
-		changeInfoMap[FTValue("groupNotice")] = FTValue(groupChangeInfo->getGroupNotice());
-		changeInfoMap[FTValue("groupAvatarUrl")] = FTValue(groupChangeInfo->getGroupAvatarUrl());
-		changeInfoMap[FTValue("groupMuteInfo")] = FTValue(cnvZIMGroupMuteInfoPtrToObj(groupChangeInfo->getGroupName()));
+		changeInfoMap[FTValue("groupDataFlag")] = FTValue(groupChangeInfo->GetGroupDataFlag());
+		changeInfoMap[FTValue("groupName")] = FTValue(groupChangeInfo->GetGroupName());
+		changeInfoMap[FTValue("groupNotice")] = FTValue(groupChangeInfo->GetGroupNotice());
+		changeInfoMap[FTValue("groupAvatarUrl")] = FTValue(groupChangeInfo->GetGroupAvatarUrl());
+		changeInfoMap[FTValue("groupMuteInfo")] = FTValue(cnvZIMGroupMuteInfoPtrToObj(groupChangeInfo->GetGroupMutedInfo()));
 		return changeInfoMap;
 	}
 
 	auto groupMemberChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupMemberChangeInfo>(changeInfo);
 	if (groupMemberInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupMemberChangeInfo");
-		changeInfoMap[FTValue("muteExpiredTime")] = FTValue(groupMemberChangeInfo->getMuteExpiredTime());
-		changeInfoMap[FTValue("role")] = FTValue(groupMemberChangeInfo->getMemberRole());
+		changeInfoMap[FTValue("muteExpiredTime")] = FTValue(groupMemberChangeInfo->GetMuteExpiredTime());
+		changeInfoMap[FTValue("role")] = FTValue(groupMemberChangeInfo->GetMemberRole());
 		return changeInfoMap;
 	}
 
@@ -1599,17 +1599,19 @@ std::shared_ptr<ZIMUserInfo> ZIMPluginConverter::cnvZIMUserInfoToObject(FTMap in
 	std::string classType = std::get<std::string>(infoMap[FTValue("classType")]);
 	
 	if (classType == "ZIMGroupMemberSimpleInfo") {
-		info = std::make_shared<ZIMGroupMemberSimpleInfo>();
+		auto simpleInfo = std::make_shared<ZIMGroupMemberSimpleInfo>();
 		info->memberNickname = std::get<std::string>(infoMap[FTValue("memberNickname")]);
 		info->memberRole = cnvFTMapToInt32(infoMap[FTValue("memberRole")]);
+		info = simpleInfo;
 	} else if (classType == "ZIMGroupMemberInfo") {
-		info = std::make_shared<ZIMGroupMemberInfo>();
+       	auto memberInfo = std::make_shared<ZIMGroupMemberInfo>();
 		info->memberNickname = std::get<std::string>(infoMap[FTValue("memberNickname")]);
 		info->memberRole = cnvFTMapToInt32(infoMap[FTValue("memberRole")]);
 		info->memberAvatarUrl = std::get<std::string>(infoMap[FTValue("memberAvatarUrl")]);
 		info->muteExpiredTime = cnvFTMapToInt64(infoMap[FTValue("muteExpiredTime")]);
+		info = memberInfo;
 	} else if (lassType ==  "ZIMFriendInfo") {
-		info = std::make_shared<ZIMFriendInfo>();
+		auto friendInfo = std::make_shared<ZIMFriendInfo>();
 		info->friendAlias = std::get<std::string>(infoMap[FTValue("friendAlias")]);
 		info->createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
 		info->wording = std::get<std::string>(infoMap[FTValue("wording")]);
@@ -1617,8 +1619,9 @@ std::shared_ptr<ZIMUserInfo> ZIMPluginConverter::cnvZIMUserInfoToObject(FTMap in
 		for (auto& attr : attrsMap) {
 			auto key = std::get<std::string>(attr.first);
 			auto value = std::get<std::string>(attr.second);
-			info->friendAttributes[key] = value;
+			friendInfo->friendAttributes[key] = value;
 		}
+		info = friendInfo;
 	}
 
 	info->userID = std::get<std::string>(infoMap[FTValue("userID")]);
@@ -1692,7 +1695,7 @@ ZIMFriendRelationInfo ZIMPluginConverter::cnvZIMFriendRelationInfoToObject(FTMap
 
 ZIMFriendApplicationInfo ZIMPluginConverter::cnvZIMFriendApplicationInfoToObject(FTMap infoMap) {
 	ZIMFriendApplicationInfo info;
-	auto apUser = cnvZIMUserInfoToObject(std::get<FTMap>(infoMap[FTValue("applyUser")]))
+	auto apUser = cnvZIMUserInfoToObject(std::get<FTMap>(infoMap[FTValue("applyUser")]));
 	info.applyUser = apUser ? *apUser : ZIMUserInfo();
 	info.wording = std::get<std::string>(infoMap[FTValue("wording")]);
 	info.createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
