@@ -246,6 +246,8 @@ extension ZIMTipsMessageChangeInfoTypeExtension on ZIMTipsMessageChangeInfoType 
     11 : ZIMTipsMessageChangeInfoType.groupMemberRoleChanged,
     12 : ZIMTipsMessageChangeInfoType.groupMemberMuted
   };
+
+  int get value => valueMap[this] ?? -1;
 }
 
 extension ZIMMessageMentionedTypeExtension on ZIMMessageMentionedType {

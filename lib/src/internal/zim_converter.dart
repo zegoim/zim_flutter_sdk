@@ -2380,6 +2380,29 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     return info;
   }
 
+  static Map mZIMTipsMessageChangeInfo(ZIMTipsMessageChangeInfo info){
+    Map map = {};
+    map['type'] = info.type.value;
+    switch(info.runtimeType){
+      case ZIMTipsMessageGroupChangeInfo:
+        info as ZIMTipsMessageGroupChangeInfo;
+        map['groupDataFlag'] = info.groupDataFlag;
+        map['groupName'] = info.groupName;
+        map['groupNotice'] = info.groupNotice;
+        map['groupAvatarUrl'] = info.groupAvatarUrl;
+        if(info.groupMuteInfo != null){
+          map['groupMuteInfo'] = mZIMGroupMuteInfo(info.groupMuteInfo!);
+        }
+        break;
+      case ZIMTipsMessageGroupMemberChangeInfo:
+        info as ZIMTipsMessageGroupMemberChangeInfo;
+        map['role'] = info.role;
+        map['muteExpiredTime'] = info.muteExpiredTime;
+        break;
+    }
+    return map;
+  }
+
 
   static Uint8List convertToUint8List(dynamic data) {
     final list = <int>[];
