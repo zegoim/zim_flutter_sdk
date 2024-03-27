@@ -417,7 +417,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(std
 	FTMap changeInfoMap;
 	changeInfoMap[FTValue("type")] = FTValue(changeInfo->getType());
 
-	auto groupChangeInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMTipsMessageGroupChangeInfo>>(changeInfo);
+	auto groupChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupChangeInfo>(changeInfo);
 	if (groupChangeInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupChangeInfo");
 		changeInfoMap[FTValue("groupDataFlag")] = FTValue(groupChangeInfo->getGroupDataFlag());
@@ -428,7 +428,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(std
 		return changeInfoMap;
 	}
 
-	auto groupMemberChangeInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMTipsMessageGroupMemberChangeInfo>>(changeInfo);
+	auto groupMemberChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupMemberChangeInfo>(changeInfo);
 	if (groupMemberInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupMemberChangeInfo");
 		changeInfoMap[FTValue("muteExpiredTime")] = FTValue(groupMemberChangeInfo->getMuteExpiredTime());
