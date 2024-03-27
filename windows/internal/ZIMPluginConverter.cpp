@@ -222,7 +222,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(std::shared_p
 	userInfoMap[FTValue("userName")] = FTValue(userPtr->userName);
 	userInfoMap[FTValue("userAvatarUrl")] = FTValue(userPtr->userAvatarUrl);
 
-	auto groupMemberSimpleInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMGroupMemberSimpleInfo>>(userPtr);
+	auto groupMemberSimpleInfo = std::dynamic_pointer_cast<ZIMGroupMemberSimpleInfo>(userPtr);
 	if (groupMemberSimpleInfo) {
 		userInfoMap[FTValue("memberNickname")] = FTValue(groupMemberSimpleInfo->memberNickname);
 		userInfoMap[FTValue("memberRole")] = FTValue(groupMemberSimpleInfo->memberRole);
@@ -230,7 +230,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(std::shared_p
 		return userInfoMap;
 	}
 
-	auto groupMemberInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMGroupMemberInfo>>(userPtr);
+	auto groupMemberInfo = std::dynamic_pointer_cast<ZIMGroupMemberInfo>(userPtr);
 	if (groupMemberInfo) {
 		userInfoMap[FTValue("memberNickname")] = FTValue(groupMemberInfo->memberNickname);
 		userInfoMap[FTValue("memberRole")] = FTValue(groupMemberInfo->memberRole);
@@ -240,7 +240,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(std::shared_p
 		return userInfoMap;
 	}
 
-	auto friendInfo = std::dynamic_pointer_cast<std::shared_ptr<ZIMFriendInfo>>(userPtr);
+	auto friendInfo = std::dynamic_pointer_cast<ZIMFriendInfo>(userPtr);
 	if (friendInfo) {
 		userInfoMap[FTValue("friendAlias")] = FTValue(friendInfo->friendAlias);
 		userInfoMap[FTValue("createTime")] = FTValue(friendInfo->createTime);
