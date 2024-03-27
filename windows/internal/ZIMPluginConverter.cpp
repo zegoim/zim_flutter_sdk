@@ -429,7 +429,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(std
 	}
 
 	auto groupMemberChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupMemberChangeInfo>(changeInfo);
-	if (groupMemberInfo) {
+	if (groupMemberChangeInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupMemberChangeInfo");
 		changeInfoMap[FTValue("muteExpiredTime")] = FTValue(groupMemberChangeInfo->GetMuteExpiredTime());
 		changeInfoMap[FTValue("role")] = FTValue(groupMemberChangeInfo->GetMemberRole());
@@ -1600,21 +1600,21 @@ std::shared_ptr<ZIMUserInfo> ZIMPluginConverter::cnvZIMUserInfoToObject(FTMap in
 	
 	if (classType == "ZIMGroupMemberSimpleInfo") {
 		auto simpleInfo = std::make_shared<ZIMGroupMemberSimpleInfo>();
-		info->memberNickname = std::get<std::string>(infoMap[FTValue("memberNickname")]);
-		info->memberRole = cnvFTMapToInt32(infoMap[FTValue("memberRole")]);
+		simpleInfo->memberNickname = std::get<std::string>(infoMap[FTValue("memberNickname")]);
+		simpleInfo->memberRole = cnvFTMapToInt32(infoMap[FTValue("memberRole")]);
 		info = simpleInfo;
 	} else if (classType == "ZIMGroupMemberInfo") {
        	auto memberInfo = std::make_shared<ZIMGroupMemberInfo>();
-		info->memberNickname = std::get<std::string>(infoMap[FTValue("memberNickname")]);
-		info->memberRole = cnvFTMapToInt32(infoMap[FTValue("memberRole")]);
-		info->memberAvatarUrl = std::get<std::string>(infoMap[FTValue("memberAvatarUrl")]);
-		info->muteExpiredTime = cnvFTMapToInt64(infoMap[FTValue("muteExpiredTime")]);
+		memberInfo->memberNickname = std::get<std::string>(infoMap[FTValue("memberNickname")]);
+		memberInfo->memberRole = cnvFTMapToInt32(infoMap[FTValue("memberRole")]);
+		memberInfo->memberAvatarUrl = std::get<std::string>(infoMap[FTValue("memberAvatarUrl")]);
+		memberInfo->muteExpiredTime = cnvFTMapToInt64(infoMap[FTValue("muteExpiredTime")]);
 		info = memberInfo;
 	} else if (lassType ==  "ZIMFriendInfo") {
 		auto friendInfo = std::make_shared<ZIMFriendInfo>();
-		info->friendAlias = std::get<std::string>(infoMap[FTValue("friendAlias")]);
-		info->createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
-		info->wording = std::get<std::string>(infoMap[FTValue("wording")]);
+		friendInfo->friendAlias = std::get<std::string>(infoMap[FTValue("friendAlias")]);
+		friendInfo->createTime = cnvFTMapToInt64(infoMap[FTValue("createTime")]);
+		friendInfo->wording = std::get<std::string>(infoMap[FTValue("wording")]);
 		auto attrsMap = std::get<FTMap>(infoMap[FTValue("friendAttributes")]);
 		for (auto& attr : attrsMap) {
 			auto key = std::get<std::string>(attr.first);
