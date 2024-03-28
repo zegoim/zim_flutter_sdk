@@ -835,7 +835,7 @@ abstract class ZIM {
   /// [roomID] ID of the room to leave.
   Future<ZIMRoomLeftResult> leaveRoom(String roomID);
 
-  Future<ZIMAllRoomLeftResult> leaveAllRoom();
+  Future<ZIMRoomAllLeftResult> leaveAllRoom();
 
   /// Query the list of members in the room.
   ///

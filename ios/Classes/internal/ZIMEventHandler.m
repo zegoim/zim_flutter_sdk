@@ -384,6 +384,51 @@ fromGroupID:(NSString *)fromGroupID{
 }
 
 - (void)zim:(ZIM *)zim
+    groupVerifyInfoUpdated:(ZIMGroupVerifyInfo *)verifyInfo
+              operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+    groupID:(NSString *)groupID{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupVerifyInfo:verifyInfo] forKey:@"verifyInfo"];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo] forKey:@"operatedInfo"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupVerifyInfoUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    groupApplicationListChanged:(NSArray<ZIMGroupApplicationInfo *> *)applicationList
+     action:(ZIMGroupApplicationListChangeAction)action{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupApplicationInfoList:applicationList] forKey:@"applicationList"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)action] forKey:@"action"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupApplicationListChanged" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+groupApplicationUpdated:(NSArray<ZIMGroupApplicationInfo *> *)applicationList{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupApplicationInfoList:applicationList] forKey:@"applicationList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupApplicationUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
     groupNameUpdated:(NSString *)groupName
         operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
     groupID:(NSString *)groupID{

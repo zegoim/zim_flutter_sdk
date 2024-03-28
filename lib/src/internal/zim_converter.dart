@@ -67,6 +67,7 @@ class ZIMConverter {
     ZIMGroupMemberSimpleInfo groupMemberSimpleInfo = ZIMGroupMemberSimpleInfo(memberNickname: zimGroupMemberSimpleInfoMap['memberNickname'], memberRole: zimGroupMemberSimpleInfoMap['memberRole']);
     groupMemberSimpleInfo.userID = zimGroupMemberSimpleInfoMap['userID'];
     groupMemberSimpleInfo.userName = zimGroupMemberSimpleInfoMap['userName'] ?? '';
+    groupMemberSimpleInfo.userAvatarUrl = zimGroupMemberSimpleInfoMap['userAvatarUrl'] ?? '';
     return groupMemberSimpleInfo;
   }
 
@@ -76,7 +77,7 @@ class ZIMConverter {
     applicationInfo.createTime = applicationInfoMap['createTime'];
     applicationInfo.updateTime = applicationInfoMap['updateTime'];
     applicationInfo.state = ZIMGroupApplicationStateExtension.mapValue[applicationInfoMap['state']]!;
-    if(applicationInfoMap.containsKey('operatedUser')){
+    if(applicationInfoMap.containsKey('operatedUser') && applicationInfoMap['operatedUser'] != null){
       applicationInfo.operatedUser = oZIMGroupMemberSimpleInfo(applicationInfoMap['operatedUser']);
     }
     applicationInfo.type = ZIMGroupApplicationTypeExtension.mapValue[applicationInfoMap['type']]!;
@@ -774,8 +775,8 @@ class ZIMConverter {
     return ZIMRoomLeftResult(roomID: resultMap['roomID']);
   }
 
-  static ZIMAllRoomLeftResult oZIMAllRoomLeftResult(Map resultMap) {
-    return ZIMAllRoomLeftResult(roomIDList: List<String>.from(resultMap['roomIDList']));
+  static ZIMRoomAllLeftResult oZIMAllRoomLeftResult(Map resultMap) {
+    return ZIMRoomAllLeftResult(roomIDs: List<String>.from(resultMap['roomIDList']));
   }
 
   static Map mZIMRoomMemberQueryConfig(ZIMRoomMemberQueryConfig config) {
@@ -1098,6 +1099,17 @@ class ZIMConverter {
         nickname: resultMap['nickname'] ?? '');
   }
 
+  static ZIMGroupEnterInfo oZIMGroupEnterInfo(Map? groupEnterInfoMap) {
+    if (groupEnterInfoMap == null) return ZIMGroupEnterInfo();
+    ZIMGroupEnterInfo groupEnterInfo = ZIMGroupEnterInfo();
+    if(groupEnterInfoMap.containsKey('operatedUser') && groupEnterInfoMap['operatedUser'] != null){
+      groupEnterInfo.operatedUser  = oZIMGroupMemberSimpleInfo(groupEnterInfoMap['operatedUser']);
+    }
+    groupEnterInfo.enterTime = groupEnterInfoMap['enterTime'] ?? 0;
+    groupEnterInfo.enterType = ZIMGroupEnterTypeExtension.mapValue[groupEnterInfoMap['enterType']]!;
+    return groupEnterInfo;
+  }
+
   static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map? memberInfoMap) {
     if (memberInfoMap == null) return ZIMGroupMemberInfo();
     ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
@@ -1108,6 +1120,7 @@ class ZIMConverter {
     groupMemberInfo.memberNickname = memberInfoMap['memberNickname'] ?? '';
     groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'] ?? '';
     groupMemberInfo.muteExpiredTime = memberInfoMap['muteExpiredTime'] ??0;
+    groupMemberInfo.groupEnterInfo = oZIMGroupEnterInfo(memberInfoMap['groupEnterInfo']);
     return groupMemberInfo;
   }
 
@@ -1233,6 +1246,7 @@ class ZIMConverter {
     configMap['mode'] = ZIMInvitationModeExtension.valueMap[config.mode];
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
     configMap['extendedData'] = config.extendedData;
+    configMap['enableNotReceivedCheck'] = config.enableNotReceivedCheck;
     return configMap;
   }
 

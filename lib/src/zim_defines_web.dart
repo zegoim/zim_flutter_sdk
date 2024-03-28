@@ -166,6 +166,21 @@ class ZIM {
   external PromiseJsImpl<dynamic> deleteAllConversationMessages(dynamic config);
   external PromiseJsImpl<dynamic> searchLocalFriends(dynamic config);
   external PromiseJsImpl<dynamic> sendFriendApplication(String userID, dynamic config);
+  external PromiseJsImpl<dynamic> updateUserOfflinePushRule(dynamic offlinePushRule);
+  external PromiseJsImpl<dynamic> querySelfUserInfo();
+  external PromiseJsImpl<dynamic> replyMessage(dynamic message, dynamic repliedMessage, dynamic config);
+  external PromiseJsImpl<dynamic> queryRepliedMessageList(dynamic message, dynamic config);
+  external PromiseJsImpl<dynamic> queryRepliedMessageCount(dynamic message);
+  external PromiseJsImpl<dynamic> updateGroupJoinMode(dynamic mode, String groupID);
+  external PromiseJsImpl<dynamic> updateGroupInviteMode(dynamic mode, String groupID);
+  external PromiseJsImpl<dynamic> updateGroupBeInviteMode(dynamic mode, String groupID);
+  external PromiseJsImpl<dynamic> sendGroupJoinApplication(String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> acceptGroupJoinApplication(String userID, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> rejectGroupJoinApplication(String userID, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> sendGroupInviteApplications(dynamic userIDs, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> acceptGroupInviteApplication(String inviterUserID, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> rejectGroupInviteApplication(String inviterUserID, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> queryGroupApplicationList(dynamic config);
 }
 
 @JS()

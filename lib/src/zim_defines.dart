@@ -346,9 +346,9 @@ enum ZIMGroupMemberEvent { joined, left, kickedout, invited }
 
 enum ZIMGroupMemberState { quit, enter }
 
-enum ZIMGroupJoinMode { none, auth, forbid }
+enum ZIMGroupJoinMode { any, auth, forbid }
 
-enum ZIMGroupInviteMode { none, auth }
+enum ZIMGroupInviteMode { any, admin }
 
 enum ZIMGroupBeInviteMode { none, auth }
 
@@ -370,7 +370,8 @@ enum ZIMCallUserState {
   received,
   timeout,
   quited,
-  ended
+  ended,
+  notYetReceived
 }
 
 enum ZIMCallInvitationMode {
@@ -424,6 +425,7 @@ class ZIMVoIPConfig {
 
 class ZIMGroupMemberRole {
   static const int owner = 1;
+  static const int admin = 2;
   static const int member = 3;
 }
 // Model
@@ -752,6 +754,15 @@ enum ZIMGroupApplicationType {
   beInvite,
 }
 
+enum ZIMGroupEnterType {
+  Unknown,
+  Created,
+  JoinApply,
+  Joined,
+  Invited,
+  InviteApply,
+}
+
 enum ZIMGroupApplicationState {
   waiting,
   accepted,
@@ -1062,6 +1073,14 @@ class ZIMGroup {
   ZIMGroup();
 }
 
+/// Description:  group class.
+class ZIMGroupEnterInfo {
+  int enterTime = 0;
+  ZIMGroupEnterType enterType = ZIMGroupEnterType.Unknown;
+  ZIMGroupMemberSimpleInfo? operatedUser;
+  ZIMGroupEnterInfo();
+}
+
 /// Group member information.
 class ZIMGroupMemberInfo extends ZIMUserInfo {
   /// Description: Group nickname.
@@ -1074,6 +1093,8 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
   String memberAvatarUrl = "";
 
   int muteExpiredTime = 0;
+
+  ZIMGroupEnterInfo? groupEnterInfo;
 
   ZIMGroupMemberInfo();
 }
@@ -1147,8 +1168,8 @@ class ZIMGroupApplicationListQueryConfig {
 }
 
 class ZIMGroupVerifyInfo {
-  ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.none;
-  ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.none;
+  ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.any;
+  ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.any;
   ZIMGroupBeInviteMode beInviteMode = ZIMGroupBeInviteMode.none;
   ZIMGroupVerifyInfo();
 }
@@ -1159,8 +1180,8 @@ class ZIMGroupAdvancedConfig {
   Map<String, String>? groupAttributes;
 
   int maxMemberCount = 0;
-  ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.none;
-  ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.none;
+  ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.any;
+  ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.any;
   ZIMGroupBeInviteMode beInviteMode = ZIMGroupBeInviteMode.none;
 
   ZIMGroupAdvancedConfig();
@@ -1224,6 +1245,8 @@ class ZIMCallInviteConfig {
   String extendedData = "";
 
   ZIMPushConfig? pushConfig;
+
+  bool enableNotReceivedCheck = false;
 
   ZIMCallInviteConfig();
 }
@@ -1802,9 +1825,9 @@ class ZIMRoomLeftResult {
   ZIMRoomLeftResult({required this.roomID});
 }
 
-class ZIMAllRoomLeftResult {
-  List<String> roomIDList;
-  ZIMAllRoomLeftResult({required this.roomIDList});
+class ZIMRoomAllLeftResult {
+  List<String> roomIDs;
+  ZIMRoomAllLeftResult({required this.roomIDs});
 }
 
 /// Callback of the result of querying the room members list.
