@@ -228,7 +228,6 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(const std::sh
 		userInfoMap[FTValue("memberNickname")] = FTValue(groupMemberSimpleInfo->memberNickname);
 		userInfoMap[FTValue("memberRole")] = FTValue(groupMemberSimpleInfo->memberRole);
 		userInfoMap[FTValue("classType")] = FTValue("ZIMGroupMemberSimpleInfo");
-		return userInfoMap;
 	}
 
 	auto groupMemberInfo = std::dynamic_pointer_cast<ZIMGroupMemberInfo>(notConstUserPtr);
@@ -238,7 +237,6 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(const std::sh
 		userInfoMap[FTValue("memberAvatarUrl")] = FTValue(groupMemberInfo->memberAvatarUrl);
 		userInfoMap[FTValue("muteExpiredTime")] = FTValue(groupMemberInfo->muteExpiredTime);
 		userInfoMap[FTValue("classType")] = FTValue("ZIMGroupMemberInfo");
-		return userInfoMap;
 	}
 
 	auto friendInfo = std::dynamic_pointer_cast<ZIMFriendInfo>(notConstUserPtr);
@@ -248,8 +246,8 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(const std::sh
 		userInfoMap[FTValue("wording")] = FTValue(friendInfo->wording);
 		userInfoMap[FTValue("friendAttributes")] = cnvSTLMapToFTMap(friendInfo->friendAttributes);
 		userInfoMap[FTValue("classType")] = FTValue("ZIMFriendInfo");
-		return userInfoMap;
 	}
+	return userInfoMap;
 }
 
 FTArray ZIMPluginConverter::cnvZIMUserInfoPtrListToArray(const std::vector<std::shared_ptr<ZIMUserInfo>> userInfoList) {
