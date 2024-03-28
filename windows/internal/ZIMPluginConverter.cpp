@@ -222,7 +222,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(const std::sh
 	userInfoMap[FTValue("userName")] = FTValue(userPtr->userName);
 	userInfoMap[FTValue("userAvatarUrl")] = FTValue(userPtr->userAvatarUrl);
 
-	auto groupMemberSimpleInfo = std::dynamic_pointer_cast<ZIMGroupMemberSimpleInfo>(userPtr);
+	auto groupMemberSimpleInfo = std::dynamic_pointer_cast<ZIMGroupMemberSimpleInfo>(std::const_pointer_cast<ZIMUserInfo>(userPtr));
 	if (groupMemberSimpleInfo) {
 		userInfoMap[FTValue("memberNickname")] = FTValue(groupMemberSimpleInfo->memberNickname);
 		userInfoMap[FTValue("memberRole")] = FTValue(groupMemberSimpleInfo->memberRole);
@@ -230,7 +230,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(const std::sh
 		return userInfoMap;
 	}
 
-	auto groupMemberInfo = std::dynamic_pointer_cast<ZIMGroupMemberInfo>(userPtr);
+	auto groupMemberInfo = std::dynamic_pointer_cast<ZIMGroupMemberInfo>(std::const_pointer_cast<ZIMUserInfo>(userPtr));
 	if (groupMemberInfo) {
 		userInfoMap[FTValue("memberNickname")] = FTValue(groupMemberInfo->memberNickname);
 		userInfoMap[FTValue("memberRole")] = FTValue(groupMemberInfo->memberRole);
@@ -240,7 +240,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(const std::sh
 		return userInfoMap;
 	}
 
-	auto friendInfo = std::dynamic_pointer_cast<ZIMFriendInfo>(userPtr);
+	auto friendInfo = std::dynamic_pointer_cast<ZIMFriendInfo>(std::const_pointer_cast<ZIMUserInfo>(userPtr));
 	if (friendInfo) {
 		userInfoMap[FTValue("friendAlias")] = FTValue(friendInfo->friendAlias);
 		userInfoMap[FTValue("createTime")] = FTValue(friendInfo->createTime);
@@ -416,11 +416,11 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(con
 
 	FTMap changeInfoMap;
 	changeInfoMap[FTValue("type")] = FTValue(changeInfo->getType());
-
-	auto groupChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupChangeInfo>(changeInfo);
+	
+	auto groupChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupChangeInfo>(std::const_pointer_cast<ZIMTipsMessageChangeInfo>(changeInfo));
 	if (groupChangeInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupChangeInfo");
-		changeInfoMap[FTValue("groupDataFlag")] = FTValue(groupChangeInfo->getGroupDataFlag());
+		changeInfoMap[FTValue("groupDataFlag")] = FTValue((int32_t)(groupChangeInfo->getGroupDataFlag()));
 		changeInfoMap[FTValue("groupName")] = FTValue(groupChangeInfo->getGroupName());
 		changeInfoMap[FTValue("groupNotice")] = FTValue(groupChangeInfo->getGroupNotice());
 		changeInfoMap[FTValue("groupAvatarUrl")] = FTValue(groupChangeInfo->getGroupAvatarUrl());
@@ -428,7 +428,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(con
 		return changeInfoMap;
 	}
 
-	auto groupMemberChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupMemberChangeInfo>(changeInfo);
+	auto groupMemberChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupMemberChangeInfo>(std::const_pointer_cast<ZIMTipsMessageChangeInfo>(changeInfo));
 	if (groupMemberChangeInfo) {
 		changeInfoMap[FTValue("classType")] = FTValue("ZIMTipsMessageGroupMemberChangeInfo");
 		changeInfoMap[FTValue("muteExpiredTime")] = FTValue((int64_t)(groupMemberChangeInfo->getMuteExpiredTime()));
