@@ -212,7 +212,7 @@ FTMap ZIMPluginConverter::cnvZIMUserInfoObjectToMap(const ZIMUserInfo& userInfo)
 	return userInfoMap;
 }
 
-flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(std::shared_ptr<ZIMUserInfo> userPtr) {
+flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(const std::shared_ptr<ZIMUserInfo> userPtr) {
 	if (!userPtr) {
 		return FTValue(std::monostate());
 	}
@@ -251,7 +251,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMUserInfoPtrToObj(std::shared_p
 	}
 }
 
-FTArray ZIMPluginConverter::cnvZIMUserInfoPtrListToArray(std::vector<std::shared_ptr<ZIMUserInfo>> userInfoList) {
+FTArray ZIMPluginConverter::cnvZIMUserInfoPtrListToArray(const std::vector<std::shared_ptr<ZIMUserInfo>> userInfoList) {
 	FTArray userInfoListArray;
 
 	for (const auto& userInfo : userInfoList) {
@@ -409,7 +409,7 @@ FTArray ZIMPluginConverter::cnvZIMMessageSentStatusChangeInfoListToArray(const s
 	return messageSentStatusInfoArray;
 }
 
-flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(std::shared_ptr<ZIMTipsMessageChangeInfo> changeInfo) {
+flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(const std::shared_ptr<ZIMTipsMessageChangeInfo> changeInfo) {
 	if (!changeInfo) {
 		return FTValue(std::monostate());
 	}
@@ -1389,7 +1389,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info)
 	return infoMap;
 }
 
-flutter::EncodableValue ZIMPluginConverter::cnvZIMGroupMuteInfoPtrToObj(std::shared_ptr<ZIMGroupMuteInfo> infoPtr) {
+flutter::EncodableValue ZIMPluginConverter::cnvZIMGroupMuteInfoPtrToObj(const std::shared_ptr<ZIMGroupMuteInfo> infoPtr) {
 	if (!infoPtr) {
 		return FTValue(std::monostate());
 	}
