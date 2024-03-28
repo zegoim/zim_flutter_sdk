@@ -487,9 +487,13 @@
         case ZIMMessageTypeTips:{
             ZIMTipsMessage *tipsMessage = (ZIMTipsMessage *)message;
             [messageDic setObject:@(tipsMessage.event) forKey:@"event"];
-            [messageDic setObject:[ZIMPluginConverter mZIMUserInfo:tipsMessage.operatedUser] forKey:@"operatedUser"];
+            if(tipsMessage.operatedUser != nil){
+                [messageDic setObject:[ZIMPluginConverter mZIMUserInfo:tipsMessage.operatedUser] forKey:@"operatedUser"];
+            }
+            if(tipsMessage.changeInfo != nil){
+                [messageDic setObject:[ZIMPluginConverter mZIMTipsMessageChangeInfo:tipsMessage.changeInfo] forKey:@"changeInfo"];
+            }
             [messageDic setObject:[ZIMPluginConverter mZIMUserInfoList:tipsMessage.targetUserList] forKey:@"targetUserList"];
-            [messageDic setObject:[ZIMPluginConverter mZIMTipsMessageChangeInfo:tipsMessage.changeInfo] forKey:@"changeInfo"];
             break;
         }
         default:
@@ -1927,7 +1931,9 @@
         [dic setObject:subInfo.groupName forKey:@"groupName"];
         [dic setObject:subInfo.groupNotice forKey:@"groupNotice"];
         [dic setObject:subInfo.groupAvatarUrl forKey:@"groupAvatarUrl"];
-        [dic setObject:[ZIMPluginConverter mZIMGroupMuteInfo:subInfo.groupMutedInfo] forKey:@"groupMuteInfo"];
+        if(subInfo.groupMutedInfo != nil){
+            [dic setObject:[ZIMPluginConverter mZIMGroupMuteInfo:subInfo.groupMutedInfo] forKey:@"groupMuteInfo"];
+        }
     }else if ([info isKindOfClass:[ZIMTipsMessageGroupMemberChangeInfo class]]){
         ZIMTipsMessageGroupMemberChangeInfo *subInfo = (ZIMTipsMessageGroupMemberChangeInfo *)info;
         [dic setObject:@(subInfo.memberRole) forKey:@"role"];

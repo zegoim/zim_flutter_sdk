@@ -202,9 +202,13 @@ public class ZIMPluginConverter {
             case TIPS:
                 assert message instanceof ZIMTipsMessage;
                 messageMap.put("event",((ZIMTipsMessage) message).event.value());
-                messageMap.put("operatedUser",mZIMUserInfo(((ZIMTipsMessage) message).operatedUser));
+                if(((ZIMTipsMessage) message).operatedUser != null) {
+                    messageMap.put("operatedUser",mZIMUserInfo(((ZIMTipsMessage) message).operatedUser));
+                }
                 messageMap.put("targetUserList",mZIMUserInfoList(((ZIMTipsMessage) message).targetUserList));
-                messageMap.put("changeInfo",mZIMTip)
+                if(((ZIMTipsMessage) message).changeInfo != null){
+                    messageMap.put("changeInfo",mZIMTipsMessageChangeInfo(((ZIMTipsMessage) message).changeInfo));
+                }
             case UNKNOWN:
             default:
                 break;
@@ -1713,8 +1717,23 @@ public class ZIMPluginConverter {
         return userInfoMap;
     }
 
-    public static HashMap<String,Object> mZIMTipsMessageChangeInfo（ZIMTipsMessageChangeInfo info）{
-        HashMap<String, Object> userInfoMap = new HashMap<>();
-        userInfoMap.put("")
+    public static HashMap<String,Object> mZIMTipsMessageChangeInfo(ZIMTipsMessageChangeInfo info){
+        HashMap<String, Object> infoMap = new HashMap<>();
+        infoMap.put("type",info.type.value());
+        if(info instanceof ZIMTipsMessageGroupChangeInfo) {
+            infoMap.put("classType", "ZIMTipsMessageGroupChangeInfo");
+            infoMap.put("groupDataFlag", ((ZIMTipsMessageGroupChangeInfo) info).groupDataFlag);
+            infoMap.put("groupName", ((ZIMTipsMessageGroupChangeInfo) info).groupName);
+            infoMap.put("groupNotice", ((ZIMTipsMessageGroupChangeInfo) info).groupNotice);
+            infoMap.put("groupAvatarUrl", ((ZIMTipsMessageGroupChangeInfo) info).groupAvatarUrl);
+            if (((ZIMTipsMessageGroupChangeInfo) info).groupMutedInfo != null) {
+                infoMap.put("groupMuteInfo", mZIMGroupMuteInfo(((ZIMTipsMessageGroupChangeInfo) info).groupMutedInfo));
+            }
+        }else if(info instanceof ZIMTipsMessageGroupMemberChangeInfo){
+            infoMap.put("role",((ZIMTipsMessageGroupMemberChangeInfo) info).memberRole);
+            infoMap.put("muteExpiredTime",((ZIMTipsMessageGroupMemberChangeInfo) info).muteExpiredTime);
+            infoMap.put("classType","ZIMTipsMessageGroupMemberChangeInfo");
+        }
+        return infoMap;
     }
 }
