@@ -415,7 +415,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMTipsMessageChangeInfoToMap(std
 	}
 
 	FTMap changeInfoMap;
-	changeInfoMap[FTValue("type")] = FTValue(changeInfo->GetType());
+	changeInfoMap[FTValue("type")] = FTValue(changeInfo->getType());
 
 	auto groupChangeInfo = std::dynamic_pointer_cast<ZIMTipsMessageGroupChangeInfo>(changeInfo);
 	if (groupChangeInfo) {
