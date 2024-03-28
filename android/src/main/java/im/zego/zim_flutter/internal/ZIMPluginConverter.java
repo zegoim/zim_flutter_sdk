@@ -746,7 +746,7 @@ public class ZIMPluginConverter {
         userInfo.userName = (String) map.get("userName");
         userInfo.userAvatarUrl = (String) map.get("userAvatarUrl");
         if(userInfo instanceof ZIMGroupMemberSimpleInfo){
-            ((ZIMGroupMemberSimpleInfo) userInfo).memberNickName = (String) map.get("memberNickname");
+            ((ZIMGroupMemberSimpleInfo) userInfo).memberNickname = (String) map.get("memberNickname");
             ((ZIMGroupMemberSimpleInfo) userInfo).memberRole = (int) map.get("memberRole");
         }else if(userInfo instanceof ZIMGroupMemberInfo){
             ((ZIMGroupMemberInfo) userInfo).memberNickname = (String) map.get("memberNickname");
