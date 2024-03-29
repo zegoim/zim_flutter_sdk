@@ -249,6 +249,7 @@ enum ZIMTipsMessageChangeInfoType {
   groupNotice,
   groupName,
   groupAvatar,
+  muteChanged,
   groupOwnerTransferred,
   groupMemberRoleChanged,
   groupMemberMuted,

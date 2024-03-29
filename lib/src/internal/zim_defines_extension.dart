@@ -230,6 +230,7 @@ extension ZIMTipsMessageChangeInfoTypeExtension on ZIMTipsMessageChangeInfoType 
     ZIMTipsMessageChangeInfoType.groupNotice : 2,
     ZIMTipsMessageChangeInfoType.groupName : 3,
     ZIMTipsMessageChangeInfoType.groupAvatar : 4,
+    ZIMTipsMessageChangeInfoType.muteChanged : 5,
 
     ZIMTipsMessageChangeInfoType.groupOwnerTransferred : 10,
     ZIMTipsMessageChangeInfoType.groupMemberRoleChanged : 11,
@@ -241,6 +242,7 @@ extension ZIMTipsMessageChangeInfoTypeExtension on ZIMTipsMessageChangeInfoType 
     2 : ZIMTipsMessageChangeInfoType.groupNotice,
     3 : ZIMTipsMessageChangeInfoType.groupName,
     4 : ZIMTipsMessageChangeInfoType.groupAvatar,
+    5 : ZIMTipsMessageChangeInfoType.muteChanged,
 
     10 : ZIMTipsMessageChangeInfoType.groupOwnerTransferred,
     11 : ZIMTipsMessageChangeInfoType.groupMemberRoleChanged,
