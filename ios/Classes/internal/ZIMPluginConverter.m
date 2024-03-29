@@ -136,8 +136,8 @@
     }
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     ZIMUserOfflinePushRule *offlinePushRule = [[ZIMUserOfflinePushRule alloc] init];
-    offlinePushRule.onlinePlatforms = [dic objectForKey:@"onlinePlatforms"];
-    offlinePushRule.notToReceiveOfflinePushPlatforms = [dic objectForKey:@"notToReceiveOfflinePushPlatforms"];
+    offlinePushRule.onlinePlatforms = [ruleDic objectForKey:@"onlinePlatforms"];
+    offlinePushRule.notToReceiveOfflinePushPlatforms = [ruleDic objectForKey:@"notToReceiveOfflinePushPlatforms"];
     return offlinePushRule;
 }
 
