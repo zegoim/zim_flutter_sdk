@@ -432,8 +432,6 @@ class ZIMConverter {
         break;
       case ZIMMessageType.tips:
         message ??= ZIMTipsMessage();
-        ZIMEventHandler.onError!(ZIM.getInstance()!,
-            ZIMError(code: -100, message: resultMap.toString()));
         message as ZIMTipsMessage;
         message.event = ZIMTipsMessageEventExtension.mapValue[resultMap['event']]!;
         if(resultMap['operatedUser'] != null){
@@ -444,7 +442,7 @@ class ZIMConverter {
           message.changeInfo = oZIMTipsMessageChangeInfo(resultMap['changeInfo']);
         }
         ZIMEventHandler.onError!(ZIM.getInstance()!,
-            ZIMError(code: -100, message: "tips message event${message.event}"));
+            ZIMError(code: -100, message: "tips message map:${resultMap.toString()},event map value:${resultMap['event']}, message event${message.event},message event value:${message.event.value}"));
         break;
       default:
         message ??= ZIMMessage();
