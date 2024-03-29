@@ -156,6 +156,7 @@
     }
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:[ZIMPluginConverter mZIMUserRule:selfUserInfo.userRule] forKey:@"userRule"];
+    [dic setObject:[ZIMPluginConverter mZIMUserFullInfo:selfUserInfo.userFullInfo] forKey:@"userFullInfo"];
     return dic;
 }
 
