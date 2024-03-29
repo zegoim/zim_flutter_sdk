@@ -491,7 +491,7 @@ class ZIMConverter {
       message.cbInnerID = resultMap['cbInnerID'];
       return message;
     } catch(error,e){
-      ZIMError zim_error = ZIMError(code: -100, message: error.toString()+e.toString());
+      ZIMError zim_error = ZIMError(code: -100, message: "resultMap:$resultMap,${error.toString()},${e.toString()}");
       ZIMEventHandler.onError!(ZIM.getInstance()!,zim_error);
       return ZIMMessage();
     }
