@@ -702,7 +702,7 @@ public class ZIMPluginConverter {
         userInfoMap.put("userName",userInfo.userName);
         userInfoMap.put("userAvatarUrl",userInfo.userAvatarUrl);
         if(userInfo instanceof ZIMGroupMemberSimpleInfo){
-            userInfoMap.put("memberNickname",((ZIMGroupMemberSimpleInfo) userInfo).memberNickName);
+            userInfoMap.put("memberNickname",((ZIMGroupMemberSimpleInfo) userInfo).memberNickname);
             userInfoMap.put("memberRole",((ZIMGroupMemberSimpleInfo) userInfo).memberRole);
             userInfoMap.put("classType","ZIMGroupMemberSimpleInfo");
         } else if (userInfo instanceof ZIMGroupMemberInfo) {
