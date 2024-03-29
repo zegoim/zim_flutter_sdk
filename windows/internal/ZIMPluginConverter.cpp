@@ -562,7 +562,15 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 		messageMap[FTValue("event")] = FTValue(tipsMessage->getEvent());
 		messageMap[FTValue("operatedUser")] = FTValue(cnvZIMUserInfoPtrToObj(tipsMessage->getOperatedUser()));
 		messageMap[FTValue("targetUserList")] = FTValue(cnvZIMUserInfoPtrListToArray(tipsMessage->getTargetUserList()));
-		messageMap[FTValue("changeInfo")] = FTValue(cnvZIMTipsMessageChangeInfoToMap(tipsMessage->getChangeInfo()));
+		if (tipsMessage->getEvent() !=
+				ZIMTipsMessageEvent::ZIM_TIPS_MESSAGE_EVENT_GROUP_INFO_CHANGED &&
+			tipsMessage->getEvent() !=
+				ZIMTipsMessageEvent::ZIM_TIPS_MESSAGE_EVENT_GROUP_MEMBER_INFO_CHANGED) {
+			messageMap[FTValue("changeInfo")] = FTValue(std::monostate());
+		} else {
+			messageMap[FTValue("changeInfo")] =
+				FTValue(cnvZIMTipsMessageChangeInfoToMap(tipsMessage->getChangeInfo()));
+		}
 		break;
 	}
 	case ZIM_MESSAGE_TYPE_UNKNOWN:
