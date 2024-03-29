@@ -87,7 +87,7 @@ extendedData:(NSDictionary *)extendedData{
     NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
     [resultDic setObject:[ZIMPluginConverter mZIMUserRule:userRule] forKey:@"userRule"];
     [resultDic safeSetObject:[_engineEventMap objectForKey:zim] forKey:@"handle"];
-    [resultDic setObject:@"userRuleUpdated" forKey:@"method"];
+    [resultDic setObject:@"onUserRuleUpdated" forKey:@"method"];
     _events(resultDic);
 }
 
