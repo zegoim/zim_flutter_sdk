@@ -3,8 +3,6 @@ import 'dart:typed_data';
 import 'package:zego_zim/src/internal/zim_common_data.dart';
 import 'package:zego_zim/src/internal/zim_manager.dart';
 
-import '../../zego_zim.dart';
-import '../zim_api.dart';
 import '../zim_defines.dart';
 import 'zim_defines_extension.dart';
 
@@ -342,9 +340,6 @@ class ZIMConverter {
   }
 
   static ZIMMessage oZIMMessage(Map resultMap, [int? messageID]) {
-    try{
-      ZIMEventHandler.onError!(ZIM.getInstance()!,
-          ZIMError(code: -100, message: "message map:${resultMap.toString()},event map value:${resultMap['event']}"));
       ZIMMessageType msgType =
           ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
       ZIMMessage? message =
@@ -444,8 +439,6 @@ class ZIMConverter {
           if(resultMap['changeInfo'] != null){
             message.changeInfo = oZIMTipsMessageChangeInfo(resultMap['changeInfo']);
           }
-          ZIMEventHandler.onError!(ZIM.getInstance()!,
-              ZIMError(code: -100, message: "tips message map:${resultMap.toString()},event map value:${resultMap['event']}, message event${message.event},message event value:${message.event.value}"));
           break;
         default:
           message ??= ZIMMessage();
@@ -490,11 +483,6 @@ class ZIMConverter {
       message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
       message.cbInnerID = resultMap['cbInnerID'];
       return message;
-    } catch(error,e){
-      ZIMError zim_error = ZIMError(code: -100, message: "resultMap:$resultMap,${error.toString()},${e.toString()}");
-      ZIMEventHandler.onError!(ZIM.getInstance()!,zim_error);
-      return ZIMMessage();
-    }
   }
 
   static List mZIMMessageList(List<ZIMMessage> messageList) {
