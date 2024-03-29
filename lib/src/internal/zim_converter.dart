@@ -342,151 +342,159 @@ class ZIMConverter {
   }
 
   static ZIMMessage oZIMMessage(Map resultMap, [int? messageID]) {
-    ZIMMessageType msgType =
-        ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
-    ZIMMessage? message =
-        messageID == null ? null : ZIMCommonData.messsageMap[messageID];
-    switch (msgType) {
-      case ZIMMessageType.unknown:
-        message ??= ZIMMessage();
-        break;
-      case ZIMMessageType.text:
-        message ??= ZIMTextMessage(message: resultMap['message']);
-        break;
-      case ZIMMessageType.command:
-        resultMap['message'] = resultMap['message'] is Uint8List ? resultMap['message'] : convertToUint8List(resultMap['message']);
-        message ??= ZIMCommandMessage(message: resultMap['message']);
-        break;
-      case ZIMMessageType.barrage:
-        message ??= ZIMBarrageMessage(message: resultMap['message']);
-        break;
-      case ZIMMessageType.image:
-        message ??= ZIMImageMessage(resultMap['fileLocalPath'] ?? '');
-        message as ZIMImageMessage;
-        message.thumbnailDownloadUrl = resultMap['thumbnailDownloadUrl'] ?? '';
-        message.thumbnailLocalPath = resultMap['thumbnailLocalPath'] ?? '';
-        message.largeImageDownloadUrl =
-            resultMap['largeImageDownloadUrl'] ?? '';
-        message.largeImageLocalPath = resultMap['largeImageLocalPath'] ?? '';
-        message.originalImageHeight = resultMap['originalImageHeight'] ?? 0;
-        message.originalImageWidth = resultMap['originalImageWidth'] ?? 0;
-        message.largeImageHeight = resultMap['largeImageHeight'] ?? 0;
-        message.largeImageWidth = resultMap['largeImageWidth'] ?? 0;
-        message.thumbnailHeight = resultMap['thumbnailHeight'] ?? 0;
-        message.thumbnailWidth = resultMap['thumbnailWidth'] ?? 0;
-        break;
-      case ZIMMessageType.file:
-        message ??= ZIMFileMessage(resultMap['fileLocalPath'] ?? '');
-        message as ZIMFileMessage;
-        break;
-      case ZIMMessageType.audio:
-        message ??= ZIMAudioMessage(resultMap['fileLocalPath'] ?? '');
-        message as ZIMAudioMessage;
-        message.audioDuration = resultMap['audioDuration'];
-        break;
-      case ZIMMessageType.video:
-        message ??= ZIMVideoMessage(resultMap['fileLocalPath'] ?? '');
-        message as ZIMVideoMessage;
-        message.videoDuration = resultMap['videoDuration'];
-        message.videoFirstFrameDownloadUrl =
-            resultMap['videoFirstFrameDownloadUrl'];
-        message.videoFirstFrameLocalPath =
-            resultMap['videoFirstFrameLocalPath'];
-        message.videoFirstFrameHeight = resultMap['videoFirstFrameHeight'];
-        message.videoFirstFrameWidth = resultMap['videoFirstFrameWidth'];
-        break;
-      case ZIMMessageType.system:
-        message ??= ZIMSystemMessage(message: resultMap['message']);
-        break;
+    try{
+      ZIMEventHandler.onError!(ZIM.getInstance()!,
+          ZIMError(code: -100, message: "message map:${resultMap.toString()},event map value:${resultMap['event']}"));
+      ZIMMessageType msgType =
+          ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
+      ZIMMessage? message =
+      messageID == null ? null : ZIMCommonData.messsageMap[messageID];
+      switch (msgType) {
+        case ZIMMessageType.unknown:
+          message ??= ZIMMessage();
+          break;
+        case ZIMMessageType.text:
+          message ??= ZIMTextMessage(message: resultMap['message']);
+          break;
+        case ZIMMessageType.command:
+          resultMap['message'] = resultMap['message'] is Uint8List ? resultMap['message'] : convertToUint8List(resultMap['message']);
+          message ??= ZIMCommandMessage(message: resultMap['message']);
+          break;
+        case ZIMMessageType.barrage:
+          message ??= ZIMBarrageMessage(message: resultMap['message']);
+          break;
+        case ZIMMessageType.image:
+          message ??= ZIMImageMessage(resultMap['fileLocalPath'] ?? '');
+          message as ZIMImageMessage;
+          message.thumbnailDownloadUrl = resultMap['thumbnailDownloadUrl'] ?? '';
+          message.thumbnailLocalPath = resultMap['thumbnailLocalPath'] ?? '';
+          message.largeImageDownloadUrl =
+              resultMap['largeImageDownloadUrl'] ?? '';
+          message.largeImageLocalPath = resultMap['largeImageLocalPath'] ?? '';
+          message.originalImageHeight = resultMap['originalImageHeight'] ?? 0;
+          message.originalImageWidth = resultMap['originalImageWidth'] ?? 0;
+          message.largeImageHeight = resultMap['largeImageHeight'] ?? 0;
+          message.largeImageWidth = resultMap['largeImageWidth'] ?? 0;
+          message.thumbnailHeight = resultMap['thumbnailHeight'] ?? 0;
+          message.thumbnailWidth = resultMap['thumbnailWidth'] ?? 0;
+          break;
+        case ZIMMessageType.file:
+          message ??= ZIMFileMessage(resultMap['fileLocalPath'] ?? '');
+          message as ZIMFileMessage;
+          break;
+        case ZIMMessageType.audio:
+          message ??= ZIMAudioMessage(resultMap['fileLocalPath'] ?? '');
+          message as ZIMAudioMessage;
+          message.audioDuration = resultMap['audioDuration'];
+          break;
+        case ZIMMessageType.video:
+          message ??= ZIMVideoMessage(resultMap['fileLocalPath'] ?? '');
+          message as ZIMVideoMessage;
+          message.videoDuration = resultMap['videoDuration'];
+          message.videoFirstFrameDownloadUrl =
+          resultMap['videoFirstFrameDownloadUrl'];
+          message.videoFirstFrameLocalPath =
+          resultMap['videoFirstFrameLocalPath'];
+          message.videoFirstFrameHeight = resultMap['videoFirstFrameHeight'];
+          message.videoFirstFrameWidth = resultMap['videoFirstFrameWidth'];
+          break;
+        case ZIMMessageType.system:
+          message ??= ZIMSystemMessage(message: resultMap['message']);
+          break;
 
-      case ZIMMessageType.custom:
-        message ??= ZIMCustomMessage(
-            message: resultMap['message'], subType: resultMap['subType']);
-        message as ZIMCustomMessage;
-        message.searchedContent = resultMap['searchedContent'];
-        break;
-      case ZIMMessageType.revoke:
-        message ??= ZIMRevokeMessage();
-        message as ZIMRevokeMessage;
-        message.revokeType =
-            ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']] ?? ZIMRevokeType.unknown;
-        message.revokeStatus = ZIMMessageRevokeStatusExtension
-            .mapValue[resultMap['revokeStatus']] ?? ZIMMessageRevokeStatus.unknown;
-        message.revokeTimestamp = resultMap['revokeTimestamp'];
-        message.operatedUserID = resultMap['operatedUserID'];
-        message.revokeExtendedData = resultMap['revokeExtendedData'] ?? '';
-        message.originalMessageType =
-            ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']] ?? ZIMMessageType.unknown;
-        message.originalTextMessageContent =
-            resultMap['originalTextMessageContent'];
-        break;
-      case ZIMMessageType.combine:
-        List<ZIMMessage> messageList = [];
-        List<Map> messageListMap = List<Map>.from(resultMap['messageList']??[]) ;
-        for (var element in messageListMap) {
-          messageList.add(oZIMMessage(element));
-        }
-        message ??= ZIMCombineMessage(title:resultMap['title'], summary: resultMap['summary'], messageList: messageList);
-        message as ZIMCombineMessage;
-        message.combineID = resultMap['combineID'];
-        break;
-      case ZIMMessageType.tips:
-        message ??= ZIMTipsMessage();
-        message as ZIMTipsMessage;
-        message.event = ZIMTipsMessageEventExtension.mapValue[resultMap['event']]!;
-        if(resultMap['operatedUser'] != null){
-          message.operatedUser = oZIMUserInfo(resultMap['operatedUser']);
-        }
-        message.targetUserList = oZIMUserInfoList(resultMap['targetUserList']);
-        if(resultMap['changeInfo'] != null){
-          message.changeInfo = oZIMTipsMessageChangeInfo(resultMap['changeInfo']);
-        }
-        ZIMEventHandler.onError!(ZIM.getInstance()!,
-            ZIMError(code: -100, message: "tips message map:${resultMap.toString()},event map value:${resultMap['event']}, message event${message.event},message event value:${message.event.value}"));
-        break;
-      default:
-        message ??= ZIMMessage();
-        break;
+        case ZIMMessageType.custom:
+          message ??= ZIMCustomMessage(
+              message: resultMap['message'], subType: resultMap['subType']);
+          message as ZIMCustomMessage;
+          message.searchedContent = resultMap['searchedContent'];
+          break;
+        case ZIMMessageType.revoke:
+          message ??= ZIMRevokeMessage();
+          message as ZIMRevokeMessage;
+          message.revokeType =
+              ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']] ?? ZIMRevokeType.unknown;
+          message.revokeStatus = ZIMMessageRevokeStatusExtension
+              .mapValue[resultMap['revokeStatus']] ?? ZIMMessageRevokeStatus.unknown;
+          message.revokeTimestamp = resultMap['revokeTimestamp'];
+          message.operatedUserID = resultMap['operatedUserID'];
+          message.revokeExtendedData = resultMap['revokeExtendedData'] ?? '';
+          message.originalMessageType =
+              ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']] ?? ZIMMessageType.unknown;
+          message.originalTextMessageContent =
+          resultMap['originalTextMessageContent'];
+          break;
+        case ZIMMessageType.combine:
+          List<ZIMMessage> messageList = [];
+          List<Map> messageListMap = List<Map>.from(resultMap['messageList']??[]) ;
+          for (var element in messageListMap) {
+            messageList.add(oZIMMessage(element));
+          }
+          message ??= ZIMCombineMessage(title:resultMap['title'], summary: resultMap['summary'], messageList: messageList);
+          message as ZIMCombineMessage;
+          message.combineID = resultMap['combineID'];
+          break;
+        case ZIMMessageType.tips:
+          message ??= ZIMTipsMessage();
+          message as ZIMTipsMessage;
+          message.event = ZIMTipsMessageEventExtension.mapValue[resultMap['event']]!;
+          if(resultMap['operatedUser'] != null){
+            message.operatedUser = oZIMUserInfo(resultMap['operatedUser']);
+          }
+          message.targetUserList = oZIMUserInfoList(resultMap['targetUserList']);
+          if(resultMap['changeInfo'] != null){
+            message.changeInfo = oZIMTipsMessageChangeInfo(resultMap['changeInfo']);
+          }
+          ZIMEventHandler.onError!(ZIM.getInstance()!,
+              ZIMError(code: -100, message: "tips message map:${resultMap.toString()},event map value:${resultMap['event']}, message event${message.event},message event value:${message.event.value}"));
+          break;
+        default:
+          message ??= ZIMMessage();
+          break;
+      }
+      message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
+      message.messageID = resultMap['messageID'] is String
+          ? int.parse(resultMap['messageID'])
+          : resultMap['messageID'];
+      message.localMessageID = resultMap['localMessageID'] is String
+          ? int.parse(resultMap['localMessageID'])
+          : resultMap['localMessageID'];
+      message.senderUserID = resultMap['senderUserID'];
+      message.conversationID = resultMap['conversationID'];
+      message.direction =
+      ZIMMessageDirectionExtension.mapValue[resultMap['direction']]!;
+      message.sentStatus =
+      ZIMMessageSentStatusExtension.mapValue[resultMap['sentStatus']]!;
+      message.conversationType =
+      ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
+      message.timestamp = resultMap['timestamp'];
+      message.conversationSeq = resultMap['conversationSeq'];
+      message.orderKey = resultMap['orderKey'] is int ? resultMap['orderKey'] : 0;
+      message.isUserInserted = resultMap['isUserInserted'] is bool
+          ? resultMap['isUserInserted']
+          : false;
+      message.receiptStatus =
+      ZIMMessageReceiptStatusExtension.mapValue[resultMap['receiptStatus']]!;
+      if (message is ZIMMediaMessage) {
+        message.fileLocalPath = resultMap['fileLocalPath'] ?? '';
+        message.fileDownloadUrl = resultMap['fileDownloadUrl'] ?? '';
+        message.fileUID = resultMap['fileUID'] ?? '';
+        message.fileName = resultMap['fileName'] ?? '';
+        message.fileSize = resultMap['fileSize'] ?? 0;
+      }
+      message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
+      message.reactions = oZIMMessageReactionList(resultMap['reactions']);
+      message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
+      message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
+      message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
+      message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
+      message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
+      message.cbInnerID = resultMap['cbInnerID'];
+      return message;
+    } catch(error,e){
+      ZIMError zim_error = ZIMError(code: -100, message: error.toString()+e.toString());
+      ZIMEventHandler.onError!(ZIM.getInstance()!,zim_error);
+      return ZIMMessage();
     }
-    message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
-    message.messageID = resultMap['messageID'] is String
-        ? int.parse(resultMap['messageID'])
-        : resultMap['messageID'];
-    message.localMessageID = resultMap['localMessageID'] is String
-        ? int.parse(resultMap['localMessageID'])
-        : resultMap['localMessageID'];
-    message.senderUserID = resultMap['senderUserID'];
-    message.conversationID = resultMap['conversationID'];
-    message.direction =
-        ZIMMessageDirectionExtension.mapValue[resultMap['direction']]!;
-    message.sentStatus =
-        ZIMMessageSentStatusExtension.mapValue[resultMap['sentStatus']]!;
-    message.conversationType =
-        ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
-    message.timestamp = resultMap['timestamp'];
-    message.conversationSeq = resultMap['conversationSeq'];
-    message.orderKey = resultMap['orderKey'] is int ? resultMap['orderKey'] : 0;
-    message.isUserInserted = resultMap['isUserInserted'] is bool
-        ? resultMap['isUserInserted']
-        : false;
-    message.receiptStatus =
-        ZIMMessageReceiptStatusExtension.mapValue[resultMap['receiptStatus']]!;
-    if (message is ZIMMediaMessage) {
-      message.fileLocalPath = resultMap['fileLocalPath'] ?? '';
-      message.fileDownloadUrl = resultMap['fileDownloadUrl'] ?? '';
-      message.fileUID = resultMap['fileUID'] ?? '';
-      message.fileName = resultMap['fileName'] ?? '';
-      message.fileSize = resultMap['fileSize'] ?? 0;
-    }
-    message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
-    message.reactions = oZIMMessageReactionList(resultMap['reactions']);
-    message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
-    message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
-    message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
-    message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
-    message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
-    message.cbInnerID = resultMap['cbInnerID'];
-    return message;
   }
 
   static List mZIMMessageList(List<ZIMMessage> messageList) {
