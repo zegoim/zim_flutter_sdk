@@ -194,7 +194,7 @@ std::vector<std::string> ZIMPluginConverter::cnvFTArrayToStlVector(FTArray ftArr
 	return vec;
 }
 
-std::vector<int> ZIMPluginConverter::cnvFTArrayToStlVector(FTArray ftArray) {
+std::vector<int> ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(FTArray ftArray) {
 	std::vector<int> vec;
 	for (auto& intObj : ftArray) {
 		auto intValue = std::get<int32_t>(intObj);
@@ -1466,8 +1466,8 @@ ZIMFileCacheQueryConfig ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(F
 
 ZIMUserOfflinePushRule ZIMPluginConverter::cnvZIMUserOfflinePushRuleToObject(FTMap ruleMap) {
 	ZIMUserOfflinePushRule offlinePushRule;
-	offlinePushRule.onlinePlatforms = ZIMPluginConverter::cnvFTArrayToStlVector(ruleMap[FTValue("onlinePlatforms")]);
-	offlinePushRule.notToReceiveOfflinePushPlatforms = ZIMPluginConverter::cnvFTArrayToStlVector(ruleMap[FTValue("notToReceiveOfflinePushPlatforms")]);
+	offlinePushRule.onlinePlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(ruleMap[FTValue("onlinePlatforms")]);
+	offlinePushRule.notToReceiveOfflinePushPlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(ruleMap[FTValue("notToReceiveOfflinePushPlatforms")]);
 	return offlinePushRule;
 }
 
