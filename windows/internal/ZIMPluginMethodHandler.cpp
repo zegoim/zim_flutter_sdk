@@ -278,7 +278,7 @@ void ZIMPluginMethodHandler::updateUserOfflinePushRule(flutter::EncodableMap& ar
         result->Error("-1", "no native instance");
         return;
     }
-    ZIMUserOfflinePushRule rule = ZIMPluginConverter::cnvZIMUserOfflinePushRuleToObject(argument[FTValue("offlinePushRule")]);
+    ZIMUserOfflinePushRule rule = ZIMPluginConverter::cnvZIMUserOfflinePushRuleToObject(std::get<FTMap>(argument[FTValue("offlinePushRule")]));
     auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
 
     zim->updateUserOfflinePushRule(rule, [=](const ZIMUserOfflinePushRule &offlinePushRule, const ZIMError &errorInfo) {

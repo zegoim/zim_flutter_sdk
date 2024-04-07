@@ -1466,8 +1466,8 @@ ZIMFileCacheQueryConfig ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(F
 
 ZIMUserOfflinePushRule ZIMPluginConverter::cnvZIMUserOfflinePushRuleToObject(FTMap ruleMap) {
 	ZIMUserOfflinePushRule offlinePushRule;
-	offlinePushRule.onlinePlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(ruleMap[FTValue("onlinePlatforms")]);
-	offlinePushRule.notToReceiveOfflinePushPlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(ruleMap[FTValue("notToReceiveOfflinePushPlatforms")]);
+	offlinePushRule.onlinePlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(std::get<FTArray>(ruleMap[FTValue("onlinePlatforms")]));
+	offlinePushRule.notToReceiveOfflinePushPlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(std::get<FTArray>(ruleMap[FTValue("notToReceiveOfflinePushPlatforms")]));
 	return offlinePushRule;
 }
 
