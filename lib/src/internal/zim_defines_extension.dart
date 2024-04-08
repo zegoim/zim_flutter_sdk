@@ -176,6 +176,7 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.barrage: 20,
     ZIMMessageType.system:30,
     ZIMMessageType.revoke:31,
+    ZIMMessageType.tips:32,
     ZIMMessageType.combine:100,
     ZIMMessageType.custom:200,
   };
@@ -190,8 +191,62 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     20: ZIMMessageType.barrage,
     30: ZIMMessageType.system,
     31: ZIMMessageType.revoke,
+    32: ZIMMessageType.tips,
     100:ZIMMessageType.combine,
     200:ZIMMessageType.custom
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMTipsMessageEventExtension on ZIMTipsMessageEvent {
+  static const valueMap = {
+    ZIMTipsMessageEvent.groupCreated:1,
+    ZIMTipsMessageEvent.groupDismissed:2,
+    ZIMTipsMessageEvent.groupJoined:3,
+    ZIMTipsMessageEvent.groupInvited:4,
+    ZIMTipsMessageEvent.groupLeft:5,
+    ZIMTipsMessageEvent.groupKickout:6,
+    ZIMTipsMessageEvent.groupInfoChanged:7,
+    ZIMTipsMessageEvent.groupMemberInfoChanged:8
+  };
+
+  static const mapValue = {
+    1:ZIMTipsMessageEvent.groupCreated,
+    2:ZIMTipsMessageEvent.groupDismissed,
+    3:ZIMTipsMessageEvent.groupJoined,
+    4:ZIMTipsMessageEvent.groupInvited,
+    5:ZIMTipsMessageEvent.groupLeft,
+    6:ZIMTipsMessageEvent.groupKickout,
+    7:ZIMTipsMessageEvent.groupInfoChanged,
+    8:ZIMTipsMessageEvent.groupMemberInfoChanged
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMTipsMessageChangeInfoTypeExtension on ZIMTipsMessageChangeInfoType {
+  static const valueMap = {
+    ZIMTipsMessageChangeInfoType.groupDatas : 1,
+    ZIMTipsMessageChangeInfoType.groupNotice : 2,
+    ZIMTipsMessageChangeInfoType.groupName : 3,
+    ZIMTipsMessageChangeInfoType.groupAvatar : 4,
+    ZIMTipsMessageChangeInfoType.muteChanged : 5,
+
+    ZIMTipsMessageChangeInfoType.groupOwnerTransferred : 10,
+    ZIMTipsMessageChangeInfoType.groupMemberRoleChanged : 11,
+    ZIMTipsMessageChangeInfoType.groupMemberMuted : 12
+  };
+
+  static const mapValue = {
+    1 : ZIMTipsMessageChangeInfoType.groupDatas,
+    2 : ZIMTipsMessageChangeInfoType.groupNotice,
+    3 : ZIMTipsMessageChangeInfoType.groupName,
+    4 : ZIMTipsMessageChangeInfoType.groupAvatar,
+    5 : ZIMTipsMessageChangeInfoType.muteChanged,
+
+    10 : ZIMTipsMessageChangeInfoType.groupOwnerTransferred,
+    11 : ZIMTipsMessageChangeInfoType.groupMemberRoleChanged,
+    12 : ZIMTipsMessageChangeInfoType.groupMemberMuted
   };
 
   int get value => valueMap[this] ?? -1;
