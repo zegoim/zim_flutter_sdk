@@ -721,6 +721,33 @@ public class ZIMPluginConverter {
         return userInfoMap;
     }
 
+    static ZIMUserOfflinePushRule oZIMUserOfflinePushRule(HashMap<String,Object> offlinePushRuleMap){
+        ZIMUserOfflinePushRule userOfflinePushRule = new ZIMUserOfflinePushRule();
+        userOfflinePushRule.onlinePlatforms = (ArrayList<Integer>) offlinePushRuleMap.get("onlinePlatforms");
+        userOfflinePushRule.notToReceiveOfflinePushPlatforms = (ArrayList<Integer>) offlinePushRuleMap.get("notToReceiveOfflinePushPlatforms");
+        return userOfflinePushRule;
+    }
+
+    static public HashMap<String,Object> mZIMUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule){
+        HashMap<String,Object> userOfflinePushRuleMap = new HashMap<>();
+        userOfflinePushRuleMap.put("onlinePlatforms",offlinePushRule.onlinePlatforms);
+        userOfflinePushRuleMap.put("notToReceiveOfflinePushPlatforms",offlinePushRule.notToReceiveOfflinePushPlatforms);
+        return userOfflinePushRuleMap;
+    }
+
+    static public HashMap<String,Object> mZIMUserRule(ZIMUserRule userRule){
+        HashMap<String,Object> userRuleMap = new HashMap<>();
+        userRuleMap.put("offlinePushRule",ZIMPluginConverter.mZIMUserOfflinePushRule(userRule.offlinePushRule));
+        return userRuleMap;
+    }
+
+    static public HashMap<String,Object> mZIMSelfUserInfo(ZIMSelfUserInfo selfUserInfo){
+        HashMap<String,Object> selfInfoMap = new HashMap<>();
+        selfInfoMap.put("userRule",ZIMPluginConverter.mZIMUserRule(selfUserInfo.userRule));
+        selfInfoMap.put("userFullInfo",ZIMPluginConverter.mZIMUserFullInfo(selfUserInfo.userFullInfo));
+        return selfInfoMap;
+    }
+
     static public ZIMUserInfo oZIMUserInfo(HashMap<String,Object> map,ZIMUserInfo userInfo){
         if(userInfo == null){
             String classType = "";

@@ -167,6 +167,29 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void querySelfUserInfo(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+
+        zim.querySelfUserInfo(new ZIMSelfUserInfoQueriedCallback() {
+            @Override
+            public void onSelfUserInfoQueried(ZIMSelfUserInfo selfUserInfo, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("selfUserInfo",ZIMPluginConverter.mZIMSelfUserInfo(selfUserInfo));
+                    result.success(resultMap);
+                }
+                else {
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
     public static void queryUsersInfo(MethodCall call, Result result){
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
@@ -258,6 +281,29 @@ public class ZIMPluginMethodHandler {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
                     resultMap.put("extendedData",extendedData);
+                    result.success(resultMap);
+                }
+                else{
+                    result.error(String.valueOf(errorInfo.code.value()),errorInfo.message,null);
+                }
+            }
+        });
+    }
+
+    public static void updateUserOfflinePushRule(MethodCall call, Result result){
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if(zim == null) {
+            result.error("-1", "no native instance",null);
+            return;
+        }
+        ZIMUserOfflinePushRule offlinePushRule = ZIMPluginConverter.oZIMUserOfflinePushRule(Objects.requireNonNull(call.argument("offlinePushRule")));
+        zim.updateUserOfflinePushRule(offlinePushRule, new ZIMUserOfflinePushRuleUpdatedCallback() {
+            @Override
+            public void onUserOfflinePushRuleInfoUpdated(ZIMUserOfflinePushRule offlinePushRule, ZIMError errorInfo) {
+                if(errorInfo.code == ZIMErrorCode.SUCCESS){
+                    HashMap<String,Object> resultMap = new HashMap<>();
+                    resultMap.put("offlinePushRule",ZIMPluginConverter.mZIMUserOfflinePushRule(offlinePushRule));
                     result.success(resultMap);
                 }
                 else{

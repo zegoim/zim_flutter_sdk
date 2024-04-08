@@ -441,6 +441,11 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           ZIMEventHandler.onError!(zim,zim_error);
         };
         break;
+      case 'onUserRuleUpdated':
+        if(ZIMEventHandler.onUserRuleUpdated == null) return;
+        ZIMUserRule userRule = ZIMConverter.oZIMUserRule(map['userRule']);
+        ZIMEventHandler.onUserRuleUpdated!(zim,userRule);
+        break;
       default:
         break;
     }

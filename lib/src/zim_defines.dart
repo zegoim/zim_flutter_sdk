@@ -439,6 +439,8 @@ enum ZIMUserRelationType {
 
 enum ZIMBlacklistChangeAction { added, removed }
 
+enum ZIMPlatformType{win,iPhoneOS,android,macOS,linux,web,miniProgram,iPadOS,unknown}
+
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
   String iOSVoIPHandleValue = "";
@@ -2802,4 +2804,30 @@ class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
 class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo{
   int role = 0;
   int muteExpiredTime = 0;
+
+
+class ZIMUserOfflinePushRule {
+  List<ZIMPlatformType> onlinePlatforms = [];
+  List<ZIMPlatformType> notToReceiveOfflinePushPlatforms = [];
+}
+
+class ZIMUserRule {
+  ZIMUserOfflinePushRule offlinePushRule;
+  ZIMUserRule({required this.offlinePushRule});
+}
+
+class ZIMSelfUserInfo {
+  ZIMUserRule userRule;
+  ZIMUserFullInfo userFullInfo;
+  ZIMSelfUserInfo({required this.userRule,required this.userFullInfo});
+}
+
+class ZIMUserOfflinePushRuleUpdatedResult {
+  ZIMUserOfflinePushRule offlinePushRule;
+  ZIMUserOfflinePushRuleUpdatedResult({required this.offlinePushRule});
+}
+
+class ZIMSelfUserInfoQueriedResult {
+  ZIMSelfUserInfo selfUserInfo;
+  ZIMSelfUserInfoQueriedResult({required this.selfUserInfo});
 }

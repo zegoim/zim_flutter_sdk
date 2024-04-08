@@ -244,6 +244,9 @@ public:
     static FTArray cnvZIMGroupApplicationInfoToArray(const std::vector<ZIMGroupApplicationInfo>& infoList);
 	static FTMap  convZIMGroupEnterInfo(const ZIMGroupEnterInfo& groupEnterInfo);
 	static FTMap cnvZIMFileCacheInfoToMap(const ZIMFileCacheInfo& fileCacheInfo);
+    static FTMap cnvZIMUserOfflinePushRuleToMap(const ZIMUserOfflinePushRule &offlinePushRule);
+    static FTMap cnvZIMUserRuleToMap(const ZIMUserRule &rule);
+    static FTMap cnvZIMSelfUserInfoToMap(const ZIMSelfUserInfo &info);
 
 public:
 
@@ -285,6 +288,7 @@ public:
     static ZIMGroupMemberMutedListQueryConfig cnvZIMGroupMemberMutedListQueryConfigToObject(FTMap configMap);
 	static ZIMFileCacheClearConfig cnvZIMFileCacheClearConfigToObject(FTMap configMap);
 	static ZIMFileCacheQueryConfig cnvZIMFileCacheQueryConfigToObject(FTMap configMap);
+    static ZIMUserOfflinePushRule cnvZIMUserOfflinePushRuleToObject(FTMap ruleMap);
     
 public:
     static ZIMFriendAddConfig cnvZIMFriendAddConfigToObject(FTMap configMap);
@@ -307,6 +311,7 @@ public:
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<int>& vec);
+    static std::vector<int> cnvFTArrayToStlVectorIntValue(FTArray ftArray);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
     static std::vector<ZIMGroupMemberRole> cnvFTArrayToStlVectorInt(FTArray ftArray);
     static FTArray cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList);

@@ -194,6 +194,15 @@ std::vector<std::string> ZIMPluginConverter::cnvFTArrayToStlVector(FTArray ftArr
 	return vec;
 }
 
+std::vector<int> ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(FTArray ftArray) {
+	std::vector<int> vec;
+	for (auto& intObj : ftArray) {
+		auto intValue = std::get<int32_t>(intObj);
+		vec.emplace_back(intValue);
+	}
+	return vec;
+}
+
 std::vector<ZIMGroupMemberRole> ZIMPluginConverter::cnvFTArrayToStlVectorInt(FTArray ftArray) {
 	std::vector<ZIMGroupMemberRole> vec;
 		for (auto& intObj : ftArray) {
@@ -1568,6 +1577,13 @@ ZIMFileCacheQueryConfig ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(F
 	return config;
 }
 
+ZIMUserOfflinePushRule ZIMPluginConverter::cnvZIMUserOfflinePushRuleToObject(FTMap ruleMap) {
+	ZIMUserOfflinePushRule offlinePushRule;
+	offlinePushRule.onlinePlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(std::get<FTArray>(ruleMap[FTValue("onlinePlatforms")]));
+	offlinePushRule.notToReceiveOfflinePushPlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(std::get<FTArray>(ruleMap[FTValue("notToReceiveOfflinePushPlatforms")]));
+	return offlinePushRule;
+}
+
 ZIMFriendAddConfig ZIMPluginConverter::cnvZIMFriendAddConfigToObject(FTMap configMap) {
 	ZIMFriendAddConfig config;
 	config.wording = std::get<std::string>(configMap[FTValue("wording")]);
@@ -1758,6 +1774,24 @@ FTArray ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(const std::vector<
 		infoListArray.emplace_back(infoMap);
 	}
 	return infoListArray;
+}
+
+FTMap ZIMPluginConverter::cnvZIMUserOfflinePushRuleToMap(const ZIMUserOfflinePushRule &offlinePushRule){
+	FTMap infoMap;
+	infoMap[FTValue("onlinePlatforms")] = cnvStlVectorToFTArray(offlinePushRule.onlinePlatforms);
+	infoMap[FTValue("notToReceiveOfflinePushPlatforms")] = cnvStlVectorToFTArray(offlinePushRule.notToReceiveOfflinePushPlatforms);
+	return infoMap;
+}
+FTMap ZIMPluginConverter::cnvZIMUserRuleToMap(const ZIMUserRule &rule){
+	FTMap infoMap;
+	infoMap[FTValue("offlinePushRule")] = cnvZIMUserOfflinePushRuleToMap(rule.offlinePushRule);
+	return infoMap;
+}
+FTMap ZIMPluginConverter::cnvZIMSelfUserInfoToMap(const ZIMSelfUserInfo &info){
+	FTMap infoMap;
+	infoMap[FTValue("userRule")] = cnvZIMUserRuleToMap(info.userRule);
+	infoMap[FTValue("userFullInfo")] = cnvZIMUserFullInfoObjectToMap(info.userFullInfo);
+	return infoMap;
 }
 
 FTMap ZIMPluginConverter::cnvZIMFriendInfoToMap(const ZIMFriendInfo& info) {

@@ -46,6 +46,10 @@ public:
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void updateUserExtendedData(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void updateUserOfflinePushRule(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    void querySelfUserInfo(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryUsersInfo(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void queryConversationList(flutter::EncodableMap& argument,

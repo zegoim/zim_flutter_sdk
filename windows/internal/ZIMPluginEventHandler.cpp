@@ -62,6 +62,18 @@ void ZIMPluginEventHandler::onUserInfoUpdated(ZIM* zim, const ZIMUserFullInfo& i
     }
 }
 
+void ZIMPluginEventHandler::onUserRuleUpdated(ZIM* zim, const ZIMUserRule & userRule) {
+    if(eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onUserRuleUpdated");
+        auto handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("userRule")] = ZIMPluginConverter::cnvZIMUserRuleToMap(userRule);
+
+        eventSink_->Success(retMap);
+    }
+}
+
 void ZIMPluginEventHandler::onTokenWillExpire(ZIM* zim, unsigned int second) {
     if (eventSink_) {
         FTMap retMap;

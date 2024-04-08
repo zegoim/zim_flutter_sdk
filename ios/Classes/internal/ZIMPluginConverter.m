@@ -140,6 +140,46 @@
     return basicZIMUserInfoList;
 }
 
++(nullable NSDictionary *)mZIMUserOfflinePushRule:(nullable ZIMUserOfflinePushRule *)offlinePushRule{
+    if(offlinePushRule == nil || offlinePushRule == NULL || [offlinePushRule isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:offlinePushRule.onlinePlatforms forKey:@"onlinePlatforms"];
+    [dic setObject:offlinePushRule.notToReceiveOfflinePushPlatforms forKey:@"notToReceiveOfflinePushPlatforms"];
+    return dic;
+}
+
++(nullable ZIMUserOfflinePushRule *)oZIMUserOfflinePushRule:(nullable NSDictionary *)ruleDic{
+    if(ruleDic == nil || ruleDic == NULL || [ruleDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    ZIMUserOfflinePushRule *offlinePushRule = [[ZIMUserOfflinePushRule alloc] init];
+    offlinePushRule.onlinePlatforms = [ruleDic objectForKey:@"onlinePlatforms"];
+    offlinePushRule.notToReceiveOfflinePushPlatforms = [ruleDic objectForKey:@"notToReceiveOfflinePushPlatforms"];
+    return offlinePushRule;
+}
+
++(nullable NSDictionary *)mZIMUserRule:(nullable ZIMUserRule *)userRule{
+    if(userRule == nil || userRule == NULL || [userRule isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:[ZIMPluginConverter mZIMUserOfflinePushRule:userRule.offlinePushRule] forKey:@"offlinePushRule"];
+    return dic;
+}
+
++(nullable NSDictionary *)mZIMSelfUserInfo:(nullable ZIMSelfUserInfo *)selfUserInfo{
+    if(selfUserInfo == nil || selfUserInfo == NULL || [selfUserInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:[ZIMPluginConverter mZIMUserRule:selfUserInfo.userRule] forKey:@"userRule"];
+    [dic setObject:[ZIMPluginConverter mZIMUserFullInfo:selfUserInfo.userFullInfo] forKey:@"userFullInfo"];
+    return dic;
+}
+
 +(nullable ZIMConversation *)oZIMConversation:(nullable NSDictionary *)conversationDic{
     if(conversationDic == nil || conversationDic == NULL || [conversationDic isEqual:[NSNull null]]){
         return nil;

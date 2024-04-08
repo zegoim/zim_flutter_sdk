@@ -38,6 +38,8 @@ protected:
 
     void onUserInfoUpdated(ZIM* zim, const ZIMUserFullInfo& info);
 
+    void onUserRuleUpdated(ZIM* zim, const ZIMUserRule & userRule);
+
     void onRoomStateChanged(ZIM* zim, ZIMRoomState state, ZIMRoomEvent event,
         const std::string& extendedData,
         const std::string& roomID);

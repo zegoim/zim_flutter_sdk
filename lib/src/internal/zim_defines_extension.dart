@@ -846,3 +846,30 @@ extension ZIMGroupMuteModeExtension on ZIMGroupMuteMode{
   };
   int get value => valueMap[this] ?? -1;
 }
+
+extension ZIMPlatformTypeExtension on ZIMPlatformType{
+  static const valueMap = {
+    ZIMPlatformType.win : 1,
+    ZIMPlatformType.iPhoneOS : 2,
+    ZIMPlatformType.android : 3,
+    ZIMPlatformType.macOS : 4,
+    ZIMPlatformType.linux : 5,
+    ZIMPlatformType.web : 6,
+    ZIMPlatformType.miniProgram : 7,
+    ZIMPlatformType.iPadOS : 9,
+    ZIMPlatformType.unknown : 32
+  };
+
+  static const mapValue = {
+    1 : ZIMPlatformType.win,
+    2 : ZIMPlatformType.iPhoneOS,
+    3 : ZIMPlatformType.android,
+    4 : ZIMPlatformType.macOS,
+    5 : ZIMPlatformType.linux,
+    6 : ZIMPlatformType.web,
+    7 : ZIMPlatformType.miniProgram,
+    9 : ZIMPlatformType.iPadOS,
+    32 : ZIMPlatformType.unknown
+  };
+  int get value => valueMap[this] ?? -1;
+}
