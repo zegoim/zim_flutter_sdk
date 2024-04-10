@@ -475,13 +475,17 @@ class ZIMConverter {
         message.fileSize = resultMap['fileSize'] ?? 0;
       }
       message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
-      message.reactions = oZIMMessageReactionList(resultMap['reactions']);
+      if (resultMap['reactions'] != null) {
+        message.reactions = oZIMMessageReactionList(resultMap['reactions']);
+      }
       message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
       message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
       message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
       message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
       message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
-      message.cbInnerID = resultMap['cbInnerID'];
+      if (resultMap['cbInnerID'] != null) {
+        message.cbInnerID = resultMap['cbInnerID'];
+      }
       return message;
   }
 

@@ -2517,7 +2517,7 @@ class ZegoZimPlugin {
     if (ZIMEventHandler.onUserRuleUpdated == null) {
       return;
     }
-    ZIMSelfUserRule userRule = ZIMConverter.oZIMSelfUserRule(data['userRule']);
+    ZIMUserRule userRule = ZIMConverter.oZIMUserRule(data['userRule']);
     ZIMEventHandler.onUserRuleUpdated!(zim, userRule);
   }
 

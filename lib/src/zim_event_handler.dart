@@ -383,11 +383,6 @@ class ZIMEventHandler {
 
   static void Function(
       ZIM zim,
-      ZIMSelfUserRule userRule)? onUserRuleUpdated;
-
-
-  static void Function(
-      ZIM zim,
       List<ZIMGroupApplicationInfo> applicationList,
       ZIMGroupApplicationListChangeAction action)? onGroupApplicationListChanged;
 
