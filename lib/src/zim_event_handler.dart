@@ -375,12 +375,15 @@ class ZIMEventHandler {
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupMemberInfoUpdated;
 
-
   static void Function(
       ZIM zim,
       ZIMGroupVerifyInfo verifyInfo,
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupVerifyInfoUpdated;
+
+  static void Function(
+      ZIM zim,
+      ZIMSelfUserRule userRule)? onUserRuleUpdated;
 
 
   static void Function(

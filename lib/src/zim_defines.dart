@@ -2801,10 +2801,10 @@ class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
   ZIMGroupMuteInfo? groupMuteInfo;
 }
 
-class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo{
+class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo {
   int role = 0;
   int muteExpiredTime = 0;
-
+}
 
 class ZIMUserOfflinePushRule {
   List<ZIMPlatformType> onlinePlatforms = [];
