@@ -2752,12 +2752,3 @@ class ZIMBlacklistQueryConfig {
   int nextFlag = 0;
   int count = 0;
 }
-
-class ZIMUserOfflinePushRule {
-  List<int> onlinePlatforms = [];
-  List<int> notToReceiveOfflinePushPlatforms = [];
-}
-
-class ZIMSelfUserRule {
-  ZIMUserOfflinePushRule offlinePushRule = ZIMUserOfflinePushRule();
-}

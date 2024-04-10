@@ -2514,11 +2514,9 @@ class ZegoZimPlugin {
   }
 
   static void userRuleUpdated(ZIMEngine zim, dynamic data) {
-    if (ZIMEventHandler.onUserRuleUpdated == null) {
-      return;
-    }
-    ZIMSelfUserRule userRule = ZIMConverter.oZIMSelfUserRule(data['userRule']);
-    ZIMEventHandler.onUserRuleUpdated!(zim, userRule);
+    // if (ZIMEventHandler.onUserRuleUpdated == null) {
+    //   return;
+    // }
   }
 
   static void groupVerifyInfoUpdated(ZIMEngine zim, dynamic data) {
@@ -2597,20 +2595,7 @@ class ZegoZimPlugin {
         : false;
     zimMessage.extendedData =
         messageMap['extendedData'] is String ? messageMap['extendedData'] : '';
-    zimMessage.receiptStatus = ZIMMessageReceiptStatus.values[messageMap['receiptStatus']];
-    zimMessage.localExtendedData = messageMap['localExtendedData'] is String ? messageMap['localExtendedData'] : '';
-    zimMessage.isBroadcastMessage = messageMap['isBroadcastMessage'] is bool
-        ? messageMap['isBroadcastMessage']
-        : false;
-    zimMessage.isMentionAll = messageMap['isMentionAll'] is bool
-        ? messageMap['isMentionAll']
-        : false;
-    zimMessage.mentionedUserIds = messageMap['mentionedUserIDs'] is List<String> ? messageMap['mentionedUserIDs'] : [];
-    if (messageMap['reactions'] != null) {
-      zimMessage.reactions =  messageMap['reactions'];
-    } else {
-      zimMessage.reactions = [];
-    }
+
     return zimMessage;
   }
 }
