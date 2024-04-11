@@ -678,7 +678,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String,Object> resultMap = new HashMap<>();
         resultMap.put("method","onUserRuleUpdated");
         resultMap.put("handle", handle);
-        resultMap.put("rule",ZIMPluginConverter.mZIMUserRule(rule));
+        resultMap.put("userRule",ZIMPluginConverter.mZIMUserRule(rule));
         mysink.success(resultMap);
     }
 
