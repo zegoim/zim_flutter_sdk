@@ -67,7 +67,35 @@
     NSMutableDictionary *userInfoDic = [[NSMutableDictionary alloc] init];
     [userInfoDic safeSetObject:userInfo.userID forKey:@"userID"];
     [userInfoDic safeSetObject:userInfo.userName forKey:@"userName"];
-    [userInfoDic safeSetObject:userInfo.userAvatarUrl forKey:@"userAvatarUrl"];
+    if(userInfo.userAvatarUrl != nil){
+        [userInfoDic safeSetObject:userInfo.userAvatarUrl forKey:@"userAvatarUrl"];
+    }else{
+        [userInfoDic safeSetObject:@"" forKey:@"userAvatarUrl"];
+    }
+    if([userInfo isKindOfClass:[ZIMGroupMemberSimpleInfo class]]){
+        ZIMGroupMemberSimpleInfo *subInfo = (ZIMGroupMemberSimpleInfo *)userInfo;
+        [userInfoDic setObject:subInfo.memberNickname forKey:@"memberNickname"];
+        [userInfoDic setObject:@(subInfo.memberRole) forKey:@"memberRole"];
+        [userInfoDic setObject:@"ZIMGroupMemberSimpleInfo" forKey:@"classType"];
+    }else if([userInfo isKindOfClass:[ZIMGroupMemberInfo class]]){
+        ZIMGroupMemberInfo *subInfo = (ZIMGroupMemberInfo *)userInfo;
+        [userInfoDic setObject:subInfo.memberNickname forKey:@"memberNickname"];
+        [userInfoDic setObject:@(subInfo.memberRole) forKey:@"memberRole"];
+        if(subInfo.memberAvatarUrl != nil){
+            [userInfoDic setObject:subInfo.memberAvatarUrl forKey:@"memberAvatarUrl"];
+        }else{
+            [userInfoDic setObject:@"" forKey:@"memberAvatarUrl"];
+        }
+        [userInfoDic setObject:@(subInfo.muteExpiredTime) forKey:@"muteExpiredTime"];
+        [userInfoDic setObject:@"ZIMGroupMemberInfo" forKey:@"classType"];
+    }else if ([userInfo isKindOfClass:[ZIMFriendInfo class]]){
+        ZIMFriendInfo *subInfo = (ZIMFriendInfo *)userInfo;
+        [userInfoDic setObject:subInfo.friendAlias forKey:@"friendAlias"];
+        [userInfoDic setObject:@(subInfo.createTime) forKey:@"createTime"];
+        [userInfoDic setObject:subInfo.wording forKey:@"wording"];
+        [userInfoDic setObject:subInfo.friendAttributes forKey:@"friendAttributes"];
+        [userInfoDic setObject:@"ZIMFriendInfo" forKey:@"classType"];
+    }
     return userInfoDic;
 }
 
@@ -118,6 +146,46 @@
         [basicZIMUserInfoList safeAddObject:userInfoDic];
     }
     return basicZIMUserInfoList;
+}
+
++(nullable NSDictionary *)mZIMUserOfflinePushRule:(nullable ZIMUserOfflinePushRule *)offlinePushRule{
+    if(offlinePushRule == nil || offlinePushRule == NULL || [offlinePushRule isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:offlinePushRule.onlinePlatforms forKey:@"onlinePlatforms"];
+    [dic setObject:offlinePushRule.notToReceiveOfflinePushPlatforms forKey:@"notToReceiveOfflinePushPlatforms"];
+    return dic;
+}
+
++(nullable ZIMUserOfflinePushRule *)oZIMUserOfflinePushRule:(nullable NSDictionary *)ruleDic{
+    if(ruleDic == nil || ruleDic == NULL || [ruleDic isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    ZIMUserOfflinePushRule *offlinePushRule = [[ZIMUserOfflinePushRule alloc] init];
+    offlinePushRule.onlinePlatforms = [ruleDic objectForKey:@"onlinePlatforms"];
+    offlinePushRule.notToReceiveOfflinePushPlatforms = [ruleDic objectForKey:@"notToReceiveOfflinePushPlatforms"];
+    return offlinePushRule;
+}
+
++(nullable NSDictionary *)mZIMUserRule:(nullable ZIMUserRule *)userRule{
+    if(userRule == nil || userRule == NULL || [userRule isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:[ZIMPluginConverter mZIMUserOfflinePushRule:userRule.offlinePushRule] forKey:@"offlinePushRule"];
+    return dic;
+}
+
++(nullable NSDictionary *)mZIMSelfUserInfo:(nullable ZIMSelfUserInfo *)selfUserInfo{
+    if(selfUserInfo == nil || selfUserInfo == NULL || [selfUserInfo isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:[ZIMPluginConverter mZIMUserRule:selfUserInfo.userRule] forKey:@"userRule"];
+    [dic setObject:[ZIMPluginConverter mZIMUserFullInfo:selfUserInfo.userFullInfo] forKey:@"userFullInfo"];
+    return dic;
 }
 
 +(nullable ZIMConversation *)oZIMConversation:(nullable NSDictionary *)conversationDic{
@@ -304,6 +372,10 @@
             ((ZIMCombineMessage *)msg).messageList = messageList;
             break;
         }
+        case ZIMMessageTypeTips:{
+            msg = [[ZIMTipsMessage alloc] init];
+            break;
+        }
         default:
             break;
     }
@@ -458,8 +530,20 @@
             [messageDic safeSetObject:combineMessage.summary forKey:@"summary"];
             [messageDic safeSetObject:combineMessage.combineID forKey:@"combineID"];
             [messageDic safeSetObject:[ZIMPluginConverter mZIMMessageList:combineMessage.messageList] forKey:@"messageList"];
-        }
             break;
+        }
+        case ZIMMessageTypeTips:{
+            ZIMTipsMessage *tipsMessage = (ZIMTipsMessage *)message;
+            [messageDic setObject:@(tipsMessage.event) forKey:@"event"];
+            if(tipsMessage.operatedUser != nil){
+                [messageDic setObject:[ZIMPluginConverter mZIMUserInfo:tipsMessage.operatedUser] forKey:@"operatedUser"];
+            }
+            if(tipsMessage.changeInfo != nil){
+                [messageDic setObject:[ZIMPluginConverter mZIMTipsMessageChangeInfo:tipsMessage.changeInfo] forKey:@"changeInfo"];
+            }
+            [messageDic setObject:[ZIMPluginConverter mZIMUserInfoList:tipsMessage.targetUserList] forKey:@"targetUserList"];
+            break;
+        }
         default:
             break;
     }
@@ -810,9 +894,9 @@
         return nil;
     }
     NSMutableDictionary *verifyInfoDic = [[NSMutableDictionary alloc] init];
-    [verifyInfoDic safeSetObject:[NSNumber numberWithInt:(int)verifyInfo.joinMode] forKey:@"joinMode"];
-    [verifyInfoDic safeSetObject:[NSNumber numberWithInt:(int)verifyInfo.inviteMode] forKey:@"inviteMode"];
-    [verifyInfoDic safeSetObject:[NSNumber numberWithInt:(int)verifyInfo.beInviteMode] forKey:@"beInviteMode"];
+    [verifyInfoDic safeSetObject:@(verifyInfo.joinMode) forKey:@"joinMode"];
+    [verifyInfoDic safeSetObject:@(verifyInfo.inviteMode) forKey:@"inviteMode"];
+    [verifyInfoDic safeSetObject:@(verifyInfo.beInviteMode) forKey:@"beInviteMode"];
     return verifyInfoDic;
 }
 
@@ -873,7 +957,7 @@
     [memberInfoDic safeSetObject:memberInfo.memberAvatarUrl ? memberInfo.memberAvatarUrl : @"" forKey:@"memberAvatarUrl"];
     [memberInfoDic safeSetObject:memberInfo.userAvatarUrl ? memberInfo.userAvatarUrl : @"" forKey:@"userAvatarUrl"];
     [memberInfoDic safeSetObject:[NSNumber numberWithLongLong:memberInfo.muteExpiredTime] forKey:@"muteExpiredTime"];
-    [memberInfoDic safeSetObject:memberInfo.groupEnterInfo ? [ZIMPluginConverter mZIMGroupEnterInfo:memberInfo.groupEnterInfo] : @"" forKey:@"groupEnterInfo"];
+    [memberInfoDic safeSetObject:memberInfo.groupEnterInfo ? [ZIMPluginConverter mZIMGroupEnterInfo:memberInfo.groupEnterInfo] : [NSNull null] forKey:@"groupEnterInfo"];
     return memberInfoDic;
 }
 
@@ -1007,10 +1091,10 @@
     [groupFullInfoDic safeSetObject:groupInfoDic forKey:@"baseInfo"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupNotice forKey:@"groupNotice"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupAttributes forKey:@"groupAttributes"];
-    [groupFullInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupFullInfo.notificationStatus] forKey:@"notificationStatus"];
+    [groupFullInfoDic safeSetObject:@(groupFullInfo.notificationStatus) forKey:@"notificationStatus"];
     [groupFullInfoDic safeSetObject:groupMuteInfoDic forKey:@"mutedInfo"];
-    [groupFullInfoDic safeSetObject:[NSNumber numberWithInt:(int)groupFullInfo.maxMemberCount] forKey:@"maxMemberCount"];
-    [groupFullInfoDic safeSetObject:[NSNumber numberWithLongLong:(int)groupFullInfo.createTime] forKey:@"createTime"];
+    [groupFullInfoDic safeSetObject:[NSNumber numberWithUnsignedInt:groupFullInfo.maxMemberCount] forKey:@"maxMemberCount"];
+    [groupFullInfoDic safeSetObject:[NSNumber numberWithLongLong:groupFullInfo.createTime] forKey:@"createTime"];
     [groupFullInfoDic safeSetObject:[ZIMPluginConverter mZIMGroupVerifyInfo:groupFullInfo.verifyInfo] forKey:@"verifyInfo"];
     return groupFullInfoDic;
 }
@@ -1033,9 +1117,9 @@
     config.groupAttributes = [configDic safeObjectForKey:@"groupAttributes"];
     config.groupNotice = [configDic safeObjectForKey:@"groupNotice"];
     config.maxMemberCount = ((NSNumber *)[configDic objectForKey:@"maxMemberCount"]).intValue;
-    config.joinMode = ((NSNumber *)[configDic objectForKey:@"joinMode"]).intValue;
-    config.inviteMode = ((NSNumber *)[configDic objectForKey:@"inviteMode"]).intValue;
-    config.beInviteMode = ((NSNumber *)[configDic objectForKey:@"beInviteMode"]).intValue;
+    config.joinMode = ((NSNumber *)[configDic objectForKey:@"joinMode"]).unsignedIntValue;
+    config.inviteMode = ((NSNumber *)[configDic objectForKey:@"inviteMode"]).unsignedIntValue;
+    config.beInviteMode = ((NSNumber *)[configDic objectForKey:@"beInviteMode"]).unsignedIntValue;
     return config;
 }
 
@@ -1640,11 +1724,38 @@
     if(infoDic == nil || infoDic == NULL || [infoDic isEqual:[NSNull null]]){
         return nil;
     }
-    ZIMUserInfo *info = [[ZIMUserInfo alloc] init];
+    NSString *classType = [infoDic safeObjectForKey:@"classType"];
+    ZIMUserInfo *info;
+    if(classType != nil){
+        if([classType isEqual:@"ZIMGroupMemberSimpleInfo"]){
+            info = [[ZIMGroupMemberSimpleInfo alloc] init];
+            ZIMGroupMemberSimpleInfo *subInfo = (ZIMGroupMemberSimpleInfo *)info;
+            subInfo.memberNickname = [infoDic objectForKey:@"memberNickname"];
+            subInfo.memberRole = [[infoDic objectForKey:@"memberRole"] intValue];
+        }else if ([classType isEqual:@"ZIMGroupMemberInfo"]){
+            info = [[ZIMGroupMemberInfo alloc] init];
+            ZIMGroupMemberInfo *subInfo = (ZIMGroupMemberInfo *)info;
+            subInfo.memberNickname = [infoDic objectForKey:@"memberNickname"];
+            subInfo.memberRole = [[infoDic objectForKey:@"memberRole"] intValue];
+            subInfo.memberAvatarUrl = [infoDic objectForKey:@"memberAvatarUrl"];
+            subInfo.muteExpiredTime = [[infoDic objectForKey:@"muteExpiredTime"] longLongValue];
+        }else if ([classType isEqual:@"ZIMFriendInfo"]){
+            info = [[ZIMFriendInfo alloc] init];
+            ZIMFriendInfo *subInfo = (ZIMFriendInfo *)info;
+            subInfo.friendAlias = [infoDic objectForKey:@"friendAlias"];
+            subInfo.createTime = [[infoDic objectForKey:@"createTime"] longLongValue];
+            subInfo.wording = [infoDic objectForKey:@"wording"];
+            subInfo.friendAttributes = [infoDic objectForKey:@"friendAttributes"];
+        }else{
+            info = [[ZIMUserInfo alloc] init];
+        }
+    }else{
+        info = [[ZIMUserInfo alloc] init];
+    }
+    
     info.userID = (NSString *)[infoDic objectForKey:@"userID"];
     info.userName = (NSString *)[infoDic objectForKey:@"userName"];
     info.userAvatarUrl = (NSString *)[infoDic objectForKey:@"userAvatarUrl"];
-
     return info;
 }
 
@@ -1853,6 +1964,31 @@
     config.isAlsoMatchFriendAlias = [[configMap objectForKey:@"isAlsoMatchFriendAlias"] boolValue];
     return config;
 
+}
+
++(nullable NSDictionary *)mZIMTipsMessageChangeInfo:(nullable ZIMTipsMessageChangeInfo *)info{
+    if(info == nil || info == NULL || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:@(info.type) forKey:@"type"];
+    if([info isKindOfClass:[ZIMTipsMessageGroupChangeInfo class]]){
+        ZIMTipsMessageGroupChangeInfo *subInfo = (ZIMTipsMessageGroupChangeInfo *)info;
+        [dic setObject:@"ZIMTipsMessageGroupChangeInfo" forKey:@"classType"];
+        [dic setObject:@(subInfo.groupDataFlag) forKey:@"groupDataFlag"];
+        [dic setObject:subInfo.groupName forKey:@"groupName"];
+        [dic setObject:subInfo.groupNotice forKey:@"groupNotice"];
+        [dic setObject:subInfo.groupAvatarUrl forKey:@"groupAvatarUrl"];
+        if(subInfo.groupMutedInfo != nil){
+            [dic setObject:[ZIMPluginConverter mZIMGroupMuteInfo:subInfo.groupMutedInfo] forKey:@"groupMuteInfo"];
+        }
+    }else if ([info isKindOfClass:[ZIMTipsMessageGroupMemberChangeInfo class]]){
+        ZIMTipsMessageGroupMemberChangeInfo *subInfo = (ZIMTipsMessageGroupMemberChangeInfo *)info;
+        [dic setObject:@(subInfo.memberRole) forKey:@"role"];
+        [dic setObject:@(subInfo.muteExpiredTime) forKey:@"muteExpiredTime"];
+        [dic setObject:@"ZIMTipsMessageGroupMemberChangeInfo" forKey:@"classType"];
+    }
+    return dic;
 }
 
 @end

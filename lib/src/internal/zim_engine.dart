@@ -1455,5 +1455,24 @@ class ZIMEngine implements ZIM {
     });
     return ZIMFileCacheQueriedResult(fileCacheInfo: ZIMConverter.oZIMFileCacheInfo(resultMap['fileCacheInfo']));
   }
+  @override
+  Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo() async{
+
+    Map resultMap = await channel.invokeMethod('querySelfUserInfo',{
+      'handle':handle
+    });
+
+    return ZIMConverter.oZIMSelfUserInfoQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule) async{
+    Map resultMap = await channel.invokeMethod('updateUserOfflinePushRule',{
+      'handle':handle,
+      'offlinePushRule' : ZIMConverter.mZIMUserOfflinePushRule(offlinePushRule),
+    });
+    return ZIMConverter.oZIMUserOfflinePushRuleInfoUpdatedResult(resultMap);
+  }
+
 
 }

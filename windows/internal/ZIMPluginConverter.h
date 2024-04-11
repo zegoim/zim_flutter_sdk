@@ -175,6 +175,8 @@ public:
 
 public:
     static FTMap cnvZIMUserInfoObjectToMap(const ZIMUserInfo& userInfo);
+    static flutter::EncodableValue cnvZIMUserInfoPtrToObj(const std::shared_ptr<ZIMUserInfo> userPtr);
+    static FTArray cnvZIMUserInfoPtrListToArray(const std::vector<std::shared_ptr<ZIMUserInfo>> userInfoList);
     static FTMap cnvZIMRoomMemberInfoObjectToMap(const ZIMRoomMemberInfo& userInfo);
     static FTMap cnvZIMUserFullInfoObjectToMap(const ZIMUserFullInfo &userFullInfo);
     static FTMap cnvZIMErrorUserInfoToMap(const ZIMErrorUserInfo& errorUserInfo);
@@ -189,6 +191,7 @@ public:
     static FTMap cnvZIMConversationToMap(const std::shared_ptr<ZIMConversation>& conversation);
     static FTArray cnvZIMConversationChangeInfoListToArray(const std::vector<ZIMConversationChangeInfo> &convInfoList);
     static FTArray cnvZIMMessageSentStatusChangeInfoListToArray(const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList);
+    static flutter::EncodableValue cnvZIMTipsMessageChangeInfoToMap(const std::shared_ptr<ZIMTipsMessageChangeInfo> changeInfo);
     static flutter::EncodableValue cnvZIMMessageObjectToMap(ZIMMessage* message);
     static FTMap cnvZIMGroupVerifyInfoToMap(const ZIMGroupVerifyInfo& info);
     static FTArray cnvZIMMessageListToArray(const std::vector<std::shared_ptr<ZIMMessage>>& messageList);
@@ -232,6 +235,7 @@ public:
     static FTArray cnvZIMMessageReactionUserInfoListToArray(const std::vector<ZIMMessageReactionUserInfo>& reactionUserInfoList);
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo& info);
     static FTMap cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo& info);
+    static flutter::EncodableValue cnvZIMGroupMuteInfoPtrToObj(const std::shared_ptr<ZIMGroupMuteInfo> infoPtr);
     static FTMap cnvZIMFriendApplicationInfoToMap(const ZIMFriendApplicationInfo& info);
     static FTMap cnvZIMFriendInfoToMap(const ZIMFriendInfo& info);
     static FTMap cnvZIMFriendRelationInfoToMap(const ZIMFriendRelationInfo& info);
@@ -240,6 +244,9 @@ public:
     static FTArray cnvZIMGroupApplicationInfoToArray(const std::vector<ZIMGroupApplicationInfo>& infoList);
 	static FTMap  convZIMGroupEnterInfo(const ZIMGroupEnterInfo& groupEnterInfo);
 	static FTMap cnvZIMFileCacheInfoToMap(const ZIMFileCacheInfo& fileCacheInfo);
+    static FTMap cnvZIMUserOfflinePushRuleToMap(const ZIMUserOfflinePushRule &offlinePushRule);
+    static FTMap cnvZIMUserRuleToMap(const ZIMUserRule &rule);
+    static FTMap cnvZIMSelfUserInfoToMap(const ZIMSelfUserInfo &info);
 
 public:
 
@@ -281,12 +288,13 @@ public:
     static ZIMGroupMemberMutedListQueryConfig cnvZIMGroupMemberMutedListQueryConfigToObject(FTMap configMap);
 	static ZIMFileCacheClearConfig cnvZIMFileCacheClearConfigToObject(FTMap configMap);
 	static ZIMFileCacheQueryConfig cnvZIMFileCacheQueryConfigToObject(FTMap configMap);
+    static ZIMUserOfflinePushRule cnvZIMUserOfflinePushRuleToObject(FTMap ruleMap);
     
 public:
     static ZIMFriendAddConfig cnvZIMFriendAddConfigToObject(FTMap configMap);
     static ZIMFriendApplicationAcceptConfig cnvZIMFriendApplicationAcceptConfigToObject(FTMap configMap);
     static ZIMFriendApplicationInfo cnvZIMFriendApplicationInfoToObject(FTMap configMap);
-    static ZIMUserInfo cnvZIMUserInfoToObject(FTMap infoMap);
+    static std::shared_ptr<ZIMUserInfo> cnvZIMUserInfoToObject(FTMap infoMap);
     static ZIMFriendApplicationListQueryConfig cnvZIMFriendApplicationListQueryConfigToObject(FTMap infoMap);
     static ZIMFriendApplicationRejectConfig cnvZIMFriendApplicationRejectConfigToObject(FTMap infoMap);
     static ZIMFriendDeleteConfig cnvZIMFriendDeleteConfigToObject(FTMap infoMap);
@@ -303,6 +311,7 @@ public:
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<int>& vec);
+    static std::vector<int> cnvFTArrayToStlVectorIntValue(FTArray ftArray);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
     static std::vector<ZIMGroupMemberRole> cnvFTArrayToStlVectorInt(FTArray ftArray);
     static FTArray cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList);

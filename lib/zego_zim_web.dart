@@ -2514,9 +2514,11 @@ class ZegoZimPlugin {
   }
 
   static void userRuleUpdated(ZIMEngine zim, dynamic data) {
-    // if (ZIMEventHandler.onUserRuleUpdated == null) {
-    //   return;
-    // }
+    if (ZIMEventHandler.onUserRuleUpdated == null) {
+      return;
+    }
+    ZIMUserRule userRule = ZIMConverter.oZIMUserRule(data['userRule']);
+    ZIMEventHandler.onUserRuleUpdated!(zim, userRule);
   }
 
   static void groupVerifyInfoUpdated(ZIMEngine zim, dynamic data) {

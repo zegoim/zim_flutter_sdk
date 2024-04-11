@@ -228,7 +228,31 @@ enum ZIMMessageType {
 
   custom,
 
+  tips,
+
   combine
+}
+
+enum ZIMTipsMessageEvent {
+  groupCreated,
+  groupDismissed,
+  groupJoined,
+  groupInvited,
+  groupLeft,
+  groupKickout,
+  groupInfoChanged,
+  groupMemberInfoChanged
+}
+
+enum ZIMTipsMessageChangeInfoType {
+  groupDatas,
+  groupNotice,
+  groupName,
+  groupAvatar,
+  muteChanged,
+  groupOwnerTransferred,
+  groupMemberRoleChanged,
+  groupMemberMuted,
 }
 
 enum ZIMMediaFileType {
@@ -414,6 +438,8 @@ enum ZIMUserRelationType {
 }
 
 enum ZIMBlacklistChangeAction { added, removed }
+
+enum ZIMPlatformType{win,iPhoneOS,android,macOS,linux,web,miniProgram,iPadOS,unknown}
 
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
@@ -721,6 +747,17 @@ class ZIMCustomMessage extends ZIMMessage {
   }
 }
 
+class ZIMTipsMessage extends ZIMMessage {
+
+  ZIMTipsMessageEvent event = ZIMTipsMessageEvent.groupCreated;
+
+  ZIMUserInfo? operatedUser;
+
+  List<ZIMUserInfo> targetUserList = [];
+
+  ZIMTipsMessageChangeInfo? changeInfo;
+}
+
 class ZIMConversation {
   String conversationID = '';
   String conversationName = '';
@@ -997,10 +1034,9 @@ class ZIMGroupInfo {
 }
 
 class ZIMGroupMemberSimpleInfo extends ZIMUserInfo {
-  String memberNickname;
+  String memberNickname = '';
   int memberRole = ZIMGroupMemberRole.member;
-  ZIMGroupMemberSimpleInfo(
-      {required this.memberNickname, required this.memberRole});
+  ZIMGroupMemberSimpleInfo();
 }
 
 class ZIMGroupApplicationInfo {
@@ -2751,4 +2787,47 @@ class ZIMFriendSearchConfig {
 class ZIMBlacklistQueryConfig {
   int nextFlag = 0;
   int count = 0;
+}
+
+class ZIMTipsMessageChangeInfo {
+  ZIMTipsMessageChangeInfoType type = ZIMTipsMessageChangeInfoType.groupMemberMuted;
+}
+
+class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
+  int groupDataFlag = 0;
+  String groupName = '';
+  String groupNotice = '';
+  String groupAvatarUrl = '';
+  ZIMGroupMuteInfo? groupMuteInfo;
+}
+
+class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo {
+  int role = 0;
+  int muteExpiredTime = 0;
+}
+
+class ZIMUserOfflinePushRule {
+  List<ZIMPlatformType> onlinePlatforms = [];
+  List<ZIMPlatformType> notToReceiveOfflinePushPlatforms = [];
+}
+
+class ZIMUserRule {
+  ZIMUserOfflinePushRule offlinePushRule;
+  ZIMUserRule({required this.offlinePushRule});
+}
+
+class ZIMSelfUserInfo {
+  ZIMUserRule userRule;
+  ZIMUserFullInfo userFullInfo;
+  ZIMSelfUserInfo({required this.userRule,required this.userFullInfo});
+}
+
+class ZIMUserOfflinePushRuleUpdatedResult {
+  ZIMUserOfflinePushRule offlinePushRule;
+  ZIMUserOfflinePushRuleUpdatedResult({required this.offlinePushRule});
+}
+
+class ZIMSelfUserInfoQueriedResult {
+  ZIMSelfUserInfo selfUserInfo;
+  ZIMSelfUserInfoQueriedResult({required this.selfUserInfo});
 }

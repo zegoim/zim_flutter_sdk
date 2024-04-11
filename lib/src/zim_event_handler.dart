@@ -31,6 +31,8 @@ class ZIMEventHandler {
   ///Description: In the multi-terminal login scenario, after the user modifies their information on device A, other online multi-terminal devices will receive this callback. For offline devices, after the user goes online, they need to call the [ZIM.QueryUsersInfo] interface to actively query user information.
   static void Function(ZIM zim, ZIMUserFullInfo info)? onUserInfoUpdated;
 
+  static void Function(ZIM zim, ZIMUserRule)? onUserRuleUpdated;
+
   // Supported version: 2.11.0 or later.
   //
   // Description: In the multi-terminal login scenario, after the user deletes the server level message on device A, other online multi-terminal devices will receive this callback..
@@ -379,7 +381,6 @@ class ZIMEventHandler {
       ZIMGroupVerifyInfo verifyInfo,
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupVerifyInfoUpdated;
-
 
   static void Function(
       ZIM zim,

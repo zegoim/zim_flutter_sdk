@@ -669,6 +669,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onUserRuleUpdated(ZIM zim, ZIMUserRule rule) {
+        super.onUserRuleUpdated(zim, rule);
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onUserRuleUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("userRule",ZIMPluginConverter.mZIMUserRule(rule));
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onMessageDeleted(ZIM zim, ZIMMessageDeletedInfo deletedInfo) {
         super.onMessageDeleted(zim, deletedInfo);
         if(mysink == null){

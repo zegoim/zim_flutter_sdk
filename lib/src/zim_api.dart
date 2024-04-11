@@ -1743,4 +1743,7 @@ abstract class ZIM {
   Future<ZIMFileCacheQueriedResult> queryLocalFileCache(ZIMFileCacheQueryConfig config);
 
   Future<void> exportLocalMessages(String folderPath, ZIMMessageExportConfig config, ZIMMessageExportingProgress? progress);
+  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule);
+
+  Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
 }
