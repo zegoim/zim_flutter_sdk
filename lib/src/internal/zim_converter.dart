@@ -2372,12 +2372,12 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
         info.groupNotice = map['groupNotice'];
         info.groupAvatarUrl = map['groupAvatarUrl'];
         if(map['groupMuteInfo'] != null){
-          info.groupMuteInfo = oZIMGroupMuteInfo(map['groupMuteInfo']);
+          info.groupMutedInfo = oZIMGroupMuteInfo(map['groupMuteInfo']);
         }
         break;
       case ZIMTipsMessageGroupMemberChangeInfo:
         info as ZIMTipsMessageGroupMemberChangeInfo;
-        info.role = map['role'];
+        info.memberRole = map['role'];
         info.muteExpiredTime = map['muteExpiredTime'];
         break;
     }
@@ -2394,13 +2394,13 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
         map['groupName'] = info.groupName;
         map['groupNotice'] = info.groupNotice;
         map['groupAvatarUrl'] = info.groupAvatarUrl;
-        if(info.groupMuteInfo != null){
-          map['groupMuteInfo'] = mZIMGroupMuteInfo(info.groupMuteInfo!);
+        if(info.groupMutedInfo != null){
+          map['groupMuteInfo'] = mZIMGroupMuteInfo(info.groupMutedInfo!);
         }
         break;
       case ZIMTipsMessageGroupMemberChangeInfo:
         info as ZIMTipsMessageGroupMemberChangeInfo;
-        map['role'] = info.role;
+        map['role'] = info.memberRole;
         map['muteExpiredTime'] = info.muteExpiredTime;
         break;
     }
