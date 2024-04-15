@@ -2798,11 +2798,11 @@ class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
   String groupName = '';
   String groupNotice = '';
   String groupAvatarUrl = '';
-  ZIMGroupMuteInfo? groupMuteInfo;
+  ZIMGroupMuteInfo? groupMutedInfo;
 }
 
 class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo {
-  int role = 0;
+  int memberRole = 0;
   int muteExpiredTime = 0;
 }
 
