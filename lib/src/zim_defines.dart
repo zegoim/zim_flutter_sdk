@@ -2806,6 +2806,13 @@ class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo {
   int muteExpiredTime = 0;
 }
 
+class ZIMGroupDataFlag{
+  static const int groupName = 1 << 0; // 0b0001
+  static const int groupNotice = 1 << 1; // 0b0010
+  static const int avatarUrl = 1 << 2; // 0b0100
+}
+
+
 class ZIMUserOfflinePushRule {
   List<ZIMPlatformType> onlinePlatforms = [];
   List<ZIMPlatformType> notToReceiveOfflinePushPlatforms = [];
