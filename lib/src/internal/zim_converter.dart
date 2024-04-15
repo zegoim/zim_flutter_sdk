@@ -2201,9 +2201,9 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
 
   static ZIMGroupVerifyInfo oZIMGroupVerifyInfo(Map map) {
     ZIMGroupVerifyInfo verifyInfo = ZIMGroupVerifyInfo();
-    verifyInfo.joinMode = ZIMGroupJoinModeExtension.mapValue[map['joinMode']]!;
-    verifyInfo.inviteMode = ZIMGroupInviteModeExtension.mapValue[map['inviteMode']]!;
-    verifyInfo.beInviteMode = ZIMGroupBeInviteModeExtension.mapValue[map['beInviteMode']]!;
+    verifyInfo.joinMode = ZIMGroupJoinModeExtension.mapValue[map['joinMode']] ?? ZIMGroupJoinMode.any;
+    verifyInfo.inviteMode = ZIMGroupInviteModeExtension.mapValue[map['inviteMode']] ?? ZIMGroupInviteMode.any;
+    verifyInfo.beInviteMode = ZIMGroupBeInviteModeExtension.mapValue[map['beInviteMode']] ?? ZIMGroupBeInviteMode.none;
     return verifyInfo;
   }
 
