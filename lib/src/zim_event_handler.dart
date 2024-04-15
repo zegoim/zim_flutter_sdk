@@ -278,7 +278,7 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.updateGroupName] : updates the group name.
   ///
   /// [zim] ZIM instance.
-  /// [groupName] The updated group name.
+  /// [groupNameChanged] The updated group name.
   /// [operatedInfo] Operation information after the group name is updated.
   /// [groupID] The groupID where the group name update occurred.
   static void Function(ZIM zim, String groupName,
@@ -293,7 +293,7 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.updateGroupAvatarUrl] : updates the group avatar url.
   ///
   /// [zim] ZIM instance.
-  /// [groupName] The updated group avatar url.
+  /// [groupNameChanged] The updated group avatar url.
   /// [operatedInfo] Operation information after the group avatar url is updated.
   /// [groupID] The groupID where the group avatar url update occurred.
   static void Function(
@@ -311,7 +311,7 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.updateGroupNotice], which updates the group notice.
   ///
   /// [zim] ZIM instance.
-  /// [groupNotice] Updated group announcement.
+  /// [groupNoticeChanged] Updated group announcement.
   /// [operatedInfo] The group announces the updated operation information.
   /// [groupID] The groupID where the group announcement update occurred.
   static void Function(ZIM zim, String groupNotice,

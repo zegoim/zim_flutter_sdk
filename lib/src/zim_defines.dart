@@ -239,20 +239,20 @@ enum ZIMTipsMessageEvent {
   groupJoined,
   groupInvited,
   groupLeft,
-  groupKickout,
+  groupKickedOut,
   groupInfoChanged,
   groupMemberInfoChanged
 }
 
 enum ZIMTipsMessageChangeInfoType {
-  groupDatas,
-  groupNotice,
-  groupName,
-  groupAvatar,
-  muteChanged,
+  groupDataChanged,
+  groupNoticeChanged,
+  groupNameChanged,
+  groupAvatarUrlChanged,
+  groupMuteChanged,
   groupOwnerTransferred,
   groupMemberRoleChanged,
-  groupMemberMuted,
+  groupMemberMutedChanged,
 }
 
 enum ZIMMediaFileType {
@@ -2790,7 +2790,7 @@ class ZIMBlacklistQueryConfig {
 }
 
 class ZIMTipsMessageChangeInfo {
-  ZIMTipsMessageChangeInfoType type = ZIMTipsMessageChangeInfoType.groupMemberMuted;
+  ZIMTipsMessageChangeInfoType type = ZIMTipsMessageChangeInfoType.groupMemberMutedChanged;
 }
 
 class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
