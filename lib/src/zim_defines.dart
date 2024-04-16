@@ -1713,7 +1713,7 @@ class ZIMConversationNotificationStatusSetResult {
 ///
 /// Description: This callback is triggered when the developer calls the [sendPeerMessage] and [sendRoomMessage] interfaces. The developer can check whether the callback is sent successfully by [errorCode] in the callback.
 ///
-/// [message] The sent message object, from which parameters such as messageID can be obtained. If the sending fails, the messageID parameter in the message will be an empty string.
+/// [message] The sent message object, from which parameters such as messageID can be obtained. If the sending fails, the messageID parameter in the message will be an empty int.
 class ZIMMessageSentResult {
   ZIMMessage message;
   ZIMMessageSentResult({required this.message});
