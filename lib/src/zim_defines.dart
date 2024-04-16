@@ -30,6 +30,7 @@ enum ZIMConnectionState {
   reconnecting
 }
 
+///Use cases: For example, if the specified geofenced area is Europe, the region where the App user resides is not distinguished, and the actual region accessed by the SDK is Europe.
 enum ZIMGeofencingType {
   none,
 
@@ -222,14 +223,21 @@ enum ZIMMessageType {
   /// Use cases: For sending video messages, only ".mp4", ".mov" video types are supported. After sending the video message, the server will generate the first frame of the video file.
   video,
 
+  ///   Description: Systemmessage.
+  ///
+  /// Use cases: It is often used for local messages that need to be customized in the business layer, and is usually used to insert local message interfaces.
   system,
 
+  ///Description: Reovked message.
   revoke,
 
+  ///Description: Custom message.
   custom,
 
+  ///Description: Tips message.
   tips,
 
+  ///Description: Combined message.
   combine
 }
 
@@ -322,7 +330,13 @@ enum ZIMMessageSentStatus {
   failed
 }
 
-enum ZIMMessageOrder { descending, ascending }
+///Description: Used to represent the order of the message list.
+enum ZIMMessageOrder {
+  /// Represents message list in descending order (message list order is from new to old).
+  descending,
+  /// Represents message list in ascending order (message list order is from old to new).
+  ascending
+}
 
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
@@ -332,10 +346,18 @@ enum ZIMMessageDeleteType {
   conversationAllMessagesDeleted,
   allConversationMessagesDeleted
 }
-
-enum ZIMConversationEvent { added, updated, disabled, deleted }
-
-enum ZIMConversationNotificationStatus { notify, doNotDisturb }
+/// conversation changed event.
+enum ZIMConversationEvent {
+  added,
+  updated,
+  disabled,
+  deleted
+}
+///Enumeration of conversation notification status.
+enum ZIMConversationNotificationStatus {
+  notify,
+  doNotDisturb
+}
 
 /// Description: Group events.
 enum ZIMGroupEvent {
@@ -2833,8 +2855,9 @@ class ZIMUserOfflinePushRuleUpdatedResult {
   ZIMUserOfflinePushRule offlinePushRule;
   ZIMUserOfflinePushRuleUpdatedResult({required this.offlinePushRule});
 }
-
+/// Callback result of querying personal user information and rules.
 class ZIMSelfUserInfoQueriedResult {
+  /// Own user information, rule data.
   ZIMSelfUserInfo selfUserInfo;
   ZIMSelfUserInfoQueriedResult({required this.selfUserInfo});
 }
