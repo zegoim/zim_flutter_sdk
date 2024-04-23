@@ -30,7 +30,8 @@ enum ZIMConnectionState {
   reconnecting
 }
 
-enum ZIMGeofencingType{
+///Use cases: For example, if the specified geofenced area is Europe, the region where the App user resides is not distinguished, and the actual region accessed by the SDK is Europe.
+enum ZIMGeofencingType {
   none,
 
   include,
@@ -38,7 +39,7 @@ enum ZIMGeofencingType{
   exclude
 }
 
-class ZIMGeofencingArea{
+class ZIMGeofencingArea {
   /// Chinese mainland (excluding Hong Kong, Macao and Taiwan).
   static const int CN = 2;
 
@@ -87,8 +88,8 @@ enum ZIMRoomState {
 ///
 /// Caution: Please use it with the connection event parameter.
 enum ZIMConnectionEvent {
-
   unknown,
+
   /// Description: Success.
   success,
 
@@ -222,13 +223,44 @@ enum ZIMMessageType {
   /// Use cases: For sending video messages, only ".mp4", ".mov" video types are supported. After sending the video message, the server will generate the first frame of the video file.
   video,
 
+  ///   Description: Systemmessage.
+  ///
+  /// Use cases: It is often used for local messages that need to be customized in the business layer, and is usually used to insert local message interfaces.
   system,
 
+  ///Description: Reovked message.
   revoke,
 
+  ///Description: Custom message.
   custom,
 
+  ///Description: Tips message.
+  tips,
+
+  ///Description: Combined message.
   combine
+}
+
+enum ZIMTipsMessageEvent {
+  groupCreated,
+  groupDismissed,
+  groupJoined,
+  groupInvited,
+  groupLeft,
+  groupKickedOut,
+  groupInfoChanged,
+  groupMemberInfoChanged
+}
+
+enum ZIMTipsMessageChangeInfoType {
+  groupDataChanged,
+  groupNoticeChanged,
+  groupNameChanged,
+  groupAvatarUrlChanged,
+  groupMuteChanged,
+  groupOwnerTransferred,
+  groupMemberRoleChanged,
+  groupMemberMutedChanged,
 }
 
 enum ZIMMediaFileType {
@@ -271,6 +303,8 @@ enum ZIMRoomAttributesUpdateAction {
   delete
 }
 
+enum ZIMGroupApplicationListChangeAction { added }
+
 /// the direction of the message.
 ///
 /// Description: Describes whether the current message was sent or received.
@@ -296,19 +330,34 @@ enum ZIMMessageSentStatus {
   failed
 }
 
+///Description: Used to represent the order of the message list.
 enum ZIMMessageOrder {
+  /// Represents message list in descending order (message list order is from new to old).
   descending,
+  /// Represents message list in ascending order (message list order is from old to new).
   ascending
 }
 
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
 
-enum ZIMMessageDeleteType { messageListDeleted, conversationAllMessagesDeleted, allConversationMessagesDeleted }
-
-enum ZIMConversationEvent { added, updated, disabled, deleted}
-
-enum ZIMConversationNotificationStatus { notify, doNotDisturb }
+enum ZIMMessageDeleteType {
+  messageListDeleted,
+  conversationAllMessagesDeleted,
+  allConversationMessagesDeleted
+}
+/// conversation changed event.
+enum ZIMConversationEvent {
+  added,
+  updated,
+  disabled,
+  deleted
+}
+///Enumeration of conversation notification status.
+enum ZIMConversationNotificationStatus {
+  notify,
+  doNotDisturb
+}
 
 /// Description: Group events.
 enum ZIMGroupEvent {
@@ -343,11 +392,17 @@ enum ZIMGroupMemberEvent { joined, left, kickedout, invited }
 
 enum ZIMGroupMemberState { quit, enter }
 
+enum ZIMGroupJoinMode { any, auth, forbid }
+
+enum ZIMGroupInviteMode { any, admin }
+
+enum ZIMGroupBeInviteMode { none, auth }
+
 enum ZIMGroupAttributesUpdateAction { set, delete }
 
 enum ZIMGroupMessageNotificationStatus { notify, doNotDisturb }
 
-enum ZIMGroupMuteMode {none,normal,all,custom}
+enum ZIMGroupMuteMode { none, normal, all, custom }
 
 enum ZIMMessageReceiptStatus { none, processing, done, expired, failed }
 
@@ -361,7 +416,8 @@ enum ZIMCallUserState {
   received,
   timeout,
   quited,
-  ended
+  ended,
+  notYetReceived
 }
 
 enum ZIMCallInvitationMode {
@@ -370,25 +426,42 @@ enum ZIMCallInvitationMode {
   advanced,
 }
 
-enum ZIMCallState { unknown,started, ended }
+enum ZIMCallState { unknown, started, ended }
 
-enum ZIMCXHandleType{generic,phoneNumber,emailAddress }
+enum ZIMCXHandleType { generic, phoneNumber, emailAddress }
 
-enum ZIMFriendApplicationState{unknown,waiting,accepted,rejected,expired,disabled}
+enum ZIMFriendApplicationState {
+  unknown,
+  waiting,
+  accepted,
+  rejected,
+  expired,
+  disabled
+}
 
-enum ZIMFriendApplicationType{unknown,none,received,sent,both}
+enum ZIMFriendApplicationType { unknown, none, received, sent, both }
 
-enum ZIMFriendDeleteType{unknown,both,single}
+enum ZIMFriendDeleteType { unknown, both, single }
 
-enum ZIMFriendListChangeAction{added,deleted}
+enum ZIMFriendListChangeAction { added, deleted }
 
-enum ZIMFriendApplicationListChangeAction{added,deleted}
+enum ZIMFriendApplicationListChangeAction { added, deleted }
 
-enum ZIMFriendRelationCheckType{unknown,both,single}
+enum ZIMFriendRelationCheckType { unknown, both, single }
 
-enum ZIMUserRelationType{unknown,singleNo,singleHave,bothAllNo,bothSelfHave,bothOtherHave,bothAllHave}
+enum ZIMUserRelationType {
+  unknown,
+  singleNo,
+  singleHave,
+  bothAllNo,
+  bothSelfHave,
+  bothOtherHave,
+  bothAllHave
+}
 
-enum ZIMBlacklistChangeAction{added,removed}
+enum ZIMBlacklistChangeAction { added, removed }
+
+enum ZIMPlatformType{win,iPhoneOS,android,macOS,linux,web,miniProgram,iPadOS,unknown}
 
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
@@ -398,6 +471,7 @@ class ZIMVoIPConfig {
 
 class ZIMGroupMemberRole {
   static const int owner = 1;
+  static const int admin = 2;
   static const int member = 3;
 }
 // Model
@@ -441,6 +515,7 @@ class ZIMAppConfig {
 
 class ZIMLoginConfig {
   String userName = '';
+
   /// The token issued by the developer's business server, used to ensure security. The generation rules are detailed in ZEGO document website.
   String token = '';
   bool isOfflineLogin = false;
@@ -532,8 +607,7 @@ class ZIMUserInfo {
   ZIMUserInfo();
 }
 
-class ZIMRoomMemberInfo extends ZIMUserInfo{
-
+class ZIMRoomMemberInfo extends ZIMUserInfo {
   ZIMRoomMemberInfo();
 }
 
@@ -565,6 +639,7 @@ class ZIMMessage {
   bool isMentionAll = false;
   List<String> mentionedUserIds = [];
   List<ZIMMessageReaction> reactions = [];
+  String cbInnerID = "";
 }
 
 class ZIMTextMessage extends ZIMMessage {
@@ -613,7 +688,6 @@ class ZIMMediaMessage extends ZIMMessage {
   String fileName = '';
   int fileSize = 0;
   ZIMMediaMessage({required this.fileLocalPath});
-
 }
 
 class ZIMRevokeMessage extends ZIMMessage {
@@ -688,11 +762,22 @@ class ZIMSystemMessage extends ZIMMessage {
 
 class ZIMCustomMessage extends ZIMMessage {
   String message = '';
-  int subType=0;
+  int subType = 0;
   String searchedContent = '';
-  ZIMCustomMessage({required this.message,required this.subType}){
+  ZIMCustomMessage({required this.message, required this.subType}) {
     super.type = ZIMMessageType.custom;
   }
+}
+
+class ZIMTipsMessage extends ZIMMessage {
+
+  ZIMTipsMessageEvent event = ZIMTipsMessageEvent.groupCreated;
+
+  ZIMUserInfo? operatedUser;
+
+  List<ZIMUserInfo> targetUserList = [];
+
+  ZIMTipsMessageChangeInfo? changeInfo;
 }
 
 class ZIMConversation {
@@ -706,24 +791,41 @@ class ZIMConversation {
   int unreadMessageCount = 0;
   ZIMMessage? lastMessage;
   int orderKey = 0;
-  bool isPinned =false;
+  bool isPinned = false;
   String draft = '';
   List<ZIMMessageMentionedInfo> mentionedInfoList = [];
   ZIMConversation();
 }
 
-class ZIMGroupConversation extends ZIMConversation{
-    int mutedExpiryTime = 0;
-    int userSelfMutedExpiryTime = 0;
-    bool isDisabled = false;
-    ZIMGroupConversation();
-}
-
-enum ZIMMessageMentionedType{
+enum ZIMMessageMentionedType {
   unknown,
   mention_me,
   mention_all,
   mention_all_and_me
+}
+
+enum ZIMGroupApplicationType {
+  none,
+  join,
+  invite,
+  beInvite,
+}
+
+enum ZIMGroupEnterType {
+  Unknown,
+  Created,
+  JoinApply,
+  Joined,
+  Invited,
+  InviteApply,
+}
+
+enum ZIMGroupApplicationState {
+  waiting,
+  accepted,
+  rejected,
+  expired,
+  disabled,
 }
 
 class ZIMMessageMentionedInfo {
@@ -731,7 +833,6 @@ class ZIMMessageMentionedInfo {
   String fromUserID = '';
   ZIMMessageMentionedType type = ZIMMessageMentionedType.unknown;
 }
-
 
 class ZIMConversationQueryConfig {
   ZIMConversation? nextConversation;
@@ -820,7 +921,7 @@ class ZIMMessageQueryConfig {
 /// [endTime] Call invitation end time.
 /// [callUserList] The list of call member.
 class ZIMCallInfo {
-  String callID ="";
+  String callID = "";
   String caller = "";
   ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
   ZIMCallState state = ZIMCallState.started;
@@ -954,12 +1055,31 @@ class ZIMGroupInfo {
   ZIMGroupInfo();
 }
 
+class ZIMGroupMemberSimpleInfo extends ZIMUserInfo {
+  String memberNickname = '';
+  int memberRole = ZIMGroupMemberRole.member;
+  ZIMGroupMemberSimpleInfo();
+}
+
+class ZIMGroupApplicationInfo {
+  ZIMGroupInfo groupInfo;
+  ZIMUserInfo applyUser;
+  ZIMGroupMemberSimpleInfo? operatedUser;
+  String wording = "";
+  int createTime = 0;
+  int updateTime = 0;
+  ZIMGroupApplicationType type = ZIMGroupApplicationType.none;
+  ZIMGroupApplicationState state = ZIMGroupApplicationState.waiting;
+
+  ZIMGroupApplicationInfo({required this.groupInfo, required this.applyUser});
+}
+
 class ZIMGroupMuteInfo {
-   ZIMGroupMuteMode mode = ZIMGroupMuteMode.none;
+  ZIMGroupMuteMode mode = ZIMGroupMuteMode.none;
 
-   int expiredTime = 0;
+  int expiredTime = 0;
 
-   List<int> roles = [];
+  List<int> roles = [];
 }
 
 class ZIMGroupMuteConfig {
@@ -989,6 +1109,12 @@ class ZIMGroupFullInfo {
 
   ZIMGroupMuteInfo mutedInfo = ZIMGroupMuteInfo();
 
+  int createTime = 0;
+
+  int maxMemberCount = 0;
+
+  ZIMGroupVerifyInfo verifyInfo = ZIMGroupVerifyInfo();
+
   ZIMGroupFullInfo({required this.baseInfo});
 }
 
@@ -1003,6 +1129,14 @@ class ZIMGroup {
   ZIMGroup();
 }
 
+/// Description:  group class.
+class ZIMGroupEnterInfo {
+  int enterTime = 0;
+  ZIMGroupEnterType enterType = ZIMGroupEnterType.Unknown;
+  ZIMGroupMemberSimpleInfo? operatedUser;
+  ZIMGroupEnterInfo();
+}
+
 /// Group member information.
 class ZIMGroupMemberInfo extends ZIMUserInfo {
   /// Description: Group nickname.
@@ -1015,6 +1149,8 @@ class ZIMGroupMemberInfo extends ZIMUserInfo {
   String memberAvatarUrl = "";
 
   int muteExpiredTime = 0;
+
+  ZIMGroupEnterInfo? groupEnterInfo;
 
   ZIMGroupMemberInfo();
 }
@@ -1048,16 +1184,62 @@ class ZIMGroupMemberQueryConfig {
   ZIMGroupMemberQueryConfig();
 }
 
-class ZIMGroupMemberMutedListQueryConfig{
+class ZIMGroupMemberMutedListQueryConfig {
   int nextFlag = 0;
   int count = 0;
-  ZIMGroupMemberMutedListQueryConfig():nextFlag=0,count=0;
+  ZIMGroupMemberMutedListQueryConfig()
+      : nextFlag = 0,
+        count = 0;
+}
+
+class ZIMGroupJoinApplicationSendConfig {
+  ZIMPushConfig? pushConfig;
+  String wording = "";
+}
+
+class ZIMGroupJoinApplicationAcceptConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMGroupJoinApplicationRejectConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMGroupInviteApplicationSendConfig {
+  ZIMPushConfig? pushConfig;
+  String wording = "";
+}
+
+class ZIMGroupInviteApplicationAcceptConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMGroupInviteApplicationRejectConfig {
+  ZIMPushConfig? pushConfig;
+}
+
+class ZIMGroupApplicationListQueryConfig {
+  int count = 0;
+  int nextFlag = 0;
+}
+
+class ZIMGroupVerifyInfo {
+  ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.any;
+  ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.any;
+  ZIMGroupBeInviteMode beInviteMode = ZIMGroupBeInviteMode.none;
+  ZIMGroupVerifyInfo();
 }
 
 /// Group advanced configuration.
 class ZIMGroupAdvancedConfig {
   String groupNotice = "";
   Map<String, String>? groupAttributes;
+
+  int maxMemberCount = 0;
+  ZIMGroupJoinMode joinMode = ZIMGroupJoinMode.any;
+  ZIMGroupInviteMode inviteMode = ZIMGroupInviteMode.any;
+  ZIMGroupBeInviteMode beInviteMode = ZIMGroupBeInviteMode.none;
+
   ZIMGroupAdvancedConfig();
 }
 
@@ -1120,12 +1302,15 @@ class ZIMCallInviteConfig {
 
   ZIMPushConfig? pushConfig;
 
+  bool enableNotReceivedCheck = false;
+
   ZIMCallInviteConfig();
 }
 
 /// Behavior property that cancels the call invitation setting.
 class ZIMCallCancelConfig {
   ZIMPushConfig? pushConfig;
+
   /// Description: Extended field.
   String extendedData = "";
   ZIMCallCancelConfig();
@@ -1146,7 +1331,6 @@ class ZIMCallRejectConfig {
 }
 
 class ZIMCallQuitConfig {
-
   String extendedData = "";
 
   ZIMPushConfig? pushConfig;
@@ -1155,7 +1339,6 @@ class ZIMCallQuitConfig {
 }
 
 class ZIMCallEndConfig {
-
   String extendedData = "";
 
   ZIMPushConfig? pushConfig;
@@ -1164,7 +1347,6 @@ class ZIMCallEndConfig {
 }
 
 class ZIMCallingInviteConfig {
-
   ZIMPushConfig? pushConfig;
 
   ZIMCallingInviteConfig();
@@ -1175,7 +1357,6 @@ class ZIMCallJoinConfig {
 }
 
 class ZIMCallInvitationQueryConfig {
-
   int count = 0;
 
   int nextFlag = 0;
@@ -1276,7 +1457,7 @@ class ZIMCallInvitationRejectedInfo {
   ZIMCallInvitationRejectedInfo();
 }
 
-class ZIMCallInvitationCreatedInfo{
+class ZIMCallInvitationCreatedInfo {
   ZIMCallInvitationMode mode = ZIMCallInvitationMode.unknown;
   String caller = "";
   String extendedData = "";
@@ -1285,7 +1466,7 @@ class ZIMCallInvitationCreatedInfo{
   List<ZIMCallUserInfo> callUserList = [];
 }
 
-class ZIMCallInvitationEndedInfo{
+class ZIMCallInvitationEndedInfo {
   String caller = '';
   String operatedUserID = '';
   String extendedData = '';
@@ -1293,12 +1474,11 @@ class ZIMCallInvitationEndedInfo{
   int endTime = 0;
 }
 
-class ZIMCallUserStateChangeInfo{
+class ZIMCallUserStateChangeInfo {
   List<ZIMCallUserInfo> callUserList = [];
 }
 
 class ZIMCallInvitationTimeoutInfo {
-
   ZIMCallInvitationMode mode = ZIMCallInvitationMode.general;
 
   ZIMCallInvitationTimeoutInfo();
@@ -1309,7 +1489,11 @@ class ZIMCallJoinSentInfo {
   int createTime;
   int joinTime;
   List<ZIMCallUserInfo> callUserList = [];
-  ZIMCallJoinSentInfo({required this.extendedData, required this.createTime, required this.joinTime,required this.callUserList});
+  ZIMCallJoinSentInfo(
+      {required this.extendedData,
+      required this.createTime,
+      required this.joinTime,
+      required this.callUserList});
 }
 
 class ZIMMessageReceiptInfo {
@@ -1369,7 +1553,11 @@ class ZIMConversationSearchInfo {
   int totalMessageCount;
   List<ZIMMessage> messageList;
 
-  ZIMConversationSearchInfo({required this.conversationID, required this.conversationType, required this.totalMessageCount, required this.messageList});
+  ZIMConversationSearchInfo(
+      {required this.conversationID,
+      required this.conversationType,
+      required this.totalMessageCount,
+      required this.messageList});
 }
 
 class ZIMConversationsAllDeletedInfo {
@@ -1462,7 +1650,7 @@ class ZIMConversationsAllDeletedResult {
   ZIMConversationsAllDeletedResult();
 }
 
-class ZIMConversationQueriedResult{
+class ZIMConversationQueriedResult {
   ZIMConversation conversation;
 
   ZIMConversationQueriedResult({required this.conversation});
@@ -1480,6 +1668,7 @@ class ZIMConversationPinnedListQueriedResult {
 
   ZIMConversationPinnedListQueriedResult({required this.conversationList});
 }
+
 /// Available since: 2.0.0 and above.
 ///
 /// Description: This callback returns the result of clearing a session if the session is not read.
@@ -1524,7 +1713,7 @@ class ZIMConversationNotificationStatusSetResult {
 ///
 /// Description: This callback is triggered when the developer calls the [sendPeerMessage] and [sendRoomMessage] interfaces. The developer can check whether the callback is sent successfully by [errorCode] in the callback.
 ///
-/// [message] The sent message object, from which parameters such as messageID can be obtained. If the sending fails, the messageID parameter in the message will be an empty string.
+/// [message] The sent message object, from which parameters such as messageID can be obtained. If the sending fails, the messageID parameter in the message will be an empty int.
 class ZIMMessageSentResult {
   ZIMMessage message;
   ZIMMessageSentResult({required this.message});
@@ -1601,7 +1790,11 @@ class ZIMMessagesSearchedResult {
   ZIMConversationType conversationType;
   List<ZIMMessage> messageList;
   ZIMMessage? nextMessage;
-  ZIMMessagesSearchedResult({required this.conversationID, required this.conversationType, required this.messageList, required this.nextMessage});
+  ZIMMessagesSearchedResult(
+      {required this.conversationID,
+      required this.conversationType,
+      required this.messageList,
+      required this.nextMessage});
 }
 
 /// Description: Detailed description: Return of search results for local messages.
@@ -1615,7 +1808,8 @@ class ZIMMessagesSearchedResult {
 class ZIMMessagesGlobalSearchedResult {
   List<ZIMMessage> messageList;
   ZIMMessage? nextMessage;
-  ZIMMessagesGlobalSearchedResult({required this.messageList, required this.nextMessage});
+  ZIMMessagesGlobalSearchedResult(
+      {required this.messageList, required this.nextMessage});
 }
 
 /// Description: Search the results of local conversations based on local messages.
@@ -1629,7 +1823,8 @@ class ZIMMessagesGlobalSearchedResult {
 class ZIMConversationsSearchedResult {
   List<ZIMConversationSearchInfo> conversationSearchInfoList = [];
   int nextFlag = 0;
-  ZIMConversationsSearchedResult({required this.conversationSearchInfoList, required this.nextFlag});
+  ZIMConversationsSearchedResult(
+      {required this.conversationSearchInfoList, required this.nextFlag});
 }
 
 /// Callback of the result of creating the room.
@@ -1686,6 +1881,11 @@ class ZIMRoomLeftResult {
   ZIMRoomLeftResult({required this.roomID});
 }
 
+class ZIMRoomAllLeftResult {
+  List<String> roomIDs;
+  ZIMRoomAllLeftResult({required this.roomIDs});
+}
+
 /// Callback of the result of querying the room members list.
 ///
 /// Available since: 1.1.0 or above.
@@ -1704,7 +1904,6 @@ class ZIMRoomMemberQueriedResult {
       {required this.roomID, required this.nextFlag, required this.memberList});
 }
 
-
 /// Available since: 2.8.0 and above.
 ///
 /// Description: After querying room user information, the query result is returned through this callback.
@@ -1721,7 +1920,9 @@ class ZIMRoomMembersQueriedResult {
   List<ZIMRoomMemberInfo> memberList;
   List<ZIMErrorUserInfo> errorUserList;
   ZIMRoomMembersQueriedResult(
-      {required this.roomID, required this.memberList, required this.errorUserList});
+      {required this.roomID,
+      required this.memberList,
+      required this.errorUserList});
 }
 
 /// Callback of the result of querying the online members count in the room.
@@ -1811,7 +2012,6 @@ class ZIMRoomMembersAttributesQueriedResult {
   String roomID = '';
   List<ZIMRoomMemberAttributesInfo> infos = [];
 }
-
 
 /// Supported version: 2.4.0.
 ///
@@ -1980,6 +2180,73 @@ class ZIMGroupNoticeUpdatedResult {
       {required this.groupID, required this.groupNotice});
 }
 
+class ZIMGroupJoinModeUpdatedResult {
+  String groupID;
+  ZIMGroupJoinMode mode;
+  ZIMGroupJoinModeUpdatedResult({required this.groupID, required this.mode});
+}
+
+class ZIMGroupInviteModeUpdatedResult {
+  String groupID;
+  ZIMGroupInviteMode mode;
+  ZIMGroupInviteModeUpdatedResult({required this.groupID, required this.mode});
+}
+
+class ZIMGroupBeInviteModeUpdatedResult {
+  String groupID;
+  ZIMGroupBeInviteMode mode;
+  ZIMGroupBeInviteModeUpdatedResult(
+      {required this.groupID, required this.mode});
+}
+
+class ZIMGroupJoinApplicationSentResult {
+  String groupID;
+
+  ZIMGroupJoinApplicationSentResult({required this.groupID});
+}
+
+class ZIMGroupJoinApplicationAcceptedResult {
+  String groupID;
+  String userID;
+  ZIMGroupJoinApplicationAcceptedResult(
+      {required this.groupID, required this.userID});
+}
+
+class ZIMGroupJoinApplicationRejectedResult {
+  String groupID;
+  String userID;
+  ZIMGroupJoinApplicationRejectedResult(
+      {required this.groupID, required this.userID});
+}
+
+class ZIMGroupApplicationListQueriedResult {
+  List<ZIMGroupApplicationInfo> applicationList;
+  int nextFlag;
+  ZIMGroupApplicationListQueriedResult(
+      {required this.applicationList, required this.nextFlag});
+}
+
+class ZIMGroupInviteApplicationsSentResult {
+  String groupID;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMGroupInviteApplicationsSentResult(
+      {required this.groupID, required this.errorUserList});
+}
+
+class ZIMGroupInviteApplicationAcceptedResult {
+  ZIMGroupFullInfo groupInfo;
+  String inviterUserID;
+  ZIMGroupInviteApplicationAcceptedResult(
+      {required this.groupInfo, required this.inviterUserID});
+}
+
+class ZIMGroupInviteApplicationRejectedResult {
+  String groupID;
+  String inviterUserID;
+  ZIMGroupInviteApplicationRejectedResult(
+      {required this.groupID, required this.inviterUserID});
+}
+
 /// Description: Returns the result of the group dismiss operation.
 ///
 /// Use cases: After a group disband operation is performed, the success of the operation can be determined by the callback.
@@ -2101,14 +2368,16 @@ class ZIMGroupMemberCountQueriedResult {
 class ZIMGroupsSearchedResult {
   List<ZIMGroupSearchInfo> groupSearchInfoList = [];
   int nextFlag;
-  ZIMGroupsSearchedResult({required this.groupSearchInfoList, required this.nextFlag});
+  ZIMGroupsSearchedResult(
+      {required this.groupSearchInfoList, required this.nextFlag});
 }
 
 class ZIMGroupMembersSearchedResult {
   String groupID;
   List<ZIMGroupMemberInfo> userList;
   int nextFlag;
-  ZIMGroupMembersSearchedResult({required this.groupID, required this.userList, required this.nextFlag});
+  ZIMGroupMembersSearchedResult(
+      {required this.groupID, required this.userList, required this.nextFlag});
 }
 
 /// Supported version: 2.0.0.
@@ -2182,7 +2451,7 @@ class ZIMCallingInvitationSentResult {
 class ZIMCallJoinSentResult {
   String callID = "";
   ZIMCallJoinSentInfo info;
-  ZIMCallJoinSentResult({required this.callID,required this.info});
+  ZIMCallJoinSentResult({required this.callID, required this.info});
 }
 
 /// Exit the return result of the current call.
@@ -2210,9 +2479,9 @@ class ZIMCallEndSentResult {
 class ZIMCallInvitationListQueriedResult {
   List<ZIMCallInfo> callList;
   int nextFlag;
-  ZIMCallInvitationListQueriedResult({required this.callList, required this.nextFlag});
+  ZIMCallInvitationListQueriedResult(
+      {required this.callList, required this.nextFlag});
 }
-
 
 /// Supported version: 2.5.0 and above.
 ///
@@ -2278,7 +2547,12 @@ class ZIMMessageReactionUserListQueriedResult {
   String reactionType;
   int totalCount;
   int nextFlag;
-  ZIMMessageReactionUserListQueriedResult({required this.message,required this.reactionType,required this.userList,required this.nextFlag,required this.totalCount});
+  ZIMMessageReactionUserListQueriedResult(
+      {required this.message,
+      required this.reactionType,
+      required this.userList,
+      required this.nextFlag,
+      required this.totalCount});
 }
 
 class ZIMFriendAddedResult {
@@ -2299,7 +2573,8 @@ class ZIMFriendApplicationAcceptedResult {
 class ZIMFriendApplicationListQueriedResult {
   List<ZIMFriendApplicationInfo> applicationList;
   int nextFlag;
-  ZIMFriendApplicationListQueriedResult({required this.applicationList,required this.nextFlag});
+  ZIMFriendApplicationListQueriedResult(
+      {required this.applicationList, required this.nextFlag});
 }
 
 class ZIMFriendApplicationRejectedResult {
@@ -2326,19 +2601,22 @@ class ZIMFriendsDeletedResult {
 class ZIMFriendListQueriedResult {
   List<ZIMFriendInfo> friendList;
   int nextFlag;
-  ZIMFriendListQueriedResult({required this.friendList,required this.nextFlag});
+  ZIMFriendListQueriedResult(
+      {required this.friendList, required this.nextFlag});
 }
 
 class ZIMFriendsRelationCheckedResult {
   List<ZIMFriendRelationInfo> relationInfos;
   List<ZIMErrorUserInfo> errorUserList;
-  ZIMFriendsRelationCheckedResult({required this.relationInfos,required this.errorUserList});
+  ZIMFriendsRelationCheckedResult(
+      {required this.relationInfos, required this.errorUserList});
 }
 
 class ZIMFriendsInfoQueriedResult {
   List<ZIMFriendInfo> friendInfos;
   List<ZIMErrorUserInfo> errorUserList;
-  ZIMFriendsInfoQueriedResult({required this.friendInfos,required this.errorUserList});
+  ZIMFriendsInfoQueriedResult(
+      {required this.friendInfos, required this.errorUserList});
 }
 
 class ZIMFriendApplicationSentResult {
@@ -2378,7 +2656,8 @@ class ZIMGroupMutedResult {
   bool isMute;
   String groupID;
   ZIMGroupMuteInfo info;
-  ZIMGroupMutedResult({required this.isMute,required this.groupID,required this.info});
+  ZIMGroupMutedResult(
+      {required this.isMute, required this.groupID, required this.info});
 }
 
 class ZIMGroupMembersMutedResult {
@@ -2387,18 +2666,43 @@ class ZIMGroupMembersMutedResult {
   int duration;
   List<String> mutedMemberIDs;
   List<ZIMErrorUserInfo> errorUserList;
-  ZIMGroupMembersMutedResult({required this.groupID, required this.isMute, required this.duration, required this.mutedMemberIDs, required this.errorUserList});
+  ZIMGroupMembersMutedResult(
+      {required this.groupID,
+      required this.isMute,
+      required this.duration,
+      required this.mutedMemberIDs,
+      required this.errorUserList});
 }
 
 class ZIMGroupMemberMutedListQueriedResult {
   String groupID;
   int nextFlag;
   List<ZIMGroupMemberInfo> userList;
-  ZIMGroupMemberMutedListQueriedResult({required this.groupID,required this.nextFlag, required this.userList});
+  ZIMGroupMemberMutedListQueriedResult(
+      {required this.groupID, required this.nextFlag, required this.userList});
 }
+
 class ZIMCombineMessageDetailQueriedResult {
   ZIMCombineMessage message;
   ZIMCombineMessageDetailQueriedResult({required this.message});
+}
+
+class ZIMFileCacheQueriedResult {
+  ZIMFileCacheInfo fileCacheInfo;
+  ZIMFileCacheQueriedResult({required this.fileCacheInfo});
+}
+
+class ZIMFileCacheInfo {
+  int totalFileSize;
+  ZIMFileCacheInfo({required this.totalFileSize});
+}
+
+class ZIMFileCacheClearConfig {
+  int endTime = 0;
+}
+
+class ZIMFileCacheQueryConfig {
+  int endTime = 0;
 }
 
 class ZIMMessageDeletedInfo {
@@ -2408,13 +2712,33 @@ class ZIMMessageDeletedInfo {
   bool isDeleteConversationAllMessage;
   List<ZIMMessage> messageList;
 
-  ZIMMessageDeletedInfo({required this.conversationID,required this.conversationType,required this.messageDeleteType,required this.isDeleteConversationAllMessage,required this.messageList});
+  ZIMMessageDeletedInfo(
+      {required this.conversationID,
+      required this.conversationType,
+      required this.messageDeleteType,
+      required this.isDeleteConversationAllMessage,
+      required this.messageList});
 }
 
+typedef ZIMMessageImportingProgress = void Function(
+    int importedMessageCount, int totalMessageCount);
+
+typedef ZIMMessageExportingProgress = void Function(
+    int exportedMessageCount, int totalMessageCount);
+
+class ZIMMessageImportConfig {
+
+  ZIMMessageImportConfig();
+}
+
+class ZIMMessageExportConfig {
+
+  ZIMMessageExportConfig();
+}
 class ZIMFriendAddConfig {
   String wording = "";
   String friendAlias = "";
-  Map<String,String> friendAttributes = {};
+  Map<String, String> friendAttributes = {};
 }
 
 class ZIMFriendDeleteConfig {
@@ -2437,7 +2761,6 @@ class ZIMFriendApplicationInfo {
   ZIMFriendApplicationState state = ZIMFriendApplicationState.unknown;
 }
 
-
 class ZIMFriendListQueryConfig {
   int count = 0;
   int nextFlag = 0;
@@ -2453,15 +2776,15 @@ class ZIMFriendRelationInfo {
 }
 
 class ZIMFriendApplicationSendConfig {
-  String wording  = "";
+  String wording = "";
   String friendAlias = "";
-  Map<String,String> friendAttributes = {};
+  Map<String, String> friendAttributes = {};
   ZIMPushConfig? pushConfig;
 }
 
 class ZIMFriendApplicationAcceptConfig {
   String friendAlias = "";
-  Map<String,String> friendAttributes = {};
+  Map<String, String> friendAttributes = {};
   ZIMPushConfig? pushConfig;
 }
 
@@ -2486,4 +2809,55 @@ class ZIMFriendSearchConfig {
 class ZIMBlacklistQueryConfig {
   int nextFlag = 0;
   int count = 0;
+}
+
+class ZIMTipsMessageChangeInfo {
+  ZIMTipsMessageChangeInfoType type = ZIMTipsMessageChangeInfoType.groupMemberMutedChanged;
+}
+
+class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
+  int groupDataFlag = 0;
+  String groupName = '';
+  String groupNotice = '';
+  String groupAvatarUrl = '';
+  ZIMGroupMuteInfo? groupMutedInfo;
+}
+
+class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo {
+  int memberRole = 0;
+  int muteExpiredTime = 0;
+}
+
+class ZIMGroupDataFlag{
+  static const int groupName = 1 << 0; // 0b0001
+  static const int groupNotice = 1 << 1; // 0b0010
+  static const int avatarUrl = 1 << 2; // 0b0100
+}
+
+
+class ZIMUserOfflinePushRule {
+  List<ZIMPlatformType> onlinePlatforms = [];
+  List<ZIMPlatformType> notToReceiveOfflinePushPlatforms = [];
+}
+
+class ZIMUserRule {
+  ZIMUserOfflinePushRule offlinePushRule;
+  ZIMUserRule({required this.offlinePushRule});
+}
+
+class ZIMSelfUserInfo {
+  ZIMUserRule userRule;
+  ZIMUserFullInfo userFullInfo;
+  ZIMSelfUserInfo({required this.userRule,required this.userFullInfo});
+}
+
+class ZIMUserOfflinePushRuleUpdatedResult {
+  ZIMUserOfflinePushRule offlinePushRule;
+  ZIMUserOfflinePushRuleUpdatedResult({required this.offlinePushRule});
+}
+/// Callback result of querying personal user information and rules.
+class ZIMSelfUserInfoQueriedResult {
+  /// Own user information, rule data.
+  ZIMSelfUserInfo selfUserInfo;
+  ZIMSelfUserInfoQueriedResult({required this.selfUserInfo});
 }

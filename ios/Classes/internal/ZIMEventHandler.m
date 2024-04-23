@@ -80,6 +80,17 @@ extendedData:(NSDictionary *)extendedData{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim userRuleUpdated:(ZIMUserRule *)userRule{
+    if(_events == nil){
+        return;
+    }
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic setObject:[ZIMPluginConverter mZIMUserRule:userRule] forKey:@"userRule"];
+    [resultDic safeSetObject:[_engineEventMap objectForKey:zim] forKey:@"handle"];
+    [resultDic setObject:@"onUserRuleUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
 - (void)zim:(ZIM *)zim messageDeleted:(ZIMMessageDeletedInfo *)deletedInfo{
     if(_events == nil){
         return;
@@ -369,6 +380,51 @@ fromGroupID:(NSString *)fromGroupID{
     [resultDic safeSetObject:groupInfoDic forKey:@"groupInfo"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupStateChanged" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    groupVerifyInfoUpdated:(ZIMGroupVerifyInfo *)verifyInfo
+              operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+    groupID:(NSString *)groupID{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupVerifyInfo:verifyInfo] forKey:@"verifyInfo"];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupOperatedInfo:operatedInfo] forKey:@"operatedInfo"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupVerifyInfoUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    groupApplicationListChanged:(NSArray<ZIMGroupApplicationInfo *> *)applicationList
+     action:(ZIMGroupApplicationListChangeAction)action{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupApplicationInfoList:applicationList] forKey:@"applicationList"];
+    [resultDic safeSetObject:[NSNumber numberWithInt:(int)action] forKey:@"action"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupApplicationListChanged" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+groupApplicationUpdated:(NSArray<ZIMGroupApplicationInfo *> *)applicationList{
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMGroupApplicationInfoList:applicationList] forKey:@"applicationList"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupApplicationUpdated" forKey:@"method"];
     _events(resultDic);
 }
 

@@ -293,6 +293,26 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           progress(message, currentFileSize, totalFileSize);
         }
         break;
+      case 'messageExportingProgress':
+        int? progressID = map['progressID'];
+        int exportedMessageCount = map['exportedMessageCount'];
+        int totalMessageCount = map['totalMessageCount'];
+        ZIMMessageExportingProgress? progress =
+        ZIMCommonData.messageExportingProgressMap[progressID ?? 0];
+        if (progress != null) {
+          progress(exportedMessageCount, totalMessageCount);
+        }
+        break;
+      case 'messageImportingProgress':
+        int? progressID = map['progressID'];
+        int importedMessageCount = map['importedMessageCount'];
+        int totalMessageCount = map['totalMessageCount'];
+        ZIMMessageImportingProgress? progress =
+        ZIMCommonData.messageImportingProgressMap[progressID ?? 0];
+        if (progress != null) {
+          progress(importedMessageCount, totalMessageCount);
+        }
+        break;
       case 'uploadMediaProgress':
         int? progressID = map['progressID'];
         ZIMMessage message =
@@ -397,8 +417,38 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         String groupID = map['groupID'];
         ZIMEventHandler.onGroupMutedInfoUpdated!(zim,muteInfo,operatedInfo,groupID);
         break;
+      case 'onGroupVerifyInfoUpdated':
+        if(ZIMEventHandler.onGroupVerifyInfoUpdated == null) return;
+        ZIMGroupVerifyInfo verifyInfo = ZIMConverter.oZIMGroupVerifyInfo(map['verifyInfo']);
+        ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
+        String groupID = map['groupID'];
+        ZIMEventHandler.onGroupVerifyInfoUpdated!(zim, verifyInfo, operatedInfo, groupID);
+        break;
+      case 'onGroupApplicationListChanged':
+
+        if(ZIMEventHandler.onGroupApplicationListChanged == null) return;
+        List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+        ZIMGroupApplicationListChangeAction action = ZIMGroupApplicationListChangeActionExtension.mapValue[map['action']]!;
+        ZIMEventHandler.onGroupApplicationListChanged!(zim, applicationList, action);
+        break;
+      case 'onGroupApplicationUpdated':
+        try{
+          if(ZIMEventHandler.onGroupApplicationUpdated == null) return;
+          List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+          ZIMEventHandler.onGroupApplicationUpdated!(zim, applicationList);
+        } catch (error,e) {
+          ZIMError zim_error = ZIMError(code: -1, message: error.toString()+e.toString());
+          ZIMEventHandler.onError!(zim,zim_error);
+        };
+        break;
+      case 'onUserRuleUpdated':
+        if(ZIMEventHandler.onUserRuleUpdated == null) return;
+        ZIMUserRule userRule = ZIMConverter.oZIMUserRule(map['userRule']);
+        ZIMEventHandler.onUserRuleUpdated!(zim,userRule);
+        break;
       default:
         break;
     }
   }
 }
+

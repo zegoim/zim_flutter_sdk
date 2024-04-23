@@ -42,12 +42,58 @@ class ZIMConverter {
 
   static ZIMUserInfo oZIMUserInfo(Map userInfoBasicMap,
       [ZIMUserInfo? userInfo]) {
-    userInfo ??= ZIMUserInfo();
+
+    String? classType = userInfoBasicMap['classType'];
+    switch(classType){
+      case 'ZIMGroupMemberSimpleInfo':
+        userInfo ??= ZIMGroupMemberSimpleInfo();
+        break;
+      case 'ZIMGroupMemberInfo':
+        userInfo ??= ZIMGroupMemberInfo();
+        break;
+      case 'ZIMFriendInfo':
+        userInfo ??= ZIMFriendInfo();
+        break;
+      case 'ZIMRoomMemberInfo':
+        userInfo ??= ZIMRoomMemberInfo();
+        break;
+      default:
+        userInfo ??= ZIMUserInfo();
+        break;
+    }
     userInfo.userID = userInfoBasicMap['userID'];
     userInfo.userName = userInfoBasicMap['userName'];
     userInfo.userAvatarUrl = userInfoBasicMap['userAvatarUrl'];
+
+    switch(userInfo.runtimeType){
+      case ZIMGroupMemberSimpleInfo:
+        userInfo as ZIMGroupMemberSimpleInfo;
+        userInfo.memberNickname = userInfoBasicMap['memberNickname'];
+        userInfo.memberRole = userInfoBasicMap['memberRole'];
+        break;
+      case ZIMGroupMemberInfo:
+        userInfo as ZIMGroupMemberInfo;
+        userInfo.memberNickname = userInfoBasicMap['memberNickname'];
+        userInfo.memberRole = userInfoBasicMap['memberRole'];
+        userInfo.memberAvatarUrl = userInfoBasicMap['memberAvatarUrl'];
+        userInfo.muteExpiredTime = userInfoBasicMap['muteExpiredTime'];
+        break;
+      case ZIMFriendInfo:
+        userInfo as ZIMFriendInfo;
+        userInfo.friendAlias = userInfoBasicMap['friendAlias'];
+        userInfo.createTime = userInfoBasicMap['createTime'];
+        userInfo.wording = userInfoBasicMap['wording'];
+        userInfo.friendAttributes =
+        Map<String, String>.from(userInfoBasicMap['friendAttributes']);
+        break;
+      default:
+        break;
+    }
     return userInfo;
   }
+
+
+
 
   static ZIMRoomMemberInfo oZIMRoomMemberInfo(Map userInfoBasicMap) {
     ZIMRoomMemberInfo userInfo = ZIMRoomMemberInfo();
@@ -62,6 +108,27 @@ class ZIMConverter {
     errorUserInfo.reason = errorUserInfoBasicMap['reason'] ?? 0;
     return errorUserInfo;
   }
+
+  static ZIMGroupMemberSimpleInfo oZIMGroupMemberSimpleInfo(Map zimGroupMemberSimpleInfoMap) {
+    ZIMGroupMemberSimpleInfo info = ZIMGroupMemberSimpleInfo();
+    ZIMGroupMemberSimpleInfo groupMemberSimpleInfo = oZIMUserInfo(zimGroupMemberSimpleInfoMap,info) as ZIMGroupMemberSimpleInfo;
+    return groupMemberSimpleInfo;
+  }
+
+
+  static ZIMGroupApplicationInfo oZIMGroupApplicationInfo(Map applicationInfoMap) {
+    ZIMGroupApplicationInfo applicationInfo = ZIMGroupApplicationInfo(groupInfo: oZIMGroupInfo(applicationInfoMap['groupInfo'])!, applyUser: oZIMUserInfo(applicationInfoMap['applyUser']));
+    applicationInfo.createTime = applicationInfoMap['createTime'];
+    applicationInfo.updateTime = applicationInfoMap['updateTime'];
+    applicationInfo.state = ZIMGroupApplicationStateExtension.mapValue[applicationInfoMap['state']]!;
+    if(applicationInfoMap.containsKey('operatedUser') && applicationInfoMap['operatedUser'] != null){
+      applicationInfo.operatedUser = oZIMGroupMemberSimpleInfo(applicationInfoMap['operatedUser']);
+    }
+    applicationInfo.type = ZIMGroupApplicationTypeExtension.mapValue[applicationInfoMap['type']]!;
+    applicationInfo.wording = applicationInfoMap['wording'];
+    return applicationInfo;
+  }
+
 
   static ZIMUserExtendedDataUpdatedResult oZIMUserExtendedDataUpdatedResult(
       Map resultMap) {
@@ -80,6 +147,15 @@ class ZIMConverter {
       errorUserInfoList.add(errorUserInfo);
     }
     return errorUserInfoList;
+  }
+
+  static List<ZIMGroupApplicationInfo> oZIMGroupApplicationInfoList(List applicationInfoList){
+    List<ZIMGroupApplicationInfo> groupApplicationInfo = [];
+    for (Map applicationInfoMap in applicationInfoList) {
+      ZIMGroupApplicationInfo applicationInfo = oZIMGroupApplicationInfo(applicationInfoMap);
+      groupApplicationInfo.add(applicationInfo);
+    }
+    return groupApplicationInfo;
   }
 
   static Map mZIMConversationQueryConfig(ZIMConversationQueryConfig config) {
@@ -107,6 +183,7 @@ class ZIMConverter {
     conversationMap['orderKey'] = conversation.orderKey;
     conversationMap['isPinned'] = conversation.isPinned;
     conversationMap['draft'] = conversation.draft;
+    conversationMap['conversationAlias'] = conversation.conversationAlias;
     if (conversation.lastMessage != null) {
       conversationMap['lastMessage'] = mZIMMessage(conversation.lastMessage!);
     }
@@ -166,6 +243,7 @@ class ZIMConverter {
     messageMap['isServerMessage'] = message.isServerMessage;
     messageMap['isMentionAll'] = message.isMentionAll;
     messageMap['mentionedUserIDs'] = message.mentionedUserIds;
+    messageMap['cbInnerID'] = message.cbInnerID;
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -252,6 +330,9 @@ class ZIMConverter {
         }
         messageMap['messageList'] = messageListMap;
         break;
+      case ZIMMessageType.tips:
+        message as ZIMTipsMessage;
+        break;
       default:
         break;
     }
@@ -259,136 +340,153 @@ class ZIMConverter {
   }
 
   static ZIMMessage oZIMMessage(Map resultMap, [int? messageID]) {
-    ZIMMessageType msgType =
-        ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
-    ZIMMessage? message =
-        messageID == null ? null : ZIMCommonData.messsageMap[messageID];
-    switch (msgType) {
-      case ZIMMessageType.unknown:
-        message ??= ZIMMessage();
-        break;
-      case ZIMMessageType.text:
-        message ??= ZIMTextMessage(message: resultMap['message']);
-        break;
-      case ZIMMessageType.command:
-        resultMap['message'] = resultMap['message'] is Uint8List ? resultMap['message'] : convertToUint8List(resultMap['message']);
-        message ??= ZIMCommandMessage(message: resultMap['message']);
-        break;
-      case ZIMMessageType.barrage:
-        message ??= ZIMBarrageMessage(message: resultMap['message']);
-        break;
-      case ZIMMessageType.image:
-        message ??= ZIMImageMessage(resultMap['fileLocalPath'] ?? '');
-        message as ZIMImageMessage;
-        message.thumbnailDownloadUrl = resultMap['thumbnailDownloadUrl'] ?? '';
-        message.thumbnailLocalPath = resultMap['thumbnailLocalPath'] ?? '';
-        message.largeImageDownloadUrl =
-            resultMap['largeImageDownloadUrl'] ?? '';
-        message.largeImageLocalPath = resultMap['largeImageLocalPath'] ?? '';
-        message.originalImageHeight = resultMap['originalImageHeight'] ?? 0;
-        message.originalImageWidth = resultMap['originalImageWidth'] ?? 0;
-        message.largeImageHeight = resultMap['largeImageHeight'] ?? 0;
-        message.largeImageWidth = resultMap['largeImageWidth'] ?? 0;
-        message.thumbnailHeight = resultMap['thumbnailHeight'] ?? 0;
-        message.thumbnailWidth = resultMap['thumbnailWidth'] ?? 0;
-        break;
-      case ZIMMessageType.file:
-        message ??= ZIMFileMessage(resultMap['fileLocalPath'] ?? '');
-        message as ZIMFileMessage;
-        break;
-      case ZIMMessageType.audio:
-        message ??= ZIMAudioMessage(resultMap['fileLocalPath'] ?? '');
-        message as ZIMAudioMessage;
-        message.audioDuration = resultMap['audioDuration'];
-        break;
-      case ZIMMessageType.video:
-        message ??= ZIMVideoMessage(resultMap['fileLocalPath'] ?? '');
-        message as ZIMVideoMessage;
-        message.videoDuration = resultMap['videoDuration'];
-        message.videoFirstFrameDownloadUrl =
-            resultMap['videoFirstFrameDownloadUrl'];
-        message.videoFirstFrameLocalPath =
-            resultMap['videoFirstFrameLocalPath'];
-        message.videoFirstFrameHeight = resultMap['videoFirstFrameHeight'];
-        message.videoFirstFrameWidth = resultMap['videoFirstFrameWidth'];
-        break;
-      case ZIMMessageType.system:
-        message ??= ZIMSystemMessage(message: resultMap['message']);
-        break;
+      ZIMMessageType msgType =
+          ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
+      ZIMMessage? message =
+      messageID == null ? null : ZIMCommonData.messsageMap[messageID];
+      switch (msgType) {
+        case ZIMMessageType.unknown:
+          message ??= ZIMMessage();
+          break;
+        case ZIMMessageType.text:
+          message ??= ZIMTextMessage(message: resultMap['message']);
+          break;
+        case ZIMMessageType.command:
+          resultMap['message'] = resultMap['message'] is Uint8List ? resultMap['message'] : convertToUint8List(resultMap['message']);
+          message ??= ZIMCommandMessage(message: resultMap['message']);
+          break;
+        case ZIMMessageType.barrage:
+          message ??= ZIMBarrageMessage(message: resultMap['message']);
+          break;
+        case ZIMMessageType.image:
+          message ??= ZIMImageMessage(resultMap['fileLocalPath'] ?? '');
+          message as ZIMImageMessage;
+          message.thumbnailDownloadUrl = resultMap['thumbnailDownloadUrl'] ?? '';
+          message.thumbnailLocalPath = resultMap['thumbnailLocalPath'] ?? '';
+          message.largeImageDownloadUrl =
+              resultMap['largeImageDownloadUrl'] ?? '';
+          message.largeImageLocalPath = resultMap['largeImageLocalPath'] ?? '';
+          message.originalImageHeight = resultMap['originalImageHeight'] ?? 0;
+          message.originalImageWidth = resultMap['originalImageWidth'] ?? 0;
+          message.largeImageHeight = resultMap['largeImageHeight'] ?? 0;
+          message.largeImageWidth = resultMap['largeImageWidth'] ?? 0;
+          message.thumbnailHeight = resultMap['thumbnailHeight'] ?? 0;
+          message.thumbnailWidth = resultMap['thumbnailWidth'] ?? 0;
+          break;
+        case ZIMMessageType.file:
+          message ??= ZIMFileMessage(resultMap['fileLocalPath'] ?? '');
+          message as ZIMFileMessage;
+          break;
+        case ZIMMessageType.audio:
+          message ??= ZIMAudioMessage(resultMap['fileLocalPath'] ?? '');
+          message as ZIMAudioMessage;
+          message.audioDuration = resultMap['audioDuration'];
+          break;
+        case ZIMMessageType.video:
+          message ??= ZIMVideoMessage(resultMap['fileLocalPath'] ?? '');
+          message as ZIMVideoMessage;
+          message.videoDuration = resultMap['videoDuration'];
+          message.videoFirstFrameDownloadUrl =
+          resultMap['videoFirstFrameDownloadUrl'];
+          message.videoFirstFrameLocalPath =
+          resultMap['videoFirstFrameLocalPath'];
+          message.videoFirstFrameHeight = resultMap['videoFirstFrameHeight'];
+          message.videoFirstFrameWidth = resultMap['videoFirstFrameWidth'];
+          break;
+        case ZIMMessageType.system:
+          message ??= ZIMSystemMessage(message: resultMap['message']);
+          break;
 
-      case ZIMMessageType.custom:
-        message ??= ZIMCustomMessage(
-            message: resultMap['message'], subType: resultMap['subType']);
-        message as ZIMCustomMessage;
-        message.searchedContent = resultMap['searchedContent'];
-        break;
-      case ZIMMessageType.revoke:
-        message ??= ZIMRevokeMessage();
-        message as ZIMRevokeMessage;
-        message.revokeType =
-            ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']] ?? ZIMRevokeType.unknown;
-        message.revokeStatus = ZIMMessageRevokeStatusExtension
-            .mapValue[resultMap['revokeStatus']] ?? ZIMMessageRevokeStatus.unknown;
-        message.revokeTimestamp = resultMap['revokeTimestamp'];
-        message.operatedUserID = resultMap['operatedUserID'];
-        message.revokeExtendedData = resultMap['revokeExtendedData'] ?? '';
-        message.originalMessageType =
-            ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']] ?? ZIMMessageType.unknown;
-        message.originalTextMessageContent =
-            resultMap['originalTextMessageContent'];
-        break;
-      case ZIMMessageType.combine:
-        List<ZIMMessage> messageList = [];
-        List<Map> messageListMap = List<Map>.from(resultMap['messageList']??[]) ;
-        for (var element in messageListMap) {
-          messageList.add(oZIMMessage(element));
-        }
-        message ??= ZIMCombineMessage(title:resultMap['title'], summary: resultMap['summary'], messageList: messageList);
-        message as ZIMCombineMessage;
-        message.combineID = resultMap['combineID'];
-        break;
-      default:
-        message ??= ZIMMessage();
-        break;
-    }
-    message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
-    message.messageID = resultMap['messageID'] is String
-        ? int.parse(resultMap['messageID'])
-        : resultMap['messageID'];
-    message.localMessageID = resultMap['localMessageID'] is String
-        ? int.parse(resultMap['localMessageID'])
-        : resultMap['localMessageID'];
-    message.senderUserID = resultMap['senderUserID'];
-    message.conversationID = resultMap['conversationID'];
-    message.direction =
-        ZIMMessageDirectionExtension.mapValue[resultMap['direction']]!;
-    message.sentStatus =
-        ZIMMessageSentStatusExtension.mapValue[resultMap['sentStatus']]!;
-    message.conversationType =
-        ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
-    message.timestamp = resultMap['timestamp'];
-    message.conversationSeq = resultMap['conversationSeq'];
-    message.orderKey = resultMap['orderKey'] is int ? resultMap['orderKey'] : 0;
-    message.isUserInserted = resultMap['isUserInserted'] is bool
-        ? resultMap['isUserInserted']
-        : false;
-    message.receiptStatus =
-        ZIMMessageReceiptStatusExtension.mapValue[resultMap['receiptStatus']]!;
-    if (message is ZIMMediaMessage) {
-      message.fileLocalPath = resultMap['fileLocalPath'] ?? '';
-      message.fileDownloadUrl = resultMap['fileDownloadUrl'] ?? '';
-      message.fileUID = resultMap['fileUID'] ?? '';
-      message.fileName = resultMap['fileName'] ?? '';
-      message.fileSize = resultMap['fileSize'] ?? 0;
-    }
-    message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
-    message.reactions = oZIMMessageReactionList(resultMap['reactions']);
-    message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
-    message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
-    message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
-    message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
-    message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
-    return message;
+        case ZIMMessageType.custom:
+          message ??= ZIMCustomMessage(
+              message: resultMap['message'], subType: resultMap['subType']);
+          message as ZIMCustomMessage;
+          message.searchedContent = resultMap['searchedContent'];
+          break;
+        case ZIMMessageType.revoke:
+          message ??= ZIMRevokeMessage();
+          message as ZIMRevokeMessage;
+          message.revokeType =
+              ZIMRevokeTypeExtension.mapValue[resultMap['revokeType']] ?? ZIMRevokeType.unknown;
+          message.revokeStatus = ZIMMessageRevokeStatusExtension
+              .mapValue[resultMap['revokeStatus']] ?? ZIMMessageRevokeStatus.unknown;
+          message.revokeTimestamp = resultMap['revokeTimestamp'];
+          message.operatedUserID = resultMap['operatedUserID'];
+          message.revokeExtendedData = resultMap['revokeExtendedData'] ?? '';
+          message.originalMessageType =
+              ZIMMessageTypeExtension.mapValue[resultMap['originalMessageType']] ?? ZIMMessageType.unknown;
+          message.originalTextMessageContent =
+          resultMap['originalTextMessageContent'];
+          break;
+        case ZIMMessageType.combine:
+          List<ZIMMessage> messageList = [];
+          List<Map> messageListMap = List<Map>.from(resultMap['messageList']??[]) ;
+          for (var element in messageListMap) {
+            messageList.add(oZIMMessage(element));
+          }
+          message ??= ZIMCombineMessage(title:resultMap['title'], summary: resultMap['summary'], messageList: messageList);
+          message as ZIMCombineMessage;
+          message.combineID = resultMap['combineID'];
+          break;
+        case ZIMMessageType.tips:
+          message ??= ZIMTipsMessage();
+          message as ZIMTipsMessage;
+          message.event = ZIMTipsMessageEventExtension.mapValue[resultMap['event']]!;
+          if(resultMap['operatedUser'] != null){
+            message.operatedUser = oZIMUserInfo(resultMap['operatedUser']);
+          }
+          message.targetUserList = oZIMUserInfoList(resultMap['targetUserList']);
+          if(resultMap['changeInfo'] != null){
+            message.changeInfo = oZIMTipsMessageChangeInfo(resultMap['changeInfo']);
+          }
+          break;
+        default:
+          message ??= ZIMMessage();
+          break;
+      }
+      message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
+      message.messageID = resultMap['messageID'] is String
+          ? int.parse(resultMap['messageID'])
+          : resultMap['messageID'];
+      message.localMessageID = resultMap['localMessageID'] is String
+          ? int.parse(resultMap['localMessageID'])
+          : resultMap['localMessageID'];
+      message.senderUserID = resultMap['senderUserID'];
+      message.conversationID = resultMap['conversationID'];
+      message.direction =
+      ZIMMessageDirectionExtension.mapValue[resultMap['direction']]!;
+      message.sentStatus =
+      ZIMMessageSentStatusExtension.mapValue[resultMap['sentStatus']]!;
+      message.conversationType =
+      ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
+      message.timestamp = resultMap['timestamp'];
+      message.conversationSeq = resultMap['conversationSeq'];
+      message.orderKey = resultMap['orderKey'] is int ? resultMap['orderKey'] : 0;
+      message.isUserInserted = resultMap['isUserInserted'] is bool
+          ? resultMap['isUserInserted']
+          : false;
+      message.receiptStatus =
+      ZIMMessageReceiptStatusExtension.mapValue[resultMap['receiptStatus']]!;
+      if (message is ZIMMediaMessage) {
+        message.fileLocalPath = resultMap['fileLocalPath'] ?? '';
+        message.fileDownloadUrl = resultMap['fileDownloadUrl'] ?? '';
+        message.fileUID = resultMap['fileUID'] ?? '';
+        message.fileName = resultMap['fileName'] ?? '';
+        message.fileSize = resultMap['fileSize'] ?? 0;
+      }
+      message.extendedData = resultMap['extendedData'] is String ? resultMap['extendedData'] : "";
+      if (resultMap['reactions'] != null) {
+        message.reactions = oZIMMessageReactionList(resultMap['reactions']);
+      }
+      message.localExtendedData = resultMap['localExtendedData'] is String ? resultMap['localExtendedData'] : "";
+      message.isBroadcastMessage = resultMap['isBroadcastMessage'] is bool ? resultMap['isBroadcastMessage'] : false;
+      message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
+      message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
+      message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
+      if (resultMap['cbInnerID'] != null) {
+        message.cbInnerID = resultMap['cbInnerID'];
+      }
+      return message;
   }
 
   static List mZIMMessageList(List<ZIMMessage> messageList) {
@@ -506,6 +604,13 @@ class ZIMConverter {
       Map infoMap) {
     ZIMConversationsAllDeletedInfo info =
         ZIMConversationsAllDeletedInfo(count: infoMap['count']);
+    return info;
+  }
+
+  static ZIMFileCacheInfo oZIMFileCacheInfo(
+      Map infoMap) {
+    ZIMFileCacheInfo info =
+    ZIMFileCacheInfo(totalFileSize: infoMap['totalFileSize']);
     return info;
   }
 
@@ -734,6 +839,10 @@ class ZIMConverter {
     return ZIMRoomLeftResult(roomID: resultMap['roomID']);
   }
 
+  static ZIMRoomAllLeftResult oZIMAllRoomLeftResult(Map resultMap) {
+    return ZIMRoomAllLeftResult(roomIDs: List<String>.from(resultMap['roomIDList']));
+  }
+
   static Map mZIMRoomMemberQueryConfig(ZIMRoomMemberQueryConfig config) {
     Map configMap = {};
     configMap['nextFlag'] = config.nextFlag;
@@ -753,7 +862,6 @@ class ZIMConverter {
     for (Map memberInfoMap in memberListBasic) {
       memberList.add(oZIMUserInfo(memberInfoMap));
     }
-    ZIMManager.writeLog("Flutter dart. oZIMUserInfoList success");
     return memberList;
   }
 
@@ -911,6 +1019,9 @@ class ZIMConverter {
     groupFullInfo.groupAttributes =
         (groupFullInfoMap['groupAttributes'] as Map).cast<String, String>();
     groupFullInfo.mutedInfo = ZIMConverter.oZIMGroupMuteInfo(groupFullInfoMap['mutedInfo']);
+    groupFullInfo.verifyInfo =  ZIMConverter.oZIMGroupVerifyInfo(groupFullInfoMap['verifyInfo']);
+    groupFullInfo.maxMemberCount = groupFullInfoMap['maxMemberCount'];
+    groupFullInfo.createTime = groupFullInfoMap['createTime'];
     return groupFullInfo;
   }
 
@@ -921,6 +1032,10 @@ class ZIMConverter {
     Map configMap = {};
     configMap['groupNotice'] = config.groupNotice;
     configMap['groupAttributes'] = config.groupAttributes;
+    configMap['joinMode'] = ZIMGroupJoinModeExtension.valueMap[config.joinMode];
+    configMap['inviteMode'] = ZIMGroupInviteModeExtension.valueMap[config.inviteMode];
+    configMap['beInviteMode'] = ZIMGroupBeInviteModeExtension.valueMap[config.beInviteMode];
+    configMap['maxMemberCount'] = config.maxMemberCount;
     return configMap;
   }
 
@@ -988,6 +1103,27 @@ class ZIMConverter {
         groupNotice: resultMap['groupNotice'] ?? '');
   }
 
+  static ZIMGroupJoinModeUpdatedResult oZIMGroupJoinModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupJoinModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupJoinModeExtension.mapValue[resultMap['mode']]!);
+  }
+
+  static ZIMGroupInviteModeUpdatedResult oZIMGroupInviteModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupInviteModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupInviteModeExtension.mapValue[resultMap['mode']]!);
+  }
+
+  static ZIMGroupBeInviteModeUpdatedResult oZIMGroupBeInviteModeUpdatedResult(
+      Map resultMap) {
+    return ZIMGroupBeInviteModeUpdatedResult(
+        groupID: resultMap['groupID'],
+        mode: ZIMGroupBeInviteModeExtension.mapValue[resultMap['mode']]!);
+  }
+
   static ZIMGroupInfoQueriedResult oZIMGroupInfoQueriedResult(Map resultMap) {
     ZIMGroupFullInfo groupInfo = oZIMGroupFullInfo(resultMap['groupInfo'])!;
     return ZIMGroupInfoQueriedResult(groupInfo: groupInfo);
@@ -1026,6 +1162,17 @@ class ZIMConverter {
         nickname: resultMap['nickname'] ?? '');
   }
 
+  static ZIMGroupEnterInfo oZIMGroupEnterInfo(Map? groupEnterInfoMap) {
+    if (groupEnterInfoMap == null) return ZIMGroupEnterInfo();
+    ZIMGroupEnterInfo groupEnterInfo = ZIMGroupEnterInfo();
+    if(groupEnterInfoMap.containsKey('operatedUser') && groupEnterInfoMap['operatedUser'] != null){
+      groupEnterInfo.operatedUser  = oZIMGroupMemberSimpleInfo(groupEnterInfoMap['operatedUser']);
+    }
+    groupEnterInfo.enterTime = groupEnterInfoMap['enterTime'] ?? 0;
+    groupEnterInfo.enterType = ZIMGroupEnterTypeExtension.mapValue[groupEnterInfoMap['enterType']]!;
+    return groupEnterInfo;
+  }
+
   static ZIMGroupMemberInfo oZIMGroupMemberInfo(Map? memberInfoMap) {
     if (memberInfoMap == null) return ZIMGroupMemberInfo();
     ZIMGroupMemberInfo groupMemberInfo = ZIMGroupMemberInfo();
@@ -1036,6 +1183,7 @@ class ZIMConverter {
     groupMemberInfo.memberNickname = memberInfoMap['memberNickname'] ?? '';
     groupMemberInfo.memberAvatarUrl = memberInfoMap['memberAvatarUrl'] ?? '';
     groupMemberInfo.muteExpiredTime = memberInfoMap['muteExpiredTime'] ??0;
+    groupMemberInfo.groupEnterInfo = oZIMGroupEnterInfo(memberInfoMap['groupEnterInfo']);
     return groupMemberInfo;
   }
 
@@ -1161,6 +1309,7 @@ class ZIMConverter {
     configMap['mode'] = ZIMInvitationModeExtension.valueMap[config.mode];
     configMap['pushConfig'] = mZIMPushConfig(config.pushConfig);
     configMap['extendedData'] = config.extendedData;
+    configMap['enableNotReceivedCheck'] = config.enableNotReceivedCheck;
     return configMap;
   }
 
@@ -1872,13 +2021,8 @@ class ZIMConverter {
 
   static ZIMFriendInfo oZIMFriendInfo(Map map, [ZIMFriendInfo? friendInfo]) {
     friendInfo ??= ZIMFriendInfo();
-    oZIMUserInfo(map, friendInfo);
-    friendInfo.friendAlias = map['friendAlias'];
-    friendInfo.createTime = map['createTime'];
-    friendInfo.wording = map['wording'];
-    friendInfo.friendAttributes =
-        Map<String, String>.from(map['friendAttributes']);
-    return friendInfo;
+    ZIMUserInfo info = oZIMUserInfo(map, friendInfo);
+    return info as ZIMFriendInfo;
   }
 
   static List<ZIMFriendInfo> oZIMFriendInfoList(List list) {
@@ -2055,6 +2199,14 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     return groupMuteInfo;
   }
 
+  static ZIMGroupVerifyInfo oZIMGroupVerifyInfo(Map map) {
+    ZIMGroupVerifyInfo verifyInfo = ZIMGroupVerifyInfo();
+    verifyInfo.joinMode = ZIMGroupJoinModeExtension.mapValue[map['joinMode']] ?? ZIMGroupJoinMode.any;
+    verifyInfo.inviteMode = ZIMGroupInviteModeExtension.mapValue[map['inviteMode']] ?? ZIMGroupInviteMode.any;
+    verifyInfo.beInviteMode = ZIMGroupBeInviteModeExtension.mapValue[map['beInviteMode']] ?? ZIMGroupBeInviteMode.none;
+    return verifyInfo;
+  }
+
   //供自动化使用，sdk 使用前需要 check
   static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo){
     Map map = {};
@@ -2087,9 +2239,67 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     return result;
   }
 
+  static Map mZIMGroupInviteApplicationAcceptConfig(ZIMGroupInviteApplicationAcceptConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationAcceptConfig(ZIMGroupJoinApplicationAcceptConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    return map;
+  }
+
+  static Map mZIMGroupApplicationListQueryConfig(ZIMGroupApplicationListQueryConfig config){
+    Map map = {};
+    map['count'] = config.count;
+    map['nextFlag'] = config.nextFlag;
+    return map;
+  }
+
+  static Map mZIMGroupInviteApplicationRejectConfig(ZIMGroupInviteApplicationRejectConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationRejectConfig(ZIMGroupJoinApplicationRejectConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    return map;
+  }
+
+  static Map mZIMGroupInviteApplicationSendConfig(ZIMGroupInviteApplicationSendConfig config){
+    Map map = {};
+    map['pushConfig'] = config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    map['wording'] = config.wording;
+    return map;
+  }
+
+  static Map mZIMGroupJoinApplicationSendConfig(ZIMGroupJoinApplicationSendConfig config){
+    Map map = {};
+    map['pushConfig'] =config.pushConfig != null ? mZIMPushConfig(config.pushConfig!) : null;
+    map['wording'] = config.wording;
+    return map;
+  }
+
   static Map mZIMGroupMemberMuteConfig(ZIMGroupMemberMuteConfig config){
     Map map = {};
     map['duration'] = config.duration;
+    return map;
+  }
+
+  static Map mZIMFileCacheClearConfig(ZIMFileCacheClearConfig config){
+    Map map = {};
+    map['endTime'] = config.endTime;
+    return map;
+  }
+
+  static Map mZIMFileCacheQueryConfig(ZIMFileCacheQueryConfig config){
+    Map map = {};
+    map['endTime'] = config.endTime;
     return map;
   }
 
@@ -2105,16 +2315,145 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     map['userID'] = userInfo.userID;
     map['userName'] = userInfo.userName;
     map['userAvatarUrl'] = userInfo.userAvatarUrl;
+    switch(userInfo.runtimeType){
+      case ZIMGroupMemberSimpleInfo:
+        userInfo as ZIMGroupMemberSimpleInfo;
+        map['memberNickname'] = userInfo.memberNickname;
+        map['memberRole'] = userInfo.memberRole;
+        map['classType'] = 'ZIMGroupMemberSimpleInfo';
+        break;
+      case ZIMGroupMemberInfo:
+        userInfo as ZIMGroupMemberInfo;
+        map['memberNickname'] = userInfo.memberNickname;
+        map['memberRole'] = userInfo.memberRole;
+        map['memberAvatarUrl'] = userInfo.memberAvatarUrl;
+        map['muteExpiredTime'] = userInfo.muteExpiredTime;
+        map['classType'] = 'ZIMGroupMemberInfo';
+        break;
+      case ZIMFriendInfo:
+        userInfo as ZIMFriendInfo;
+        map['friendAlias'] = userInfo.friendAlias;
+        map['createTime'] = userInfo.createTime;
+        map['wording'] = userInfo.wording;
+        map['friendAttributes'] = userInfo.friendAttributes;
+        map['classType'] = 'ZIMFriendInfo';
+        break;
+      default:
+        map['classType'] = 'ZIMUserInfo';
+        break;
+    }
     return map;
   }
 
   static Map mZIMGroupMemberInfo(ZIMGroupMemberInfo memberInfo){
     Map map = ZIMConverter.mZIMUserInfo(memberInfo);
-    map['memberNickname'] = memberInfo.memberNickname;
-    map['memberRole'] = memberInfo.memberRole;
-    map['memberAvatarUrl'] = memberInfo.memberAvatarUrl;
-    map['muteExpiredTime'] = memberInfo.muteExpiredTime;
     return map;
+  }
+
+  static ZIMTipsMessageChangeInfo oZIMTipsMessageChangeInfo(Map map,[ZIMTipsMessageChangeInfo? info]){
+    String? classType = map['classType'];
+    switch(classType){
+      case 'ZIMTipsMessageGroupChangeInfo':
+        info ??= ZIMTipsMessageGroupChangeInfo();
+        break;
+      case 'ZIMTipsMessageGroupMemberChangeInfo':
+        info ??= ZIMTipsMessageGroupMemberChangeInfo();
+        break;
+      default:
+        info ??= ZIMTipsMessageChangeInfo();
+        break;
+    }
+    info.type = ZIMTipsMessageChangeInfoTypeExtension.mapValue[map['type']]!;
+    switch(info.runtimeType){
+      case ZIMTipsMessageGroupChangeInfo:
+        info as ZIMTipsMessageGroupChangeInfo;
+        info.groupDataFlag = map['groupDataFlag'];
+        info.groupName = map['groupName'];
+        info.groupNotice = map['groupNotice'];
+        info.groupAvatarUrl = map['groupAvatarUrl'];
+        if(map['groupMuteInfo'] != null){
+          info.groupMutedInfo = oZIMGroupMuteInfo(map['groupMuteInfo']);
+        }
+        break;
+      case ZIMTipsMessageGroupMemberChangeInfo:
+        info as ZIMTipsMessageGroupMemberChangeInfo;
+        info.memberRole = map['role'];
+        info.muteExpiredTime = map['muteExpiredTime'];
+        break;
+    }
+    return info;
+  }
+
+  static Map mZIMTipsMessageChangeInfo(ZIMTipsMessageChangeInfo info){
+    Map map = {};
+    map['type'] = info.type.value;
+    switch(info.runtimeType){
+      case ZIMTipsMessageGroupChangeInfo:
+        info as ZIMTipsMessageGroupChangeInfo;
+        map['groupDataFlag'] = info.groupDataFlag;
+        map['groupName'] = info.groupName;
+        map['groupNotice'] = info.groupNotice;
+        map['groupAvatarUrl'] = info.groupAvatarUrl;
+        if(info.groupMutedInfo != null){
+          map['groupMuteInfo'] = mZIMGroupMuteInfo(info.groupMutedInfo!);
+        }
+        break;
+      case ZIMTipsMessageGroupMemberChangeInfo:
+        info as ZIMTipsMessageGroupMemberChangeInfo;
+        map['role'] = info.memberRole;
+        map['muteExpiredTime'] = info.muteExpiredTime;
+        break;
+    }
+    return map;
+  }
+
+  static ZIMUserOfflinePushRule oZIMUserOfflinePushRule(Map map){
+    ZIMUserOfflinePushRule pushRule = ZIMUserOfflinePushRule();
+
+    List<int> basicOnlinePlatforms = List<int>.from(map['onlinePlatforms']);
+    List<int> basicNotToReceiveOfflinePushPlatforms = List<int>.from(map['notToReceiveOfflinePushPlatforms']);
+    List<ZIMPlatformType> onlinePlatforms = [];
+    List<ZIMPlatformType> notToReceiveOfflinePushPlatforms = [];
+    for(int i in basicOnlinePlatforms){
+      onlinePlatforms.add(ZIMPlatformTypeExtension.mapValue[i]??ZIMPlatformType.unknown);
+    }
+    for(int i in basicNotToReceiveOfflinePushPlatforms){
+      notToReceiveOfflinePushPlatforms.add(ZIMPlatformTypeExtension.mapValue[i]??ZIMPlatformType.unknown);
+    }
+    pushRule.onlinePlatforms = onlinePlatforms;
+    pushRule.notToReceiveOfflinePushPlatforms = notToReceiveOfflinePushPlatforms;
+    return pushRule;
+  }
+
+  static Map mZIMUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule){
+    Map map = {};
+    List<int> basicOnlinePlatforms = [];
+    List<int> basicNotToReceiveOfflinePushPlatforms = [];
+    for(ZIMPlatformType i in offlinePushRule.onlinePlatforms){
+      basicOnlinePlatforms.add(i.value);
+    }
+    for(ZIMPlatformType i in offlinePushRule.notToReceiveOfflinePushPlatforms){
+      basicNotToReceiveOfflinePushPlatforms.add(i.value);
+    }
+    map['onlinePlatforms'] = basicOnlinePlatforms;
+    map['notToReceiveOfflinePushPlatforms'] = basicNotToReceiveOfflinePushPlatforms;
+    return map;
+  }
+
+  static ZIMUserRule oZIMUserRule(Map map){
+    return ZIMUserRule(offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
+  }
+
+  static ZIMSelfUserInfo oZIMSelfUserInfo(Map map){
+    return ZIMSelfUserInfo(userRule: oZIMUserRule(map['userRule']), userFullInfo: oZIMUserFullInfo(map['userFullInfo']));
+  }
+
+  static ZIMSelfUserInfoQueriedResult oZIMSelfUserInfoQueriedResult(Map map){
+    return ZIMSelfUserInfoQueriedResult(selfUserInfo: oZIMSelfUserInfo(map['selfUserInfo']));
+  }
+
+  static ZIMUserOfflinePushRuleUpdatedResult oZIMUserOfflinePushRuleInfoUpdatedResult(Map map){
+    return ZIMUserOfflinePushRuleUpdatedResult(offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
   }
 
 
@@ -2127,6 +2466,5 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     final uint8List = Uint8List.fromList(list);
     return uint8List;
   }
-
 
 }

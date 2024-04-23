@@ -31,6 +31,13 @@ class ZIMEventHandler {
   ///Description: In the multi-terminal login scenario, after the user modifies their information on device A, other online multi-terminal devices will receive this callback. For offline devices, after the user goes online, they need to call the [ZIM.QueryUsersInfo] interface to actively query user information.
   static void Function(ZIM zim, ZIMUserFullInfo info)? onUserInfoUpdated;
 
+  /// Available since: 2.15.0 and later versions.
+  ///
+  /// Description:Callback of user rule changes.
+  ///
+  /// When to Trigger: When the user rule of the current user is changed, all users are notified by the callback.
+  static void Function(ZIM zim, ZIMUserRule)? onUserRuleUpdated;
+
   // Supported version: 2.11.0 or later.
   //
   // Description: In the multi-terminal login scenario, after the user deletes the server level message on device A, other online multi-terminal devices will receive this callback..
@@ -276,7 +283,7 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.updateGroupName] : updates the group name.
   ///
   /// [zim] ZIM instance.
-  /// [groupName] The updated group name.
+  /// [groupNameChanged] The updated group name.
   /// [operatedInfo] Operation information after the group name is updated.
   /// [groupID] The groupID where the group name update occurred.
   static void Function(ZIM zim, String groupName,
@@ -291,7 +298,7 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.updateGroupAvatarUrl] : updates the group avatar url.
   ///
   /// [zim] ZIM instance.
-  /// [groupName] The updated group avatar url.
+  /// [groupNameChanged] The updated group avatar url.
   /// [operatedInfo] Operation information after the group avatar url is updated.
   /// [groupID] The groupID where the group avatar url update occurred.
   static void Function(
@@ -309,7 +316,7 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.updateGroupNotice], which updates the group notice.
   ///
   /// [zim] ZIM instance.
-  /// [groupNotice] Updated group announcement.
+  /// [groupNoticeChanged] Updated group announcement.
   /// [operatedInfo] The group announces the updated operation information.
   /// [groupID] The groupID where the group announcement update occurred.
   static void Function(ZIM zim, String groupNotice,
@@ -372,6 +379,40 @@ class ZIMEventHandler {
       List<ZIMGroupMemberInfo> userInfo,
       ZIMGroupOperatedInfo operatedInfo,
       String groupID)? onGroupMemberInfoUpdated;
+
+  /// Description: Callback notification for changes in group verification  mode.
+  ///
+  /// When to trigger: When group verification mode changes.
+  ///
+  /// Related APIs: [updateGroupJoinMode, updateGroupInviteMode,  updateGroupBeInviteMode], Update the group verification mode.
+  static void Function(
+      ZIM zim,
+      ZIMGroupVerifyInfo verifyInfo,
+      ZIMGroupOperatedInfo operatedInfo,
+      String groupID)? onGroupVerifyInfoUpdated;
+
+  /// Supported versions: 2.15.0 and above.
+  ///
+  /// Detail description: This method will be called back when the group application list changes.
+  ///
+  /// When to call: After creating a ZIM instance through [create].
+  ///
+  /// Related APIs: [sendGroupJoinApplication], [sendGroupInviteApplications].
+  static void Function(
+      ZIM zim,
+      List<ZIMGroupApplicationInfo> applicationList,
+      ZIMGroupApplicationListChangeAction action)? onGroupApplicationListChanged;
+
+  /// Supported versions: 2.15.0 and above.
+  ///
+  /// Detail description: This method will be called back when the group application list changes.
+  ///
+  /// When to call: After creating a ZIM instance through [create].
+  ///
+  /// Related APIs: [acceptGroupJoinApplication], [rejectGroupJoinApplication], [acceptGroupInviteApplication], [rejectGroupInviteApplication].
+  static void Function(
+      ZIM zim,
+      List<ZIMGroupApplicationInfo> applicationList)? onGroupApplicationUpdated;
 
 /* Invite */
 
@@ -491,7 +532,15 @@ class ZIMEventHandler {
   static void Function(ZIM zim, List<String> invitees, String callID)?
       onCallInviteesAnsweredTimeout;
 
-
+  /// Supported versions: 2.13.0 and above.
+  ///
+  /// Detail description: After the caller initiates a call invitation, the caller will receive this callback when the caller is online.
+  ///
+  /// Business scenario: The caller will call this callback after sends a call invitation.
+  ///
+  /// When to call: After creating a ZIM instance through [create].
+  ///
+  /// Related APIs: [callInvite].
   static void Function(ZIM zim, ZIMCallInvitationCreatedInfo info, String callID)? onCallInvitationCreated;
   /// Supported versions: 2.9.0 and above.
   ///

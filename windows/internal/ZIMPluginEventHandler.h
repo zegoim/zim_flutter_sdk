@@ -38,6 +38,8 @@ protected:
 
     void onUserInfoUpdated(ZIM* zim, const ZIMUserFullInfo& info);
 
+    void onUserRuleUpdated(ZIM* zim, const ZIMUserRule & userRule);
+
     void onRoomStateChanged(ZIM* zim, ZIMRoomState state, ZIMRoomEvent event,
         const std::string& extendedData,
         const std::string& roomID);
@@ -175,7 +177,18 @@ protected:
 
     void onGroupMutedInfoUpdated(ZIM * zim, const ZIMGroupMuteInfo & groupMuteInfo,
                                  const ZIMGroupOperatedInfo & operatedInfo,
-                                 const std::string & groupID);
+                                 const std::string & groupID) override;
+
+    void onGroupVerifyInfoUpdated(ZIM * zim, const ZIMGroupVerifyInfo & groupMuteInfo,
+                                 const ZIMGroupOperatedInfo & operatedInfo,
+                                 const std::string & groupID) override;
+
+    void onGroupApplicationListChanged(ZIM * zim, const std::vector<ZIMGroupApplicationInfo> & applicationList, ZIMGroupApplicationListChangeAction action) override;
+
+
+    void onGroupApplicationUpdated(ZIM * zim, const std::vector<ZIMGroupApplicationInfo> & applicationList) override;
+
+
 
 private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
