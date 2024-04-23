@@ -835,7 +835,14 @@ abstract class ZIM {
   /// [roomID] ID of the room to leave.
   Future<ZIMRoomLeftResult> leaveRoom(String roomID);
 
-  Future<ZIMAllRoomLeftResult> leaveAllRoom();
+  /// Available since: 2.15 and above.
+  ///
+  /// Description: Call this interface to exit all rooms you have entered at once.
+  ///
+  /// When to call: Can be called after logging in.
+  ///
+  /// Related callbacks: Get the list of rooms left through the [ZIMRoomAllLeftResult] result.
+  Future<ZIMRoomAllLeftResult> leaveAllRoom();
 
   /// Query the list of members in the room.
   ///
@@ -1187,40 +1194,123 @@ abstract class ZIM {
   Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
       String groupNotice, String groupID);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: When a group is created, the group owner and administrators can use this method to update the group verification mode.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupJoinModeUpdatedResult> updateGroupJoinMode(
       ZIMGroupJoinMode mode, String groupID);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: When a group is created, the group owner and administrators can use this method to update the group verification mode.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupInviteModeUpdatedResult> updateGroupInviteMode(
       ZIMGroupInviteMode mode, String groupID);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: After a group is created, the group owner and administrators can update the invited group verification mode through this method.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupBeInviteModeUpdatedResult> updateGroupBeInviteMode(
       ZIMGroupBeInviteMode mode, String groupID);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: When a group's joinMode is Auth, users can apply to join the group through this method.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupJoinApplicationSentResult> sendGroupJoinApplication(
    String groupID, ZIMGroupJoinApplicationSendConfig config);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: When a group's joinMode requires Auth, after an external user sends a group application, the group owner or administrator can agree to the application through this method.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
    Future<ZIMGroupJoinApplicationAcceptedResult> acceptGroupJoinApplication(String userID,
    String groupID, ZIMGroupJoinApplicationAcceptConfig config);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: When a group's joinMode is Auth, the group owner or administrator can reject to the user's application to join the group through this method.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(String userID,
       String groupID, ZIMGroupJoinApplicationRejectConfig config);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: When a group's invitation verification mode requires approval by the invitee, group members can send invitations to the group through this method.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(List<String> userIDs,
   String groupID, ZIMGroupInviteApplicationSendConfig config);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: When a group's beInviteMode mode is Auth, users outside the group can accept the invitation through this method and become group members after receiving the group invitation.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupInviteApplicationAcceptedResult> acceptGroupInviteApplication(String inviterUserID,
   String groupID, ZIMGroupInviteApplicationAcceptConfig config);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: When a group's beInviteMode requires Auth, users invited to the group can reject the invitation through this method.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String inviterUserID,
   String groupID, ZIMGroupInviteApplicationRejectConfig config);
 
+  /// Available since: 2.15.0 and above.
+  ///
+  /// Description: The query results include your own application to join the group and your application to be invited to join the group. When the user is a group owner or administrator, the query results will also include other people's applications to join the group and their own applications to invite others to the group.
+  ///
+  /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(ZIMGroupApplicationListQueryConfig config);
 
-
+  /// Available since: 2.14.0 and above.
+  ///
+  /// Description: Once a group is created, the group administrator can call this interface to implement group muting and unmuting.
+  ///
+  /// Use cases: After creating a group, users need to change the mute status of the group.
+  ///
+  /// When to call: This can be called after a ZIM instance is created using [create] and logged into the group.
+  ///
+  /// Restrictions: This can be called by the group owner and group administrators.
+  ///
+  /// Related result: The result of changing the group mute status can be obtained through the [ZIMGroupMutedResult] result. The updated group mute status information can be obtained through [onGroupMuteInfoUpdated].
   Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config);
 
+  /// Available since: 2.14.0 and above.
+  ///
+  /// Description: Once a group is created, the group administrator can call this interface to implement group members muting and unmuting.
+  ///
+  /// Use cases: After creating a group, users need to change the mute status of the group members.
+  ///
+  /// When to call: This can be called after a ZIM instance is created using [create] and logged into the group.
+  ///
+  /// Restrictions: This can be called by the group owner and group administrators.
+  ///
+  /// Related result: The result of changing the group members mute status can be obtained through the [ZIMGroupMembersMutedResult] result. The updated group members mute status information can be obtained through [onGroupMemberInfoUpdated].
   Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs,String groupID,ZIMGroupMemberMuteConfig config);
 
+
+  /// Available since: 2.14.0 and above.
+  ///
+  /// Description: After a group is created, you can use this method to query the group muted member list.
+  ///
+  /// Use cases: You need to obtain the specified group muted member list for display or interaction.
+  ///
+  /// When to call: The ZIM instance can be invoked after being created by [create] and logged in.
+  ///
+  /// Restrictions: Available after login, unavailable after logout.
+  ///
+  /// Related result: Through the result [ZIMGroupMembersMutedResult] can query the result of the group muted member list.
   Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID,ZIMGroupMemberMutedListQueryConfig config);
 
   /// Available since: 2.1.5 and above.
@@ -1637,6 +1727,13 @@ abstract class ZIM {
   /// Related callbacks: [ZIMFriendApplicationAcceptedResult].
   Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
 
+  /// Available since: 2.14.0 or above.
+  ///
+  /// Description: After receiving the friend application, reject the friend application through this interface.
+  ///
+  /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
+  ///
+  /// Related callbacks: [ZIMFriendApplicationRejectedResult].
   Future<ZIMFriendApplicationRejectedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
 
   /// Available since: 2.14.0 or above.
@@ -1738,9 +1835,60 @@ abstract class ZIM {
   /// Restrictions: You can only use it after logging in.
   Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
 
+  /// Supported versions: 2.15.0 and above.
+  ///
+  /// Detailed description: Clear the local message cache of the current user.
+  ///
+  /// Business scenario: This interface is invoked when the local message cache needs to be cleared.
+  ///
+  /// Restrictions: This takes effect after the login and becomes invalid after the logout.
   Future<void> clearLocalFileCache(ZIMFileCacheClearConfig config);
 
+  /// Supported versions: 2.15.0 and above.
+  ///
+  /// Detailed description: Query the local message cache of the current user.
+  ///
+  /// Business scenario: This interface is invoked when the local message cache needs to be queried.
+  ///
+  /// Restrictions: This takes effect after the login and becomes invalid after the logout.
+  ///
+  /// Related callbacks: [ZIMFileCacheQueriedResult].
   Future<ZIMFileCacheQueriedResult> queryLocalFileCache(ZIMFileCacheQueryConfig config);
 
+  /// Supported versions: 2.15.0 and above.
+  ///
+  /// Detailed description: This method is used to export the local message of the current user.
+  ///
+  /// Business scenario: This interface is called when a message needs to be exported.
+  ///
+  /// Restrictions: It takes effect after login and becomes invalid after logout.
+  ///
+  /// Caution: The name of the message file exported by this interface is zim_backup_msg_text. If the passed in path is the same when calling this interface multiple times, the ZIM SDK will rename the old zim_backup_msg_text file by itself to ensure that the latest exported file name is zim_backup_msg_text.
   Future<void> exportLocalMessages(String folderPath, ZIMMessageExportConfig config, ZIMMessageExportingProgress? progress);
+
+  /// Available since: 2.15.0 and later versions.
+  ///
+  /// Description: This interface is used to modify the custom rule of offline push for the current user.
+  ///
+  /// Use cases: For example, in the multi-terminal login scenario, the developer hopes that when the desktop is online, the mobile terminal does not want to receive offline push. In this scenario, the interface can be invoked to achieve this function.
+  ///
+  /// When to call /Trigger: You can call it after you log in and the network is in good condition.
+  ///
+  /// Caution:After the interface is successfully invoked, all ends will receive onUserRuleUpdate notifying the user that the rule has been updated.
+  ///
+  /// Related callbacks: [ZIMEventHandler.onUserRuleUpdated]、[ZIMUserOfflinePushRuleUpdatedResult]
+  ///
+  /// Related APIs: [querySelfUserInfo]
+  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule);
+
+  /// Available since: 2.15.0 and later versions.
+  ///
+  /// Description:Query information about the current user and user rules. In offline state, you can query local data.
+  ///
+  /// Use cases: If you need to display the user information and rules, you can invoke the query, for example, to enter the personal page of the current user.
+  ///
+  /// When to call /Trigger: Call after login.
+  ///
+  /// Restrictions: [ZIMSelfUserInfoQueriedResult]、[ZIMEventHandler.onUserInfoUpdated]、[ZIMEventHandler.onUserRuleUpdated]
+  Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
 }

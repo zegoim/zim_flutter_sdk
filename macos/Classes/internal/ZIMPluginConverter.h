@@ -22,6 +22,14 @@
 
 +(nullable NSArray *)mZIMUserInfoList:(nullable NSArray<ZIMUserInfo *> *)userInfoList;
 
++(nullable NSDictionary *)mZIMUserOfflinePushRule:(nullable ZIMUserOfflinePushRule *)offlinePushRule;
+
++(nullable ZIMUserOfflinePushRule *)oZIMUserOfflinePushRule:(nullable NSDictionary *)ruleDic;
+
++(nullable NSDictionary *)mZIMUserRule:(nullable ZIMUserRule *)userRule;
+
++(nullable NSDictionary *)mZIMSelfUserInfo:(nullable ZIMSelfUserInfo *)selfUserInfo;
+
 +(nullable NSArray *)mZIMRoomMemberInfoList:(nullable NSArray<ZIMRoomMemberInfo *> *)userInfoList;
 
 +(nullable ZIMConversation *)oZIMConversation:(nullable NSDictionary *)conversationDic;
@@ -126,6 +134,10 @@
 
 +(nullable ZIMGroupAdvancedConfig *)oZIMGroupAdvancedConfig:(nullable NSDictionary *)configDic;
 
++(nullable ZIMFileCacheClearConfig *)oZIMFileCacheClearConfig:(nullable NSDictionary *)configDic;
+
++(nullable ZIMFileCacheQueryConfig *)oZIMFileCacheQueryConfig:(nullable NSDictionary *)configDic;
+
 +(nullable NSDictionary *)mZIMGroupMuteConfig:(nullable ZIMGroupMuteConfig *)config;
 
 +(nullable ZIMGroupMuteConfig *)oZIMGroupMuteConfig:(nullable NSDictionary *)configDic;
@@ -228,18 +240,42 @@
 
 +(nullable ZIMFriendInfo *)oZIMFriendInfo:(nullable NSDictionary *)infoDic;
 
++(nullable NSDictionary *)mZIMGroupMemberSimpleInfo:(nullable ZIMGroupMemberSimpleInfo *)groupMemberSimpleInfo;
+
 +(nullable ZIMFriendListQueryConfig *)oZIMFriendListQueryConfig:(nullable NSDictionary *)configMap;
 
 +(nullable ZIMFriendRelationCheckConfig *)oZIMFriendRelationCheckConfig:(nullable NSDictionary *)configMap;
 
 +(nullable NSDictionary *)mZIMFriendRelationInfo:(nullable ZIMFriendRelationInfo *)info;
 
++(nullable NSArray *)mZIMGroupApplicationInfoList:(nullable NSArray<ZIMGroupApplicationInfo *> *)groupApplicationInfoList;
+
++(nullable NSDictionary *)mZIMGroupApplicationInfo:(nullable ZIMGroupApplicationInfo *)groupApplicationInfo;
+
 +(nullable NSArray *)mZIMFriendRelationInfoList:(nullable NSArray<ZIMFriendRelationInfo *> *)infoList;
+
++(nullable NSDictionary *)mZIMFileCacheInfo:(nullable ZIMFileCacheInfo *)info;
 
 +(nullable ZIMFriendRelationInfo *)oZIMFriendRelationInfo:(nullable NSDictionary *)infoDic;
 
 +(nullable ZIMFriendApplicationSendConfig *)oZIMFriendApplicationSendConfig:(nullable NSDictionary *)configMap;
 
 +(nullable ZIMFriendSearchConfig *)oZIMFriendSearchConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupJoinApplicationSendConfig *)oZIMGroupJoinApplicationSendConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupJoinApplicationAcceptConfig *)oZIMGroupJoinApplicationAcceptConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupJoinApplicationRejectConfig *)oZIMGroupJoinApplicationRejectConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupInviteApplicationSendConfig *)oZIMGroupInviteApplicationSendConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupInviteApplicationAcceptConfig *)oZIMGroupInviteApplicationAcceptConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupInviteApplicationRejectConfig *)oZIMGroupInviteApplicationRejectConfig:(nullable NSDictionary *)configMap;
+
++(nullable ZIMGroupApplicationListQueryConfig *)oZIMGroupApplicationListQueryConfig:(nullable NSDictionary *)configMap;
+
++(nullable NSDictionary *)mZIMGroupVerifyInfo:(nullable ZIMGroupVerifyInfo *)verifyInfo;
 
 @end

@@ -669,6 +669,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onUserRuleUpdated(ZIM zim, ZIMUserRule rule) {
+        super.onUserRuleUpdated(zim, rule);
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onUserRuleUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("userRule",ZIMPluginConverter.mZIMUserRule(rule));
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onMessageDeleted(ZIM zim, ZIMMessageDeletedInfo deletedInfo) {
         super.onMessageDeleted(zim, deletedInfo);
         if(mysink == null){
@@ -759,8 +773,6 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
 
-
-
     @Override
     public void onBlacklistChanged(ZIM zim,ArrayList<ZIMUserInfo> userList,ZIMBlacklistChangeAction action) {
         super.onBlacklistChanged(zim, userList ,action);
@@ -780,6 +792,60 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         mysink.success(resultMap);
     }
 
+    @Override
+    public void onGroupVerifyInfoUpdated(ZIM zim, ZIMGroupVerifyInfo verifyInfo, ZIMGroupOperatedInfo operatedInfo, String groupID) {
+        super.onGroupVerifyInfoUpdated(zim, verifyInfo ,operatedInfo, groupID);
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onGroupVerifyInfoUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("verifyInfo", ZIMPluginConverter.mZIMGroupVerifyInfo(verifyInfo));
+        resultMap.put("operatedInfo", ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
+        resultMap.put("groupID", groupID);
+
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onGroupApplicationListChanged(ZIM zim, ArrayList<ZIMGroupApplicationInfo> applicationList, ZIMGroupApplicationListChangeAction action) {
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onGroupApplicationListChanged");
+        resultMap.put("handle", handle);
+        ArrayList<HashMap<String, Object>> applicationInfoMapList = new ArrayList<>();
+        for (ZIMGroupApplicationInfo applicationInfo : applicationList) {
+            HashMap<String, Object> applicationInfoMap = ZIMPluginConverter.mZIMGroupApplicationInfo(applicationInfo); // 假设存在 mZIMFriendApplicationInfo 转换函数
+            applicationInfoMapList.add(applicationInfoMap);
+        }
+        resultMap.put("applicationList", applicationInfoMapList);
+        resultMap.put("action", action.value());
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onGroupApplicationUpdated(ZIM zim, ArrayList<ZIMGroupApplicationInfo> applicationList) {
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onGroupApplicationUpdated");
+        resultMap.put("handle", handle);
+        ArrayList<HashMap<String, Object>> applicationInfoMapList = new ArrayList<>();
+        for (ZIMGroupApplicationInfo applicationInfo : applicationList) {
+            HashMap<String, Object> applicationInfoMap = ZIMPluginConverter.mZIMGroupApplicationInfo(applicationInfo); // 假设存在 mZIMFriendApplicationInfo 转换函数
+            applicationInfoMapList.add(applicationInfoMap);
+        }
+        resultMap.put("applicationList", applicationInfoMapList);
+
+        mysink.success(resultMap);
+    }
 }
 
 

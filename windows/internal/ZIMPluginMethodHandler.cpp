@@ -270,6 +270,52 @@ void ZIMPluginMethodHandler::updateUserExtendedData(flutter::EncodableMap& argum
     });
 }
 
+void ZIMPluginMethodHandler::updateUserOfflinePushRule(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+        auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    ZIMUserOfflinePushRule rule = ZIMPluginConverter::cnvZIMUserOfflinePushRuleToObject(std::get<FTMap>(argument[FTValue("offlinePushRule")]));
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+
+    zim->updateUserOfflinePushRule(rule, [=](const ZIMUserOfflinePushRule &offlinePushRule, const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("offlinePushRule")] = ZIMPluginConverter::cnvZIMUserOfflinePushRuleToMap(offlinePushRule);
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::querySelfUserInfo(flutter::EncodableMap& argument,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);
+    auto zim = this->engineMap[handle];
+    if (!zim) {
+        result->Error("-1", "no native instance");
+        return;
+    }
+    auto sharedPtrResult = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+
+    zim->querySelfUserInfo([=](const ZIMSelfUserInfo &selfUserInfo, const ZIMError &errorInfo){
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("selfUserInfo")] = ZIMPluginConverter::cnvZIMSelfUserInfoToMap(selfUserInfo);
+            sharedPtrResult->Success(retMap);
+        }
+        else {
+            sharedPtrResult->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
 void ZIMPluginMethodHandler::queryUsersInfo(flutter::EncodableMap& argument,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
     
@@ -2844,7 +2890,7 @@ void ZIMPluginMethodHandler::queryGroupApplicationList(flutter::EncodableMap& ar
                                                unsigned long long nextFlag, const ZIMError &errorInfo){
         if (errorInfo.code == 0) {
             FTMap retMap;
-            retMap[FTValue("nextFlag")] = FTValue((int64_t)nextFlag);
+            retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
             retMap[FTValue("applicationList")] = ZIMPluginConverter::cnvZIMGroupApplicationInfoToArray(applicationList);
             sharedPtrResult->Success(retMap);
         } else {
@@ -2932,6 +2978,7 @@ void ZIMPluginMethodHandler::callInvite(flutter::EncodableMap& argument,
     config.mode = (ZIMCallInvitationMode)std::get<int32_t>(configMap[FTValue("mode")]);
     config.timeout = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("timeout")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
+    config.enableNotReceivedCheck = std::get<bool>(configMap[FTValue("enableNotReceivedCheck")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {

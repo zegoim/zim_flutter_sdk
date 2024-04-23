@@ -176,6 +176,7 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     ZIMMessageType.barrage: 20,
     ZIMMessageType.system:30,
     ZIMMessageType.revoke:31,
+    ZIMMessageType.tips:32,
     ZIMMessageType.combine:100,
     ZIMMessageType.custom:200,
   };
@@ -190,8 +191,62 @@ extension ZIMMessageTypeExtension on ZIMMessageType {
     20: ZIMMessageType.barrage,
     30: ZIMMessageType.system,
     31: ZIMMessageType.revoke,
+    32: ZIMMessageType.tips,
     100:ZIMMessageType.combine,
     200:ZIMMessageType.custom
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMTipsMessageEventExtension on ZIMTipsMessageEvent {
+  static const valueMap = {
+    ZIMTipsMessageEvent.groupCreated:1,
+    ZIMTipsMessageEvent.groupDismissed:2,
+    ZIMTipsMessageEvent.groupJoined:3,
+    ZIMTipsMessageEvent.groupInvited:4,
+    ZIMTipsMessageEvent.groupLeft:5,
+    ZIMTipsMessageEvent.groupKickedOut:6,
+    ZIMTipsMessageEvent.groupInfoChanged:7,
+    ZIMTipsMessageEvent.groupMemberInfoChanged:8
+  };
+
+  static const mapValue = {
+    1:ZIMTipsMessageEvent.groupCreated,
+    2:ZIMTipsMessageEvent.groupDismissed,
+    3:ZIMTipsMessageEvent.groupJoined,
+    4:ZIMTipsMessageEvent.groupInvited,
+    5:ZIMTipsMessageEvent.groupLeft,
+    6:ZIMTipsMessageEvent.groupKickedOut,
+    7:ZIMTipsMessageEvent.groupInfoChanged,
+    8:ZIMTipsMessageEvent.groupMemberInfoChanged
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMTipsMessageChangeInfoTypeExtension on ZIMTipsMessageChangeInfoType {
+  static const valueMap = {
+    ZIMTipsMessageChangeInfoType.groupDataChanged : 1,
+    ZIMTipsMessageChangeInfoType.groupNoticeChanged : 2,
+    ZIMTipsMessageChangeInfoType.groupNameChanged : 3,
+    ZIMTipsMessageChangeInfoType.groupAvatarUrlChanged : 4,
+    ZIMTipsMessageChangeInfoType.groupMuteChanged : 5,
+
+    ZIMTipsMessageChangeInfoType.groupOwnerTransferred : 10,
+    ZIMTipsMessageChangeInfoType.groupMemberRoleChanged : 11,
+    ZIMTipsMessageChangeInfoType.groupMemberMutedChanged : 12
+  };
+
+  static const mapValue = {
+    1 : ZIMTipsMessageChangeInfoType.groupDataChanged,
+    2 : ZIMTipsMessageChangeInfoType.groupNoticeChanged,
+    3 : ZIMTipsMessageChangeInfoType.groupNameChanged,
+    4 : ZIMTipsMessageChangeInfoType.groupAvatarUrlChanged,
+    5 : ZIMTipsMessageChangeInfoType.groupMuteChanged,
+
+    10 : ZIMTipsMessageChangeInfoType.groupOwnerTransferred,
+    11 : ZIMTipsMessageChangeInfoType.groupMemberRoleChanged,
+    12 : ZIMTipsMessageChangeInfoType.groupMemberMutedChanged
   };
 
   int get value => valueMap[this] ?? -1;
@@ -431,7 +486,8 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
     ZIMCallUserState.received: 5,
     ZIMCallUserState.timeout:6,
     ZIMCallUserState.quited:7,
-    ZIMCallUserState.ended:8
+    ZIMCallUserState.ended:8,
+    ZIMCallUserState.notYetReceived:9,
   };
   static const mapValue = {
     -1: ZIMCallUserState.unknown,
@@ -443,7 +499,8 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
     5: ZIMCallUserState.received,
     6: ZIMCallUserState.timeout,
     7: ZIMCallUserState.quited,
-    8: ZIMCallUserState.ended
+    8: ZIMCallUserState.ended,
+    9: ZIMCallUserState.notYetReceived
   };
 
   int get value => valueMap[this] ?? -1;
@@ -514,12 +571,12 @@ extension ZIMRevokeTypeExtension on ZIMRevokeType {
 
 extension ZIMGroupJoinModeExtension on ZIMGroupJoinMode {
   static const valueMap = {
-    ZIMGroupJoinMode.none: 0,
+    ZIMGroupJoinMode.any: 0,
     ZIMGroupJoinMode.auth: 1,
      ZIMGroupJoinMode.forbid: 2,
   };
   static const mapValue = {
-    0: ZIMGroupJoinMode.none,
+    0: ZIMGroupJoinMode.any,
     1: ZIMGroupJoinMode.auth,
     2: ZIMGroupJoinMode.forbid,
   };
@@ -527,14 +584,34 @@ extension ZIMGroupJoinModeExtension on ZIMGroupJoinMode {
   int get value => valueMap[this] ?? -1;
 }
 
-extension ZIMGroupInviteModeExtension on ZIMGroupInviteMode {
+extension ZIMGroupEnterTypeExtension on ZIMGroupEnterType {
   static const valueMap = {
-    ZIMGroupInviteMode.none: 0,
-    ZIMGroupInviteMode.auth: 1,
+    ZIMGroupEnterType.Unknown: 0,
+    ZIMGroupEnterType.Created: 1,
+    ZIMGroupEnterType.JoinApply: 2,
+    ZIMGroupEnterType.Joined: 3,
+    ZIMGroupEnterType.Invited: 4,
+    ZIMGroupEnterType.InviteApply: 5,
   };
   static const mapValue = {
-    0: ZIMGroupInviteMode.none,
-    1: ZIMGroupInviteMode.auth
+    0: ZIMGroupEnterType.Unknown,
+    1: ZIMGroupEnterType.Created,
+    2: ZIMGroupEnterType.JoinApply,
+    3: ZIMGroupEnterType.Joined,
+    4: ZIMGroupEnterType.Invited,
+    5: ZIMGroupEnterType.InviteApply,
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMGroupInviteModeExtension on ZIMGroupInviteMode {
+  static const valueMap = {
+    ZIMGroupInviteMode.any: 0,
+    ZIMGroupInviteMode.admin: 1,
+  };
+  static const mapValue = {
+    0: ZIMGroupInviteMode.any,
+    1: ZIMGroupInviteMode.admin
   };
 
   int get value => valueMap[this] ?? -1;
@@ -766,6 +843,33 @@ extension ZIMGroupMuteModeExtension on ZIMGroupMuteMode{
     1 : ZIMGroupMuteMode.normal,
     2 : ZIMGroupMuteMode.all,
     3 : ZIMGroupMuteMode.custom
+  };
+  int get value => valueMap[this] ?? -1;
+}
+
+extension ZIMPlatformTypeExtension on ZIMPlatformType{
+  static const valueMap = {
+    ZIMPlatformType.win : 1,
+    ZIMPlatformType.iPhoneOS : 2,
+    ZIMPlatformType.android : 3,
+    ZIMPlatformType.macOS : 4,
+    ZIMPlatformType.linux : 5,
+    ZIMPlatformType.web : 6,
+    ZIMPlatformType.miniProgram : 7,
+    ZIMPlatformType.iPadOS : 9,
+    ZIMPlatformType.unknown : 32
+  };
+
+  static const mapValue = {
+    1 : ZIMPlatformType.win,
+    2 : ZIMPlatformType.iPhoneOS,
+    3 : ZIMPlatformType.android,
+    4 : ZIMPlatformType.macOS,
+    5 : ZIMPlatformType.linux,
+    6 : ZIMPlatformType.web,
+    7 : ZIMPlatformType.miniProgram,
+    9 : ZIMPlatformType.iPadOS,
+    32 : ZIMPlatformType.unknown
   };
   int get value => valueMap[this] ?? -1;
 }
