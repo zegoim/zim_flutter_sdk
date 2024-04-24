@@ -191,7 +191,15 @@ class ZIMConverter {
   }
 
   static ZIMConversation oZIMConversation(Map resultMap) {
-    ZIMConversation conversation = ZIMConversation();
+    var conversation;
+    if(ZIMConversationTypeExtension.mapValue[resultMap['type']] == ZIMConversationType.group){
+      conversation = ZIMGroupConversation();
+      conversation as ZIMGroupConversation;
+      conversation.mutedExpiredTime = resultMap['mutedExpiredTime']??0;
+      conversation.isDisabled = resultMap['isDisabled']??false;
+    }else{
+      conversation = ZIMConversation();
+    }
     conversation.type =
         ZIMConversationTypeExtension.mapValue[resultMap['type']]!;
     conversation.conversationID = resultMap['conversationID'];
