@@ -1,3 +1,92 @@
+## 2.15.0
+
+### New Features
+
+#### Group Roles
+- **Description:** Added a new group role "Administrator" with most of the group owner capabilities, including modifying nicknames for regular members, retracting messages from regular members, kicking members, and muting individual members and specific group roles.
+- **Relevant API:** `setGroupMemberRole`
+- **Additional Information:** For more details on group roles and their permissions, please refer to [Group Member Management - Setting Group Member Roles](#).
+
+#### Group Entry Validation
+- **Description:** Added properties `joinMode`, `inviteMode`, and `beInviteMode` to `ZIMGroupAdvancedConfig` to support setting group entry validation modes, invite modes, and invitee validation modes during group creation. This facilitates group owners and administrators in restricting external user entries.
+- **Relevant APIs:**
+  - `createGroup`
+  - `ZIMGroupAdvancedConfig > joinMode`
+  - `ZIMGroupAdvancedConfig > inviteMode`
+  - `ZIMGroupAdvancedConfig > beInviteMode`
+  - `sendGroupJoinApplication`
+  - `acceptGroupJoinApplication`
+  - `rejectGroupJoinApplication`
+  - `sendGroupInviteApplications`
+  - `acceptGroupInviteApplication`
+  - `rejectGroupInviteApplication`
+  - `queryGroupApplicationList`
+  - `updateGroupJoinMode`
+  - `updateGroupInviteMode`
+  - `updateGroupBeInviteMode`
+- **Additional Information:** For more details on API usage, please refer to [Group Management](#).
+
+#### Tips Messages
+- **Description:** Support converting certain group actions (like creating or dissolving a group) into special type messages (Tips). Developers can construct and display descriptions of related events in the UI based on group message callbacks.
+- **Relevant API:** 
+  - `ZIMMessageType > TIPS`
+  - `onReceiveGroupMessage`
+- **Additional Information:** For types of Tips messages and extensions, and how to handle them after receipt, please refer to [Receiving Tips Messages](#).
+
+#### Custom Push Rules
+- **Description:** Supports users in multi-login scenarios to decide which platforms should receive offline push notifications, and query current offline push rules.
+- **Relevant APIs:**
+  - `updateUserOfflinePushRule`
+  - `querySelfUserInfo`
+
+#### Message Export and Import
+- **Description:** Supports exporting local terminal history messages for backup, useful for transferring chat history when switching devices or recovering deleted messages.
+- **Relevant APIs:**
+  - `exportLocalMessages`
+  - `importLocalMessages`
+
+#### Cache Management
+- **Description:** Supports querying the current login user's local cache file size and clearing local cache.
+- **Relevant APIs:**
+  - `queryLocalFileCache`
+  - `clearLocalFileCache`
+
+#### Leave All Rooms
+- **Description:** Supports users in multi-room scenarios to exit all rooms at once; also useful for developers to exit a single room without needing to pass a `roomID`.
+- **Relevant API:** `leaveAllRoom`
+
+#### Data Migration
+- **Description:** Supports users in migrating user data to the ZIM service via the ZIM server interface.
+- **Relevant API:** See [Migration Scheme](#).
+
+#### Server-side Query Conversation List
+- **Description:** Supports server-side pagination to query the latest 1000 conversations (both single and group chats) of a user.
+- **Relevant API:** See [Query Conversation List](#).
+
+#### Server-side Query Historical Messages
+- **Description:** Supports server-side pagination to query historical messages list of specified single chat or group chat conversations.
+- **Relevant APIs:**
+  - `Query Single Chat Conversation Messages List`
+  - `Query Group Chat Conversation Messages List`
+
+#### Modify Group Specifications on Server-side
+- **Description:** Supports modifying the group's entry validation mode, invite mode, invite target verification mode, and group member cap on the server-side.
+- **Relevant API:** Modify group specification restrictions
+
+### Improvements and Optimizations
+
+#### Invite Delivery Detection
+- **Description:** Added a configuration parameter `enableNotReceivedCheck` to detect if a call invitation reaches the callee, allowing the caller to quickly be aware of the callee's network status and provide notifications.
+- **Relevant API:** `ZIMCallInviteConfig > enableNotReceivedCheck`
+
+#### Server-side Create Group Interface New Parameter
+- **Description:** Added `CreateGroupTime` parameter, supporting the setting of the event time for creating groups.
+- **Relevant API:** Create group
+
+#### Server-side Add Group Member Interface New Parameter
+- **Description:** Added `GroupMemberInfos` parameter, supporting the definition of group joining time and mode for new members.
+- **Relevant API:** Create group
+
 ## 2.14.1
 ### Fix some issue.
 

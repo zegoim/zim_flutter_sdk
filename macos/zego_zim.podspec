@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'zego_zim'
-  s.version          = '2.14.1'
+  s.version          = '2.15.0'
   s.summary          = 'ZIM macOS SDK for Flutter.'
   s.description      = <<-DESC
   ZIM Flutter SDK is a flutter plugin wrapper based on ZIM native macOS SDK
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'FlutterMacOS'
-  s.dependency 'ZIM_macOS','2.14.1'
+  s.dependency 'ZIM_macOS-Private','2.15.2.2616'
   #s.vendored_frameworks = "ZIM.xcframework"
 
   s.platform = :osx, '10.13'
