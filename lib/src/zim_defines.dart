@@ -797,6 +797,11 @@ class ZIMConversation {
   ZIMConversation();
 }
 
+class ZIMGroupConversation extends ZIMConversation {
+  int mutedExpiredTime = 0;
+  bool isDisabled = false;
+}
+
 enum ZIMMessageMentionedType {
   unknown,
   mention_me,

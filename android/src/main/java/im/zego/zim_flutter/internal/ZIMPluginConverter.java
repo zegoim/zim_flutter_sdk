@@ -96,6 +96,12 @@ public class ZIMPluginConverter {
         }
         conversationMap.put("isPinned",conversation.isPinned);
         conversationMap.put("draft",conversation.draft);
+        if(conversation.type == ZIMConversationType.GROUP){
+            if(conversation instanceof ZIMGroupConversation){
+                conversationMap.put("mutedExpiredTime",((ZIMGroupConversation) conversation).mutedExpiredTime);
+                conversationMap.put("isDisabled",((ZIMGroupConversation) conversation).isDisabled);
+            }
+        }
         return conversationMap;
     }
 

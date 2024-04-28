@@ -224,6 +224,12 @@
     [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
     [conversationDic safeSetObject:[ZIMPluginConverter mZIMMentionedInfoList:conversation.mentionedInfoList] forKey:@"mentionedInfoList"];
     [conversationDic safeSetObject:conversation.draft forKey:@"draft"];
+    if(conversation.type == ZIMConversationTypeGroup){
+        if([conversation isKindOfClass:[ZIMGroupConversation class]]){
+            [conversationDic safeSetObject:@(((ZIMGroupConversation *)conversation).mutedExpiredTime) forKey:@"mutedExpiredTime"];
+            [conversationDic safeSetObject:@(((ZIMGroupConversation *)conversation).isDisabled) forKey:@"isDisabled"];
+        }
+    }
     return conversationDic;
 }
 
