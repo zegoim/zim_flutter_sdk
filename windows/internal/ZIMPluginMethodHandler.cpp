@@ -93,8 +93,8 @@ void ZIMPluginMethodHandler::setCacheConfig(flutter::EncodableMap& argument,
     result->Success();
 }
 
-void setGeofencingConfig(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
+void ZIMPluginMethodHandler::setGeofencingConfig(flutter::EncodableMap& argument,
+     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result){
 
     int geofencingType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("type")]);
 

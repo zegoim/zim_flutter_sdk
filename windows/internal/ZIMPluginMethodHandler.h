@@ -27,7 +27,7 @@ public:
     void setLogConfig(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void setAdvancedConfig(flutter::EncodableMap& argument,
-    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void setCacheConfig(flutter::EncodableMap& argument,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     void setGeofencingConfig(flutter::EncodableMap& argument,
