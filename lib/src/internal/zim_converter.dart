@@ -255,7 +255,7 @@ class ZIMConverter {
     messageMap['mentionedUserIDs'] = message.mentionedUserIds;
     messageMap['cbInnerID'] = message.cbInnerID;
     messageMap['rootRepliedCount'] = message.rootRepliedCount;
-    messageMap['repliedInfo']
+    messageMap['repliedInfo'] = mZIMMessageRepliedInfo(message.repliedInfo);
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -2519,9 +2519,50 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     map['messageSeq'] = info.messageSeq;
     map['senderUserID'] = info.senderUserID;
     map['sentTime'] = info.sentTime;
-    map['messageInfo'] = //TODO
+    map['messageInfo'] = mZIMMessageLiteInfo(info.messageInfo);
+    return map;
   }
 
+  static Map mZIMMessageLiteInfo(ZIMMessageLiteInfo liteInfo){
+    Map map = {};
+    map['type'] = ZIMMessageTypeExtension.valueMap[liteInfo.type];
+    if(liteInfo is ZIMTextMessageLiteInfo){
+      map['message'] = liteInfo.message;
+    }else if (liteInfo is ZIMCustomMessageLiteInfo){
+      map['message'] = liteInfo.message;
+      map['subType'] = liteInfo.subType;
+    }else if (liteInfo is ZIMCombineMessageLiteInfo){
+      map['title'] = liteInfo.title;
+      map['summary'] = liteInfo.summary;
+    }else if(liteInfo is ZIMImageMessageLiteInfo){
+      map['originalImageWidth'] = liteInfo.originalImageWidth;
+      map['originalImageHeight'] = liteInfo.originalImageHeight;
+      map['thumbnailLocalPath'] = liteInfo.thumbnailLocalPath;
+      map['thumbnailDownloadUrl'] = liteInfo.thumbnailDownloadUrl;
+      map['thumbnailWidth'] = liteInfo.thumbnailWidth;
+      map['thumbnailHeight'] = liteInfo.thumbnailHeight;
+      map['largeImageLocalPath'] = liteInfo.largeImageLocalPath;
+      map['largeImageDownloadUrl'] = liteInfo.largeImageDownloadUrl;
+      map['largeImageWidth'] = liteInfo.largeImageWidth;
+      map['largeImageHeight'] = liteInfo.largeImageHeight;
+    }else if(liteInfo is ZIMAudioMessageLiteInfo){
+      map['audioDuration'] = liteInfo.audioDuration;
+    }else if(liteInfo is ZIMVideoMessageLiteInfo){
+      map['videoDuration'] = liteInfo.videoDuration;
+      map['videoFirstFrameDownloadUrl'] = liteInfo.videoFirstFrameDownloadUrl;
+      map['videoFirstFrameLocalPath'] = liteInfo.videoFirstFrameLocalPath;
+      map['videoFirstFrameWidth'] = liteInfo.videoFirstFrameWidth;
+      map['videoFirstFrameHeight'] = liteInfo.videoFirstFrameHeight;
+    }
+
+    if(liteInfo is ZIMMediaMessageLiteInfo){
+      map['fileSize'] = liteInfo.fileSize;
+      map['fileName'] = liteInfo.fileName;
+      map['fileLocalPath'] = liteInfo.fileLocalPath;
+      map['fileDownloadUrl'] = liteInfo.fileDownloadUrl;
+    }
+    return map;
+  }
   static ZIMMessageLiteInfo oZIMMessageLiteInfo(Map map){
     ZIMMessageLiteInfo liteInfo;
     ZIMMessageType type = ZIMMessageTypeExtension.mapValue[map['type']]??ZIMMessageType.unknown;
@@ -2530,12 +2571,6 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
         liteInfo = ZIMTextMessageLiteInfo();
         liteInfo as ZIMTextMessageLiteInfo;
         liteInfo.message = map['message'];
-        break;
-      case ZIMMessageType.command:
-        liteInfo = ZIMCustomMessageLiteInfo();
-        liteInfo as ZIMCustomMessageLiteInfo;
-        liteInfo.message = map['message'];
-        liteInfo.subType = map['subType'];
         break;
       case ZIMMessageType.image:
         liteInfo = ZIMImageMessageLiteInfo();
@@ -2584,7 +2619,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
         liteInfo.title = map['title'];
         liteInfo.summary = map['summary'];
         break;
-
+      case ZIMMessageType.command:
       case ZIMMessageType.tips:
       case ZIMMessageType.system:
       case ZIMMessageType.barrage:
