@@ -105,7 +105,7 @@ void ZIMPluginMethodHandler::login(FArgument &argument, FResult result) {
     ZIMLoginConfig loginConfig =
         ZIMPluginConverter::cnvZIMLoginConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
 
-    zim->login(userID, loginConfig, [result = std::move(result)](const ZIMError &errorInfo) {
+    zim->login(userID, loginConfig, [=, result = std::move(result)](const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             result->Success();
         } else {
@@ -127,7 +127,7 @@ void ZIMPluginMethodHandler::uploadLog(FArgument &argument, FResult result) {
 
     CheckZIMInstanceExistAndObtainZIM();
 
-    zim->uploadLog([result = std::move(result)](const ZIMError &errorInfo) {
+    zim->uploadLog([=, result = std::move(result)](const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             result->Success();
         } else {
@@ -143,7 +143,7 @@ void ZIMPluginMethodHandler::renewToken(FArgument &argument, FResult result) {
     auto token = std::get<std::string>(argument[FTValue("token")]);
 
     zim->renewToken(
-        token, [result = std::move(result)](const std::string &token, const ZIMError &errorInfo) {
+        token, [=, result = std::move(result)](const std::string &token, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("token")] = FTValue(token);
@@ -161,7 +161,7 @@ void ZIMPluginMethodHandler::updateUserName(FArgument &argument, FResult result)
 
     auto userName = std::get<std::string>(argument[FTValue("userName")]);
 
-    zim->updateUserName(userName, [result = std::move(result)](const std::string &userName,
+    zim->updateUserName(userName, [=, result = std::move(result)](const std::string &userName,
                                                                const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -182,7 +182,7 @@ void ZIMPluginMethodHandler::updateUserAvatarUrl(FArgument &argument, FResult re
 
     zim->updateUserAvatarUrl(
         userAvatarUrl,
-        [result = std::move(result)](const std::string &userAvatarUrl, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const std::string &userAvatarUrl, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("userAvatarUrl")] = FTValue(userAvatarUrl);
@@ -201,7 +201,7 @@ void ZIMPluginMethodHandler::updateUserExtendedData(FArgument &argument, FResult
     auto userExtendedData = std::get<std::string>(argument[FTValue("extendedData")]);
 
     zim->updateUserExtendedData(
-        userExtendedData, [result = std::move(result)](const std::string &userExtendedData,
+        userExtendedData, [=, result = std::move(result)](const std::string &userExtendedData,
                                                        const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -221,7 +221,7 @@ void ZIMPluginMethodHandler::updateUserOfflinePushRule(FArgument &argument, FRes
         std::get<FTMap>(argument[FTValue("offlinePushRule")]));
 
     zim->updateUserOfflinePushRule(
-        rule, [result = std::move(result)](const ZIMUserOfflinePushRule &offlinePushRule,
+        rule, [=, result = std::move(result)](const ZIMUserOfflinePushRule &offlinePushRule,
                                            const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -238,7 +238,7 @@ void ZIMPluginMethodHandler::querySelfUserInfo(FArgument &argument, FResult resu
 
     CheckZIMInstanceExistAndObtainZIM();
 
-    zim->querySelfUserInfo([result = std::move(result)](const ZIMSelfUserInfo &selfUserInfo,
+    zim->querySelfUserInfo([=, result = std::move(result)](const ZIMSelfUserInfo &selfUserInfo,
                                                         const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -268,7 +268,7 @@ void ZIMPluginMethodHandler::queryUsersInfo(FArgument &argument, FResult result)
 
     zim->queryUsersInfo(
         userIDsVec, config,
-        [result = std::move(result)](const std::vector<ZIMUserFullInfo> &userList,
+        [=, result = std::move(result)](const std::vector<ZIMUserFullInfo> &userList,
                                      const std::vector<ZIMErrorUserInfo> &errorUserList,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -314,7 +314,7 @@ void ZIMPluginMethodHandler::queryConversationList(FArgument &argument, FResult 
     }
 
     zim->queryConversationList(
-        queryConfig, [result = std::move(result)](
+        queryConfig, [=, result = std::move(result)](
                          const std::vector<std::shared_ptr<ZIMConversation>> &conversationList,
                          const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -339,7 +339,7 @@ void ZIMPluginMethodHandler::queryConversation(FArgument &argument, FResult resu
 
     zim->queryConversation(
         conversationID, (ZIMConversationType)conversationType,
-        [result = std::move(result)](const std::shared_ptr<ZIMConversation> &conversation,
+        [=, result = std::move(result)](const std::shared_ptr<ZIMConversation> &conversation,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -370,7 +370,7 @@ void ZIMPluginMethodHandler::queryConversationPinnedList(FArgument &argument, FR
     }
 
     zim->queryConversationPinnedList(
-        queryConfig, [result = std::move(result)](
+        queryConfig, [=, result = std::move(result)](
                          const std::vector<std::shared_ptr<ZIMConversation>> &conversationList,
                          const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -396,7 +396,7 @@ void ZIMPluginMethodHandler::updateConversationPinnedState(FArgument &argument, 
 
     zim->updateConversationPinnedState(
         isPinned, conversationID, (ZIMConversationType)conversationType,
-        [result = std::move(result)](const std::string &conversationID,
+        [=, result = std::move(result)](const std::string &conversationID,
                                      ZIMConversationType conversationType,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -424,7 +424,7 @@ void ZIMPluginMethodHandler::deleteConversation(FArgument &argument, FResult res
         ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(configMap);
 
     zim->deleteConversation(conversationID, (ZIMConversationType)conversationType, deleteConfig,
-                            [result = std::move(result)](const std::string &conversationID,
+                            [=, result = std::move(result)](const std::string &conversationID,
                                                          ZIMConversationType conversationType,
                                                          const ZIMError &errorInfo) {
                                 if (errorInfo.code == 0) {
@@ -450,7 +450,7 @@ void ZIMPluginMethodHandler::deleteAllConversations(FArgument &argument, FResult
         ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(configMap);
 
     zim->deleteAllConversations(
-        deleteConfig, [result = std::move(result)](const ZIMError &errorInfo) {
+        deleteConfig, [=, result = std::move(result)](const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 result->Success();
             } else {
@@ -470,7 +470,7 @@ void ZIMPluginMethodHandler::clearConversationUnreadMessageCount(FArgument &argu
 
     zim->clearConversationUnreadMessageCount(
         conversationID, (ZIMConversationType)conversationType,
-        [result = std::move(result)](const std::string &conversationID,
+        [=, result = std::move(result)](const std::string &conversationID,
                                      ZIMConversationType conversationType,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -491,7 +491,7 @@ void ZIMPluginMethodHandler::clearConversationTotalUnreadMessageCount(FArgument 
     CheckZIMInstanceExistAndObtainZIM();
 
     zim->clearConversationTotalUnreadMessageCount(
-        [result = std::move(result)](const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 result->Success();
             } else {
@@ -514,7 +514,7 @@ void ZIMPluginMethodHandler::setConversationNotificationStatus(FArgument &argume
     zim->setConversationNotificationStatus(
         (ZIMConversationNotificationStatus)status, conversationID,
         (ZIMConversationType)conversationType,
-        [result = std::move(result)](const std::string &conversationID,
+        [=, result = std::move(result)](const std::string &conversationID,
                                      ZIMConversationType conversationType,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -540,7 +540,7 @@ void ZIMPluginMethodHandler::sendConversationMessageReceiptRead(FArgument &argum
 
     zim->sendConversationMessageReceiptRead(
         conversationID, (ZIMConversationType)conversationType,
-        [result = std::move(result)](const std::string &conversationID,
+        [=, result = std::move(result)](const std::string &conversationID,
                                      ZIMConversationType conversationType,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -566,7 +566,7 @@ void ZIMPluginMethodHandler::setConversationDraft(FArgument &argument, FResult r
 
     zim->setConversationDraft(
         draft, conversationID, (ZIMConversationType)conversationType,
-        [result = std::move(result)](const std::string &conversationID,
+        [=, result = std::move(result)](const std::string &conversationID,
                                      ZIMConversationType conversationType,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -603,7 +603,7 @@ void ZIMPluginMethodHandler::revokeMessage(FArgument &argument, FResult result) 
     config.revokeExtendedData = revokeExtendedData;
 
     zim->revokeMessage(messagePtr, config,
-                       [result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
+                       [=, result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
                                                     const ZIMError &errorInfo) {
                            if (errorInfo.code == 0) {
                                FTMap retMap;
@@ -656,7 +656,7 @@ void ZIMPluginMethodHandler::updateMessageLocalExtendedData(FArgument &argument,
 
     zim->updateMessageLocalExtendedData(
         localExtendedData, std::static_pointer_cast<zim::ZIMMessage>(messagePtr),
-        [result = std::move(result)](const std::shared_ptr<zim::ZIMMessage> &message,
+        [=, result = std::move(result)](const std::shared_ptr<zim::ZIMMessage> &message,
                                      const zim::ZIMError &errorInfo) {
             FTMap retMap;
             auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
@@ -730,7 +730,7 @@ void ZIMPluginMethodHandler::sendPeerMessage(FArgument &argument, FResult result
         ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
 
     zim->sendPeerMessage(messagePtr.get(), toUserID, config,
-                         [result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
+                         [=, result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
                                                       const ZIMError &errorInfo) {
                              if (errorInfo.code == 0) {
                                  FTMap retMap;
@@ -758,7 +758,7 @@ void ZIMPluginMethodHandler::sendRoomMessage(FArgument &argument, FResult result
         ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
 
     zim->sendRoomMessage(messagePtr.get(), toRoomID, config,
-                         [result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
+                         [=, result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
                                                       const ZIMError &errorInfo) {
                              if (errorInfo.code == 0) {
                                  FTMap retMap;
@@ -786,7 +786,7 @@ void ZIMPluginMethodHandler::sendGroupMessage(FArgument &argument, FResult resul
         ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
 
     zim->sendGroupMessage(messagePtr.get(), toGroupID, config,
-                          [result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
+                          [=, result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
                                                        const ZIMError &errorInfo) {
                               if (errorInfo.code == 0) {
                                   FTMap retMap;
@@ -892,7 +892,7 @@ void ZIMPluginMethodHandler::downloadMediaFile(FArgument &argument, FResult resu
             progressRetMap[FTValue("totalFileSize")] = FTValue((int64_t)totalFileSize);
             ZIMPluginEventHandler::getInstance()->sendEvent(progressRetMap);
         },
-        [result = std::move(result)](const std::shared_ptr<ZIMMediaMessage> &message,
+        [=, result = std::move(result)](const std::shared_ptr<ZIMMediaMessage> &message,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -991,7 +991,7 @@ void ZIMPluginMethodHandler::queryHistoryMessage(FArgument &argument, FResult re
 
     zim->queryHistoryMessage(
         conversationID, (ZIMConversationType)conversationType, config,
-        [result = std::move(result)](const std::string &conversationID,
+        [=, result = std::move(result)](const std::string &conversationID,
                                      ZIMConversationType conversationType,
                                      const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
                                      const ZIMError &errorInfo) {
@@ -1019,7 +1019,7 @@ void ZIMPluginMethodHandler::queryMessages(FArgument &argument, FResult result) 
         std::get<FTArray>(argument[FTValue("messageSeq")]));
 
     zim->queryMessages(messageSeq, conversationID, conversationType,
-                       [result = std::move(result)](
+                       [=, result = std::move(result)](
                            const std::string &conversationID, ZIMConversationType conversationType,
                            const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
                            const ZIMError &errorInfo) {
@@ -1047,7 +1047,7 @@ void ZIMPluginMethodHandler::queryRepliedMessageList(FArgument &argument, FResul
 
     zim->queryRepliedMessageList(
         message, config,
-        [result = std::move(result)](const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+        [=, result = std::move(result)](const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
                                      long long nextFlag, bool isRootMessageDeleted,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
@@ -1078,7 +1078,7 @@ void ZIMPluginMethodHandler::deleteAllMessage(FArgument &argument, FResult resul
         std::get<bool>(configMap[FTValue("isAlsoDeleteServerMessage")]);
 
     zim->deleteAllMessage(conversationID, (ZIMConversationType)conversationType, config,
-                          [result = std::move(result)](const std::string &conversationID,
+                          [=, result = std::move(result)](const std::string &conversationID,
                                                        ZIMConversationType conversationType,
                                                        const ZIMError &errorInfo) {
                               if (errorInfo.code == 0) {
@@ -1109,7 +1109,7 @@ void ZIMPluginMethodHandler::deleteMessages(FArgument &argument, FResult result)
 
     zim->deleteMessages(messageObjectList, conversationID, (ZIMConversationType)conversationType,
                         config,
-                        [result = std::move(result)](const std::string &conversationID,
+                        [=, result = std::move(result)](const std::string &conversationID,
                                                      ZIMConversationType conversationType,
                                                      const ZIMError &errorInfo) {
                             if (errorInfo.code == 0) {
@@ -1134,7 +1134,7 @@ void ZIMPluginMethodHandler::deleteAllConversationMessages(FArgument &argument, 
         std::get<bool>(configMap[FTValue("isAlsoDeleteServerMessage")]);
 
     zim->deleteAllConversationMessages(
-        config, [result = std::move(result)](const ZIMError &errorInfo) {
+        config, [=, result = std::move(result)](const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 result->Success();
             } else {
@@ -1155,7 +1155,7 @@ void ZIMPluginMethodHandler::sendMessageReceiptsRead(FArgument &argument, FResul
 
     zim->sendMessageReceiptsRead(
         messageObjectList, conversationID, (ZIMConversationType)conversationType,
-        [result = std::move(result)](
+        [=, result = std::move(result)](
             const std::string &conversationID, ZIMConversationType conversationType,
             const std::vector<long long> &errorMessageIDs, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1184,7 +1184,7 @@ void ZIMPluginMethodHandler::queryMessageReceiptsInfo(FArgument &argument, FResu
 
     zim->queryMessageReceiptsInfo(
         messageObjectList, conversationID, (ZIMConversationType)conversationType,
-        [result = std::move(result)](const std::vector<ZIMMessageReceiptInfo> &infos,
+        [=, result = std::move(result)](const std::vector<ZIMMessageReceiptInfo> &infos,
                                      std::vector<long long> errorMessageIDs,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1213,7 +1213,7 @@ void ZIMPluginMethodHandler::queryGroupMessageReceiptReadMemberList(FArgument &a
 
     zim->queryGroupMessageReceiptReadMemberList(
         messagePtr, groupID, config,
-        [result = std::move(result)](const std::string &groupID,
+        [=, result = std::move(result)](const std::string &groupID,
                                      const std::vector<ZIMGroupMemberInfo> &userList,
                                      unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1242,7 +1242,7 @@ void ZIMPluginMethodHandler::queryGroupMessageReceiptUnreadMemberList(FArgument 
 
     zim->queryGroupMessageReceiptUnreadMemberList(
         messagePtr, groupID, config,
-        [result = std::move(result)](const std::string &callbackGroupID,
+        [=, result = std::move(result)](const std::string &callbackGroupID,
                                      const std::vector<ZIMGroupMemberInfo> &userList,
                                      unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1269,7 +1269,7 @@ void ZIMPluginMethodHandler::searchLocalMessages(FArgument &argument, FResult re
 
     zim->searchLocalMessages(
         conversationID, (ZIMConversationType)conversationType, config,
-        [result = std::move(result)](
+        [=, result = std::move(result)](
             const std::string &conversationID, ZIMConversationType conversationType,
             const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
             const std::shared_ptr<ZIMMessage> &nextMessage, const ZIMError &errorInfo) {
@@ -1296,7 +1296,7 @@ void ZIMPluginMethodHandler::searchGlobalLocalMessages(FArgument &argument, FRes
         std::get<FTMap>(argument[FTValue("config")]));
 
     zim->searchGlobalLocalMessages(
-        config, [result = std::move(result)](
+        config, [=, result = std::move(result)](
                     const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
                     const std::shared_ptr<ZIMMessage> &nextMessage, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1320,7 +1320,7 @@ void ZIMPluginMethodHandler::searchLocalConversations(FArgument &argument, FResu
         std::get<FTMap>(argument[FTValue("config")]));
 
     zim->searchLocalConversations(
-        config, [result = std::move(result)](
+        config, [=, result = std::move(result)](
                     const std::vector<ZIMConversationSearchInfo> &conversationSearchInfoList,
                     unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1343,7 +1343,7 @@ void ZIMPluginMethodHandler::createRoom(FArgument &argument, FResult result) {
     auto roomInfo =
         ZIMPluginConverter::cnvZIMRoomInfoToObject(std::get<FTMap>(argument[FTValue("roomInfo")]));
 
-    zim->createRoom(roomInfo, [result = std::move(result)](const ZIMRoomFullInfo &roomInfo,
+    zim->createRoom(roomInfo, [=, result = std::move(result)](const ZIMRoomFullInfo &roomInfo,
                                                            const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1368,7 +1368,7 @@ void ZIMPluginMethodHandler::createRoomWithConfig(FArgument &argument, FResult r
 
     zim->createRoom(
         roomInfo, roomAdvancedConfig,
-        [result = std::move(result)](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 auto roomFullInfoMap = ZIMPluginConverter::cnvZIMRoomFullInfoToMap(roomInfo);
@@ -1392,7 +1392,7 @@ void ZIMPluginMethodHandler::enterRoom(FArgument &argument, FResult result) {
 
     zim->enterRoom(
         roomInfo, roomAdvancedConfig,
-        [result = std::move(result)](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 auto roomFullInfoMap = ZIMPluginConverter::cnvZIMRoomFullInfoToMap(roomInfo);
@@ -1411,7 +1411,7 @@ void ZIMPluginMethodHandler::joinRoom(FArgument &argument, FResult result) {
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
-    zim->joinRoom(roomID, [result = std::move(result)](const ZIMRoomFullInfo &roomInfo,
+    zim->joinRoom(roomID, [=, result = std::move(result)](const ZIMRoomFullInfo &roomInfo,
                                                        const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1432,7 +1432,7 @@ void ZIMPluginMethodHandler::leaveRoom(FArgument &argument, FResult result) {
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
     zim->leaveRoom(
-        roomID, [result = std::move(result)](const std::string &roomID, const ZIMError &errorInfo) {
+        roomID, [=, result = std::move(result)](const std::string &roomID, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("roomID")] = FTValue(roomID);
@@ -1448,7 +1448,7 @@ void ZIMPluginMethodHandler::leaveAllRoom(FArgument &argument, FResult result) {
 
     CheckZIMInstanceExistAndObtainZIM();
 
-    zim->leaveAllRoom([result = std::move(result)](const std::vector<std::string> &roomIDList,
+    zim->leaveAllRoom([=, result = std::move(result)](const std::vector<std::string> &roomIDList,
                                                    const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1470,7 +1470,7 @@ void ZIMPluginMethodHandler::queryRoomMemberList(FArgument &argument, FResult re
 
     zim->queryRoomMemberList(
         roomID, queryConfig,
-        [result = std::move(result)](const std::string &roomID,
+        [=, result = std::move(result)](const std::string &roomID,
                                      const std::vector<ZIMUserInfo> &memberList,
                                      const std::string &nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1497,7 +1497,7 @@ void ZIMPluginMethodHandler::queryRoomMembers(FArgument &argument, FResult resul
 
     zim->queryRoomMembers(
         userIDs, roomID,
-        [result = std::move(result)](
+        [=, result = std::move(result)](
             const std::string &roomID, const std::vector<ZIMRoomMemberInfo> &memberList,
             const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1521,7 +1521,7 @@ void ZIMPluginMethodHandler::queryRoomOnlineMemberCount(FArgument &argument, FRe
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
     zim->queryRoomOnlineMemberCount(
-        roomID, [result = std::move(result)](const std::string &roomID, unsigned int count,
+        roomID, [=, result = std::move(result)](const std::string &roomID, unsigned int count,
                                              const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -1547,7 +1547,7 @@ void ZIMPluginMethodHandler::setRoomAttributes(FArgument &argument, FResult resu
 
     zim->setRoomAttributes(
         roomAttributes, roomID, &roomAttributesSetConfig,
-        [result = std::move(result)](const std::string &roomID,
+        [=, result = std::move(result)](const std::string &roomID,
                                      const std::vector<std::string> &errorKeyList,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1575,7 +1575,7 @@ void ZIMPluginMethodHandler::deleteRoomAttributes(FArgument &argument, FResult r
 
     zim->deleteRoomAttributes(
         keys, roomID, &roomAttributesDeleteConfig,
-        [result = std::move(result)](const std::string &roomID,
+        [=, result = std::move(result)](const std::string &roomID,
                                      const std::vector<std::string> &errorKeyList,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1611,7 +1611,7 @@ void ZIMPluginMethodHandler::endRoomAttributesBatchOperation(FArgument &argument
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
     zim->endRoomAttributesBatchOperation(
-        roomID, [result = std::move(result)](const std::string &roomID, const ZIMError &errorInfo) {
+        roomID, [=, result = std::move(result)](const std::string &roomID, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("roomID")] = FTValue(roomID);
@@ -1630,7 +1630,7 @@ void ZIMPluginMethodHandler::queryRoomAllAttributes(FArgument &argument, FResult
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
     zim->queryRoomAllAttributes(
-        roomID, [result = std::move(result)](
+        roomID, [=, result = std::move(result)](
                     const std::string &roomID,
                     const std::unordered_map<std::string, std::string> &roomAttributes,
                     const ZIMError &errorInfo) {
@@ -1661,7 +1661,7 @@ void ZIMPluginMethodHandler::setRoomMembersAttributes(FArgument &argument, FResu
 
     zim->setRoomMembersAttributes(
         attributes, userIDs, roomID, config,
-        [result = std::move(result)](const std::string &roomID,
+        [=, result = std::move(result)](const std::string &roomID,
                                      const std::vector<ZIMRoomMemberAttributesOperatedInfo> &infos,
                                      const std::vector<std::string> &errorUserList,
                                      const ZIMError &errorInfo) {
@@ -1693,7 +1693,7 @@ void ZIMPluginMethodHandler::queryRoomMembersAttributes(FArgument &argument, FRe
 
     zim->queryRoomMembersAttributes(
         userIDs, roomID,
-        [result = std::move(result)](const std::string &roomID,
+        [=, result = std::move(result)](const std::string &roomID,
                                      const std::vector<ZIMRoomMemberAttributesInfo> &infos,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1721,7 +1721,7 @@ void ZIMPluginMethodHandler::queryRoomMemberAttributesList(FArgument &argument, 
 
     zim->queryRoomMemberAttributesList(
         roomID, config,
-        [result = std::move(result)](const std::string &roomID,
+        [=, result = std::move(result)](const std::string &roomID,
                                      const std::vector<ZIMRoomMemberAttributesInfo> &infos,
                                      const std::string &nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1752,7 +1752,7 @@ void ZIMPluginMethodHandler::createGroup(FArgument &argument, FResult result) {
 
     zim->createGroup(
         groupInfo, userIDs,
-        [result = std::move(result)](
+        [=, result = std::move(result)](
             const ZIMGroupFullInfo &groupInfo, const std::vector<ZIMGroupMemberInfo> &userList,
             const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1784,7 +1784,7 @@ void ZIMPluginMethodHandler::createGroupWithConfig(FArgument &argument, FResult 
 
     zim->createGroup(
         groupInfo, userIDs, config,
-        [result = std::move(result)](
+        [=, result = std::move(result)](
             const ZIMGroupFullInfo &groupInfo, const std::vector<ZIMGroupMemberInfo> &userList,
             const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1809,7 +1809,7 @@ void ZIMPluginMethodHandler::joinGroup(FArgument &argument, FResult result) {
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
-    zim->joinGroup(groupID, [result = std::move(result)](const ZIMGroupFullInfo &groupInfo,
+    zim->joinGroup(groupID, [=, result = std::move(result)](const ZIMGroupFullInfo &groupInfo,
                                                          const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1828,7 +1828,7 @@ void ZIMPluginMethodHandler::dismissGroup(FArgument &argument, FResult result) {
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
-    zim->dismissGroup(groupID, [result = std::move(result)](const std::string &groupID,
+    zim->dismissGroup(groupID, [=, result = std::move(result)](const std::string &groupID,
                                                             const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1847,7 +1847,7 @@ void ZIMPluginMethodHandler::leaveGroup(FArgument &argument, FResult result) {
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
-    zim->leaveGroup(groupID, [result = std::move(result)](const std::string &groupID,
+    zim->leaveGroup(groupID, [=, result = std::move(result)](const std::string &groupID,
                                                           const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1870,7 +1870,7 @@ void ZIMPluginMethodHandler::inviteUsersIntoGroup(FArgument &argument, FResult r
 
     zim->inviteUsersIntoGroup(
         userIDs, groupID,
-        [result = std::move(result)](
+        [=, result = std::move(result)](
             const std::string &groupID, const std::vector<ZIMGroupMemberInfo> &userList,
             const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1898,7 +1898,7 @@ void ZIMPluginMethodHandler::kickGroupMembers(FArgument &argument, FResult resul
 
     zim->kickGroupMembers(
         userIDs, groupID,
-        [result = std::move(result)](
+        [=, result = std::move(result)](
             const std::string &groupID, const std::vector<std::string> &kickedUserIDList,
             const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -1925,7 +1925,7 @@ void ZIMPluginMethodHandler::transferGroupOwner(FArgument &argument, FResult res
 
     zim->transferGroupOwner(
         toUserID, groupID,
-        [result = std::move(result)](const std::string &groupID, const std::string &toUserID,
+        [=, result = std::move(result)](const std::string &groupID, const std::string &toUserID,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -1947,7 +1947,7 @@ void ZIMPluginMethodHandler::updateGroupName(FArgument &argument, FResult result
     auto groupName = std::get<std::string>(argument[FTValue("groupName")]);
 
     zim->updateGroupName(groupName, groupID,
-                         [result = std::move(result)](const std::string &groupID,
+                         [=, result = std::move(result)](const std::string &groupID,
                                                       const std::string &groupName,
                                                       const ZIMError &errorInfo) {
                              if (errorInfo.code == 0) {
@@ -1971,7 +1971,7 @@ void ZIMPluginMethodHandler::updateGroupAvatarUrl(FArgument &argument, FResult r
 
     zim->updateGroupAvatarUrl(
         groupAvatarUrl, groupID,
-        [result = std::move(result)](const std::string &groupID, const std::string &groupAvatarUrl,
+        [=, result = std::move(result)](const std::string &groupID, const std::string &groupAvatarUrl,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -1993,7 +1993,7 @@ void ZIMPluginMethodHandler::updateGroupNotice(FArgument &argument, FResult resu
     auto groupNotice = std::get<std::string>(argument[FTValue("groupNotice")]);
 
     zim->updateGroupNotice(groupNotice, groupID,
-                           [result = std::move(result)](const std::string &groupID,
+                           [=, result = std::move(result)](const std::string &groupID,
                                                         const std::string &groupNotice,
                                                         const ZIMError &errorInfo) {
                                if (errorInfo.code == 0) {
@@ -2017,7 +2017,7 @@ void ZIMPluginMethodHandler::updateGroupJoinMode(FArgument &argument, FResult re
 
     zim->updateGroupJoinMode(
         mode, groupID,
-        [result = std::move(result)](const std::string &groupID, ZIMGroupJoinMode mode,
+        [=, result = std::move(result)](const std::string &groupID, ZIMGroupJoinMode mode,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2040,7 +2040,7 @@ void ZIMPluginMethodHandler::updateGroupInviteMode(FArgument &argument, FResult 
 
     zim->updateGroupInviteMode(
         (ZIMGroupInviteMode)mode, groupID,
-        [result = std::move(result)](const std::string &groupID, ZIMGroupInviteMode mode,
+        [=, result = std::move(result)](const std::string &groupID, ZIMGroupInviteMode mode,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2062,7 +2062,7 @@ void ZIMPluginMethodHandler::updateGroupBeInviteMode(FArgument &argument, FResul
 
     zim->updateGroupBeInviteMode(
         mode, groupID,
-        [result = std::move(result)](const std::string &groupID, ZIMGroupBeInviteMode mode,
+        [=, result = std::move(result)](const std::string &groupID, ZIMGroupBeInviteMode mode,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2081,7 +2081,7 @@ void ZIMPluginMethodHandler::queryGroupInfo(FArgument &argument, FResult result)
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
-    zim->queryGroupInfo(groupID, [result = std::move(result)](const ZIMGroupFullInfo &groupInfo,
+    zim->queryGroupInfo(groupID, [=, result = std::move(result)](const ZIMGroupFullInfo &groupInfo,
                                                               const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -2104,7 +2104,7 @@ void ZIMPluginMethodHandler::setGroupAttributes(FArgument &argument, FResult res
 
     zim->setGroupAttributes(
         groupAttributes, groupID,
-        [result = std::move(result)](const std::string &groupID,
+        [=, result = std::move(result)](const std::string &groupID,
                                      const std::vector<std::string> &errorKeys,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -2129,7 +2129,7 @@ void ZIMPluginMethodHandler::deleteGroupAttributes(FArgument &argument, FResult 
 
     zim->deleteGroupAttributes(
         keys, groupID,
-        [result = std::move(result)](const std::string &groupID,
+        [=, result = std::move(result)](const std::string &groupID,
                                      const std::vector<std::string> &errorKeys,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -2178,7 +2178,7 @@ void ZIMPluginMethodHandler::queryGroupAllAttributes(FArgument &argument, FResul
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
     zim->queryGroupAllAttributes(
-        groupID, [result = std::move(result)](
+        groupID, [=, result = std::move(result)](
                      const std::string &groupID,
                      const std::unordered_map<std::string, std::string> &groupAttributes,
                      const ZIMError &errorInfo) {
@@ -2205,7 +2205,7 @@ void ZIMPluginMethodHandler::setGroupMemberRole(FArgument &argument, FResult res
 
     zim->setGroupMemberRole(
         role, forUserID, groupID,
-        [result = std::move(result)](const std::string &groupID, const std::string &forUserID,
+        [=, result = std::move(result)](const std::string &groupID, const std::string &forUserID,
                                      ZIMGroupMemberRole role, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2230,7 +2230,7 @@ void ZIMPluginMethodHandler::setGroupMemberNickname(FArgument &argument, FResult
 
     zim->setGroupMemberNickname(
         nickname, forUserID, groupID,
-        [result = std::move(result)](const std::string &groupID, const std::string &forUserID,
+        [=, result = std::move(result)](const std::string &groupID, const std::string &forUserID,
                                      const std::string &nickname, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2254,7 +2254,7 @@ void ZIMPluginMethodHandler::queryGroupMemberInfo(FArgument &argument, FResult r
 
     zim->queryGroupMemberInfo(
         userID, groupID,
-        [result = std::move(result)](const std::string &groupID, const ZIMGroupMemberInfo &userInfo,
+        [=, result = std::move(result)](const std::string &groupID, const ZIMGroupMemberInfo &userInfo,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2273,7 +2273,7 @@ void ZIMPluginMethodHandler::queryGroupList(FArgument &argument, FResult result)
 
     CheckZIMInstanceExistAndObtainZIM();
 
-    zim->queryGroupList([result = std::move(result)](const std::vector<ZIMGroup> &groupList,
+    zim->queryGroupList([=, result = std::move(result)](const std::vector<ZIMGroup> &groupList,
                                                      const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -2296,7 +2296,7 @@ void ZIMPluginMethodHandler::queryGroupMemberList(FArgument &argument, FResult r
 
     zim->queryGroupMemberList(
         groupID, config,
-        [result = std::move(result)](const std::string &groupID,
+        [=, result = std::move(result)](const std::string &groupID,
                                      const std::vector<ZIMGroupMemberInfo> &userList,
                                      unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -2319,7 +2319,7 @@ void ZIMPluginMethodHandler::queryGroupMemberCount(FArgument &argument, FResult 
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
-    zim->queryGroupMemberCount(groupID, [result = std::move(result)](const std::string &groupID,
+    zim->queryGroupMemberCount(groupID, [=, result = std::move(result)](const std::string &groupID,
                                                                      unsigned int count,
                                                                      const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -2341,7 +2341,7 @@ void ZIMPluginMethodHandler::searchLocalGroups(FArgument &argument, FResult resu
     auto config = ZIMPluginConverter::cnvZIMGroupSearchConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
 
-    zim->searchLocalGroups(config, [result = std::move(result)](
+    zim->searchLocalGroups(config, [=, result = std::move(result)](
                                        const std::vector<ZIMGroupSearchInfo> &groupSearchInfoList,
                                        unsigned int nextFlag, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -2367,7 +2367,7 @@ void ZIMPluginMethodHandler::searchLocalGroupMembers(FArgument &argument, FResul
 
     zim->searchLocalGroupMembers(
         groupID, config,
-        [result = std::move(result)](const std::string &groupID,
+        [=, result = std::move(result)](const std::string &groupID,
                                      const std::vector<ZIMGroupMemberInfo> &userList,
                                      unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -2395,7 +2395,7 @@ void ZIMPluginMethodHandler::muteGroup(FArgument &argument, FResult result) {
 
     zim->muteGroup(
         isMute, groupID, config,
-        [result = std::move(result)](const std::string &groupID, bool isMute,
+        [=, result = std::move(result)](const std::string &groupID, bool isMute,
                                      const ZIMGroupMuteInfo &info, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2429,7 +2429,7 @@ void ZIMPluginMethodHandler::sendGroupJoinApplication(FArgument &argument, FResu
 
     zim->sendGroupJoinApplication(
         groupID, config,
-        [result = std::move(result)](const std::string &groupID, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const std::string &groupID, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("groupID")] = FTValue(groupID);
@@ -2461,7 +2461,7 @@ void ZIMPluginMethodHandler::acceptGroupJoinApplication(FArgument &argument, FRe
 
     zim->acceptGroupJoinApplication(
         userID, groupID, config,
-        [result = std::move(result)](const std::string &groupID, const std::string &userID,
+        [=, result = std::move(result)](const std::string &groupID, const std::string &userID,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2495,7 +2495,7 @@ void ZIMPluginMethodHandler::rejectGroupJoinApplication(FArgument &argument, FRe
 
     zim->rejectGroupJoinApplication(
         userID, groupID, config,
-        [result = std::move(result)](const std::string &groupID, const std::string &userID,
+        [=, result = std::move(result)](const std::string &groupID, const std::string &userID,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2534,7 +2534,7 @@ void ZIMPluginMethodHandler::sendGroupInviteApplications(FArgument &argument, FR
 
     zim->sendGroupInviteApplications(
         userIDsVec, groupID, config,
-        [result = std::move(result)](const std::string &groupID,
+        [=, result = std::move(result)](const std::string &groupID,
                                      const std::vector<ZIMErrorUserInfo> &errorUserList,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -2571,7 +2571,7 @@ void ZIMPluginMethodHandler::acceptGroupInviteApplication(FArgument &argument, F
 
     zim->acceptGroupInviteApplication(
         inviterUserID, groupID, config,
-        [result = std::move(result)](const ZIMGroupFullInfo &fullInfo,
+        [=, result = std::move(result)](const ZIMGroupFullInfo &fullInfo,
                                      const std::string &inviterUserID, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2607,7 +2607,7 @@ void ZIMPluginMethodHandler::rejectGroupInviteApplication(FArgument &argument, F
 
     zim->rejectGroupInviteApplication(
         inviterUserID, groupID, config,
-        [result = std::move(result)](const std::string &groupID, const std::string &inviterUserID,
+        [=, result = std::move(result)](const std::string &groupID, const std::string &inviterUserID,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2629,7 +2629,7 @@ void ZIMPluginMethodHandler::queryGroupApplicationList(FArgument &argument, FRes
 
     zim->queryGroupApplicationList(
         config,
-        [result = std::move(result)](const std::vector<ZIMGroupApplicationInfo> &applicationList,
+        [=, result = std::move(result)](const std::vector<ZIMGroupApplicationInfo> &applicationList,
                                      unsigned long long nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2660,7 +2660,7 @@ void ZIMPluginMethodHandler::muteGroupMemberList(FArgument &argument, FResult re
 
     zim->muteGroupMembers(
         isMute, userIDsVec, groupID, config,
-        [result = std::move(result)](const std::string &groupID, bool isMute, unsigned int duration,
+        [=, result = std::move(result)](const std::string &groupID, bool isMute, unsigned int duration,
                                      const std::vector<std::string> &mutedMemberIDs,
                                      const std::vector<ZIMErrorUserInfo> &errorUserList,
                                      const ZIMError &errorInfo) {
@@ -2689,7 +2689,7 @@ void ZIMPluginMethodHandler::queryGroupMemberMutedList(FArgument &argument, FRes
         std::get<FTMap>(argument[FTValue("config")]));
     zim->queryGroupMemberMutedList(
         groupID, config,
-        [result = std::move(result)](const std::string &groupID, unsigned long long nextFlag,
+        [=, result = std::move(result)](const std::string &groupID, unsigned long long nextFlag,
                                      const std::vector<ZIMGroupMemberInfo> &userList,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -2729,7 +2729,7 @@ void ZIMPluginMethodHandler::callInvite(FArgument &argument, FResult result) {
     }
 
     zim->callInvite(invitees, config,
-                    [result = std::move(result)](const std::string &callID,
+                    [=, result = std::move(result)](const std::string &callID,
                                                  const ZIMCallInvitationSentInfo &info,
                                                  const ZIMError &errorInfo) {
                         if (errorInfo.code == 0) {
@@ -2766,7 +2766,7 @@ void ZIMPluginMethodHandler::callingInvite(FArgument &argument, FResult result) 
     }
 
     zim->callingInvite(invitees, callID, config,
-                       [result = std::move(result)](const std::string &callID,
+                       [=, result = std::move(result)](const std::string &callID,
                                                     const ZIMCallingInvitationSentInfo &info,
                                                     const ZIMError &errorInfo) {
                            if (errorInfo.code == 0) {
@@ -2803,7 +2803,7 @@ void ZIMPluginMethodHandler::callQuit(FArgument &argument, FResult result) {
 
     zim->callQuit(
         callID, config,
-        [result = std::move(result)](const std::string &callID, const ZIMCallQuitSentInfo &info,
+        [=, result = std::move(result)](const std::string &callID, const ZIMCallQuitSentInfo &info,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2837,7 +2837,7 @@ void ZIMPluginMethodHandler::callEnd(FArgument &argument, FResult result) {
 
     zim->callEnd(
         callID, config,
-        [result = std::move(result)](const std::string &callID, const ZIMCallEndedSentInfo &info,
+        [=, result = std::move(result)](const std::string &callID, const ZIMCallEndedSentInfo &info,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2872,7 +2872,7 @@ void ZIMPluginMethodHandler::callCancel(FArgument &argument, FResult result) {
     }
 
     zim->callCancel(invitees, callID, config,
-                    [result = std::move(result)](const std::string &callID,
+                    [=, result = std::move(result)](const std::string &callID,
                                                  const std::vector<std::string> &errorInvitees,
                                                  const ZIMError &errorInfo) {
                         if (errorInfo.code == 0) {
@@ -2900,7 +2900,7 @@ void ZIMPluginMethodHandler::callAccept(FArgument &argument, FResult result) {
 
     zim->callAccept(
         callID, config,
-        [result = std::move(result)](const std::string &callID, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const std::string &callID, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("callID")] = FTValue(callID);
@@ -2924,7 +2924,7 @@ void ZIMPluginMethodHandler::callReject(FArgument &argument, FResult result) {
 
     zim->callReject(
         callID, config,
-        [result = std::move(result)](const std::string &callID, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const std::string &callID, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("callID")] = FTValue(callID);
@@ -2948,7 +2948,7 @@ void ZIMPluginMethodHandler::callJoin(FArgument &argument, FResult result) {
 
     zim->callJoin(
         callID, config,
-        [result = std::move(result)](const std::string &callID, const ZIMCallJoinSentInfo &info,
+        [=, result = std::move(result)](const std::string &callID, const ZIMCallJoinSentInfo &info,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -2977,7 +2977,7 @@ void ZIMPluginMethodHandler::queryCallList(FArgument &argument, FResult result) 
     }
 
     zim->queryCallInvitationList(
-        config, [result = std::move(result)](const std::vector<ZIMCallInfo> &callList,
+        config, [=, result = std::move(result)](const std::vector<ZIMCallInfo> &callList,
                                              long long nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -3006,7 +3006,7 @@ void ZIMPluginMethodHandler::addMessageReaction(FArgument &argument, FResult res
     auto reactionType = std::get<std::string>(argument[FTValue("reactionType")]);
 
     zim->addMessageReaction(reactionType, messagePtr,
-                            [result = std::move(result)](const ZIMMessageReaction &reaction,
+                            [=, result = std::move(result)](const ZIMMessageReaction &reaction,
                                                          const ZIMError &errorInfo) {
                                 if (errorInfo.code == 0) {
                                     FTMap retMap;
@@ -3029,7 +3029,7 @@ void ZIMPluginMethodHandler::deleteMessageReaction(FArgument &argument, FResult 
     auto reactionType = std::get<std::string>(argument[FTValue("reactionType")]);
 
     zim->deleteMessageReaction(reactionType, messagePtr,
-                               [result = std::move(result)](const ZIMMessageReaction &reaction,
+                               [=, result = std::move(result)](const ZIMMessageReaction &reaction,
                                                             const ZIMError &errorInfo) {
                                    if (errorInfo.code == 0) {
                                        FTMap retMap;
@@ -3054,7 +3054,7 @@ void ZIMPluginMethodHandler::queryMessageReactionUserList(FArgument &argument, F
 
     zim->queryMessageReactionUserList(
         messagePtr, config,
-        [result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
+        [=, result = std::move(result)](const std::shared_ptr<ZIMMessage> &message,
                                      const std::vector<ZIMMessageReactionUserInfo> &userList,
                                      const std::string &reactionType, const long long nextFlag,
                                      const unsigned int totalCount, const ZIMError &errorInfo) {
@@ -3088,7 +3088,7 @@ void ZIMPluginMethodHandler::addUsersToBlacklist(FArgument &argument, FResult re
     }
 
     zim->addUsersToBlacklist(
-        userIDsVec, [result = std::move(result)](const std::vector<ZIMErrorUserInfo> &errorUserList,
+        userIDsVec, [=, result = std::move(result)](const std::vector<ZIMErrorUserInfo> &errorUserList,
                                                  const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -3112,7 +3112,7 @@ void ZIMPluginMethodHandler::removeUsersFromBlacklist(FArgument &argument, FResu
     }
 
     zim->removeUsersFromBlacklist(
-        userIDsVec, [result = std::move(result)](const std::vector<ZIMErrorUserInfo> &errorUserList,
+        userIDsVec, [=, result = std::move(result)](const std::vector<ZIMErrorUserInfo> &errorUserList,
                                                  const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -3131,7 +3131,7 @@ void ZIMPluginMethodHandler::queryBlackList(FArgument &argument, FResult result)
     ZIMBlacklistQueryConfig config = ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
     zim->queryBlacklist(
-        config, [result = std::move(result)](const std::vector<ZIMUserInfo> &blacklist,
+        config, [=, result = std::move(result)](const std::vector<ZIMUserInfo> &blacklist,
                                              long long nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -3150,7 +3150,7 @@ void ZIMPluginMethodHandler::checkUserIsInBlackList(FArgument &argument, FResult
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
 
     zim->checkUserIsInBlacklist(
-        userID, [result = std::move(result)](bool isUserInBlacklist, const ZIMError &errorInfo) {
+        userID, [=, result = std::move(result)](bool isUserInBlacklist, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("isUserInBlacklist")] = FTValue(isUserInBlacklist);
@@ -3171,7 +3171,7 @@ void ZIMPluginMethodHandler::addFriend(FArgument &argument, FResult result) {
 
     zim->addFriend(
         userID, config,
-        [result = std::move(result)](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("friendInfo")] =
@@ -3205,7 +3205,7 @@ void ZIMPluginMethodHandler::sendFriendApplication(FArgument &argument, FResult 
 
     zim->sendFriendApplication(
         applyUserID, config,
-        [result = std::move(result)](const ZIMFriendApplicationInfo &friendApplicationInfo,
+        [=, result = std::move(result)](const ZIMFriendApplicationInfo &friendApplicationInfo,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -3234,7 +3234,7 @@ void ZIMPluginMethodHandler::deleteFriends(FArgument &argument, FResult result) 
 
     zim->deleteFriends(
         userIDsVec, config,
-        [result = std::move(result)](const std::vector<ZIMErrorUserInfo> &errorUserList,
+        [=, result = std::move(result)](const std::vector<ZIMErrorUserInfo> &errorUserList,
                                      const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
@@ -3270,7 +3270,7 @@ void ZIMPluginMethodHandler::checkFriendsRelation(FArgument &argument, FResult r
 
     zim->checkFriendsRelation(
         userIDsVec, config,
-        [result = std::move(result)](
+        [=, result = std::move(result)](
             const std::vector<ZIMFriendRelationInfo> &friendRelationInfoList,
             const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -3307,7 +3307,7 @@ void ZIMPluginMethodHandler::updateFriendAlias(FArgument &argument, FResult resu
 
     zim->updateFriendAlias(
         friendAlias, userID,
-        [result = std::move(result)](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("friendInfo")] =
@@ -3329,7 +3329,7 @@ void ZIMPluginMethodHandler::updateFriendAttributes(FArgument &argument, FResult
 
     zim->updateFriendAttributes(
         friendAttributes, userID,
-        [result = std::move(result)](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("friendInfo")] =
@@ -3352,7 +3352,7 @@ void ZIMPluginMethodHandler::queryFriendsInfo(FArgument &argument, FResult resul
         userIDsVec.emplace_back(userID);
     }
 
-    zim->queryFriendsInfo(userIDsVec, [result = std::move(result)](
+    zim->queryFriendsInfo(userIDsVec, [=, result = std::move(result)](
                                           const std::vector<ZIMFriendInfo> &friendInfoList,
                                           const std::vector<ZIMErrorUserInfo> &errorUserList,
                                           const ZIMError &errorInfo) {
@@ -3402,7 +3402,7 @@ void ZIMPluginMethodHandler::acceptFriendApplication(FArgument &argument, FResul
 
     zim->acceptFriendApplication(
         userID, config,
-        [result = std::move(result)](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("friendInfo")] =
@@ -3436,7 +3436,7 @@ void ZIMPluginMethodHandler::rejectFriendApplication(FArgument &argument, FResul
 
     zim->rejectFriendApplication(
         userID, config,
-        [result = std::move(result)](const ZIMUserInfo &userInfo, const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMUserInfo &userInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("userInfo")] =
@@ -3457,7 +3457,7 @@ void ZIMPluginMethodHandler::queryFriendList(FArgument &argument, FResult result
         std::get<FTMap>(argument[FTValue("config")]));
 
     zim->queryFriendList(
-        config, [result = std::move(result)](const std::vector<ZIMFriendInfo> &friendInfoList,
+        config, [=, result = std::move(result)](const std::vector<ZIMFriendInfo> &friendInfoList,
                                              unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTArray friendInfoArray;
@@ -3487,7 +3487,7 @@ void ZIMPluginMethodHandler::queryFriendApplicationList(FArgument &argument, FRe
 
     zim->queryFriendApplicationList(
         config,
-        [result = std::move(result)](const std::vector<ZIMFriendApplicationInfo> &applicationList,
+        [=, result = std::move(result)](const std::vector<ZIMFriendApplicationInfo> &applicationList,
                                      unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTArray friendApplicationInfoArray;
@@ -3514,7 +3514,7 @@ void ZIMPluginMethodHandler::searchLocalFriends(FArgument &argument, FResult res
         std::get<FTMap>(argument[FTValue("config")]));
 
     zim->searchLocalFriends(
-        config, [result = std::move(result)](const std::vector<ZIMFriendInfo> &friendInfos,
+        config, [=, result = std::move(result)](const std::vector<ZIMFriendInfo> &friendInfos,
                                              unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTArray friendInfoArray;
@@ -3543,7 +3543,7 @@ void ZIMPluginMethodHandler::queryCombineMessageDetail(FArgument &argument, FRes
 
     zim->queryCombineMessageDetail(
         combineMessagePtr,
-        [result = std::move(result)](const std::shared_ptr<ZIMCombineMessage> &message,
+        [=, result = std::move(result)](const std::shared_ptr<ZIMCombineMessage> &message,
                                      ZIMError &errorInfo) {
             FTMap retMap;
             auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
@@ -3564,7 +3564,7 @@ void ZIMPluginMethodHandler::clearLocalFileCache(FArgument &argument, FResult re
     ZIMFileCacheClearConfig config = ZIMPluginConverter::cnvZIMFileCacheClearConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
 
-    zim->clearLocalFileCache(config, [result = std::move(result)](const ZIMError &errorInfo) {
+    zim->clearLocalFileCache(config, [=, result = std::move(result)](const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             result->Success();
         } else {
@@ -3581,7 +3581,7 @@ void ZIMPluginMethodHandler::queryLocalFileCache(FArgument &argument, FResult re
     ZIMFileCacheQueryConfig config = ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
 
-    zim->queryLocalFileCache(config, [result = std::move(result)](const ZIMFileCacheInfo &cacheInfo,
+    zim->queryLocalFileCache(config, [=, result = std::move(result)](const ZIMFileCacheInfo &cacheInfo,
                                                                   const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -3615,7 +3615,7 @@ void ZIMPluginMethodHandler::importLocalMessages(FArgument &argument, FResult re
             progressRetMap[FTValue("totalMessageCount")] = FTValue((int64_t)totalMessageCount);
             ZIMPluginEventHandler::getInstance()->sendEvent(progressRetMap);
         },
-        [result = std::move(result)](const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 result->Success();
             } else {
@@ -3645,7 +3645,7 @@ void ZIMPluginMethodHandler::exportLocalMessages(FArgument &argument, FResult re
             progressRetMap[FTValue("totalMessageCount")] = FTValue((int64_t)totalMessageCount);
             ZIMPluginEventHandler::getInstance()->sendEvent(progressRetMap);
         },
-        [result = std::move(result)](const ZIMError &errorInfo) {
+        [=, result = std::move(result)](const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 result->Success();
             } else {
