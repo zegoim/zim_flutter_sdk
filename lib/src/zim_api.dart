@@ -1892,7 +1892,7 @@ abstract class ZIM {
   /// Restrictions: [ZIMSelfUserInfoQueriedResult]、[ZIMEventHandler.onUserInfoUpdated]、[ZIMEventHandler.onUserRuleUpdated]
   Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
 
-  Future<ZIMMessageQueriedResult> queryMessagesByMessageSeqs(List<int> messageSeqs,String conversationID,ZIMConversationType conversationType);
+  Future<ZIMMessageQueriedResult> queryMessages(List<int> messageSeqs,String conversationID,ZIMConversationType conversationType);
 
   Future<ZIMMessageSentResult> replyMessage(ZIMMessage message,ZIMMessage toOriginalMessage, ZIMMessageSendConfig config, ZIMMessageSendNotification? notification);
 

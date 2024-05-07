@@ -5,7 +5,6 @@ import 'zim_converter.dart';
 import '../zim_api.dart';
 import '../zim_defines.dart';
 import 'zim_manager.dart';
-import 'zim_event_handler_impl.dart';
 import 'zim_defines_extension.dart';
 
 class ZIMEngine implements ZIM {
@@ -1471,8 +1470,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMMessageQueriedResult> queryMessagesByMessageSeqs(List<int> messageSeqs, String conversationID, ZIMConversationType conversationType) async{
-    Map resultMap = await channel.invokeMethod('queryMessagesByMessageSeqs',{
+  Future<ZIMMessageQueriedResult> queryMessages(List<int> messageSeqs, String conversationID, ZIMConversationType conversationType) async{
+    Map resultMap = await channel.invokeMethod('queryMessages',{
       'handle':handle,
       'messageSeqs':messageSeqs,
       'conversationID':conversationID,
