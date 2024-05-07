@@ -1242,12 +1242,12 @@ void ZIMPluginMethodHandler::queryGroupMessageReceiptUnreadMemberList(FArgument 
 
     zim->queryGroupMessageReceiptUnreadMemberList(
         messagePtr, groupID, config,
-        [result = std::move(result)](const std::string &groupID,
+        [result = std::move(result)](const std::string &callbackGroupID,
                                      const std::vector<ZIMGroupMemberInfo> &userList,
                                      unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
-                retMap[FTValue("groupID")] = FTValue(groupID);
+                retMap[FTValue("groupID")] = FTValue(callbackGroupID);
                 retMap[FTValue("userList")] =
                     ZIMPluginConverter::cnvZIMGroupMemberInfoListToArray(userList);
                 retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
