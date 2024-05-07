@@ -174,6 +174,10 @@ public:
     ZIMPluginConverter() {}
 
 public:
+    static FTMap mZIMMessageRootRepliedCountInfo(const ZIMMessageRootRepliedCountInfo &info);
+    static FTArray
+    mZIMMessageRootRepliedCountInfoList(const std::vector<ZIMMessageRootRepliedCountInfo> &infos);
+
     static FTMap cnvZIMUserInfoObjectToMap(const ZIMUserInfo& userInfo);
     static flutter::EncodableValue cnvZIMUserInfoPtrToObj(const std::shared_ptr<ZIMUserInfo> userPtr);
     static FTArray cnvZIMUserInfoPtrListToArray(const std::vector<std::shared_ptr<ZIMUserInfo>> userInfoList);
@@ -249,6 +253,8 @@ public:
     static FTMap cnvZIMSelfUserInfoToMap(const ZIMSelfUserInfo &info);
 
 public:
+    static ZIMMessageSendConfig oZIMMessageSendConfig(FTMap configMap);
+    static ZIMMessageRepliedListQueryConfig oZIMMessageRepliedListQueryConfig(FTMap configMap);
 
     static ZIMFriendSearchConfig cnvZIMFriendSearchConfigToObject(FTMap configMap);
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
@@ -305,13 +311,14 @@ public:
 
 
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
-    static int32_t cnvFTMapToInt32(flutter::EncodableValue value);
-    static int64_t cnvFTMapToInt64(flutter::EncodableValue value);
+    static int32_t cnvFValueToInt32(flutter::EncodableValue value);
+    static int64_t cnvFValueToInt64(flutter::EncodableValue value);
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string>& map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long>& vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<int>& vec);
     static std::vector<int> cnvFTArrayToStlVectorIntValue(FTArray ftArray);
+    static std::vector<long long> cnvFTArrayToInt64Vec(FTArray ftArray);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
     static std::vector<ZIMGroupMemberRole> cnvFTArrayToStlVectorInt(FTArray ftArray);
     static FTArray cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList);
