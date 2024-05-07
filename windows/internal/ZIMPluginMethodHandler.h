@@ -19,7 +19,7 @@ class ZIMPluginMethodHandler {
     ~ZIMPluginMethodHandler() {}
 
     typedef flutter::EncodableMap FArgument;
-    typedef std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> FResult;
+    typedef std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>> FResult;
 
     static ZIMPluginMethodHandler &getInstance() {
         static ZIMPluginMethodHandler m_instance;

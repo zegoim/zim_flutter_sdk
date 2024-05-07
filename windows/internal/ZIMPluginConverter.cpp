@@ -215,7 +215,7 @@ std::vector<long long> ZIMPluginConverter::cnvFTArrayToInt64Vec(FTArray ftArray)
 std::vector<ZIMGroupMemberRole> ZIMPluginConverter::cnvFTArrayToStlVectorInt(FTArray ftArray) {
 	std::vector<ZIMGroupMemberRole> vec;
 		for (auto& intObj : ftArray) {
-            auto intValue = cnvFValueToInt64(intObj);
+            auto intValue = cnvFValueToInt32(intObj);
 		vec.emplace_back(intValue);
 	}
 	return vec;
@@ -228,7 +228,7 @@ FTMap ZIMPluginConverter::mZIMMessageRootRepliedCountInfo(
     infoMap[FTValue("conversationID")] = FTValue(info.getConversationID());
     infoMap[FTValue("conversationType")] = FTValue(info.getConversationType());
     infoMap[FTValue("messageID")] = FTValue(info.getMessageID());
-    infoMap[FTValue("count")] = FTValue(info.getCount());
+    infoMap[FTValue("count")] = FTValue(static_cast<int32_t>(info.getCount()));
 
 	return infoMap;
 }
