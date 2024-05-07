@@ -488,6 +488,7 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
     ZIMCallUserState.quited:7,
     ZIMCallUserState.ended:8,
     ZIMCallUserState.notYetReceived:9,
+    ZIMCallUserState.beCanceled:10
   };
   static const mapValue = {
     -1: ZIMCallUserState.unknown,
@@ -500,7 +501,8 @@ extension ZIMCallUserStateExtension on ZIMCallUserState {
     6: ZIMCallUserState.timeout,
     7: ZIMCallUserState.quited,
     8: ZIMCallUserState.ended,
-    9: ZIMCallUserState.notYetReceived
+    9: ZIMCallUserState.notYetReceived,
+    10: ZIMCallUserState.beCanceled
   };
 
   int get value => valueMap[this] ?? -1;
