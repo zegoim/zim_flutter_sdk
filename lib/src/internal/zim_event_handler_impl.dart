@@ -446,6 +446,16 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         ZIMUserRule userRule = ZIMConverter.oZIMUserRule(map['userRule']);
         ZIMEventHandler.onUserRuleUpdated!(zim,userRule);
         break;
+      case 'onMessageRepliedCountChanged':
+        if(ZIMEventHandler.onMessageRepliedCountChanged == null) return;
+        List<ZIMMessageRootRepliedCountInfo> list = ZIMConverter.oZIMMessageRootRepliedCountInfoList(map['infos']);
+        ZIMEventHandler.onMessageRepliedCountChanged!(zim,list);
+        break;
+      case 'onMessageRepliedInfoChanged':
+        if(ZIMEventHandler.onMessageRepliedInfoChanged == null) return;
+        List<ZIMMessage> messageList = ZIMConverter.oZIMMessageList(map['messageList']);
+        ZIMEventHandler.onMessageRepliedInfoChanged!(zim,messageList);
+        break;
       default:
         break;
     }

@@ -796,10 +796,6 @@ class ZIMEngine implements ZIM {
       });
       ZIMMessageSentResult result =
           ZIMConverter.oZIMMessageSentResult(resultMap);
-      // ios 2.5.0 桥层bug 临时规避方法，后续删除
-      if (config.hasReceipt == true) {
-        result.message.receiptStatus = ZIMMessageReceiptStatus.processing;
-      }
       return result;
     } on PlatformException catch (e) {
       Map resultMap = e.details;
@@ -1472,6 +1468,44 @@ class ZIMEngine implements ZIM {
       'offlinePushRule' : ZIMConverter.mZIMUserOfflinePushRule(offlinePushRule),
     });
     return ZIMConverter.oZIMUserOfflinePushRuleInfoUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageQueriedResult> queryMessagesByMessageSeqs(List<int> messageSeqs, String conversationID, ZIMConversationType conversationType) async{
+    Map resultMap = await channel.invokeMethod('queryMessagesByMessageSeqs',{
+      'handle':handle,
+      'messageSeqs':messageSeqs,
+      'conversationID':conversationID,
+      'conversationType':ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMMessageQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageRepliedListQueriedResult> queryRepliedMessageList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryRepliedMessageList',{
+      'handle':handle,
+      'message':ZIMConverter.mZIMMessage(message),
+      'config':ZIMConverter.mZIMMessageRepliedListQueryConfig(config)
+    });
+    return ZIMConverter.oZIMMessageRepliedListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageSentResult> replyMessage(ZIMMessage message, ZIMMessage toOriginalMessage, ZIMMessageSendConfig config, ZIMMessageSendNotification? notification) async{
+    int? messageAttachedCallbackID;
+    if (notification?.onMessageAttached != null) {
+      messageAttachedCallbackID = ZIMCommonData.getSequence();
+      ZIMCommonData.zimMessageAttachedCallbackMap[messageAttachedCallbackID] =
+      notification!.onMessageAttached!;
+    }
+    Map resultMap = await channel.invokeMethod('replyMessage',{
+      'handle':handle,
+      'message':ZIMConverter.mZIMMessage(message),
+      'toOriginalMessage':ZIMConverter.mZIMMessage(toOriginalMessage),
+      'config':ZIMConverter.mZIMMessageSendConfig(config),
+    });
+    return ZIMConverter.oZIMMessageSentResult(resultMap);
   }
 
 

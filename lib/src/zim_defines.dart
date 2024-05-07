@@ -577,7 +577,8 @@ class ZIMMessageRevokeConfig {
 
 class ZIMMessageSendNotification {
   ZIMMessageAttachedCallback? onMessageAttached;
-  ZIMMessageSendNotification({this.onMessageAttached});
+  ZIMMediaUploadingProgress? onMediaUploadingProgress;
+  ZIMMessageSendNotification({this.onMessageAttached,this.onMediaUploadingProgress});
 }
 
 class ZIMMediaMessageSendNotification {
@@ -621,6 +622,7 @@ class ZIMUserFullInfo {
 class ZIMMessage {
   ZIMMessageType type = ZIMMessageType.unknown;
   int messageID = 0;
+  int messageSeq = 0;
   int localMessageID = 0;
   String senderUserID = "";
   String conversationID = "";
@@ -637,6 +639,8 @@ class ZIMMessage {
   bool isBroadcastMessage = false;
   bool isServerMessage = false;
   bool isMentionAll = false;
+  int rootRepliedCount = 0;
+  ZIMMessageRepliedInfo repliedInfo = ZIMMessageRepliedInfo();
   List<String> mentionedUserIds = [];
   List<ZIMMessageReaction> reactions = [];
   String cbInnerID = "";
@@ -780,6 +784,86 @@ class ZIMTipsMessage extends ZIMMessage {
   ZIMTipsMessageChangeInfo? changeInfo;
 }
 
+class ZIMMessageLiteInfo {
+  ZIMMessageType type = ZIMMessageType.unknown;
+}
+
+class ZIMTextMessageLiteInfo extends ZIMMessageLiteInfo{
+  String message = '';
+}
+
+class ZIMCustomMessageLiteInfo extends ZIMMessageLiteInfo{
+  String message = '';
+  int subType = 0;
+}
+
+class ZIMCombineMessageLiteInfo extends ZIMMessageLiteInfo{
+  String title = '';
+  String summary = '';
+}
+
+class ZIMRevokeMessageLiteInfo extends ZIMMessageLiteInfo{
+
+}
+
+class ZIMMediaMessageLiteInfo extends ZIMMessageLiteInfo{
+  int fileSize = 0;
+  String fileName = '';
+  String fileLocalPath = '';
+  String fileDownloadUrl = '';
+}
+
+class ZIMImageMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+  int originalImageWidth = 0;
+  int originalImageHeight = 0;
+
+  String thumbnailLocalPath = '';
+  String thumbnailDownloadUrl = '';
+  int thumbnailWidth = 0;
+  int thumbnailHeight = 0;
+
+  String largeImageLocalPath = '';
+  String largeImageDownloadUrl = '';
+  int largeImageWidth = 0;
+  int largeImageHeight = 0;
+}
+
+class ZIMFileMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+
+}
+
+class ZIMAudioMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+  int audioDuration = 0;
+}
+
+class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+  int videoDuration = 0;
+  String videoFirstFrameDownloadUrl = '';
+  String videoFirstFrameLocalPath = '';
+  int videoFirstFrameWidth = 0;
+  int videoFirstFrameHeight = 0;
+}
+
+class ZIMMessageRepliedInfo{
+  ZIMMessageLiteInfo messageInfo = ZIMMessageLiteInfo();
+  int messageID = 0;
+  int messageSeq = 0;
+  String senderUserID = '';
+  int sentTime = 0;
+}
+
+class ZIMMessageRootRepliedCountInfo{
+  int messageID = 0;
+  String conversationID = '';
+  ZIMConversationType conversationType = ZIMConversationType.unknown;
+  int count = 0;
+}
+
+class ZIMMessageRepliedListQueryConfig{
+  int nextFlag = 0;
+  int count = 0;
+}
+
 class ZIMConversation {
   String conversationID = '';
   String conversationName = '';
@@ -835,6 +919,7 @@ enum ZIMGroupApplicationState {
 
 class ZIMMessageMentionedInfo {
   int messageID = 0;
+  int messageSeq = 0;
   String fromUserID = '';
   ZIMMessageMentionedType type = ZIMMessageMentionedType.unknown;
 }
@@ -2865,4 +2950,10 @@ class ZIMSelfUserInfoQueriedResult {
   /// Own user information, rule data.
   ZIMSelfUserInfo selfUserInfo;
   ZIMSelfUserInfoQueriedResult({required this.selfUserInfo});
+}
+
+class ZIMMessageRepliedListQueriedResult {
+  List<ZIMMessage> messageList = [];
+  int nextFlag = 0;
+  bool isRootRepliedMessageDeleted = false;
 }
