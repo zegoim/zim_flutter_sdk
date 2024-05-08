@@ -41,5 +41,5 @@ android {
 }
 dependencies {
     // for other module visit
-    api 'im.zego:zim-private:2.15.2.2616'
+    api 'im.zego:zim:2.15.0'
 }
