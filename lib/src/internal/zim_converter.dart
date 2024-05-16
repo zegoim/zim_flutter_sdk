@@ -187,6 +187,10 @@ class ZIMConverter {
     if (conversation.lastMessage != null) {
       conversationMap['lastMessage'] = mZIMMessage(conversation.lastMessage!);
     }
+    if (conversation is ZIMGroupConversation){
+      conversationMap['mutedExpiredTime'] = conversation.mutedExpiredTime;
+      conversationMap['isDisabled'] = conversation.isDisabled;
+    }
     return conversationMap;
   }
 
