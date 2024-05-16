@@ -833,11 +833,20 @@ public class ZIMPluginConverter {
         if(resultMap == null) return null;
         ZIMConversation conversation;
         ZIMConversationType type = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(resultMap.get("type")));
-        if(type == ZIMConversationType.GROUP){
+        if (type == ZIMConversationType.GROUP) {
             conversation = new ZIMGroupConversation();
-            ((ZIMGroupConversation)conversation).mutedExpiredTime = (long) resultMap.get("mutedExpiredTime");
-            ((ZIMGroupConversation) conversation).isDisabled = (boolean) resultMap.get("isDisabled");
-        }else{
+            if (resultMap.containsKey("mutedExpiredTime") && resultMap.get("mutedExpiredTime") != null) {
+                ((ZIMGroupConversation) conversation).mutedExpiredTime = (long) resultMap.get("mutedExpiredTime");
+            } else {
+                ((ZIMGroupConversation) conversation).mutedExpiredTime = 0L;
+            }
+
+            if (resultMap.containsKey("isDisabled") && resultMap.get("isDisabled") != null) {
+                ((ZIMGroupConversation) conversation).isDisabled = (boolean) resultMap.get("isDisabled");
+            } else {
+                ((ZIMGroupConversation) conversation).isDisabled = false;
+            }
+        } else {
             conversation = new ZIMConversation();
         }
         conversation.conversationID = (String) resultMap.get("conversationID");
