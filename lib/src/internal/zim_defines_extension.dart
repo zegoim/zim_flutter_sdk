@@ -339,7 +339,8 @@ extension ZIMConversationTypeExtension on ZIMConversationType {
     1: ZIMConversationType.room,
     2: ZIMConversationType.group,
   };
-  int get value => valueMap[this] ?? -1;
+  get value => valueMap[this] ?? -1;
+  static getEnum(int? value) => mapValue[value] ?? ZIMConversationType.unknown;
 }
 
 extension ZIMMessageDeleteTypeExtension on ZIMMessageDeleteType {

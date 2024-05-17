@@ -795,12 +795,25 @@ class ZIMConversation {
   bool isPinned = false;
   String draft = '';
   List<ZIMMessageMentionedInfo> mentionedInfoList = [];
-  ZIMConversation();
+  List<int> marks = <int>[];
 }
 
 class ZIMGroupConversation extends ZIMConversation {
   int mutedExpiredTime = 0;
   bool isDisabled = false;
+}
+
+class ZIMConversationFilterOption {
+  List<int> marks = <int>[];
+}
+
+class ZIMConversationBaseInfo {
+  String conversationID = '';
+  ZIMConversationType conversationType = ZIMConversationType.unknown;
+}
+
+class ZIMConversationTotalUnreadCountQueryConfig {
+  List<int> marks = <int>[];
 }
 
 enum ZIMMessageMentionedType {
@@ -2866,4 +2879,14 @@ class ZIMSelfUserInfoQueriedResult {
   /// Own user information, rule data.
   ZIMSelfUserInfo selfUserInfo;
   ZIMSelfUserInfoQueriedResult({required this.selfUserInfo});
+}
+
+class ZIMConversationMarkSetResult {
+  List<ZIMConversationBaseInfo> failedInfos;
+  ZIMConversationMarkSetResult({required this.failedInfos});
+}
+
+class ZIMConversationTotalUnreadCountQueriedResult {
+  int unreadCount;
+  ZIMConversationTotalUnreadCountQueriedResult({required this.unreadCount});
 }
