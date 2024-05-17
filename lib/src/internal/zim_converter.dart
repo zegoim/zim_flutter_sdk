@@ -227,13 +227,13 @@ class ZIMConverter {
       conversation.mentionedInfoList.add(info);
     }
     conversation.draft = resultMap['draft'] ?? '';
-    conversation.marks = resultMap['marks'];
+    conversation.marks = List<int>.from(resultMap['marks']);
     return conversation;
   }
 
   static ZIMConversationFilterOption oZIMConversationFilterOption(Map map){
     ZIMConversationFilterOption option = ZIMConversationFilterOption();
-    option.marks = map['marks'];
+    option.marks = List<int>.from(map['marks']);
     return option;
   }
   static Map? mZIMConversationFilterOption(ZIMConversationFilterOption? option){
