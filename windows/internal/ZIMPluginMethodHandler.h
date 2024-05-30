@@ -1,292 +1,175 @@
 ﻿#pragma once
 
-#include <flutter/method_channel.h>
 #include <flutter/encodable_value.h>
+#include <flutter/method_channel.h>
 
 #include <ZIM.h>
 using namespace zim;
 
-class ZIMPluginMethodHandler 
-{
-public:
-    ~ZIMPluginMethodHandler(){}
+#define CheckZIMInstanceExistAndObtainZIM()                                                        \
+    auto handle = std::get<std::string>(argument[FTValue("handle")]);                              \
+    auto zim = this -> engineMap[handle];                                                          \
+    if (!zim) {                                                                                    \
+        result->Error("-1", "no native instance");                                                 \
+        return;                                                                                    \
+    }
 
-    static ZIMPluginMethodHandler & getInstance()
-    {
+#define GetParamsFromArgument(type, param) std::get<##type>(argument[FTValue(#param)]);\
+
+class ZIMPluginMethodHandler {
+  public:
+    ~ZIMPluginMethodHandler() {}
+
+    typedef flutter::EncodableMap FArgument;
+    typedef std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>> FResult;
+
+    static ZIMPluginMethodHandler &getInstance() {
         static ZIMPluginMethodHandler m_instance;
         return m_instance;
     }
 
-public:
-    void getVersion(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void create(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void destroy(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setLogConfig(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setAdvancedConfig(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setCacheConfig(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setGeofencingConfig(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void login(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void logout(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void uploadLog(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void renewToken(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateUserName(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateUserAvatarUrl(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateUserExtendedData(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateUserOfflinePushRule(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void querySelfUserInfo(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryUsersInfo(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryConversationList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryConversation(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryConversationPinnedList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateConversationPinnedState(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void deleteConversation(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void deleteAllConversations(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void clearConversationUnreadMessageCount(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void clearConversationTotalUnreadMessageCount(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setConversationNotificationStatus(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void sendConversationMessageReceiptRead(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void setConversationDraft(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void sendMessage(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void insertMessageToLocalDB(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void updateMessageLocalExtendedData(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void sendPeerMessage(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void sendRoomMessage(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void sendGroupMessage(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateGroupJoinMode(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateGroupInviteMode(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateGroupBeInviteMode(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void sendMediaMessage(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void downloadMediaFile(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryHistoryMessage(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void deleteAllMessage(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void deleteMessages(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void deleteAllConversationMessages(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void sendMessageReceiptsRead(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryMessageReceiptsInfo(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupMessageReceiptReadMemberList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupMessageReceiptUnreadMemberList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchLocalMessages(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchGlobalLocalMessages(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchLocalConversations(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void revokeMessage(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void enterRoom(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void createRoom(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void createRoomWithConfig(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void joinRoom(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void leaveRoom(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void leaveAllRoom(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryRoomMemberList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryRoomMembers(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryRoomOnlineMemberCount(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setRoomAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void deleteRoomAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void beginRoomAttributesBatchOperation(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void endRoomAttributesBatchOperation(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryRoomAllAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setRoomMembersAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryRoomMembersAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryRoomMemberAttributesList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void createGroup(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void createGroupWithConfig(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void joinGroup(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void dismissGroup(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void leaveGroup(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void inviteUsersIntoGroup(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void kickGroupMembers(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void transferGroupOwner(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateGroupName(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateGroupAvatarUrl(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void updateGroupNotice(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupInfo(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setGroupAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void deleteGroupAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupAllAttributes(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setGroupMemberRole(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void setGroupMemberNickname(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupMemberInfo(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupMemberList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupMemberCount(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchLocalGroups(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void searchLocalGroupMembers(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void muteGroup(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void muteGroupMemberList(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryGroupMemberMutedList(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callInvite(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callingInvite(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callQuit(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callEnd(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);              
-    void callCancel(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callAccept(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void callReject(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void callJoin(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryCallList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);  
-    void addMessageReaction(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void deleteMessageReaction(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryMessageReactionUserList(flutter::EncodableMap& argument,
-        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void importLocalMessages(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void exportLocalMessages(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void addUsersToBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void removeUsersFromBlacklist(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void queryBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void checkUserIsInBlackList(flutter::EncodableMap& argument,std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void addFriend(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void sendFriendApplication(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void deleteFriends(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void checkFriendsRelation(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void updateFriendAlias(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void updateFriendAttributes(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void queryFriendsInfo(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void acceptFriendApplication(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void rejectFriendApplication(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void queryFriendList(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void queryFriendApplicationList(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void queryCombineMessageDetail(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-    void searchLocalFriends(flutter::EncodableMap& argument,
-     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void clearLocalFileCache(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void queryLocalFileCache(flutter::EncodableMap& argument,
-		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void sendGroupJoinApplication(flutter::EncodableMap& argument,
-							std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void acceptGroupJoinApplication(flutter::EncodableMap& argument,
-								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void rejectGroupJoinApplication(flutter::EncodableMap& argument,
-								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void sendGroupInviteApplications(flutter::EncodableMap& argument,
-								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void acceptGroupInviteApplication(flutter::EncodableMap& argument,
-								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void rejectGroupInviteApplication(flutter::EncodableMap& argument,
-								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-	void queryGroupApplicationList(flutter::EncodableMap& argument,
-								  std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+  public:
+    void getVersion(FArgument &argument, FResult result);
+    void create(FArgument &argument, FResult result);
+    void destroy(FArgument &argument, FResult result);
+    void setLogConfig(FArgument &argument, FResult result);
+    void setAdvancedConfig(FArgument &argument, FResult result);
+    void setCacheConfig(FArgument &argument, FResult result);
+    void setGeofencingConfig(FArgument &argument, FResult result);
+    void login(FArgument &argument, FResult result);
+    void logout(FArgument &argument, FResult result);
+    void uploadLog(FArgument &argument, FResult result);
+    void renewToken(FArgument &argument, FResult result);
+    void updateUserName(FArgument &argument, FResult result);
+    void updateUserAvatarUrl(FArgument &argument, FResult result);
+    void updateUserExtendedData(FArgument &argument, FResult result);
+    void updateUserOfflinePushRule(FArgument &argument, FResult result);
+    void querySelfUserInfo(FArgument &argument, FResult result);
+    void queryUsersInfo(FArgument &argument, FResult result);
+    void queryConversationList(FArgument &argument, FResult result);
+    void queryConversation(FArgument &argument, FResult result);
+    void queryConversationPinnedList(FArgument &argument, FResult result);
+    void updateConversationPinnedState(FArgument &argument, FResult result);
+    void deleteConversation(FArgument &argument, FResult result);
+    void deleteAllConversations(FArgument &argument, FResult result);
+    void clearConversationUnreadMessageCount(FArgument &argument, FResult result);
+    void clearConversationTotalUnreadMessageCount(FArgument &argument, FResult result);
+    void setConversationNotificationStatus(FArgument &argument, FResult result);
+    void sendConversationMessageReceiptRead(FArgument &argument, FResult result);
+    void setConversationDraft(FArgument &argument, FResult result);
+    void setConversationMark(FArgument &argument, FResult result);
+    void queryConversationTotalUnreadCount(FArgument &argument, FResult result);
+    void sendMessage(FArgument &argument, FResult result);
+    void insertMessageToLocalDB(FArgument &argument, FResult result);
+    void updateMessageLocalExtendedData(FArgument &argument, FResult result);
+    void sendPeerMessage(FArgument &argument, FResult result);
+    void sendRoomMessage(FArgument &argument, FResult result);
+    void sendGroupMessage(FArgument &argument, FResult result);
+    void updateGroupJoinMode(FArgument &argument, FResult result);
+    void updateGroupInviteMode(FArgument &argument, FResult result);
+    void updateGroupBeInviteMode(FArgument &argument, FResult result);
+    void sendMediaMessage(FArgument &argument, FResult result);
+    void downloadMediaFile(FArgument &argument, FResult result);
+    void queryHistoryMessage(FArgument &argument, FResult result);
+    void deleteAllMessage(FArgument &argument, FResult result);
+    void deleteMessages(FArgument &argument, FResult result);
+    void deleteAllConversationMessages(FArgument &argument, FResult result);
+    void sendMessageReceiptsRead(FArgument &argument, FResult result);
+    void queryMessageReceiptsInfo(FArgument &argument, FResult result);
+    void queryGroupMessageReceiptReadMemberList(FArgument &argument, FResult result);
+    void queryGroupMessageReceiptUnreadMemberList(FArgument &argument, FResult result);
+    void searchLocalMessages(FArgument &argument, FResult result);
+    void searchGlobalLocalMessages(FArgument &argument, FResult result);
+    void searchLocalConversations(FArgument &argument, FResult result);
+    void revokeMessage(FArgument &argument, FResult result);
+    void enterRoom(FArgument &argument, FResult result);
+    void createRoom(FArgument &argument, FResult result);
+    void createRoomWithConfig(FArgument &argument, FResult result);
+    void joinRoom(FArgument &argument, FResult result);
+    void leaveRoom(FArgument &argument, FResult result);
+    void leaveAllRoom(FArgument &argument, FResult result);
+    void queryRoomMemberList(FArgument &argument, FResult result);
+    void queryRoomMembers(FArgument &argument, FResult result);
+    void queryRoomOnlineMemberCount(FArgument &argument, FResult result);
+    void setRoomAttributes(FArgument &argument, FResult result);
+    void deleteRoomAttributes(FArgument &argument, FResult result);
+    void beginRoomAttributesBatchOperation(FArgument &argument, FResult result);
+    void endRoomAttributesBatchOperation(FArgument &argument, FResult result);
+    void queryRoomAllAttributes(FArgument &argument, FResult result);
+    void setRoomMembersAttributes(FArgument &argument, FResult result);
+    void queryRoomMembersAttributes(FArgument &argument, FResult result);
+    void queryRoomMemberAttributesList(FArgument &argument, FResult result);
+    void createGroup(FArgument &argument, FResult result);
+    void createGroupWithConfig(FArgument &argument, FResult result);
+    void joinGroup(FArgument &argument, FResult result);
+    void dismissGroup(FArgument &argument, FResult result);
+    void leaveGroup(FArgument &argument, FResult result);
+    void inviteUsersIntoGroup(FArgument &argument, FResult result);
+    void kickGroupMembers(FArgument &argument, FResult result);
+    void transferGroupOwner(FArgument &argument, FResult result);
+    void updateGroupName(FArgument &argument, FResult result);
+    void updateGroupAvatarUrl(FArgument &argument, FResult result);
+    void updateGroupNotice(FArgument &argument, FResult result);
+    void queryGroupInfo(FArgument &argument, FResult result);
+    void setGroupAttributes(FArgument &argument, FResult result);
+    void deleteGroupAttributes(FArgument &argument, FResult result);
+    void queryGroupAttributes(FArgument &argument, FResult result);
+    void queryGroupAllAttributes(FArgument &argument, FResult result);
+    void setGroupMemberRole(FArgument &argument, FResult result);
+    void setGroupMemberNickname(FArgument &argument, FResult result);
+    void queryGroupMemberInfo(FArgument &argument, FResult result);
+    void queryGroupList(FArgument &argument, FResult result);
+    void queryGroupMemberList(FArgument &argument, FResult result);
+    void queryGroupMemberCount(FArgument &argument, FResult result);
+    void searchLocalGroups(FArgument &argument, FResult result);
+    void searchLocalGroupMembers(FArgument &argument, FResult result);
+    void muteGroup(FArgument &argument, FResult result);
+    void muteGroupMemberList(FArgument &argument, FResult result);
+    void queryGroupMemberMutedList(FArgument &argument, FResult result);
+    void callInvite(FArgument &argument, FResult result);
+    void callingInvite(FArgument &argument, FResult result);
+    void callQuit(FArgument &argument, FResult result);
+    void callEnd(FArgument &argument, FResult result);
+    void callCancel(FArgument &argument, FResult result);
+    void callAccept(FArgument &argument, FResult result);
+    void callReject(FArgument &argument, FResult result);
+    void callJoin(FArgument &argument, FResult result);
+    void queryCallList(FArgument &argument, FResult result);
+    void addMessageReaction(FArgument &argument, FResult result);
+    void deleteMessageReaction(FArgument &argument, FResult result);
+    void queryMessageReactionUserList(FArgument &argument, FResult result);
+    void importLocalMessages(FArgument &argument, FResult result);
+    void exportLocalMessages(FArgument &argument, FResult result);
+    void addUsersToBlacklist(FArgument &argument, FResult result);
+    void removeUsersFromBlacklist(FArgument &argument, FResult result);
+    void queryBlackList(FArgument &argument, FResult result);
+    void checkUserIsInBlackList(FArgument &argument, FResult result);
+    void addFriend(FArgument &argument, FResult result);
+    void sendFriendApplication(FArgument &argument, FResult result);
+    void deleteFriends(FArgument &argument, FResult result);
+    void checkFriendsRelation(FArgument &argument, FResult result);
+    void updateFriendAlias(FArgument &argument, FResult result);
+    void updateFriendAttributes(FArgument &argument, FResult result);
+    void queryFriendsInfo(FArgument &argument, FResult result);
+    void acceptFriendApplication(FArgument &argument, FResult result);
+    void rejectFriendApplication(FArgument &argument, FResult result);
+    void queryFriendList(FArgument &argument, FResult result);
+    void queryFriendApplicationList(FArgument &argument, FResult result);
+    void queryCombineMessageDetail(FArgument &argument, FResult result);
+    void searchLocalFriends(FArgument &argument, FResult result);
+    void clearLocalFileCache(FArgument &argument, FResult result);
+    void queryLocalFileCache(FArgument &argument, FResult result);
+    void sendGroupJoinApplication(FArgument &argument, FResult result);
+    void acceptGroupJoinApplication(FArgument &argument, FResult result);
+    void rejectGroupJoinApplication(FArgument &argument, FResult result);
+    void sendGroupInviteApplications(FArgument &argument, FResult result);
+    void acceptGroupInviteApplication(FArgument &argument, FResult result);
+    void rejectGroupInviteApplication(FArgument &argument, FResult result);
+    void queryGroupApplicationList(FArgument &argument, FResult result);
 
-
-
-private:
+  private:
     ZIMPluginMethodHandler() = default;
-private:
-    std::unordered_map<std::string, ZIM*> engineMap;
+
+  private:
+    std::unordered_map<std::string, ZIM *> engineMap;
 };

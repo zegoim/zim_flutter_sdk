@@ -314,5 +314,16 @@ public:
     static std::vector<int> cnvFTArrayToStlVectorIntValue(FTArray ftArray);
     static std::vector<std::string> cnvFTArrayToStlVector(FTArray ftArray);
     static std::vector<ZIMGroupMemberRole> cnvFTArrayToStlVectorInt(FTArray ftArray);
-    static FTArray cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo>& infoList);
+    static FTArray
+    cnvZIMMessageMentionedInfoToMap(const std::vector<ZIMMessageMentionedInfo> &infoList);
+
+    static ZIMConversationBaseInfo oZIMConversationBaseInfo(FTMap ftmap);
+    static std::vector<ZIMConversationBaseInfo> oZIMConversationBaseInfoList(FTArray ftArray);
+    static FTMap mZIMConversationBaseInfo(const ZIMConversationBaseInfo& info);
+    static FTArray aZIMConversationBaseInfoList(const std::vector<ZIMConversationBaseInfo> &infos);
+
+    static ZIMConversationFilterOption oZIMConversationFilterOption(FTMap ftmap);
+
+    static ZIMConversationTotalUnreadCountQueryConfig
+    oZIMConversationTotalUnreadCountQueryConfig(FTMap ftmap);
 };
