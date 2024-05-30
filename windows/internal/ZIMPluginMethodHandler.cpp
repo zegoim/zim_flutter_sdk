@@ -509,7 +509,7 @@ void ZIMPluginMethodHandler::deleteConversation(FArgument &argument, FResult res
                                     result->Success(retMap);
                                 } else {
                                     result->Error(std::to_string(errorInfo.code),
-                                                           errorInfo.message);
+                                                  errorInfo.message);
                                 }
                             });
 }
@@ -709,7 +709,8 @@ void ZIMPluginMethodHandler::queryConversationTotalUnreadCount(FArgument &argume
         config, [=](unsigned int totalUnreadCount, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
-                retMap[FTValue("totalUnreadCount")] = FTValue(totalUnreadCount);
+                retMap[FTValue("totalUnreadCount")] =
+                    FTValue(static_cast<int32_t>(totalUnreadCount));
 
                 result->Success(retMap);
             } else {
@@ -742,18 +743,18 @@ void ZIMPluginMethodHandler::revokeMessage(FArgument &argument, FResult result) 
     }
     auto revokeExtendedData = std::get<std::string>(configMap[FTValue("revokeExtendedData")]);
     config.revokeExtendedData = revokeExtendedData;
-    zim->revokeMessage(
-        messagePtr, config,
-        [=](const std::shared_ptr<ZIMMessage> &message, const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
-                retMap[FTValue("message")] = messageMap;
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+    zim->revokeMessage(messagePtr, config,
+                       [=](const std::shared_ptr<ZIMMessage> &message, const ZIMError &errorInfo) {
+                           if (errorInfo.code == 0) {
+                               FTMap retMap;
+                               auto messageMap =
+                                   ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
+                               retMap[FTValue("message")] = messageMap;
+                               result->Success(retMap);
+                           } else {
+                               result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                           }
+                       });
 }
 
 void ZIMPluginMethodHandler::insertMessageToLocalDB(FArgument &argument, FResult result) {
@@ -1197,8 +1198,7 @@ void ZIMPluginMethodHandler::deleteAllMessage(FArgument &argument, FResult resul
 
                                   result->Success(retMap);
                               } else {
-                                  result->Error(std::to_string(errorInfo.code),
-                                                         errorInfo.message);
+                                  result->Error(std::to_string(errorInfo.code), errorInfo.message);
                               }
                           });
 }
@@ -1222,20 +1222,20 @@ void ZIMPluginMethodHandler::deleteMessages(FArgument &argument, FResult result)
     config.isAlsoDeleteServerMessage =
         std::get<bool>(configMap[FTValue("isAlsoDeleteServerMessage")]);
 
-    zim->deleteMessages(
-        messageObjectList, conversationID, (ZIMConversationType)conversationType, config,
-        [=](const std::string &conversationID, ZIMConversationType conversationType,
-            const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                retMap[FTValue("conversationID")] = FTValue(conversationID);
-                retMap[FTValue("conversationType")] = FTValue(conversationType);
+    zim->deleteMessages(messageObjectList, conversationID, (ZIMConversationType)conversationType,
+                        config,
+                        [=](const std::string &conversationID, ZIMConversationType conversationType,
+                            const ZIMError &errorInfo) {
+                            if (errorInfo.code == 0) {
+                                FTMap retMap;
+                                retMap[FTValue("conversationID")] = FTValue(conversationID);
+                                retMap[FTValue("conversationType")] = FTValue(conversationType);
 
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+                                result->Success(retMap);
+                            } else {
+                                result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                            }
+                        });
 }
 
 void ZIMPluginMethodHandler::deleteAllConversationMessages(FArgument &argument, FResult result) {
@@ -1507,19 +1507,19 @@ void ZIMPluginMethodHandler::createRoomWithConfig(FArgument &argument, FResult r
     auto roomAdvancedConfig = ZIMPluginConverter::cnvZIMRoomAdvancedConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
 
-    zim->createRoom(
-        roomInfo, roomAdvancedConfig,
-        [=](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                auto roomFullInfoMap = ZIMPluginConverter::cnvZIMRoomFullInfoToMap(roomInfo);
-                retMap[FTValue("roomInfo")] = roomFullInfoMap;
+    zim->createRoom(roomInfo, roomAdvancedConfig,
+                    [=](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
+                        if (errorInfo.code == 0) {
+                            FTMap retMap;
+                            auto roomFullInfoMap =
+                                ZIMPluginConverter::cnvZIMRoomFullInfoToMap(roomInfo);
+                            retMap[FTValue("roomInfo")] = roomFullInfoMap;
 
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+                            result->Success(retMap);
+                        } else {
+                            result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                        }
+                    });
 }
 
 void ZIMPluginMethodHandler::enterRoom(FArgument &argument, FResult result) {
@@ -1536,19 +1536,19 @@ void ZIMPluginMethodHandler::enterRoom(FArgument &argument, FResult result) {
     auto roomAdvancedConfig = ZIMPluginConverter::cnvZIMRoomAdvancedConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
 
-    zim->enterRoom(
-        roomInfo, roomAdvancedConfig,
-        [=](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                auto roomFullInfoMap = ZIMPluginConverter::cnvZIMRoomFullInfoToMap(roomInfo);
-                retMap[FTValue("roomInfo")] = roomFullInfoMap;
+    zim->enterRoom(roomInfo, roomAdvancedConfig,
+                   [=](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
+                       if (errorInfo.code == 0) {
+                           FTMap retMap;
+                           auto roomFullInfoMap =
+                               ZIMPluginConverter::cnvZIMRoomFullInfoToMap(roomInfo);
+                           retMap[FTValue("roomInfo")] = roomFullInfoMap;
 
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+                           result->Success(retMap);
+                       } else {
+                           result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                       }
+                   });
 }
 
 void ZIMPluginMethodHandler::joinRoom(FArgument &argument, FResult result) {
@@ -1718,21 +1718,21 @@ void ZIMPluginMethodHandler::setRoomAttributes(FArgument &argument, FResult resu
     auto roomAttributesSetConfig = ZIMPluginConverter::cnvZIMRoomAttributesSetConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
 
-    zim->setRoomAttributes(
-        roomAttributes, roomID, &roomAttributesSetConfig,
-        [=](const std::string &roomID, const std::vector<std::string> &errorKeyList,
-            const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                retMap[FTValue("roomID")] = FTValue(roomID);
-                retMap[FTValue("errorKeys")] =
-                    ZIMPluginConverter::cnvStlVectorToFTArray(errorKeyList);
+    zim->setRoomAttributes(roomAttributes, roomID, &roomAttributesSetConfig,
+                           [=](const std::string &roomID,
+                               const std::vector<std::string> &errorKeyList,
+                               const ZIMError &errorInfo) {
+                               if (errorInfo.code == 0) {
+                                   FTMap retMap;
+                                   retMap[FTValue("roomID")] = FTValue(roomID);
+                                   retMap[FTValue("errorKeys")] =
+                                       ZIMPluginConverter::cnvStlVectorToFTArray(errorKeyList);
 
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+                                   result->Success(retMap);
+                               } else {
+                                   result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                               }
+                           });
 }
 
 void ZIMPluginMethodHandler::deleteRoomAttributes(FArgument &argument, FResult result) {
@@ -2214,7 +2214,7 @@ void ZIMPluginMethodHandler::updateGroupAvatarUrl(FArgument &argument, FResult r
                                       result->Success(retMap);
                                   } else {
                                       result->Error(std::to_string(errorInfo.code),
-                                                             errorInfo.message);
+                                                    errorInfo.message);
                                   }
                               });
 }
@@ -2487,7 +2487,7 @@ void ZIMPluginMethodHandler::setGroupMemberRole(FArgument &argument, FResult res
                                     result->Success(retMap);
                                 } else {
                                     result->Error(std::to_string(errorInfo.code),
-                                                           errorInfo.message);
+                                                  errorInfo.message);
                                 }
                             });
 }
@@ -2517,7 +2517,7 @@ void ZIMPluginMethodHandler::setGroupMemberNickname(FArgument &argument, FResult
                                         result->Success(retMap);
                                     } else {
                                         result->Error(std::to_string(errorInfo.code),
-                                                               errorInfo.message);
+                                                      errorInfo.message);
                                     }
                                 });
 }
@@ -2546,7 +2546,7 @@ void ZIMPluginMethodHandler::queryGroupMemberInfo(FArgument &argument, FResult r
                                       result->Success(retMap);
                                   } else {
                                       result->Error(std::to_string(errorInfo.code),
-                                                             errorInfo.message);
+                                                    errorInfo.message);
                                   }
                               });
 }
@@ -2696,20 +2696,20 @@ void ZIMPluginMethodHandler::muteGroup(FArgument &argument, FResult result) {
     bool isMute = std::get<bool>(argument[FTValue("isMute")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMuteConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
-    zim->muteGroup(
-        isMute, groupID, config,
-        [=](const std::string &groupID, bool isMute, const ZIMGroupMuteInfo &info,
-            const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                retMap[FTValue("isMute")] = FTValue(isMute);
-                retMap[FTValue("groupID")] = FTValue(groupID);
-                retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(info);
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+    zim->muteGroup(isMute, groupID, config,
+                   [=](const std::string &groupID, bool isMute, const ZIMGroupMuteInfo &info,
+                       const ZIMError &errorInfo) {
+                       if (errorInfo.code == 0) {
+                           FTMap retMap;
+                           retMap[FTValue("isMute")] = FTValue(isMute);
+                           retMap[FTValue("groupID")] = FTValue(groupID);
+                           retMap[FTValue("info")] =
+                               ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(info);
+                           result->Success(retMap);
+                       } else {
+                           result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                       }
+                   });
 }
 
 void ZIMPluginMethodHandler::sendGroupJoinApplication(FArgument &argument, FResult result) {
@@ -2972,25 +2972,25 @@ void ZIMPluginMethodHandler::muteGroupMemberList(FArgument &argument, FResult re
     bool isMute = std::get<bool>(argument[FTValue("isMute")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMemberMuteConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
-    zim->muteGroupMembers(
-        isMute, userIDsVec, groupID, config,
-        [=](const std::string &groupID, bool isMute, unsigned int duration,
-            const std::vector<std::string> &mutedMemberIDs,
-            const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                retMap[FTValue("isMute")] = FTValue(isMute);
-                retMap[FTValue("groupID")] = FTValue(groupID);
-                retMap[FTValue("duration")] = FTValue((int32_t)duration);
-                retMap[FTValue("mutedMemberIDs")] =
-                    ZIMPluginConverter::cnvStlVectorToFTArray(mutedMemberIDs);
-                retMap[FTValue("errorUserList")] =
-                    ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+    zim->muteGroupMembers(isMute, userIDsVec, groupID, config,
+                          [=](const std::string &groupID, bool isMute, unsigned int duration,
+                              const std::vector<std::string> &mutedMemberIDs,
+                              const std::vector<ZIMErrorUserInfo> &errorUserList,
+                              const ZIMError &errorInfo) {
+                              if (errorInfo.code == 0) {
+                                  FTMap retMap;
+                                  retMap[FTValue("isMute")] = FTValue(isMute);
+                                  retMap[FTValue("groupID")] = FTValue(groupID);
+                                  retMap[FTValue("duration")] = FTValue((int32_t)duration);
+                                  retMap[FTValue("mutedMemberIDs")] =
+                                      ZIMPluginConverter::cnvStlVectorToFTArray(mutedMemberIDs);
+                                  retMap[FTValue("errorUserList")] =
+                                      ZIMPluginConverter::cnvZIMErrorUserListToArray(errorUserList);
+                                  result->Success(retMap);
+                              } else {
+                                  result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                              }
+                          });
 }
 
 void ZIMPluginMethodHandler::queryGroupMemberMutedList(FArgument &argument, FResult result) {
@@ -3058,8 +3058,7 @@ void ZIMPluginMethodHandler::callInvite(FArgument &argument, FResult result) {
 
                             result->Success(retMap);
                         } else {
-                            result->Error(std::to_string(errorInfo.code),
-                                                   errorInfo.message);
+                            result->Error(std::to_string(errorInfo.code), errorInfo.message);
                         }
                     });
 }
@@ -3099,8 +3098,7 @@ void ZIMPluginMethodHandler::callingInvite(FArgument &argument, FResult result) 
 
                                result->Success(retMap);
                            } else {
-                               result->Error(std::to_string(errorInfo.code),
-                                                      errorInfo.message);
+                               result->Error(std::to_string(errorInfo.code), errorInfo.message);
                            }
                        });
 }
@@ -3218,8 +3216,7 @@ void ZIMPluginMethodHandler::callCancel(FArgument &argument, FResult result) {
 
                             result->Success(retMap);
                         } else {
-                            result->Error(std::to_string(errorInfo.code),
-                                                   errorInfo.message);
+                            result->Error(std::to_string(errorInfo.code), errorInfo.message);
                         }
                     });
 }
@@ -3363,11 +3360,11 @@ void ZIMPluginMethodHandler::addMessageReaction(FArgument &argument, FResult res
                                     FTMap retMap;
                                     retMap[FTValue("reaction")] =
                                         ZIMPluginConverter::cnvZIMMessageReactionToMap(reaction);
-                                    
+
                                     result->Success(retMap);
                                 } else {
                                     result->Error(std::to_string(errorInfo.code),
-                                                           errorInfo.message);
+                                                  errorInfo.message);
                                 }
                             });
 }
@@ -3391,7 +3388,7 @@ void ZIMPluginMethodHandler::deleteMessageReaction(FArgument &argument, FResult 
                                        result->Success(retMap);
                                    } else {
                                        result->Error(std::to_string(errorInfo.code),
-                                                              errorInfo.message);
+                                                     errorInfo.message);
                                    }
                                });
 }
@@ -3422,7 +3419,7 @@ void ZIMPluginMethodHandler::queryMessageReactionUserList(FArgument &argument, F
                 retMap[FTValue("reactionType")] = FTValue(reactionType);
                 retMap[FTValue("nextFlag")] = FTValue((int64_t)nextFlag);
                 retMap[FTValue("totalCount")] = FTValue((int32_t)totalCount);
-                
+
                 result->Success(retMap);
             } else {
                 result->Error(std::to_string(errorInfo.code), errorInfo.message);
@@ -3671,17 +3668,17 @@ void ZIMPluginMethodHandler::updateFriendAlias(FArgument &argument, FResult resu
     }
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto friendAlias = std::get<std::string>(argument[FTValue("friendAlias")]);
-    zim->updateFriendAlias(
-        friendAlias, userID, [=](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                retMap[FTValue("friendInfo")] =
-                    ZIMPluginConverter::cnvZIMFriendInfoToMap(friendInfo);
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+    zim->updateFriendAlias(friendAlias, userID,
+                           [=](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
+                               if (errorInfo.code == 0) {
+                                   FTMap retMap;
+                                   retMap[FTValue("friendInfo")] =
+                                       ZIMPluginConverter::cnvZIMFriendInfoToMap(friendInfo);
+                                   result->Success(retMap);
+                               } else {
+                                   result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                               }
+                           });
 }
 
 void ZIMPluginMethodHandler::updateFriendAttributes(FArgument &argument, FResult result) {
