@@ -63,10 +63,24 @@ public class ZIMPluginConverter {
     static public HashMap<String,Object> mZIMMessageSentStatusChangInfo(ZIMMessageSentStatusChangeInfo messageSentStatusChangeInfo){
         HashMap<String,Object> messageSentStatusChangeInfoMap = new HashMap<>();
         messageSentStatusChangeInfoMap.put("status",messageSentStatusChangeInfo.status.value());
-
         messageSentStatusChangeInfoMap.put("message", mZIMMessage(messageSentStatusChangeInfo.message));
         messageSentStatusChangeInfoMap.put("reason", messageSentStatusChangeInfo.reason);
         return messageSentStatusChangeInfoMap;
+    }
+
+    static public HashMap<String, Object> mZIMConversationBaseInfo(ZIMConversationBaseInfo baseInfo) {
+        HashMap<String, Object> conversationMap = new HashMap<>();
+        conversationMap.put("conversationID",conversation.conversationID);
+        conversationMap.put("conversationType",conversation.conversationType.value());
+        return conversationMap;
+    }
+
+    static public ArrayList<HashMap<String,Object>> mZIMConversationBaseInfoList(ArrayList<ZIMConversationBaseInfo> conversationList){
+        ArrayList<HashMap<String,Object>> conversationBasicList = new ArrayList<>();
+        for (ZIMConversationBaseInfo conversation: conversationList) {
+            conversationBasicList.add(mZIMConversationBaseInfo(conversation));
+        }
+        return conversationBasicList;
     }
 
     static public HashMap<String,Object> mZIMConversation(ZIMConversation conversation){
@@ -827,6 +841,58 @@ public class ZIMPluginConverter {
         queryConfig.nextConversation = oZIMConversation(ZIMPluginCommonTools.safeGetHashMap(resultMap.get("nextConversation")));
 
         return queryConfig;
+    }
+
+    static public ZIMConversationFilterOption oZIMConversationFilterOption(HashMap<String,Object> resultMap) {
+        ZIMConversationFilterOption option = new ZIMConversationFilterOption();
+        Object optionValue = resultMap.get("option");
+
+        if (optionValue instanceof ArrayList) {
+            ArrayList<?> list = (ArrayList<?>) optionValue;
+            if (list.stream().allMatch(Integer.class::isInstance)) {
+                option.marks = (ArrayList<Integer>) list;
+            } else {
+                throw new IllegalArgumentException("The 'option' value is not an ArrayList of Integers.");
+            }
+        } else {
+            throw new IllegalArgumentException("The 'option' key does not map to an ArrayList.");
+        }
+
+        return option;
+    }
+
+    static public ZIMConversationTotalUnreadCountQueryConfig oZIMConversationTotalUnreadCountQueryConfig(HashMap<String,Object> resultMap) {
+        ZIMConversationTotalUnreadCountQueryConfig config = new ZIMConversationTotalUnreadCountQueryConfig();
+        Object configValue = resultMap.get("config");
+
+        if (configValue instanceof ArrayList) {
+            ArrayList<?> list = (ArrayList<?>) configValue;
+            if (list.stream().allMatch(Integer.class::isInstance)) {
+                config.marks = (ArrayList<Integer>) list;
+            } else {
+                throw new IllegalArgumentException("The 'config' value is not an ArrayList of Integers.");
+            }
+        } else {
+            throw new IllegalArgumentException("The 'config' key does not map to an ArrayList.");
+        }
+
+        return config;
+    }
+
+    static public ZIMConversationBaseInfo oZIMConversationBaseInfo(HashMap<String,Object> resultMap) {
+        if(resultMap == null) return null;
+        ZIMConversationBaseInfo conversation = new ZIMConversationBaseInfo();
+        conversation.conversationID = (String) resultMap.get("conversationID");
+        conversation.conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(resultMap.get("conversationType")));
+        return conversation;
+    }
+
+    static public ArrayList<ZIMConversationBaseInfo> oZIMConversationBaseInfoList(ArrayList<HashMap<String,Object>> basicList){
+        ArrayList<ZIMConversationBaseInfo> convList = new ArrayList<>();
+        for (HashMap<String,Object> convMap : basicList) {
+                convList.add(oZIMConversationBaseInfo(convMap));
+        }
+        return convList;
     }
 
     static public ZIMConversation oZIMConversation(HashMap<String,Object> resultMap){
