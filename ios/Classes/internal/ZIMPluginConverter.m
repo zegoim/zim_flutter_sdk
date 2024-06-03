@@ -192,7 +192,15 @@
     if(conversationDic == nil || conversationDic == NULL || [conversationDic isEqual:[NSNull null]]){
         return nil;
     }
-    ZIMConversation *conversation = [[ZIMConversation alloc] init];
+    ZIMConversation *conversation;
+    ZIMConversationType type = ((NSNumber *)[conversationDic objectForKey:@"type"]).intValue;
+    if(type == ZIMConversationTypeGroup){
+        conversation = [[ZIMGroupConversation alloc] init];
+        ((ZIMGroupConversation *)conversation).mutedExpiredTime = [[conversationDic objectForKey:@"mutedExpiredTime"] longLongValue];
+        ((ZIMGroupConversation *)conversation).isDisabled = [[conversationDic objectForKey:@"isDisabled"] boolValue];
+    }else{
+        conversation = [[ZIMConversation alloc] init];
+    }
     conversation.conversationID = (NSString *)[conversationDic objectForKey:@"conversationID"];
     conversation.conversationName = (NSString *)[conversationDic objectForKey:@"conversationName"];
     conversation.conversationAlias = (NSString *)[conversationDic objectForKey:@"conversationAlias"];

@@ -665,6 +665,7 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	case zim::ZIM_MESSAGE_TYPE_VIDEO: {
 		messagePtr = std::make_shared<ZIMVideoMessage>(std::get<std::string>(messageMap[FTValue("fileLocalPath")]), (unsigned int)ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("videoDuration")]));
 		auto videoMessagePtr = std::static_pointer_cast<ZIMVideoMessage>(messagePtr);
+		videoMessagePtr->videoFirstFrameDownloadUrl = std::get<std::string>(messageMap[FTValue("videoFirstFrameDownloadUrl")]);
 		(*videoMessagePtr.get()).*get(ZIM_FriendlyGet_videoFirstFrameLocalPath()) = std::get<std::string>(messageMap[FTValue("videoFirstFrameLocalPath")]);
 		(*videoMessagePtr.get()).*get(ZIM_FriendlyGet_videoFirstFrameWidth()) = ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("videoFirstFrameWidth")]);
 		(*videoMessagePtr.get()).*get(ZIM_FriendlyGet_videoFirstFrameHeight()) = ZIMPluginConverter::cnvFTMapToInt32(messageMap[FTValue("videoFirstFrameHeight")]);

@@ -1,3 +1,23 @@
+## 2.16.0
+### Features
+
+**Server-Side Call Invitation Management**
+- Supports initiating, accepting, and rejecting call invitations on the server side.
+
+**Server-Side Mute Management**
+- Supports muting groups and specific group members on the server side.
+
+**Server-Side Group Member Role Setting**
+- Supports modifying group member roles on the server side.
+
+### Improvements and Optimizations
+
+**Receipt Optimization**
+- Includes real-time awareness of receipt expiration status, supports offline query of receipt details, and supports querying receipt details for groups with more than 100 members.
+
+**Call Invitation**
+- Supports advanced mode call invitations, allowing a specific userID to be passed in the callCancel interface to cancel the call for that user only, without affecting the overall call status.
+
 ## 2.15.0
 
 ### New Features
