@@ -19,7 +19,7 @@
 - Supports advanced mode call invitations, allowing a specific userID to be passed in the callCancel interface to cancel the call for that user only, without affecting the overall call status.
 
 ### 2. API Refactoring
-> 💥 Please note to developers that there are breaking changes starting from version 2.13.0, so please read the following guidelines when upgrading from the old version to the new version.
+> 💥 Please note to developers that there are breaking changes starting from version 2.16.0, so please read the following guidelines when upgrading from the old version to the new version.
 
 For advanced mode call invitations, in the new version of callCancel, if the userIDs parameter contains userID, the interface will only cancel the invitation for that called user. If the userIDs parameter is empty, the interface will cancel invitations for all called users.
 
