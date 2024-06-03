@@ -831,7 +831,24 @@ public class ZIMPluginConverter {
 
     static public ZIMConversation oZIMConversation(HashMap<String,Object> resultMap){
         if(resultMap == null) return null;
-        ZIMConversation conversation = new ZIMConversation();
+        ZIMConversation conversation;
+        ZIMConversationType type = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(resultMap.get("type")));
+        if (type == ZIMConversationType.GROUP) {
+            conversation = new ZIMGroupConversation();
+            if (resultMap.containsKey("mutedExpiredTime") && resultMap.get("mutedExpiredTime") != null) {
+                ((ZIMGroupConversation) conversation).mutedExpiredTime = (long) resultMap.get("mutedExpiredTime");
+            } else {
+                ((ZIMGroupConversation) conversation).mutedExpiredTime = 0L;
+            }
+
+            if (resultMap.containsKey("isDisabled") && resultMap.get("isDisabled") != null) {
+                ((ZIMGroupConversation) conversation).isDisabled = (boolean) resultMap.get("isDisabled");
+            } else {
+                ((ZIMGroupConversation) conversation).isDisabled = false;
+            }
+        } else {
+            conversation = new ZIMConversation();
+        }
         conversation.conversationID = (String) resultMap.get("conversationID");
         conversation.conversationAlias = (String) resultMap.get("conversationAlias");
         conversation.conversationName = (String) resultMap.get("conversationName");
