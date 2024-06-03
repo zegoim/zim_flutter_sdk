@@ -472,7 +472,7 @@ class ZIMConverter {
       message.conversationType =
       ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
       message.timestamp = resultMap['timestamp'];
-      message.conversationSeq = resultMap['conversationSeq'];
+      message.conversationSeq = resultMap['conversationSeq'] ?? resultMap['messageSeq'];
       message.orderKey = resultMap['orderKey'] is int ? resultMap['orderKey'] : 0;
       message.isUserInserted = resultMap['isUserInserted'] is bool
           ? resultMap['isUserInserted']
