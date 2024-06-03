@@ -127,6 +127,8 @@ abstract class ZIM {
   ///
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
+  /// If an interface is invoked once, the number of Userids queried cannot exceed 10. If an interface is invoked repeatedly within 10 seconds, the total number of Userids queried cannot exceed 10.
+  ///
   /// [userIDs] userID list.
   /// [config] query config.
   Future<ZIMUsersInfoQueriedResult> queryUsersInfo(
