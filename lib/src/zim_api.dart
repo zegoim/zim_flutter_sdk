@@ -1653,6 +1653,18 @@ abstract class ZIM {
   Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
 
 //MARK: - Cache
+
+  /// Supported versions: 2.15.0 and above.
+  ///
+  /// Detailed description: This method is used to import the local message of the current user.
+  ///
+  /// Business scenario: This interface is called when a message needs to be imported.
+  ///
+  /// Restrictions: It takes effect after login and becomes invalid after logout.
+  ///
+  /// Caution: The ZIM SDK reads a file named zim_backup_msg_text in the directory by default. If there are multiple backups in this path, please confirm whether the name of the file to be imported is zim_backup_msg_text.
+  /// [folderPath] Enter the address of the directory where the imported file resides. The path is an absolute path, excluding the file name.
+  /// [progress] Return of import message progress.
   Future<void> importLocalMessages(String folderPath, ZIMMessageImportConfig config, ZIMMessageImportingProgress? progress);
   /// Available since: 2.14.0 or above.
   ///
