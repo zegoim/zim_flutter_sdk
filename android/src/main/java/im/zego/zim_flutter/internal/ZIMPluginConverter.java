@@ -70,8 +70,8 @@ public class ZIMPluginConverter {
 
     static public HashMap<String, Object> mZIMConversationBaseInfo(ZIMConversationBaseInfo baseInfo) {
         HashMap<String, Object> conversationMap = new HashMap<>();
-        conversationMap.put("conversationID",conversation.conversationID);
-        conversationMap.put("conversationType",conversation.conversationType.value());
+        conversationMap.put("conversationID",baseInfo.conversationID);
+        conversationMap.put("conversationType",baseInfo.conversationType.value());
         return conversationMap;
     }
 
