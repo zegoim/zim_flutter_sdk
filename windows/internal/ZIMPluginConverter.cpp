@@ -437,7 +437,8 @@ FTMap ZIMPluginConverter::cnvZIMConversationToMap(const std::shared_ptr<ZIMConve
 	conversationMap[FTValue("lastMessage")] = cnvZIMMessageObjectToMap(conversation->lastMessage.get());
     conversationMap[FTValue("isPinned")] = FTValue(conversation->isPinned);
 	conversationMap[FTValue("mentionedInfoList")] = cnvZIMMessageMentionedInfoToMap(conversation->mentionedInfoList);
-	conversationMap[FTValue("draft")] = FTValue(conversation->draft);
+    conversationMap[FTValue("draft")] = FTValue(conversation->draft);
+    conversationMap[FTValue("marks")] = FTValue(cnvStlVectorToFTArray(conversation->marks));
 	return conversationMap;
 }
 
