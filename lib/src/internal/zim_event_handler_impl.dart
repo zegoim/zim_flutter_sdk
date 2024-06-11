@@ -453,7 +453,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
     } catch (onError, e){
       ZIMError error = ZIMError(code: -1, message: 'dart execption,error:${onError.toString()},stack:${e.toString()}');
       if(ZIMEventHandler.onError == null) return;
-      ZIMEventHandler.onError!(zim,error);
+      ZIMEventHandler.onError!(zim!,error);
     }
   }
 }
