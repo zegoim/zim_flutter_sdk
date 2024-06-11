@@ -709,7 +709,7 @@ void ZIMPluginMethodHandler::queryConversationTotalUnreadCount(FArgument &argume
         config, [=](unsigned int totalUnreadCount, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
-                retMap[FTValue("totalUnreadCount")] =
+                retMap[FTValue("unreadCount")] =
                     FTValue(static_cast<int32_t>(totalUnreadCount));
 
                 result->Success(retMap);
