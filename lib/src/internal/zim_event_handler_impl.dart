@@ -27,6 +27,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
   static void eventListener(dynamic data) {
     final Map<dynamic, dynamic> map = data;
     ZIMEngine? zim = ZIMManager.engineMap[map['handle']];
+    ZIMError error = ZIMError(code: -1, message: 'eventListener test, map:${data.toString()}');
+    ZIMEventHandler.onError!(zim!,error);
     try{
       if (zim == null) {
         return;
@@ -452,8 +454,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
       }
     } catch (onError, e){
       ZIMError error = ZIMError(code: -1, message: 'dart execption,error:${onError.toString()},stack:${e.toString()}');
-      if(ZIMEventHandler.onUserRuleUpdated == null) return;
-      ZIMEventHandler.onError!(zim!,error);
+      if(ZIMEventHandler.onError == null) return;
+      ZIMEventHandler.onError!(zim,error);
     }
   }
 }
