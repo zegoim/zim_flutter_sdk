@@ -688,7 +688,7 @@ void ZIMPluginMethodHandler::setConversationMark(FArgument &argument, FResult re
             const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
-                retMap[FTValue("failedConversationList")] =
+                retMap[FTValue("failedConversationInfos")] =
                     ZIMPluginConverter::aZIMConversationBaseInfoList(failedConversationList);
 
                 result->Success(retMap);

@@ -2520,7 +2520,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
   }
 
   static ZIMConversationMarkSetResult oZIMConversationMarkSetResult(Map map){
-    ZIMConversationMarkSetResult result = ZIMConversationMarkSetResult(failedInfos: ZIMConverter.oZIMConversationBaseInfoList(map['failedInfos']));
+    ZIMConversationMarkSetResult result = ZIMConversationMarkSetResult(failedInfos: ZIMConverter.oZIMConversationBaseInfoList(map['failedConversationInfos']));
     return result;
   }
 
