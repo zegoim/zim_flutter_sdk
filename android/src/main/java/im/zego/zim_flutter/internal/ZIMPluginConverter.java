@@ -110,6 +110,7 @@ public class ZIMPluginConverter {
         }
         conversationMap.put("isPinned",conversation.isPinned);
         conversationMap.put("draft",conversation.draft);
+        conversationMap.put("marks",conversation.marks);
         if(conversation.type == ZIMConversationType.GROUP){
             if(conversation instanceof ZIMGroupConversation){
                 conversationMap.put("mutedExpiredTime",((ZIMGroupConversation) conversation).mutedExpiredTime);

@@ -426,7 +426,7 @@ public class ZIMPluginMethodHandler {
             public void onConversationTotalUnreadCountQueried(Integer unreadCount, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
-                    resultMap.put("conversationList",unreadCount);
+                    resultMap.put("unreadCount",unreadCount);
                     result.success(resultMap);
                 }
                 else{
@@ -654,7 +654,7 @@ public class ZIMPluginMethodHandler {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
                     ArrayList<HashMap<String,Object>> basicConversationList = ZIMPluginConverter.mZIMConversationBaseInfoList(failedInfos);
-                    resultMap.put("failedConversationList",basicConversationList);
+                    resultMap.put("failedConversationInfos",basicConversationList);
                     result.success(resultMap);
                 }
                 else{
