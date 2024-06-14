@@ -27,6 +27,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
   static void eventListener(dynamic data) {
     final Map<dynamic, dynamic> map = data;
     ZIMEngine? zim = ZIMManager.engineMap[map['handle']];
+    ZIMError error = ZIMError(code: -1, message: 'eventListener test, map:${data.toString()}');
+    ZIMEventHandler.onError!(zim!,error);
     try{
       if (zim == null) {
         return;
