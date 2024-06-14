@@ -846,7 +846,7 @@ public class ZIMPluginConverter {
 
     static public ZIMConversationFilterOption oZIMConversationFilterOption(HashMap<String,Object> resultMap) {
         ZIMConversationFilterOption option = new ZIMConversationFilterOption();
-        Object optionValue = resultMap.get("option");
+        Object optionValue = resultMap.get("marks");
 
         if (optionValue instanceof ArrayList) {
             ArrayList<?> list = (ArrayList<?>) optionValue;
@@ -864,7 +864,7 @@ public class ZIMPluginConverter {
 
     static public ZIMConversationTotalUnreadCountQueryConfig oZIMConversationTotalUnreadCountQueryConfig(HashMap<String,Object> resultMap) {
         ZIMConversationTotalUnreadCountQueryConfig config = new ZIMConversationTotalUnreadCountQueryConfig();
-        Object configValue = resultMap.get("config");
+        Object configValue = resultMap.get("marks");
 
         if (configValue instanceof ArrayList) {
             ArrayList<?> list = (ArrayList<?>) configValue;
