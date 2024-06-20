@@ -423,7 +423,7 @@ public class ZIMPluginMethodHandler {
 
         zim.queryConversationTotalUnreadMessageCount(config, new ZIMConversationTotalUnreadMessageCountQueriedCallback() {
             @Override
-            public void onConversationTotalUnreadMessageCountQueried(Integer unreadCount, ZIMError errorInfo) {
+            public void onConversationTotalUnreadMessageCountQueried(int unreadCount, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
                     Integer itg_unread = unreadCount;
