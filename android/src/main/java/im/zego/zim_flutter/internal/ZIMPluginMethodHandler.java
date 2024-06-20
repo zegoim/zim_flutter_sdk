@@ -419,14 +419,15 @@ public class ZIMPluginMethodHandler {
         }
 
         HashMap<String,Object> configMap = Objects.requireNonNull((call.argument("config")));
-        ZIMConversationTotalUnreadCountQueryConfig config = ZIMPluginConverter.oZIMConversationTotalUnreadCountQueryConfig(configMap);
+        ZIMConversationTotalUnreadMessageCountQueryConfig config = ZIMPluginConverter.oZIMConversationTotalUnreadMessageCountQueryConfig(configMap);
 
-        zim.queryConversationTotalUnreadCount(config, new ZIMConversationTotalUnreadCountQueriedCallback() {
+        zim.queryConversationTotalUnreadMessageCount(config, new ZIMConversationTotalUnreadMessageCountQueriedCallback() {
             @Override
-            public void onConversationTotalUnreadCountQueried(Integer unreadCount, ZIMError errorInfo) {
+            public void onConversationTotalUnreadMessageCountQueried(Integer unreadCount, ZIMError errorInfo) {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
-                    resultMap.put("unreadCount",unreadCount);
+                    Integer itg_unread = unreadCount;
+                    resultMap.put("unreadCount",itg_unread);
                     result.success(resultMap);
                 }
                 else{

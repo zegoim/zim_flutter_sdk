@@ -862,8 +862,8 @@ public class ZIMPluginConverter {
         return option;
     }
 
-    static public ZIMConversationTotalUnreadCountQueryConfig oZIMConversationTotalUnreadCountQueryConfig(HashMap<String,Object> resultMap) {
-        ZIMConversationTotalUnreadCountQueryConfig config = new ZIMConversationTotalUnreadCountQueryConfig();
+    static public ZIMConversationTotalUnreadMessageCountQueryConfig oZIMConversationTotalUnreadMessageCountQueryConfig(HashMap<String,Object> resultMap) {
+        ZIMConversationTotalUnreadMessageCountQueryConfig config = new ZIMConversationTotalUnreadMessageCountQueryConfig();
         Object configValue = resultMap.get("marks");
 
         if (configValue instanceof ArrayList) {
