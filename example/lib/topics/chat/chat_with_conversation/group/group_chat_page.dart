@@ -158,7 +158,7 @@ class GroupChatPageState extends State<GroupChatPage> {
     ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
     try {
       ZIMMessageSentResult result = await ZIM
-          .getInstance()!.sendGroupMessage(textMessage, widget.conversationID, sendConfig);
+          .getInstance()!.sendMessage(textMessage, widget.conversationID, ZIMConversationType.group,sendConfig);
       widget._historyZIMMessageList.add(result.message);
       SendTextMsgCell cell =
           SendTextMsgCell(message: (result.message as ZIMTextMessage));

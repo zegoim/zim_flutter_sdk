@@ -1,5 +1,5 @@
 group 'im.zego.zim_flutter'
-version '2.15.0'
+version '2.16.0'
 
 buildscript {
     repositories {
@@ -26,6 +26,9 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    if (project.android.hasProperty("namespace")) {
+        namespace 'im.zego.zim_flutter'
+    }
     compileSdkVersion 31
 
     compileOptions {
@@ -41,5 +44,5 @@ android {
 }
 dependencies {
     // for other module visit
-    api 'im.zego:zim-private:2.15.2.2616'
+    api 'im.zego:zim:2.16.0'
 }

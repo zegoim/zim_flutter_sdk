@@ -417,7 +417,8 @@ enum ZIMCallUserState {
   timeout,
   quited,
   ended,
-  notYetReceived
+  notYetReceived,
+  beCanceled,
 }
 
 enum ZIMCallInvitationMode {

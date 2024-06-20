@@ -1,3 +1,34 @@
+## 2.16.0
+### Features
+
+**Server-Side Call Invitation Management**
+- Supports initiating, accepting, and rejecting call invitations on the server side.
+
+**Server-Side Mute Management**
+- Supports muting groups and specific group members on the server side.
+
+**Server-Side Group Member Role Setting**
+- Supports modifying group member roles on the server side.
+
+### Improvements and Optimizations
+
+**Receipt Optimization**
+- Includes real-time awareness of receipt expiration status, supports offline query of receipt details, and supports querying receipt details for groups with more than 100 members.
+
+**Call Invitation**
+- Supports advanced mode call invitations, allowing a specific userID to be passed in the callCancel interface to cancel the call for that user only, without affecting the overall call status.
+
+### 2. API Refactoring
+> 💥 Please note to developers that there are breaking changes starting from version 2.16.0, so please read the following guidelines when upgrading from the old version to the new version.
+
+For advanced mode call invitations, in the new version of callCancel, if the userIDs parameter contains userID, the interface will only cancel the invitation for that called user. If the userIDs parameter is empty, the interface will cancel invitations for all called users.
+
+For the old version of the callCancelWithInvitees interface, regardless of whether the userIDs parameter is empty or not, it will cancel invitations for all called users.
+
+Since the old version of the ZIM SDK is not compatible with the individual cancelation logic, if you need to retain the cancelation logic implemented with the old version of ZIM while using the individual cancelation feature of the new version, please isolate the call functions between the new and old versions of ZIM.
+
+
+
 ## 2.15.0
 
 ### New Features

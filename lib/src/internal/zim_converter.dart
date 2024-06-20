@@ -187,6 +187,10 @@ class ZIMConverter {
     if (conversation.lastMessage != null) {
       conversationMap['lastMessage'] = mZIMMessage(conversation.lastMessage!);
     }
+    if (conversation is ZIMGroupConversation){
+      conversationMap['mutedExpiredTime'] = conversation.mutedExpiredTime;
+      conversationMap['isDisabled'] = conversation.isDisabled;
+    }
     return conversationMap;
   }
 
@@ -473,7 +477,7 @@ class ZIMConverter {
       message.conversationType =
       ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
       message.timestamp = resultMap['timestamp'];
-      message.conversationSeq = resultMap['conversationSeq'];
+      message.conversationSeq = resultMap['conversationSeq'] ?? resultMap['messageSeq'];
       message.orderKey = resultMap['orderKey'] is int ? resultMap['orderKey'] : 0;
       message.isUserInserted = resultMap['isUserInserted'] is bool
           ? resultMap['isUserInserted']
