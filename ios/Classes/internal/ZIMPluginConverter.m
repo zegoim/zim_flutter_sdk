@@ -406,6 +406,7 @@
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"conversationType"]  forKey:@"conversationType"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"timestamp"]  forKey:@"timestamp"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"conversationSeq"]  forKey:@"conversationSeq"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"messageSeq"]  forKey:@"messageSeq"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"orderKey"]  forKey:@"orderKey"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isUserInserted"] forKey:@"isUserInserted"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey: @"receiptStatus"] forKey:@"receiptStatus"];
@@ -445,7 +446,7 @@
     [messageDic safeSetObject:[NSNumber numberWithInt:(int)message.conversationType] forKey:@"conversationType"];
 
     [messageDic safeSetObject:[NSNumber numberWithUnsignedLongLong:message.timestamp] forKey:@"timestamp"];
-
+    [messageDic safeSetObject:[NSNumber numberWithLongLong:message.messageSeq] forKey:@"messageSeq"];
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.conversationSeq] forKey:@"conversationSeq"];
     [messageDic safeSetObject:[NSNumber numberWithLongLong:message.orderKey] forKey:@"orderKey"];
     [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:message.receiptStatus] forKey:@"receiptStatus"];
@@ -592,6 +593,7 @@
         [dic safeSetObject:[NSNumber numberWithInt:(int)info.type] forKey:@"type"];
         [dic safeSetObject:info.fromUserID forKey:@"fromUserID"];
         [dic safeSetObject:[NSNumber numberWithLongLong:info.messageID] forKey:@"messageID"];
+        [dic safeSetObject:[NSNumber numberWithLongLong:info.messageSeq] forKey:@"messageSeq"];
         [DicArr addObject:dic];
     }
     return DicArr;

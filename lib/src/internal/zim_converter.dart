@@ -469,7 +469,7 @@ class ZIMConverter {
       message.localMessageID = resultMap['localMessageID'] is String
           ? int.parse(resultMap['localMessageID'])
           : resultMap['localMessageID'];
-      message.messageSeq = resultMap['messageSeq'];
+      message.messageSeq = resultMap['messageSeq'] ?? 0;
       message.senderUserID = resultMap['senderUserID'];
       message.conversationID = resultMap['conversationID'];
       message.direction =
@@ -479,7 +479,7 @@ class ZIMConverter {
       message.conversationType =
       ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
       message.timestamp = resultMap['timestamp'];
-      message.conversationSeq = resultMap['conversationSeq'] ?? resultMap['messageSeq'];
+      message.conversationSeq = resultMap['conversationSeq'] ?? 0;
       message.orderKey = resultMap['orderKey'] is int ? resultMap['orderKey'] : 0;
       message.isUserInserted = resultMap['isUserInserted'] is bool
           ? resultMap['isUserInserted']
