@@ -51,6 +51,9 @@ template struct Rob<ZIM_FriendlyGet_isServerMessage, &ZIMMessage::broadcastMessa
 std::shared_ptr<ZIMMessageRepliedInfo> ZIMMessage::*get(ZIM_FriendlyGet_repliedInfo);
 template struct Rob<ZIM_FriendlyGet_repliedInfo, &ZIMMessage::repliedInfo>;
 
+int ZIMMessage::*get(ZIM_FriendlyGet_rootRepliedCount);
+template struct Rob<ZIM_FriendlyGet_rootRepliedCount, &ZIMMessage::rootRepliedCount>;
+
 std::string ZIMMediaMessage::*get(ZIM_FriendlyGet_fileUID);
 template struct Rob<ZIM_FriendlyGet_fileUID, &ZIMMediaMessage::fileUID>;
 
@@ -541,6 +544,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage 
     messageMap[FTValue("cbInnerID")] = FTValue(message->getCbInnerID());
     messageMap[FTValue("repliedInfo")] =
         FTValue(ZIMPluginConverter::cnvZIMMessageRepliedInfoToMap(message->getRepliedInfo()));
+    messageMap[FTValue("rootRepliedCount")] = FTValue(message->getRootRepliedCount());
 
     if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE &&
         message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
@@ -1033,6 +1037,9 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
         (*messagePtr.get()).*get(ZIM_FriendlyGet_repliedInfo()) =
             cnvZIMMessageRepliedInfoToObject(std::get<FTMap>(messageMap[FTValue("repliedInfo")]));
     }
+
+    (*messagePtr.get()).*get(ZIM_FriendlyGet_rootRepliedCount()) =
+        ZIMPluginConverter::cnvFValueToInt32(messageMap[FTValue("rootRepliedCount")]);
 
     return messagePtr;
 }

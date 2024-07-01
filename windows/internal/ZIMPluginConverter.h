@@ -83,6 +83,10 @@ struct ZIM_FriendlyGet_repliedInfo {
     typedef std::shared_ptr<ZIMMessageRepliedInfo> ZIMMessage::*type;
 };
 
+struct ZIM_FriendlyGet_rootRepliedCount {
+    typedef int ZIMMessage::*type;
+};
+
 struct ZIM_FriendlyGet_fileUID {
     typedef std::string ZIMMediaMessage::*type;
 };
