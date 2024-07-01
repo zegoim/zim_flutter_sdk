@@ -69,7 +69,7 @@ class ZIMPluginMethodHandler {
     void replyMessage(FArgument &argument, FResult result);
     void queryHistoryMessage(FArgument &argument, FResult result);
     void queryMessages(FArgument &argument, FResult result);
-    void queryRepliedMessageList(FArgument &argument, FResult result);
+    void queryMessageRepliedList(FArgument &argument, FResult result);
     void deleteAllMessage(FArgument &argument, FResult result);
     void deleteMessages(FArgument &argument, FResult result);
     void deleteAllConversationMessages(FArgument &argument, FResult result);

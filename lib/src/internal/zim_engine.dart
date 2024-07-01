@@ -1481,8 +1481,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMMessageRepliedListQueriedResult> queryRepliedMessageList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config) async{
-    Map resultMap = await channel.invokeMethod('queryRepliedMessageList',{
+  Future<ZIMMessageRepliedListQueriedResult> queryMessageRepliedList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryMessageRepliedList',{
       'handle':handle,
       'message':ZIMConverter.mZIMMessage(message),
       'config':ZIMConverter.mZIMMessageRepliedListQueryConfig(config)
@@ -1493,18 +1493,41 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMMessageSentResult> replyMessage(ZIMMessage message, ZIMMessage toOriginalMessage, ZIMMessageSendConfig config, ZIMMessageSendNotification? notification) async{
     int? messageAttachedCallbackID;
+    int? progressID;
+    int messageID = ZIMCommonData.getSequence();
     if (notification?.onMessageAttached != null) {
       messageAttachedCallbackID = ZIMCommonData.getSequence();
       ZIMCommonData.zimMessageAttachedCallbackMap[messageAttachedCallbackID] =
       notification!.onMessageAttached!;
     }
-    Map resultMap = await channel.invokeMethod('replyMessage',{
-      'handle':handle,
-      'message':ZIMConverter.mZIMMessage(message),
-      'toOriginalMessage':ZIMConverter.mZIMMessage(toOriginalMessage),
-      'config':ZIMConverter.mZIMMessageSendConfig(config),
-    });
-    return ZIMConverter.oZIMMessageSentResult(resultMap);
+    if (notification?.onMediaUploadingProgress != null) {
+      progressID = ZIMCommonData.getSequence();
+      ZIMCommonData.mediaUploadingProgressMap[progressID] =
+          notification!.onMediaUploadingProgress!;
+    }
+    try {
+        Map resultMap = await channel.invokeMethod('replyMessage',{
+          'handle':handle,
+          'message':ZIMConverter.mZIMMessage(message),
+          'toOriginalMessage':ZIMConverter.mZIMMessage(toOriginalMessage),
+          'messageID': messageID,
+          'config':ZIMConverter.mZIMMessageSendConfig(config),
+          'messageAttachedCallbackID': messageAttachedCallbackID,
+          'progressID': progressID,
+        });
+        return ZIMConverter.oZIMMessageSentResult(resultMap);
+    } on PlatformException catch (e) {
+        Map resultMap = e.details;
+        ZIMMessageSentResult result =
+          ZIMConverter.oZIMMessageSentResult(resultMap);
+      result.message.sentStatus = ZIMMessageSentStatus.failed;
+      throw PlatformException(code: e.code, message: e.message);
+    } finally {
+        ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
+        ZIMCommonData.messsageMap.remove(messageID);
+        ZIMCommonData.zimMessageAttachedCallbackMap
+              .remove(messageAttachedCallbackID);
+    }
   }
 
 

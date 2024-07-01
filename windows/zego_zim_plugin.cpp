@@ -256,6 +256,10 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().queryHistoryMessage(argument, std::move(result));
         return;
     }
+    else if (method_call.method_name() == "queryMessages") {
+        ZIMPluginMethodHandler::getInstance().queryMessages(argument, std::move(result));
+        return;
+    }
     else if (method_call.method_name() == "deleteAllMessage") {
         ZIMPluginMethodHandler::getInstance().deleteAllMessage(argument, std::move(result));
         return;
@@ -280,7 +284,17 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().searchLocalConversations(argument, std::move(result));
         return;
     } 
-    else if (method_call.method_name() == "enterRoom") {
+    else if (method_call.method_name() == "queryMessageRepliedList") {
+        ZIMPluginMethodHandler::getInstance().queryMessageRepliedList(argument, std::move(result));
+        return;
+    }
+    else if (method_call.method_name() == "replyMessage") {
+        ZIMPluginMethodHandler::getInstance().replyMessage(argument, std::move(result));
+        return;
+    }
+
+    // ROOM API
+    if (method_call.method_name() == "enterRoom") {
         ZIMPluginMethodHandler::getInstance().enterRoom(argument, std::move(result));
         return;
     }
@@ -303,10 +317,7 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "leaveAllRoom") {
         ZIMPluginMethodHandler::getInstance().leaveAllRoom(argument, std::move(result));
         return;
-    }
-    
-    
-    if (method_call.method_name() == "queryRoomMemberList") {
+    } else if (method_call.method_name() == "queryRoomMemberList") {
         ZIMPluginMethodHandler::getInstance().queryRoomMemberList(argument, std::move(result));
         return;
     }
@@ -350,7 +361,9 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().queryRoomMemberAttributesList(argument, std::move(result));
         return;
     }
-    else if (method_call.method_name() == "createGroup") {
+
+    // GROUP API
+    if (method_call.method_name() == "createGroup") {
         ZIMPluginMethodHandler::getInstance().createGroup(argument, std::move(result));
         return;
     }
@@ -458,7 +471,9 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().searchLocalGroupMembers(argument, std::move(result));
         return;
     }
-    else if (method_call.method_name() == "callInvite") {
+
+    // CALL API
+    if (method_call.method_name() == "callInvite") {
         ZIMPluginMethodHandler::getInstance().callInvite(argument, std::move(result));
         return;
     }
@@ -477,10 +492,8 @@ void ZegoZimPlugin::HandleMethodCall(
     else if (method_call.method_name() == "queryCallList") {
         ZIMPluginMethodHandler::getInstance().queryCallList(argument, std::move(result));
         return;
-    }
-
-    
-    if (method_call.method_name() == "callCancel") {
+    } 
+    else if (method_call.method_name() == "callCancel") {
         ZIMPluginMethodHandler::getInstance().callCancel(argument, std::move(result));
         return;
     }

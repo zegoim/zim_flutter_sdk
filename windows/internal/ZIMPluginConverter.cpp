@@ -45,9 +45,11 @@ template struct Rob<ZIM_FriendlyGet_isBroadcastMessage, &ZIMMessage::broadcastMe
 bool ZIMMessage::* get(ZIM_FriendlyGet_isServerMessage);
 template struct Rob<ZIM_FriendlyGet_isServerMessage, &ZIMMessage::broadcastMessage>;
 
+std::shared_ptr<ZIMMessageRepliedInfo> ZIMMessage::* get(ZIM_FriendlyGet_repliedInfo);
+template struct Rob<ZIM_FriendlyGet_repliedInfo, &ZIMMessage::repliedInfo>;
+
 std::string ZIMMediaMessage::* get(ZIM_FriendlyGet_fileUID);
 template struct Rob<ZIM_FriendlyGet_fileUID, &ZIMMediaMessage::fileUID>;
-
 
 long long ZIMMediaMessage::* get(ZIM_FriendlyGet_fileSize);
 template struct Rob<ZIM_FriendlyGet_fileSize, &ZIMMediaMessage::fileSize>;
@@ -221,25 +223,25 @@ std::vector<ZIMGroupMemberRole> ZIMPluginConverter::cnvFTArrayToStlVectorInt(FTA
 	return vec;
 }
 
-FTMap ZIMPluginConverter::mZIMMessageRootRepliedCountInfo(
+FTMap ZIMPluginConverter::cnvZIMMessageRootRepliedCountInfoToMap(
     const ZIMMessageRootRepliedCountInfo &info) {
 
     FTMap infoMap;
-    infoMap[FTValue("conversationID")] = FTValue(info.getConversationID());
-    infoMap[FTValue("conversationType")] = FTValue(info.getConversationType());
-    infoMap[FTValue("messageID")] = FTValue(info.getMessageID());
-    infoMap[FTValue("count")] = FTValue(static_cast<int32_t>(info.getCount()));
+    infoMap[FTValue("conversationID")] = FTValue(info.conversationID);
+    infoMap[FTValue("conversationType")] = FTValue(info.conversationType);
+    infoMap[FTValue("messageID")] = FTValue(info.messageID);
+    infoMap[FTValue("count")] = FTValue(static_cast<int32_t>(info.count));
 
 	return infoMap;
 }
 
-FTArray ZIMPluginConverter::mZIMMessageRootRepliedCountInfoList(
+FTArray ZIMPluginConverter::cnvZIMMessageRootRepliedCountInfoListToArray(
     const std::vector<ZIMMessageRootRepliedCountInfo> &infos) {
 
     FTArray infoArray;
 
     for (const auto &info : infos) {
-        infoArray.emplace_back(mZIMMessageRootRepliedCountInfo(info));
+        infoArray.emplace_back(cnvZIMMessageRootRepliedCountInfoToMap(info));
     }
 
     return infoArray;
@@ -510,6 +512,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	messageMap[FTValue("isServerMessage")] = FTValue(message->isServerMessage());
 	messageMap[FTValue("mentionedUserIDs")] = cnvStlVectorToFTArray(message->mentionedUserIDs);
 	messageMap[FTValue("cbInnerID")] = FTValue(message->getCbInnerID());
+	messageMap[FTValue("repliedInfo")] = FTValue(cnvZIMMessageRepliedInfoToMap(message->repliedInfo));
 
 	if (message->getType() >= ZIM_MESSAGE_TYPE_IMAGE && message->getType() <= ZIM_MESSAGE_TYPE_VIDEO) {
 		auto mediaMessage = (ZIMMediaMessage*)message;
@@ -623,6 +626,106 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage*
 	return messageMap;
 }
 
+flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageRepliedInfoToMap(const std::shared_ptr<ZIMMessageRepliedInfo> &repliedInfoPtr) {
+	if (!repliedInfoPtr) {
+		return FTValue(std::monostate());
+	}
+
+	FTMap infoMap;
+	infoMap[FTValue("messageID")] = FTValue(repliedInfoPtr->messageID);
+	infoMap[FTValue("messageSeq")] = FTValue(repliedInfoPtr->messageSeq);
+	infoMap[FTValue("senderUserID")] = FTValue(repliedInfoPtr->senderUserID);
+	infoMap[FTValue("sentTime")] = FTValue((int64_t)repliedInfoPtr->sentTime);
+	infoMap[FTValue("state")] = FTValue(repliedInfoPtr->state);
+	infoMap[FTValue("messageInfo")] = cnvZIMMessageLiteInfoToMap(repliedInfoPtr->messageInfo);
+
+	return infoMap;
+}
+    
+FTMap ZIMPluginConverter::cnvZIMMessageLiteInfoToMap(const std::shared_ptr<ZIMMessageLiteInfo> &infoPtr) {
+	FTMap infoMap;
+	if(!infoPtr) {
+		return infoMap;
+	}
+
+	auto type = infoPtr->type;
+	infoMap[FTValue("type")] = FTValue(type);
+	switch (type) {
+		case ZIM_MESSAGE_TYPE_TEXT: {
+			auto textLiteInfo = std::static_pointer_cast<ZIMTextMessageLiteInfo>(infoPtr);
+			infoMap[FTValue("message")] = FTValue(textLiteInfo->message);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_CUSTOM: {
+			auto customLiteInfo = std::static_pointer_cast<ZIMCustomMessageLiteInfo>(infoPtr);
+			infoMap[FTValue("message")] = FTValue(customLiteInfo->message);
+			infoMap[FTValue("subType")] = FTValue(customLiteInfo->subType);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_COMBINE: {
+			auto cbLiteInfo = std::static_pointer_cast<ZIMCombineMessageLiteInfo>(infoPtr);
+			infoMap[FTValue("title")] = FTValue(cbLiteInfo->title);
+			infoMap[FTValue("summary")] = FTValue(cbLiteInfo->summary);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_IMAGE: {
+			auto imageLiteInfo = std::static_pointer_cast<ZIMImageMessageLiteInfo>(infoPtr);
+			infoMap[FTValue("originalImageWidth")] = FTValue((int32_t)imageLiteInfo->originalImageWidth);
+			infoMap[FTValue("originalImageHeight")] = FTValue((int32_t)imageLiteInfo->originalImageHeight);
+			infoMap[FTValue("largeImageDownloadUrl")] = FTValue(imageLiteInfo->largeImageDownloadUrl);
+			infoMap[FTValue("largeImageLocalPath")] = FTValue(imageLiteInfo->largeImageLocalPath);
+			infoMap[FTValue("largeImageWidth")] = FTValue(imageLiteInfo->largeImageWidth);
+			infoMap[FTValue("largeImageHeight")] = FTValue(imageLiteInfo->largeImageHeight);
+			infoMap[FTValue("thumbnailDownloadUrl")] = FTValue(imageLiteInfo->thumbnailDownloadUrl);
+			infoMap[FTValue("thumbnailLocalPath")] = FTValue(imageLiteInfo->thumbnailLocalPath);
+			infoMap[FTValue("thumbnailWidth")] = FTValue(imageLiteInfo->thumbnailWidth);
+			infoMap[FTValue("thumbnailHeight")] = FTValue(imageLiteInfo->thumbnailHeight);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_FILE: {
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_AUDIO: {
+			auto audioLiteInfo = std::static_pointer_cast<ZIMAudioMessageLiteInfo>(infoPtr);
+			infoMap[FTValue("audioDuration")] = FTValue(audioLiteInfo->audioDuration);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_VIDEO: {
+			auto videoLiteInfo = std::static_pointer_cast<ZIMVideoMessageLiteInfo>(infoPtr);
+			infoMap[FTValue("videoDuration")] = FTValue(videoLiteInfo->videoDuration);
+			infoMap[FTValue("videoFirstFrameDownloadUrl")] = FTValue(videoLiteInfo->videoFirstFrameDownloadUrl);
+			infoMap[FTValue("videoFirstFrameLocalPath")] = FTValue(videoLiteInfo->videoFirstFrameLocalPath);
+			infoMap[FTValue("videoFirstFrameWidth")] = FTValue((int32_t)videoLiteInfo->videoFirstFrameWidth);
+			infoMap[FTValue("videoFirstFrameHeight")] = FTValue((int32_t)videoLiteInfo->videoFirstFrameHeight);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_UNKNOWN:
+		default:
+			break;
+	}
+
+	if(type >= ZIM_MESSAGE_TYPE_IMAGE && type <= ZIM_MESSAGE_TYPE_VIDEO) {
+		auto mediaLiteInfo = std::static_pointer_cast<ZIMMediaMessageLiteInfo>(infoPtr);
+		infoMap[FTValue("fileLocalPath")] = FTValue(mediaLiteInfo->fileLocalPath);
+		infoMap[FTValue("fileDownloadUrl")] = FTValue(mediaLiteInfo->fileDownloadUrl);
+		infoMap[FTValue("fileName")] = FTValue(mediaLiteInfo->fileName);
+		infoMap[FTValue("fileSize")] = FTValue(mediaLiteInfo->fileSize);
+	}
+
+	return infoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMMessageRootRepliedInfoToMap(const ZIMMessageRootRepliedInfo &info) {
+	FTMap infoMap;
+	infoMap[FTValue("state")] = FTValue(info.state);
+	infoMap[FTValue("senderUserID")] = FTValue(info.senderUserID);
+	infoMap[FTValue("sentTime")] = FTValue((int64_t)info.sentTime);
+	infoMap[FTValue("repliedCount")] = FTValue((int32_t)info.repliedCount);
+	infoMap[FTValue("message")] = FTValue(cnvZIMMessageObjectToMap(info.message.get()));
+
+	return infoMap;
+}
+
 ZIMConversationDeleteConfig ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(FTMap configMap) {
 	ZIMConversationDeleteConfig config;
 	config.isAlsoDeleteServerConversation = std::get<bool>(configMap[FTValue("isAlsoDeleteServerConversation")]);
@@ -677,6 +780,8 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	case zim::ZIM_MESSAGE_TYPE_IMAGE: {
 		messagePtr = std::make_shared<ZIMImageMessage>(std::get<std::string>(messageMap[FTValue("fileLocalPath")]));
 		auto imageMessagePtr = std::static_pointer_cast<ZIMImageMessage>(messagePtr);
+		imageMessagePtr->largeImageDownloadUrl = std::get<std::string>(messageMap[FTValue("largeImageDownloadUrl")]);
+		imageMessagePtr->thumbnailDownloadUrl = std::get<std::string>(messageMap[FTValue("thumbnailDownloadUrl")]);
 		(*imageMessagePtr.get()).*get(ZIM_FriendlyGet_largeImageLocalPath()) = std::get<std::string>(messageMap[FTValue("largeImageLocalPath")]);
 		(*imageMessagePtr.get()).*get(ZIM_FriendlyGet_thumbnailLocalPath()) = std::get<std::string>(messageMap[FTValue("thumbnailLocalPath")]);
 		(*imageMessagePtr.get()).*get(ZIM_FriendlyGet_originalImageWidth()) = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(messageMap[FTValue("originalImageWidth")]);
@@ -761,6 +866,15 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	default:
 		break;
 	}
+	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
+		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
+		mediaMessagePtr->fileDownloadUrl = std::get<std::string>(messageMap[FTValue("fileDownloadUrl")]);
+		mediaMessagePtr->fileName = std::get<std::string>(messageMap[FTValue("fileName")]);
+		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileUID()) = std::get<std::string>(messageMap[FTValue("fileUID")]);
+		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileSize()) = (long long)ZIMPluginConverter::cnvFValueToInt64(messageMap[FTValue("fileSize")]);
+
+	}
+
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_msgType()) = msgType;
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_senderUserID()) = std::get<std::string>(messageMap[FTValue("senderUserID")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_conversationID()) = std::get<std::string>(messageMap[FTValue("conversationID")]);
@@ -778,17 +892,13 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_receiptStatus()) = (ZIMMessageReceiptStatus)ZIMPluginConverter::cnvFValueToInt32(messageMap[FTValue("receiptStatus")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_isBroadcastMessage()) = (bool)std::get<bool>(messageMap[FTValue("isBroadcastMessage")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_cbInnerID()) = std::get<std::string>(messageMap[FTValue("cbInnerID")]);
-	if (msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
-		auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-		mediaMessagePtr->fileDownloadUrl = std::get<std::string>(messageMap[FTValue("fileDownloadUrl")]);
-		mediaMessagePtr->fileName = std::get<std::string>(messageMap[FTValue("fileName")]);
-		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileUID()) = std::get<std::string>(messageMap[FTValue("fileUID")]);
-		(*mediaMessagePtr.get()).*get(ZIM_FriendlyGet_fileSize()) = (long long)ZIMPluginConverter::cnvFValueToInt64(messageMap[FTValue("fileSize")]);
-
-	}
 	messagePtr->isMentionAll = (bool)std::get<bool>(messageMap[FTValue("isMentionAll")]);
 	(*messagePtr.get()).*get(ZIM_FriendlyGet_isServerMessage()) = (bool)std::get<bool>(messageMap[FTValue("isServerMessage")]);
 	messagePtr->mentionedUserIDs = cnvFTArrayToStlVector(std::get<FTArray>(messageMap[FTValue("mentionedUserIDs")]));
+	if(std::holds_alternative<FTMap>(messageMap[FTValue("repliedInfo")])) {
+		(*messagePtr.get()).*get(ZIM_FriendlyGet_repliedInfo()) = cnvZIMMessageRepliedInfoToObject(std::get<FTMap>(messageMap[FTValue("repliedInfo")]));
+	}
+	
 	return messagePtr;
 }
 
@@ -1676,6 +1786,99 @@ ZIMPluginConverter::oZIMMessageRepliedListQueryConfig(FTMap configMap) {
     config.nextFlag = static_cast<unsigned long long>(cnvFValueToInt64(configMap[FTValue("nextFlag")]));
 
 	return config;
+}
+
+std::shared_ptr<ZIMMessageRepliedInfo> ZIMPluginConverter::cnvZIMMessageRepliedInfoToObject(FTMap infoMap) {
+	std::shared_ptr<ZIMMessageRepliedInfo> infoPtr = std::make_shared<ZIMMessageRepliedInfo>();
+	infoPtr->state = (ZIMMessageRepliedInfoState)cnvFValueToInt32(infoMap[FTValue("state")]);
+	infoPtr->messageInfo = cnvZIMMessageLiteInfoToObject(infoMap[FTValue("messageInfo")]);
+	infoPtr->senderUserID = std::get<std::string>(infoMap[FTValue("senderUserID")]);
+	infoPtr->sentTime = (unsigned long long)cnvFValueToInt64(infoMap[FTValue("sentTime")]);
+	infoPtr->messageID = cnvFValueToInt64(infoMap[FTValue("messageID")])
+	infoPtr->messageSeq = cnvFValueToInt64(infoMap[FTValue("messageSeq")])
+
+	return infoPtr;
+}
+
+std::shared_ptr<ZIMMessageLiteInfo> ZIMPluginConverter::cnvZIMMessageLiteInfoToObject(FTMap infoMap) {
+	std::shared_ptr<ZIMMessageLiteInfo> infoPtr;
+
+	ZIMMessageType msgType = (ZIMMessageType)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("type")]);
+	switch (msgType) {
+		case ZIM_MESSAGE_TYPE_TEXT: {
+			infoPtr = std::make_shared<ZIMTextMessageLiteInfo>();
+			auto textLiteInfo = std::static_pointer_cast<ZIMTextMessageLiteInfo>(infoPtr);
+			textLiteInfo->message = std::get<std::string>(infoMap[FTValue("message")]);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_CUSTOM: {
+			infoPtr = std::make_shared<ZIMCustomMessageLiteInfo>();
+			auto customLiteInfo = std::static_pointer_cast<ZIMCustomMessageLiteInfo>(infoPtr);
+			customLiteInfo->message = std::get<std::string>(infoMap[FTValue("message")]);
+			customLiteInfo->subType = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("subType")]);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_COMBINE: {
+			infoPtr = std::make_shared<ZIMCombineMessageLiteInfo>();
+			auto cbLiteInfo = std::static_pointer_cast<ZIMCombineMessageLiteInfo>(infoPtr);
+			cbLiteInfo->title = std::get<std::string>(infoMap[FTValue("title")]);
+			cbLiteInfo->summary = std::get<std::string>(infoMap[FTValue("summary")]);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_REVOKE: {
+			infoPtr = std::make_shared<ZIMRevokeMessageLiteInfo>();
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_IMAGE: {
+			infoPtr = std::make_shared<ZIMImageMessageLiteInfo>();
+			auto imageLiteInfo = std::static_pointer_cast<ZIMImageMessageLiteInfo>(infoPtr);
+			imageLiteInfo->originalImageWidth = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("originalImageWidth")]);
+			imageLiteInfo->originalImageHeight = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("originalImageHeight")]);
+			imageLiteInfo->largeImageDownloadUrl = std::get<std::string>(infoMap[FTValue("largeImageDownloadUrl")]);
+			imageLiteInfo->largeImageLocalPath = std::get<std::string>(infoMap[FTValue("largeImageLocalPath")]);
+			imageLiteInfo->largeImageWidth = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("largeImageWidth")]);
+			imageLiteInfo->largeImageHeight = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("largeImageHeight")]);
+			imageLiteInfo->thumbnailDownloadUrl = std::get<std::string>(infoMap[FTValue("thumbnailDownloadUrl")]);
+			imageLiteInfo->thumbnailLocalPath = std::get<std::string>(infoMap[FTValue("thumbnailLocalPath")]);
+			imageLiteInfo->thumbnailWidth = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("thumbnailWidth")]);
+			imageLiteInfo->thumbnailHeight = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("thumbnailHeight")]);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_FILE: {
+			infoPtr = std::make_shared<ZIMFileMessageLiteInfo>();
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_AUDIO: {
+			infoPtr = std::make_shared<ZIMAudioMessageLiteInfo>();
+			auto audioLiteInfo = std::static_pointer_cast<ZIMAudioMessageLiteInfo>(infoPtr);
+			audioLiteInfo->audioDuration = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("audioDuration")]);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_VIDEO: {
+			infoPtr = std::make_shared<ZIMVideoMessageLiteInfo>();
+			auto videoLiteInfo = std::static_pointer_cast<ZIMVideoMessageLiteInfo>(infoPtr);
+			videoLiteInfo->videoDuration = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("videoDuration")]);
+			videoLiteInfo->videoFirstFrameDownloadUrl = std::get<std::string>(infoMap[FTValue("videoFirstFrameDownloadUrl")]);
+			videoLiteInfo->videoFirstFrameLocalPath = std::get<std::string>(infoMap[FTValue("videoFirstFrameLocalPath")]);
+			videoLiteInfo->videoFirstFrameWidth = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("videoFirstFrameWidth")]);
+			videoLiteInfo->videoFirstFrameHeight = (unsigned int)ZIMPluginConverter::cnvFValueToInt32(infoMap[FTValue("videoFirstFrameHeight")]);
+			break;
+		}
+		case ZIM_MESSAGE_TYPE_UNKNOWN:
+		default:
+			infoPtr = std::make_shared<ZIMMessageLiteInfo>();
+			break;
+	}
+
+	if(msgType >= ZIM_MESSAGE_TYPE_IMAGE && msgType <= ZIM_MESSAGE_TYPE_VIDEO) {
+		auto mediaLiteInfo = std::static_pointer_cast<ZIMMediaMessageLiteInfo>(infoPtr);
+		mediaLiteInfo->fileName = std::get<std::string>(infoMap[FTValue("fileName")]);
+		mediaLiteInfo->fileSize = ZIMPluginConverter::cnvFValueToInt64(infoMap[FTValue("fileSize")]);
+		mediaLiteInfo->fileDownloadUrl = std::get<std::string>(infoMap[FTValue("fileDownloadUrl")]);
+		mediaLiteInfo->fileLocalPath = std::get<std::string>(infoMap[FTValue("fileLocalPath")]);
+	}
+
+	return infoPtr;
 }
 
 ZIMFriendSearchConfig ZIMPluginConverter::cnvZIMFriendSearchConfigToObject(FTMap configMap) {

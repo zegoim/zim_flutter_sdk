@@ -78,6 +78,10 @@ struct ZIM_FriendlyGet_isServerMessage {
     typedef bool ZIMMessage::* type;
 };
 
+struct ZIM_FriendlyGet_repliedInfo {
+    typedef std::shared_ptr<ZIMMessageRepliedInfo> ZIMMessage::* type;
+};
+
 struct ZIM_FriendlyGet_fileUID {
     typedef std::string ZIMMediaMessage::* type;
 };
@@ -174,10 +178,6 @@ public:
     ZIMPluginConverter() {}
 
 public:
-    static FTMap mZIMMessageRootRepliedCountInfo(const ZIMMessageRootRepliedCountInfo &info);
-    static FTArray
-    mZIMMessageRootRepliedCountInfoList(const std::vector<ZIMMessageRootRepliedCountInfo> &infos);
-
     static FTMap cnvZIMUserInfoObjectToMap(const ZIMUserInfo& userInfo);
     static flutter::EncodableValue cnvZIMUserInfoPtrToObj(const std::shared_ptr<ZIMUserInfo> userPtr);
     static FTArray cnvZIMUserInfoPtrListToArray(const std::vector<std::shared_ptr<ZIMUserInfo>> userInfoList);
@@ -197,6 +197,13 @@ public:
     static FTArray cnvZIMMessageSentStatusChangeInfoListToArray(const std::vector<ZIMMessageSentStatusChangeInfo>& messageSentStatusChangeInfoList);
     static flutter::EncodableValue cnvZIMTipsMessageChangeInfoToMap(const std::shared_ptr<ZIMTipsMessageChangeInfo> changeInfo);
     static flutter::EncodableValue cnvZIMMessageObjectToMap(ZIMMessage* message);
+    static FTMap cnvZIMMessageRootRepliedCountInfoToMap(const ZIMMessageRootRepliedCountInfo &info);
+    static FTArray
+    cnvZIMMessageRootRepliedCountInfoListToArray(const std::vector<ZIMMessageRootRepliedCountInfo> &infos);
+    static flutter::EncodableValue cnvZIMMessageRepliedInfoToMap(const std::shared_ptr<ZIMMessageRepliedInfo> &repliedInfoPtr);
+    static FTMap cnvZIMMessageLiteInfoToMap(const std::shared_ptr<ZIMMessageLiteInfo> &infoPtr);
+    static FTMap cnvZIMMessageRootRepliedInfoToMap(const ZIMMessageRootRepliedInfo &info);
+
     static FTMap cnvZIMGroupVerifyInfoToMap(const ZIMGroupVerifyInfo& info);
     static FTArray cnvZIMMessageListToArray(const std::vector<std::shared_ptr<ZIMMessage>>& messageList);
     static FTMap cnvZIMMessageReceiptInfoToMap(const ZIMMessageReceiptInfo& messageReceiptInfo);
@@ -255,7 +262,8 @@ public:
 public:
     static ZIMMessageSendConfig oZIMMessageSendConfig(FTMap configMap);
     static ZIMMessageRepliedListQueryConfig oZIMMessageRepliedListQueryConfig(FTMap configMap);
-
+    static std::shared_ptr<ZIMMessageRepliedInfo> cnvZIMMessageRepliedInfoToObject(FTMap infoMap);
+    static std::shared_ptr<ZIMMessageLiteInfo> cnvZIMMessageLiteInfoToObject(FTMap infoMap);
     static ZIMFriendSearchConfig cnvZIMFriendSearchConfigToObject(FTMap configMap);
     static ZIMConversationDeleteConfig cnvZIMConversationDeleteConfigToObject(FTMap configMap);
     static std::shared_ptr<ZIMConversation> cnvZIMConversationToObject(FTMap conversationMap);

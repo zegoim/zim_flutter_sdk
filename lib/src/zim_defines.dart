@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:zego_zim/zego_zim.dart';
+
 /// Connection state.
 ///
 /// Description: The state machine that identifies the current connection state.
@@ -338,6 +340,12 @@ enum ZIMMessageOrder {
   ascending
 }
 
+enum ZIMMessageRepliedInfoState {
+  normal,
+  deleted,
+  notFound
+}
+
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
 
@@ -641,7 +649,7 @@ class ZIMMessage {
   bool isServerMessage = false;
   bool isMentionAll = false;
   int rootRepliedCount = 0;
-  ZIMMessageRepliedInfo repliedInfo = ZIMMessageRepliedInfo();
+  ZIMMessageRepliedInfo? repliedInfo;
   List<String> mentionedUserIds = [];
   List<ZIMMessageReaction> reactions = [];
   String cbInnerID = "";
@@ -791,20 +799,34 @@ class ZIMMessageLiteInfo {
 
 class ZIMTextMessageLiteInfo extends ZIMMessageLiteInfo{
   String message = '';
+
+  ZIMTextMessageLiteInfo() {
+    super.type = ZIMMessageType.text;
+  }
 }
 
 class ZIMCustomMessageLiteInfo extends ZIMMessageLiteInfo{
   String message = '';
   int subType = 0;
+
+  ZIMCustomMessageLiteInfo() {
+    super.type = ZIMMessageType.custom;
+  }
 }
 
 class ZIMCombineMessageLiteInfo extends ZIMMessageLiteInfo{
   String title = '';
   String summary = '';
+
+  ZIMCombineMessageLiteInfo() {
+    super.type = ZIMMessageType.combine;
+  }
 }
 
 class ZIMRevokeMessageLiteInfo extends ZIMMessageLiteInfo{
-
+  ZIMRevokeMessageLiteInfo() {
+    super.type = ZIMMessageType.revoke;
+  }
 }
 
 class ZIMMediaMessageLiteInfo extends ZIMMessageLiteInfo{
@@ -827,14 +849,24 @@ class ZIMImageMessageLiteInfo extends ZIMMediaMessageLiteInfo{
   String largeImageDownloadUrl = '';
   int largeImageWidth = 0;
   int largeImageHeight = 0;
+
+  ZIMImageMessageLiteInfo() {
+    super.type = ZIMMessageType.image;
+  }
 }
 
 class ZIMFileMessageLiteInfo extends ZIMMediaMessageLiteInfo{
-
+  ZIMFileMessageLiteInfo() {
+    super.type = ZIMMessageType.file;
+  }
 }
 
 class ZIMAudioMessageLiteInfo extends ZIMMediaMessageLiteInfo{
   int audioDuration = 0;
+
+  ZIMAudioMessageLiteInfo() {
+    super.type = ZIMMessageType.audio;
+  }
 }
 
 class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo{
@@ -843,9 +875,14 @@ class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo{
   String videoFirstFrameLocalPath = '';
   int videoFirstFrameWidth = 0;
   int videoFirstFrameHeight = 0;
+
+  ZIMVideoMessageLiteInfo() {
+    super.type = ZIMMessageType.video;
+  }
 }
 
 class ZIMMessageRepliedInfo{
+  ZIMMessageRepliedInfoState state = ZIMMessageRepliedInfoState.normal;
   ZIMMessageLiteInfo messageInfo = ZIMMessageLiteInfo();
   int messageID = 0;
   int messageSeq = 0;
@@ -858,6 +895,14 @@ class ZIMMessageRootRepliedCountInfo{
   String conversationID = '';
   ZIMConversationType conversationType = ZIMConversationType.unknown;
   int count = 0;
+}
+
+class ZIMMessageRootRepliedInfo {
+  ZIMMessageRepliedInfoState state = ZIMMessageRepliedInfoState.normal;
+  ZIMMessage? message;
+  String senderUserID = '';
+  int sentTime = 0;
+  int repliedCount = 0;
 }
 
 class ZIMMessageRepliedListQueryConfig{
@@ -2956,5 +3001,5 @@ class ZIMSelfUserInfoQueriedResult {
 class ZIMMessageRepliedListQueriedResult {
   List<ZIMMessage> messageList = [];
   int nextFlag = 0;
-  bool isRootRepliedMessageDeleted = false;
+  ZIMMessageRootRepliedInfo rootRepliedInfo = ZIMMessageRootRepliedInfo();
 }

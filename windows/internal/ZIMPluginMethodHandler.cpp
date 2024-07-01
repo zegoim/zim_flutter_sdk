@@ -1037,7 +1037,7 @@ void ZIMPluginMethodHandler::queryMessages(FArgument &argument, FResult result) 
                        });
 }
 
-void ZIMPluginMethodHandler::queryRepliedMessageList(FArgument &argument, FResult result) {
+void ZIMPluginMethodHandler::queryMessageRepliedList(FArgument &argument, FResult result) {
     CheckZIMInstanceExistAndObtainZIM();
 
     auto message =
@@ -1045,17 +1045,16 @@ void ZIMPluginMethodHandler::queryRepliedMessageList(FArgument &argument, FResul
     auto config = ZIMPluginConverter::oZIMMessageRepliedListQueryConfig(
         std::get<FTMap>(argument[FTValue("config")]));
 
-    zim->queryRepliedMessageList(
+    zim->queryMessageRepliedList(
         message, config,
-        [=](const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
-                                     long long nextFlag, bool isRootMessageDeleted,
-                                     const ZIMError &errorInfo) {
+        [=](const std::vector<std::shared_ptr<ZIMMessage>> &messageList, long long nextFlag, 
+            const ZIMMessageRootRepliedInfo &rootRepliedInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
                 FTMap retMap;
                 retMap[FTValue("messageList")] =
                     ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
                 retMap[FTValue("nextFlag")] = FTValue(nextFlag);
-                retMap[FTValue("isRootRepliedMessageDeleted")] = FTValue(isRootMessageDeleted);
+                retMap[FTValue("rootRepliedInfo")] = cnvZIMMessageRootRepliedInfoToMap(rootRepliedInfo);
 
                 result->Success(retMap);
             } else {

@@ -556,6 +556,22 @@ extension ZIMMessageOrderExtension on ZIMMessageOrder {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMMessageRepliedInfoStateExtension on ZIMMessageRepliedInfoState {
+  static const valueMap = {
+    ZIMMessageRepliedInfoState.normal: 0,
+    ZIMMessageRepliedInfoState.deleted: 1,
+    ZIMMessageRepliedInfoState.notFound: 2
+  };
+
+  static const mapValue = {
+    0: ZIMMessageRepliedInfoState.normal,
+    1: ZIMMessageRepliedInfoState.deleted,
+    2: ZIMMessageRepliedInfoState.notFound
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMRevokeTypeExtension on ZIMRevokeType {
   static const valueMap = {
     ZIMRevokeType.unknown: -1,

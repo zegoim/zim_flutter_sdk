@@ -1910,5 +1910,5 @@ abstract class ZIM {
 
   Future<ZIMMessageSentResult> replyMessage(ZIMMessage message,ZIMMessage toOriginalMessage, ZIMMessageSendConfig config, ZIMMessageSendNotification? notification);
 
-  Future<ZIMMessageRepliedListQueriedResult> queryRepliedMessageList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config);
+  Future<ZIMMessageRepliedListQueriedResult> queryMessageRepliedList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config);
 }

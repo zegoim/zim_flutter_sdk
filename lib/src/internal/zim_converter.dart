@@ -259,7 +259,9 @@ class ZIMConverter {
     messageMap['mentionedUserIDs'] = message.mentionedUserIds;
     messageMap['cbInnerID'] = message.cbInnerID;
     messageMap['rootRepliedCount'] = message.rootRepliedCount;
-    messageMap['repliedInfo'] = mZIMMessageRepliedInfo(message.repliedInfo);
+    if(message.repliedInfo != null) {
+      messageMap['repliedInfo'] = mZIMMessageRepliedInfo(message.repliedInfo!);
+    }
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -501,7 +503,9 @@ class ZIMConverter {
       message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
       message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
       message.rootRepliedCount = resultMap['rootRepliedCount'];
-      message.repliedInfo = ZIMConverter.oZIMMessageRepliedInfo(resultMap['repliedInfo']);
+      if(resultMap['repliedInfo'] != null) {
+        message.repliedInfo = ZIMConverter.oZIMMessageRepliedInfo(resultMap['repliedInfo']);
+      }
       if (resultMap['cbInnerID'] != null) {
         message.cbInnerID = resultMap['cbInnerID'];
       }
@@ -2486,7 +2490,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     ZIMMessageRepliedListQueriedResult result = ZIMMessageRepliedListQueriedResult();
     result.messageList = ZIMConverter.oZIMMessageList(map['messageList']);
     result.nextFlag = map['nextFlag'];
-    result.isRootRepliedMessageDeleted = map['isRootRepliedMessageDeleted'];
+    result.rootRepliedInfo = ZIMConverter.oZIMMessageRootRepliedInfo(map['rootRepliedInfo']);
     return result;
   }
 
@@ -2507,13 +2511,28 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     return oList;
   }
 
+  static ZIMMessageRootRepliedInfo oZIMMessageRootRepliedInfo(Map map) {
+    ZIMMessageRootRepliedInfo info = ZIMMessageRootRepliedInfo();
+    if(map['message'] != null) {
+      info.message = ZIMConverter.oZIMMessage(map['message']);
+    }
+    info.state = ZIMMessageRepliedInfoStateExtension.mapValue[map['state']] ?? ZIMMessageRepliedInfoState.normal;
+    info.senderUserID = map['senderUserID'];
+    info.sentTime = map['sentTime'];
+    info.repliedCount = map['repliedCount'];
+
+    return info;
+  }
+
   static ZIMMessageRepliedInfo oZIMMessageRepliedInfo(Map map){
     ZIMMessageRepliedInfo repliedInfo = ZIMMessageRepliedInfo();
     repliedInfo.messageID = map['messageID'];
     repliedInfo.messageSeq = map['messageSeq'];
     repliedInfo.senderUserID = map['senderUserID'];
     repliedInfo.sentTime = map['sentTime'];
+    repliedInfo.state = ZIMMessageRepliedInfoStateExtension.mapValue[map['state']] ?? ZIMMessageRepliedInfoState.normal;
     repliedInfo.messageInfo = ZIMConverter.oZIMMessageLiteInfo(map['messageInfo']);
+    
     return repliedInfo;
   }
 
@@ -2523,7 +2542,9 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     map['messageSeq'] = info.messageSeq;
     map['senderUserID'] = info.senderUserID;
     map['sentTime'] = info.sentTime;
+    map['state'] = ZIMMessageRepliedInfoStateExtension.valueMap[info.state];
     map['messageInfo'] = mZIMMessageLiteInfo(info.messageInfo);
+    
     return map;
   }
 
@@ -2634,6 +2655,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     liteInfo.type = type;
     switch(type){
       case ZIMMessageType.image:
+      case ZIMMessageType.file:
       case ZIMMessageType.video:
       case ZIMMessageType.audio:
         liteInfo as ZIMMediaMessageLiteInfo;
