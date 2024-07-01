@@ -24,6 +24,9 @@ template struct Rob<ZIM_FriendlyGet_conversationType, &ZIMMessage::conversationT
 long long ZIMMessage::*get(ZIM_FriendlyGet_conversationSeq);
 template struct Rob<ZIM_FriendlyGet_conversationSeq, &ZIMMessage::conversationSeq>;
 
+long long ZIMMessage::*get(ZIM_FriendlyGet_messageSeq);
+template struct Rob<ZIM_FriendlyGet_messageSeq, &ZIMMessage::messageSeq>;
+
 ZIMMessageDirection ZIMMessage::*get(ZIM_FriendlyGet_direction);
 template struct Rob<ZIM_FriendlyGet_direction, &ZIMMessage::direction>;
 
@@ -523,6 +526,7 @@ flutter::EncodableValue ZIMPluginConverter::cnvZIMMessageObjectToMap(ZIMMessage 
     messageMap[FTValue("conversationType")] = FTValue(message->getConversationType());
     messageMap[FTValue("timestamp")] = FTValue((int64_t)message->getTimestamp());
     messageMap[FTValue("conversationSeq")] = FTValue(message->getConversationSeq());
+    messageMap[FTValue("messageSeq")] = FTValue(message->getMessageSeq());
     messageMap[FTValue("orderKey")] = FTValue(message->getOrderKey());
     messageMap[FTValue("isUserInserted")] = FTValue(message->isUserInserted());
     messageMap[FTValue("receiptStatus")] = FTValue(message->getReceiptStatus());
@@ -1007,6 +1011,8 @@ std::shared_ptr<ZIMMessage> ZIMPluginConverter::cnvZIMMessageToObject(FTMap mess
         (long long)ZIMPluginConverter::cnvFValueToInt64(messageMap[FTValue("localMessageID")]);
     (*messagePtr.get()).*get(ZIM_FriendlyGet_conversationSeq()) =
         (long long)ZIMPluginConverter::cnvFValueToInt64(messageMap[FTValue("conversationSeq")]);
+    (*messagePtr.get()).*get(ZIM_FriendlyGet_messageSeq()) =
+        (long long)ZIMPluginConverter::cnvFValueToInt64(messageMap[FTValue("messageSeq")]);
     (*messagePtr.get()).*get(ZIM_FriendlyGet_timestamp()) =
         (unsigned long long)ZIMPluginConverter::cnvFValueToInt64(messageMap[FTValue("timestamp")]);
     (*messagePtr.get()).*get(ZIM_FriendlyGet_orderKey()) =
@@ -1707,6 +1713,7 @@ FTArray ZIMPluginConverter::cnvZIMMessageMentionedInfoToMap(
         map[FTValue("type")] = FTValue(info.type);
         map[FTValue("fromUserID")] = FTValue(info.fromUserID);
         map[FTValue("messageID")] = FTValue(info.messageID);
+        map[FTValue("messageSeq")] = FTValue(info.messageSeq);
         array.emplace_back(map);
     }
     return array;

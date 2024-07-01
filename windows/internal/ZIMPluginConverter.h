@@ -47,6 +47,10 @@ struct ZIM_FriendlyGet_conversationSeq {
     typedef long long ZIMMessage::*type;
 };
 
+struct ZIM_FriendlyGet_messageSeq {
+    typedef long long ZIMMessage::*type;
+};
+
 struct ZIM_FriendlyGet_direction {
     typedef ZIMMessageDirection ZIMMessage::*type;
 };
