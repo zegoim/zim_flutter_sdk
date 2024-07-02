@@ -934,9 +934,9 @@ class ZIMGroupConversation extends ZIMConversation {
 
 enum ZIMMessageMentionedType {
   unknown,
-  mention_me,
-  mention_all,
-  mention_all_and_me
+  mentionMe,
+  mentionAll,
+  mentionAllAndMe
 }
 
 enum ZIMGroupApplicationType {
@@ -947,12 +947,12 @@ enum ZIMGroupApplicationType {
 }
 
 enum ZIMGroupEnterType {
-  Unknown,
-  Created,
-  JoinApply,
-  Joined,
-  Invited,
-  InviteApply,
+  unknown,
+  created,
+  joinApply,
+  joined,
+  invited,
+  inviteApply,
 }
 
 enum ZIMGroupApplicationState {
@@ -1268,7 +1268,7 @@ class ZIMGroup {
 /// Description:  group class.
 class ZIMGroupEnterInfo {
   int enterTime = 0;
-  ZIMGroupEnterType enterType = ZIMGroupEnterType.Unknown;
+  ZIMGroupEnterType enterType = ZIMGroupEnterType.unknown;
   ZIMGroupMemberSimpleInfo? operatedUser;
   ZIMGroupEnterInfo();
 }

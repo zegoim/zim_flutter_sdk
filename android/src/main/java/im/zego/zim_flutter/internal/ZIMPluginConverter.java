@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import im.zego.zim.ZIM;
 import im.zego.zim.entity.*;
 import im.zego.zim.enums.*;
 
@@ -84,6 +85,7 @@ public class ZIMPluginConverter {
             HashMap<String,Object> mentionInfo = new HashMap<String,Object>();
             mentionInfo.put("fromUserID",info.fromUserID);
             mentionInfo.put("messageID",info.messageID);
+            mentionInfo.put("messageSeq",info.messageSeq);
             mentionInfo.put("type",info.type.value());
             mentionInfoList.add(mentionInfo);
         }
@@ -116,6 +118,7 @@ public class ZIMPluginConverter {
         messageMap.put("messageID",message.getMessageID());
         messageMap.put("conversationID",message.getConversationID());
         messageMap.put("conversationSeq",message.getConversationSeq());
+        messageMap.put("messageSeq",message.getMessageSeq());
         messageMap.put("senderUserID",message.getSenderUserID());
         messageMap.put("timestamp",message.getTimestamp());
         messageMap.put("localMessageID",message.getLocalMessageID());
@@ -133,6 +136,8 @@ public class ZIMPluginConverter {
         messageMap.put("mentionedUserIDs",message.getMentionedUserIDs());
         messageMap.put("isMentionAll",message.isMentionAll());
         messageMap.put("cbInnerID",message.getCbInnerID());
+        messageMap.put("rootRepliedCount",message.getRootRepliedCount());
+        messageMap.put("repliedInfo",mZIMMessageRepliedInfo(message.getRepliedInfo()));
         switch(message.getType()){
             case TEXT:
                 messageMap.put("message",((ZIMTextMessage)message).message);
@@ -418,6 +423,34 @@ public class ZIMPluginConverter {
                 message = new ZIMMessage(ZIMMessageType.UNKNOWN);
                 break;
         }
+
+        if (message instanceof ZIMMediaMessage) {
+            ((ZIMMediaMessage) message).setFileDownloadUrl((String) messageMap.get("fileDownloadUrl"));
+            try {
+                Field fileUIDField = ZIMMediaMessage.class.getDeclaredField("fileUID");
+                fileUIDField.setAccessible(true);
+                fileUIDField.set(message,messageMap.get("fileUID"));
+                fileUIDField.setAccessible(false);
+
+                Field fileNameField = ZIMMediaMessage.class.getDeclaredField("fileName");
+                fileNameField.setAccessible(true);
+                fileNameField.set(message,messageMap.get("fileName"));
+                fileNameField.setAccessible(false);
+
+                Field fileSizeField = ZIMMediaMessage.class.getDeclaredField("fileSize");
+                fileSizeField.setAccessible(true);
+                fileSizeField.set(message,ZIMPluginCommonTools.safeGetIntValue(messageMap.get("fileSize")));
+                fileSizeField.setAccessible(false);
+
+            }
+            catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+            catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         try {
             Field msgTypeField = ZIMMessage.class.getDeclaredField("type");
             msgTypeField.setAccessible(true);
@@ -438,6 +471,11 @@ public class ZIMPluginConverter {
             conversationSeqField.setAccessible(true);
             conversationSeqField.set(message,ZIMPluginCommonTools.safeGetLongValue(messageMap.get("conversationSeq")));
             conversationSeqField.setAccessible(false);
+
+            Field messageSeqField = ZIMMessage.class.getDeclaredField("messageSeq");
+            messageSeqField.setAccessible(true);
+            messageSeqField.set(message,ZIMPluginCommonTools.safeGetLongValue(messageMap.get("messageSeq")));
+            messageSeqField.setAccessible(false);
 
             Field senderUserIDField = ZIMMessage.class.getDeclaredField("senderUserID");
             senderUserIDField.setAccessible(true);
@@ -508,6 +546,17 @@ public class ZIMPluginConverter {
             cbInnerIDField.setAccessible(true);
             cbInnerIDField.set(message,messageMap.get("cbInnerID"));
             cbInnerIDField.setAccessible(false);
+
+            Field rootRepliedCountField = ZIMMessage.class.getDeclaredField("rootRepliedCount");
+            rootRepliedCountField.setAccessible(true);
+            rootRepliedCountField.set(message,messageMap.get("rootRepliedCount"));
+            rootRepliedCountField.setAccessible(false);
+
+            Field repliedInfoField = ZIMMessage.class.getDeclaredField("repliedInfo");
+            repliedInfoField.setAccessible(true);
+            repliedInfoField.set(message, oZIMMessageRepliedInfo(ZIMPluginCommonTools.safeGetHashMap(messageMap.get("repliedInfo"))));
+            repliedInfoField.setAccessible(false);
+
         }
         catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -516,38 +565,13 @@ public class ZIMPluginConverter {
             e.printStackTrace();
         }
 
-        if (message instanceof ZIMMediaMessage) {
-            ((ZIMMediaMessage) message).setFileDownloadUrl((String) messageMap.get("fileDownloadUrl"));
-            try {
-                Field fileUIDField = ZIMMediaMessage.class.getDeclaredField("fileUID");
-                fileUIDField.setAccessible(true);
-                fileUIDField.set(message,messageMap.get("fileUID"));
-                fileUIDField.setAccessible(false);
-
-                Field fileNameField = ZIMMediaMessage.class.getDeclaredField("fileName");
-                fileNameField.setAccessible(true);
-                fileNameField.set(message,messageMap.get("fileName"));
-                fileNameField.setAccessible(false);
-
-                Field fileSizeField = ZIMMediaMessage.class.getDeclaredField("fileSize");
-                fileSizeField.setAccessible(true);
-                fileSizeField.set(message,ZIMPluginCommonTools.safeGetIntValue(messageMap.get("fileSize")));
-                fileSizeField.setAccessible(false);
-
-            }
-            catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-            catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
         message.setIsMentionAll(ZIMPluginCommonTools.safeGetBoolValue(messageMap.get("isMentionAll")));
         ArrayList<String> mentionedUserIds = new ArrayList<>();
         for (String userId : (ArrayList<String>) messageMap.get("mentionedUserIDs")) {
             mentionedUserIds.add(userId);
         }
         message.setMentionedUserIDs(mentionedUserIds);
+
         return message;
     }
 
@@ -569,6 +593,231 @@ public class ZIMPluginConverter {
         return messageList;
     }
 
+    static public HashMap<String,Object> mZIMMessageRepliedInfo(ZIMMessageRepliedInfo info) {
+        if(info == null) {
+            return null;
+        }
+
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("state", info.state.value());
+        infoMap.put("messageInfo", mZIMMessageLiteInfo(info.messageInfo));
+        infoMap.put("senderUserID", info.senderUserID);
+        infoMap.put("messageID", info.messageID);
+        infoMap.put("messageSeq", info.messageSeq);
+        infoMap.put("sentTime", info.sentTime);
+
+        return infoMap;
+    }
+
+    static public HashMap<String, Object> mZIMMessageLiteInfo(ZIMMessageLiteInfo info) {
+        if(info == null) {
+            return null;
+        }
+
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("type", info.type.value());
+        switch (info.type) {
+            case TEXT:
+                ZIMTextMessageLiteInfo textLiteInfo = (ZIMTextMessageLiteInfo)info;
+                infoMap.put("message", textLiteInfo.message);
+                break;
+            case CUSTOM:
+                ZIMCustomMessageLiteInfo customLiteInfo = (ZIMCustomMessageLiteInfo)info;
+                infoMap.put("message", customLiteInfo.message);
+                infoMap.put("subType", customLiteInfo.subType);
+                break;
+            case COMBINE:
+                ZIMCombineMessageLiteInfo cbLiteInfo = (ZIMCombineMessageLiteInfo)info;
+                infoMap.put("title", cbLiteInfo.title);
+                infoMap.put("summary", cbLiteInfo.summary);
+                break;
+            case IMAGE:
+                ZIMImageMessageLiteInfo imageLiteInfo = (ZIMImageMessageLiteInfo)info;
+                infoMap.put("fileName", imageLiteInfo.fileName);
+                infoMap.put("fileSize", imageLiteInfo.fileSize);
+                infoMap.put("fileDownloadUrl", imageLiteInfo.fileDownloadUrl);
+                infoMap.put("fileLocalPath", imageLiteInfo.fileLocalPath);
+                infoMap.put("originalImageWidth", imageLiteInfo.originalImageWidth);
+                infoMap.put("originalImageHeight", imageLiteInfo.originalImageHeight);
+                infoMap.put("largeImageDownloadUrl", imageLiteInfo.largeImageDownloadUrl);
+                infoMap.put("largeImageLocalPath", imageLiteInfo.largeImageLocalPath);
+                infoMap.put("largeImageWidth", imageLiteInfo.largeImageWidth);
+                infoMap.put("largeImageHeight", imageLiteInfo.largeImageHeight);
+                infoMap.put("thumbnailDownloadUrl", imageLiteInfo.thumbnailDownloadUrl);
+                infoMap.put("thumbnailLocalPath", imageLiteInfo.thumbnailLocalPath);
+                infoMap.put("thumbnailWidth", imageLiteInfo.thumbnailWidth);
+                infoMap.put("thumbnailHeight", imageLiteInfo.thumbnailHeight);
+                break;
+            case FILE:
+                ZIMFileMessageLiteInfo fileLiteInfo = (ZIMFileMessageLiteInfo)info;
+                infoMap.put("fileName", fileLiteInfo.fileName);
+                infoMap.put("fileSize", fileLiteInfo.fileSize);
+                infoMap.put("fileDownloadUrl", fileLiteInfo.fileDownloadUrl);
+                infoMap.put("fileLocalPath", fileLiteInfo.fileLocalPath);
+                break;
+            case AUDIO:
+                ZIMAudioMessageLiteInfo audioLiteInfo = (ZIMAudioMessageLiteInfo)info;
+                infoMap.put("fileName", audioLiteInfo.fileName);
+                infoMap.put("fileSize", audioLiteInfo.fileSize);
+                infoMap.put("fileDownloadUrl", audioLiteInfo.fileDownloadUrl);
+                infoMap.put("fileLocalPath", audioLiteInfo.fileLocalPath);
+                infoMap.put("audioDuration", audioLiteInfo.audioDuration);
+                break;
+            case VIDEO:
+                ZIMVideoMessageLiteInfo videoLiteInfo = (ZIMVideoMessageLiteInfo)info;
+                infoMap.put("fileName", videoLiteInfo.fileName);
+                infoMap.put("fileSize", videoLiteInfo.fileSize);
+                infoMap.put("fileDownloadUrl", videoLiteInfo.fileDownloadUrl);
+                infoMap.put("fileLocalPath", videoLiteInfo.fileLocalPath);
+                infoMap.put("videoLiteInfo", videoLiteInfo.videoDuration);
+                infoMap.put("videoFirstFrameDownloadUrl", videoLiteInfo.videoFirstFrameDownloadUrl);
+                infoMap.put("videoFirstFrameLocalPath", videoLiteInfo.videoFirstFrameLocalPath);
+                infoMap.put("videoFirstFrameWidth", videoLiteInfo.videoFirstFrameWidth);
+                infoMap.put("videoFirstFrameHeight", videoLiteInfo.videoFirstFrameHeight);
+                break;
+            default:
+                break;
+        }
+
+        return infoMap;
+    }
+
+    static public ZIMMessageRepliedInfo oZIMMessageRepliedInfo(HashMap<String,Object> infoMap) {
+        if(infoMap == null) {
+            return null;
+        }
+
+        ZIMMessageRepliedInfo info = new ZIMMessageRepliedInfo();
+        info.state = ZIMMessageRepliedInfoState.getZIMMessageRepliedInfoState(ZIMPluginCommonTools.safeGetIntValue(infoMap.get("state")));
+        info.messageInfo = oZIMMessageLiteInfo(ZIMPluginCommonTools.safeGetHashMap(infoMap.get("messageInfo")));
+        info.messageID = ZIMPluginCommonTools.safeGetLongValue(infoMap.get("messageID"));
+        info.messageSeq = ZIMPluginCommonTools.safeGetLongValue(infoMap.get("messageSeq"));
+        info.senderUserID = (String) infoMap.get("senderUserID");
+        info.sentTime = ZIMPluginCommonTools.safeGetLongValue("sentTime");
+
+        return info;
+    }
+
+    static public ZIMMessageLiteInfo oZIMMessageLiteInfo(HashMap<String,Object> infoMap) {
+        if(infoMap == null) {
+            return null;
+        }
+
+        ZIMMessageLiteInfo info = null;
+        ZIMMessageType messageType = ZIMMessageType.getZIMMessageType(ZIMPluginCommonTools.safeGetIntValue(infoMap.get("type")));
+        switch (messageType) {
+            case TEXT:
+                info = new ZIMTextMessageLiteInfo();
+                ZIMTextMessageLiteInfo textLiteInfo = (ZIMTextMessageLiteInfo) info;
+                textLiteInfo.message = (String) infoMap.get("message");
+                break;
+            case CUSTOM:
+                info = new ZIMCustomMessageLiteInfo();
+                ZIMCustomMessageLiteInfo customLiteInfo = (ZIMCustomMessageLiteInfo) info;
+                customLiteInfo.message = (String) infoMap.get("message");
+                customLiteInfo.subType = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("subType"));
+                break;
+            case COMBINE:
+                info = new ZIMCombineMessageLiteInfo();
+                ZIMCombineMessageLiteInfo cbLiteInfo = (ZIMCombineMessageLiteInfo) info;
+                cbLiteInfo.title = (String) infoMap.get("title");
+                cbLiteInfo.summary = (String) infoMap.get("summary");
+                break;
+            case REVOKE:
+                info = new ZIMRevokeMessageLiteInfo();
+                break;
+            case IMAGE:
+                info = new ZIMImageMessageLiteInfo();
+                ZIMImageMessageLiteInfo imageLiteInfo = (ZIMImageMessageLiteInfo) info;
+                imageLiteInfo.originalImageWidth = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("originalImageWidth"));
+                imageLiteInfo.originalImageHeight = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("originalImageHeight"));
+                imageLiteInfo.largeImageDownloadUrl = (String) infoMap.get("largeImageDownloadUrl");
+                imageLiteInfo.largeImageLocalPath = (String) infoMap.get("largeImageLocalPath");
+                imageLiteInfo.largeImageWidth = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("largeImageWidth"));
+                imageLiteInfo.largeImageHeight = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("largeImageHeight"));
+                imageLiteInfo.thumbnailDownloadUrl = (String) infoMap.get("thumbnailDownloadUrl");
+                imageLiteInfo.thumbnailLocalPath = (String) infoMap.get("thumbnailLocalPath");
+                imageLiteInfo.thumbnailWidth = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("thumbnailWidth"));
+                imageLiteInfo.thumbnailHeight = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("thumbnailHeight"));
+                break;
+            case FILE:
+                info = new ZIMFileMessageLiteInfo();
+                break;
+            case AUDIO:
+                info = new ZIMAudioMessageLiteInfo();
+                ZIMAudioMessageLiteInfo audioLiteInfo = (ZIMAudioMessageLiteInfo) info;
+                audioLiteInfo.audioDuration = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("audioDuration"));
+                break;
+            case VIDEO:
+                info = new ZIMVideoMessageLiteInfo();
+                ZIMVideoMessageLiteInfo videoLiteInfo = (ZIMVideoMessageLiteInfo) info;
+                videoLiteInfo.videoDuration = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("videoDuration"));
+                videoLiteInfo.videoFirstFrameDownloadUrl = (String) infoMap.get("videoFirstFrameDownloadUrl");
+                videoLiteInfo.videoFirstFrameLocalPath = (String) infoMap.get("videoFirstFrameLocalPath");
+                videoLiteInfo.videoFirstFrameWidth = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("videoFirstFrameWidth"));
+                videoLiteInfo.videoFirstFrameHeight = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("videoFirstFrameHeight"));
+                break;
+            default:
+                info = new ZIMMessageLiteInfo();
+                break;
+        }
+
+        if(info instanceof ZIMMediaMessageLiteInfo) {
+            ZIMMediaMessageLiteInfo mediaLiteInfo = (ZIMMediaMessageLiteInfo) info;
+            mediaLiteInfo.fileName = (String) infoMap.get("fileName");
+            mediaLiteInfo.fileDownloadUrl = (String) infoMap.get("fileDownloadUrl");
+            mediaLiteInfo.fileLocalPath = (String) infoMap.get("fileLocalPath");
+            mediaLiteInfo.fileSize = ZIMPluginCommonTools.safeGetIntValue(infoMap.get("fileSize"));
+        }
+
+        return info;
+    }
+
+    static public HashMap<String,Object> mZIMMessageRootRepliedInfo(ZIMMessageRootRepliedInfo info) {
+        if(info == null) {
+            return null;
+        }
+
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("state", info.state.value());
+        infoMap.put("message", mZIMMessage(info.message));
+        infoMap.put("senderUserID", info.senderUserID);
+        infoMap.put("sentTime", info.sentTime);
+        infoMap.put("repliedCount", info.repliedCount);
+
+        return infoMap;
+    }
+
+    static public HashMap<String,Object> mZIMMessageRootRepliedCountInfo(ZIMMessageRootRepliedCountInfo info) {
+        if(info == null) {
+            return null;
+        }
+
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("conversationID", info.conversationID);
+        infoMap.put("conversationType", info.conversationType);
+        infoMap.put("messageID", info.messageID);
+        infoMap.put("count", info.count);
+
+        return infoMap;
+    }
+
+    static public ArrayList<HashMap<String,Object>> mZIMMessageRootRepliedCountInfoList(ArrayList<ZIMMessageRootRepliedCountInfo> infoList) {
+        if(infoList == null) {
+            return null;
+        }
+
+        ArrayList<HashMap<String,Object>> infoMapArray = new ArrayList<>();
+        for(ZIMMessageRootRepliedCountInfo info : infoList) {
+            HashMap<String,Object> infoMap = mZIMMessageRootRepliedCountInfo(info);
+            if(infoMap != null) {
+                infoMapArray.add(infoMap);
+            }
+        }
+
+        return infoMapArray;
+    }
+
     static public HashMap<String,Object> mZIMMessageReceiptInfo(ZIMMessageReceiptInfo info){
         HashMap<String,Object> infoModel = new HashMap<>();
         infoModel.put("conversationID",info.conversationID);
@@ -579,6 +828,14 @@ public class ZIMPluginConverter {
         infoModel.put("unreadMemberCount",info.unreadMemberCount);
         infoModel.put("isSelfOperated",info.isSelfOperated);
         return infoModel;
+    }
+
+    static public ZIMMessageRepliedListQueryConfig oZIMMessageRepliedListQueryConfig(HashMap<String,Object> configMap) {
+        ZIMMessageRepliedListQueryConfig config = new ZIMMessageRepliedListQueryConfig();
+        config.count = ZIMPluginCommonTools.safeGetIntValue(configMap.get("count"));
+        config.nextFlag =  ZIMPluginCommonTools.safeGetLongValue(configMap.get("nextFlag"));
+
+        return config;
     }
 
     static public ZIMMessageSearchConfig oZIMMessageSearchConfig(HashMap<String,Object> configMap) {
