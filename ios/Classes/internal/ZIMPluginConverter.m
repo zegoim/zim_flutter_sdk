@@ -414,6 +414,7 @@
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"localExtendedData"]  forKey:@"localExtendedData"];
     [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"isBroadcastMessage"] forKey:@"isBroadcastMessage"];
     [msg safeSetValue:(NSString *)[messageDic safeObjectForKey:@"cbInnerID"]  forKey:@"cbInnerID"];
+    [msg safeSetValue:(NSNumber *)[messageDic safeObjectForKey:@"rootRepliedCount"]  forKey:@"rootRepliedCount"];
     [msg safeSetValue:[ZIMPluginConverter oZIMMessageRepliedInfo:[messageDic safeObjectForKey:@"repliedInfo"]] forKey:@"repliedInfo"];
     
     if([msg isKindOfClass:[ZIMMediaMessage class]]){
@@ -458,7 +459,7 @@
     [messageDic safeSetObject:[NSNumber numberWithBool:message.isServerMessage] forKey:@"isServerMessage"];
     [messageDic safeSetObject:message.mentionedUserIDs forKey:@"mentionedUserIDs"];
     [messageDic safeSetObject:message.cbInnerID  forKey:@"cbInnerID"];
-    
+    [messageDic safeSetObject:[NSNumber numberWithUnsignedInteger:message.rootRepliedCount] forKey:@"rootRepliedCount"];
     if(message.repliedInfo) {
         [messageDic safeSetObject:[ZIMPluginConverter mZIMMessageRepliedInfo:message.repliedInfo] forKey:@"repliedInfo"];
     }
