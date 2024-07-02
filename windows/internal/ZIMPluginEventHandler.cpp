@@ -788,7 +788,7 @@ void ZIMPluginEventHandler::onGroupApplicationUpdated(
 }
 
 void ZIMPluginEventHandler::onMessageRepliedCountChanged(
-    ZIM * /*zim*/, const std::vector<ZIMMessageRootRepliedCountInfo> &infos) {
+    ZIM * zim, const std::vector<ZIMMessageRootRepliedCountInfo> &infos) {
     if (eventSink_) {
         FTMap retMap;
         auto handle = this->engineEventMap[zim];
@@ -801,7 +801,7 @@ void ZIMPluginEventHandler::onMessageRepliedCountChanged(
 }
 
 void ZIMPluginEventHandler::onMessageRepliedInfoChanged(
-    ZIM * /*zim*/, const std::vector<std::shared_ptr<ZIMMessage>> &messageList) {
+    ZIM * zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList) {
     if (eventSink_) {
         FTMap retMap;
         auto handle = this->engineEventMap[zim];
