@@ -988,7 +988,7 @@ void ZIMPluginMethodHandler::queryMessages(FArgument &argument, FResult result) 
     auto conversationType = static_cast<ZIMConversationType>(
         ZIMPluginConverter::cnvFValueToInt32(argument[FTValue("conversationType")]));
     auto messageSeq = ZIMPluginConverter::cnvFTArrayToInt64Vec(
-        std::get<FTArray>(argument[FTValue("messageSeq")]));
+        std::get<FTArray>(argument[FTValue("messageSeqs")]));
 
     zim->queryMessages(messageSeq, conversationID, conversationType,
                        [=](const std::string &conversationID, ZIMConversationType conversationType,
