@@ -224,6 +224,7 @@ class ZIMConverter {
       info.fromUserID = value['fromUserID'];
       info.messageID = value['messageID'];
       info.type = ZIMMessageMentionedTypeExtension.mapValue[value['type']]!;
+      info.messageSeq = value['messageSeq'];
       conversation.mentionedInfoList.add(info);
     }
     conversation.draft = resultMap['draft'] ?? '';
@@ -286,6 +287,7 @@ class ZIMConverter {
     messageMap['type'] = ZIMMessageTypeExtension.valueMap[message.type];
     messageMap['messageID'] = message.messageID;
     messageMap['localMessageID'] = message.localMessageID;
+    messageMap['messageSeq'] = message.messageSeq;
     messageMap['senderUserID'] = message.senderUserID;
     messageMap['conversationID'] = message.conversationID;
     messageMap['direction'] =
@@ -307,6 +309,10 @@ class ZIMConverter {
     messageMap['isMentionAll'] = message.isMentionAll;
     messageMap['mentionedUserIDs'] = message.mentionedUserIds;
     messageMap['cbInnerID'] = message.cbInnerID;
+    messageMap['rootRepliedCount'] = message.rootRepliedCount;
+    if(message.repliedInfo != null) {
+      messageMap['repliedInfo'] = mZIMMessageRepliedInfo(message.repliedInfo!);
+    }
     if (message is ZIMMediaMessage) {
       messageMap['fileLocalPath'] = message.fileLocalPath;
       messageMap['fileDownloadUrl'] = message.fileDownloadUrl;
@@ -514,6 +520,7 @@ class ZIMConverter {
       message.localMessageID = resultMap['localMessageID'] is String
           ? int.parse(resultMap['localMessageID'])
           : resultMap['localMessageID'];
+      message.messageSeq = resultMap['messageSeq'] ?? 0;
       message.senderUserID = resultMap['senderUserID'];
       message.conversationID = resultMap['conversationID'];
       message.direction =
@@ -523,7 +530,7 @@ class ZIMConverter {
       message.conversationType =
       ZIMConversationTypeExtension.mapValue[resultMap['conversationType']]!;
       message.timestamp = resultMap['timestamp'];
-      message.conversationSeq = resultMap['conversationSeq'] ?? resultMap['messageSeq'];
+      message.conversationSeq = resultMap['conversationSeq'] ?? 0;
       message.orderKey = resultMap['orderKey'] is int ? resultMap['orderKey'] : 0;
       message.isUserInserted = resultMap['isUserInserted'] is bool
           ? resultMap['isUserInserted']
@@ -546,6 +553,10 @@ class ZIMConverter {
       message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
       message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
       message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
+      message.rootRepliedCount = resultMap['rootRepliedCount'];
+      if(resultMap['repliedInfo'] != null) {
+        message.repliedInfo = ZIMConverter.oZIMMessageRepliedInfo(resultMap['repliedInfo']);
+      }
       if (resultMap['cbInnerID'] != null) {
         message.cbInnerID = resultMap['cbInnerID'];
       }
@@ -2528,6 +2539,196 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     return ZIMConversationTotalUnreadCountQueriedResult(unreadCount: map['unreadCount']);
   }
 
+  static Map mZIMMessageRepliedListQueryConfig(ZIMMessageRepliedListQueryConfig config){
+    Map map = {};
+    map['nextFlag'] = config.nextFlag;
+    map['count'] = config.count;
+    return map;
+  }
+
+  static ZIMMessageRepliedListQueriedResult oZIMMessageRepliedListQueriedResult(Map map){
+    ZIMMessageRepliedListQueriedResult result = ZIMMessageRepliedListQueriedResult();
+    result.messageList = ZIMConverter.oZIMMessageList(map['messageList']);
+    result.nextFlag = map['nextFlag'];
+    result.rootRepliedInfo = ZIMConverter.oZIMMessageRootRepliedInfo(map['rootRepliedInfo']);
+    return result;
+  }
+
+  static ZIMMessageRootRepliedCountInfo oZIMMessageRootRepliedCountInfo(Map map){
+    ZIMMessageRootRepliedCountInfo info = ZIMMessageRootRepliedCountInfo();
+    info.messageID = map['messageID'];
+    info.conversationID = map['conversationID'];
+    info.conversationType = ZIMConversationTypeExtension.mapValue[map['conversationType']]??ZIMConversationType.unknown;
+    info.count = map['count'];
+    return info;
+  }
+
+  static List<ZIMMessageRootRepliedCountInfo> oZIMMessageRootRepliedCountInfoList(List infoList){
+    List<ZIMMessageRootRepliedCountInfo> oList = [];
+    for(Map map in infoList){
+      oList.add(ZIMConverter.oZIMMessageRootRepliedCountInfo(map));
+    }
+    return oList;
+  }
+
+  static ZIMMessageRootRepliedInfo oZIMMessageRootRepliedInfo(Map map) {
+    ZIMMessageRootRepliedInfo info = ZIMMessageRootRepliedInfo();
+    if(map['message'] != null) {
+      info.message = ZIMConverter.oZIMMessage(map['message']);
+    }
+    info.state = ZIMMessageRepliedInfoStateExtension.mapValue[map['state']] ?? ZIMMessageRepliedInfoState.normal;
+    info.senderUserID = map['senderUserID'];
+    info.sentTime = map['sentTime'];
+    info.repliedCount = map['repliedCount'];
+
+    return info;
+  }
+
+  static ZIMMessageRepliedInfo oZIMMessageRepliedInfo(Map map){
+    ZIMMessageRepliedInfo repliedInfo = ZIMMessageRepliedInfo();
+    repliedInfo.messageID = map['messageID'];
+    repliedInfo.messageSeq = map['messageSeq'];
+    repliedInfo.senderUserID = map['senderUserID'];
+    repliedInfo.sentTime = map['sentTime'];
+    repliedInfo.state = ZIMMessageRepliedInfoStateExtension.mapValue[map['state']] ?? ZIMMessageRepliedInfoState.normal;
+    repliedInfo.messageInfo = ZIMConverter.oZIMMessageLiteInfo(map['messageInfo']);
+    
+    return repliedInfo;
+  }
+
+  static Map mZIMMessageRepliedInfo(ZIMMessageRepliedInfo info){
+    Map map = {};
+    map['messageID'] = info.messageID;
+    map['messageSeq'] = info.messageSeq;
+    map['senderUserID'] = info.senderUserID;
+    map['sentTime'] = info.sentTime;
+    map['state'] = ZIMMessageRepliedInfoStateExtension.valueMap[info.state];
+    map['messageInfo'] = mZIMMessageLiteInfo(info.messageInfo);
+    
+    return map;
+  }
+
+  static Map mZIMMessageLiteInfo(ZIMMessageLiteInfo liteInfo){
+    Map map = {};
+    map['type'] = ZIMMessageTypeExtension.valueMap[liteInfo.type];
+    if(liteInfo is ZIMTextMessageLiteInfo){
+      map['message'] = liteInfo.message;
+    }else if (liteInfo is ZIMCustomMessageLiteInfo){
+      map['message'] = liteInfo.message;
+      map['subType'] = liteInfo.subType;
+    }else if (liteInfo is ZIMCombineMessageLiteInfo){
+      map['title'] = liteInfo.title;
+      map['summary'] = liteInfo.summary;
+    }else if(liteInfo is ZIMImageMessageLiteInfo){
+      map['originalImageWidth'] = liteInfo.originalImageWidth;
+      map['originalImageHeight'] = liteInfo.originalImageHeight;
+      map['thumbnailLocalPath'] = liteInfo.thumbnailLocalPath;
+      map['thumbnailDownloadUrl'] = liteInfo.thumbnailDownloadUrl;
+      map['thumbnailWidth'] = liteInfo.thumbnailWidth;
+      map['thumbnailHeight'] = liteInfo.thumbnailHeight;
+      map['largeImageLocalPath'] = liteInfo.largeImageLocalPath;
+      map['largeImageDownloadUrl'] = liteInfo.largeImageDownloadUrl;
+      map['largeImageWidth'] = liteInfo.largeImageWidth;
+      map['largeImageHeight'] = liteInfo.largeImageHeight;
+    }else if(liteInfo is ZIMAudioMessageLiteInfo){
+      map['audioDuration'] = liteInfo.audioDuration;
+    }else if(liteInfo is ZIMVideoMessageLiteInfo){
+      map['videoDuration'] = liteInfo.videoDuration;
+      map['videoFirstFrameDownloadUrl'] = liteInfo.videoFirstFrameDownloadUrl;
+      map['videoFirstFrameLocalPath'] = liteInfo.videoFirstFrameLocalPath;
+      map['videoFirstFrameWidth'] = liteInfo.videoFirstFrameWidth;
+      map['videoFirstFrameHeight'] = liteInfo.videoFirstFrameHeight;
+    }
+
+    if(liteInfo is ZIMMediaMessageLiteInfo){
+      map['fileSize'] = liteInfo.fileSize;
+      map['fileName'] = liteInfo.fileName;
+      map['fileLocalPath'] = liteInfo.fileLocalPath;
+      map['fileDownloadUrl'] = liteInfo.fileDownloadUrl;
+    }
+    return map;
+  }
+  static ZIMMessageLiteInfo oZIMMessageLiteInfo(Map map){
+    ZIMMessageLiteInfo liteInfo;
+    ZIMMessageType type = ZIMMessageTypeExtension.mapValue[map['type']]??ZIMMessageType.unknown;
+    switch(type){
+      case ZIMMessageType.text:
+        liteInfo = ZIMTextMessageLiteInfo();
+        liteInfo as ZIMTextMessageLiteInfo;
+        liteInfo.message = map['message'];
+        break;
+      case ZIMMessageType.image:
+        liteInfo = ZIMImageMessageLiteInfo();
+        liteInfo as ZIMImageMessageLiteInfo;
+        liteInfo.originalImageHeight = map['originalImageHeight'];
+        liteInfo.originalImageWidth = map['originalImageWidth'];
+        liteInfo.largeImageHeight = map['largeImageHeight'];
+        liteInfo.largeImageWidth = map['largeImageWidth'];
+        liteInfo.largeImageLocalPath = map['largeImageLocalPath'];
+        liteInfo.largeImageDownloadUrl = map['largeImageDownloadUrl'];
+        liteInfo.thumbnailHeight = map['thumbnailHeight'];
+        liteInfo.thumbnailWidth = map['thumbnailWidth'];
+        liteInfo.thumbnailLocalPath = map['thumbnailLocalPath'];
+        liteInfo.thumbnailDownloadUrl = map['thumbnailDownloadUrl'];
+        break;
+      case ZIMMessageType.file:
+        liteInfo = ZIMFileMessageLiteInfo();
+        liteInfo as ZIMFileMessageLiteInfo;
+        break;
+      case ZIMMessageType.audio:
+        liteInfo = ZIMAudioMessageLiteInfo();
+        liteInfo as ZIMAudioMessageLiteInfo;
+        liteInfo.audioDuration = map['audioDuration'];
+        break;
+      case ZIMMessageType.video:
+        liteInfo = ZIMVideoMessageLiteInfo();
+        liteInfo as ZIMVideoMessageLiteInfo;
+        liteInfo.videoDuration = map['videoDuration'];
+        liteInfo.videoFirstFrameDownloadUrl = map['videoFirstFrameDownloadUrl'];
+        liteInfo.videoFirstFrameLocalPath = map['videoFirstFrameLocalPath'];
+        liteInfo.videoFirstFrameHeight = map['videoFirstFrameHeight'];
+        liteInfo.videoFirstFrameWidth = map['videoFirstFrameWidth'];
+        break;
+      case ZIMMessageType.revoke:
+        liteInfo = ZIMRevokeMessageLiteInfo();
+        break;
+      case ZIMMessageType.custom:
+        liteInfo = ZIMCustomMessageLiteInfo();
+        liteInfo as ZIMCustomMessageLiteInfo;
+        liteInfo.message = map['message'];
+        liteInfo.subType = map['subType'];
+        break;
+      case ZIMMessageType.combine:
+        liteInfo = ZIMCombineMessageLiteInfo();
+        liteInfo as ZIMCombineMessageLiteInfo;
+        liteInfo.title = map['title'];
+        liteInfo.summary = map['summary'];
+        break;
+      case ZIMMessageType.command:
+      case ZIMMessageType.tips:
+      case ZIMMessageType.system:
+      case ZIMMessageType.barrage:
+      case ZIMMessageType.unknown:
+        liteInfo = ZIMMessageLiteInfo();
+        break;
+    }
+    liteInfo.type = type;
+    switch(type){
+      case ZIMMessageType.image:
+      case ZIMMessageType.file:
+      case ZIMMessageType.video:
+      case ZIMMessageType.audio:
+        liteInfo as ZIMMediaMessageLiteInfo;
+        liteInfo.fileSize = map['fileSize'];
+        liteInfo.fileName = map['fileName'];
+        liteInfo.fileLocalPath = map['fileLocalPath'];
+        liteInfo.fileDownloadUrl = map['fileDownloadUrl'];
+        break;
+      default:
+        break;
+    }
+    return liteInfo;
+  }
 
   static Uint8List convertToUint8List(dynamic data) {
     final list = <int>[];

@@ -42,6 +42,10 @@ class ZIMEventHandler {
   //
   // Description: In the multi-terminal login scenario, after the user deletes the server level message on device A, other online multi-terminal devices will receive this callback..
   static void Function(ZIM zim, ZIMMessageDeletedInfo deletedInfo)? onMessageDeleted;
+
+  static void Function(ZIM zim, List<ZIMMessage> messageList)? onMessageRepliedInfoChanged;
+
+  static void Function(ZIM zim, List<ZIMMessageRootRepliedCountInfo> infos)? onMessageRepliedCountChanged;
 /* Conversation */
 
   /// The callback for conversation changed event.

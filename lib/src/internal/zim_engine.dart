@@ -5,7 +5,6 @@ import 'zim_converter.dart';
 import '../zim_api.dart';
 import '../zim_defines.dart';
 import 'zim_manager.dart';
-import 'zim_event_handler_impl.dart';
 import 'zim_defines_extension.dart';
 
 class ZIMEngine implements ZIM {
@@ -251,10 +250,6 @@ class ZIMEngine implements ZIM {
       });
       return ZIMConverter.oZIMMessageSentResult(resultMap);
     } on PlatformException catch (e) {
-      resultMap = e.details;
-      ZIMMessageSentResult result =
-          ZIMConverter.oZIMMessageSentResult(resultMap);
-      result.message.sentStatus = ZIMMessageSentStatus.failed;
       throw PlatformException(code: e.code, message: e.message);
     } finally {
       ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
@@ -797,16 +792,8 @@ class ZIMEngine implements ZIM {
       });
       ZIMMessageSentResult result =
           ZIMConverter.oZIMMessageSentResult(resultMap);
-      // ios 2.5.0 桥层bug 临时规避方法，后续删除
-      if (config.hasReceipt == true) {
-        result.message.receiptStatus = ZIMMessageReceiptStatus.processing;
-      }
       return result;
-    } on PlatformException catch (e) {
-      Map resultMap = e.details;
-      ZIMMessageSentResult result =
-          ZIMConverter.oZIMMessageSentResult(resultMap);
-      result.message.sentStatus = ZIMMessageSentStatus.failed;
+    } on PlatformException catch (e) {      
       throw PlatformException(code: e.code, message: e.message);
     } finally {
       ZIMCommonData.messsageMap.remove(messageID);
@@ -1493,6 +1480,61 @@ class ZIMEngine implements ZIM {
       'config':ZIMConverter.mZIMConversationTotalUnreadCountQueryConfig(config)
     });
     return ZIMConverter.oZIMConversationTotalUnreadCountQueriedResult(resultMap);
+  }
+  Future<ZIMMessageQueriedResult> queryMessages(List<int> messageSeqs, String conversationID, ZIMConversationType conversationType) async{
+    Map resultMap = await channel.invokeMethod('queryMessages',{
+      'handle':handle,
+      'messageSeqs':messageSeqs,
+      'conversationID':conversationID,
+      'conversationType':ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMMessageQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageRepliedListQueriedResult> queryMessageRepliedList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryMessageRepliedList',{
+      'handle':handle,
+      'message':ZIMConverter.mZIMMessage(message),
+      'config':ZIMConverter.mZIMMessageRepliedListQueryConfig(config)
+    });
+    return ZIMConverter.oZIMMessageRepliedListQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMMessageSentResult> replyMessage(ZIMMessage message, ZIMMessage toOriginalMessage, ZIMMessageSendConfig config, ZIMMessageSendNotification? notification) async{
+    int? messageAttachedCallbackID;
+    int? progressID;
+    int messageID = ZIMCommonData.getSequence();
+    if (notification?.onMessageAttached != null) {
+      messageAttachedCallbackID = ZIMCommonData.getSequence();
+      ZIMCommonData.zimMessageAttachedCallbackMap[messageAttachedCallbackID] =
+      notification!.onMessageAttached!;
+    }
+    if (notification?.onMediaUploadingProgress != null) {
+      progressID = ZIMCommonData.getSequence();
+      ZIMCommonData.mediaUploadingProgressMap[progressID] =
+          notification!.onMediaUploadingProgress!;
+    }
+    try {
+        Map resultMap = await channel.invokeMethod('replyMessage',{
+          'handle':handle,
+          'message':ZIMConverter.mZIMMessage(message),
+          'toOriginalMessage':ZIMConverter.mZIMMessage(toOriginalMessage),
+          'messageID': messageID,
+          'config':ZIMConverter.mZIMMessageSendConfig(config),
+          'messageAttachedCallbackID': messageAttachedCallbackID,
+          'progressID': progressID,
+        });
+        return ZIMConverter.oZIMMessageSentResult(resultMap);
+    } on PlatformException catch (e) {
+      throw PlatformException(code: e.code, message: e.message);
+    } finally {
+        ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
+        ZIMCommonData.messsageMap.remove(messageID);
+        ZIMCommonData.zimMessageAttachedCallbackMap
+              .remove(messageAttachedCallbackID);
+    }
   }
 
 }

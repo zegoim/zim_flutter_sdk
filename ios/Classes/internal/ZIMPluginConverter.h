@@ -71,6 +71,22 @@
 
 +(nullable NSArray *)mZIMConversationMessageSearchInfoList:(nullable NSArray<ZIMConversationSearchInfo *> *)infoList;
 
++ (nullable ZIMMessageRepliedListQueryConfig *)oZIMMessageRepliedListQueryConfig:(nullable NSDictionary *)configDic;
+
++ (nullable ZIMMessageRepliedInfo *)oZIMMessageRepliedInfo:(nullable NSDictionary *)infoDic;
+
++ (nullable NSDictionary *)mZIMMessageRepliedInfo:(nullable ZIMMessageRepliedInfo *)info;
+
++ (nullable NSDictionary *)mZIMMessageRootRepliedInfo:(nullable ZIMMessageRootRepliedInfo *)info;
+
++ (nullable NSDictionary *)mZIMMessageRootRepliedCountInfo:(nullable ZIMMessageRootRepliedCountInfo *)info;
+
++ (nullable NSArray *)mZIMMessageRootRepliedCountInfoList:(nullable NSArray<ZIMMessageRootRepliedCountInfo *> *)infoList;
+
++ (nullable ZIMMessageLiteInfo *)oZIMMessageLiteInfo:(nullable NSDictionary *)infoDic;
+
++ (nullable NSDictionary *)mZIMMessageLiteInfo:(nullable ZIMMessageLiteInfo *)info;
+
 +(nullable ZIMRoomInfo *)oZIMRoomInfo:(nullable NSDictionary *)roomInfoDic;
 
 +(nullable NSDictionary *)mZIMRoomInfo:(nullable ZIMRoomInfo *)roomInfo;

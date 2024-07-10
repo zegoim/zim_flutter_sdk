@@ -255,15 +255,15 @@ extension ZIMTipsMessageChangeInfoTypeExtension on ZIMTipsMessageChangeInfoType 
 extension ZIMMessageMentionedTypeExtension on ZIMMessageMentionedType {
   static const valueMap = {
     ZIMMessageMentionedType.unknown: -1,
-    ZIMMessageMentionedType.mention_me: 1,
-    ZIMMessageMentionedType.mention_all: 2,
-    ZIMMessageMentionedType.mention_all_and_me: 3,
+    ZIMMessageMentionedType.mentionMe: 1,
+    ZIMMessageMentionedType.mentionAll: 2,
+    ZIMMessageMentionedType.mentionAllAndMe: 3,
   };
   static const mapValue = {
     -1: ZIMMessageMentionedType.unknown,
-    1: ZIMMessageMentionedType.mention_me,
-    2: ZIMMessageMentionedType.mention_all,
-    3: ZIMMessageMentionedType.mention_all_and_me,
+    1: ZIMMessageMentionedType.mentionMe,
+    2: ZIMMessageMentionedType.mentionAll,
+    3: ZIMMessageMentionedType.mentionAllAndMe,
   };
 
   int get value => valueMap[this] ?? -1;
@@ -557,6 +557,22 @@ extension ZIMMessageOrderExtension on ZIMMessageOrder {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMMessageRepliedInfoStateExtension on ZIMMessageRepliedInfoState {
+  static const valueMap = {
+    ZIMMessageRepliedInfoState.normal: 0,
+    ZIMMessageRepliedInfoState.deleted: 1,
+    ZIMMessageRepliedInfoState.notFound: 2
+  };
+
+  static const mapValue = {
+    0: ZIMMessageRepliedInfoState.normal,
+    1: ZIMMessageRepliedInfoState.deleted,
+    2: ZIMMessageRepliedInfoState.notFound
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMRevokeTypeExtension on ZIMRevokeType {
   static const valueMap = {
     ZIMRevokeType.unknown: -1,
@@ -589,20 +605,20 @@ extension ZIMGroupJoinModeExtension on ZIMGroupJoinMode {
 
 extension ZIMGroupEnterTypeExtension on ZIMGroupEnterType {
   static const valueMap = {
-    ZIMGroupEnterType.Unknown: 0,
-    ZIMGroupEnterType.Created: 1,
-    ZIMGroupEnterType.JoinApply: 2,
-    ZIMGroupEnterType.Joined: 3,
-    ZIMGroupEnterType.Invited: 4,
-    ZIMGroupEnterType.InviteApply: 5,
+    ZIMGroupEnterType.unknown: 0,
+    ZIMGroupEnterType.created: 1,
+    ZIMGroupEnterType.joinApply: 2,
+    ZIMGroupEnterType.joined: 3,
+    ZIMGroupEnterType.invited: 4,
+    ZIMGroupEnterType.inviteApply: 5,
   };
   static const mapValue = {
-    0: ZIMGroupEnterType.Unknown,
-    1: ZIMGroupEnterType.Created,
-    2: ZIMGroupEnterType.JoinApply,
-    3: ZIMGroupEnterType.Joined,
-    4: ZIMGroupEnterType.Invited,
-    5: ZIMGroupEnterType.InviteApply,
+    0: ZIMGroupEnterType.unknown,
+    1: ZIMGroupEnterType.created,
+    2: ZIMGroupEnterType.joinApply,
+    3: ZIMGroupEnterType.joined,
+    4: ZIMGroupEnterType.invited,
+    5: ZIMGroupEnterType.inviteApply,
   };
   int get value => valueMap[this] ?? -1;
 }
