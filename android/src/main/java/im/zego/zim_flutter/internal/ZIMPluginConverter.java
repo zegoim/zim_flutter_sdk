@@ -795,7 +795,7 @@ public class ZIMPluginConverter {
 
         HashMap<String,Object> infoMap = new HashMap<>();
         infoMap.put("conversationID", info.conversationID);
-        infoMap.put("conversationType", info.conversationType);
+        infoMap.put("conversationType", info.conversationType.value());
         infoMap.put("messageID", info.messageID);
         infoMap.put("count", info.count);
 
