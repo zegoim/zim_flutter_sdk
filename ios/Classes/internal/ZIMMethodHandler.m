@@ -10,6 +10,7 @@
 #import "NSDictionary+safeInvoke.h"
 #import "NSMutableDictionary+safeInvoke.h"
 #import "NSMutableArray+safeInvoke.h"
+#import "NSArray+Log.h"
 #import "NSObject+safeInvoke.h"
 #import "ZIMEventHandler.h"
 
@@ -1144,7 +1145,7 @@
             [resultDic safeSetObject:@(nextFlag) forKey:@"nextFlag"];
             [resultDic safeSetObject:MsgDicList forKey:@"messageList"];
             [resultDic safeSetObject:infoDic forKey:@"rootRepliedInfo"];
-            [self writeLog:[NSString stringWithFormat:@"Auto test: %@",infoDic]];
+            [self writeLog:[NSString stringWithFormat:@"Auto test ,rootRepliedInfo:%@",infoDic]];
             
             result(resultDic);
         }
