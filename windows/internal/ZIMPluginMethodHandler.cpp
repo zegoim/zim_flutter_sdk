@@ -22,7 +22,7 @@ void ZIMPluginMethodHandler::create(FArgument &argument, FResult result) {
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     unsigned int appID =
-        (unsigned int)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("appID")]);
+        (unsigned int)ZIMPluginConverter::cnvFTValueToInt64(configMap[FTValue("appID")]);
     auto appSign = std::get<std::string>(configMap[FTValue("appSign")]);
 
     ZIMAppConfig appConfig;
@@ -56,7 +56,7 @@ void ZIMPluginMethodHandler::setLogConfig(FArgument &argument, FResult result) {
 
     ZIMLogConfig logConfig;
     logConfig.logPath = std::get<std::string>(argument[FTValue("logPath")]);
-    logConfig.logSize = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("logSize")]);
+    logConfig.logSize = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("logSize")]);
 
     ZIM::setLogConfig(logConfig);
 
@@ -85,12 +85,12 @@ void ZIMPluginMethodHandler::setCacheConfig(FArgument &argument, FResult result)
 
 void ZIMPluginMethodHandler::setGeofencingConfig(FArgument &argument, FResult result) {
 
-    int geofencingType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("type")]);
+    int geofencingType = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("type")]);
 
     auto areaList = std::get<FTArray>(argument[FTValue("areaList")]);
     std::vector<int> areaListVec;
     for (auto &areaValue : areaList) {
-        auto area = ZIMPluginConverter::cnvFTMapToInt32(areaValue);
+        auto area = ZIMPluginConverter::cnvFTValueToInt32(areaValue);
         areaListVec.emplace_back(area);
     }
     bool operatorResult = ZIM::setGeofencingConfig(areaListVec, (ZIMGeofencingType)geofencingType);
@@ -343,7 +343,7 @@ void ZIMPluginMethodHandler::queryConversationList(FArgument &argument, FResult 
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMConversationQueryConfig queryConfig;
-    queryConfig.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+    queryConfig.count = ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("count")]);
 
     if (std::holds_alternative<std::monostate>(configMap[FTValue("nextConversation")])) {
         queryConfig.nextConversation = nullptr;
@@ -400,7 +400,7 @@ void ZIMPluginMethodHandler::queryConversation(FArgument &argument, FResult resu
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     zim->queryConversation(
         conversationID, (ZIMConversationType)conversationType,
@@ -428,7 +428,7 @@ void ZIMPluginMethodHandler::queryConversationPinnedList(FArgument &argument, FR
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMConversationQueryConfig queryConfig;
-    queryConfig.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+    queryConfig.count = ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("count")]);
 
     if (std::holds_alternative<std::monostate>(configMap[FTValue("nextConversation")])) {
         queryConfig.nextConversation = nullptr;
@@ -464,7 +464,7 @@ void ZIMPluginMethodHandler::updateConversationPinnedState(FArgument &argument, 
     bool isPinned = std::get<bool>(argument[FTValue("isPinned")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     zim->updateConversationPinnedState(
         isPinned, conversationID, (ZIMConversationType)conversationType,
@@ -493,7 +493,7 @@ void ZIMPluginMethodHandler::deleteConversation(FArgument &argument, FResult res
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     ZIMConversationDeleteConfig deleteConfig =
@@ -548,7 +548,7 @@ void ZIMPluginMethodHandler::clearConversationUnreadMessageCount(FArgument &argu
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     zim->clearConversationUnreadMessageCount(
         conversationID, (ZIMConversationType)conversationType,
@@ -597,9 +597,9 @@ void ZIMPluginMethodHandler::setConversationNotificationStatus(FArgument &argume
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
-    int status = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("status")]);
+    int status = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("status")]);
 
     zim->setConversationNotificationStatus(
         (ZIMConversationNotificationStatus)status, conversationID,
@@ -629,7 +629,7 @@ void ZIMPluginMethodHandler::sendConversationMessageReceiptRead(FArgument &argum
     }
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     zim->sendConversationMessageReceiptRead(
         conversationID, (ZIMConversationType)conversationType,
         [=](const std::string &conversationID, ZIMConversationType conversationType,
@@ -657,7 +657,7 @@ void ZIMPluginMethodHandler::setConversationDraft(FArgument &argument, FResult r
     auto draft = std::get<std::string>(argument[FTValue("draft")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     zim->setConversationDraft(
         draft, conversationID, (ZIMConversationType)conversationType,
         [=](const std::string &conversationID, ZIMConversationType conversationType,
@@ -765,10 +765,10 @@ void ZIMPluginMethodHandler::insertMessageToLocalDB(FArgument &argument, FResult
     }
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
-    auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
+    auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     auto senderUserID = std::get<std::string>(argument[FTValue("senderUserID")]);
     zim->insertMessageToLocalDB(
         std::static_pointer_cast<zim::ZIMMessage>(messagePtr), conversationID,
@@ -822,17 +822,17 @@ void ZIMPluginMethodHandler::sendMessage(FArgument &argument, FResult result) {
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toConversationID = std::get<std::string>(argument[FTValue("toConversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
-    auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
+    auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
 
     int32_t messageAttachedCallbackID =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageAttachedCallbackID")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageAttachedCallbackID")]);
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+        (ZIMMessagePriority)ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -890,7 +890,7 @@ void ZIMPluginMethodHandler::sendPeerMessage(FArgument &argument, FResult result
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+        (ZIMMessagePriority)ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -933,7 +933,7 @@ void ZIMPluginMethodHandler::sendRoomMessage(FArgument &argument, FResult result
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+        (ZIMMessagePriority)ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -976,7 +976,7 @@ void ZIMPluginMethodHandler::sendGroupMessage(FArgument &argument, FResult resul
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+        (ZIMMessagePriority)ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -1014,14 +1014,14 @@ void ZIMPluginMethodHandler::sendMediaMessage(FArgument &argument, FResult resul
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toConversationID = std::get<std::string>(argument[FTValue("toConversationID")]);
     auto conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageSendConfig config;
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
+        (ZIMMessagePriority)ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("priority")]);
     config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
     if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
         config.pushConfig = nullptr;
@@ -1032,10 +1032,10 @@ void ZIMPluginMethodHandler::sendMediaMessage(FArgument &argument, FResult resul
     }
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-    int32_t progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
-    auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
+    int32_t progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
+    auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
     int32_t messageAttachedCallbackID =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageAttachedCallbackID")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageAttachedCallbackID")]);
 
     auto notification = std::make_shared<zim::ZIMMediaMessageSendNotification>(
         [=](const std::shared_ptr<zim::ZIMMessage> &message) {
@@ -1090,12 +1090,12 @@ void ZIMPluginMethodHandler::downloadMediaFile(FArgument &argument, FResult resu
         return;
     }
 
-    auto fileType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("fileType")]);
+    auto fileType = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("fileType")]);
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
     zim->downloadMediaFile(
         mediaMessagePtr.get(), (ZIMMediaFileType)fileType,
         [=](const std::shared_ptr<ZIMMediaMessage> &message, unsigned long long currentFileSize,
@@ -1134,11 +1134,11 @@ void ZIMPluginMethodHandler::queryHistoryMessage(FArgument &argument, FResult re
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageQueryConfig config;
-    config.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+    config.count = ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("count")]);
     config.reverse = std::get<bool>(configMap[FTValue("reverse")]);
 
     std::shared_ptr<ZIMMessage> nextMessagePtr = nullptr;
@@ -1180,7 +1180,7 @@ void ZIMPluginMethodHandler::deleteAllMessage(FArgument &argument, FResult resul
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageDeleteConfig config;
@@ -1215,7 +1215,7 @@ void ZIMPluginMethodHandler::deleteMessages(FArgument &argument, FResult result)
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageDeleteConfig config;
     config.isAlsoDeleteServerMessage =
@@ -1271,7 +1271,7 @@ void ZIMPluginMethodHandler::sendMessageReceiptsRead(FArgument &argument, FResul
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     zim->sendMessageReceiptsRead(
         messageObjectList, conversationID, (ZIMConversationType)conversationType,
         [=](const std::string &conversationID, ZIMConversationType conversationType,
@@ -1301,7 +1301,7 @@ void ZIMPluginMethodHandler::queryMessageReceiptsInfo(FArgument &argument, FResu
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     zim->queryMessageReceiptsInfo(
         messageObjectList, conversationID, (ZIMConversationType)conversationType,
         [=](const std::vector<ZIMMessageReceiptInfo> &infos, std::vector<long long> errorMessageIDs,
@@ -2281,7 +2281,7 @@ void ZIMPluginMethodHandler::updateGroupInviteMode(FArgument &argument, FResult 
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
-    int mode = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("mode")]);
+    int mode = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("mode")]);
     zim->updateGroupInviteMode(
         (ZIMGroupInviteMode)mode, groupID,
         [=](const std::string &groupID, ZIMGroupInviteMode mode, const ZIMError &errorInfo) {
@@ -2471,7 +2471,7 @@ void ZIMPluginMethodHandler::setGroupMemberRole(FArgument &argument, FResult res
     }
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
-    int role = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("role")]);
+    int role = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("role")]);
     auto forUserID = std::get<std::string>(argument[FTValue("forUserID")]);
 
     zim->setGroupMemberRole(role, forUserID, groupID,
@@ -3034,7 +3034,7 @@ void ZIMPluginMethodHandler::callInvite(FArgument &argument, FResult result) {
 
     ZIMCallInviteConfig config;
     config.mode = (ZIMCallInvitationMode)std::get<int32_t>(configMap[FTValue("mode")]);
-    config.timeout = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("timeout")]);
+    config.timeout = ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("timeout")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     config.enableNotReceivedCheck = std::get<bool>(configMap[FTValue("enableNotReceivedCheck")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
@@ -3627,8 +3627,8 @@ void ZIMPluginMethodHandler::checkFriendsRelation(FArgument &argument, FResult r
     }
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendRelationCheckConfig config;
-    config.type =
-        (ZIMFriendRelationCheckType)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("type")]);
+    config.type = (ZIMFriendRelationCheckType)ZIMPluginConverter::cnvFTValueToInt32(
+        configMap[FTValue("type")]);
     zim->checkFriendsRelation(
         userIDsVec, config,
         [=](const std::vector<ZIMFriendRelationInfo> &friendRelationInfoList,
@@ -3989,7 +3989,7 @@ void ZIMPluginMethodHandler::importLocalMessages(FArgument &argument, FResult re
 
     auto folderPath = std::get<std::string>(argument[FTValue("folderPath")]);
     ZIMMessageImportConfig config;
-    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
 
     zim->importLocalMessages(
         folderPath, config,
@@ -4022,7 +4022,7 @@ void ZIMPluginMethodHandler::exportLocalMessages(FArgument &argument, FResult re
 
     auto folderPath = std::get<std::string>(argument[FTValue("folderPath")]);
     ZIMMessageExportConfig config;
-    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
 
     zim->exportLocalMessages(
         folderPath, config,
