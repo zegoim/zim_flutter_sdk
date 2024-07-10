@@ -786,3 +786,28 @@ void ZIMPluginEventHandler::onGroupApplicationUpdated(
         eventSink_->Success(retMap);
     }
 }
+
+void ZIMPluginEventHandler::onMessageRepliedCountChanged(
+    ZIM *zim, const std::vector<ZIMMessageRootRepliedCountInfo> &infos) {
+    if (eventSink_) {
+        FTMap retMap;
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("method")] = FTValue("onMessageRepliedCountChanged");
+        retMap[FTValue("infos")] =
+            FTValue(ZIMPluginConverter::cnvZIMMessageRootRepliedCountInfoListToArray(infos));
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onMessageRepliedInfoChanged(
+    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList) {
+    if (eventSink_) {
+        FTMap retMap;
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("method")] = FTValue("onMessageRepliedInfoChanged");
+        retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+        eventSink_->Success(retMap);
+    }
+}

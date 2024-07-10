@@ -70,7 +70,10 @@ class ZIMPluginMethodHandler {
     void updateGroupBeInviteMode(FArgument &argument, FResult result);
     void sendMediaMessage(FArgument &argument, FResult result);
     void downloadMediaFile(FArgument &argument, FResult result);
+    void replyMessage(FArgument &argument, FResult result);
     void queryHistoryMessage(FArgument &argument, FResult result);
+    void queryMessages(FArgument &argument, FResult result);
+    void queryMessageRepliedList(FArgument &argument, FResult result);
     void deleteAllMessage(FArgument &argument, FResult result);
     void deleteMessages(FArgument &argument, FResult result);
     void deleteAllConversationMessages(FArgument &argument, FResult result);

@@ -183,6 +183,13 @@ class ZIMPluginEventHandler : public ZIMEventHandler {
     onGroupApplicationUpdated(ZIM *zim,
                               const std::vector<ZIMGroupApplicationInfo> &applicationList) override;
 
+    void
+    onMessageRepliedCountChanged(ZIM * /*zim*/,
+                                 const std::vector<ZIMMessageRootRepliedCountInfo> &infos) override;
+
+    void onMessageRepliedInfoChanged(
+        ZIM * /*zim*/, const std::vector<std::shared_ptr<ZIMMessage>> &messageList) override;
+
   private:
     static std::shared_ptr<ZIMPluginEventHandler> m_instance;
 

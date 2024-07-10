@@ -1,22 +1,13 @@
 //
-//  NSMutableArray+safeInvoke.m
-//  zim
+//  NSArray+Log.m
+//  AutoTest
 //
-//  Created by 武耀琳 on 2022/5/11.
+//  Created by 武耀琳 on 2021/12/31.
 //
 
-#import "NSMutableArray+safeInvoke.h"
+#import "NSArray+Log.h"
 
-@implementation NSMutableArray (safeInvoke)
-
--(void)safeAddObject:(nullable id)object{
-    if(object == nil || object == NULL || [object isEqual:[NSNull null]]){
-        [self addObject:[NSNull null]];
-        return;
-    }
-    [self addObject:object];
-}
-
+@implementation NSArray (Log)
 - (NSString *)descriptionWithLocale:(id)locale {
     NSMutableString *str = [NSMutableString stringWithFormat:@"%lu (\n", (unsigned long)self.count];
     for (id obj in self) {

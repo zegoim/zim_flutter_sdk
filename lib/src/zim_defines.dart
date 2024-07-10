@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:zego_zim/zego_zim.dart';
+
 /// Connection state.
 ///
 /// Description: The state machine that identifies the current connection state.
@@ -338,6 +340,12 @@ enum ZIMMessageOrder {
   ascending
 }
 
+enum ZIMMessageRepliedInfoState {
+  normal,
+  deleted,
+  notFound
+}
+
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
 
@@ -578,7 +586,8 @@ class ZIMMessageRevokeConfig {
 
 class ZIMMessageSendNotification {
   ZIMMessageAttachedCallback? onMessageAttached;
-  ZIMMessageSendNotification({this.onMessageAttached});
+  ZIMMediaUploadingProgress? onMediaUploadingProgress;
+  ZIMMessageSendNotification({this.onMessageAttached,this.onMediaUploadingProgress});
 }
 
 class ZIMMediaMessageSendNotification {
@@ -622,6 +631,7 @@ class ZIMUserFullInfo {
 class ZIMMessage {
   ZIMMessageType type = ZIMMessageType.unknown;
   int messageID = 0;
+  int messageSeq = 0;
   int localMessageID = 0;
   String senderUserID = "";
   String conversationID = "";
@@ -638,6 +648,8 @@ class ZIMMessage {
   bool isBroadcastMessage = false;
   bool isServerMessage = false;
   bool isMentionAll = false;
+  int rootRepliedCount = 0;
+  ZIMMessageRepliedInfo? repliedInfo;
   List<String> mentionedUserIds = [];
   List<ZIMMessageReaction> reactions = [];
   String cbInnerID = "";
@@ -781,6 +793,123 @@ class ZIMTipsMessage extends ZIMMessage {
   ZIMTipsMessageChangeInfo? changeInfo;
 }
 
+class ZIMMessageLiteInfo {
+  ZIMMessageType type = ZIMMessageType.unknown;
+}
+
+class ZIMTextMessageLiteInfo extends ZIMMessageLiteInfo{
+  String message = '';
+
+  ZIMTextMessageLiteInfo() {
+    super.type = ZIMMessageType.text;
+  }
+}
+
+class ZIMCustomMessageLiteInfo extends ZIMMessageLiteInfo{
+  String message = '';
+  int subType = 0;
+
+  ZIMCustomMessageLiteInfo() {
+    super.type = ZIMMessageType.custom;
+  }
+}
+
+class ZIMCombineMessageLiteInfo extends ZIMMessageLiteInfo{
+  String title = '';
+  String summary = '';
+
+  ZIMCombineMessageLiteInfo() {
+    super.type = ZIMMessageType.combine;
+  }
+}
+
+class ZIMRevokeMessageLiteInfo extends ZIMMessageLiteInfo{
+  ZIMRevokeMessageLiteInfo() {
+    super.type = ZIMMessageType.revoke;
+  }
+}
+
+class ZIMMediaMessageLiteInfo extends ZIMMessageLiteInfo{
+  int fileSize = 0;
+  String fileName = '';
+  String fileLocalPath = '';
+  String fileDownloadUrl = '';
+}
+
+class ZIMImageMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+  int originalImageWidth = 0;
+  int originalImageHeight = 0;
+
+  String thumbnailLocalPath = '';
+  String thumbnailDownloadUrl = '';
+  int thumbnailWidth = 0;
+  int thumbnailHeight = 0;
+
+  String largeImageLocalPath = '';
+  String largeImageDownloadUrl = '';
+  int largeImageWidth = 0;
+  int largeImageHeight = 0;
+
+  ZIMImageMessageLiteInfo() {
+    super.type = ZIMMessageType.image;
+  }
+}
+
+class ZIMFileMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+  ZIMFileMessageLiteInfo() {
+    super.type = ZIMMessageType.file;
+  }
+}
+
+class ZIMAudioMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+  int audioDuration = 0;
+
+  ZIMAudioMessageLiteInfo() {
+    super.type = ZIMMessageType.audio;
+  }
+}
+
+class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+  int videoDuration = 0;
+  String videoFirstFrameDownloadUrl = '';
+  String videoFirstFrameLocalPath = '';
+  int videoFirstFrameWidth = 0;
+  int videoFirstFrameHeight = 0;
+
+  ZIMVideoMessageLiteInfo() {
+    super.type = ZIMMessageType.video;
+  }
+}
+
+class ZIMMessageRepliedInfo{
+  ZIMMessageRepliedInfoState state = ZIMMessageRepliedInfoState.normal;
+  ZIMMessageLiteInfo messageInfo = ZIMMessageLiteInfo();
+  int messageID = 0;
+  int messageSeq = 0;
+  String senderUserID = '';
+  int sentTime = 0;
+}
+
+class ZIMMessageRootRepliedCountInfo{
+  int messageID = 0;
+  String conversationID = '';
+  ZIMConversationType conversationType = ZIMConversationType.unknown;
+  int count = 0;
+}
+
+class ZIMMessageRootRepliedInfo {
+  ZIMMessageRepliedInfoState state = ZIMMessageRepliedInfoState.normal;
+  ZIMMessage? message;
+  String senderUserID = '';
+  int sentTime = 0;
+  int repliedCount = 0;
+}
+
+class ZIMMessageRepliedListQueryConfig{
+  int nextFlag = 0;
+  int count = 0;
+}
+
 class ZIMConversation {
   String conversationID = '';
   String conversationName = '';
@@ -818,9 +947,9 @@ class ZIMConversationTotalUnreadCountQueryConfig {
 
 enum ZIMMessageMentionedType {
   unknown,
-  mention_me,
-  mention_all,
-  mention_all_and_me
+  mentionMe,
+  mentionAll,
+  mentionAllAndMe
 }
 
 enum ZIMGroupApplicationType {
@@ -831,12 +960,12 @@ enum ZIMGroupApplicationType {
 }
 
 enum ZIMGroupEnterType {
-  Unknown,
-  Created,
-  JoinApply,
-  Joined,
-  Invited,
-  InviteApply,
+  unknown,
+  created,
+  joinApply,
+  joined,
+  invited,
+  inviteApply,
 }
 
 enum ZIMGroupApplicationState {
@@ -849,6 +978,7 @@ enum ZIMGroupApplicationState {
 
 class ZIMMessageMentionedInfo {
   int messageID = 0;
+  int messageSeq = 0;
   String fromUserID = '';
   ZIMMessageMentionedType type = ZIMMessageMentionedType.unknown;
 }
@@ -1151,7 +1281,7 @@ class ZIMGroup {
 /// Description:  group class.
 class ZIMGroupEnterInfo {
   int enterTime = 0;
-  ZIMGroupEnterType enterType = ZIMGroupEnterType.Unknown;
+  ZIMGroupEnterType enterType = ZIMGroupEnterType.unknown;
   ZIMGroupMemberSimpleInfo? operatedUser;
   ZIMGroupEnterInfo();
 }
@@ -2879,6 +3009,12 @@ class ZIMSelfUserInfoQueriedResult {
   /// Own user information, rule data.
   ZIMSelfUserInfo selfUserInfo;
   ZIMSelfUserInfoQueriedResult({required this.selfUserInfo});
+}
+
+class ZIMMessageRepliedListQueriedResult {
+  List<ZIMMessage> messageList = [];
+  int nextFlag = 0;
+  ZIMMessageRootRepliedInfo rootRepliedInfo = ZIMMessageRootRepliedInfo();
 }
 
 class ZIMConversationMarkSetResult {

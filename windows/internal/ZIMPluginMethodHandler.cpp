@@ -22,7 +22,7 @@ void ZIMPluginMethodHandler::create(FArgument &argument, FResult result) {
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     unsigned int appID =
-        (unsigned int)ZIMPluginConverter::cnvFTMapToInt64(configMap[FTValue("appID")]);
+        (unsigned int)ZIMPluginConverter::cnvFTValueToInt64(configMap[FTValue("appID")]);
     auto appSign = std::get<std::string>(configMap[FTValue("appSign")]);
 
     ZIMAppConfig appConfig;
@@ -56,7 +56,7 @@ void ZIMPluginMethodHandler::setLogConfig(FArgument &argument, FResult result) {
 
     ZIMLogConfig logConfig;
     logConfig.logPath = std::get<std::string>(argument[FTValue("logPath")]);
-    logConfig.logSize = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("logSize")]);
+    logConfig.logSize = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("logSize")]);
 
     ZIM::setLogConfig(logConfig);
 
@@ -85,12 +85,12 @@ void ZIMPluginMethodHandler::setCacheConfig(FArgument &argument, FResult result)
 
 void ZIMPluginMethodHandler::setGeofencingConfig(FArgument &argument, FResult result) {
 
-    int geofencingType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("type")]);
+    int geofencingType = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("type")]);
 
     auto areaList = std::get<FTArray>(argument[FTValue("areaList")]);
     std::vector<int> areaListVec;
     for (auto &areaValue : areaList) {
-        auto area = ZIMPluginConverter::cnvFTMapToInt32(areaValue);
+        auto area = ZIMPluginConverter::cnvFTValueToInt32(areaValue);
         areaListVec.emplace_back(area);
     }
     bool operatorResult = ZIM::setGeofencingConfig(areaListVec, (ZIMGeofencingType)geofencingType);
@@ -99,12 +99,8 @@ void ZIMPluginMethodHandler::setGeofencingConfig(FArgument &argument, FResult re
 
 void ZIMPluginMethodHandler::login(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
+
     std::string userID = std::get<std::string>(argument[FTValue("userID")]);
     ZIMLoginConfig loginConfig =
         ZIMPluginConverter::cnvZIMLoginConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
@@ -120,12 +116,7 @@ void ZIMPluginMethodHandler::login(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::logout(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     zim->logout();
 
@@ -134,12 +125,7 @@ void ZIMPluginMethodHandler::logout(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::uploadLog(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     zim->uploadLog([=](const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -152,12 +138,7 @@ void ZIMPluginMethodHandler::uploadLog(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::renewToken(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto token = std::get<std::string>(argument[FTValue("token")]);
 
@@ -175,12 +156,7 @@ void ZIMPluginMethodHandler::renewToken(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::updateUserName(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto userName = std::get<std::string>(argument[FTValue("userName")]);
 
@@ -198,12 +174,7 @@ void ZIMPluginMethodHandler::updateUserName(FArgument &argument, FResult result)
 
 void ZIMPluginMethodHandler::updateUserAvatarUrl(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto userAvatarUrl = std::get<std::string>(argument[FTValue("userAvatarUrl")]);
 
@@ -222,12 +193,7 @@ void ZIMPluginMethodHandler::updateUserAvatarUrl(FArgument &argument, FResult re
 
 void ZIMPluginMethodHandler::updateUserExtendedData(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto userExtendedData = std::get<std::string>(argument[FTValue("extendedData")]);
 
@@ -244,12 +210,9 @@ void ZIMPluginMethodHandler::updateUserExtendedData(FArgument &argument, FResult
 }
 
 void ZIMPluginMethodHandler::updateUserOfflinePushRule(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     ZIMUserOfflinePushRule rule = ZIMPluginConverter::cnvZIMUserOfflinePushRuleToObject(
         std::get<FTMap>(argument[FTValue("offlinePushRule")]));
 
@@ -268,12 +231,7 @@ void ZIMPluginMethodHandler::updateUserOfflinePushRule(FArgument &argument, FRes
 
 void ZIMPluginMethodHandler::querySelfUserInfo(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     zim->querySelfUserInfo([=](const ZIMSelfUserInfo &selfUserInfo, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -289,12 +247,7 @@ void ZIMPluginMethodHandler::querySelfUserInfo(FArgument &argument, FResult resu
 
 void ZIMPluginMethodHandler::queryUsersInfo(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;
@@ -343,7 +296,7 @@ void ZIMPluginMethodHandler::queryConversationList(FArgument &argument, FResult 
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMConversationQueryConfig queryConfig;
-    queryConfig.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+    queryConfig.count = ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("count")]);
 
     if (std::holds_alternative<std::monostate>(configMap[FTValue("nextConversation")])) {
         queryConfig.nextConversation = nullptr;
@@ -400,7 +353,7 @@ void ZIMPluginMethodHandler::queryConversation(FArgument &argument, FResult resu
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     zim->queryConversation(
         conversationID, (ZIMConversationType)conversationType,
@@ -419,16 +372,11 @@ void ZIMPluginMethodHandler::queryConversation(FArgument &argument, FResult resu
 
 void ZIMPluginMethodHandler::queryConversationPinnedList(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMConversationQueryConfig queryConfig;
-    queryConfig.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+    queryConfig.count = ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("count")]);
 
     if (std::holds_alternative<std::monostate>(configMap[FTValue("nextConversation")])) {
         queryConfig.nextConversation = nullptr;
@@ -437,6 +385,7 @@ void ZIMPluginMethodHandler::queryConversationPinnedList(FArgument &argument, FR
         queryConfig.nextConversation =
             ZIMPluginConverter::cnvZIMConversationToObject(nextConversation);
     }
+
     zim->queryConversationPinnedList(
         queryConfig, [=](const std::vector<std::shared_ptr<ZIMConversation>> &conversationList,
                          const ZIMError &errorInfo) {
@@ -454,17 +403,11 @@ void ZIMPluginMethodHandler::queryConversationPinnedList(FArgument &argument, FR
 
 void ZIMPluginMethodHandler::updateConversationPinnedState(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
-    bool isPinned = std::get<bool>(argument[FTValue("isPinned")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     zim->updateConversationPinnedState(
         isPinned, conversationID, (ZIMConversationType)conversationType,
@@ -484,20 +427,16 @@ void ZIMPluginMethodHandler::updateConversationPinnedState(FArgument &argument, 
 
 void ZIMPluginMethodHandler::deleteConversation(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     ZIMConversationDeleteConfig deleteConfig =
         ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(configMap);
+
     zim->deleteConversation(conversationID, (ZIMConversationType)conversationType, deleteConfig,
                             [=](const std::string &conversationID,
                                 ZIMConversationType conversationType, const ZIMError &errorInfo) {
@@ -516,17 +455,13 @@ void ZIMPluginMethodHandler::deleteConversation(FArgument &argument, FResult res
 
 void ZIMPluginMethodHandler::deleteAllConversations(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
     ZIMConversationDeleteConfig deleteConfig =
         ZIMPluginConverter::cnvZIMConversationDeleteConfigToObject(configMap);
+
     zim->deleteAllConversations(deleteConfig, [=](const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             result->Success();
@@ -539,16 +474,11 @@ void ZIMPluginMethodHandler::deleteAllConversations(FArgument &argument, FResult
 void ZIMPluginMethodHandler::clearConversationUnreadMessageCount(FArgument &argument,
                                                                  FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     zim->clearConversationUnreadMessageCount(
         conversationID, (ZIMConversationType)conversationType,
@@ -569,12 +499,7 @@ void ZIMPluginMethodHandler::clearConversationUnreadMessageCount(FArgument &argu
 void ZIMPluginMethodHandler::clearConversationTotalUnreadMessageCount(FArgument &argument,
                                                                       FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     zim->clearConversationTotalUnreadMessageCount([=](const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -588,18 +513,13 @@ void ZIMPluginMethodHandler::clearConversationTotalUnreadMessageCount(FArgument 
 void ZIMPluginMethodHandler::setConversationNotificationStatus(FArgument &argument,
                                                                FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
-    int status = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("status")]);
+    int status = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("status")]);
 
     zim->setConversationNotificationStatus(
         (ZIMConversationNotificationStatus)status, conversationID,
@@ -621,15 +541,12 @@ void ZIMPluginMethodHandler::setConversationNotificationStatus(FArgument &argume
 void ZIMPluginMethodHandler::sendConversationMessageReceiptRead(FArgument &argument,
                                                                 FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
+
     zim->sendConversationMessageReceiptRead(
         conversationID, (ZIMConversationType)conversationType,
         [=](const std::string &conversationID, ZIMConversationType conversationType,
@@ -648,16 +565,13 @@ void ZIMPluginMethodHandler::sendConversationMessageReceiptRead(FArgument &argum
 
 void ZIMPluginMethodHandler::setConversationDraft(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto draft = std::get<std::string>(argument[FTValue("draft")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
+
     zim->setConversationDraft(
         draft, conversationID, (ZIMConversationType)conversationType,
         [=](const std::string &conversationID, ZIMConversationType conversationType,
@@ -720,12 +634,8 @@ void ZIMPluginMethodHandler::queryConversationTotalUnreadCount(FArgument &argume
 
 void ZIMPluginMethodHandler::revokeMessage(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
 
@@ -742,6 +652,7 @@ void ZIMPluginMethodHandler::revokeMessage(FArgument &argument, FResult result) 
     }
     auto revokeExtendedData = std::get<std::string>(configMap[FTValue("revokeExtendedData")]);
     config.revokeExtendedData = revokeExtendedData;
+
     zim->revokeMessage(messagePtr, config,
                        [=](const std::shared_ptr<ZIMMessage> &message, const ZIMError &errorInfo) {
                            if (errorInfo.code == 0) {
@@ -757,19 +668,17 @@ void ZIMPluginMethodHandler::revokeMessage(FArgument &argument, FResult result) 
 }
 
 void ZIMPluginMethodHandler::insertMessageToLocalDB(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
-    auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
+    auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     auto senderUserID = std::get<std::string>(argument[FTValue("senderUserID")]);
+
     zim->insertMessageToLocalDB(
         std::static_pointer_cast<zim::ZIMMessage>(messagePtr), conversationID,
         (ZIMConversationType)conversationType, senderUserID,
@@ -787,15 +696,13 @@ void ZIMPluginMethodHandler::insertMessageToLocalDB(FArgument &argument, FResult
 }
 
 void ZIMPluginMethodHandler::updateMessageLocalExtendedData(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto localExtendedData = std::get<std::string>(argument[FTValue("localExtendedData")]);
+
     zim->updateMessageLocalExtendedData(
         localExtendedData, std::static_pointer_cast<zim::ZIMMessage>(messagePtr),
         [=](const std::shared_ptr<zim::ZIMMessage> &message, const zim::ZIMError &errorInfo) {
@@ -811,36 +718,20 @@ void ZIMPluginMethodHandler::updateMessageLocalExtendedData(FArgument &argument,
 }
 
 void ZIMPluginMethodHandler::sendMessage(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toConversationID = std::get<std::string>(argument[FTValue("toConversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
-    auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
+    auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
 
     int32_t messageAttachedCallbackID =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageAttachedCallbackID")]);
-    FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
-    ZIMMessageSendConfig config;
-    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-    config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
-    config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
-    if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
-        config.pushConfig = nullptr;
-    } else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(
-            std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
-        config.pushConfig = pushConfigPtr.get();
-    }
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageAttachedCallbackID")]);
+    auto config =
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
 
     auto notification = std::make_shared<zim::ZIMMessageSendNotification>(
         [=](const std::shared_ptr<zim::ZIMMessage> &message) {
@@ -856,7 +747,9 @@ void ZIMPluginMethodHandler::sendMessage(FArgument &argument, FResult result) {
             onMessageAttachedMap[FTValue("message")] =
                 ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
             ZIMPluginEventHandler::getInstance()->sendEvent(onMessageAttachedMap);
-        });
+        },
+        nullptr);
+
     zim->sendMessage(
         messagePtr, toConversationID, (ZIMConversationType)conversationType, config, notification,
         [=](const std::shared_ptr<zim::ZIMMessage> &message, const zim::ZIMError &errorInfo) {
@@ -874,31 +767,15 @@ void ZIMPluginMethodHandler::sendMessage(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::sendPeerMessage(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toUserID = std::get<std::string>(argument[FTValue("toUserID")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
-    ZIMMessageSendConfig config;
-    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-    config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
-    config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
-    if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
-        config.pushConfig = nullptr;
-    } else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(
-            std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
-        config.pushConfig = pushConfigPtr.get();
-    }
+    auto config =
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
 
     zim->sendPeerMessage(
         messagePtr.get(), toUserID, config,
@@ -917,31 +794,15 @@ void ZIMPluginMethodHandler::sendPeerMessage(FArgument &argument, FResult result
 
 void ZIMPluginMethodHandler::sendRoomMessage(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toRoomID = std::get<std::string>(argument[FTValue("toRoomID")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
-    ZIMMessageSendConfig config;
-    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-    config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
-    config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
-    if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
-        config.pushConfig = nullptr;
-    } else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(
-            std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
-        config.pushConfig = pushConfigPtr.get();
-    }
+    auto config =
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
 
     zim->sendRoomMessage(
         messagePtr.get(), toRoomID, config,
@@ -960,31 +821,15 @@ void ZIMPluginMethodHandler::sendRoomMessage(FArgument &argument, FResult result
 
 void ZIMPluginMethodHandler::sendGroupMessage(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toGroupID = std::get<std::string>(argument[FTValue("toGroupID")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
-    ZIMMessageSendConfig config;
-    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-    config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
-    config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
-    if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
-        config.pushConfig = nullptr;
-    } else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(
-            std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
-        config.pushConfig = pushConfigPtr.get();
-    }
+    auto config =
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
 
     zim->sendGroupMessage(
         messagePtr.get(), toGroupID, config,
@@ -1003,39 +848,23 @@ void ZIMPluginMethodHandler::sendGroupMessage(FArgument &argument, FResult resul
 
 void ZIMPluginMethodHandler::sendMediaMessage(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto toConversationID = std::get<std::string>(argument[FTValue("toConversationID")]);
     auto conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
-    ZIMMessageSendConfig config;
-    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-    config.priority =
-        (ZIMMessagePriority)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("priority")]);
-    config.hasReceipt = std::get<bool>(configMap[FTValue("hasReceipt")]);
-    if (std::holds_alternative<std::monostate>(configMap[FTValue("pushConfig")])) {
-        config.pushConfig = nullptr;
-    } else {
-        pushConfigPtr = ZIMPluginConverter::cnvZIMPushConfigToObject(
-            std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
-        config.pushConfig = pushConfigPtr.get();
-    }
+    auto config =
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-    int32_t progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
-    auto messageID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageID")]);
+    int32_t progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
+    auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
     int32_t messageAttachedCallbackID =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("messageAttachedCallbackID")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageAttachedCallbackID")]);
 
     auto notification = std::make_shared<zim::ZIMMediaMessageSendNotification>(
         [=](const std::shared_ptr<zim::ZIMMessage> &message) {
@@ -1083,19 +912,15 @@ void ZIMPluginMethodHandler::sendMediaMessage(FArgument &argument, FResult resul
 
 void ZIMPluginMethodHandler::downloadMediaFile(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
-    auto fileType = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("fileType")]);
+    auto fileType = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("fileType")]);
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
-    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
+
     zim->downloadMediaFile(
         mediaMessagePtr.get(), (ZIMMediaFileType)fileType,
         [=](const std::shared_ptr<ZIMMediaMessage> &message, unsigned long long currentFileSize,
@@ -1123,22 +948,78 @@ void ZIMPluginMethodHandler::downloadMediaFile(FArgument &argument, FResult resu
         });
 }
 
+void ZIMPluginMethodHandler::replyMessage(FArgument &argument, FResult result) {
+
+    CheckZIMInstanceExistAndObtainZIM();
+
+    auto message =
+        ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
+    auto toOriginalMessage = ZIMPluginConverter::cnvZIMMessageToObject(
+        std::get<FTMap>(argument[FTValue("toOriginalMessage")]));
+
+    auto config =
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
+
+    auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
+    int32_t progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
+    int32_t messageAttachedCallbackID =
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageAttachedCallbackID")]);
+
+    auto notification = std::make_shared<zim::ZIMMessageSendNotification>(
+        [=](const std::shared_ptr<zim::ZIMMessage> &message) {
+            if (messageAttachedCallbackID == 0) {
+                return;
+            }
+            FTMap onMessageAttachedMap;
+            onMessageAttachedMap[FTValue("handle")] = FTValue(handle);
+            onMessageAttachedMap[FTValue("method")] = FTValue("onMessageAttached");
+            onMessageAttachedMap[FTValue("messageAttachedCallbackID")] =
+                FTValue(messageAttachedCallbackID);
+            onMessageAttachedMap[FTValue("messageID")] = FTValue(messageID);
+            onMessageAttachedMap[FTValue("message")] =
+                ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
+            ZIMPluginEventHandler::getInstance()->sendEvent(onMessageAttachedMap);
+        },
+        [=](const std::shared_ptr<zim::ZIMMediaMessage> &message,
+            unsigned long long currentFileSize, unsigned long long totalFileSize) {
+            FTMap progressRetMap;
+            progressRetMap[FTValue("handle")] = FTValue(handle);
+            progressRetMap[FTValue("method")] = FTValue("uploadMediaProgress");
+            progressRetMap[FTValue("progressID")] = FTValue(progressID);
+            progressRetMap[FTValue("message")] =
+                ZIMPluginConverter::cnvZIMMessageObjectToMap(message.get());
+            progressRetMap[FTValue("currentFileSize")] = FTValue((int64_t)currentFileSize);
+            progressRetMap[FTValue("totalFileSize")] = FTValue((int64_t)totalFileSize);
+            ZIMPluginEventHandler::getInstance()->sendEvent(progressRetMap);
+        });
+
+    zim->replyMessage(
+        message, toOriginalMessage, config, notification,
+        [=](const std::shared_ptr<zim::ZIMMessage> &callbackMessage,
+            const zim::ZIMError &errorInfo) {
+            FTMap retMap;
+            auto messageMap = ZIMPluginConverter::cnvZIMMessageObjectToMap(callbackMessage.get());
+            retMap[FTValue("message")] = messageMap;
+            retMap[FTValue("messageID")] = FTValue(messageID);
+            if (errorInfo.code == 0) {
+                result->Success(retMap);
+            } else {
+                result->Error(std::to_string(errorInfo.code), errorInfo.message, retMap);
+            }
+        });
+}
+
 void ZIMPluginMethodHandler::queryHistoryMessage(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageQueryConfig config;
-    config.count = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("count")]);
+    config.count = ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("count")]);
     config.reverse = std::get<bool>(configMap[FTValue("reverse")]);
 
     std::shared_ptr<ZIMMessage> nextMessagePtr = nullptr;
@@ -1169,18 +1050,67 @@ void ZIMPluginMethodHandler::queryHistoryMessage(FArgument &argument, FResult re
         });
 }
 
+void ZIMPluginMethodHandler::queryMessages(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+
+    auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
+    auto conversationType = static_cast<ZIMConversationType>(
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]));
+    auto messageSeq = ZIMPluginConverter::cnvFTArrayToInt64Vec(
+        std::get<FTArray>(argument[FTValue("messageSeqs")]));
+
+    zim->queryMessages(messageSeq, conversationID, conversationType,
+                       [=](const std::string &conversationID, ZIMConversationType conversationType,
+                           const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+                           const ZIMError &errorInfo) {
+                           if (errorInfo.code == ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+                               FTMap retMap;
+                               retMap[FTValue("messageList")] =
+                                   ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+                               retMap[FTValue("conversationID")] = FTValue(conversationID);
+                               retMap[FTValue("conversationType")] = FTValue(conversationType);
+
+                               result->Success(retMap);
+                           } else {
+                               result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                           }
+                       });
+}
+
+void ZIMPluginMethodHandler::queryMessageRepliedList(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+
+    auto message =
+        ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
+    auto config = ZIMPluginConverter::oZIMMessageRepliedListQueryConfig(
+        std::get<FTMap>(argument[FTValue("config")]));
+
+    zim->queryMessageRepliedList(
+        message, config,
+        [=](const std::vector<std::shared_ptr<ZIMMessage>> &messageList, long long nextFlag,
+            const ZIMMessageRootRepliedInfo &rootRepliedInfo, const ZIMError &errorInfo) {
+            if (errorInfo.code == ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+                FTMap retMap;
+                retMap[FTValue("messageList")] =
+                    ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+                retMap[FTValue("nextFlag")] = FTValue(nextFlag);
+                retMap[FTValue("rootRepliedInfo")] =
+                    ZIMPluginConverter::cnvZIMMessageRootRepliedInfoToMap(rootRepliedInfo);
+
+                result->Success(retMap);
+            } else {
+                result->Error(std::to_string(errorInfo.code), errorInfo.message);
+            }
+        });
+}
+
 void ZIMPluginMethodHandler::deleteAllMessage(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageDeleteConfig config;
@@ -1204,18 +1134,13 @@ void ZIMPluginMethodHandler::deleteAllMessage(FArgument &argument, FResult resul
 
 void ZIMPluginMethodHandler::deleteMessages(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto messageArray = std::get<FTArray>(argument[(FTValue("messageList"))]);
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageDeleteConfig config;
     config.isAlsoDeleteServerMessage =
@@ -1239,12 +1164,7 @@ void ZIMPluginMethodHandler::deleteMessages(FArgument &argument, FResult result)
 
 void ZIMPluginMethodHandler::deleteAllConversationMessages(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMMessageDeleteConfig config;
@@ -1261,17 +1181,15 @@ void ZIMPluginMethodHandler::deleteAllConversationMessages(FArgument &argument, 
 }
 
 void ZIMPluginMethodHandler::sendMessageReceiptsRead(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messageArray = std::get<FTArray>(argument[(FTValue("messageList"))]);
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
+
     zim->sendMessageReceiptsRead(
         messageObjectList, conversationID, (ZIMConversationType)conversationType,
         [=](const std::string &conversationID, ZIMConversationType conversationType,
@@ -1291,17 +1209,15 @@ void ZIMPluginMethodHandler::sendMessageReceiptsRead(FArgument &argument, FResul
 }
 
 void ZIMPluginMethodHandler::queryMessageReceiptsInfo(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messageArray = std::get<FTArray>(argument[(FTValue("messageList"))]);
     auto messageObjectList = ZIMPluginConverter::cnvZIMMessageArrayToObjectList(messageArray);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
-        ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("conversationType")]);
+        ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
+
     zim->queryMessageReceiptsInfo(
         messageObjectList, conversationID, (ZIMConversationType)conversationType,
         [=](const std::vector<ZIMMessageReceiptInfo> &infos, std::vector<long long> errorMessageIDs,
@@ -1321,17 +1237,15 @@ void ZIMPluginMethodHandler::queryMessageReceiptsInfo(FArgument &argument, FResu
 
 void ZIMPluginMethodHandler::queryGroupMessageReceiptReadMemberList(FArgument &argument,
                                                                     FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->queryGroupMessageReceiptReadMemberList(
         messagePtr, groupID, config,
         [=](const std::string &groupID, const std::vector<ZIMGroupMemberInfo> &userList,
@@ -1352,24 +1266,21 @@ void ZIMPluginMethodHandler::queryGroupMessageReceiptReadMemberList(FArgument &a
 void ZIMPluginMethodHandler::queryGroupMessageReceiptUnreadMemberList(FArgument &argument,
                                                                       FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMessageReceiptMemberQueryConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->queryGroupMessageReceiptUnreadMemberList(
         messagePtr, groupID, config,
-        [=](const std::string &groupID, const std::vector<ZIMGroupMemberInfo> &userList,
+        [=](const std::string &callbackGroupID, const std::vector<ZIMGroupMemberInfo> &userList,
             unsigned int nextFlag, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
-                retMap[FTValue("groupID")] = FTValue(groupID);
+                retMap[FTValue("groupID")] = FTValue(callbackGroupID);
                 retMap[FTValue("userList")] =
                     ZIMPluginConverter::cnvZIMGroupMemberInfoListToArray(userList);
                 retMap[FTValue("nextFlag")] = FTValue((int32_t)nextFlag);
@@ -1382,17 +1293,13 @@ void ZIMPluginMethodHandler::queryGroupMessageReceiptUnreadMemberList(FArgument 
 
 void ZIMPluginMethodHandler::searchLocalMessages(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType = std::get<int32_t>(argument[FTValue("conversationType")]);
     auto config = ZIMPluginConverter::cnvZIMMessageSearchConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->searchLocalMessages(
         conversationID, (ZIMConversationType)conversationType, config,
         [=](const std::string &conversationID, ZIMConversationType conversationType,
@@ -1415,15 +1322,11 @@ void ZIMPluginMethodHandler::searchLocalMessages(FArgument &argument, FResult re
 
 void ZIMPluginMethodHandler::searchGlobalLocalMessages(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto config = ZIMPluginConverter::cnvZIMMessageSearchConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->searchGlobalLocalMessages(
         config, [=](const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
                     const std::shared_ptr<ZIMMessage> &nextMessage, const ZIMError &errorInfo) {
@@ -1442,15 +1345,11 @@ void ZIMPluginMethodHandler::searchGlobalLocalMessages(FArgument &argument, FRes
 
 void ZIMPluginMethodHandler::searchLocalConversations(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto config = ZIMPluginConverter::cnvZIMConversationSearchConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->searchLocalConversations(
         config, [=](const std::vector<ZIMConversationSearchInfo> &conversationSearchInfoList,
                     unsigned int nextFlag, const ZIMError &errorInfo) {
@@ -1469,12 +1368,7 @@ void ZIMPluginMethodHandler::searchLocalConversations(FArgument &argument, FResu
 
 void ZIMPluginMethodHandler::createRoom(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomInfo =
         ZIMPluginConverter::cnvZIMRoomInfoToObject(std::get<FTMap>(argument[FTValue("roomInfo")]));
@@ -1494,12 +1388,7 @@ void ZIMPluginMethodHandler::createRoom(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::createRoomWithConfig(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomInfo =
         ZIMPluginConverter::cnvZIMRoomInfoToObject(std::get<FTMap>(argument[FTValue("roomInfo")]));
@@ -1523,12 +1412,7 @@ void ZIMPluginMethodHandler::createRoomWithConfig(FArgument &argument, FResult r
 
 void ZIMPluginMethodHandler::enterRoom(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomInfo =
         ZIMPluginConverter::cnvZIMRoomInfoToObject(std::get<FTMap>(argument[FTValue("roomInfo")]));
@@ -1552,12 +1436,7 @@ void ZIMPluginMethodHandler::enterRoom(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::joinRoom(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
@@ -1576,12 +1455,7 @@ void ZIMPluginMethodHandler::joinRoom(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::leaveRoom(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
@@ -1598,12 +1472,9 @@ void ZIMPluginMethodHandler::leaveRoom(FArgument &argument, FResult result) {
 }
 
 void ZIMPluginMethodHandler::leaveAllRoom(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     zim->leaveAllRoom([=](const std::vector<std::string> &roomIDList, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -1617,12 +1488,7 @@ void ZIMPluginMethodHandler::leaveAllRoom(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::queryRoomMemberList(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
     auto queryConfig = ZIMPluginConverter::cnvZIMRoomMemberQueryConfigToObject(
@@ -1648,12 +1514,7 @@ void ZIMPluginMethodHandler::queryRoomMemberList(FArgument &argument, FResult re
 
 void ZIMPluginMethodHandler::queryRoomMembers(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
     auto userIDs =
@@ -1679,12 +1540,7 @@ void ZIMPluginMethodHandler::queryRoomMembers(FArgument &argument, FResult resul
 
 void ZIMPluginMethodHandler::queryRoomOnlineMemberCount(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
@@ -1704,12 +1560,7 @@ void ZIMPluginMethodHandler::queryRoomOnlineMemberCount(FArgument &argument, FRe
 
 void ZIMPluginMethodHandler::setRoomAttributes(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
     auto roomAttributes =
@@ -1736,12 +1587,7 @@ void ZIMPluginMethodHandler::setRoomAttributes(FArgument &argument, FResult resu
 
 void ZIMPluginMethodHandler::deleteRoomAttributes(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
     auto keys =
@@ -1769,12 +1615,7 @@ void ZIMPluginMethodHandler::deleteRoomAttributes(FArgument &argument, FResult r
 void ZIMPluginMethodHandler::beginRoomAttributesBatchOperation(FArgument &argument,
                                                                FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
     auto config = ZIMPluginConverter::cnvZIMRoomAttributesBatchOperationConfigToObject(
@@ -1786,12 +1627,7 @@ void ZIMPluginMethodHandler::beginRoomAttributesBatchOperation(FArgument &argume
 
 void ZIMPluginMethodHandler::endRoomAttributesBatchOperation(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
@@ -1810,12 +1646,7 @@ void ZIMPluginMethodHandler::endRoomAttributesBatchOperation(FArgument &argument
 
 void ZIMPluginMethodHandler::queryRoomAllAttributes(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
 
@@ -1837,12 +1668,9 @@ void ZIMPluginMethodHandler::queryRoomAllAttributes(FArgument &argument, FResult
 }
 
 void ZIMPluginMethodHandler::setRoomMembersAttributes(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
     auto attributes =
         ZIMPluginConverter::cnvFTMapToSTLMap(std::get<FTMap>(argument[FTValue("attributes")]));
@@ -1850,6 +1678,7 @@ void ZIMPluginMethodHandler::setRoomMembersAttributes(FArgument &argument, FResu
         ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(argument[FTValue("userIDs")]));
     auto config = ZIMPluginConverter::cnvZIMRoomMemberAttributesSetConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->setRoomMembersAttributes(
         attributes, userIDs, roomID, config,
         [=](const std::string &roomID,
@@ -1874,15 +1703,13 @@ void ZIMPluginMethodHandler::setRoomMembersAttributes(FArgument &argument, FResu
         });
 }
 void ZIMPluginMethodHandler::queryRoomMembersAttributes(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
     auto userIDs =
         ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(argument[FTValue("userIDs")]));
+
     zim->queryRoomMembersAttributes(
         userIDs, roomID,
         [=](const std::string &roomID, const std::vector<ZIMRoomMemberAttributesInfo> &infos,
@@ -1903,15 +1730,13 @@ void ZIMPluginMethodHandler::queryRoomMembersAttributes(FArgument &argument, FRe
         });
 }
 void ZIMPluginMethodHandler::queryRoomMemberAttributesList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto config = ZIMPluginConverter::cnvZIMRoomMemberAttributesQueryConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
     auto roomID = std::get<std::string>(argument[FTValue("roomID")]);
+
     zim->queryRoomMemberAttributesList(
         roomID, config,
         [=](const std::string &roomID, const std::vector<ZIMRoomMemberAttributesInfo> &infos,
@@ -1935,12 +1760,7 @@ void ZIMPluginMethodHandler::queryRoomMemberAttributesList(FArgument &argument, 
 
 void ZIMPluginMethodHandler::createGroup(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupInfo = ZIMPluginConverter::cnvZIMGroupInfoToObject(
         std::get<FTMap>(argument[FTValue("groupInfo")]));
@@ -1969,12 +1789,7 @@ void ZIMPluginMethodHandler::createGroup(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::createGroupWithConfig(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupInfo = ZIMPluginConverter::cnvZIMGroupInfoToObject(
         std::get<FTMap>(argument[FTValue("groupInfo")]));
@@ -2005,12 +1820,7 @@ void ZIMPluginMethodHandler::createGroupWithConfig(FArgument &argument, FResult 
 
 void ZIMPluginMethodHandler::joinGroup(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
@@ -2028,12 +1838,7 @@ void ZIMPluginMethodHandler::joinGroup(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::dismissGroup(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
@@ -2051,12 +1856,7 @@ void ZIMPluginMethodHandler::dismissGroup(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::leaveGroup(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
@@ -2074,12 +1874,7 @@ void ZIMPluginMethodHandler::leaveGroup(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::inviteUsersIntoGroup(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto userIDs =
@@ -2106,12 +1901,7 @@ void ZIMPluginMethodHandler::inviteUsersIntoGroup(FArgument &argument, FResult r
 
 void ZIMPluginMethodHandler::kickGroupMembers(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto userIDs =
@@ -2138,12 +1928,7 @@ void ZIMPluginMethodHandler::kickGroupMembers(FArgument &argument, FResult resul
 
 void ZIMPluginMethodHandler::transferGroupOwner(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto toUserID = std::get<std::string>(argument[FTValue("toUserID")]);
@@ -2165,12 +1950,7 @@ void ZIMPluginMethodHandler::transferGroupOwner(FArgument &argument, FResult res
 
 void ZIMPluginMethodHandler::updateGroupName(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto groupName = std::get<std::string>(argument[FTValue("groupName")]);
@@ -2192,12 +1972,7 @@ void ZIMPluginMethodHandler::updateGroupName(FArgument &argument, FResult result
 
 void ZIMPluginMethodHandler::updateGroupAvatarUrl(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto groupAvatarUrl = std::get<std::string>(argument[FTValue("groupAvatarUrl")]);
@@ -2220,12 +1995,7 @@ void ZIMPluginMethodHandler::updateGroupAvatarUrl(FArgument &argument, FResult r
 
 void ZIMPluginMethodHandler::updateGroupNotice(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto groupNotice = std::get<std::string>(argument[FTValue("groupNotice")]);
@@ -2247,15 +2017,11 @@ void ZIMPluginMethodHandler::updateGroupNotice(FArgument &argument, FResult resu
 
 void ZIMPluginMethodHandler::updateGroupJoinMode(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto mode = (ZIMGroupJoinMode)std::get<int32_t>(argument[FTValue("mode")]);
+
     zim->updateGroupJoinMode(
         mode, groupID,
         [=](const std::string &groupID, ZIMGroupJoinMode mode, const ZIMError &errorInfo) {
@@ -2272,16 +2038,12 @@ void ZIMPluginMethodHandler::updateGroupJoinMode(FArgument &argument, FResult re
 
 void ZIMPluginMethodHandler::updateGroupInviteMode(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
-    int mode = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("mode")]);
+    int mode = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("mode")]);
+
     zim->updateGroupInviteMode(
         (ZIMGroupInviteMode)mode, groupID,
         [=](const std::string &groupID, ZIMGroupInviteMode mode, const ZIMError &errorInfo) {
@@ -2298,15 +2060,11 @@ void ZIMPluginMethodHandler::updateGroupInviteMode(FArgument &argument, FResult 
 
 void ZIMPluginMethodHandler::updateGroupBeInviteMode(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto mode = (ZIMGroupBeInviteMode)std::get<int32_t>(argument[FTValue("mode")]);
+
     zim->updateGroupBeInviteMode(
         mode, groupID,
         [=](const std::string &groupID, ZIMGroupBeInviteMode mode, const ZIMError &errorInfo) {
@@ -2323,12 +2081,7 @@ void ZIMPluginMethodHandler::updateGroupBeInviteMode(FArgument &argument, FResul
 
 void ZIMPluginMethodHandler::queryGroupInfo(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
@@ -2346,12 +2099,7 @@ void ZIMPluginMethodHandler::queryGroupInfo(FArgument &argument, FResult result)
 
 void ZIMPluginMethodHandler::setGroupAttributes(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto groupAttributes =
@@ -2375,12 +2123,7 @@ void ZIMPluginMethodHandler::setGroupAttributes(FArgument &argument, FResult res
 
 void ZIMPluginMethodHandler::deleteGroupAttributes(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto keys =
@@ -2404,12 +2147,7 @@ void ZIMPluginMethodHandler::deleteGroupAttributes(FArgument &argument, FResult 
 
 void ZIMPluginMethodHandler::queryGroupAttributes(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto keys =
@@ -2417,9 +2155,10 @@ void ZIMPluginMethodHandler::queryGroupAttributes(FArgument &argument, FResult r
 
     zim->queryGroupAttributes(
         keys, groupID,
-        [=](const std::string &groupID,
-            const std::unordered_map<std::string, std::string> &groupAttributes,
-            const ZIMError &errorInfo) {
+        [result =
+             std::move(result)](const std::string &groupID,
+                                const std::unordered_map<std::string, std::string> &groupAttributes,
+                                const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;
                 retMap[FTValue("groupID")] = FTValue(groupID);
@@ -2435,12 +2174,7 @@ void ZIMPluginMethodHandler::queryGroupAttributes(FArgument &argument, FResult r
 
 void ZIMPluginMethodHandler::queryGroupAllAttributes(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
@@ -2463,15 +2197,10 @@ void ZIMPluginMethodHandler::queryGroupAllAttributes(FArgument &argument, FResul
 
 void ZIMPluginMethodHandler::setGroupMemberRole(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
-    int role = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("role")]);
+    int role = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("role")]);
     auto forUserID = std::get<std::string>(argument[FTValue("forUserID")]);
 
     zim->setGroupMemberRole(role, forUserID, groupID,
@@ -2493,12 +2222,7 @@ void ZIMPluginMethodHandler::setGroupMemberRole(FArgument &argument, FResult res
 
 void ZIMPluginMethodHandler::setGroupMemberNickname(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto nickname = std::get<std::string>(argument[FTValue("nickname")]);
@@ -2523,12 +2247,7 @@ void ZIMPluginMethodHandler::setGroupMemberNickname(FArgument &argument, FResult
 
 void ZIMPluginMethodHandler::queryGroupMemberInfo(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
@@ -2552,12 +2271,7 @@ void ZIMPluginMethodHandler::queryGroupMemberInfo(FArgument &argument, FResult r
 
 void ZIMPluginMethodHandler::queryGroupList(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     zim->queryGroupList([=](const std::vector<ZIMGroup> &groupList, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -2573,12 +2287,7 @@ void ZIMPluginMethodHandler::queryGroupList(FArgument &argument, FResult result)
 
 void ZIMPluginMethodHandler::queryGroupMemberList(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMemberQueryConfigToObject(
@@ -2604,12 +2313,7 @@ void ZIMPluginMethodHandler::queryGroupMemberList(FArgument &argument, FResult r
 
 void ZIMPluginMethodHandler::queryGroupMemberCount(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
 
@@ -2629,15 +2333,11 @@ void ZIMPluginMethodHandler::queryGroupMemberCount(FArgument &argument, FResult 
 
 void ZIMPluginMethodHandler::searchLocalGroups(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto config = ZIMPluginConverter::cnvZIMGroupSearchConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->searchLocalGroups(config, [=](const std::vector<ZIMGroupSearchInfo> &groupSearchInfoList,
                                        unsigned int nextFlag, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -2655,16 +2355,12 @@ void ZIMPluginMethodHandler::searchLocalGroups(FArgument &argument, FResult resu
 
 void ZIMPluginMethodHandler::searchLocalGroupMembers(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMemberSearchConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->searchLocalGroupMembers(
         groupID, config,
         [=](const std::string &groupID, const std::vector<ZIMGroupMemberInfo> &userList,
@@ -2684,17 +2380,14 @@ void ZIMPluginMethodHandler::searchLocalGroupMembers(FArgument &argument, FResul
 }
 
 void ZIMPluginMethodHandler::muteGroup(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     bool isMute = std::get<bool>(argument[FTValue("isMute")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMuteConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->muteGroup(isMute, groupID, config,
                    [=](const std::string &groupID, bool isMute, const ZIMGroupMuteInfo &info,
                        const ZIMError &errorInfo) {
@@ -2712,12 +2405,9 @@ void ZIMPluginMethodHandler::muteGroup(FArgument &argument, FResult result) {
 }
 
 void ZIMPluginMethodHandler::sendGroupJoinApplication(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationSendConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
@@ -2731,6 +2421,7 @@ void ZIMPluginMethodHandler::sendGroupJoinApplication(FArgument &argument, FResu
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->sendGroupJoinApplication(
         groupID, config, [=](const std::string &groupID, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -2744,12 +2435,9 @@ void ZIMPluginMethodHandler::sendGroupJoinApplication(FArgument &argument, FResu
 }
 
 void ZIMPluginMethodHandler::acceptGroupJoinApplication(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationAcceptConfigToObject(
@@ -2764,6 +2452,7 @@ void ZIMPluginMethodHandler::acceptGroupJoinApplication(FArgument &argument, FRe
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->acceptGroupJoinApplication(
         userID, groupID, config,
         [=](const std::string &groupID, const std::string &userID, const ZIMError &errorInfo) {
@@ -2779,12 +2468,9 @@ void ZIMPluginMethodHandler::acceptGroupJoinApplication(FArgument &argument, FRe
 }
 
 void ZIMPluginMethodHandler::rejectGroupJoinApplication(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupJoinApplicationRejectConfigToObject(
@@ -2799,6 +2485,7 @@ void ZIMPluginMethodHandler::rejectGroupJoinApplication(FArgument &argument, FRe
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->rejectGroupJoinApplication(
         userID, groupID, config,
         [=](const std::string &groupID, const std::string &userID, const ZIMError &errorInfo) {
@@ -2814,12 +2501,9 @@ void ZIMPluginMethodHandler::rejectGroupJoinApplication(FArgument &argument, FRe
 }
 
 void ZIMPluginMethodHandler::sendGroupInviteApplications(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;
@@ -2839,6 +2523,7 @@ void ZIMPluginMethodHandler::sendGroupInviteApplications(FArgument &argument, FR
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->sendGroupInviteApplications(
         userIDsVec, groupID, config,
         [=](const std::string &groupID, const std::vector<ZIMErrorUserInfo> &errorUserList,
@@ -2857,12 +2542,9 @@ void ZIMPluginMethodHandler::sendGroupInviteApplications(FArgument &argument, FR
 }
 
 void ZIMPluginMethodHandler::acceptGroupInviteApplication(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto inviterUserID = std::get<std::string>(argument[FTValue("inviterUserID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationAcceptConfigToObject(
@@ -2877,6 +2559,7 @@ void ZIMPluginMethodHandler::acceptGroupInviteApplication(FArgument &argument, F
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->acceptGroupInviteApplication(
         inviterUserID, groupID, config,
         [=](const ZIMGroupFullInfo &fullInfo, const std::string &inviterUserID,
@@ -2895,12 +2578,9 @@ void ZIMPluginMethodHandler::acceptGroupInviteApplication(FArgument &argument, F
 }
 
 void ZIMPluginMethodHandler::rejectGroupInviteApplication(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto inviterUserID = std::get<std::string>(argument[FTValue("inviterUserID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupInviteApplicationRejectConfigToObject(
@@ -2915,6 +2595,7 @@ void ZIMPluginMethodHandler::rejectGroupInviteApplication(FArgument &argument, F
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->rejectGroupInviteApplication(
         inviterUserID, groupID, config,
         [=](const std::string &groupID, const std::string &inviterUserID,
@@ -2931,14 +2612,12 @@ void ZIMPluginMethodHandler::rejectGroupInviteApplication(FArgument &argument, F
 }
 
 void ZIMPluginMethodHandler::queryGroupApplicationList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto config = ZIMPluginConverter::cnvZIMGroupApplicationListQueryConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->queryGroupApplicationList(
         config, [=](const std::vector<ZIMGroupApplicationInfo> &applicationList,
                     unsigned long long nextFlag, const ZIMError &errorInfo) {
@@ -2955,12 +2634,9 @@ void ZIMPluginMethodHandler::queryGroupApplicationList(FArgument &argument, FRes
 }
 
 void ZIMPluginMethodHandler::muteGroupMemberList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;
     for (auto &userIDValue : userIDs) {
@@ -2971,6 +2647,7 @@ void ZIMPluginMethodHandler::muteGroupMemberList(FArgument &argument, FResult re
     bool isMute = std::get<bool>(argument[FTValue("isMute")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMemberMuteConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->muteGroupMembers(isMute, userIDsVec, groupID, config,
                           [=](const std::string &groupID, bool isMute, unsigned int duration,
                               const std::vector<std::string> &mutedMemberIDs,
@@ -2993,12 +2670,9 @@ void ZIMPluginMethodHandler::muteGroupMemberList(FArgument &argument, FResult re
 }
 
 void ZIMPluginMethodHandler::queryGroupMemberMutedList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
     auto config = ZIMPluginConverter::cnvZIMGroupMemberMutedListQueryConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
@@ -3021,12 +2695,7 @@ void ZIMPluginMethodHandler::queryGroupMemberMutedList(FArgument &argument, FRes
 
 void ZIMPluginMethodHandler::callInvite(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto invitees =
         ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(argument[FTValue("invitees")]));
@@ -3034,7 +2703,7 @@ void ZIMPluginMethodHandler::callInvite(FArgument &argument, FResult result) {
 
     ZIMCallInviteConfig config;
     config.mode = (ZIMCallInvitationMode)std::get<int32_t>(configMap[FTValue("mode")]);
-    config.timeout = ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("timeout")]);
+    config.timeout = ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("timeout")]);
     config.extendedData = std::get<std::string>(configMap[FTValue("extendedData")]);
     config.enableNotReceivedCheck = std::get<bool>(configMap[FTValue("enableNotReceivedCheck")]);
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
@@ -3046,6 +2715,7 @@ void ZIMPluginMethodHandler::callInvite(FArgument &argument, FResult result) {
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->callInvite(invitees, config,
                     [=](const std::string &callID, const ZIMCallInvitationSentInfo &info,
                         const ZIMError &errorInfo) {
@@ -3064,12 +2734,7 @@ void ZIMPluginMethodHandler::callInvite(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::callingInvite(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto invitees =
         ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(argument[FTValue("invitees")]));
@@ -3086,6 +2751,7 @@ void ZIMPluginMethodHandler::callingInvite(FArgument &argument, FResult result) 
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->callingInvite(invitees, callID, config,
                        [=](const std::string &callID, const ZIMCallingInvitationSentInfo &info,
                            const ZIMError &errorInfo) {
@@ -3104,12 +2770,7 @@ void ZIMPluginMethodHandler::callingInvite(FArgument &argument, FResult result) 
 
 void ZIMPluginMethodHandler::callQuit(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto callID = std::get<std::string>(argument[FTValue("callID")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
@@ -3142,12 +2803,7 @@ void ZIMPluginMethodHandler::callQuit(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::callEnd(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto callID = std::get<std::string>(argument[FTValue("callID")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
@@ -3181,12 +2837,7 @@ void ZIMPluginMethodHandler::callEnd(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::callCancel(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto invitees =
         ZIMPluginConverter::cnvFTArrayToStlVector(std::get<FTArray>(argument[FTValue("invitees")]));
@@ -3204,6 +2855,7 @@ void ZIMPluginMethodHandler::callCancel(FArgument &argument, FResult result) {
             std::get<FTMap>(configMap[FTValue("pushConfig")]), voIPConfigPtr);
         config.pushConfig = pushConfigPtr.get();
     }
+
     zim->callCancel(invitees, callID, config,
                     [=](const std::string &callID, const std::vector<std::string> &errorInvitees,
                         const ZIMError &errorInfo) {
@@ -3222,12 +2874,7 @@ void ZIMPluginMethodHandler::callCancel(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::callAccept(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto callID = std::get<std::string>(argument[FTValue("callID")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
@@ -3249,12 +2896,7 @@ void ZIMPluginMethodHandler::callAccept(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::callReject(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto callID = std::get<std::string>(argument[FTValue("callID")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
@@ -3276,12 +2918,7 @@ void ZIMPluginMethodHandler::callReject(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::callJoin(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto callID = std::get<std::string>(argument[FTValue("callID")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
@@ -3305,12 +2942,7 @@ void ZIMPluginMethodHandler::callJoin(FArgument &argument, FResult result) {
 
 void ZIMPluginMethodHandler::queryCallList(FArgument &argument, FResult result) {
 
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
 
@@ -3322,6 +2954,7 @@ void ZIMPluginMethodHandler::queryCallList(FArgument &argument, FResult result) 
     } else {
         config.nextFlag = (long long)std::get<int64_t>(configMap[FTValue("nextFlag")]);
     }
+
     zim->queryCallInvitationList(config, [=](const std::vector<ZIMCallInfo> &callList,
                                              long long nextFlag, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -3343,12 +2976,9 @@ void ZIMPluginMethodHandler::queryCallList(FArgument &argument, FResult result) 
     });
 }
 void ZIMPluginMethodHandler::addMessageReaction(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto reactionType = std::get<std::string>(argument[FTValue("reactionType")]);
@@ -3368,15 +2998,13 @@ void ZIMPluginMethodHandler::addMessageReaction(FArgument &argument, FResult res
                             });
 }
 void ZIMPluginMethodHandler::deleteMessageReaction(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto reactionType = std::get<std::string>(argument[FTValue("reactionType")]);
+
     zim->deleteMessageReaction(reactionType, messagePtr,
                                [=](const ZIMMessageReaction &reaction, const ZIMError &errorInfo) {
                                    if (errorInfo.code == 0) {
@@ -3392,16 +3020,14 @@ void ZIMPluginMethodHandler::deleteMessageReaction(FArgument &argument, FResult 
                                });
 }
 void ZIMPluginMethodHandler::queryMessageReactionUserList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto messagePtr =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
     auto config = ZIMPluginConverter::cnvZIMMessageReactionUserQueryConfigMapToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->queryMessageReactionUserList(
         messagePtr, config,
         [=](const std::shared_ptr<ZIMMessage> &message,
@@ -3427,18 +3053,16 @@ void ZIMPluginMethodHandler::queryMessageReactionUserList(FArgument &argument, F
 }
 
 void ZIMPluginMethodHandler::addUsersToBlacklist(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;
     for (auto &userIDValue : userIDs) {
         auto userID = std::get<std::string>(userIDValue);
         userIDsVec.emplace_back(userID);
     }
+
     zim->addUsersToBlacklist(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList,
                                              const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -3452,12 +3076,8 @@ void ZIMPluginMethodHandler::addUsersToBlacklist(FArgument &argument, FResult re
     });
 }
 void ZIMPluginMethodHandler::removeUsersFromBlacklist(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;
@@ -3465,6 +3085,7 @@ void ZIMPluginMethodHandler::removeUsersFromBlacklist(FArgument &argument, FResu
         auto userID = std::get<std::string>(userIDValue);
         userIDsVec.emplace_back(userID);
     }
+
     zim->removeUsersFromBlacklist(
         userIDsVec,
         [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
@@ -3479,12 +3100,9 @@ void ZIMPluginMethodHandler::removeUsersFromBlacklist(FArgument &argument, FResu
         });
 }
 void ZIMPluginMethodHandler::queryBlackList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     ZIMBlacklistQueryConfig config = ZIMPluginConverter::cnvZIMBlacklistQueryConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
     zim->queryBlacklist(config, [=](const std::vector<ZIMUserInfo> &blacklist, long long nextFlag,
@@ -3500,13 +3118,11 @@ void ZIMPluginMethodHandler::queryBlackList(FArgument &argument, FResult result)
     });
 }
 void ZIMPluginMethodHandler::checkUserIsInBlackList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
+
     zim->checkUserIsInBlacklist(userID, [=](bool isUserInBlacklist, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -3519,15 +3135,13 @@ void ZIMPluginMethodHandler::checkUserIsInBlackList(FArgument &argument, FResult
 }
 
 void ZIMPluginMethodHandler::addFriend(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     ZIMFriendAddConfig config = ZIMPluginConverter::cnvZIMFriendAddConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->addFriend(userID, config, [=](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
@@ -3540,12 +3154,9 @@ void ZIMPluginMethodHandler::addFriend(FArgument &argument, FResult result) {
 }
 
 void ZIMPluginMethodHandler::sendFriendApplication(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto applyUserID = std::get<std::string>(argument[FTValue("userID")]);
     ZIMFriendApplicationSendConfig config =
         ZIMPluginConverter::cnvZIMFriendApplicationSendConfigToObject(
@@ -3577,12 +3188,9 @@ void ZIMPluginMethodHandler::sendFriendApplication(FArgument &argument, FResult 
 }
 
 void ZIMPluginMethodHandler::deleteFriends(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;
     for (auto &userIDValue : userIDs) {
@@ -3592,6 +3200,7 @@ void ZIMPluginMethodHandler::deleteFriends(FArgument &argument, FResult result) 
 
     ZIMFriendDeleteConfig config = ZIMPluginConverter::cnvZIMFriendDeleteConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->deleteFriends(
         userIDsVec, config,
         [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
@@ -3613,12 +3222,9 @@ void ZIMPluginMethodHandler::deleteFriends(FArgument &argument, FResult result) 
 }
 
 void ZIMPluginMethodHandler::checkFriendsRelation(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;
     for (auto &userIDValue : userIDs) {
@@ -3627,8 +3233,9 @@ void ZIMPluginMethodHandler::checkFriendsRelation(FArgument &argument, FResult r
     }
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendRelationCheckConfig config;
-    config.type =
-        (ZIMFriendRelationCheckType)ZIMPluginConverter::cnvFTMapToInt32(configMap[FTValue("type")]);
+    config.type = (ZIMFriendRelationCheckType)ZIMPluginConverter::cnvFTValueToInt32(
+        configMap[FTValue("type")]);
+
     zim->checkFriendsRelation(
         userIDsVec, config,
         [=](const std::vector<ZIMFriendRelationInfo> &friendRelationInfoList,
@@ -3659,14 +3266,12 @@ void ZIMPluginMethodHandler::checkFriendsRelation(FArgument &argument, FResult r
 }
 
 void ZIMPluginMethodHandler::updateFriendAlias(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto friendAlias = std::get<std::string>(argument[FTValue("friendAlias")]);
+
     zim->updateFriendAlias(friendAlias, userID,
                            [=](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
                                if (errorInfo.code == 0) {
@@ -3681,15 +3286,13 @@ void ZIMPluginMethodHandler::updateFriendAlias(FArgument &argument, FResult resu
 }
 
 void ZIMPluginMethodHandler::updateFriendAttributes(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto friendAttributes = ZIMPluginConverter::cnvFTMapToSTLMap(
         std::get<FTMap>(argument[FTValue("friendAttributes")]));
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
+
     zim->updateFriendAttributes(
         friendAttributes, userID, [=](const ZIMFriendInfo &friendInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -3704,12 +3307,8 @@ void ZIMPluginMethodHandler::updateFriendAttributes(FArgument &argument, FResult
 }
 
 void ZIMPluginMethodHandler::queryFriendsInfo(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+    
+    CheckZIMInstanceExistAndObtainZIM();
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;
     for (auto &userIDValue : userIDs) {
@@ -3745,12 +3344,9 @@ void ZIMPluginMethodHandler::queryFriendsInfo(FArgument &argument, FResult resul
 }
 
 void ZIMPluginMethodHandler::acceptFriendApplication(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendApplicationAcceptConfig config =
@@ -3781,12 +3377,9 @@ void ZIMPluginMethodHandler::acceptFriendApplication(FArgument &argument, FResul
 }
 
 void ZIMPluginMethodHandler::rejectFriendApplication(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
+
     auto userID = std::get<std::string>(argument[FTValue("userID")]);
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendApplicationRejectConfig config =
@@ -3817,12 +3410,8 @@ void ZIMPluginMethodHandler::rejectFriendApplication(FArgument &argument, FResul
 }
 
 void ZIMPluginMethodHandler::queryFriendList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendListQueryConfig config = ZIMPluginConverter::cnvZIMFriendListQueryConfigToObject(
@@ -3848,12 +3437,8 @@ void ZIMPluginMethodHandler::queryFriendList(FArgument &argument, FResult result
 }
 
 void ZIMPluginMethodHandler::queryFriendApplicationList(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendApplicationListQueryConfig config =
@@ -3880,16 +3465,13 @@ void ZIMPluginMethodHandler::queryFriendApplicationList(FArgument &argument, FRe
 }
 
 void ZIMPluginMethodHandler::searchLocalFriends(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFriendSearchConfig config = ZIMPluginConverter::cnvZIMFriendSearchConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->searchLocalFriends(config, [=](const std::vector<ZIMFriendInfo> &friendInfos,
                                         unsigned int nextFlag, const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
@@ -3910,12 +3492,8 @@ void ZIMPluginMethodHandler::searchLocalFriends(FArgument &argument, FResult res
 }
 
 void ZIMPluginMethodHandler::queryCombineMessageDetail(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     std::shared_ptr<ZIMMessage> message =
         ZIMPluginConverter::cnvZIMMessageToObject(std::get<FTMap>(argument[FTValue("message")]));
@@ -3936,16 +3514,13 @@ void ZIMPluginMethodHandler::queryCombineMessageDetail(FArgument &argument, FRes
 }
 
 void ZIMPluginMethodHandler::clearLocalFileCache(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFileCacheClearConfig config = ZIMPluginConverter::cnvZIMFileCacheClearConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->clearLocalFileCache(config, [=](const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             result->Success();
@@ -3956,16 +3531,13 @@ void ZIMPluginMethodHandler::clearLocalFileCache(FArgument &argument, FResult re
 }
 
 void ZIMPluginMethodHandler::queryLocalFileCache(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     ZIMFileCacheQueryConfig config = ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(
         std::get<FTMap>(argument[FTValue("config")]));
+
     zim->queryLocalFileCache(
         config, [=](const ZIMFileCacheInfo &cacheInfo, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
@@ -3980,16 +3552,12 @@ void ZIMPluginMethodHandler::queryLocalFileCache(FArgument &argument, FResult re
 }
 
 void ZIMPluginMethodHandler::importLocalMessages(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto folderPath = std::get<std::string>(argument[FTValue("folderPath")]);
     ZIMMessageImportConfig config;
-    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
 
     zim->importLocalMessages(
         folderPath, config,
@@ -4013,16 +3581,12 @@ void ZIMPluginMethodHandler::importLocalMessages(FArgument &argument, FResult re
 }
 
 void ZIMPluginMethodHandler::exportLocalMessages(FArgument &argument, FResult result) {
-    auto handle = std::get<std::string>(argument[FTValue("handle")]);
-    auto zim = this->engineMap[handle];
-    if (!zim) {
-        result->Error("-1", "no native instance");
-        return;
-    }
+
+    CheckZIMInstanceExistAndObtainZIM();
 
     auto folderPath = std::get<std::string>(argument[FTValue("folderPath")]);
     ZIMMessageExportConfig config;
-    auto progressID = ZIMPluginConverter::cnvFTMapToInt32(argument[FTValue("progressID")]);
+    auto progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
 
     zim->exportLocalMessages(
         folderPath, config,
