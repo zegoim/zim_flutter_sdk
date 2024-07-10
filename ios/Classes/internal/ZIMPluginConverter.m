@@ -826,7 +826,7 @@
     [infoDic safeSetObject:@(info.sentTime) forKey:@"sentTime"];
     [infoDic safeSetObject:@(info.messageID) forKey:@"messageID"];
     [infoDic safeSetObject:@(info.messageSeq) forKey:@"messageSeq"];
-    [infoDic safeSetObject:info.messageInfo forKey:@"messageInfo"];
+    [infoDic safeSetObject:[ZIMPluginConverter mZIMMessageLiteInfo:info.messageInfo] forKey:@"messageInfo"];
     
     return infoDic;
 }
