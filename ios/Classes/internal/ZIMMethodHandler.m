@@ -1145,7 +1145,14 @@
             [resultDic safeSetObject:@(nextFlag) forKey:@"nextFlag"];
             [resultDic safeSetObject:MsgDicList forKey:@"messageList"];
             [resultDic safeSetObject:infoDic forKey:@"rootRepliedInfo"];
-            [self writeLog:[NSString stringWithFormat:@"Auto test ,rootRepliedInfo:%@",infoDic]];
+            NSString *infoStr = [NSString stringWithFormat:@"Auto test ,rootRepliedInfo:%@",infoDic];
+            NSString *compressedString1 = [infoStr stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+            // 去掉制表符
+            NSString *compressedString2 = [compressedString1 stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+            // 去掉空格
+            NSString *compressedString3 = [compressedString2 stringByReplacingOccurrencesOfString:@" " withString:@""];
+            
+            [self writeLog:compressedString3];
             
             result(resultDic);
         }
