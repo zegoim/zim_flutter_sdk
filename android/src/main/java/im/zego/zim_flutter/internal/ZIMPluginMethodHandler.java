@@ -1132,7 +1132,11 @@ public class ZIMPluginMethodHandler {
 
         String conversationID = call.argument("conversationID");
         ZIMConversationType conversationType = ZIMConversationType.getZIMConversationType(ZIMPluginCommonTools.safeGetIntValue(call.argument("conversationType")));
-        ArrayList<Long> messageSeqs = call.argument("messageSeqs");
+        ArrayList<Object> messageSeqsObj = call.argument("messageSeqs");
+        ArrayList<Long> messageSeqs = new ArrayList<>();
+        for(Object seqObj : messageSeqsObj) {
+            messageSeqs.add(ZIMPluginCommonTools.safeGetLongValue(seqObj));
+        }
 
         zim.queryMessages(messageSeqs, conversationID, conversationType, new ZIMMessageQueriedCallback() {
             @Override
