@@ -191,6 +191,7 @@ class ZIMConverter {
       conversationMap['mutedExpiredTime'] = conversation.mutedExpiredTime;
       conversationMap['isDisabled'] = conversation.isDisabled;
     }
+    conversationMap['marks'] = conversation.marks;
     return conversationMap;
   }
 
@@ -211,7 +212,6 @@ class ZIMConverter {
     conversation.conversationName = resultMap['conversationName'] ?? '';
     conversation.conversationAvatarUrl =
         resultMap['conversationAvatarUrl'] ?? '';
-  
     conversation.unreadMessageCount = resultMap['unreadMessageCount'];
     conversation.orderKey = resultMap['orderKey'];
     if (resultMap['lastMessage'] != null) {
@@ -227,7 +227,58 @@ class ZIMConverter {
       conversation.mentionedInfoList.add(info);
     }
     conversation.draft = resultMap['draft'] ?? '';
+    conversation.marks = List<int>.from(resultMap['marks']);
     return conversation;
+  }
+
+  static ZIMConversationFilterOption oZIMConversationFilterOption(Map map){
+    ZIMConversationFilterOption option = ZIMConversationFilterOption();
+    option.marks = List<int>.from(map['marks']);
+    return option;
+  }
+  static Map? mZIMConversationFilterOption(ZIMConversationFilterOption? option){
+    if(option == null){
+      return null;
+    }
+    Map map = {};
+    map['marks'] = option.marks;
+    return map;
+  }
+
+  static ZIMConversationBaseInfo oZIMConversationBaseInfo(Map map){
+    ZIMConversationBaseInfo baseInfo = ZIMConversationBaseInfo();
+    baseInfo.conversationID = map['conversationID'];
+    baseInfo.conversationType = ZIMConversationTypeExtension.getEnum(map['conversationType']);
+    return baseInfo;
+  }
+
+  static Map mZIMConversationBaseInfo(ZIMConversationBaseInfo info){
+    Map map = {};
+    map['conversationID'] = info.conversationID;
+    map['conversationType'] = info.conversationType.value;
+    return map;
+  }
+
+  static List mZIMConversationBaseInfoList(List<ZIMConversationBaseInfo> infos){
+    List list = [];
+    for(ZIMConversationBaseInfo info in infos){
+      list.add(mZIMConversationBaseInfo(info));
+    }
+    return list;
+  }
+
+  static List<ZIMConversationBaseInfo> oZIMConversationBaseInfoList(List basicInfos){
+    List<ZIMConversationBaseInfo> infoList = [];
+    for(Map map in basicInfos){
+      infoList.add(oZIMConversationBaseInfo(map));
+    }
+    return infoList;
+  }
+
+  static Map mZIMConversationTotalUnreadCountQueryConfig(ZIMConversationTotalUnreadCountQueryConfig config){
+    Map map = {};
+    map['marks'] = config.marks;
+    return map;
   }
 
   static Map mZIMMessage(ZIMMessage message) {
@@ -2466,6 +2517,15 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
 
   static ZIMUserOfflinePushRuleUpdatedResult oZIMUserOfflinePushRuleInfoUpdatedResult(Map map){
     return ZIMUserOfflinePushRuleUpdatedResult(offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
+  }
+
+  static ZIMConversationMarkSetResult oZIMConversationMarkSetResult(Map map){
+    ZIMConversationMarkSetResult result = ZIMConversationMarkSetResult(failedInfos: ZIMConverter.oZIMConversationBaseInfoList(map['failedConversationInfos']));
+    return result;
+  }
+
+  static ZIMConversationTotalUnreadCountQueriedResult oZIMConversationTotalUnreadCountQueriedResult(Map map){
+    return ZIMConversationTotalUnreadCountQueriedResult(unreadCount: map['unreadCount']);
   }
 
 

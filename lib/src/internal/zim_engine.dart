@@ -83,10 +83,11 @@ class ZIMEngine implements ZIM {
 
   @override
   Future<ZIMConversationListQueriedResult> queryConversationList(
-      ZIMConversationQueryConfig config) async {
+      ZIMConversationQueryConfig config,[ZIMConversationFilterOption? option]) async {
     Map resultMap = await channel.invokeMethod('queryConversationList', {
       'handle': handle,
-      'config': ZIMConverter.mZIMConversationQueryConfig(config)
+      'config': ZIMConverter.mZIMConversationQueryConfig(config),
+      'option': ZIMConverter.mZIMConversationFilterOption(option)
     });
     return ZIMConverter.oZIMConversationListQueriedResult(resultMap);
   }
@@ -1474,5 +1475,24 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMUserOfflinePushRuleInfoUpdatedResult(resultMap);
   }
 
+  @override
+  Future<ZIMConversationMarkSetResult> setConversationMark(int markType, bool enable, List<ZIMConversationBaseInfo> infos) async{
+    Map resultMap = await channel.invokeMethod('setConversationMark',{
+      'handle':handle,
+      'markType':markType,
+      'enable':enable,
+      'infos':ZIMConverter.mZIMConversationBaseInfoList(infos)
+    });
+    return ZIMConverter.oZIMConversationMarkSetResult(resultMap);
+  }
+
+  @override
+  Future<ZIMConversationTotalUnreadCountQueriedResult> queryConversationTotalUnreadCount(ZIMConversationTotalUnreadCountQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('queryConversationTotalUnreadCount',{
+      'handle':handle,
+      'config':ZIMConverter.mZIMConversationTotalUnreadCountQueryConfig(config)
+    });
+    return ZIMConverter.oZIMConversationTotalUnreadCountQueriedResult(resultMap);
+  }
 
 }

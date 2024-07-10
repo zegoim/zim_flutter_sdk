@@ -181,7 +181,7 @@ abstract class ZIM {
   ///
   /// [config] Configuration for session queries.
   Future<ZIMConversationListQueriedResult> queryConversationList(
-      ZIMConversationQueryConfig config);
+      ZIMConversationQueryConfig config,[ZIMConversationFilterOption? option]);
 
   /// Available since: 2.1.5 and above.
   ///
@@ -319,6 +319,9 @@ abstract class ZIM {
           String conversationID,
           ZIMConversationType conversationType);
 
+  Future<ZIMConversationMarkSetResult> setConversationMark(int markType, bool enable, List<ZIMConversationBaseInfo> infos);
+
+  Future<ZIMConversationTotalUnreadCountQueriedResult> queryConversationTotalUnreadCount(ZIMConversationTotalUnreadCountQueryConfig config);
 
   /// Available since: 2.5.0 and above.
   ///
