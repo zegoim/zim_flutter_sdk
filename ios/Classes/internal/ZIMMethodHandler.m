@@ -1144,6 +1144,8 @@
             [resultDic safeSetObject:@(nextFlag) forKey:@"nextFlag"];
             [resultDic safeSetObject:MsgDicList forKey:@"messageList"];
             [resultDic safeSetObject:infoDic forKey:@"rootRepliedInfo"];
+            [self writeLog:[NSString stringWithFormat:@"Auto test: %@",infoDic]];
+            
             result(resultDic);
         }
         else{
