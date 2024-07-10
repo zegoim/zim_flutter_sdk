@@ -365,8 +365,8 @@ class ZIMPluginConverter {
     static ZIMFriendRelationInfo cnvZIMFriendRelationInfoToObject(FTMap infoMap);
 
     static std::unordered_map<std::string, std::string> cnvFTMapToSTLMap(FTMap map);
-    static int32_t cnvFValueToInt32(flutter::EncodableValue value);
-    static int64_t cnvFValueToInt64(flutter::EncodableValue value);
+    static int32_t cnvFTValueToInt32(flutter::EncodableValue value);
+    static int64_t cnvFTValueToInt64(flutter::EncodableValue value);
     static FTMap cnvSTLMapToFTMap(const std::unordered_map<std::string, std::string> &map);
     static FTArray cnvStlVectorToFTArray(const std::vector<std::string> &vec);
     static FTArray cnvStlVectorToFTArray(const std::vector<long long> &vec);
