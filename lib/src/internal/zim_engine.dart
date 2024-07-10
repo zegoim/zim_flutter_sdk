@@ -249,10 +249,6 @@ class ZIMEngine implements ZIM {
       });
       return ZIMConverter.oZIMMessageSentResult(resultMap);
     } on PlatformException catch (e) {
-      resultMap = e.details;
-      ZIMMessageSentResult result =
-          ZIMConverter.oZIMMessageSentResult(resultMap);
-      result.message.sentStatus = ZIMMessageSentStatus.failed;
       throw PlatformException(code: e.code, message: e.message);
     } finally {
       ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
@@ -796,11 +792,7 @@ class ZIMEngine implements ZIM {
       ZIMMessageSentResult result =
           ZIMConverter.oZIMMessageSentResult(resultMap);
       return result;
-    } on PlatformException catch (e) {
-      Map resultMap = e.details;
-      ZIMMessageSentResult result =
-          ZIMConverter.oZIMMessageSentResult(resultMap);
-      result.message.sentStatus = ZIMMessageSentStatus.failed;
+    } on PlatformException catch (e) {      
       throw PlatformException(code: e.code, message: e.message);
     } finally {
       ZIMCommonData.messsageMap.remove(messageID);
@@ -1517,10 +1509,6 @@ class ZIMEngine implements ZIM {
         });
         return ZIMConverter.oZIMMessageSentResult(resultMap);
     } on PlatformException catch (e) {
-        Map resultMap = e.details;
-        ZIMMessageSentResult result =
-          ZIMConverter.oZIMMessageSentResult(resultMap);
-      result.message.sentStatus = ZIMMessageSentStatus.failed;
       throw PlatformException(code: e.code, message: e.message);
     } finally {
         ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
