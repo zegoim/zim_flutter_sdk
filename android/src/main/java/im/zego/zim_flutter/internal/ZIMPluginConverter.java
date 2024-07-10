@@ -693,7 +693,7 @@ public class ZIMPluginConverter {
         info.messageID = ZIMPluginCommonTools.safeGetLongValue(infoMap.get("messageID"));
         info.messageSeq = ZIMPluginCommonTools.safeGetLongValue(infoMap.get("messageSeq"));
         info.senderUserID = (String) infoMap.get("senderUserID");
-        info.sentTime = ZIMPluginCommonTools.safeGetLongValue("sentTime");
+        info.sentTime = ZIMPluginCommonTools.safeGetLongValue(infoMap.get("sentTime"));
 
         return info;
     }
