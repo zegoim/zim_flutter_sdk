@@ -14,7 +14,7 @@ using namespace zim;
         return;                                                                                    \
     }
 
-#define GetParamsFromArgument(type, param) std::get<##type>(argument[FTValue(#param)]);\
+#define GetParamsFromArgument(type, param) std::get<##type>(argument[FTValue(#param)]);
 
 class ZIMPluginMethodHandler {
   public:

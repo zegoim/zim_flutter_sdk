@@ -156,7 +156,7 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().queryUsersInfo(argument, std::move(result));
         return;
     }
-    
+
     if (method_call.method_name() == "queryConversationList") {
         ZIMPluginMethodHandler::getInstance().queryConversationList(argument, std::move(result));
         return;
@@ -641,9 +641,6 @@ void ZegoZimPlugin::HandleMethodCall(
     else {
         result->NotImplemented();
     }
-
-
-
 }
 
 void ZegoZimPluginRegisterWithRegistrar(
