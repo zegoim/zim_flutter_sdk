@@ -940,8 +940,8 @@
         
         [infoDic safeSetObject:imageLiteInfo.thumbnailDownloadUrl forKey:@"thumbnailDownloadUrl"];
         [infoDic safeSetObject:imageLiteInfo.thumbnailLocalPath forKey:@"thumbnailLocalPath"];
-        [infoDic safeSetObject:[NSNumber numberWithInt:imageLiteInfo.largeImageSize.width] forKey:@"thumbnailWidth"];
-        [infoDic safeSetObject:[NSNumber numberWithInt:imageLiteInfo.largeImageSize.height] forKey:@"thumbnailHeight"];
+        [infoDic safeSetObject:[NSNumber numberWithInt:imageLiteInfo.thumbnailSize.width] forKey:@"thumbnailWidth"];
+        [infoDic safeSetObject:[NSNumber numberWithInt:imageLiteInfo.thumbnailSize.height] forKey:@"thumbnailHeight"];
         
     } else if (info.type == ZIMMessageTypeFile) {
         ZIMFileMessageLiteInfo *fileLiteInfo = (ZIMFileMessageLiteInfo *)info;
