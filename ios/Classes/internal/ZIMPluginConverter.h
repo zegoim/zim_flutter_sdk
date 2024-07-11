@@ -293,4 +293,16 @@
 
 +(nullable NSDictionary *)mZIMGroupVerifyInfo:(nullable ZIMGroupVerifyInfo *)verifyInfo;
 
++(nullable ZIMConversationBaseInfo *)oZIMConversationBaseInfo:(nullable NSDictionary *)infoMap;
+
++(nullable NSArray<ZIMConversationBaseInfo *> *)oZIMConversationBaseInfoList:(nullable NSArray*)basicList;
+
++(nullable NSDictionary *)mZIMConversationBaseInfo:(nullable ZIMConversationBaseInfo *)info;
+
++(nullable NSArray *)mZIMConversationBaseInfoList:(nullable NSArray<ZIMConversationBaseInfo *> *)infoList;
+
++(nullable ZIMConversationFilterOption *)oZIMConversationFilterOption:(nullable NSDictionary *)optionMap;
+
++(nullable ZIMConversationTotalUnreadMessageCountQueryConfig *)oZIMConversationTotalUnreadMessageCountQueryConfig:(nullable NSDictionary *)cofigMap;
+
 @end

@@ -934,6 +934,8 @@ class ZIMGroupConversation extends ZIMConversation {
 
 class ZIMConversationFilterOption {
   List<int> marks = <int>[];
+  List<ZIMConversationType> conversationTypes = [];
+  bool isOnlyUnreadConversation = false;
 }
 
 class ZIMConversationBaseInfo {
@@ -943,6 +945,7 @@ class ZIMConversationBaseInfo {
 
 class ZIMConversationTotalUnreadCountQueryConfig {
   List<int> marks = <int>[];
+  List<ZIMConversationType> conversationTypes = <ZIMConversationType>[];
 }
 
 enum ZIMMessageMentionedType {

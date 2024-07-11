@@ -323,11 +323,48 @@
     ZIMConversationQueryConfig *config = [[ZIMConversationQueryConfig alloc] init];
     config.count = ((NSNumber *)[configDic objectForKey:@"count"]).unsignedIntValue;
     config.nextConversation = [ZIMPluginConverter oZIMConversation:(NSDictionary *)[configDic objectForKey:@"nextConversation"]];
-    [zim queryConversationListWithConfig:config callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo)  {
+    
+    ZIMConversationFilterOption *option = [ZIMPluginConverter oZIMConversationFilterOption:[call.arguments objectForKey:@"option"]];
+    
+    if(option == nil){
+        [zim queryConversationListWithConfig:config callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo)  {
+            if(errorInfo.code == 0){
+                NSArray *conversationBasicList = [ZIMPluginConverter mZIMConversationList:conversationList];
+                NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+                [resultDic safeSetObject:conversationBasicList forKey:@"conversationList"];
+                result(resultDic);
+            }
+            else{
+                result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+            }
+        }];
+    }else{
+        [zim queryConversationListWithConfig:config option:option callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo) {
+            if(errorInfo.code == 0){
+                NSArray *conversationBasicList = [ZIMPluginConverter mZIMConversationList:conversationList];
+                NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+                [resultDic safeSetObject:conversationBasicList forKey:@"conversationList"];
+                result(resultDic);
+            }
+            else{
+                result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+            }
+        }];
+    }
+}
+
+- (void)queryConversationTotalUnreadCount:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    ZIMConversationTotalUnreadMessageCountQueryConfig *queryConfig = [ZIMPluginConverter oZIMConversationTotalUnreadMessageCountQueryConfig:[call.arguments objectForKey:@"config"]];
+    [zim queryConversationTotalUnreadMessageCountWithConfig:queryConfig callback:^(unsigned int unreadMessageCount, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
-            NSArray *conversationBasicList = [ZIMPluginConverter mZIMConversationList:conversationList];
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic safeSetObject:conversationBasicList forKey:@"conversationList"];
+            [resultDic setObject:@(unreadMessageCount) forKey:@"unreadCount"];
             result(resultDic);
         }
         else{
@@ -514,6 +551,29 @@
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
             [resultDic safeSetObject:conversationID forKey:@"conversationID"];
             [resultDic safeSetObject:[NSNumber numberWithInt:(int)conversationType] forKey:@"conversationType"];
+            result(resultDic);
+        }
+        else{
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d",(int)errorInfo.code] message:errorInfo.message details:nil]);
+        }
+    }];
+}
+
+-(void)setConversationMark:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if(!zim){
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+    NSNumber *markType = [call.arguments objectForKey:@"markType"];
+    BOOL enable = [[call.arguments objectForKey:@"enable"] boolValue];
+    NSArray<ZIMConversationBaseInfo *> *baseInfos = [ZIMPluginConverter oZIMConversationBaseInfoList:[call.arguments objectForKey:@"infos"]];
+    
+    [zim setConversationMark:markType enable:enable conversationInfos:baseInfos callback:^(NSArray<ZIMConversationBaseInfo *> * _Nonnull failedConversationInfos, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == 0){
+            NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+            [resultDic safeSetObject:[ZIMPluginConverter mZIMConversationBaseInfoList:failedConversationInfos] forKey:@"failedConversationInfos"];
             result(resultDic);
         }
         else{

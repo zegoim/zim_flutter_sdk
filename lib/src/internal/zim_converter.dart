@@ -234,6 +234,7 @@ class ZIMConverter {
 
   static ZIMConversationFilterOption oZIMConversationFilterOption(Map map){
     ZIMConversationFilterOption option = ZIMConversationFilterOption();
+
     option.marks = List<int>.from(map['marks']);
     return option;
   }
@@ -243,6 +244,12 @@ class ZIMConverter {
     }
     Map map = {};
     map['marks'] = option.marks;
+    List<int> basicConversationTypes = <int>[];
+    for(ZIMConversationType type in option.conversationTypes){
+      basicConversationTypes.add(type.value);
+    }
+    map['conversationTypes'] = basicConversationTypes;
+    map['isOnlyUnreadConversation'] = option.isOnlyUnreadConversation;
     return map;
   }
 
@@ -279,6 +286,11 @@ class ZIMConverter {
   static Map mZIMConversationTotalUnreadCountQueryConfig(ZIMConversationTotalUnreadCountQueryConfig config){
     Map map = {};
     map['marks'] = config.marks;
+    List<int> basicConversationTypes = <int>[];
+    for(ZIMConversationType type in config.conversationTypes){
+      basicConversationTypes.add(type.value);
+    }
+    map['conversationTypes'] = basicConversationTypes;
     return map;
   }
 

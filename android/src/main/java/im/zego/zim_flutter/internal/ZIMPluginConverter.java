@@ -1119,6 +1119,30 @@ public class ZIMPluginConverter {
             throw new IllegalArgumentException("The 'option' key does not map to an ArrayList.");
         }
 
+        Object types = resultMap.get("conversationTypes");
+        ArrayList<ZIMConversationType> typesList = new ArrayList<ZIMConversationType>();
+        if(types instanceof  ArrayList){
+            ArrayList<?> list = (ArrayList<?>) types;
+            if (list.stream().allMatch(Integer.class::isInstance)) {
+                ArrayList<Integer> intList = (ArrayList<Integer>) list;
+                for (Integer integer:intList
+                     ) {
+                    typesList.add(ZIMConversationType.getZIMConversationType(integer.intValue()));
+                }
+                option.conversationTypes = typesList;
+            }else {
+                throw new IllegalArgumentException("The 'conversationTypes' value is not an ArrayList of Integers.");
+            }
+        }else {
+            throw new IllegalArgumentException("The 'conversationTypes' key does not map to an ArrayList.");
+        }
+
+        Object isOnlyUnreadConversationObj = resultMap.get("isOnlyUnreadConversation");
+        if(isOnlyUnreadConversationObj instanceof Boolean){
+            option.isOnlyUnreadConversation = ((Boolean) isOnlyUnreadConversationObj).booleanValue();
+        }else {
+            throw new IllegalArgumentException("The 'isOnlyUnreadConversation' key does not map to an ArrayList.");
+        }
         return option;
     }
 
@@ -1136,6 +1160,25 @@ public class ZIMPluginConverter {
         } else {
             throw new IllegalArgumentException("The 'config' key does not map to an ArrayList.");
         }
+
+        Object types = resultMap.get("conversationTypes");
+        ArrayList<ZIMConversationType> typesList = new ArrayList<ZIMConversationType>();
+        if(types instanceof  ArrayList){
+            ArrayList<?> list = (ArrayList<?>) types;
+            if (list.stream().allMatch(Integer.class::isInstance)) {
+                ArrayList<Integer> intList = (ArrayList<Integer>) list;
+                for (Integer integer:intList
+                ) {
+                    typesList.add(ZIMConversationType.getZIMConversationType(integer.intValue()));
+                }
+                config.conversationTypes = typesList;
+            }else {
+                throw new IllegalArgumentException("The 'conversationTypes' value is not an ArrayList of Integers.");
+            }
+        }else {
+            throw new IllegalArgumentException("The 'conversationTypes' key does not map to an ArrayList.");
+        }
+
 
         return config;
     }

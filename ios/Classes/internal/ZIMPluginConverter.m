@@ -212,6 +212,7 @@
     conversation.lastMessage = [ZIMPluginConverter oZIMMessage:(NSDictionary *)[conversationDic objectForKey:@"lastMessage"]];
     conversation.isPinned = ((NSNumber *)[conversationDic objectForKey:@"isPinned"]).boolValue;
     conversation.draft = (NSString *)[conversationDic objectForKey:@"draft"];
+    conversation.marks = [conversationDic objectForKey:@"marks"];
     return conversation;
 }
 
@@ -232,6 +233,7 @@
     [conversationDic safeSetObject:[NSNumber numberWithBool:conversation.isPinned] forKey:@"isPinned"];
     [conversationDic safeSetObject:[ZIMPluginConverter mZIMMentionedInfoList:conversation.mentionedInfoList] forKey:@"mentionedInfoList"];
     [conversationDic safeSetObject:conversation.draft forKey:@"draft"];
+    [conversationDic safeSetObject:conversation.marks forKey:@"marks"];
     if(conversation.type == ZIMConversationTypeGroup){
         if([conversation isKindOfClass:[ZIMGroupConversation class]]){
             [conversationDic safeSetObject:@(((ZIMGroupConversation *)conversation).mutedExpiredTime) forKey:@"mutedExpiredTime"];
@@ -2247,4 +2249,66 @@
     return dic;
 }
 
++(nullable ZIMConversationBaseInfo *)oZIMConversationBaseInfo:(nullable NSDictionary *)infoMap{
+    if(infoMap == nil || [infoMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMConversationBaseInfo *baseInfo = [[ZIMConversationBaseInfo alloc] init];
+    baseInfo.conversationID = [infoMap objectForKey:@"conversationID"];
+    baseInfo.conversationType = [[infoMap objectForKey:@"conversationType"] integerValue];
+    return baseInfo;
+}
+
++(nullable NSArray<ZIMConversationBaseInfo *> *)oZIMConversationBaseInfoList:(nullable NSArray*)basicList{
+    if(basicList == nil || [basicList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray<ZIMConversationBaseInfo *> *infoList = [[NSMutableArray alloc] init];
+    for(NSDictionary *basicMap in basicList){
+        [infoList addObject:[ZIMPluginConverter oZIMConversationBaseInfo:basicMap]];
+    }
+    return infoList;
+}
+
++(nullable NSDictionary *)mZIMConversationBaseInfo:(nullable ZIMConversationBaseInfo *)info{
+    if(info == nil || [info isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableDictionary *basicInfo = [[NSMutableDictionary alloc] init];
+    [basicInfo setObject:info.conversationID forKey:@"conversationID"];
+    [basicInfo setObject:@(info.conversationType) forKey:@"conversationType"];
+    return basicInfo;
+}
+
++(nullable NSArray *)mZIMConversationBaseInfoList:(nullable NSArray<ZIMConversationBaseInfo *> *)infoList{
+    if(infoList == nil || [infoList isEqual:[NSNull null]]){
+        return nil;
+    }
+    NSMutableArray *basicList= [[NSMutableArray alloc] init];
+    for(ZIMConversationBaseInfo *info in infoList){
+        [basicList addObject:[ZIMPluginConverter mZIMConversationBaseInfo:info]];
+    }
+    return basicList;
+}
+
++(nullable ZIMConversationFilterOption *)oZIMConversationFilterOption:(nullable NSDictionary *)optionMap{
+    if(optionMap == nil || [optionMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMConversationFilterOption *option = [[ZIMConversationFilterOption alloc] init];
+    option.marks = [optionMap objectForKey:@"marks"];
+    option.conversationTypes = [optionMap objectForKey:@"conversationTypes"];
+    option.isOnlyUnreadConversation = [[optionMap objectForKey:@"isOnlyUnreadConversation"] boolValue];
+    return option;
+}
+
++(nullable ZIMConversationTotalUnreadMessageCountQueryConfig *)oZIMConversationTotalUnreadMessageCountQueryConfig:(nullable NSDictionary *)configMap{
+    if(configMap == nil || [configMap isEqual:[NSNull null]]){
+        return nil;
+    }
+    ZIMConversationTotalUnreadMessageCountQueryConfig *queryConfig = [[ZIMConversationTotalUnreadMessageCountQueryConfig alloc] init];
+    queryConfig.marks = [configMap objectForKey:@"marks"];
+    queryConfig.conversationTypes = [configMap objectForKey:@"conversationTypes"];
+    return queryConfig;
+}
 @end
