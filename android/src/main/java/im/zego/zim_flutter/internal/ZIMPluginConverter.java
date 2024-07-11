@@ -684,7 +684,7 @@ public class ZIMPluginConverter {
                 infoMap.put("fileSize", videoLiteInfo.fileSize);
                 infoMap.put("fileDownloadUrl", videoLiteInfo.fileDownloadUrl);
                 infoMap.put("fileLocalPath", videoLiteInfo.fileLocalPath);
-                infoMap.put("videoLiteInfo", videoLiteInfo.videoDuration);
+                infoMap.put("videoDuration", videoLiteInfo.videoDuration);
                 infoMap.put("videoFirstFrameDownloadUrl", videoLiteInfo.videoFirstFrameDownloadUrl);
                 infoMap.put("videoFirstFrameLocalPath", videoLiteInfo.videoFirstFrameLocalPath);
                 infoMap.put("videoFirstFrameWidth", videoLiteInfo.videoFirstFrameWidth);
