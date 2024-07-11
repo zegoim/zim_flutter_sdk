@@ -385,6 +385,6 @@ class ZIMPluginConverter {
 
     static ZIMConversationFilterOption oZIMConversationFilterOption(FTMap ftmap);
 
-    static ZIMConversationTotalUnreadCountQueryConfig
+    static ZIMConversationTotalUnreadMessageCountQueryConfig
     oZIMConversationTotalUnreadCountQueryConfig(FTMap ftmap);
 };

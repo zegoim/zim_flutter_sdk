@@ -405,6 +405,7 @@ void ZIMPluginMethodHandler::updateConversationPinnedState(FArgument &argument, 
 
     CheckZIMInstanceExistAndObtainZIM();
 
+    bool isPinned = std::get<bool>(argument[FTValue("isPinned")]);
     auto conversationID = std::get<std::string>(argument[FTValue("conversationID")]);
     int conversationType =
         ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
@@ -619,7 +620,7 @@ void ZIMPluginMethodHandler::queryConversationTotalUnreadCount(FArgument &argume
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     auto config = ZIMPluginConverter::oZIMConversationTotalUnreadCountQueryConfig(configMap);
 
-    zim->queryConversationTotalUnreadCount(
+    zim->queryConversationTotalUnreadMessageCount(
         config, [=](unsigned int totalUnreadCount, const ZIMError &errorInfo) {
             if (errorInfo.code == 0) {
                 FTMap retMap;

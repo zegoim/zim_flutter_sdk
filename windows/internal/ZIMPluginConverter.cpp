@@ -277,8 +277,8 @@ ZIMPluginConverter::oZIMConversationBaseInfoList(FTArray ftArray) {
 FTMap ZIMPluginConverter::mZIMConversationBaseInfo(const ZIMConversationBaseInfo &info) {
     FTMap convBaseInfoMap;
 
-    convBaseInfoMap[FTValue("conversationID")] = FTValue(info.getConversationID());
-    convBaseInfoMap[FTValue("conversationType")] = FTValue(info.getConversationType());
+    convBaseInfoMap[FTValue("conversationID")] = FTValue(info.conversationID);
+    convBaseInfoMap[FTValue("conversationType")] = FTValue(info.conversationType);
 
     return convBaseInfoMap;
 }
@@ -295,26 +295,28 @@ FTArray ZIMPluginConverter::aZIMConversationBaseInfoList(
 }
 
 zim::ZIMConversationFilterOption ZIMPluginConverter::oZIMConversationFilterOption(FTMap ftmap) {
-    std::vector<int> markList;
+
+    zim::ZIMConversationFilterOption option;
 
     FTArray markArray = std::get<FTArray>(ftmap[FTValue("marks")]);
     for (auto &intObj : markArray) {
         auto intValue = std::get<int32_t>(intObj);
-        markList.emplace_back(intValue);
+        option.marks.emplace_back(intValue);
     }
-    return markList;
+    return option;
 }
 
-zim::ZIMConversationTotalUnreadCountQueryConfig
+zim::ZIMConversationTotalUnreadMessageCountQueryConfig
 ZIMPluginConverter::oZIMConversationTotalUnreadCountQueryConfig(FTMap ftmap) {
-    std::vector<int> markList;
+
+    zim::ZIMConversationTotalUnreadMessageCountQueryConfig config;
 
     FTArray markArray = std::get<FTArray>(ftmap[FTValue("marks")]);
     for (auto &intObj : markArray) {
         auto intValue = std::get<int32_t>(intObj);
-        markList.emplace_back(intValue);
+        config.marks.emplace_back(intValue);
     }
-    return markList;
+    return config;
 }
 
 FTMap ZIMPluginConverter::cnvZIMUserInfoObjectToMap(const ZIMUserInfo &userInfo) {
