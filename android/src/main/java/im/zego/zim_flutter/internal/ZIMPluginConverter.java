@@ -128,6 +128,9 @@ public class ZIMPluginConverter {
 
 
     static public HashMap<String,Object> mZIMMessage(ZIMMessage message){
+        if(message == null){
+            return null;
+        }
         HashMap<String,Object> messageMap = new HashMap<>();
         messageMap.put("type",message.getType().value());
         messageMap.put("messageID",message.getMessageID());
