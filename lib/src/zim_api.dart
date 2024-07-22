@@ -321,7 +321,7 @@ abstract class ZIM {
 
   Future<ZIMConversationMarkSetResult> setConversationMark(int markType, bool enable, List<ZIMConversationBaseInfo> infos);
 
-  Future<ZIMConversationTotalUnreadCountQueriedResult> queryConversationTotalUnreadCount(ZIMConversationTotalUnreadCountQueryConfig config);
+  Future<ZIMConversationTotalUnreadMessageCountQueriedResult> queryConversationTotalUnreadMessageCount(ZIMConversationTotalUnreadMessageCountQueryConfig config);
 
   /// Available since: 2.5.0 and above.
   ///

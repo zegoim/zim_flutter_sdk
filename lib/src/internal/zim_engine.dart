@@ -1474,7 +1474,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMConversationTotalUnreadCountQueriedResult> queryConversationTotalUnreadCount(ZIMConversationTotalUnreadCountQueryConfig config) async{
+  Future<ZIMConversationTotalUnreadMessageCountQueriedResult> queryConversationTotalUnreadMessageCount(ZIMConversationTotalUnreadMessageCountQueryConfig config) async{
     Map resultMap = await channel.invokeMethod('queryConversationTotalUnreadCount',{
       'handle':handle,
       'config':ZIMConverter.mZIMConversationTotalUnreadCountQueryConfig(config)
