@@ -308,7 +308,7 @@ zim::ZIMConversationFilterOption ZIMPluginConverter::oZIMConversationFilterOptio
         auto intValue = std::get<int32_t>(intObj);
         option.conversationTypes.emplace_back(static_cast<ZIMConversationType>(intValue));
     }
-    option.isOnlyUnreadConversation = std::get<bool>(conversationMap[FTValue("isOnlyUnreadConversation")]);
+    option.isOnlyUnreadConversation = std::get<bool>(ftmap[FTValue("isOnlyUnreadConversation")]);
     return option;
 }
 
