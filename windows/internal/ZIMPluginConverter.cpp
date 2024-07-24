@@ -303,6 +303,12 @@ zim::ZIMConversationFilterOption ZIMPluginConverter::oZIMConversationFilterOptio
         auto intValue = std::get<int32_t>(intObj);
         option.marks.emplace_back(intValue);
     }
+    FTArray convTypeArray = std::get<FTArray>(ftmap[FTValue("conversationTypes")]);
+    for (auto &intObj : convTypeArray) {
+        auto intValue = std::get<int32_t>(intObj);
+        option.conversationTypes.emplace_back(static_cast<ZIMConversationType>(intValue));
+    }
+    option.isOnlyUnreadConversation = std::get<bool>(conversationMap[FTValue("isOnlyUnreadConversation")]);
     return option;
 }
 
@@ -315,6 +321,11 @@ ZIMPluginConverter::oZIMConversationTotalUnreadCountQueryConfig(FTMap ftmap) {
     for (auto &intObj : markArray) {
         auto intValue = std::get<int32_t>(intObj);
         config.marks.emplace_back(intValue);
+    }
+    FTArray convTypeArray = std::get<FTArray>(ftmap[FTValue("conversationTypes")]);
+    for (auto &intObj : convTypeArray) {
+        auto intValue = std::get<int32_t>(intObj);
+        config.conversationTypes.emplace_back(static_cast<ZIMConversationType>(intValue));
     }
     return config;
 }
