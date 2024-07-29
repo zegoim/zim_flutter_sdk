@@ -110,6 +110,30 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           ZIMEventHandler.onReceiveGroupMessage!(
               zim, messageList, map['fromGroupID']);
           break;
+        case 'onPeerMessageReceived':
+          if (ZIMEventHandler.onPeerMessageReceived == null) return;
+          List<ZIMMessage> messageList =
+              ZIMConverter.oZIMMessageList(map['messageList']);
+          ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMEventHandler.onPeerMessageReceived!(
+              zim, messageList, info, map['fromUserID']);
+          break;
+        case 'onRoomMessageReceived':
+          if (ZIMEventHandler.onRoomMessageReceived == null) return;
+          List<ZIMMessage> messageList =
+              ZIMConverter.oZIMMessageList(map['messageList']);
+          ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMEventHandler.onRoomMessageReceived!(
+              zim, messageList, info, map['fromRoomID']);
+          break;
+        case 'onGroupMessageReceived':
+          if (ZIMEventHandler.onGroupMessageReceived == null) return;
+          List<ZIMMessage> messageList =
+              ZIMConverter.oZIMMessageList(map['messageList']);
+          ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMEventHandler.onGroupMessageReceived!(
+              zim, messageList, info, map['fromGroupID']);
+          break;
         case 'onRoomMemberJoined':
           if (ZIMEventHandler.onRoomMemberJoined == null) return;
           List<ZIMUserInfo> memberList =

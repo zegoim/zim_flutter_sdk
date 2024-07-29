@@ -611,6 +611,17 @@ public class ZIMPluginConverter {
         return messageList;
     }
 
+    static public HashMap<String,Object> mZIMMessageReceivedInfo(ZIMMessageReceivedInfo info) {
+        if(info == null) {
+            return null;
+        }
+
+        HashMap<String,Object> infoMap = new HashMap<>();
+        infoMap.put("isOfflineMessage", info.isOfflineMessage);
+
+        return infoMap;
+    }
+
     static public HashMap<String,Object> mZIMMessageRepliedInfo(ZIMMessageRepliedInfo info) {
         if(info == null) {
             return null;

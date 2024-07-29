@@ -881,6 +881,10 @@ class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo{
   }
 }
 
+class ZIMMessageReceivedInfo {
+  bool isOfflineMessage = false;
+}
+
 class ZIMMessageRepliedInfo{
   ZIMMessageRepliedInfoState state = ZIMMessageRepliedInfoState.normal;
   ZIMMessageLiteInfo messageInfo = ZIMMessageLiteInfo();

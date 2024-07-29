@@ -1822,6 +1822,12 @@ FTMap ZIMPluginConverter::cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedI
     return infoMap;
 }
 
+FTMap ZIMPluginConverter::cnvZIMMessageReceivedInfoToMap(const ZIMMessageReceivedInfo &info) {
+    FTMap infoMap;
+    infoMap[FTValue("isOfflineMessage")] = FTValue(info.isOfflineMessage);
+    return infoMap;
+}
+
 FTMap ZIMPluginConverter::cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo &info) {
     FTMap infoMap;
     infoMap[FTValue("mode")] = FTValue(info.mode);

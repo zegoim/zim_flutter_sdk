@@ -195,6 +195,39 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim peerMessageReceived:(nonnull NSArray<ZIMMessage *> *)messageList info:(nonnull ZIMMessageReceivedInfo *)info fromUserID:(nonnull NSString *)fromUserID {
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
+    NSDictionary *resultDic = @{@"method":@"onPeerMessageReceived", @"handle": handle, @"messageList":basicMessageList, @"info":@{@"isOfflineMessage": @(info.isOfflineMessage)}, @"fromUserID":fromUserID};
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim roomMessageReceived:(nonnull NSArray<ZIMMessage *> *)messageList info:(nonnull ZIMMessageReceivedInfo *)info fromRoomID:(nonnull NSString *)fromRoomID {
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
+    NSDictionary *resultDic = @{@"method":@"onRoomMessageReceived", @"handle": handle, @"messageList":basicMessageList, @"info":@{@"isOfflineMessage": @(info.isOfflineMessage)}, @"fromRoomID":fromRoomID};
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim groupMessageReceived:(nonnull NSArray<ZIMMessage *> *)messageList info:(nonnull ZIMMessageReceivedInfo *)info fromGroupID:(nonnull NSString *)fromGroupID {
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
+    NSDictionary *resultDic = @{@"method":@"onGroupMessageReceived", @"handle": handle, @"messageList":basicMessageList, @"info":@{@"isOfflineMessage": @(info.isOfflineMessage)}, @"fromGroupID":fromGroupID};
+    _events(resultDic);
+}
+
 - (void)zim:(ZIM *)zim messageRevokeReceived:(NSArray<ZIMRevokeMessage *> *)messageList{
     if(_events == nil){
         return;
