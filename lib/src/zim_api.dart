@@ -1909,9 +1909,35 @@ abstract class ZIM {
   /// Restrictions: [ZIMSelfUserInfoQueriedResult]、[ZIMEventHandler.onUserInfoUpdated]、[ZIMEventHandler.onUserRuleUpdated]
   Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
 
+  /// Supported versions: 2.17.0 and above.
+  ///
+  /// Detailed description: Query a batch of messages based on the message seq list.
+  ///
+  /// Business scenario: Jump to the source message location quoted by the reply message on the chat page.
   Future<ZIMMessageQueriedResult> queryMessages(List<int> messageSeqs,String conversationID,ZIMConversationType conversationType);
 
+
+  /// Supported versions: 2.17.0 and above.
+  ///
+  /// Detailed description: This method can be used to send reply messages in single chat and group chat.
+  ///
+  /// Business scenario: When you need to send reply message to the target user and target group chat after logging in, send it through this interface.
+  ///
+  /// Call timing: It can be called after login.
+  ///
+  /// Usage limit: The interval between sending messages should be greater than 100ms. Available after login, unavailable after logout.
+  ///
+  /// Related callback: [onReceivePeerMessage], [onReceiveGroupMessage].
+  ///
+  /// Related APIs: [queryHistoryMessage], [sendMessage], [sendMediaMessage].
   Future<ZIMMessageSentResult> replyMessage(ZIMMessage message,ZIMMessage toOriginalMessage, ZIMMessageSendConfig config, ZIMMessageSendNotification? notification);
 
+  /// Available since: 2.17.0 and above.
+  ///
+  /// Description: Query the reply message list.
+  ///
+  /// Use cases: Developers can use this method to query the entire reply message tree.
+  ///
+  /// When to call: Callable after login.
   Future<ZIMMessageRepliedListQueriedResult> queryMessageRepliedList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config);
 }

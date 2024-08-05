@@ -43,8 +43,18 @@ class ZIMEventHandler {
   // Description: In the multi-terminal login scenario, after the user deletes the server level message on device A, other online multi-terminal devices will receive this callback..
   static void Function(ZIM zim, ZIMMessageDeletedInfo deletedInfo)? onMessageDeleted;
 
+  /// Available since: 2.17.0 and above.
+  ///
+  /// Description: Query the reply message list.
+  ///
+  /// Use cases: Developers can use this method to query the entire reply message tree.
+  ///
+  /// When to call: Callable after login.
   static void Function(ZIM zim, List<ZIMMessage> messageList)? onMessageRepliedInfoChanged;
 
+  /// Available since: 2.17.0  or above
+  ///
+  /// Description: When there is a new reply message, the number of replies to the corresponding root message is notified through this event.
   static void Function(ZIM zim, List<ZIMMessageRootRepliedCountInfo> infos)? onMessageRepliedCountChanged;
 /* Conversation */
 
