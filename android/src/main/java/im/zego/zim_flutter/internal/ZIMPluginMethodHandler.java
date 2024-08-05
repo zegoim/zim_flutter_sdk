@@ -427,7 +427,7 @@ public class ZIMPluginMethodHandler {
                 if(errorInfo.code == ZIMErrorCode.SUCCESS){
                     HashMap<String,Object> resultMap = new HashMap<>();
                     Integer itg_unread = unreadCount;
-                    resultMap.put("unreadCount",itg_unread);
+                    resultMap.put("unreadMessageCount",itg_unread);
                     result.success(resultMap);
                 }
                 else{

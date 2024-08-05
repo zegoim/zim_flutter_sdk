@@ -947,7 +947,7 @@ class ZIMConversationBaseInfo {
   ZIMConversationType conversationType = ZIMConversationType.unknown;
 }
 
-class ZIMConversationTotalUnreadCountQueryConfig {
+class ZIMConversationTotalUnreadMessageCountQueryConfig {
   List<int> marks = <int>[];
   List<ZIMConversationType> conversationTypes = <ZIMConversationType>[];
 }
@@ -3025,11 +3025,11 @@ class ZIMMessageRepliedListQueriedResult {
 }
 
 class ZIMConversationMarkSetResult {
-  List<ZIMConversationBaseInfo> failedInfos;
-  ZIMConversationMarkSetResult({required this.failedInfos});
+  List<ZIMConversationBaseInfo> failedConversationInfos;
+  ZIMConversationMarkSetResult({required this.failedConversationInfos});
 }
 
-class ZIMConversationTotalUnreadCountQueriedResult {
-  int unreadCount;
-  ZIMConversationTotalUnreadCountQueriedResult({required this.unreadCount});
+class ZIMConversationTotalUnreadMessageCountQueriedResult {
+  int unreadMessageCount;
+  ZIMConversationTotalUnreadMessageCountQueriedResult({required this.unreadMessageCount});
 }

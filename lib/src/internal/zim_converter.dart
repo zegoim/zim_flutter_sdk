@@ -228,7 +228,7 @@ class ZIMConverter {
       conversation.mentionedInfoList.add(info);
     }
     conversation.draft = resultMap['draft'] ?? '';
-    conversation.marks = List<int>.from(resultMap['marks']);
+    conversation.marks = List<int>.from(resultMap['marks'] ?? []);
     return conversation;
   }
 
@@ -283,7 +283,7 @@ class ZIMConverter {
     return infoList;
   }
 
-  static Map mZIMConversationTotalUnreadCountQueryConfig(ZIMConversationTotalUnreadCountQueryConfig config){
+  static Map mZIMConversationTotalUnreadCountQueryConfig(ZIMConversationTotalUnreadMessageCountQueryConfig config){
     Map map = {};
     map['marks'] = config.marks;
     List<int> basicConversationTypes = <int>[];
@@ -527,7 +527,7 @@ class ZIMConverter {
       }
       message.type = ZIMMessageTypeExtension.mapValue[resultMap['type']] ?? ZIMMessageType.unknown;
       message.messageID = resultMap['messageID'] is String
-          ? int.parse(resultMap['messageID'])
+          ? (resultMap['messageID'] ==""?0:int.parse(resultMap['messageID']))
           : resultMap['messageID'];
       message.localMessageID = resultMap['localMessageID'] is String
           ? int.parse(resultMap['localMessageID'])
@@ -565,7 +565,7 @@ class ZIMConverter {
       message.isServerMessage = resultMap['isServerMessage'] is bool ? resultMap['isServerMessage'] : false;
       message.isMentionAll = resultMap['isMentionAll'] is bool ? resultMap['isMentionAll'] : false;
       message.mentionedUserIds =  List<String>.from(resultMap['mentionedUserIDs']??[]);
-      message.rootRepliedCount = resultMap['rootRepliedCount'];
+      message.rootRepliedCount = resultMap['rootRepliedCount'] ?? 0;
       if(resultMap['repliedInfo'] != null) {
         message.repliedInfo = ZIMConverter.oZIMMessageRepliedInfo(resultMap['repliedInfo']);
       }
@@ -2550,12 +2550,12 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
   }
 
   static ZIMConversationMarkSetResult oZIMConversationMarkSetResult(Map map){
-    ZIMConversationMarkSetResult result = ZIMConversationMarkSetResult(failedInfos: ZIMConverter.oZIMConversationBaseInfoList(map['failedConversationInfos']));
+    ZIMConversationMarkSetResult result = ZIMConversationMarkSetResult(failedConversationInfos: ZIMConverter.oZIMConversationBaseInfoList(map['failedConversationInfos']));
     return result;
   }
 
-  static ZIMConversationTotalUnreadCountQueriedResult oZIMConversationTotalUnreadCountQueriedResult(Map map){
-    return ZIMConversationTotalUnreadCountQueriedResult(unreadCount: map['unreadCount']);
+  static ZIMConversationTotalUnreadMessageCountQueriedResult oZIMConversationTotalUnreadCountQueriedResult(Map map){
+    return ZIMConversationTotalUnreadMessageCountQueriedResult(unreadMessageCount: map['unreadMessageCount']);
   }
 
   static Map mZIMMessageRepliedListQueryConfig(ZIMMessageRepliedListQueryConfig config){
@@ -2575,7 +2575,8 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
 
   static ZIMMessageRootRepliedCountInfo oZIMMessageRootRepliedCountInfo(Map map){
     ZIMMessageRootRepliedCountInfo info = ZIMMessageRootRepliedCountInfo();
-    info.messageID = map['messageID'];
+    info.messageID = map['messageID'] is String
+    ? (map['messageID'] ==""?0:int.parse(map['messageID'])) : map['messageID'];
     info.conversationID = map['conversationID'];
     info.conversationType = ZIMConversationTypeExtension.mapValue[map['conversationType']]??ZIMConversationType.unknown;
     info.count = map['count'];
@@ -2605,7 +2606,7 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
 
   static ZIMMessageRepliedInfo oZIMMessageRepliedInfo(Map map){
     ZIMMessageRepliedInfo repliedInfo = ZIMMessageRepliedInfo();
-    repliedInfo.messageID = map['messageID'];
+    repliedInfo.messageID =  map['messageID'] is int ? map['messageID']: int.parse(map['messageID']);
     repliedInfo.messageSeq = map['messageSeq'];
     repliedInfo.senderUserID = map['senderUserID'];
     repliedInfo.sentTime = map['sentTime'];
@@ -2679,16 +2680,16 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
       case ZIMMessageType.image:
         liteInfo = ZIMImageMessageLiteInfo();
         liteInfo as ZIMImageMessageLiteInfo;
-        liteInfo.originalImageHeight = map['originalImageHeight'];
-        liteInfo.originalImageWidth = map['originalImageWidth'];
-        liteInfo.largeImageHeight = map['largeImageHeight'];
-        liteInfo.largeImageWidth = map['largeImageWidth'];
-        liteInfo.largeImageLocalPath = map['largeImageLocalPath'];
-        liteInfo.largeImageDownloadUrl = map['largeImageDownloadUrl'];
-        liteInfo.thumbnailHeight = map['thumbnailHeight'];
-        liteInfo.thumbnailWidth = map['thumbnailWidth'];
-        liteInfo.thumbnailLocalPath = map['thumbnailLocalPath'];
-        liteInfo.thumbnailDownloadUrl = map['thumbnailDownloadUrl'];
+        liteInfo.originalImageHeight = map['originalImageHeight'] ?? 0;
+        liteInfo.originalImageWidth = map['originalImageWidth'] ?? 0;
+        liteInfo.largeImageHeight = map['largeImageHeight'] ?? 0;
+        liteInfo.largeImageWidth = map['largeImageWidth'] ?? 0;
+        liteInfo.largeImageLocalPath = map['largeImageLocalPath'] ?? '';
+        liteInfo.largeImageDownloadUrl = map['largeImageDownloadUrl'] ?? '';
+        liteInfo.thumbnailHeight = map['thumbnailHeight'] ?? 0;
+        liteInfo.thumbnailWidth = map['thumbnailWidth'] ?? 0;
+        liteInfo.thumbnailLocalPath = map['thumbnailLocalPath'] ?? '';
+        liteInfo.thumbnailDownloadUrl = map['thumbnailDownloadUrl'] ?? '';
         break;
       case ZIMMessageType.file:
         liteInfo = ZIMFileMessageLiteInfo();
@@ -2697,16 +2698,16 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
       case ZIMMessageType.audio:
         liteInfo = ZIMAudioMessageLiteInfo();
         liteInfo as ZIMAudioMessageLiteInfo;
-        liteInfo.audioDuration = map['audioDuration'];
+        liteInfo.audioDuration = map['audioDuration'] ?? 0;
         break;
       case ZIMMessageType.video:
         liteInfo = ZIMVideoMessageLiteInfo();
         liteInfo as ZIMVideoMessageLiteInfo;
-        liteInfo.videoDuration = map['videoDuration'];
-        liteInfo.videoFirstFrameDownloadUrl = map['videoFirstFrameDownloadUrl'];
-        liteInfo.videoFirstFrameLocalPath = map['videoFirstFrameLocalPath'];
-        liteInfo.videoFirstFrameHeight = map['videoFirstFrameHeight'];
-        liteInfo.videoFirstFrameWidth = map['videoFirstFrameWidth'];
+        liteInfo.videoDuration = map['videoDuration'] ?? 0;
+        liteInfo.videoFirstFrameDownloadUrl = map['videoFirstFrameDownloadUrl'] ?? '';
+        liteInfo.videoFirstFrameLocalPath = map['videoFirstFrameLocalPath'] ?? '';
+        liteInfo.videoFirstFrameHeight = map['videoFirstFrameHeight'] ?? 0;
+        liteInfo.videoFirstFrameWidth = map['videoFirstFrameWidth'] ?? 0;
         break;
       case ZIMMessageType.revoke:
         liteInfo = ZIMRevokeMessageLiteInfo();
@@ -2714,14 +2715,14 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
       case ZIMMessageType.custom:
         liteInfo = ZIMCustomMessageLiteInfo();
         liteInfo as ZIMCustomMessageLiteInfo;
-        liteInfo.message = map['message'];
-        liteInfo.subType = map['subType'];
+        liteInfo.message = map['message'] ?? '';
+        liteInfo.subType = map['subType'] ?? 0;
         break;
       case ZIMMessageType.combine:
         liteInfo = ZIMCombineMessageLiteInfo();
         liteInfo as ZIMCombineMessageLiteInfo;
-        liteInfo.title = map['title'];
-        liteInfo.summary = map['summary'];
+        liteInfo.title = map['title'] ?? '';
+        liteInfo.summary = map['summary'] ?? '';
         break;
       case ZIMMessageType.command:
       case ZIMMessageType.tips:
@@ -2738,10 +2739,10 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
       case ZIMMessageType.video:
       case ZIMMessageType.audio:
         liteInfo as ZIMMediaMessageLiteInfo;
-        liteInfo.fileSize = map['fileSize'];
-        liteInfo.fileName = map['fileName'];
-        liteInfo.fileLocalPath = map['fileLocalPath'];
-        liteInfo.fileDownloadUrl = map['fileDownloadUrl'];
+        liteInfo.fileSize = map['fileSize'] ?? '';
+        liteInfo.fileName = map['fileName'] ?? '';
+        liteInfo.fileLocalPath = map['fileLocalPath'] ?? '';
+        liteInfo.fileDownloadUrl = map['fileDownloadUrl'] ?? '';
         break;
       default:
         break;
