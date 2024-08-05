@@ -609,6 +609,34 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onMessageRepliedInfoChanged(ZIM zim, ArrayList<ZIMMessage> messageList) {
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("messageList",ZIMPluginConverter.mZIMMessageList(messageList));
+        resultMap.put("method","onMessageRepliedInfoChanged");
+        resultMap.put("handle", handle);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onMessageRepliedCountChanged(ZIM zim, ArrayList<ZIMMessageRootRepliedCountInfo> infos) {
+        if(mysink == null){
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("infos",ZIMPluginConverter.mZIMMessageRootRepliedCountInfoList(infos));
+        resultMap.put("method","onMessageRepliedCountChanged");
+        resultMap.put("handle", handle);
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onConversationsAllDeleted(ZIM zim, ZIMConversationsAllDeletedInfo info) {
         if(mysink == null){
             return;

@@ -13,8 +13,8 @@
 extern "C" {
 #endif
 
-FLUTTER_PLUGIN_EXPORT void ZegoZimPluginRegisterWithRegistrar(
-    FlutterDesktopPluginRegistrarRef registrar);
+    FLUTTER_PLUGIN_EXPORT void ZegoZimPluginRegisterWithRegistrar(
+        FlutterDesktopPluginRegistrarRef registrar);
 
 #if defined(__cplusplus)
 }  // extern "C"

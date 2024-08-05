@@ -1,3 +1,58 @@
+## 2.17.0
+
+
+### Features
+
+**Content Moderation**
+- No additional development is required to implement security audits for messages.
+- Supports a variety of message types, including text, image, voice, and video messages.
+- Provides both pre-moderation and post-moderation options.
+- Allows customization of audit tags and standards based on different conversation types.
+- Supports configuring different levels of audit intensity based on audit results.
+- In addition to default sensitive words, you can define custom words to be filtered.
+
+For more details, please refer to **Content Moderation - Overview**.
+
+**Conversation Marking**
+- Allows users to mark conversations, suitable for scenarios where attention to certain conversations is needed or when unable to handle a conversation immediately. This feature can also be used to implement conversation grouping by assigning the same mark to multiple conversations.
+
+**Related Interface: `setConversationMark`**
+
+**Conversation List Query**
+- Supports filtering the conversation list by mark, conversation type, and whether it contains unread messages.
+
+**Related Interface: `queryConversationList`**
+
+**Unread Message Count Query for Specific Conversations**
+- Supports querying the total number of unread messages filtered by mark.
+
+**Related Interface: `queryConversationTotalUnreadMessageCount`**
+
+**Reply to Messages**
+- Supports users replying to specific messages within a conversation. Currently supports replies to text, image, file, audio, video, merged, and custom messages. It also supports querying the reply tree to obtain the complete list of replies.
+
+**Related Interfaces: `replyMessage`, `queryMessageRepliedList`**
+
+**Fetch Specific Historical Messages**
+- Supports querying a specific list of historical messages, suitable for scenarios where understanding the context of a message is required.
+
+**Related Interface: `queryMessages`**
+
+**Unlimited Frequency of Server-Side Offline Message Push**
+- Developers can call server-side interfaces to send single chat messages and group messages with unlimited frequency offline push to domestic Android vendors.
+
+**Related Note: `MessageBody Description - OfflinePush - PushStrategyId`**
+
+**Server-Side Support for Sender Awareness in Room Messages**
+- Added the `SenderUnaware` field, allowing clients corresponding to the `FromUserId` in the request parameters to be aware of the message sent via the server-side room message interface.
+
+**Related Interface: `Send Room Message`**
+
+### Improvements and Optimizations
+
+**Billing Optimization**
+- Optimized the billing gradients and specifications across different ZIM versions, with new cost descriptions for content moderation. For details, please refer to **Billing Information**.
+
 ## 2.16.0
 ### Features
 

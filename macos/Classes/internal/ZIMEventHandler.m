@@ -264,6 +264,32 @@ fromGroupID:(NSString *)fromGroupID{
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim messageRepliedInfoChanged:(NSArray<ZIMMessage *> *)messageList {
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onMessageRepliedInfoChanged" forKey:@"method"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMMessageList:messageList] forKey:@"messageList"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim messageRepliedCountChanged:(NSArray<ZIMMessageRootRepliedCountInfo *> *)infos {
+    if(_events == nil){
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:@"onMessageRepliedCountChanged" forKey:@"method"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:[ZIMPluginConverter mZIMMessageRootRepliedCountInfoList:infos] forKey:@"infos"];
+    _events(resultDic);
+}
+
 
 // MARK: Room
 - (void)zim:(ZIM *)zim
