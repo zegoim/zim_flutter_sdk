@@ -50,6 +50,7 @@ class ZIM {
       dynamic notification);
   external PromiseJsImpl<dynamic> queryHistoryMessage(
       String conversationID, int conversationType, Object config);
+  external PromiseJsImpl<dynamic> queryMessages(dynamic messageSeqs,String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> sendPeerMessage(
       Object message, String toUserID, Object config);
   external PromiseJsImpl<dynamic> sendRoomMessage(
@@ -94,7 +95,8 @@ class ZIM {
       String userID, String groupID);
   external PromiseJsImpl<dynamic> queryGroupMemberList(
       String groupID, Object? config);
-  external PromiseJsImpl<dynamic> queryConversationList(Object config);
+  external PromiseJsImpl<dynamic> queryConversationList(dynamic config,dynamic option);
+  external PromiseJsImpl<dynamic> queryConversationTotalUnreadMessageCount(dynamic config);
   external PromiseJsImpl<dynamic> deleteConversation(
       String conversationID, dynamic conversationType, Object? config);
   external PromiseJsImpl<dynamic> deleteAllConversations(dynamic config);
@@ -145,6 +147,7 @@ class ZIM {
   external PromiseJsImpl<dynamic> deleteMessageReaction(String reactionType, dynamic message);
   external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);
   external PromiseJsImpl<dynamic> setConversationDraft(String draft, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> setConversationMark(int markType, bool enable, dynamic conversationInfos);
   external PromiseJsImpl<dynamic> queryCombineMessageDetail(dynamic message);
   external PromiseJsImpl<dynamic> muteGroup(bool isMute, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> muteGroupMembers(bool isMute, dynamic userIDs, String groupID, dynamic config);
@@ -168,9 +171,8 @@ class ZIM {
   external PromiseJsImpl<dynamic> sendFriendApplication(String userID, dynamic config);
   external PromiseJsImpl<dynamic> updateUserOfflinePushRule(dynamic offlinePushRule);
   external PromiseJsImpl<dynamic> querySelfUserInfo();
-  external PromiseJsImpl<dynamic> replyMessage(dynamic message, dynamic repliedMessage, dynamic config);
-  external PromiseJsImpl<dynamic> queryRepliedMessageList(dynamic message, dynamic config);
-  external PromiseJsImpl<dynamic> queryRepliedMessageCount(dynamic message);
+  external PromiseJsImpl<dynamic> replyMessage(dynamic message, dynamic toOriginalMessage, dynamic config, dynamic notification);
+  external PromiseJsImpl<dynamic> queryMessageRepliedList(dynamic message, dynamic config);
   external PromiseJsImpl<dynamic> updateGroupJoinMode(dynamic mode, String groupID);
   external PromiseJsImpl<dynamic> updateGroupInviteMode(dynamic mode, String groupID);
   external PromiseJsImpl<dynamic> updateGroupBeInviteMode(dynamic mode, String groupID);
@@ -183,241 +185,241 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryGroupApplicationList(dynamic config);
 }
 
-@JS()
-@anonymous
-class ZIMAppConfigWeb {
-  external factory ZIMAppConfigWeb({int appID});
-
-  external int get appID;
-}
-
-@JS()
-@anonymous
-class ZIMLogConfig {
-  external factory ZIMLogConfig({String logLevel});
-
-  external String get logLevel;
-}
-
-@JS()
-@anonymous
-class ZIMUserInfoWeb {
-  external factory ZIMUserInfoWeb({String userID, String userName});
-
-  external String get userID;
-  external String get userName;
-}
-
-@JS()
-@anonymous
-class ZIMConversationQueryConfigWeb {
-  external factory ZIMConversationQueryConfigWeb(
-      {dynamic nextConversation, int count});
-
-  external dynamic get nextConversation;
-  external int get count;
-}
-
-@JS()
-@anonymous
-class ZIMUsersInfoQueryConfigWeb {
-  external factory ZIMUsersInfoQueryConfigWeb({bool isQueryFromServer});
-
-  external bool get isQueryFromServer;
-}
-
-@JS()
-@anonymous
-class ZIMRoomInfoWeb {
-  external factory ZIMRoomInfoWeb({String roomID, String roomName});
-
-  external String get roomID;
-  external String get roomName;
-}
-
-@JS()
-@anonymous
-class ZIMRoomAdvancedConfigWeb {
-  external factory ZIMRoomAdvancedConfigWeb(
-      {dynamic roomAttributes, int roomDestroyDelayTime});
-
-  external dynamic get roomAttributes;
-  external int get roomDestroyDelayTime;
-}
-
-@JS()
-@anonymous
-class ZIMRoomMemberQueryConfigWeb {
-  external factory ZIMRoomMemberQueryConfigWeb({String nextFlag, int count});
-
-  external dynamic get roomAttributes;
-  external int get roomDestroyDelayTime;
-}
-
-@JS()
-@anonymous
-class ZIMRoomAttributesSetConfigWeb {
-  external factory ZIMRoomAttributesSetConfigWeb(
-      {bool isForce, bool isUpdateOwner, bool isDeleteAfterOwnerLeft});
-
-  external bool get isForce;
-  external bool get isUpdateOwner;
-  external bool get isDeleteAfterOwnerLeft;
-}
-
-@JS()
-@anonymous
-class ZIMRoomAttributesDeleteConfigWeb {
-  external factory ZIMRoomAttributesDeleteConfigWeb({bool isForce});
-
-  external bool get isForce;
-}
-
-@JS()
-@anonymous
-class ZIMRoomAttributesBatchOperationConfigWeb {
-  external factory ZIMRoomAttributesBatchOperationConfigWeb(
-      {bool isForce, bool isUpdateOwner, bool isDeleteAfterOwnerLeft});
-
-  external bool get isForce;
-  external bool get isUpdateOwner;
-  external bool get isDeleteAfterOwnerLeft;
-}
-
-@JS()
-@anonymous
-class ZIMMediaMessageBaseWeb {
-  external factory ZIMMediaMessageBaseWeb(
-      {dynamic type,
-      dynamic fileLocalPath,
-      String? fileDownloadUrl,
-      String? fileName,
-      int? fileSize});
-
-  external dynamic get type;
-  external dynamic get fileLocalPath;
-  external String? get fileDownloadUrl;
-  external String? get fileName;
-  external int? get fileSize;
-}
-
-@JS()
-@anonymous
-class ZIMMessageSendConfigWeb {
-  external factory ZIMMessageSendConfigWeb(
-      {dynamic priority, ZIMPushConfigWeb pushConfig});
-
-  external dynamic get priority;
-  external ZIMPushConfigWeb get pushConfig;
-}
-
-@JS()
-@anonymous
-class ZIMPushConfigWeb {
-  external factory ZIMPushConfigWeb(
-      {String title, String content, String extendedData});
-
-  external String get title;
-  external String get content;
-  external String get extendedData;
-}
-
-@JS()
-@anonymous
-class ZIMMessageQueryConfigWeb {
-  external factory ZIMMessageQueryConfigWeb(
-      {dynamic nextMessage, int count, bool reverse});
-
-  external dynamic get nextMessage;
-  external int get count;
-  external bool get reverse;
-}
-
-@JS()
-@anonymous
-class ZIMMessageBaseWeb {
-  external factory ZIMMessageBaseWeb({dynamic type, dynamic message});
-
-  external dynamic get type;
-  external dynamic get message;
-}
-
-@JS()
-@anonymous
-class ZIMMessageDeleteConfigWeb {
-  external factory ZIMMessageDeleteConfigWeb({bool isAlsoDeleteServerMessage});
-
-  external bool get isAlsoDeleteServerMessage;
-}
-
-@JS()
-@anonymous
-class ZIMGroupInfoWeb {
-  external factory ZIMGroupInfoWeb(
-      {String groupID, String groupName, String groupAvatarUrl});
-
-  external String get groupID;
-  external String get groupName;
-  external String get groupAvatarUrl;
-}
-
-@JS()
-@anonymous
-class ZIMGroupAdvancedConfigWeb {
-  external factory ZIMGroupAdvancedConfigWeb(
-      {String groupNotice, dynamic groupAttributes});
-
-  external String get groupNotice;
-  external dynamic get groupAttributes;
-}
-
-@JS()
-@anonymous
-class ZIMGroupMemberQueryConfigWeb {
-  external factory ZIMGroupMemberQueryConfigWeb({int nextFlag, int count});
-
-  external bool get nextFlag;
-  external bool get count;
-}
-
-@JS()
-@anonymous
-class ZIMConversationDeleteConfigWeb {
-  external factory ZIMConversationDeleteConfigWeb(
-      {bool isAlsoDeleteServerConversation});
-
-  external bool get isAlsoDeleteServerConversation;
-}
-
-@JS()
-@anonymous
-class ZIMCallInviteConfigWeb {
-  external factory ZIMCallInviteConfigWeb({int timeout, String extendedData});
-
-  external int get timeout;
-  external String get extendedData;
-}
-
-@JS()
-@anonymous
-class ZIMCallCancelConfigWeb {
-  external factory ZIMCallCancelConfigWeb({String extendedData});
-
-  external String get extendedData;
-}
-
-@JS()
-@anonymous
-class ZIMCallAcceptConfigWeb {
-  external factory ZIMCallAcceptConfigWeb({String extendedData});
-
-  external String get extendedData;
-}
-
-@JS()
-@anonymous
-class ZIMCallRejectConfigWeb {
-  external factory ZIMCallRejectConfigWeb({String extendedData});
-
-  external String get extendedData;
-}
+// @JS()
+// @anonymous
+// class ZIMAppConfigWeb {
+//   external factory ZIMAppConfigWeb({int appID});
+//
+//   external int get appID;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMLogConfig {
+//   external factory ZIMLogConfig({String logLevel});
+//
+//   external String get logLevel;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMUserInfoWeb {
+//   external factory ZIMUserInfoWeb({String userID, String userName});
+//
+//   external String get userID;
+//   external String get userName;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMConversationQueryConfigWeb {
+//   external factory ZIMConversationQueryConfigWeb(
+//       {dynamic nextConversation, int count});
+//
+//   external dynamic get nextConversation;
+//   external int get count;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMUsersInfoQueryConfigWeb {
+//   external factory ZIMUsersInfoQueryConfigWeb({bool isQueryFromServer});
+//
+//   external bool get isQueryFromServer;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMRoomInfoWeb {
+//   external factory ZIMRoomInfoWeb({String roomID, String roomName});
+//
+//   external String get roomID;
+//   external String get roomName;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMRoomAdvancedConfigWeb {
+//   external factory ZIMRoomAdvancedConfigWeb(
+//       {dynamic roomAttributes, int roomDestroyDelayTime});
+//
+//   external dynamic get roomAttributes;
+//   external int get roomDestroyDelayTime;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMRoomMemberQueryConfigWeb {
+//   external factory ZIMRoomMemberQueryConfigWeb({String nextFlag, int count});
+//
+//   external dynamic get roomAttributes;
+//   external int get roomDestroyDelayTime;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMRoomAttributesSetConfigWeb {
+//   external factory ZIMRoomAttributesSetConfigWeb(
+//       {bool isForce, bool isUpdateOwner, bool isDeleteAfterOwnerLeft});
+//
+//   external bool get isForce;
+//   external bool get isUpdateOwner;
+//   external bool get isDeleteAfterOwnerLeft;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMRoomAttributesDeleteConfigWeb {
+//   external factory ZIMRoomAttributesDeleteConfigWeb({bool isForce});
+//
+//   external bool get isForce;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMRoomAttributesBatchOperationConfigWeb {
+//   external factory ZIMRoomAttributesBatchOperationConfigWeb(
+//       {bool isForce, bool isUpdateOwner, bool isDeleteAfterOwnerLeft});
+//
+//   external bool get isForce;
+//   external bool get isUpdateOwner;
+//   external bool get isDeleteAfterOwnerLeft;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMMediaMessageBaseWeb {
+//   external factory ZIMMediaMessageBaseWeb(
+//       {dynamic type,
+//       dynamic fileLocalPath,
+//       String? fileDownloadUrl,
+//       String? fileName,
+//       int? fileSize});
+//
+//   external dynamic get type;
+//   external dynamic get fileLocalPath;
+//   external String? get fileDownloadUrl;
+//   external String? get fileName;
+//   external int? get fileSize;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMMessageSendConfigWeb {
+//   external factory ZIMMessageSendConfigWeb(
+//       {dynamic priority, ZIMPushConfigWeb pushConfig});
+//
+//   external dynamic get priority;
+//   external ZIMPushConfigWeb get pushConfig;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMPushConfigWeb {
+//   external factory ZIMPushConfigWeb(
+//       {String title, String content, String extendedData});
+//
+//   external String get title;
+//   external String get content;
+//   external String get extendedData;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMMessageQueryConfigWeb {
+//   external factory ZIMMessageQueryConfigWeb(
+//       {dynamic nextMessage, int count, bool reverse});
+//
+//   external dynamic get nextMessage;
+//   external int get count;
+//   external bool get reverse;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMMessageBaseWeb {
+//   external factory ZIMMessageBaseWeb({dynamic type, dynamic message});
+//
+//   external dynamic get type;
+//   external dynamic get message;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMMessageDeleteConfigWeb {
+//   external factory ZIMMessageDeleteConfigWeb({bool isAlsoDeleteServerMessage});
+//
+//   external bool get isAlsoDeleteServerMessage;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMGroupInfoWeb {
+//   external factory ZIMGroupInfoWeb(
+//       {String groupID, String groupName, String groupAvatarUrl});
+//
+//   external String get groupID;
+//   external String get groupName;
+//   external String get groupAvatarUrl;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMGroupAdvancedConfigWeb {
+//   external factory ZIMGroupAdvancedConfigWeb(
+//       {String groupNotice, dynamic groupAttributes});
+//
+//   external String get groupNotice;
+//   external dynamic get groupAttributes;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMGroupMemberQueryConfigWeb {
+//   external factory ZIMGroupMemberQueryConfigWeb({int nextFlag, int count});
+//
+//   external bool get nextFlag;
+//   external bool get count;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMConversationDeleteConfigWeb {
+//   external factory ZIMConversationDeleteConfigWeb(
+//       {bool isAlsoDeleteServerConversation});
+//
+//   external bool get isAlsoDeleteServerConversation;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMCallInviteConfigWeb {
+//   external factory ZIMCallInviteConfigWeb({int timeout, String extendedData});
+//
+//   external int get timeout;
+//   external String get extendedData;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMCallCancelConfigWeb {
+//   external factory ZIMCallCancelConfigWeb({String extendedData});
+//
+//   external String get extendedData;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMCallAcceptConfigWeb {
+//   external factory ZIMCallAcceptConfigWeb({String extendedData});
+//
+//   external String get extendedData;
+// }
+//
+// @JS()
+// @anonymous
+// class ZIMCallRejectConfigWeb {
+//   external factory ZIMCallRejectConfigWeb({String extendedData});
+//
+//   external String get extendedData;
+// }

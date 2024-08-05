@@ -364,7 +364,7 @@
     [zim queryConversationTotalUnreadMessageCountWithConfig:queryConfig callback:^(unsigned int unreadMessageCount, ZIMError * _Nonnull errorInfo) {
         if(errorInfo.code == 0){
             NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-            [resultDic setObject:@(unreadMessageCount) forKey:@"unreadCount"];
+            [resultDic setObject:@(unreadMessageCount) forKey:@"unreadMessageCount"];
             result(resultDic);
         }
         else{
