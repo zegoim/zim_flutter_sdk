@@ -877,8 +877,8 @@ class ZIMConverter {
 
   static Map mZIMRoomFullInfo(ZIMRoomFullInfo roomInfo) {
     Map roomInfoMap = {};
-    roomInfoMap['roomID'] = roomInfo.roomID;
-    roomInfoMap['roomName'] = roomInfo.roomName;
+    roomInfoMap['roomID'] = roomInfo.baseInfo.roomID;
+    roomInfoMap['roomName'] = roomInfo.baseInfo.roomName;
 
     return roomInfoMap;
   }
@@ -932,7 +932,7 @@ class ZIMConverter {
 
   static ZIMRoomAdvancedConfig oZIMRoomAdvancedConfig(Map resultMap) {
     ZIMRoomAdvancedConfig config = ZIMRoomAdvancedConfig();
-    config.attributes = (resultMap['roomAttributes'] as Map).cast<String, String>();
+    config.roomAttributes = (resultMap['roomAttributes'] as Map).cast<String, String>();
     config.roomDestroyDelayTime = resultMap['roomDestroyDelayTime'];
     return config;
   }

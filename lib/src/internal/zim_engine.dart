@@ -361,7 +361,7 @@ class ZIMEngine implements ZIM {
     resultMap = await channel.invokeMethod('switchRoom', {
       'handle': handle,
       'fromRoomID': fromRoomID,
-      'toRoomInfo': ZIMConverter.mZIMRoomInfo(roomInfo),
+      'toRoomInfo': ZIMConverter.mZIMRoomInfo(toRoomInfo),
       'isCreateWhenRoomNotExisted':isCreateWhenRoomNotExisted,
       'config': ZIMConverter.mZIMRoomAdvancedConfig(config)
     });
