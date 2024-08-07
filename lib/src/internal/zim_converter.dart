@@ -875,6 +875,14 @@ class ZIMConverter {
         errorInvitees: (resultMap['errorInvitees'] as List).cast<String>());
   }
 
+  static Map mZIMRoomFullInfo(ZIMRoomFullInfo roomInfo) {
+    Map roomInfoMap = {};
+    roomInfoMap['roomID'] = roomInfo.roomID;
+    roomInfoMap['roomName'] = roomInfo.roomName;
+
+    return roomInfoMap;
+  }
+
   static Map mZIMRoomInfo(ZIMRoomInfo roomInfo) {
     Map roomInfoMap = {};
     roomInfoMap['roomID'] = roomInfo.roomID;
@@ -920,6 +928,13 @@ class ZIMConverter {
     configMap['roomAttributes'] = config.roomAttributes;
     configMap['roomDestroyDelayTime'] = config.roomDestroyDelayTime;
     return configMap;
+  }
+
+  static ZIMRoomAdvancedConfig oZIMRoomAdvancedConfig(Map resultMap) {
+    ZIMRoomAdvancedConfig config = ZIMRoomAdvancedConfig();
+    config.attributes = (resultMap['roomAttributes'] as Map).cast<String, String>();
+    config.roomDestroyDelayTime = resultMap['roomDestroyDelayTime'];
+    return config;
   }
 
   static ZIMRoomJoinedResult oZIMRoomJoinedResult(Map resultMap) {
