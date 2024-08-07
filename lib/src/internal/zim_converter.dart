@@ -909,6 +909,12 @@ class ZIMConverter {
     return ZIMRoomEnteredResult(roomInfo: roomInfo);
   }
 
+  static ZIMRoomSwitchedResult oZIMRoomSwitchedResult(Map resultMap) {
+    ZIMRoomFullInfo roomInfo = oZIMRoomFullInfo(resultMap['roomInfo']);
+
+    return ZIMRoomSwitchedResult(roomInfo: roomInfo);
+  }
+
   static Map mZIMRoomAdvancedConfig(ZIMRoomAdvancedConfig config) {
     Map configMap = {};
     configMap['roomAttributes'] = config.roomAttributes;

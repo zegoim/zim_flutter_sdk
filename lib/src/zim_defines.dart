@@ -2007,6 +2007,11 @@ class ZIMRoomEnteredResult {
   ZIMRoomEnteredResult({required this.roomInfo});
 }
 
+class ZIMRoomSwitchedResult {
+  ZIMRoomFullInfo roomInfo;
+  ZIMRoomSwitchedResult({required this.roomInfo});
+}
+
 /// Callback of the result of joining the room.
 ///
 /// Available since: 1.1.0 or above.

@@ -821,6 +821,8 @@ abstract class ZIM {
   Future<ZIMRoomEnteredResult> enterRoom(
       ZIMRoomInfo roomInfo, ZIMRoomAdvancedConfig config);
 
+  Future<ZIMRoomSwitchedResult> switchRoom(
+      String fromRoomID, ZIMRoomInfo toRoomInfo, bool isCreateWhenRoomNotExisted, ZIMRoomAdvancedConfig config);
   /// Leave a room.
   ///
   /// Available since: 2.1.5 or above.
