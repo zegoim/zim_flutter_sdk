@@ -307,6 +307,10 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().enterRoom(argument, std::move(result));
         return;
     }
+    else if (method_call.method_name() == "switchRoom") {
+        ZIMPluginMethodHandler::getInstance().switchRoom(argument, std::move(result));
+        return;
+    }
     else if (method_call.method_name() == "createRoom") {
         ZIMPluginMethodHandler::getInstance().createRoom(argument, std::move(result));
         return;
