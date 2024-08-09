@@ -151,7 +151,11 @@ enum ZIMRoomEvent {
 
   connectTimeout,
 
-  kickedOutByOtherDevice
+  kickedOutByOtherDevice,
+  
+  activeSwitch,
+
+  switchFailed,
 }
 
 /// The priority of the message.

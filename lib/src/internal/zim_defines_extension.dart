@@ -86,6 +86,8 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     ZIMRoomEvent.kickedOut: 8,
     ZIMRoomEvent.connectTimeout: 9,
     ZIMRoomEvent.kickedOutByOtherDevice: 10
+    ZIMRoomEvent.activeSwitch: 11,
+    ZIMRoomEvent.switchFailed: 12
   };
   static const mapValue = {
     0: ZIMRoomEvent.success,
@@ -99,6 +101,8 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     8: ZIMRoomEvent.kickedOut,
     9: ZIMRoomEvent.connectTimeout,
     10: ZIMRoomEvent.kickedOutByOtherDevice
+    11: ZIMRoomEvent.activeSwitch,
+    12: ZIMRoomEvent.switchFailed
   };
 
   int get value => valueMap[this] ?? -1;
