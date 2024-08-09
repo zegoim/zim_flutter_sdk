@@ -85,7 +85,7 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     ZIMRoomEvent.enterFailed: 7,
     ZIMRoomEvent.kickedOut: 8,
     ZIMRoomEvent.connectTimeout: 9,
-    ZIMRoomEvent.kickedOutByOtherDevice: 10
+    ZIMRoomEvent.kickedOutByOtherDevice: 10,
     ZIMRoomEvent.activeSwitch: 11,
     ZIMRoomEvent.switchFailed: 12
   };
@@ -100,7 +100,7 @@ extension ZIMRoomEventExtension on ZIMRoomEvent {
     7: ZIMRoomEvent.enterFailed,
     8: ZIMRoomEvent.kickedOut,
     9: ZIMRoomEvent.connectTimeout,
-    10: ZIMRoomEvent.kickedOutByOtherDevice
+    10: ZIMRoomEvent.kickedOutByOtherDevice,
     11: ZIMRoomEvent.activeSwitch,
     12: ZIMRoomEvent.switchFailed
   };
