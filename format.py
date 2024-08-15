@@ -3,6 +3,12 @@ import subprocess
 import sys
 import platform
 
+def set_working_directory_to_script_location():
+    """Set the working directory to the directory where the script is located."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(script_dir)
+    print(f"Working directory set to: {script_dir}")
+
 def install_clang_format():
     """Install clang-format based on the operating system."""
     system = platform.system()
@@ -12,7 +18,6 @@ def install_clang_format():
             subprocess.run(["brew", "install", "clang-format"], check=True)
         elif system == "Windows":
             print("Installing clang-format on Windows...")
-            # Download the LLVM installer from the official LLVM website and install clang-format
             subprocess.run(
                 [
                     "powershell",
@@ -91,6 +96,8 @@ def run_dart_format():
 
 def main():
     """Main function to check and run format commands."""
+    set_working_directory_to_script_location()
+
     if not check_clang_format():
         install_clang_format()
         if not check_clang_format():
