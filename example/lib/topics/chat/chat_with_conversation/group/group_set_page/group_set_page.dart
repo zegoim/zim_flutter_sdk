@@ -80,8 +80,13 @@ class GroupSetPageState extends State<GroupSetPage> {
                   //   offstage: !isGroupOwner(),
                   //   child: TransferGroupOwnershipItem(),
                   // ),
-                  ClearChatLogsItem(conversationID: widget.myGroupFullInfo.baseInfo.groupID,conversationType: ZIMConversationType.group,),
-                  DeleteAndQuitGroupChatItem(groupID: widget.myGroupFullInfo.baseInfo.groupID,)
+                  ClearChatLogsItem(
+                    conversationID: widget.myGroupFullInfo.baseInfo.groupID,
+                    conversationType: ZIMConversationType.group,
+                  ),
+                  DeleteAndQuitGroupChatItem(
+                    groupID: widget.myGroupFullInfo.baseInfo.groupID,
+                  )
                 ],
               ),
             ),
@@ -90,7 +95,8 @@ class GroupSetPageState extends State<GroupSetPage> {
   }
 
   registerZIMEvent() {
-    ZIMEventHandler.onGroupNameUpdated = (zim, groupName, operatedInfo, groupID) {
+    ZIMEventHandler.onGroupNameUpdated =
+        (zim, groupName, operatedInfo, groupID) {
       if (groupID != widget.myGroupFullInfo.baseInfo.groupID) {
         return;
       }

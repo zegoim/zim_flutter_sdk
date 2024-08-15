@@ -13,7 +13,6 @@ class ImageBubble extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ImageBubbleState();
   //final String localPath;
-
 }
 
 class ImageBubbleState extends State<ImageBubble> {

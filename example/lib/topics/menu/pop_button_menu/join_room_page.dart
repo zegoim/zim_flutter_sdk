@@ -72,14 +72,17 @@ class _PageState extends State<JoinRoomPage> {
                       onPressed: (() async {
                         FocusScope.of(context).requestFocus(FocusNode());
                         try {
-                          ZIMRoomJoinedResult result = await ZIM.getInstance()!.joinRoom(targetRoomID);
+                          ZIMRoomJoinedResult result =
+                              await ZIM.getInstance()!.joinRoom(targetRoomID);
 
                           Navigator.pop(context);
                           Navigator.push(context,
                               MaterialPageRoute(builder: ((context) {
-                            return RoomChatPage(roomID: result.roomInfo.baseInfo.roomID,roomName: result.roomInfo.baseInfo.roomName,);
+                            return RoomChatPage(
+                              roomID: result.roomInfo.baseInfo.roomID,
+                              roomName: result.roomInfo.baseInfo.roomName,
+                            );
                           })));
-
                         } on PlatformException catch (onError) {
                           ErrorDiaLog.showFailedDialog(
                               context, onError.code, onError.message!);

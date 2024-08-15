@@ -1,13 +1,11 @@
 package com.example.zego_zim_example;
 
 import androidx.annotation.NonNull;
-
 import io.flutter.Log;
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
-
 
 public class MainActivity extends FlutterActivity {
     private static final String TAG = "ActivityPluginRegistrant";
@@ -17,7 +15,7 @@ public class MainActivity extends FlutterActivity {
         GeneratedPluginRegistrant.registerWith(flutterEngine);
         try {
             flutterEngine.getPlugins().add(new TokenPlugin());
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Error registering plugin TokenPlugin at Demo MainActivity", e);
         }
     }

@@ -19,7 +19,6 @@ class RouteList {
         targetPage = LoginPage();
         break;
       default:
-
     }
     _routesMap[routeNamed] = targetPage;
     return targetPage;

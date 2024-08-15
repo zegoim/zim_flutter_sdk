@@ -16,14 +16,12 @@ class _MyState extends State<GroupListCell> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-                              MaterialPageRoute(builder: ((context) {
-                            return GroupChatPage(
-                                conversationID:
-                                    widget.zimGroup.baseInfo!.groupID,
-                                conversationName:
-                                    widget.zimGroup.baseInfo!.groupName,);
-                          })));
+        Navigator.push(context, MaterialPageRoute(builder: ((context) {
+          return GroupChatPage(
+            conversationID: widget.zimGroup.baseInfo!.groupID,
+            conversationName: widget.zimGroup.baseInfo!.groupName,
+          );
+        })));
       },
       child: Container(
         decoration: BoxDecoration(

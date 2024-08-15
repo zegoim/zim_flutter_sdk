@@ -11,8 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSObject (safeInvoke)
 
--(void)safeSetValue:(nullable id)value
-             forKey:(nonnull NSString *)key;
+- (void)safeSetValue:(nullable id)value forKey:(nonnull NSString *)key;
 
 @end
 

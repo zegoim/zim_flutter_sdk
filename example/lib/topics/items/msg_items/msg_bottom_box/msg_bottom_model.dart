@@ -1,5 +1,3 @@
-
-
 class MsgBottomModel {
-  static Function nonselfOnTapResponse = (){};
+  static Function nonselfOnTapResponse = () {};
 }

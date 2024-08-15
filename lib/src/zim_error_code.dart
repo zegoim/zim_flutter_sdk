@@ -34,7 +34,8 @@ class ZIMErrorCode {
   static const int messageModuleAuditFailed = 6000222;
 
   static const int messageModuleCacheFileOpenFailed = 6000240;
-  static const int messageModuleCacheFileExportOrImportIsInProgressCurrently = 6000241;
+  static const int messageModuleCacheFileExportOrImportIsInProgressCurrently =
+      6000241;
   static const int messageModuleCacheFileOnlyCanImportCacheOfOneself = 6000242;
   static const int messageModuleCacheFileExportFailed = 6000243;
   static const int messageModuleCacheFileImportFailed = 6000244;

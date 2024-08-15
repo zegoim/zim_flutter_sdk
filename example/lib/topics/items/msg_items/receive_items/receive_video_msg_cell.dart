@@ -34,15 +34,12 @@ class ReceiveVideoMsgCell extends StatefulWidget {
   State<StatefulWidget> createState() => ReceiveVideoeMsgCellState();
 }
 
-
 class ReceiveVideoeMsgCellState extends State<ReceiveVideoMsgCell> {
-
-
   checkIsdownload() async {
     if (widget.message.fileLocalPath == '') {
       ZIMMediaDownloadedResult result = await ZIM
-          .getInstance()
-          !.downloadMediaFile(widget.message, ZIMMediaFileType.originalFile,
+          .getInstance()!
+          .downloadMediaFile(widget.message, ZIMMediaFileType.originalFile,
               (message, currentFileSize, totalFileSize) {});
       setState(() {
         widget.message = result.message as ZIMVideoMessage;
@@ -84,9 +81,7 @@ class ReceiveVideoeMsgCellState extends State<ReceiveVideoMsgCell> {
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  getVideoBubble()
-                ],
+                children: [getVideoBubble()],
               )
             ],
           ),

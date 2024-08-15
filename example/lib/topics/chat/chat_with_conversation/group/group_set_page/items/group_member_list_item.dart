@@ -56,8 +56,8 @@ class GroupMemberListItemState extends State<GroupMemberListItem> {
     }
 
     ZIM
-        .getInstance()
-        !.queryGroupMemberList(widget.groupID, widget.groupMemberQueryConfig)
+        .getInstance()!
+        .queryGroupMemberList(widget.groupID, widget.groupMemberQueryConfig)
         .then((value) => {
               setState(() {
                 widget.userList.addAll(value.userList);
