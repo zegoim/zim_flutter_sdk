@@ -9,14 +9,11 @@
 
 @implementation NSObject (safeInvoke)
 
--(void)safeSetValue:(nullable id)value
-             forKey:(nonnull NSString *)key{
-    if(value == nil || value == NULL || [value isEqual:[NSNull null]]){
+- (void)safeSetValue:(nullable id)value forKey:(nonnull NSString *)key {
+    if (value == nil || value == NULL || [value isEqual:[NSNull null]]) {
         return;
     }
     [self setValue:value forKey:key];
 }
-
-
 
 @end

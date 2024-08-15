@@ -13,7 +13,7 @@ class _MsgBottomBoxExpandCellState extends State<MsgBottomBoxExpandCell> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20, top: 40,right: 20),
+      margin: EdgeInsets.only(left: 20, top: 40, right: 20),
       //设置 child 居中
       alignment: Alignment(0, 0),
       height: 50,

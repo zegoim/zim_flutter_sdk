@@ -67,7 +67,7 @@ class GroupSetPageNameItemState extends State<GroupSetPageNameItem> {
                                 .getInstance()!
                                 .updateGroupName(
                                     widget.newGroupName, widget.groupID);
-                            
+
                             setState(() {
                               widget.groupName = result.groupName;
                             });

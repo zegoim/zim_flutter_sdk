@@ -620,17 +620,17 @@ void ZIMPluginMethodHandler::queryConversationTotalUnreadCount(FArgument &argume
     auto configMap = std::get<FTMap>(argument[FTValue("config")]);
     auto config = ZIMPluginConverter::oZIMConversationTotalUnreadCountQueryConfig(configMap);
 
-    zim->queryConversationTotalUnreadMessageCount(
-        config, [=](unsigned int totalUnreadCount, const ZIMError &errorInfo) {
-            if (errorInfo.code == 0) {
-                FTMap retMap;
-                retMap[FTValue("unreadMessageCount")] = FTValue(static_cast<int32_t>(totalUnreadCount));
+    zim->queryConversationTotalUnreadMessageCount(config, [=](unsigned int totalUnreadCount,
+                                                              const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("unreadMessageCount")] = FTValue(static_cast<int32_t>(totalUnreadCount));
 
-                result->Success(retMap);
-            } else {
-                result->Error(std::to_string(errorInfo.code), errorInfo.message);
-            }
-        });
+            result->Success(retMap);
+        } else {
+            result->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
 }
 
 void ZIMPluginMethodHandler::revokeMessage(FArgument &argument, FResult result) {
@@ -3308,7 +3308,7 @@ void ZIMPluginMethodHandler::updateFriendAttributes(FArgument &argument, FResult
 }
 
 void ZIMPluginMethodHandler::queryFriendsInfo(FArgument &argument, FResult result) {
-    
+
     CheckZIMInstanceExistAndObtainZIM();
     auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
     std::vector<std::string> userIDsVec;

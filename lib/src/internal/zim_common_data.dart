@@ -1,7 +1,7 @@
 import '../zim_defines.dart';
 
 class ZIMCommonData {
-  static  int _sequence = 0;
+  static int _sequence = 0;
 
   static Map<int, ZIMMediaDownloadingProgress> mediaDownloadingProgressMap = {};
 

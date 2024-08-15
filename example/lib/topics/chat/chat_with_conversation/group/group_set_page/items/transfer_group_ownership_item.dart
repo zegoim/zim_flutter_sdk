@@ -21,15 +21,19 @@ class TransferGroupOwnershipState extends State<TransferGroupOwnershipItem> {
       child: Row(
         children: <Widget>[
           Text(
-                'Transfer Ownership',
-                style: TextStyle(),
-                textScaleFactor: 1.2,
-              ),
-          Expanded(
-              child: Container(),
+            'Transfer Ownership',
+            style: TextStyle(),
+            textScaleFactor: 1.2,
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.chevron_right_outlined,color: Colors.grey,)),
-          
+          Expanded(
+            child: Container(),
+          ),
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.chevron_right_outlined,
+                color: Colors.grey,
+              )),
         ],
       ),
     );

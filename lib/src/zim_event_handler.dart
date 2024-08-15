@@ -41,7 +41,8 @@ class ZIMEventHandler {
   // Supported version: 2.11.0 or later.
   //
   // Description: In the multi-terminal login scenario, after the user deletes the server level message on device A, other online multi-terminal devices will receive this callback..
-  static void Function(ZIM zim, ZIMMessageDeletedInfo deletedInfo)? onMessageDeleted;
+  static void Function(ZIM zim, ZIMMessageDeletedInfo deletedInfo)?
+      onMessageDeleted;
 
   /// Available since: 2.17.0 and above.
   ///
@@ -50,12 +51,14 @@ class ZIMEventHandler {
   /// Use cases: Developers can use this method to query the entire reply message tree.
   ///
   /// When to call: Callable after login.
-  static void Function(ZIM zim, List<ZIMMessage> messageList)? onMessageRepliedInfoChanged;
+  static void Function(ZIM zim, List<ZIMMessage> messageList)?
+      onMessageRepliedInfoChanged;
 
   /// Available since: 2.17.0  or above
   ///
   /// Description: When there is a new reply message, the number of replies to the corresponding root message is notified through this event.
-  static void Function(ZIM zim, List<ZIMMessageRootRepliedCountInfo> infos)? onMessageRepliedCountChanged;
+  static void Function(ZIM zim, List<ZIMMessageRootRepliedCountInfo> infos)?
+      onMessageRepliedCountChanged;
 /* Conversation */
 
   /// The callback for conversation changed event.
@@ -74,9 +77,8 @@ class ZIMEventHandler {
   /// When to call /Trigger: When another end clears all unread sessions, the local end triggers a notification.
   ///
   /// Related APIs: Triggered by [deleteAllConversations].
-  static void Function(
-      ZIM zim, ZIMConversationsAllDeletedInfo info)?
-  onConversationsAllDeleted;
+  static void Function(ZIM zim, ZIMConversationsAllDeletedInfo info)?
+      onConversationsAllDeleted;
 
   /// The callback for message sent status changed event.
   ///
@@ -84,8 +86,9 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageSentStatusChangedInfoList] message sent status changed info list
   static void Function(
-          ZIM zim, List<ZIMMessageSentStatusChangeInfo> messageSentStatusChangedInfoList)?
-      onMessageSentStatusChanged;
+      ZIM zim,
+      List<ZIMMessageSentStatusChangeInfo>
+          messageSentStatusChangedInfoList)? onMessageSentStatusChanged;
 
   /// The callback for conversation total unread message count changed.
   ///
@@ -103,7 +106,7 @@ class ZIMEventHandler {
 
   /// Related APIs: triggered when the peer calls via [ZIM.sendConversationMessageReceiptRead].
   static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
-  onConversationMessageReceiptChanged;
+      onConversationMessageReceiptChanged;
 
 /* Message */
 
@@ -148,8 +151,7 @@ class ZIMEventHandler {
 
   /// Related APIs: triggered when the peer calls via [ZIM.sendMessageReceiptsRead].
   static void Function(ZIM zim, List<ZIMMessageReceiptInfo> infos)?
-  onMessageReceiptChanged;
-
+      onMessageReceiptChanged;
 
   /// Available since: 2.5.0  or above.
 
@@ -159,15 +161,14 @@ class ZIMEventHandler {
 
   /// Related callbacks:You can revoke message to other members via [ZIM.revokeMessage].
   static void Function(ZIM zim, List<ZIMRevokeMessage> messageList)?
-  onMessageRevokeReceived;
+      onMessageRevokeReceived;
 
   /// Supported version: 2.10.0 or later.
   ///
   /// Description: The callback is received when the server interface [SendMessageToAllUsers] sends a message.
   ///
   /// Call time: This callback is received after logging in to the ZIM service and the server call the [SendMessageToAllUsers] interface to send a message.
-  static void Function(ZIM zim, ZIMMessage message)?
-  onBroadcastMessageReceived;
+  static void Function(ZIM zim, ZIMMessage message)? onBroadcastMessageReceived;
 /* Room */
 
   /// Callback when other members join the room.
@@ -264,8 +265,10 @@ class ZIMEventHandler {
   /// [operatedInfo] Room operation information.
   /// [roomID] Room ID.
   static void Function(
-    ZIM zim,List<ZIMRoomMemberAttributesUpdateInfo> infos,ZIMRoomOperatedInfo operatedInfo, String roomID
-  )? onRoomMemberAttributesUpdated;
+      ZIM zim,
+      List<ZIMRoomMemberAttributesUpdateInfo> infos,
+      ZIMRoomOperatedInfo operatedInfo,
+      String roomID)? onRoomMemberAttributesUpdated;
 /* Group */
 
   /// Description: callback notification of group status change.
@@ -412,10 +415,9 @@ class ZIMEventHandler {
   /// When to call: After creating a ZIM instance through [create].
   ///
   /// Related APIs: [sendGroupJoinApplication], [sendGroupInviteApplications].
-  static void Function(
-      ZIM zim,
-      List<ZIMGroupApplicationInfo> applicationList,
-      ZIMGroupApplicationListChangeAction action)? onGroupApplicationListChanged;
+  static void Function(ZIM zim, List<ZIMGroupApplicationInfo> applicationList,
+          ZIMGroupApplicationListChangeAction action)?
+      onGroupApplicationListChanged;
 
   /// Supported versions: 2.15.0 and above.
   ///
@@ -424,9 +426,8 @@ class ZIMEventHandler {
   /// When to call: After creating a ZIM instance through [create].
   ///
   /// Related APIs: [acceptGroupJoinApplication], [rejectGroupJoinApplication], [acceptGroupInviteApplication], [rejectGroupInviteApplication].
-  static void Function(
-      ZIM zim,
-      List<ZIMGroupApplicationInfo> applicationList)? onGroupApplicationUpdated;
+  static void Function(ZIM zim, List<ZIMGroupApplicationInfo> applicationList)?
+      onGroupApplicationUpdated;
 
 /* Invite */
 
@@ -525,7 +526,9 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [callID]  callID.
-  static void Function(ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID)? onCallInvitationTimeout;
+  static void Function(
+          ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID)?
+      onCallInvitationTimeout;
 
   /// Deprecated since ZIM 2.9.0, please use  [onCallUserStateChanged] instead.
   /// Supported versions: 2.0.0 and above.
@@ -555,7 +558,10 @@ class ZIMEventHandler {
   /// When to call: After creating a ZIM instance through [create].
   ///
   /// Related APIs: [callInvite].
-  static void Function(ZIM zim, ZIMCallInvitationCreatedInfo info, String callID)? onCallInvitationCreated;
+  static void Function(
+          ZIM zim, ZIMCallInvitationCreatedInfo info, String callID)?
+      onCallInvitationCreated;
+
   /// Supported versions: 2.9.0 and above.
   ///
   /// Detail description: In an advanced call,  a participant ends the call, and all participants will receive this callback.
@@ -566,8 +572,10 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [callID] Timeout invitee ID.
   /// [info] Information carried by the event callback.
-  static void Function(ZIM zim, ZIMCallInvitationEndedInfo callInvitationEndedInfo, String callID)?
-  onCallInvitationEnded;
+  static void Function(
+      ZIM zim,
+      ZIMCallInvitationEndedInfo callInvitationEndedInfo,
+      String callID)? onCallInvitationEnded;
 
   /// Supported versions: 2.9.0 and above.
   ///
@@ -582,8 +590,10 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [callUserStateChangeInfo] Information about the status change of a call member.
   /// [callID] Unique identifier of the call.
-  static void Function(ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID)?
-      onCallUserStateChanged;
+  static void Function(
+      ZIM zim,
+      ZIMCallUserStateChangeInfo callUserStateChangeInfo,
+      String callID)? onCallUserStateChanged;
 
   /// Supported version: 2.10.0 or later.
   ///
@@ -596,6 +606,7 @@ class ZIMEventHandler {
   /// Related APIs: [ZIM.addMessageReaction]、[ZIM.deleteMessageReaction]
   static void Function(ZIM zim, List<ZIMMessageReaction> infos)?
       onMessageReactionsChanged;
+
   ///
   /// Supported versions: 2.13.0 and above.
   ///
@@ -604,7 +615,10 @@ class ZIMEventHandler {
   /// When to call: After creating a ZIM instance through [create].
   ///
   /// Related APIs: [addUsersToBlacklist].
-  static void Function(ZIM zim, List<ZIMUserInfo> userList, ZIMBlacklistChangeAction action)? onBlacklistChanged;
+  static void Function(
+          ZIM zim, List<ZIMUserInfo> userList, ZIMBlacklistChangeAction action)?
+      onBlacklistChanged;
+
   ///
   /// Description: Callback notification for changes in group mute information.
   ///
@@ -613,7 +627,11 @@ class ZIMEventHandler {
   /// When to trigger: When group mute information changes.
   ///
   /// Related APIs: [muteGroup], Group Mute.
-  static void Function(ZIM zim, ZIMGroupMuteInfo groupMuteInfo, ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupMutedInfoUpdated;
+  static void Function(
+      ZIM zim,
+      ZIMGroupMuteInfo groupMuteInfo,
+      ZIMGroupOperatedInfo operatedInfo,
+      String groupID)? onGroupMutedInfoUpdated;
 
   /// Supported versions: 2.14.0 and above.
   ///
@@ -622,7 +640,9 @@ class ZIMEventHandler {
   /// When to call: After creating a ZIM instance through [create].
   ///
   /// Related APIs: [updateFriendAlias] [updateFriendAttributes]
-  static void Function(ZIM zim, List<ZIMFriendInfo> friendInfoList)? onFriendInfoUpdated;
+  static void Function(ZIM zim, List<ZIMFriendInfo> friendInfoList)?
+      onFriendInfoUpdated;
+
   ///
   /// Supported versions: 2.14.0 and above.
   ///
@@ -631,7 +651,8 @@ class ZIMEventHandler {
   /// When to call: After creating a ZIM instance through [create].
   ///
   /// Related APIs: [addFriend].
-  static void Function(ZIM zim, List<ZIMFriendInfo> friendInfoList ,ZIMFriendListChangeAction action)? onFriendListChanged;
+  static void Function(ZIM zim, List<ZIMFriendInfo> friendInfoList,
+      ZIMFriendListChangeAction action)? onFriendListChanged;
 
   /// Supported versions: 2.14.0 and above.
   ///
@@ -640,7 +661,10 @@ class ZIMEventHandler {
   /// When to call: After creating a ZIM instance through [create].
   ///
   /// Related APIs: [acceptFriendApplication] [rejectFriendApplication]
-  static void Function(ZIM zim,List<ZIMFriendApplicationInfo> friendApplicationInfoList)? onFriendApplicationUpdated;
+  static void Function(
+          ZIM zim, List<ZIMFriendApplicationInfo> friendApplicationInfoList)?
+      onFriendApplicationUpdated;
+
   ///
   /// Supported versions: 2.14.0 and above.
   ///
@@ -649,5 +673,9 @@ class ZIMEventHandler {
   /// When to call: After creating a ZIM instance through [create].
   ///
   /// Related APIs: [sendFriendApplication].
-  static void Function(ZIM zim,List<ZIMFriendApplicationInfo> friendApplicationInfoList ,ZIMFriendApplicationListChangeAction action)? onFriendApplicationListChanged;
+  static void Function(
+          ZIM zim,
+          List<ZIMFriendApplicationInfo> friendApplicationInfoList,
+          ZIMFriendApplicationListChangeAction action)?
+      onFriendApplicationListChanged;
 }

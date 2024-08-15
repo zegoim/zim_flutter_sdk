@@ -35,7 +35,7 @@ abstract class ZIM {
   /// When you need to customize the set advanced configurations, you need to call this function.
   /// It must be set before calling [create] to take effect. If it is set after [create], it will take effect at the next [create].
   ///
-  static setAdvancedConfig(String key,String value) async {
+  static setAdvancedConfig(String key, String value) async {
     return await ZIMManager.setAdvancedConfig(key, value);
   }
 
@@ -83,8 +83,9 @@ abstract class ZIM {
   /// Restrictions: If you need to use this function, please contact ZEGO technical support.
   ///
   /// Caution: If you need to update geo fencing information, please call the [destroy] interface to destroy the current ZIM instance, and then call this interface.
-  static Future<bool> setGeofencingConfig(List<int> areaList,ZIMGeofencingType type) async{
-    return await ZIMManager.setGeofencingConfig(areaList,type);
+  static Future<bool> setGeofencingConfig(
+      List<int> areaList, ZIMGeofencingType type) async {
+    return await ZIMManager.setGeofencingConfig(areaList, type);
   }
 //MARK: - Main
 
@@ -106,7 +107,7 @@ abstract class ZIM {
   /// Login, you must log in before using all functions.
   /// [userID] Unique ID used to identify the user. Note that the userID must be unique under the same appID, otherwise mutual kicks out will occur.
   /// [config] login config.
-  Future<void> login(String userID,ZIMLoginConfig config);
+  Future<void> login(String userID, ZIMLoginConfig config);
 
   /// Log out of ZIM service.
   logout();
@@ -181,7 +182,8 @@ abstract class ZIM {
   ///
   /// [config] Configuration for session queries.
   Future<ZIMConversationListQueriedResult> queryConversationList(
-      ZIMConversationQueryConfig config,[ZIMConversationFilterOption? option]);
+      ZIMConversationQueryConfig config,
+      [ZIMConversationFilterOption? option]);
 
   /// Available since: 2.1.5 and above.
   ///
@@ -223,8 +225,8 @@ abstract class ZIM {
   /// Related callbacks: [ZIMConversationQueriedResult].
   /// [conversationID] Query conversation ID.
   /// [conversationType] Query conversation type.
-  Future<ZIMConversationQueriedResult> queryConversation(String conversationID,
-      ZIMConversationType conversationType);
+  Future<ZIMConversationQueriedResult> queryConversation(
+      String conversationID, ZIMConversationType conversationType);
 
   /// Available since: 2.8.0 and above.
   ///
@@ -238,7 +240,8 @@ abstract class ZIM {
   ///
   /// Caution: NextConversation is the riveting point of the query message, which can be null for the first query. In subsequent query, the earliest conversation can be used as nextConversation to query earlier sessions. In paging query, Count in [ZIMConversationQueryConfig] fill each pull the number of sessions.
   /// [config] Configuration for session queries.
-  Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList(ZIMConversationQueryConfig config);
+  Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList(
+      ZIMConversationQueryConfig config);
 
   /// Available since: 2.8.0 and above.
   ///
@@ -251,7 +254,10 @@ abstract class ZIM {
   /// Restrictions: Available after login, unavailable after logout.
   ///
   /// Related callbacks: [ZIMConversationPinnedStateUpdatedResult].
-  Future<ZIMConversationPinnedStateUpdatedResult> updateConversationPinnedState(bool isPinned, String conversationID, ZIMConversationType conversationType);
+  Future<ZIMConversationPinnedStateUpdatedResult> updateConversationPinnedState(
+      bool isPinned,
+      String conversationID,
+      ZIMConversationType conversationType);
 
   /// Available since: 2.1.5 and above.
   ///
@@ -319,9 +325,12 @@ abstract class ZIM {
           String conversationID,
           ZIMConversationType conversationType);
 
-  Future<ZIMConversationMarkSetResult> setConversationMark(int markType, bool enable, List<ZIMConversationBaseInfo> infos);
+  Future<ZIMConversationMarkSetResult> setConversationMark(
+      int markType, bool enable, List<ZIMConversationBaseInfo> infos);
 
-  Future<ZIMConversationTotalUnreadMessageCountQueriedResult> queryConversationTotalUnreadMessageCount(ZIMConversationTotalUnreadMessageCountQueryConfig config);
+  Future<ZIMConversationTotalUnreadMessageCountQueriedResult>
+      queryConversationTotalUnreadMessageCount(
+          ZIMConversationTotalUnreadMessageCountQueryConfig config);
 
   /// Available since: 2.5.0 and above.
   ///
@@ -336,8 +345,9 @@ abstract class ZIM {
   /// Related callback: [ZIMConversationMessageReceiptReadSentResult].
   ///
   /// Related APIs: [sendMessageReceiptsRead], [sendMessage].
-  Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
-      String conversationID, ZIMConversationType conversationType);
+  Future<ZIMConversationMessageReceiptReadSentResult>
+      sendConversationMessageReceiptRead(
+          String conversationID, ZIMConversationType conversationType);
 
   /// Supported versions: 2.4.0 and above.
   ///
@@ -539,9 +549,9 @@ abstract class ZIM {
   ///Supported versions: 2.14.0 and above.
   ///
   ///Detail description: This method implements the function of deleting all messages for all sessions.
-  ///    
+  ///
   ///Business scenario: The user needs to delete a message. When the user does not need to display a message, this method can be used to delete it.
-  ///       
+  ///
   ///Call timing/Notification timing: Called when you need to delete all messages for all sessions.
   ///
   ///Note: The sdk deletes lastMessage for each conversation, but does not trigger [onConversationChanged] for each conversation.
@@ -549,7 +559,7 @@ abstract class ZIM {
   ///IsAlsoDeleteServerMessage decided whether to delete a server message, the impact of deleting messages is limited to this account.
   ///
   ///Restrictions: Effective after login.
-  ///    
+  ///
   ///Impacts on other APIs: Call the interface trigger [onMessageDeleted] callback, if there are unread messages at this time, will trigger  [onConversationTotalUnreadMessageCountUpdated] callback.
   ///
   ///Related callbacks：[ZIMConversationMessagesAllDeletedCallback]、[onMessageDeleted]、[onConversationTotalUnreadMessageCountUpdated].
@@ -596,8 +606,9 @@ abstract class ZIM {
 
   /// Related APIs: [sendMessage].
   Future<ZIMMessageReceiptsReadSentResult> sendMessageReceiptsRead(
-      List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
-
+      List<ZIMMessage> messageList,
+      String conversationID,
+      ZIMConversationType conversationType);
 
   /// Available since: 2.5.0 and above.
   ///
@@ -613,7 +624,9 @@ abstract class ZIM {
   ///
   /// Related APIs: [queryGroupMessageReceiptReadMemberList] , [queryGroupMessageReceiptUnreadMemberList].
   Future<ZIMMessageReceiptsInfoQueriedResult> queryMessageReceiptsInfo(
-      List<ZIMMessage> messageList, String conversationID, ZIMConversationType conversationType);
+      List<ZIMMessage> messageList,
+      String conversationID,
+      ZIMConversationType conversationType);
 
   /// Available since: 2.5.0 and above.
   ///
@@ -628,9 +641,9 @@ abstract class ZIM {
   /// Related callbacks: [ZIMGroupMessageReceiptMemberListQueriedResult].
   ///
   /// Related APIs: If you need to query the receipt status of a certain message or only need to query the read/unread count, you can query through the interface [queryMessageReceiptsInfo].
-  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList (
-      ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
-
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult>
+      queryGroupMessageReceiptReadMemberList(ZIMMessage message, String groupID,
+          ZIMGroupMessageReceiptMemberQueryConfig config);
 
   /// Available since: 2.5.0 and above.
   ///
@@ -645,8 +658,9 @@ abstract class ZIM {
   /// Related callbacks: [ZIMGroupMessageReceiptMemberListQueriedResult].
   ///
   /// Related APIs: If you need to query the receipt status of a certain message or only need to query the read/unread count, you can query through the interface [queryMessageReceiptsInfo].
-  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList (
-      ZIMMessage message, String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult>
+      queryGroupMessageReceiptUnreadMemberList(ZIMMessage message,
+          String groupID, ZIMGroupMessageReceiptMemberQueryConfig config);
 
   /// Available sinces: 2.5.0 and above.
   ///
@@ -661,7 +675,7 @@ abstract class ZIM {
   /// Restrictions: Effective after login.
   ///
   /// Related callbacks: If the revoked message is the latest message of the session, the [ZIMEventHandler.onConversationChanged] callback will be triggered, and if the message is unread, the [ZIMEventHandler.onConversationTotalUnreadMessageCountUpdated] callback will be triggered.
-  Future<ZIMMessageRevokedResult> revokeMessage (
+  Future<ZIMMessageRevokedResult> revokeMessage(
       ZIMMessage message, ZIMMessageRevokeConfig config);
 
   /// Available sinces: 2.10.0 and above.
@@ -675,7 +689,7 @@ abstract class ZIM {
   /// Restrictions: You can only use it after logging in. And only supports message reactions for single chat and group chat
   ///
   /// Related callbacks: If the addition is successful, the [onMessageReactionsChanged] callback will be triggered. If the reaction is made to the latest message in the conversation, the [onConversationChanged] callback will be triggered when the addition is successful.
-  Future<ZIMMessageReactionAddedResult> addMessageReaction (
+  Future<ZIMMessageReactionAddedResult> addMessageReaction(
       String reactionType, ZIMMessage message);
 
   /// Available sinces: 2.10.0 and above.
@@ -689,7 +703,7 @@ abstract class ZIM {
   /// Restrictions: You can only use it after logging in. And only supports message statements for single chat and group chat
   ///
   /// Related callbacks: If the deletion is successful, the [onMessageReactionsChanged] callback will be triggered. If the reaction is deleted from the latest message in the conversation, the [onConversationChanged] callback will be triggered when the addition is successful.
-  Future<ZIMMessageReactionDeletedResult> deleteMessageReaction (
+  Future<ZIMMessageReactionDeletedResult> deleteMessageReaction(
       String reactionType, ZIMMessage message);
 
   /// Available sinces: 2.10.0 and above.
@@ -699,10 +713,9 @@ abstract class ZIM {
   /// Use cases: When it is necessary to obtain specific user information under a certain state of a message, this interface can be called to query state user messages in a paginated manner.
   ///
   /// Restrictions: You can only use it after logging in. And only supports message statements for single chat and group chat
-  Future<ZIMMessageReactionUserListQueriedResult> queryMessageReactionUserList (
+  Future<ZIMMessageReactionUserListQueriedResult> queryMessageReactionUserList(
       ZIMMessage message, ZIMMessageReactionUsersQueryConfig config);
   //MARK: - Room
-
 
   /// Available since: 2.2.0 or above.
   ///
@@ -717,8 +730,8 @@ abstract class ZIM {
   /// [localExtendedData]  The expandable message field visible only on this end can store additional information locally and currently has a length limit of 128K. If you have special requirements, please contact ZEGO technical support for configuration.
   /// [message] Message body to be updated.
   Future<ZIMMessageLocalExtendedDataUpdatedResult>
-  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message);
-
+      updateMessageLocalExtendedData(
+          String localExtendedData, ZIMMessage message);
 
   /// Supported versions: 2.9.0 and above.
   ///
@@ -733,8 +746,8 @@ abstract class ZIM {
   /// [conversationID] The conversation ID of the local message to be search.
   /// [conversationType] conversation type.
   /// [config] Search the configuration of local messages.
-  Future<ZIMMessagesSearchedResult> searchLocalMessages(String conversationID, ZIMConversationType conversationType, ZIMMessageSearchConfig config);
-
+  Future<ZIMMessagesSearchedResult> searchLocalMessages(String conversationID,
+      ZIMConversationType conversationType, ZIMMessageSearchConfig config);
 
   /// Supported versions: 2.9.0 and above.
   ///
@@ -747,7 +760,8 @@ abstract class ZIM {
   /// Related callbacks: [ZIMMessagesGlobalSearchedResult].
   ///
   /// [config] Search global the configuration of local messages.
-  Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(ZIMMessageSearchConfig config);
+  Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(
+      ZIMMessageSearchConfig config);
 
   /// Supported versions: 2.9.0 and above.
   ///
@@ -762,8 +776,8 @@ abstract class ZIM {
   /// Related callbacks: [ZIMConversationsSearchedResult].
   ///
   /// [config] Global search conversation config.
-  Future<ZIMConversationsSearchedResult> searchLocalConversations(ZIMConversationSearchConfig config);
-
+  Future<ZIMConversationsSearchedResult> searchLocalConversations(
+      ZIMConversationSearchConfig config);
 
   /// Create a room.
   ///
@@ -870,7 +884,6 @@ abstract class ZIM {
   Future<ZIMRoomMemberQueriedResult> queryRoomMemberList(
       String roomID, ZIMRoomMemberQueryConfig config);
 
-
   /// Available since: 2.8.0 and above.
   ///
   /// Description: This method can query the information of up to ten users in the specified room of the logged-in user.
@@ -961,7 +974,6 @@ abstract class ZIM {
   ///
   /// [roomID] ID of the room to queried.
   Future<ZIMRoomAttributesQueriedResult> queryRoomAllAttributes(String roomID);
-
 
   /// Supported Versions: 2.4.0 and above.
   ///
@@ -1229,54 +1241,65 @@ abstract class ZIM {
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
   Future<ZIMGroupJoinApplicationSentResult> sendGroupJoinApplication(
-   String groupID, ZIMGroupJoinApplicationSendConfig config);
+      String groupID, ZIMGroupJoinApplicationSendConfig config);
 
   /// Available since: 2.15.0 and above.
   ///
   /// Description: When a group's joinMode requires Auth, after an external user sends a group application, the group owner or administrator can agree to the application through this method.
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
-   Future<ZIMGroupJoinApplicationAcceptedResult> acceptGroupJoinApplication(String userID,
-   String groupID, ZIMGroupJoinApplicationAcceptConfig config);
+  Future<ZIMGroupJoinApplicationAcceptedResult> acceptGroupJoinApplication(
+      String userID,
+      String groupID,
+      ZIMGroupJoinApplicationAcceptConfig config);
 
   /// Available since: 2.15.0 and above.
   ///
   /// Description: When a group's joinMode is Auth, the group owner or administrator can reject to the user's application to join the group through this method.
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
-  Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(String userID,
-      String groupID, ZIMGroupJoinApplicationRejectConfig config);
+  Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(
+      String userID,
+      String groupID,
+      ZIMGroupJoinApplicationRejectConfig config);
 
   /// Available since: 2.15.0 and above.
   ///
   /// Description: When a group's invitation verification mode requires approval by the invitee, group members can send invitations to the group through this method.
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
-  Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(List<String> userIDs,
-  String groupID, ZIMGroupInviteApplicationSendConfig config);
+  Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(
+      List<String> userIDs,
+      String groupID,
+      ZIMGroupInviteApplicationSendConfig config);
 
   /// Available since: 2.15.0 and above.
   ///
   /// Description: When a group's beInviteMode mode is Auth, users outside the group can accept the invitation through this method and become group members after receiving the group invitation.
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
-  Future<ZIMGroupInviteApplicationAcceptedResult> acceptGroupInviteApplication(String inviterUserID,
-  String groupID, ZIMGroupInviteApplicationAcceptConfig config);
+  Future<ZIMGroupInviteApplicationAcceptedResult> acceptGroupInviteApplication(
+      String inviterUserID,
+      String groupID,
+      ZIMGroupInviteApplicationAcceptConfig config);
 
   /// Available since: 2.15.0 and above.
   ///
   /// Description: When a group's beInviteMode requires Auth, users invited to the group can reject the invitation through this method.
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
-  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String inviterUserID,
-  String groupID, ZIMGroupInviteApplicationRejectConfig config);
+  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(
+      String inviterUserID,
+      String groupID,
+      ZIMGroupInviteApplicationRejectConfig config);
 
   /// Available since: 2.15.0 and above.
   ///
   /// Description: The query results include your own application to join the group and your application to be invited to join the group. When the user is a group owner or administrator, the query results will also include other people's applications to join the group and their own applications to invite others to the group.
   ///
   /// When to call /Trigger: The ZIM instance can be invoked after being created by [create] and logged in.
-  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(ZIMGroupApplicationListQueryConfig config);
+  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(
+      ZIMGroupApplicationListQueryConfig config);
 
   /// Available since: 2.14.0 and above.
   ///
@@ -1289,7 +1312,8 @@ abstract class ZIM {
   /// Restrictions: This can be called by the group owner and group administrators.
   ///
   /// Related result: The result of changing the group mute status can be obtained through the [ZIMGroupMutedResult] result. The updated group mute status information can be obtained through [onGroupMuteInfoUpdated].
-  Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config);
+  Future<ZIMGroupMutedResult> muteGroup(
+      bool isMute, String groupID, ZIMGroupMuteConfig config);
 
   /// Available since: 2.14.0 and above.
   ///
@@ -1302,8 +1326,8 @@ abstract class ZIM {
   /// Restrictions: This can be called by the group owner and group administrators.
   ///
   /// Related result: The result of changing the group members mute status can be obtained through the [ZIMGroupMembersMutedResult] result. The updated group members mute status information can be obtained through [onGroupMemberInfoUpdated].
-  Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs,String groupID,ZIMGroupMemberMuteConfig config);
-
+  Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,
+      List<String> userIDs, String groupID, ZIMGroupMemberMuteConfig config);
 
   /// Available since: 2.14.0 and above.
   ///
@@ -1316,7 +1340,8 @@ abstract class ZIM {
   /// Restrictions: Available after login, unavailable after logout.
   ///
   /// Related result: Through the result [ZIMGroupMembersMutedResult] can query the result of the group muted member list.
-  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID,ZIMGroupMemberMutedListQueryConfig config);
+  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(
+      String groupID, ZIMGroupMemberMutedListQueryConfig config);
 
   /// Available since: 2.1.5 and above.
   ///
@@ -1506,8 +1531,8 @@ abstract class ZIM {
   /// Related callbacks: [ZIMGroupsSearchedResult].
   ///
   /// [config] Configuration for searching groups.
-  Future<ZIMGroupsSearchedResult> searchLocalGroups(ZIMGroupSearchConfig config);
-
+  Future<ZIMGroupsSearchedResult> searchLocalGroups(
+      ZIMGroupSearchConfig config);
 
   /// Supported versions: 2.9.0 and above.
   ///
@@ -1523,7 +1548,8 @@ abstract class ZIM {
   ///
   /// [groupID] groupID.
   /// [config] Configuration for searching groups.
-  Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(String groupID, ZIMGroupMemberSearchConfig config);
+  Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(
+      String groupID, ZIMGroupMemberSearchConfig config);
 //MARK: - CallInvite
 
   /// Supported versions: 2.1.5 and above.
@@ -1541,7 +1567,6 @@ abstract class ZIM {
   Future<ZIMCallInvitationSentResult> callInvite(
       List<String> invitees, ZIMCallInviteConfig config);
 
-
   /// Supported versions: 2.9.0 and above.
   ///
   /// Detail description: In the advanced mode, when the master calls the call invitation, users in the call can continue to invite other users to join the call through the interface，Or after the called party accepts the advanced mode call invitation.
@@ -1556,7 +1581,7 @@ abstract class ZIM {
   /// [callID] callID of the current call in advanced mode.
   /// [config] This section describes how to configure the call invitation.
   Future<ZIMCallingInvitationSentResult> callingInvite(
-      List<String>invitees, String callID, ZIMCallingInviteConfig config);
+      List<String> invitees, String callID, ZIMCallingInviteConfig config);
 
   /// Available since: 2.12.0.
   ///
@@ -1565,7 +1590,9 @@ abstract class ZIM {
   /// Use cases: Users who are not in the call join the call, and users who are already in the call switch to the primary device.
   ///
   /// When to call: Need to be invoked after logged in.
-  Future<ZIMCallJoinSentResult> callJoin(String callID,ZIMCallJoinConfig config);
+  Future<ZIMCallJoinSentResult> callJoin(
+      String callID, ZIMCallJoinConfig config);
+
   /// Supported versions: 2.1.5 and above.
   ///
   /// Detail description: After the caller initiates a call invitation, the call invitation can be canceled through this interface before the timeout period.
@@ -1612,7 +1639,6 @@ abstract class ZIM {
   Future<ZIMCallRejectionSentResult> callReject(
       String callID, ZIMCallRejectConfig config);
 
-
   /// Supported versions: 2.9.0 and above.
   ///
   /// Detail description: End The call in advanced mode.
@@ -1625,9 +1651,7 @@ abstract class ZIM {
   ///
   /// [callID] The ID of the call invitation to be ended.
   /// [config] Related configuration for end call invitations.
-  Future<ZIMCallEndSentResult> callEnd(
-      String callID, ZIMCallEndConfig config);
-
+  Future<ZIMCallEndSentResult> callEnd(String callID, ZIMCallEndConfig config);
 
   /// Supported versions: 2.9.0 and above.
   ///
@@ -1655,7 +1679,8 @@ abstract class ZIM {
   /// Related callbacks: [ZIMCallInvitationListQueriedResult].
   ///
   /// [config] Query the relevant configuration of the call invitation list.
-  Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config);
+  Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(
+      ZIMCallInvitationQueryConfig config);
 
 //MARK: - Cache
 
@@ -1670,7 +1695,9 @@ abstract class ZIM {
   /// Caution: The ZIM SDK reads a file named zim_backup_msg_text in the directory by default. If there are multiple backups in this path, please confirm whether the name of the file to be imported is zim_backup_msg_text.
   /// [folderPath] Enter the address of the directory where the imported file resides. The path is an absolute path, excluding the file name.
   /// [progress] Return of import message progress.
-  Future<void> importLocalMessages(String folderPath, ZIMMessageImportConfig config, ZIMMessageImportingProgress? progress);
+  Future<void> importLocalMessages(String folderPath,
+      ZIMMessageImportConfig config, ZIMMessageImportingProgress? progress);
+
   /// Available since: 2.14.0 or above.
   ///
   /// Description:Through this interface, a user with the specified userID can be added to the friend list.
@@ -1678,7 +1705,8 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMEventHandler.onFriendListChanged].
-  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config);
+  Future<ZIMFriendAddedResult> addFriend(
+      String userID, ZIMFriendAddConfig config);
 
   /// Supported versions: 2.14.0 and above.
   ///
@@ -1689,7 +1717,8 @@ abstract class ZIM {
   /// When to call: It can be called after creating a ZIM instance through [create].
   ///
   /// Related callbacks: [ZIMEventHandler.onFriendApplicationListChanged].
-  Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID,ZIMFriendApplicationSendConfig config);
+  Future<ZIMFriendApplicationSentResult> sendFriendApplication(
+      String userID, ZIMFriendApplicationSendConfig config);
 
   /// Available since: 2.14.0 or above.
   ///
@@ -1698,7 +1727,8 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMEventHandler.onFriendListChanged].
-  Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config);
+  Future<ZIMFriendsDeletedResult> deleteFriends(
+      List<String> userIDs, ZIMFriendDeleteConfig config);
 
   /// Available since: 2.14.0 or above.
   ///
@@ -1707,7 +1737,8 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMEventHandler.ZIMFriendAddedResult].
-  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs,ZIMFriendRelationCheckConfig config);
+  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(
+      List<String> userIDs, ZIMFriendRelationCheckConfig config);
 
   /// Available since: 2.14.0 or above.
   ///
@@ -1716,14 +1747,16 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMFriendAliasUpdatedResult].
-  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID);
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(
+      String friendAlias, String userID);
 
   /// Available since: 2.14.0 or above.
   ///
   /// Description: Through this interface, the specified userID user can update the attributes.
   ///
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
-  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String,String> friendAttributes, String userID);
+  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(
+      Map<String, String> friendAttributes, String userID);
 
   ///
   /// Available since: 2.14.0 or above.
@@ -1734,6 +1767,7 @@ abstract class ZIM {
   ///
   /// Related callbacks: [ZIMFriendListQueriedResult].
   Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs);
+
   ///
   /// Available since: 2.14.0 or above.
   ///
@@ -1742,7 +1776,8 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMFriendApplicationAcceptedResult].
-  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID,ZIMFriendApplicationAcceptConfig config);
+  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(
+      String userID, ZIMFriendApplicationAcceptConfig config);
 
   /// Available since: 2.14.0 or above.
   ///
@@ -1751,7 +1786,8 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMFriendApplicationRejectedResult].
-  Future<ZIMFriendApplicationRejectedResult>  rejectFriendApplication(String userID,ZIMFriendApplicationRejectConfig config);
+  Future<ZIMFriendApplicationRejectedResult> rejectFriendApplication(
+      String userID, ZIMFriendApplicationRejectConfig config);
 
   /// Available since: 2.14.0 or above.
   ///
@@ -1760,7 +1796,9 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMFriendApplicationRejectedResult].
-  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config);
+  Future<ZIMFriendListQueriedResult> queryFriendList(
+      ZIMFriendListQueryConfig config);
+
   ///
   /// Available since: 2.14.0 or above.
   ///
@@ -1769,7 +1807,9 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMFriendApplicationListQueriedResult].
-  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config);
+  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(
+      ZIMFriendApplicationListQueryConfig config);
+
   ///
   /// Available since: 2.14.0 or above.
   ///
@@ -1778,50 +1818,54 @@ abstract class ZIM {
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
   ///
   /// Related callbacks: [ZIMFriendsSearchedResult].
-  Future<ZIMFriendsSearchedResult> searchLocalFriends(ZIMFriendSearchConfig config);
+  Future<ZIMFriendsSearchedResult> searchLocalFriends(
+      ZIMFriendSearchConfig config);
 
   /// Available since: 2.13.0 or above.
   ///
   /// Description:Through this interface, a user with the specified userID can be added to the blacklist.
-  ///  
+  ///
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
-  ///    
+  ///
   /// Related callbacks: [ZIMBlacklistUsersAddedResult].
   ///
   /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
   /// [userIDs] The list of userIDs to be added to blacklist.
-  Future<ZIMBlacklistUsersAddedResult>  addUsersToBlacklist(List<String> userIDs);
+  Future<ZIMBlacklistUsersAddedResult> addUsersToBlacklist(
+      List<String> userIDs);
 
   /// Available since: 2.13.0 or above.
   ///
   /// Description: Through this interface, the user with the specified userID can be removed from the blacklist.
-  ///    
+  ///
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
-  ///    
+  ///
   /// Related callbacks: [ZIMBlacklistUsersRemovedResult].
   ///
   /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
   /// [userIDs] The list of userIDs to be removed to blacklist.
-  Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs);
+  Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(
+      List<String> userIDs);
 
   /// Available since: 2.13.0 or above.
   ///
   /// Description: Through this interface, the user with the specified userID can be removed from the blacklist.
-  ///  
+  ///
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
-  ///  
+  ///
   /// Related callbacks: [ZIMBlacklistQueriedResult].
   ///
   /// Usage restrictions: The number of userID passed in at one time cannot exceed 20.
   /// [config] Query the blacklist configuration.
-  Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config);
+  Future<ZIMBlacklistQueriedResult> queryBlacklist(
+      ZIMBlacklistQueryConfig config);
 
   /// Available since: 2.13.0 or above.
   ///
   /// Description: Through this interface, you can check whether a certain userID is on the blacklist.
-  ///    
+  ///
   /// When to call /Trigger: It is available only after calling [create] to create the instance and then calling [login] to login.
-  ///    
+  ///
   /// Related callbacks: [ZIMBlacklistCheckedResult].
   /// [userID] The user ID information that needs to be checked is required.
   Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID);
@@ -1841,7 +1885,9 @@ abstract class ZIM {
   /// [conversationID] Conversation ID.
   /// [conversationType] Conversation type, only Peer type is supported.
   /// [callback] Set Conversation draft callback.
-  Future<ZIMConversationDraftSetResult> setConversationDraft(String draft, String conversationID, ZIMConversationType conversationType);
+  Future<ZIMConversationDraftSetResult> setConversationDraft(String draft,
+      String conversationID, ZIMConversationType conversationType);
+
   ///
   /// Available sinces: 2.14.0 and above.
   ///
@@ -1850,7 +1896,8 @@ abstract class ZIM {
   /// Use cases: If you need to obtain the specific sub-messages under the combine message, you can call this API to query.
   ///
   /// Restrictions: You can only use it after logging in.
-  Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message);
+  Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(
+      ZIMCombineMessage message);
 
   /// Supported versions: 2.15.0 and above.
   ///
@@ -1870,7 +1917,8 @@ abstract class ZIM {
   /// Restrictions: This takes effect after the login and becomes invalid after the logout.
   ///
   /// Related callbacks: [ZIMFileCacheQueriedResult].
-  Future<ZIMFileCacheQueriedResult> queryLocalFileCache(ZIMFileCacheQueryConfig config);
+  Future<ZIMFileCacheQueriedResult> queryLocalFileCache(
+      ZIMFileCacheQueryConfig config);
 
   /// Supported versions: 2.15.0 and above.
   ///
@@ -1881,7 +1929,8 @@ abstract class ZIM {
   /// Restrictions: It takes effect after login and becomes invalid after logout.
   ///
   /// Caution: The name of the message file exported by this interface is zim_backup_msg_text. If the passed in path is the same when calling this interface multiple times, the ZIM SDK will rename the old zim_backup_msg_text file by itself to ensure that the latest exported file name is zim_backup_msg_text.
-  Future<void> exportLocalMessages(String folderPath, ZIMMessageExportConfig config, ZIMMessageExportingProgress? progress);
+  Future<void> exportLocalMessages(String folderPath,
+      ZIMMessageExportConfig config, ZIMMessageExportingProgress? progress);
 
   /// Available since: 2.15.0 and later versions.
   ///
@@ -1896,7 +1945,8 @@ abstract class ZIM {
   /// Related callbacks: [ZIMEventHandler.onUserRuleUpdated]、[ZIMUserOfflinePushRuleUpdatedResult]
   ///
   /// Related APIs: [querySelfUserInfo]
-  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule);
+  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(
+      ZIMUserOfflinePushRule offlinePushRule);
 
   /// Available since: 2.15.0 and later versions.
   ///
@@ -1914,8 +1964,8 @@ abstract class ZIM {
   /// Detailed description: Query a batch of messages based on the message seq list.
   ///
   /// Business scenario: Jump to the source message location quoted by the reply message on the chat page.
-  Future<ZIMMessageQueriedResult> queryMessages(List<int> messageSeqs,String conversationID,ZIMConversationType conversationType);
-
+  Future<ZIMMessageQueriedResult> queryMessages(List<int> messageSeqs,
+      String conversationID, ZIMConversationType conversationType);
 
   /// Supported versions: 2.17.0 and above.
   ///
@@ -1930,7 +1980,11 @@ abstract class ZIM {
   /// Related callback: [onReceivePeerMessage], [onReceiveGroupMessage].
   ///
   /// Related APIs: [queryHistoryMessage], [sendMessage], [sendMediaMessage].
-  Future<ZIMMessageSentResult> replyMessage(ZIMMessage message,ZIMMessage toOriginalMessage, ZIMMessageSendConfig config, ZIMMessageSendNotification? notification);
+  Future<ZIMMessageSentResult> replyMessage(
+      ZIMMessage message,
+      ZIMMessage toOriginalMessage,
+      ZIMMessageSendConfig config,
+      ZIMMessageSendNotification? notification);
 
   /// Available since: 2.17.0 and above.
   ///
@@ -1939,5 +1993,6 @@ abstract class ZIM {
   /// Use cases: Developers can use this method to query the entire reply message tree.
   ///
   /// When to call: Callable after login.
-  Future<ZIMMessageRepliedListQueriedResult> queryMessageRepliedList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config);
+  Future<ZIMMessageRepliedListQueriedResult> queryMessageRepliedList(
+      ZIMMessage message, ZIMMessageRepliedListQueryConfig config);
 }

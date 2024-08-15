@@ -11,8 +11,7 @@ class SendImageMsgCell extends StatefulWidget {
   double? progress;
 
   SendImageMsgCell(
-      {required this.message,
-      required this.uploadingprogressModel});
+      {required this.message, required this.uploadingprogressModel});
 
   UploadingprogressModel? uploadingprogressModel;
 
@@ -96,7 +95,6 @@ class SendImageMsgCellState extends State<SendImageMsgCell> {
                         )),
                   ),
                   ImageBubble(filelocalPath: widget.message.fileLocalPath)
-
                 ],
               )
             ],
