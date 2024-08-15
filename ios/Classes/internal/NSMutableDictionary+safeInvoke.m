@@ -9,9 +9,8 @@
 
 @implementation NSMutableDictionary (safeInvoke)
 
--(void)safeSetObject:(nullable id)object
-              forKey:(nonnull NSString *)key{
-    if(object == nil || object == NULL || [object isEqual:[NSNull null]]){
+- (void)safeSetObject:(nullable id)object forKey:(nonnull NSString *)key {
+    if (object == nil || object == NULL || [object isEqual:[NSNull null]]) {
         [self setObject:[NSNull null] forKey:key];
         return;
     }

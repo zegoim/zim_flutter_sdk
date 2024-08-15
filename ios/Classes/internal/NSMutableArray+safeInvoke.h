@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSMutableArray (safeInvoke)
 
--(void)safeAddObject:(nullable id)object;
+- (void)safeAddObject:(nullable id)object;
 
 @end
 

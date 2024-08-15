@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface ZegoZimPlugin : NSObject<FlutterPlugin>
+@interface ZegoZimPlugin : NSObject <FlutterPlugin>
 @end

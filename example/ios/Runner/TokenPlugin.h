@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TokenPlugin : NSObject<FlutterPlugin>
+@interface TokenPlugin : NSObject <FlutterPlugin>
 
 @end
 
