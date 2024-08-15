@@ -2534,12 +2534,74 @@ static Map mZIMFriendSearchConfig(ZIMFriendSearchConfig config) {
     return ZIMSelfUserInfo(userRule: oZIMUserRule(map['userRule']), userFullInfo: oZIMUserFullInfo(map['userFullInfo']));
   }
 
+  static ZIMUserStatus oZIMUserStatus(Map map){
+    ZIMUserStatus userStatus = ZIMUserStatus();
+    userStatus.userID = map['userID'];
+    userStatus.onlineStatus = ZIMUserOnlineStatusExtension.mapValue[map['onlineStatus']]!;
+    for(int platform in map['onlinePlatforms']){
+      userStatus.onlinePlatforms.add(ZIMPlatformTypeExtension.mapValue['platform']!);
+    }
+    userStatus.lastUpdateTime = userStatus.lastUpdateTime;
+    return userStatus;
+  }
+
+  static List<ZIMUserStatus> oZIMUserStatusList(List basicList){
+    List<ZIMUserStatus> list = [];
+    for(Map map in basicList){
+      list.add(oZIMUserStatus(map));
+    }
+    return list;
+  }
+
+  static ZIMUserStatusSubscription oZIMUserStatusSubscription(Map map){
+    ZIMUserStatusSubscription subscription = ZIMUserStatusSubscription();
+    subscription.userStatus = oZIMUserStatus(map['userStatus']);
+    subscription.subscribeExpiredTime = map['subscribeExpiredTime'];
+    return subscription;
+  }
+
+  static Map mZIMUserStatusSubscribeConfig(ZIMUserStatusSubscribeConfig config){
+    Map map  = {};
+    map['subscriptionDuration'] = config.subscriptionDuration;
+    return map;
+  }
+
+  static Map mZIMSubscribedUserStatusQueryConfig(ZIMSubscribedUserStatusQueryConfig config){
+    Map map = {};
+    map['userIDs'] = config.userIDs;
+    return map;
+  }
+
   static ZIMSelfUserInfoQueriedResult oZIMSelfUserInfoQueriedResult(Map map){
     return ZIMSelfUserInfoQueriedResult(selfUserInfo: oZIMSelfUserInfo(map['selfUserInfo']));
   }
 
   static ZIMUserOfflinePushRuleUpdatedResult oZIMUserOfflinePushRuleInfoUpdatedResult(Map map){
     return ZIMUserOfflinePushRuleUpdatedResult(offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
+  }
+
+  static ZIMUsersStatusQueriedResult oZIMUsersStatusQueriedResult(Map map){
+    List<ZIMUserStatus> userStatusList = [];
+    for(Map userStatusMap in map['userStatusList']){
+      userStatusList.add(oZIMUserStatus(userStatusMap));
+    }
+    return ZIMUsersStatusQueriedResult(userStatusList: userStatusList, errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
+  }
+
+  static ZIMUsersStatusSubscribedResult oZIMUsersStatusSubscribedResult(Map map){
+    return ZIMUsersStatusSubscribedResult(errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
+  }
+
+  static ZIMUsersStatusUnsubscribedResult oZIMUsersStatusUnsubscribedResult(Map map){
+    return ZIMUsersStatusUnsubscribedResult(errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
+  }
+
+  static ZIMSubscribedUserStatusListQueriedResult oZIMSubscribedUserStatusListQueriedResult(Map map){
+    List<ZIMUserStatusSubscription> list = [];
+    for(Map basicSubscription in map['userStatusSubscriptionList'] ){
+      list.add(oZIMUserStatusSubscription(basicSubscription));
+    }
+    return ZIMSubscribedUserStatusListQueriedResult(userStatusSubscriptionList: list);
   }
 
   static ZIMConversationMarkSetResult oZIMConversationMarkSetResult(Map map){

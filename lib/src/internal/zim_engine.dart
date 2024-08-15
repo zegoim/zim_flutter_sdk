@@ -1463,6 +1463,43 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMUsersStatusQueriedResult> queryUsersStatus(List<String> userIDs) async{
+    Map resultMap = await channel.invokeMethod('queryUsersStatus',{
+      'handle':handle,
+      'userIDs':userIDs
+    });
+    return ZIMConverter.oZIMUsersStatusQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMUsersStatusSubscribedResult> subscribeUsersStatus(List<String> userIDs, ZIMUserStatusSubscribeConfig config) async{
+    Map resultMap = await channel.invokeMethod('subscribeUsersStatus',{
+      'handle':handle,
+      'userIDs':userIDs,
+      'config': ZIMConverter.mZIMUserStatusSubscribeConfig(config)
+    });
+    return ZIMConverter.oZIMUsersStatusSubscribedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMUsersStatusUnsubscribedResult> unsubscribeUsersStatus(List<String> userIDs) async{
+    Map resultMap = await channel.invokeMethod('unsubscribeUsersStatus',{
+      'handle':handle,
+      'userIDs':userIDs
+    });
+    return ZIMConverter.oZIMUsersStatusUnsubscribedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMSubscribedUserStatusListQueriedResult> querySubscribedUserStatusList(ZIMSubscribedUserStatusQueryConfig config) async{
+    Map resultMap = await channel.invokeMethod('querySubscribedUserStatusList',{
+      'handle':handle,
+      'config':ZIMConverter.mZIMSubscribedUserStatusQueryConfig(config)
+    });
+    return ZIMConverter.oZIMSubscribedUserStatusListQueriedResult(resultMap);
+  }
+
+  @override
   Future<ZIMConversationMarkSetResult> setConversationMark(int markType, bool enable, List<ZIMConversationBaseInfo> infos) async{
     Map resultMap = await channel.invokeMethod('setConversationMark',{
       'handle':handle,

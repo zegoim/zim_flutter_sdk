@@ -1909,6 +1909,14 @@ abstract class ZIM {
   /// Restrictions: [ZIMSelfUserInfoQueriedResult]、[ZIMEventHandler.onUserInfoUpdated]、[ZIMEventHandler.onUserRuleUpdated]
   Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
 
+  Future<ZIMUsersStatusQueriedResult> queryUsersStatus(List<String> userIDs);
+
+  Future<ZIMUsersStatusSubscribedResult> subscribeUsersStatus(List<String> userIDs, ZIMUserStatusSubscribeConfig config);
+
+  Future<ZIMUsersStatusUnsubscribedResult> unsubscribeUsersStatus(List<String> userIDs);
+
+  Future<ZIMSubscribedUserStatusListQueriedResult> querySubscribedUserStatusList(ZIMSubscribedUserStatusQueryConfig config);
+
   /// Supported versions: 2.17.0 and above.
   ///
   /// Detailed description: Query a batch of messages based on the message seq list.

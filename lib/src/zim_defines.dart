@@ -472,6 +472,28 @@ enum ZIMBlacklistChangeAction { added, removed }
 
 enum ZIMPlatformType{win,iPhoneOS,android,macOS,linux,web,miniProgram,iPadOS,unknown}
 
+enum ZIMUserOnlineStatus{offline,online,logout,unknown}
+
+class ZIMUserStatus {
+  String userID = '';
+  ZIMUserOnlineStatus onlineStatus = ZIMUserOnlineStatus.unknown;
+  List<ZIMPlatformType> onlinePlatforms = [];
+  int lastUpdateTime = 0;
+}
+
+class ZIMUserStatusSubscription {
+  ZIMUserStatus userStatus = ZIMUserStatus();
+  int subscribeExpiredTime = 0;
+}
+
+class ZIMUserStatusSubscribeConfig {
+  int subscriptionDuration = 0;
+}
+
+class ZIMSubscribedUserStatusQueryConfig {
+  List<String> userIDs = [];
+}
+
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
   String iOSVoIPHandleValue = "";
@@ -3028,4 +3050,25 @@ class ZIMConversationMarkSetResult {
 class ZIMConversationTotalUnreadMessageCountQueriedResult {
   int unreadMessageCount;
   ZIMConversationTotalUnreadMessageCountQueriedResult({required this.unreadMessageCount});
+}
+
+class ZIMUsersStatusQueriedResult {
+  List<ZIMUserStatus> userStatusList;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMUsersStatusQueriedResult({required this.userStatusList, required this.errorUserList});
+}
+
+class ZIMUsersStatusSubscribedResult {
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMUsersStatusSubscribedResult({required this.errorUserList});
+}
+
+class ZIMUsersStatusUnsubscribedResult {
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMUsersStatusUnsubscribedResult({required this.errorUserList});
+}
+
+class ZIMSubscribedUserStatusListQueriedResult {
+  List<ZIMUserStatusSubscription> userStatusSubscriptionList;
+  ZIMSubscribedUserStatusListQueriedResult({required this.userStatusSubscriptionList});
 }
