@@ -48,37 +48,34 @@ def check_clang_format():
         print("clang-format is not installed.")
         return False
 
+def find_files():
+    """Find all relevant files for clang-format."""
+    extensions = ["*.java", "*.h", "*.m", "*.cpp"]
+    files = []
+    for ext in extensions:
+        result = subprocess.run(["find", ".", "-name", ext], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        found_files = result.stdout.decode('utf-8').splitlines()
+        files.extend(found_files)
+    return files
+
 def run_clang_format():
     """Run clang-format on specific file types based on the operating system."""
     system = platform.system()
     print("Running clang-format...")
     try:
-        if system == "Darwin" or system == "Linux":  # macOS or Linux
-            result = subprocess.run(
-                "find . -name '*.java' -o -name '*.h' -o -name '*.m' -o -name '*.cpp' | xargs clang-format -i",
-                shell=True,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            )
-        elif system == "Windows":  # Windows
-            for root, dirs, files in os.walk("."):
+        files = find_files()
+        if files:
+            if system == "Darwin" or system == "Linux":  # macOS or Linux
                 for file in files:
-                    if file.endswith((".java", ".h", ".m", ".cpp")):
-                        filepath = os.path.join(root, file)
-                        result = subprocess.run(
-                            ["clang-format", "-i", filepath],
-                            check=True,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE
-                        )
-                        print(result.stdout.decode('utf-8'))
-                        print(result.stderr.decode('utf-8'))
-        print("clang-format completed successfully.")
+                    subprocess.run(["clang-format", "-i", file], check=True)
+            elif system == "Windows":  # Windows
+                for file in files:
+                    subprocess.run(["clang-format", "-i", file], check=True)
+            print("clang-format completed successfully.")
+        else:
+            print("No files found for clang-format.")
     except subprocess.CalledProcessError as e:
         print(f"Error while running clang-format: {e}")
-        print(f"stdout: {e.stdout.decode('utf-8')}")
-        print(f"stderr: {e.stderr.decode('utf-8')}")
         sys.exit(1)
 
 def run_dart_format():
