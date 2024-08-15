@@ -72,13 +72,17 @@ class _PageState extends State<JoinGroupPage> {
                       onPressed: (() async {
                         FocusScope.of(context).requestFocus(FocusNode());
                         try {
-                          ZIMGroupJoinedResult result = await ZIM.getInstance()!.joinGroup(targetGroupID);
+                          ZIMGroupJoinedResult result =
+                              await ZIM.getInstance()!.joinGroup(targetGroupID);
                           Navigator.pop(context);
                           Navigator.push(context,
                               MaterialPageRoute(builder: ((context) {
-                            return GroupChatPage(conversationID: result.groupInfo.baseInfo.groupID,conversationName: result.groupInfo.baseInfo.groupName,);
+                            return GroupChatPage(
+                              conversationID: result.groupInfo.baseInfo.groupID,
+                              conversationName:
+                                  result.groupInfo.baseInfo.groupName,
+                            );
                           })));
-
                         } on PlatformException catch (onError) {
                           ErrorDiaLog.showFailedDialog(
                               context, onError.code, onError.message!);

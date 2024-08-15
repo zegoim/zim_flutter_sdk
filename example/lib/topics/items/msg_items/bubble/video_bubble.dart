@@ -44,7 +44,7 @@ class VideoBubbleState extends State<VideoBubble> {
                 scale: animation as Animation<double>,
                 child: GestureDetector(
                   onTap: () {
-                  //  Navigator.pop(context);
+                    //  Navigator.pop(context);
                   },
                   child: startPlayer(),
                 ));

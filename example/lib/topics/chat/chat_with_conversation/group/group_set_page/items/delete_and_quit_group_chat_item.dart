@@ -29,16 +29,14 @@ class DeleteAndQuitGroupChatItemState
           TextButton(
             onPressed: () {
               ZIMConversationDeleteConfig deleteConfig =
-                    ZIMConversationDeleteConfig();
-                deleteConfig.isAlsoDeleteServerConversation = false;
+                  ZIMConversationDeleteConfig();
+              deleteConfig.isAlsoDeleteServerConversation = false;
               try {
-                ZIM
-                    .getInstance()
-                    !.leaveGroup(widget.groupID)
-                    .then((value) => {
-                      ZIM.getInstance()!.deleteConversation(widget.groupID, ZIMConversationType.group, deleteConfig)
+                ZIM.getInstance()!.leaveGroup(widget.groupID).then((value) => {
+                      ZIM.getInstance()!.deleteConversation(widget.groupID,
+                          ZIMConversationType.group, deleteConfig)
                     });
-                
+
                 Navigator.pop(context);
                 Navigator.pop(context);
               } on PlatformException catch (onError) {}

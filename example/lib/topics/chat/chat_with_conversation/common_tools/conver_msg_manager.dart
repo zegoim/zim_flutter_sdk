@@ -1,3 +1,1 @@
-class ConverMsgManager {
-
-}
+class ConverMsgManager {}

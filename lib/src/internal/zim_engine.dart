@@ -32,7 +32,7 @@ class ZIMEngine implements ZIM {
     return await channel.invokeMethod("login", {
       "handle": handle,
       "userID": userID,
-      "config":ZIMConverter.mZIMLoginConfig(config)
+      "config": ZIMConverter.mZIMLoginConfig(config)
     });
   }
 
@@ -82,7 +82,8 @@ class ZIMEngine implements ZIM {
 
   @override
   Future<ZIMConversationListQueriedResult> queryConversationList(
-      ZIMConversationQueryConfig config,[ZIMConversationFilterOption? option]) async {
+      ZIMConversationQueryConfig config,
+      [ZIMConversationFilterOption? option]) async {
     Map resultMap = await channel.invokeMethod('queryConversationList', {
       'handle': handle,
       'config': ZIMConverter.mZIMConversationQueryConfig(config),
@@ -131,9 +132,9 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<void>
-  clearConversationTotalUnreadMessageCount() async {
-    return await channel.invokeMethod('clearConversationTotalUnreadMessageCount', {
+  Future<void> clearConversationTotalUnreadMessageCount() async {
+    return await channel
+        .invokeMethod('clearConversationTotalUnreadMessageCount', {
       'handle': handle,
     });
   }
@@ -361,9 +362,8 @@ class ZIMEngine implements ZIM {
 
   @override
   Future<ZIMRoomAllLeftResult> leaveAllRoom() async {
-    Map resultMap = await channel.invokeMethod('leaveAllRoom',{
-      'handle':handle
-    });
+    Map resultMap =
+        await channel.invokeMethod('leaveAllRoom', {'handle': handle});
     return ZIMConverter.oZIMAllRoomLeftResult(resultMap);
   }
 
@@ -381,11 +381,8 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMRoomMembersQueriedResult> queryRoomMembers(
       List<String> userIDs, String roomID) async {
-    Map resultMap = await channel.invokeMethod('queryRoomMembers', {
-      'handle': handle,
-      'roomID': roomID,
-      'userIDs': userIDs
-    });
+    Map resultMap = await channel.invokeMethod('queryRoomMembers',
+        {'handle': handle, 'roomID': roomID, 'userIDs': userIDs});
     return ZIMConverter.oZIMRoomMembersQueriedResult(resultMap);
   }
 
@@ -538,30 +535,35 @@ class ZIMEngine implements ZIM {
   @override
   Future<ZIMGroupJoinModeUpdatedResult> updateGroupJoinMode(
       ZIMGroupJoinMode mode, String groupID) async {
-    Map resultMap = await channel.invokeMethod('updateGroupJoinMode',
-        {'handle': handle, 'mode': ZIMGroupJoinModeExtension.valueMap[mode], 'groupID': groupID});
+    Map resultMap = await channel.invokeMethod('updateGroupJoinMode', {
+      'handle': handle,
+      'mode': ZIMGroupJoinModeExtension.valueMap[mode],
+      'groupID': groupID
+    });
     return ZIMConverter.oZIMGroupJoinModeUpdatedResult(resultMap);
   }
-
 
   @override
   Future<ZIMGroupInviteModeUpdatedResult> updateGroupInviteMode(
       ZIMGroupInviteMode mode, String groupID) async {
-    Map resultMap = await channel.invokeMethod('updateGroupInviteMode',
-        {'handle': handle, 'mode': ZIMGroupInviteModeExtension.valueMap[mode], 'groupID': groupID});
+    Map resultMap = await channel.invokeMethod('updateGroupInviteMode', {
+      'handle': handle,
+      'mode': ZIMGroupInviteModeExtension.valueMap[mode],
+      'groupID': groupID
+    });
     return ZIMConverter.oZIMGroupInviteModeUpdatedResult(resultMap);
   }
-
 
   @override
   Future<ZIMGroupBeInviteModeUpdatedResult> updateGroupBeInviteMode(
       ZIMGroupBeInviteMode mode, String groupID) async {
-    Map resultMap = await channel.invokeMethod('updateGroupBeInviteMode',
-        {'handle': handle, 'mode':ZIMGroupBeInviteModeExtension.valueMap[mode], 'groupID': groupID});
+    Map resultMap = await channel.invokeMethod('updateGroupBeInviteMode', {
+      'handle': handle,
+      'mode': ZIMGroupBeInviteModeExtension.valueMap[mode],
+      'groupID': groupID
+    });
     return ZIMConverter.oZIMGroupBeInviteModeUpdatedResult(resultMap);
   }
-
-
 
   @override
   Future<ZIMGroupInfoQueriedResult> queryGroupInfo(String groupID) async {
@@ -793,7 +795,7 @@ class ZIMEngine implements ZIM {
       ZIMMessageSentResult result =
           ZIMConverter.oZIMMessageSentResult(resultMap);
       return result;
-    } on PlatformException catch (e) {      
+    } on PlatformException catch (e) {
       throw PlatformException(code: e.code, message: e.message);
     } finally {
       ZIMCommonData.messsageMap.remove(messageID);
@@ -829,27 +831,28 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMConversationMessageReceiptReadSentResult> sendConversationMessageReceiptRead(
-      String conversationID,
-      ZIMConversationType conversationType) async {
-      Map resultMap = await channel.invokeMethod('sendConversationMessageReceiptRead', {
-        'handle': handle,
-        'conversationID': conversationID,
-        'conversationType':
-            ZIMConversationTypeExtension.valueMap[conversationType]
-      });
-      return ZIMConverter.oZIMConversationMessageReceiptReadSentResult(resultMap);
+  Future<ZIMConversationMessageReceiptReadSentResult>
+      sendConversationMessageReceiptRead(
+          String conversationID, ZIMConversationType conversationType) async {
+    Map resultMap =
+        await channel.invokeMethod('sendConversationMessageReceiptRead', {
+      'handle': handle,
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMConversationMessageReceiptReadSentResult(resultMap);
   }
 
   @override
-  Future<ZIMConversationDraftSetResult> setConversationDraft(
-      String draft,String conversationID, ZIMConversationType conversationType) async {
+  Future<ZIMConversationDraftSetResult> setConversationDraft(String draft,
+      String conversationID, ZIMConversationType conversationType) async {
     Map resultMap = await channel.invokeMethod('setConversationDraft', {
       'handle': handle,
       'draft': draft,
       'conversationID': conversationID,
       'conversationType':
-      ZIMConversationTypeExtension.valueMap[conversationType]
+          ZIMConversationTypeExtension.valueMap[conversationType]
     });
     return ZIMConverter.oZIMConversationDraftSetResult(resultMap);
   }
@@ -859,14 +862,14 @@ class ZIMEngine implements ZIM {
       List<ZIMMessage> messageList,
       String conversationID,
       ZIMConversationType conversationType) async {
-      Map resultMap = await channel.invokeMethod('sendMessageReceiptsRead', {
-        'handle': handle,
-        'messageList': ZIMConverter.mZIMMessageList(messageList),
-        'conversationID': conversationID,
-        'conversationType':
-            ZIMConversationTypeExtension.valueMap[conversationType]
-      });
-      return ZIMConverter.oZIMMessageReceiptReadSentResult(resultMap);
+    Map resultMap = await channel.invokeMethod('sendMessageReceiptsRead', {
+      'handle': handle,
+      'messageList': ZIMConverter.mZIMMessageList(messageList),
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMMessageReceiptReadSentResult(resultMap);
   }
 
   @override
@@ -874,60 +877,65 @@ class ZIMEngine implements ZIM {
       List<ZIMMessage> messageList,
       String conversationID,
       ZIMConversationType conversationType) async {
-      Map resultMap = await channel.invokeMethod('queryMessageReceiptsInfo', {
-        'handle': handle,
-        'messageList': ZIMConverter.mZIMMessageList(messageList),
-        'conversationID': conversationID,
-        'conversationType':
-            ZIMConversationTypeExtension.valueMap[conversationType]
-      });
-      return ZIMConverter.oZIMMessageReceiptsInfoQueriedResult(resultMap);
+    Map resultMap = await channel.invokeMethod('queryMessageReceiptsInfo', {
+      'handle': handle,
+      'messageList': ZIMConverter.mZIMMessageList(messageList),
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType]
+    });
+    return ZIMConverter.oZIMMessageReceiptsInfoQueriedResult(resultMap);
   }
 
   @override
-  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptReadMemberList(
-      ZIMMessage message,
-      String groupID,
-      ZIMGroupMessageReceiptMemberQueryConfig config) async {
-      Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptReadMemberList', {
-        'handle': handle,
-        'message': ZIMConverter.mZIMMessage(message),
-        'groupID': groupID,
-        'config':ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
-      });
-      return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(resultMap);
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult>
+      queryGroupMessageReceiptReadMemberList(ZIMMessage message, String groupID,
+          ZIMGroupMessageReceiptMemberQueryConfig config) async {
+    Map resultMap =
+        await channel.invokeMethod('queryGroupMessageReceiptReadMemberList', {
+      'handle': handle,
+      'message': ZIMConverter.mZIMMessage(message),
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(
+        resultMap);
   }
 
   @override
-  Future<ZIMGroupMessageReceiptMemberListQueriedResult> queryGroupMessageReceiptUnreadMemberList(
-      ZIMMessage message,
-      String groupID,
-      ZIMGroupMessageReceiptMemberQueryConfig config) async {
-      Map resultMap = await channel.invokeMethod('queryGroupMessageReceiptUnreadMemberList', {
-        'handle': handle,
-        'message': ZIMConverter.mZIMMessage(message),
-        'groupID': groupID,
-        'config':ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
-      });
-      return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(resultMap);
+  Future<ZIMGroupMessageReceiptMemberListQueriedResult>
+      queryGroupMessageReceiptUnreadMemberList(
+          ZIMMessage message,
+          String groupID,
+          ZIMGroupMessageReceiptMemberQueryConfig config) async {
+    Map resultMap =
+        await channel.invokeMethod('queryGroupMessageReceiptUnreadMemberList', {
+      'handle': handle,
+      'message': ZIMConverter.mZIMMessage(message),
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupMessageReceiptMemberQueryConfig(config)
+    });
+    return ZIMConverter.oZIMGroupMessageReceiptMemberListQueriedResult(
+        resultMap);
   }
 
   @override
   Future<ZIMMessageRevokedResult> revokeMessage(
-      ZIMMessage message,
-      ZIMMessageRevokeConfig config) async {
-      Map resultMap = await channel.invokeMethod('revokeMessage', {
-        'handle': handle,
-        'message': ZIMConverter.mZIMMessage(message),
-        'config':ZIMConverter.mZIMMessageRevokeConfig(config)
-      });
-      return ZIMConverter.oZIMMessageRevokedResult(resultMap);
+      ZIMMessage message, ZIMMessageRevokeConfig config) async {
+    Map resultMap = await channel.invokeMethod('revokeMessage', {
+      'handle': handle,
+      'message': ZIMConverter.mZIMMessage(message),
+      'config': ZIMConverter.mZIMMessageRevokeConfig(config)
+    });
+    return ZIMConverter.oZIMMessageRevokedResult(resultMap);
   }
 
   @override
   Future<ZIMMessageLocalExtendedDataUpdatedResult>
-  updateMessageLocalExtendedData(String localExtendedData, ZIMMessage message) async{
-    Map resultMap = await channel.invokeMethod('updateMessageLocalExtendedData', {
+      updateMessageLocalExtendedData(
+          String localExtendedData, ZIMMessage message) async {
+    Map resultMap =
+        await channel.invokeMethod('updateMessageLocalExtendedData', {
       'handle': handle,
       'localExtendedData': localExtendedData,
       'message': ZIMConverter.mZIMMessage(message)
@@ -936,19 +944,23 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMMessagesSearchedResult> searchLocalMessages(String conversationID, ZIMConversationType conversationType, ZIMMessageSearchConfig config) async {
+  Future<ZIMMessagesSearchedResult> searchLocalMessages(
+      String conversationID,
+      ZIMConversationType conversationType,
+      ZIMMessageSearchConfig config) async {
     Map resultMap = await channel.invokeMethod('searchLocalMessages', {
       'handle': handle,
       'conversationID': conversationID,
       'conversationType':
-      ZIMConversationTypeExtension.valueMap[conversationType],
+          ZIMConversationTypeExtension.valueMap[conversationType],
       'config': ZIMConverter.mZIMMessageSearchConfig(config)
     });
     return ZIMConverter.oZIMMessagesSearchedResult(resultMap);
   }
 
   @override
-  Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(ZIMMessageSearchConfig config) async {
+  Future<ZIMMessagesGlobalSearchedResult> searchGlobalLocalMessages(
+      ZIMMessageSearchConfig config) async {
     Map resultMap = await channel.invokeMethod('searchGlobalLocalMessages', {
       'handle': handle,
       'config': ZIMConverter.mZIMMessageSearchConfig(config)
@@ -957,7 +969,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMConversationsSearchedResult> searchLocalConversations(ZIMConversationSearchConfig config) async {
+  Future<ZIMConversationsSearchedResult> searchLocalConversations(
+      ZIMConversationSearchConfig config) async {
     Map resultMap = await channel.invokeMethod('searchLocalConversations', {
       'handle': handle,
       'config': ZIMConverter.mZIMConversationSearchConfig(config)
@@ -967,8 +980,8 @@ class ZIMEngine implements ZIM {
 
   @override
   Future<ZIMConversationPinnedListQueriedResult> queryConversationPinnedList(
-      ZIMConversationQueryConfig config) async{
-    Map resultMap = await channel.invokeMethod('queryConversationPinnedList',{
+      ZIMConversationQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryConversationPinnedList', {
       'handle': handle,
       'config': ZIMConverter.mZIMConversationQueryConfig(config)
     });
@@ -976,32 +989,37 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMConversationPinnedStateUpdatedResult> updateConversationPinnedState(bool isPinned, String conversationID, ZIMConversationType conversationType) async{
-    Map resultMap = await channel.invokeMethod('updateConversationPinnedState',{
+  Future<ZIMConversationPinnedStateUpdatedResult> updateConversationPinnedState(
+      bool isPinned,
+      String conversationID,
+      ZIMConversationType conversationType) async {
+    Map resultMap =
+        await channel.invokeMethod('updateConversationPinnedState', {
       'handle': handle,
-      'isPinned':isPinned,
-      'conversationID':conversationID,
-      'conversationType': ZIMConversationTypeExtension.valueMap[conversationType]
+      'isPinned': isPinned,
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType]
     });
     return ZIMConverter.oZIMConversationPinnedStateUpdatedResult(resultMap);
   }
 
   @override
-  Future<ZIMConversationQueriedResult> queryConversation(String conversationID,
-      ZIMConversationType conversationType) async{
-    Map resultMap = await channel.invokeMethod('queryConversation',{
+  Future<ZIMConversationQueriedResult> queryConversation(
+      String conversationID, ZIMConversationType conversationType) async {
+    Map resultMap = await channel.invokeMethod('queryConversation', {
       'handle': handle,
-      'conversationID':conversationID,
-      'conversationType': ZIMConversationTypeExtension.valueMap[conversationType]
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType]
     });
     return ZIMConverter.oZIMConversationQueriedResult(resultMap);
   }
 
-
   @override
   Future<ZIMCallEndSentResult> callEnd(
-      String callID, ZIMCallEndConfig config) async{
-    Map resultMap = await channel.invokeMethod('callEnd',{
+      String callID, ZIMCallEndConfig config) async {
+    Map resultMap = await channel.invokeMethod('callEnd', {
       'handle': handle,
       'callID': callID,
       'config': ZIMConverter.mZIMCallEndConfig(config)
@@ -1010,8 +1028,9 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMCallQuitSentResult> callQuit(String callID, ZIMCallQuitConfig config) async {
-    Map resultMap = await channel.invokeMethod('callQuit',{
+  Future<ZIMCallQuitSentResult> callQuit(
+      String callID, ZIMCallQuitConfig config) async {
+    Map resultMap = await channel.invokeMethod('callQuit', {
       'handle': handle,
       'callID': callID,
       'config': ZIMConverter.mZIMCallQuitConfig(config)
@@ -1020,8 +1039,9 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMCallingInvitationSentResult> callingInvite(List<String> invitees, String callID,ZIMCallingInviteConfig config) async {
-    Map resultMap = await channel.invokeMethod('callingInvite',{
+  Future<ZIMCallingInvitationSentResult> callingInvite(List<String> invitees,
+      String callID, ZIMCallingInviteConfig config) async {
+    Map resultMap = await channel.invokeMethod('callingInvite', {
       'handle': handle,
       'invitees': invitees,
       'callID': callID,
@@ -1031,8 +1051,9 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(ZIMCallInvitationQueryConfig config) async {
-    Map resultMap = await channel.invokeMethod('queryCallList',{
+  Future<ZIMCallInvitationListQueriedResult> queryCallInvitationList(
+      ZIMCallInvitationQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryCallList', {
       'handle': handle,
       'config': ZIMConverter.mZIMQueryCallListConfig(config)
     });
@@ -1040,8 +1061,9 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMGroupsSearchedResult> searchLocalGroups(ZIMGroupSearchConfig config) async {
-    Map resultMap = await channel.invokeMethod('searchLocalGroups',{
+  Future<ZIMGroupsSearchedResult> searchLocalGroups(
+      ZIMGroupSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalGroups', {
       'handle': handle,
       'config': ZIMConverter.mZIMGroupSearchConfig(config)
     });
@@ -1049,16 +1071,18 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(String groupID, ZIMGroupMemberSearchConfig config) async {
-    Map resultMap = await channel.invokeMethod('searchLocalGroupMembers',{
+  Future<ZIMGroupMembersSearchedResult> searchLocalGroupMembers(
+      String groupID, ZIMGroupMemberSearchConfig config) async {
+    Map resultMap = await channel.invokeMethod('searchLocalGroupMembers', {
       'handle': handle,
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupMemberSearchConfig(config)
     });
     return ZIMConverter.oZIMGroupMembersSearchedResult(resultMap);
   }
+
   @override
-  Future<ZIMMessageReactionAddedResult> addMessageReaction (
+  Future<ZIMMessageReactionAddedResult> addMessageReaction(
       String reactionType, ZIMMessage message) async {
     Map resultMap = await channel.invokeMethod('addMessageReaction', {
       'handle': handle,
@@ -1069,7 +1093,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMMessageReactionDeletedResult> deleteMessageReaction (
+  Future<ZIMMessageReactionDeletedResult> deleteMessageReaction(
       String reactionType, ZIMMessage message) async {
     Map resultMap = await channel.invokeMethod('deleteMessageReaction', {
       'handle': handle,
@@ -1080,7 +1104,7 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMMessageReactionUserListQueriedResult> queryMessageReactionUserList (
+  Future<ZIMMessageReactionUserListQueriedResult> queryMessageReactionUserList(
       ZIMMessage message, ZIMMessageReactionUsersQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryMessageReactionUserList', {
       'handle': handle,
@@ -1091,17 +1115,21 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMCallJoinSentResult> callJoin(String callID, ZIMCallJoinConfig config) async {
-    Map resultMap = await channel.invokeMethod('callJoin',{
-      'handle':handle,
-      'callID':callID,
+  Future<ZIMCallJoinSentResult> callJoin(
+      String callID, ZIMCallJoinConfig config) async {
+    Map resultMap = await channel.invokeMethod('callJoin', {
+      'handle': handle,
+      'callID': callID,
       'config': ZIMConverter.mZIMCallJoinConfig(config)
     });
     return ZIMConverter.oZIMCallJoinSentResult(resultMap);
   }
 
   @override
-  Future<void> importLocalMessages(String folderPath, ZIMMessageImportConfig config, ZIMMessageImportingProgress? progress) async {
+  Future<void> importLocalMessages(
+      String folderPath,
+      ZIMMessageImportConfig config,
+      ZIMMessageImportingProgress? progress) async {
     if (progress != null) {
       int progressID = ZIMCommonData.getSequence();
       ZIMCommonData.messageImportingProgressMap[progressID] = progress;
@@ -1113,16 +1141,16 @@ class ZIMEngine implements ZIM {
       });
       ZIMCommonData.messageImportingProgressMap.remove(progressID);
     } else {
-      return await channel.invokeMethod("importLocalMessages", {
-        "handle": handle,
-        "folderPath": folderPath,
-        "config": {}
-      });
+      return await channel.invokeMethod("importLocalMessages",
+          {"handle": handle, "folderPath": folderPath, "config": {}});
     }
   }
 
   @override
-  Future<void> exportLocalMessages(String folderPath, ZIMMessageExportConfig config, ZIMMessageExportingProgress? progress) async{
+  Future<void> exportLocalMessages(
+      String folderPath,
+      ZIMMessageExportConfig config,
+      ZIMMessageExportingProgress? progress) async {
     if (progress != null) {
       int progressID = ZIMCommonData.getSequence();
       ZIMCommonData.messageExportingProgressMap[progressID] = progress;
@@ -1134,27 +1162,26 @@ class ZIMEngine implements ZIM {
       });
       ZIMCommonData.messageExportingProgressMap.remove(progressID);
     } else {
-      return await channel.invokeMethod("exportLocalMessages", {
-        "handle": handle,
-        "folderPath": folderPath,
-        "config": {}
-      });
+      return await channel.invokeMethod("exportLocalMessages",
+          {"handle": handle, "folderPath": folderPath, "config": {}});
     }
   }
 
   @override
-  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(String userID, ZIMFriendApplicationAcceptConfig config) async{
-    Map resultMap = await channel.invokeMethod('acceptFriendApplication',{
-      'handle':handle,
-      'userID':userID,
-      'config':ZIMConverter.mZIMFriendApplicationAcceptConfig(config)
+  Future<ZIMFriendApplicationAcceptedResult> acceptFriendApplication(
+      String userID, ZIMFriendApplicationAcceptConfig config) async {
+    Map resultMap = await channel.invokeMethod('acceptFriendApplication', {
+      'handle': handle,
+      'userID': userID,
+      'config': ZIMConverter.mZIMFriendApplicationAcceptConfig(config)
     });
 
     return ZIMConverter.oZIMFriendApplicationAcceptedResult(resultMap);
   }
 
   @override
-  Future<ZIMFriendAddedResult> addFriend(String userID, ZIMFriendAddConfig config) async {
+  Future<ZIMFriendAddedResult> addFriend(
+      String userID, ZIMFriendAddConfig config) async {
     Map resultMap = await channel.invokeMethod('addFriend', {
       'handle': handle,
       'userID': userID,
@@ -1165,7 +1192,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMBlacklistUsersAddedResult> addUsersToBlacklist(List<String> userIDs) async {
+  Future<ZIMBlacklistUsersAddedResult> addUsersToBlacklist(
+      List<String> userIDs) async {
     Map resultMap = await channel.invokeMethod('addUsersToBlacklist', {
       'handle': handle,
       'userIDs': userIDs,
@@ -1175,7 +1203,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
+  Future<ZIMFriendsRelationCheckedResult> checkFriendsRelation(
+      List<String> userIDs, ZIMFriendRelationCheckConfig config) async {
     Map resultMap = await channel.invokeMethod('checkFriendsRelation', {
       'handle': handle,
       'userIDs': userIDs,
@@ -1186,7 +1215,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(String userID) async {
+  Future<ZIMBlacklistCheckedResult> checkUserIsInBlacklist(
+      String userID) async {
     Map resultMap = await channel.invokeMethod('checkUserIsInBlackList', {
       'handle': handle,
       'userID': userID,
@@ -1196,7 +1226,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendsDeletedResult> deleteFriends(List<String> userIDs, ZIMFriendDeleteConfig config) async {
+  Future<ZIMFriendsDeletedResult> deleteFriends(
+      List<String> userIDs, ZIMFriendDeleteConfig config) async {
     Map resultMap = await channel.invokeMethod('deleteFriends', {
       'handle': handle,
       'userIDs': userIDs,
@@ -1206,21 +1237,21 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMFriendDeletedResult(resultMap);
   }
 
-
   @override
-  Future<ZIMBlacklistQueriedResult> queryBlacklist(ZIMBlacklistQueryConfig config) async {
+  Future<ZIMBlacklistQueriedResult> queryBlacklist(
+      ZIMBlacklistQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryBlackList', {
       'handle': handle,
       'config': ZIMConverter.mZIMBlacklistQueryConfig(config),
     });
-    ZIMManager.writeLog("Flutter dart queryBlackList callback,result Map:"+resultMap.toString());
+    ZIMManager.writeLog("Flutter dart queryBlackList callback,result Map:" +
+        resultMap.toString());
     return ZIMConverter.oZIMBlacklistQueriedResult(resultMap);
   }
 
-
-
   @override
-  Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(List<String> userIDs) async {
+  Future<ZIMBlacklistUsersRemovedResult> removeUsersFromBlacklist(
+      List<String> userIDs) async {
     Map resultMap = await channel.invokeMethod('removeUsersFromBlacklist', {
       'handle': handle,
       'userIDs': userIDs,
@@ -1230,7 +1261,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendApplicationSentResult> sendFriendApplication(String userID, ZIMFriendApplicationSendConfig config) async {
+  Future<ZIMFriendApplicationSentResult> sendFriendApplication(
+      String userID, ZIMFriendApplicationSendConfig config) async {
     Map resultMap = await channel.invokeMethod('sendFriendApplication', {
       'handle': handle,
       'userID': userID,
@@ -1241,7 +1273,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(String friendAlias, String userID) async {
+  Future<ZIMFriendAliasUpdatedResult> updateFriendAlias(
+      String friendAlias, String userID) async {
     Map resultMap = await channel.invokeMethod('updateFriendAlias', {
       'handle': handle,
       'friendAlias': friendAlias,
@@ -1252,7 +1285,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(Map<String, String> friendAttributes, String userID) async {
+  Future<ZIMFriendAttributesUpdatedResult> updateFriendAttributes(
+      Map<String, String> friendAttributes, String userID) async {
     Map resultMap = await channel.invokeMethod('updateFriendAttributes', {
       'handle': handle,
       'friendAttributes': friendAttributes,
@@ -1263,7 +1297,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(ZIMFriendApplicationListQueryConfig config) async {
+  Future<ZIMFriendApplicationListQueriedResult> queryFriendApplicationList(
+      ZIMFriendApplicationListQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryFriendApplicationList', {
       'handle': handle,
       'config': ZIMConverter.mZIMFriendApplicationListQueryConfig(config),
@@ -1272,8 +1307,9 @@ class ZIMEngine implements ZIM {
     return ZIMConverter.oZIMFriendApplicationListQueriedResult(resultMap);
   }
 
-    @override
-  Future<ZIMFriendsSearchedResult> searchLocalFriends(ZIMFriendSearchConfig config) async {
+  @override
+  Future<ZIMFriendsSearchedResult> searchLocalFriends(
+      ZIMFriendSearchConfig config) async {
     Map resultMap = await channel.invokeMethod('searchLocalFriends', {
       'handle': handle,
       'config': ZIMConverter.mZIMFriendSearchConfig(config),
@@ -1283,7 +1319,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendListQueriedResult> queryFriendList(ZIMFriendListQueryConfig config) async {
+  Future<ZIMFriendListQueriedResult> queryFriendList(
+      ZIMFriendListQueryConfig config) async {
     Map resultMap = await channel.invokeMethod('queryFriendList', {
       'handle': handle,
       'config': ZIMConverter.mZIMFriendListQueryConfig(config),
@@ -1293,7 +1330,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(List<String> userIDs) async {
+  Future<ZIMFriendsInfoQueriedResult> queryFriendsInfo(
+      List<String> userIDs) async {
     Map resultMap = await channel.invokeMethod('queryFriendsInfo', {
       'handle': handle,
       'userIDs': userIDs,
@@ -1303,7 +1341,8 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMFriendApplicationRejectedResult> rejectFriendApplication(String userID, ZIMFriendApplicationRejectConfig config) async {
+  Future<ZIMFriendApplicationRejectedResult> rejectFriendApplication(
+      String userID, ZIMFriendApplicationRejectConfig config) async {
     Map resultMap = await channel.invokeMethod('rejectFriendApplication', {
       'handle': handle,
       'userID': userID,
@@ -1314,239 +1353,293 @@ class ZIMEngine implements ZIM {
   }
 
   @override
-  Future<ZIMGroupMutedResult> muteGroup(bool isMute,String groupID, ZIMGroupMuteConfig config) async{
-    Map resultMap = await channel.invokeMethod('muteGroup',{
-      'handle':handle,
-      'isMute':isMute,
-      'groupID':groupID,
-      'config':ZIMConverter.mZIMGroupMuteConfig(config)
+  Future<ZIMGroupMutedResult> muteGroup(
+      bool isMute, String groupID, ZIMGroupMuteConfig config) async {
+    Map resultMap = await channel.invokeMethod('muteGroup', {
+      'handle': handle,
+      'isMute': isMute,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupMuteConfig(config)
     });
     return ZIMConverter.oZIMGroupMutedResult(resultMap);
   }
 
   @override
-  Future<ZIMGroupMembersMutedResult> muteGroupMembers(bool isMute,List<String> userIDs, String groupID, ZIMGroupMemberMuteConfig config) async{
-    Map resultMap = await channel.invokeMethod('muteGroupMembers',{
-      'handle':handle,
-      'isMute':isMute,
-      'userIDs':userIDs,
-      'groupID':groupID,
-      'config':ZIMConverter.mZIMGroupMemberMuteConfig(config)
+  Future<ZIMGroupMembersMutedResult> muteGroupMembers(
+      bool isMute,
+      List<String> userIDs,
+      String groupID,
+      ZIMGroupMemberMuteConfig config) async {
+    Map resultMap = await channel.invokeMethod('muteGroupMembers', {
+      'handle': handle,
+      'isMute': isMute,
+      'userIDs': userIDs,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupMemberMuteConfig(config)
     });
     return ZIMConverter.oZIMGroupMembersMutedResult(resultMap);
   }
 
   @override
-  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(String groupID, ZIMGroupMemberMutedListQueryConfig config) async{
-    Map resultMap = await channel.invokeMethod('queryGroupMemberMutedList',{
-      'handle':handle,
-      'groupID':groupID,
-      'config':ZIMConverter.mZIMGroupMemberMutedListQueryConfig(config)
+  Future<ZIMGroupMemberMutedListQueriedResult> queryGroupMemberMutedList(
+      String groupID, ZIMGroupMemberMutedListQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryGroupMemberMutedList', {
+      'handle': handle,
+      'groupID': groupID,
+      'config': ZIMConverter.mZIMGroupMemberMutedListQueryConfig(config)
     });
     return ZIMConverter.oZIMGroupMemberMutedListQueriedResult(resultMap);
   }
 
   @override
-  Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(ZIMCombineMessage message) async{
-    Map resultMap = await channel.invokeMethod('queryCombineMessageDetail',{
-      'handle':handle,
-      'message': ZIMConverter.mZIMMessage(message)
-    });
-    return ZIMCombineMessageDetailQueriedResult(message:ZIMConverter.oZIMMessage(resultMap['message']) as ZIMCombineMessage);
+  Future<ZIMCombineMessageDetailQueriedResult> queryCombineMessageDetail(
+      ZIMCombineMessage message) async {
+    Map resultMap = await channel.invokeMethod('queryCombineMessageDetail',
+        {'handle': handle, 'message': ZIMConverter.mZIMMessage(message)});
+    return ZIMCombineMessageDetailQueriedResult(
+        message: ZIMConverter.oZIMMessage(resultMap['message'])
+            as ZIMCombineMessage);
   }
 
   @override
-  Future<ZIMGroupInviteApplicationAcceptedResult> acceptGroupInviteApplication(String inviterUserID, String groupID, ZIMGroupInviteApplicationAcceptConfig config) async{
-    Map resultMap = await channel.invokeMethod('acceptGroupInviteApplication',{
-      'handle':handle,
+  Future<ZIMGroupInviteApplicationAcceptedResult> acceptGroupInviteApplication(
+      String inviterUserID,
+      String groupID,
+      ZIMGroupInviteApplicationAcceptConfig config) async {
+    Map resultMap = await channel.invokeMethod('acceptGroupInviteApplication', {
+      'handle': handle,
       'inviterUserID': inviterUserID,
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupInviteApplicationAcceptConfig(config)
     });
-    return ZIMGroupInviteApplicationAcceptedResult(groupInfo:ZIMConverter.oZIMGroupFullInfo(resultMap['groupInfo'])!, inviterUserID:resultMap['inviterUserID']);
+    return ZIMGroupInviteApplicationAcceptedResult(
+        groupInfo: ZIMConverter.oZIMGroupFullInfo(resultMap['groupInfo'])!,
+        inviterUserID: resultMap['inviterUserID']);
   }
 
   @override
-  Future<ZIMGroupJoinApplicationAcceptedResult> acceptGroupJoinApplication(String userID, String groupID, ZIMGroupJoinApplicationAcceptConfig config) async{
-    Map resultMap = await channel.invokeMethod('acceptGroupJoinApplication',{
-      'handle':handle,
+  Future<ZIMGroupJoinApplicationAcceptedResult> acceptGroupJoinApplication(
+      String userID,
+      String groupID,
+      ZIMGroupJoinApplicationAcceptConfig config) async {
+    Map resultMap = await channel.invokeMethod('acceptGroupJoinApplication', {
+      'handle': handle,
       'userID': userID,
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupJoinApplicationAcceptConfig(config)
     });
-    return ZIMGroupJoinApplicationAcceptedResult(groupID:resultMap['groupID'], userID:resultMap['userID']);
+    return ZIMGroupJoinApplicationAcceptedResult(
+        groupID: resultMap['groupID'], userID: resultMap['userID']);
   }
 
   @override
-  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(ZIMGroupApplicationListQueryConfig config) async{
-    Map resultMap = await channel.invokeMethod('queryGroupApplicationList',{
-      'handle':handle,
+  Future<ZIMGroupApplicationListQueriedResult> queryGroupApplicationList(
+      ZIMGroupApplicationListQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryGroupApplicationList', {
+      'handle': handle,
       'config': ZIMConverter.mZIMGroupApplicationListQueryConfig(config)
     });
-    return ZIMGroupApplicationListQueriedResult(nextFlag:resultMap['nextFlag'], applicationList: ZIMConverter.oZIMGroupApplicationInfoList(resultMap['applicationList']));
+    return ZIMGroupApplicationListQueriedResult(
+        nextFlag: resultMap['nextFlag'],
+        applicationList: ZIMConverter.oZIMGroupApplicationInfoList(
+            resultMap['applicationList']));
   }
 
   @override
-  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(String inviterUserID, String groupID, ZIMGroupInviteApplicationRejectConfig config) async{
-    Map resultMap = await channel.invokeMethod('rejectGroupInviteApplication',{
-      'handle':handle,
+  Future<ZIMGroupInviteApplicationRejectedResult> rejectGroupInviteApplication(
+      String inviterUserID,
+      String groupID,
+      ZIMGroupInviteApplicationRejectConfig config) async {
+    Map resultMap = await channel.invokeMethod('rejectGroupInviteApplication', {
+      'handle': handle,
       'groupID': groupID,
       'inviterUserID': inviterUserID,
       'config': ZIMConverter.mZIMGroupInviteApplicationRejectConfig(config)
     });
-    return ZIMGroupInviteApplicationRejectedResult(groupID:resultMap['groupID'], inviterUserID: resultMap['inviterUserID']);
+    return ZIMGroupInviteApplicationRejectedResult(
+        groupID: resultMap['groupID'],
+        inviterUserID: resultMap['inviterUserID']);
   }
 
   @override
-  Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(String userID, String groupID, ZIMGroupJoinApplicationRejectConfig config) async{
-    Map resultMap = await channel.invokeMethod('rejectGroupJoinApplication',{
-      'handle':handle,
+  Future<ZIMGroupJoinApplicationRejectedResult> rejectGroupJoinApplication(
+      String userID,
+      String groupID,
+      ZIMGroupJoinApplicationRejectConfig config) async {
+    Map resultMap = await channel.invokeMethod('rejectGroupJoinApplication', {
+      'handle': handle,
       'userID': userID,
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupJoinApplicationRejectConfig(config)
     });
-    return ZIMGroupJoinApplicationRejectedResult(groupID:resultMap['groupID'], userID: resultMap['userID']);
+    return ZIMGroupJoinApplicationRejectedResult(
+        groupID: resultMap['groupID'], userID: resultMap['userID']);
   }
 
   @override
-  Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(List<String> userIDs, String groupID, ZIMGroupInviteApplicationSendConfig config) async{
-    Map resultMap = await channel.invokeMethod('sendGroupInviteApplications',{
-      'handle':handle,
+  Future<ZIMGroupInviteApplicationsSentResult> sendGroupInviteApplications(
+      List<String> userIDs,
+      String groupID,
+      ZIMGroupInviteApplicationSendConfig config) async {
+    Map resultMap = await channel.invokeMethod('sendGroupInviteApplications', {
+      'handle': handle,
       'userIDs': userIDs,
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupInviteApplicationSendConfig(config)
     });
-    return ZIMGroupInviteApplicationsSentResult(groupID:resultMap['groupID'], errorUserList: ZIMConverter.oZIMErrorUserInfoList(resultMap['errorUserList']));
+    return ZIMGroupInviteApplicationsSentResult(
+        groupID: resultMap['groupID'],
+        errorUserList:
+            ZIMConverter.oZIMErrorUserInfoList(resultMap['errorUserList']));
   }
 
   @override
-  Future<ZIMGroupJoinApplicationSentResult> sendGroupJoinApplication(String groupID, ZIMGroupJoinApplicationSendConfig config) async{
-    Map resultMap = await channel.invokeMethod('sendGroupJoinApplication',{
-      'handle':handle,
+  Future<ZIMGroupJoinApplicationSentResult> sendGroupJoinApplication(
+      String groupID, ZIMGroupJoinApplicationSendConfig config) async {
+    Map resultMap = await channel.invokeMethod('sendGroupJoinApplication', {
+      'handle': handle,
       'groupID': groupID,
       'config': ZIMConverter.mZIMGroupJoinApplicationSendConfig(config)
     });
-    return ZIMGroupJoinApplicationSentResult(groupID:resultMap['groupID']);
+    return ZIMGroupJoinApplicationSentResult(groupID: resultMap['groupID']);
   }
 
-  Future<void> clearLocalFileCache(ZIMFileCacheClearConfig config) async{
-    return await channel.invokeMethod('clearLocalFileCache',{
-      'handle':handle,
+  Future<void> clearLocalFileCache(ZIMFileCacheClearConfig config) async {
+    return await channel.invokeMethod('clearLocalFileCache', {
+      'handle': handle,
       'config': ZIMConverter.mZIMFileCacheClearConfig(config)
     });
   }
 
-  Future<ZIMFileCacheQueriedResult> queryLocalFileCache(ZIMFileCacheQueryConfig config) async{
-    Map resultMap = await channel.invokeMethod('queryLocalFileCache',{
-      'handle':handle,
+  Future<ZIMFileCacheQueriedResult> queryLocalFileCache(
+      ZIMFileCacheQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryLocalFileCache', {
+      'handle': handle,
       'config': ZIMConverter.mZIMFileCacheQueryConfig(config)
     });
-    return ZIMFileCacheQueriedResult(fileCacheInfo: ZIMConverter.oZIMFileCacheInfo(resultMap['fileCacheInfo']));
+    return ZIMFileCacheQueriedResult(
+        fileCacheInfo:
+            ZIMConverter.oZIMFileCacheInfo(resultMap['fileCacheInfo']));
   }
-  @override
-  Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo() async{
 
-    Map resultMap = await channel.invokeMethod('querySelfUserInfo',{
-      'handle':handle
-    });
+  @override
+  Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo() async {
+    Map resultMap =
+        await channel.invokeMethod('querySelfUserInfo', {'handle': handle});
 
     return ZIMConverter.oZIMSelfUserInfoQueriedResult(resultMap);
   }
 
   @override
-  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(ZIMUserOfflinePushRule offlinePushRule) async{
-    Map resultMap = await channel.invokeMethod('updateUserOfflinePushRule',{
-      'handle':handle,
-      'offlinePushRule' : ZIMConverter.mZIMUserOfflinePushRule(offlinePushRule),
+  Future<ZIMUserOfflinePushRuleUpdatedResult> updateUserOfflinePushRule(
+      ZIMUserOfflinePushRule offlinePushRule) async {
+    Map resultMap = await channel.invokeMethod('updateUserOfflinePushRule', {
+      'handle': handle,
+      'offlinePushRule': ZIMConverter.mZIMUserOfflinePushRule(offlinePushRule),
     });
     return ZIMConverter.oZIMUserOfflinePushRuleInfoUpdatedResult(resultMap);
   }
 
   @override
-  Future<ZIMUsersStatusQueriedResult> queryUsersStatus(List<String> userIDs) async{
-    Map resultMap = await channel.invokeMethod('queryUsersStatus',{
-      'handle':handle,
-      'userIDs':userIDs
-    });
+  Future<ZIMUsersStatusQueriedResult> queryUsersStatus(
+      List<String> userIDs) async {
+    Map resultMap = await channel.invokeMethod(
+        'queryUsersStatus', {'handle': handle, 'userIDs': userIDs});
     return ZIMConverter.oZIMUsersStatusQueriedResult(resultMap);
   }
 
   @override
-  Future<ZIMUsersStatusSubscribedResult> subscribeUsersStatus(List<String> userIDs, ZIMUserStatusSubscribeConfig config) async{
-    Map resultMap = await channel.invokeMethod('subscribeUsersStatus',{
-      'handle':handle,
-      'userIDs':userIDs,
+  Future<ZIMUsersStatusSubscribedResult> subscribeUsersStatus(
+      List<String> userIDs, ZIMUserStatusSubscribeConfig config) async {
+    Map resultMap = await channel.invokeMethod('subscribeUsersStatus', {
+      'handle': handle,
+      'userIDs': userIDs,
       'config': ZIMConverter.mZIMUserStatusSubscribeConfig(config)
     });
     return ZIMConverter.oZIMUsersStatusSubscribedResult(resultMap);
   }
 
   @override
-  Future<ZIMUsersStatusUnsubscribedResult> unsubscribeUsersStatus(List<String> userIDs) async{
-    Map resultMap = await channel.invokeMethod('unsubscribeUsersStatus',{
-      'handle':handle,
-      'userIDs':userIDs
-    });
+  Future<ZIMUsersStatusUnsubscribedResult> unsubscribeUsersStatus(
+      List<String> userIDs) async {
+    Map resultMap = await channel.invokeMethod(
+        'unsubscribeUsersStatus', {'handle': handle, 'userIDs': userIDs});
     return ZIMConverter.oZIMUsersStatusUnsubscribedResult(resultMap);
   }
 
   @override
-  Future<ZIMSubscribedUserStatusListQueriedResult> querySubscribedUserStatusList(ZIMSubscribedUserStatusQueryConfig config) async{
-    Map resultMap = await channel.invokeMethod('querySubscribedUserStatusList',{
-      'handle':handle,
-      'config':ZIMConverter.mZIMSubscribedUserStatusQueryConfig(config)
+  Future<ZIMSubscribedUserStatusListQueriedResult>
+      querySubscribedUserStatusList(
+          ZIMSubscribedUserStatusQueryConfig config) async {
+    Map resultMap =
+        await channel.invokeMethod('querySubscribedUserStatusList', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMSubscribedUserStatusQueryConfig(config)
     });
     return ZIMConverter.oZIMSubscribedUserStatusListQueriedResult(resultMap);
   }
 
   @override
-  Future<ZIMConversationMarkSetResult> setConversationMark(int markType, bool enable, List<ZIMConversationBaseInfo> infos) async{
-    Map resultMap = await channel.invokeMethod('setConversationMark',{
-      'handle':handle,
-      'markType':markType,
-      'enable':enable,
-      'infos':ZIMConverter.mZIMConversationBaseInfoList(infos)
+  Future<ZIMConversationMarkSetResult> setConversationMark(
+      int markType, bool enable, List<ZIMConversationBaseInfo> infos) async {
+    Map resultMap = await channel.invokeMethod('setConversationMark', {
+      'handle': handle,
+      'markType': markType,
+      'enable': enable,
+      'infos': ZIMConverter.mZIMConversationBaseInfoList(infos)
     });
     return ZIMConverter.oZIMConversationMarkSetResult(resultMap);
   }
 
   @override
-  Future<ZIMConversationTotalUnreadMessageCountQueriedResult> queryConversationTotalUnreadMessageCount(ZIMConversationTotalUnreadMessageCountQueryConfig config) async{
-    Map resultMap = await channel.invokeMethod('queryConversationTotalUnreadCount',{
-      'handle':handle,
-      'config':ZIMConverter.mZIMConversationTotalUnreadCountQueryConfig(config)
+  Future<ZIMConversationTotalUnreadMessageCountQueriedResult>
+      queryConversationTotalUnreadMessageCount(
+          ZIMConversationTotalUnreadMessageCountQueryConfig config) async {
+    Map resultMap =
+        await channel.invokeMethod('queryConversationTotalUnreadCount', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMConversationTotalUnreadCountQueryConfig(config)
     });
-    return ZIMConverter.oZIMConversationTotalUnreadCountQueriedResult(resultMap);
+    return ZIMConverter.oZIMConversationTotalUnreadCountQueriedResult(
+        resultMap);
   }
-  Future<ZIMMessageQueriedResult> queryMessages(List<int> messageSeqs, String conversationID, ZIMConversationType conversationType) async{
-    Map resultMap = await channel.invokeMethod('queryMessages',{
-      'handle':handle,
-      'messageSeqs':messageSeqs,
-      'conversationID':conversationID,
-      'conversationType':ZIMConversationTypeExtension.valueMap[conversationType]
+
+  Future<ZIMMessageQueriedResult> queryMessages(List<int> messageSeqs,
+      String conversationID, ZIMConversationType conversationType) async {
+    Map resultMap = await channel.invokeMethod('queryMessages', {
+      'handle': handle,
+      'messageSeqs': messageSeqs,
+      'conversationID': conversationID,
+      'conversationType':
+          ZIMConversationTypeExtension.valueMap[conversationType]
     });
     return ZIMConverter.oZIMMessageQueriedResult(resultMap);
   }
 
   @override
-  Future<ZIMMessageRepliedListQueriedResult> queryMessageRepliedList(ZIMMessage message, ZIMMessageRepliedListQueryConfig config) async{
-    Map resultMap = await channel.invokeMethod('queryMessageRepliedList',{
-      'handle':handle,
-      'message':ZIMConverter.mZIMMessage(message),
-      'config':ZIMConverter.mZIMMessageRepliedListQueryConfig(config)
+  Future<ZIMMessageRepliedListQueriedResult> queryMessageRepliedList(
+      ZIMMessage message, ZIMMessageRepliedListQueryConfig config) async {
+    Map resultMap = await channel.invokeMethod('queryMessageRepliedList', {
+      'handle': handle,
+      'message': ZIMConverter.mZIMMessage(message),
+      'config': ZIMConverter.mZIMMessageRepliedListQueryConfig(config)
     });
     return ZIMConverter.oZIMMessageRepliedListQueriedResult(resultMap);
   }
 
   @override
-  Future<ZIMMessageSentResult> replyMessage(ZIMMessage message, ZIMMessage toOriginalMessage, ZIMMessageSendConfig config, ZIMMessageSendNotification? notification) async{
+  Future<ZIMMessageSentResult> replyMessage(
+      ZIMMessage message,
+      ZIMMessage toOriginalMessage,
+      ZIMMessageSendConfig config,
+      ZIMMessageSendNotification? notification) async {
     int? messageAttachedCallbackID;
     int? progressID;
     int messageID = ZIMCommonData.getSequence();
     if (notification?.onMessageAttached != null) {
       messageAttachedCallbackID = ZIMCommonData.getSequence();
       ZIMCommonData.zimMessageAttachedCallbackMap[messageAttachedCallbackID] =
-      notification!.onMessageAttached!;
+          notification!.onMessageAttached!;
     }
     if (notification?.onMediaUploadingProgress != null) {
       progressID = ZIMCommonData.getSequence();
@@ -1554,24 +1647,23 @@ class ZIMEngine implements ZIM {
           notification!.onMediaUploadingProgress!;
     }
     try {
-        Map resultMap = await channel.invokeMethod('replyMessage',{
-          'handle':handle,
-          'message':ZIMConverter.mZIMMessage(message),
-          'toOriginalMessage':ZIMConverter.mZIMMessage(toOriginalMessage),
-          'messageID': messageID,
-          'config':ZIMConverter.mZIMMessageSendConfig(config),
-          'messageAttachedCallbackID': messageAttachedCallbackID,
-          'progressID': progressID,
-        });
-        return ZIMConverter.oZIMMessageSentResult(resultMap);
+      Map resultMap = await channel.invokeMethod('replyMessage', {
+        'handle': handle,
+        'message': ZIMConverter.mZIMMessage(message),
+        'toOriginalMessage': ZIMConverter.mZIMMessage(toOriginalMessage),
+        'messageID': messageID,
+        'config': ZIMConverter.mZIMMessageSendConfig(config),
+        'messageAttachedCallbackID': messageAttachedCallbackID,
+        'progressID': progressID,
+      });
+      return ZIMConverter.oZIMMessageSentResult(resultMap);
     } on PlatformException catch (e) {
       throw PlatformException(code: e.code, message: e.message);
     } finally {
-        ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
-        ZIMCommonData.messsageMap.remove(messageID);
-        ZIMCommonData.zimMessageAttachedCallbackMap
-              .remove(messageAttachedCallbackID);
+      ZIMCommonData.mediaUploadingProgressMap.remove(progressID);
+      ZIMCommonData.messsageMap.remove(messageID);
+      ZIMCommonData.zimMessageAttachedCallbackMap
+          .remove(messageAttachedCallbackID);
     }
   }
-
 }

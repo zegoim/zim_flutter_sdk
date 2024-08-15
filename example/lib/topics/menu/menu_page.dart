@@ -12,7 +12,6 @@ import 'package:zego_zim_example/topics/menu/items/left_drawer.dart';
 import 'package:zego_zim_example/topics/menu/pop_button_menu/pop_button_menu.dart';
 import 'package:provider/provider.dart';
 
-
 class MenuPage extends StatefulWidget {
   int totalUnreadMsg = 0;
   bool isDisConnected = false;
@@ -84,11 +83,12 @@ class _MenuPageState extends State<MenuPage> {
                         widget.isDisConnected = false;
                       });
                       ZIMLoginConfig config = ZIMLoginConfig();
-                      config.userName = UserModel.shared().userInfo!.userName ?? '';
+                      config.userName =
+                          UserModel.shared().userInfo!.userName ?? '';
                       config.token = token;
                       await ZIM
-                          .getInstance()
-                          !.login(UserModel.shared().userInfo!.userID, config);
+                          .getInstance()!
+                          .login(UserModel.shared().userInfo!.userID, config);
                       setState(() {
                         widget.isConnecting = false;
                         widget.isDisConnected = false;
@@ -176,7 +176,8 @@ class _MenuPageState extends State<MenuPage> {
       });
     };
 
-    ZIMEventHandler.onConnectionStateChanged = (zim, state, event, extendedData) {
+    ZIMEventHandler.onConnectionStateChanged =
+        (zim, state, event, extendedData) {
       switch (state) {
         case ZIMConnectionState.connected:
           setState(() {

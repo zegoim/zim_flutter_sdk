@@ -6,9 +6,9 @@ class TokenPlugin {
 
   static Future<String> makeToken(String userID) async {
     Map resultMap = await _channel.invokeMethod('makeToken', {
-      "appID":KeyCenter.appID,
-      "userID":userID,
-      "secret":'',
+      "appID": KeyCenter.appID,
+      "userID": userID,
+      "secret": '',
     });
     return resultMap['token'];
   }

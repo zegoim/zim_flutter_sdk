@@ -37,11 +37,9 @@ class SendVideoMsgCell extends StatefulWidget {
 }
 
 class _SendVideoMsgCellState extends State<SendVideoMsgCell> {
-
   @override
   void initState() {
     super.initState();
-
   }
 
   @override

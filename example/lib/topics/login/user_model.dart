@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:zego_zim/zego_zim.dart';
 
 class UserModel {
-
   final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
   static UserModel? _userModel;
 

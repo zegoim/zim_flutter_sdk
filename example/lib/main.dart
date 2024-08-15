@@ -13,7 +13,6 @@ import 'dart:async';
 import 'package:zego_zim_example/topics/splash/splash_page.dart';
 
 Future<void> main() async {
-  
   runApp(MaterialApp(
     title: 'ZIM',
     debugShowCheckedModeBanner: false,

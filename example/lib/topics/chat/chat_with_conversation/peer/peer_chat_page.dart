@@ -149,8 +149,8 @@ class _MyPageState extends State<PeerChatPage> {
           textMessage,
           widget.conversationID,
           ZIMConversationType.peer,
-          sendConfig, ZIMMessageSendNotification(onMessageAttached: ((message) async {
-      })));
+          sendConfig,
+          ZIMMessageSendNotification(onMessageAttached: ((message) async {})));
 
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == textMessage);
@@ -259,9 +259,11 @@ class _MyPageState extends State<PeerChatPage> {
   }
 
   registerZIMEvent() {
-    ZIMEventHandler.onMessageSentStatusChanged = (zim,messageSentStatusChangedInfoList){
+    ZIMEventHandler.onMessageSentStatusChanged =
+        (zim, messageSentStatusChangedInfoList) {
       for (var element in messageSentStatusChangedInfoList) {
-        print("sentStatus:${element.status},message:${(element.message as ZIMTextMessage).message}");
+        print(
+            "sentStatus:${element.status},message:${(element.message as ZIMTextMessage).message}");
       }
     };
     ZIMEventHandler.onReceivePeerMessage = (zim, messageList, fromUserID) {
@@ -335,13 +337,9 @@ class _MyPageState extends State<PeerChatPage> {
       //window.console.warn(infos);
     };
 
-    ZIMEventHandler.onMessageDeleted = (zim, deletedInfo) {
+    ZIMEventHandler.onMessageDeleted = (zim, deletedInfo) {};
 
-    };
-
-    ZIMEventHandler.onUserInfoUpdated = (zim, info) {
-
-    };
+    ZIMEventHandler.onUserInfoUpdated = (zim, info) {};
   }
 
   unregisterZIMEvent() {

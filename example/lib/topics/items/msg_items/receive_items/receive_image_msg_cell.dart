@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zim_example/topics/items/msg_items/downloading_progress_model.dart';
@@ -38,11 +36,11 @@ class ReceiveImageMsgCell extends StatefulWidget {
 }
 
 class ReceiveImageMsgCellState extends State<ReceiveImageMsgCell> {
-   checkIsdownload() async {
+  checkIsdownload() async {
     if (widget.message.fileLocalPath == '') {
       ZIMMediaDownloadedResult result = await ZIM
-          .getInstance()
-          !.downloadMediaFile(widget.message, ZIMMediaFileType.originalFile,
+          .getInstance()!
+          .downloadMediaFile(widget.message, ZIMMediaFileType.originalFile,
               (message, currentFileSize, totalFileSize) {});
       setState(() {
         widget.message = result.message as ZIMImageMessage;
@@ -50,13 +48,11 @@ class ReceiveImageMsgCellState extends State<ReceiveImageMsgCell> {
     }
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
     checkIsdownload();
     super.initState();
-
   }
 
   @override

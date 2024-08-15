@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ErrorDiaLog {
-  static Future<bool?> showFailedDialog(BuildContext context,
-      String code, String message) {
+  static Future<bool?> showFailedDialog(
+      BuildContext context, String code, String message) {
     return showDialog<bool>(
         context: context,
         builder: (context) {

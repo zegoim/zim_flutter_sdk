@@ -27,7 +27,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
   static void eventListener(dynamic data) {
     final Map<dynamic, dynamic> map = data;
     ZIMEngine? zim = ZIMManager.engineMap[map['handle']];
-    try{
+    try {
       if (zim == null) {
         return;
       }
@@ -61,7 +61,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
               ZIMConverter.oZIMConversationChangeInfoList(
                   map['conversationChangeInfoList']);
 
-          ZIMEventHandler.onConversationChanged!(zim, conversationChangeInfoList);
+          ZIMEventHandler.onConversationChanged!(
+              zim, conversationChangeInfoList);
           break;
         case 'onConversationsAllDeleted':
           if (ZIMEventHandler.onConversationsAllDeleted == null) return;
@@ -299,7 +300,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           int exportedMessageCount = map['exportedMessageCount'];
           int totalMessageCount = map['totalMessageCount'];
           ZIMMessageExportingProgress? progress =
-          ZIMCommonData.messageExportingProgressMap[progressID ?? 0];
+              ZIMCommonData.messageExportingProgressMap[progressID ?? 0];
           if (progress != null) {
             progress(exportedMessageCount, totalMessageCount);
           }
@@ -309,7 +310,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           int importedMessageCount = map['importedMessageCount'];
           int totalMessageCount = map['totalMessageCount'];
           ZIMMessageImportingProgress? progress =
-          ZIMCommonData.messageImportingProgressMap[progressID ?? 0];
+              ZIMCommonData.messageImportingProgressMap[progressID ?? 0];
           if (progress != null) {
             progress(importedMessageCount, totalMessageCount);
           }
@@ -335,8 +336,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
         case 'onMessageReceiptChanged':
           if (ZIMEventHandler.onMessageReceiptChanged == null) return;
           List<ZIMMessageReceiptInfo> infos = [];
-          ZIMManager.writeLog(
-              "Flutter onMessageReceiptChanged eventImpl,map:" + map.toString());
+          ZIMManager.writeLog("Flutter onMessageReceiptChanged eventImpl,map:" +
+              map.toString());
           for (Map infoModel in map['infos']) {
             infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
           }
@@ -348,7 +349,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
               zim, ZIMConverter.oZIMMessage(map['message']));
           break;
         case 'onConversationMessageReceiptChanged':
-          if (ZIMEventHandler.onConversationMessageReceiptChanged == null) return;
+          if (ZIMEventHandler.onConversationMessageReceiptChanged == null)
+            return;
           List<ZIMMessageReceiptInfo> infos = [];
           for (Map infoModel in map['infos']) {
             infos.add(ZIMConverter.oZIMMessageReceiptInfo(infoModel));
@@ -377,31 +379,43 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           break;
         case 'onMessageReactionsChanged':
           if (ZIMEventHandler.onMessageReactionsChanged == null) return;
-          List<ZIMMessageReaction> reactions = List<ZIMMessageReaction>.from(ZIMConverter.oZIMMessageReactionList(map['reactions']));
-          ZIMEventHandler.onMessageReactionsChanged!(zim,reactions);
+          List<ZIMMessageReaction> reactions = List<ZIMMessageReaction>.from(
+              ZIMConverter.oZIMMessageReactionList(map['reactions']));
+          ZIMEventHandler.onMessageReactionsChanged!(zim, reactions);
           break;
         case 'onFriendInfoUpdated':
           if (ZIMEventHandler.onFriendInfoUpdated == null) return;
-          List<ZIMFriendInfo> friendInfoList =  ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
+          List<ZIMFriendInfo> friendInfoList =
+              ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
           ZIMEventHandler.onFriendInfoUpdated!(zim, friendInfoList);
           break;
         case 'onFriendListChanged':
           if (ZIMEventHandler.onFriendListChanged == null) return;
-          ZIMFriendListChangeAction action = ZIMFriendListChangeActionExtension.mapValue[map['action']]!;
-          List<ZIMFriendInfo> friendInfoList = ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
-          ZIMEventHandler.onFriendListChanged!(zim, friendInfoList ,action);
+          ZIMFriendListChangeAction action =
+              ZIMFriendListChangeActionExtension.mapValue[map['action']]!;
+          List<ZIMFriendInfo> friendInfoList =
+              ZIMConverter.oZIMFriendInfoList(map['friendInfoList']);
+          ZIMEventHandler.onFriendListChanged!(zim, friendInfoList, action);
           break;
 
         case 'onFriendApplicationUpdated':
           if (ZIMEventHandler.onFriendApplicationUpdated == null) return;
-          List<ZIMFriendApplicationInfo> friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
-          ZIMEventHandler.onFriendApplicationUpdated!(zim, friendApplicationInfoList);
+          List<ZIMFriendApplicationInfo> friendApplicationInfoList =
+              ZIMConverter.oZIMFriendApplicationInfoList(
+                  map['friendApplicationInfoList']);
+          ZIMEventHandler.onFriendApplicationUpdated!(
+              zim, friendApplicationInfoList);
           break;
         case 'onFriendApplicationListChanged':
           if (ZIMEventHandler.onFriendApplicationListChanged == null) return;
-          List<ZIMFriendApplicationInfo> friendApplicationInfoList = ZIMConverter.oZIMFriendApplicationInfoList(map['friendApplicationInfoList']);
-          ZIMFriendApplicationListChangeAction action = ZIMFriendApplicationListChangeActionExtension.mapValue[map['action']]!;
-          ZIMEventHandler.onFriendApplicationListChanged!(zim,friendApplicationInfoList ,action);
+          List<ZIMFriendApplicationInfo> friendApplicationInfoList =
+              ZIMConverter.oZIMFriendApplicationInfoList(
+                  map['friendApplicationInfoList']);
+          ZIMFriendApplicationListChangeAction action =
+              ZIMFriendApplicationListChangeActionExtension
+                  .mapValue[map['action']]!;
+          ZIMEventHandler.onFriendApplicationListChanged!(
+              zim, friendApplicationInfoList, action);
           break;
         case 'onBlacklistChanged':
           if (ZIMEventHandler.onBlacklistChanged == null) return;
@@ -409,67 +423,85 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
               ZIMBlacklistChangeActionExtension.mapValue[map['action']]!;
           List<ZIMUserInfo> userList =
               ZIMConverter.oZIMUserInfoList(map['userList']);
-          ZIMEventHandler.onBlacklistChanged!(zim, userList ,action);
+          ZIMEventHandler.onBlacklistChanged!(zim, userList, action);
           break;
         case 'onGroupMutedInfoUpdated':
-          if(ZIMEventHandler.onGroupMutedInfoUpdated == null) return;
-          ZIMGroupMuteInfo muteInfo = ZIMConverter.oZIMGroupMuteInfo(map['groupMuteInfo']);
-          ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
+          if (ZIMEventHandler.onGroupMutedInfoUpdated == null) return;
+          ZIMGroupMuteInfo muteInfo =
+              ZIMConverter.oZIMGroupMuteInfo(map['groupMuteInfo']);
+          ZIMGroupOperatedInfo operatedInfo =
+              ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
           String groupID = map['groupID'];
-          ZIMEventHandler.onGroupMutedInfoUpdated!(zim,muteInfo,operatedInfo,groupID);
+          ZIMEventHandler.onGroupMutedInfoUpdated!(
+              zim, muteInfo, operatedInfo, groupID);
           break;
         case 'onGroupVerifyInfoUpdated':
-          if(ZIMEventHandler.onGroupVerifyInfoUpdated == null) return;
-          ZIMGroupVerifyInfo verifyInfo = ZIMConverter.oZIMGroupVerifyInfo(map['verifyInfo']);
-          ZIMGroupOperatedInfo operatedInfo = ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
+          if (ZIMEventHandler.onGroupVerifyInfoUpdated == null) return;
+          ZIMGroupVerifyInfo verifyInfo =
+              ZIMConverter.oZIMGroupVerifyInfo(map['verifyInfo']);
+          ZIMGroupOperatedInfo operatedInfo =
+              ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']);
           String groupID = map['groupID'];
-          ZIMEventHandler.onGroupVerifyInfoUpdated!(zim, verifyInfo, operatedInfo, groupID);
+          ZIMEventHandler.onGroupVerifyInfoUpdated!(
+              zim, verifyInfo, operatedInfo, groupID);
           break;
         case 'onGroupApplicationListChanged':
-
-          if(ZIMEventHandler.onGroupApplicationListChanged == null) return;
-          List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
-          ZIMGroupApplicationListChangeAction action = ZIMGroupApplicationListChangeActionExtension.mapValue[map['action']]!;
-          ZIMEventHandler.onGroupApplicationListChanged!(zim, applicationList, action);
+          if (ZIMEventHandler.onGroupApplicationListChanged == null) return;
+          List<ZIMGroupApplicationInfo> applicationList =
+              ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+          ZIMGroupApplicationListChangeAction action =
+              ZIMGroupApplicationListChangeActionExtension
+                  .mapValue[map['action']]!;
+          ZIMEventHandler.onGroupApplicationListChanged!(
+              zim, applicationList, action);
           break;
         case 'onGroupApplicationUpdated':
-          try{
-            if(ZIMEventHandler.onGroupApplicationUpdated == null) return;
-            List<ZIMGroupApplicationInfo> applicationList = ZIMConverter.oZIMGroupApplicationInfoList(map['applicationList']);
+          try {
+            if (ZIMEventHandler.onGroupApplicationUpdated == null) return;
+            List<ZIMGroupApplicationInfo> applicationList =
+                ZIMConverter.oZIMGroupApplicationInfoList(
+                    map['applicationList']);
             ZIMEventHandler.onGroupApplicationUpdated!(zim, applicationList);
-          } catch (error,e) {
-            ZIMError zim_error = ZIMError(code: -1, message: error.toString()+e.toString());
-            ZIMEventHandler.onError!(zim,zim_error);
-          };
+          } catch (error, e) {
+            ZIMError zim_error =
+                ZIMError(code: -1, message: error.toString() + e.toString());
+            ZIMEventHandler.onError!(zim, zim_error);
+          }
+          ;
           break;
         case 'onUserRuleUpdated':
-          if(ZIMEventHandler.onUserRuleUpdated == null) return;
+          if (ZIMEventHandler.onUserRuleUpdated == null) return;
           ZIMUserRule userRule = ZIMConverter.oZIMUserRule(map['userRule']);
-          ZIMEventHandler.onUserRuleUpdated!(zim,userRule);
+          ZIMEventHandler.onUserRuleUpdated!(zim, userRule);
           break;
         case 'onUserStatusUpdated':
-          if(ZIMEventHandler.onUserStatusUpdated == null) return;
-          List<ZIMUserStatus> userStatusList = ZIMConverter.oZIMUserStatusList(map['userStatusList']);
-          ZIMEventHandler.onUserStatusUpdated!(zim,userStatusList);
+          if (ZIMEventHandler.onUserStatusUpdated == null) return;
+          List<ZIMUserStatus> userStatusList =
+              ZIMConverter.oZIMUserStatusList(map['userStatusList']);
+          ZIMEventHandler.onUserStatusUpdated!(zim, userStatusList);
           break;
-      case 'onMessageRepliedCountChanged':
-        if(ZIMEventHandler.onMessageRepliedCountChanged == null) return;
-        List<ZIMMessageRootRepliedCountInfo> list = ZIMConverter.oZIMMessageRootRepliedCountInfoList(map['infos']);
-        ZIMEventHandler.onMessageRepliedCountChanged!(zim,list);
-        break;
-      case 'onMessageRepliedInfoChanged':
-        if(ZIMEventHandler.onMessageRepliedInfoChanged == null) return;
-        List<ZIMMessage> messageList = ZIMConverter.oZIMMessageList(map['messageList']);
-        ZIMEventHandler.onMessageRepliedInfoChanged!(zim,messageList);
-        break;
+        case 'onMessageRepliedCountChanged':
+          if (ZIMEventHandler.onMessageRepliedCountChanged == null) return;
+          List<ZIMMessageRootRepliedCountInfo> list =
+              ZIMConverter.oZIMMessageRootRepliedCountInfoList(map['infos']);
+          ZIMEventHandler.onMessageRepliedCountChanged!(zim, list);
+          break;
+        case 'onMessageRepliedInfoChanged':
+          if (ZIMEventHandler.onMessageRepliedInfoChanged == null) return;
+          List<ZIMMessage> messageList =
+              ZIMConverter.oZIMMessageList(map['messageList']);
+          ZIMEventHandler.onMessageRepliedInfoChanged!(zim, messageList);
+          break;
         default:
           break;
       }
-    } catch (onError, e){
-      ZIMError error = ZIMError(code: -1, message: 'dart execption,error:${onError.toString()},stack:${e.toString()}');
-      if(ZIMEventHandler.onError == null) return;
-      ZIMEventHandler.onError!(zim!,error);
+    } catch (onError, e) {
+      ZIMError error = ZIMError(
+          code: -1,
+          message:
+              'dart execption,error:${onError.toString()},stack:${e.toString()}');
+      if (ZIMEventHandler.onError == null) return;
+      ZIMEventHandler.onError!(zim!, error);
     }
   }
 }
-

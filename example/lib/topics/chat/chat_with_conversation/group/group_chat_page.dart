@@ -24,13 +24,13 @@ class GroupChatPage extends StatefulWidget {
         conversationID, ZIMConversationType.group);
 
     ZIM
-        .getInstance()
-        !.queryGroupMemberInfo(
+        .getInstance()!
+        .queryGroupMemberInfo(
             UserModel.shared().userInfo!.userID, conversationID)
         .then((value) => {myGroupMemberInfo = value.userInfo});
     ZIM
-        .getInstance()
-        !.queryGroupInfo(conversationID)
+        .getInstance()!
+        .queryGroupInfo(conversationID)
         .then((value) => {myGroupFullInfo = value.groupInfo});
   }
   String conversationID;
@@ -157,8 +157,11 @@ class GroupChatPageState extends State<GroupChatPage> {
     ZIMTextMessage textMessage = ZIMTextMessage(message: message);
     ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
     try {
-      ZIMMessageSentResult result = await ZIM
-          .getInstance()!.sendMessage(textMessage, widget.conversationID, ZIMConversationType.group,sendConfig);
+      ZIMMessageSentResult result = await ZIM.getInstance()!.sendMessage(
+          textMessage,
+          widget.conversationID,
+          ZIMConversationType.group,
+          sendConfig);
       widget._historyZIMMessageList.add(result.message);
       SendTextMsgCell cell =
           SendTextMsgCell(message: (result.message as ZIMTextMessage));
@@ -185,11 +188,19 @@ class GroupChatPageState extends State<GroupChatPage> {
     });
     try {
       log(mediaMessage.fileLocalPath);
-      ZIMMediaMessageSendNotification notification = ZIMMediaMessageSendNotification(onMediaUploadingProgress: (message, currentFileSize, totalFileSize) {
-            uploadingprogressModel.uploadingprogress!(
-            message, currentFileSize, totalFileSize);
-      },);
-      ZIMMessageSentResult result = await ZIM.getInstance()!.sendMediaMessage(mediaMessage, widget.conversationID, ZIMConversationType.group, ZIMMessageSendConfig(), notification);
+      ZIMMediaMessageSendNotification notification =
+          ZIMMediaMessageSendNotification(
+        onMediaUploadingProgress: (message, currentFileSize, totalFileSize) {
+          uploadingprogressModel.uploadingprogress!(
+              message, currentFileSize, totalFileSize);
+        },
+      );
+      ZIMMessageSentResult result = await ZIM.getInstance()!.sendMediaMessage(
+          mediaMessage,
+          widget.conversationID,
+          ZIMConversationType.group,
+          ZIMMessageSendConfig(),
+          notification);
 
       int index = widget._historyZIMMessageList
           .lastIndexWhere((element) => element == mediaMessage);
@@ -225,8 +236,8 @@ class GroupChatPageState extends State<GroupChatPage> {
     }
     try {
       ZIMMessageQueriedResult result = await ZIM
-          .getInstance()
-          !.queryHistoryMessage(
+          .getInstance()!
+          .queryHistoryMessage(
               widget.conversationID, ZIMConversationType.group, queryConfig);
       if (result.messageList.length < 20) {
         widget.queryHistoryMsgComplete = true;
@@ -261,8 +272,8 @@ class GroupChatPageState extends State<GroupChatPage> {
             if ((message as ZIMImageMessage).largeImageLocalPath == "") {
               ReceiveImageMsgCell resultCell;
               ZIM
-                  .getInstance()
-                  !.downloadMediaFile(message, ZIMMediaFileType.largeImage,
+                  .getInstance()!
+                  .downloadMediaFile(message, ZIMMediaFileType.largeImage,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveImageMsgCell(
@@ -285,8 +296,8 @@ class GroupChatPageState extends State<GroupChatPage> {
             if ((message as ZIMVideoMessage).fileLocalPath == "") {
               ReceiveVideoMsgCell resultCell;
               ZIM
-                  .getInstance()
-                  !.downloadMediaFile(message, ZIMMediaFileType.originalFile,
+                  .getInstance()!
+                  .downloadMediaFile(message, ZIMMediaFileType.originalFile,
                       (message, currentFileSize, totalFileSize) {})
                   .then((value) => {
                         resultCell = ReceiveVideoMsgCell(
