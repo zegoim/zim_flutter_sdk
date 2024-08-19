@@ -313,6 +313,110 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void queryUsersStatus(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if (zim == null) {
+            result.error("-1", "no native instance", null);
+            return;
+        }
+        ArrayList<String> userIDs = call.argument("userIDs");
+        zim.queryUsersStatus(userIDs, new ZIMUsersStatusQueriedCallback() {
+            @Override
+            public void onUsersStatusQueried(ArrayList<ZIMUserStatus> userStatusList,
+                                             ArrayList<ZIMErrorUserInfo> errorUserList,
+                                             ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("userStatusList",
+                                  ZIMPluginConverter.mZIMUserStatusList(userStatusList));
+                    resultMap.put("errorUserList",
+                                  ZIMPluginConverter.mZIMErrorUserInfoList(errorUserList));
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
+                }
+            }
+        });
+    }
+
+    public static void subscribeUsersStatus(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if (zim == null) {
+            result.error("-1", "no native instance", null);
+            return;
+        }
+        ArrayList<String> userIDs = call.argument("userIDs");
+        ZIMUserStatusSubscribeConfig config =
+            ZIMPluginConverter.oZIMUserStatusSubscribeConfig(call.argument("config"));
+        zim.subscribeUsersStatus(userIDs, config, new ZIMUsersStatusSubscribedCallback() {
+            @Override
+            public void onUsersStatusSubscribed(ArrayList<ZIMErrorUserInfo> errorUserList,
+                                                ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("errorUserList",
+                                  ZIMPluginConverter.mZIMErrorUserInfoList(errorUserList));
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
+                }
+            }
+        });
+    }
+
+    public static void unsubscribeUserStatus(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if (zim == null) {
+            result.error("-1", "no native instance", null);
+            return;
+        }
+        ArrayList<String> userIDs = call.argument("userIDs");
+        zim.unsubscribeUserStatus(userIDs, new ZIMUsersStatusUnsubscribedCallback() {
+            @Override
+            public void onUsersStatusUnsubscribed(ArrayList<ZIMErrorUserInfo> errorUserList,
+                                                  ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("errorUserList",
+                                  ZIMPluginConverter.mZIMErrorUserInfoList(errorUserList));
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
+                }
+            }
+        });
+    }
+
+    public static void querySubscribedUserStatusList(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if (zim == null) {
+            result.error("-1", "no native instance", null);
+            return;
+        }
+        ZIMSubscribedUserStatusQueryConfig config =
+            ZIMPluginConverter.oZIMSubscribedUserStatusQueryConfig(call.argument("config"));
+        zim.querySubscribedUserStatusList(config, new ZIMSubscribedUserStatusListQueriedCallback() {
+            @Override
+            public void onSubscribedUserStatusListQueried(
+                ArrayList<ZIMUserStatusSubscription> userStatusSubscriptionList,
+                ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("userStatusSubscriptionList",
+                                  ZIMPluginConverter.mZIMUserStatusSubscriptionList(
+                                      userStatusSubscriptionList));
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
+                }
+            }
+        });
+    }
+
     public static void queryConversationList(MethodCall call, Result result) {
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);

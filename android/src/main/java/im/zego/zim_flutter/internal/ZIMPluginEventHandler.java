@@ -732,6 +732,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onUserStatusUpdated(ZIM zim, ArrayList<ZIMUserStatus> userStatusList) {
+        super.onUserStatusUpdated(zim, userStatusList);
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onUserStatusUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("userStatusList", ZIMPluginConverter.mZIMUserStatusList(userStatusList));
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onMessageDeleted(ZIM zim, ZIMMessageDeletedInfo deletedInfo) {
         super.onMessageDeleted(zim, deletedInfo);
         if (mysink == null) {
