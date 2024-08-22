@@ -1119,6 +1119,7 @@ class ZIMConverter {
     groupInfoMap['groupID'] = groupInfo.groupID;
     groupInfoMap['groupName'] = groupInfo.groupName;
     groupInfoMap['groupAvatarUrl'] = groupInfo.groupAvatarUrl;
+    groupInfoMap['groupAlias'] = groupInfo.groupAlias;
     return groupInfoMap;
   }
 
@@ -1130,6 +1131,7 @@ class ZIMConverter {
     groupInfo.groupID = groupInfoMap['groupID'];
     groupInfo.groupName = groupInfoMap['groupName'] ?? '';
     groupInfo.groupAvatarUrl = groupInfoMap['groupAvatarUrl'] ?? '';
+    groupInfo.groupAlias = groupInfoMap['groupAlias'] ?? '';
     return groupInfo;
   }
 
@@ -1225,6 +1227,12 @@ class ZIMConverter {
     return ZIMGroupNameUpdatedResult(
         groupID: resultMap['groupID'], groupName: resultMap['groupName'] ?? '');
   }
+
+  static ZIMGroupAliasUpdatedResult oZIMGroupAliasUpdatedResult(Map resultMap) {
+    return ZIMGroupAliasUpdatedResult(
+        groupID: resultMap['groupID'], groupAlias: resultMap['groupAlias'] ?? '');
+  }
+
 
   static ZIMGroupNoticeUpdatedResult oZIMGroupNoticeUpdatedResult(
       Map resultMap) {

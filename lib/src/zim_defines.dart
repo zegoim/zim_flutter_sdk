@@ -1200,6 +1200,8 @@ class ZIMGroupInfo {
 
   /// Description: Group avatar url.
   String groupAvatarUrl = "";
+
+  String groupAlias = "";
   ZIMGroupInfo();
 }
 
@@ -2298,6 +2300,12 @@ class ZIMGroupNameUpdatedResult {
   String groupID;
   String groupName;
   ZIMGroupNameUpdatedResult({required this.groupID, required this.groupName});
+}
+
+class ZIMGroupAliasUpdatedResult {
+  String groupID;
+  String groupAlias;
+  ZIMGroupAliasUpdatedResult({required this.groupID, required this.groupAlias});
 }
 
 /// Description: Return result of group avatar url update operation.

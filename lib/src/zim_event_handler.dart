@@ -306,6 +306,9 @@ class ZIMEventHandler {
   static void Function(ZIM zim, String groupName,
       ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupNameUpdated;
 
+  static void Function(ZIM zim, String groupAlias,
+      ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupAliasUpdated;
+
   /// Description: Group avatar url change notification callback.
   ///
   /// Use cases: If the group avatar url is changed, you need to synchronize the latest group avatar url.
