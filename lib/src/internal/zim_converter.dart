@@ -144,6 +144,21 @@ class ZIMConverter {
     return ZIMUserNameUpdatedResult(userName: resultMap['userName']);
   }
 
+  static Map mZIMErrorUserInfo(ZIMErrorUserInfo errorUserInfo) {
+    Map map = {};
+    map['userID'] = errorUserInfo.userID;
+    map['reason'] = errorUserInfo.reason;
+    return map;
+  }
+
+  static List mZIMErrorUserInfoList(List<ZIMErrorUserInfo> errorUserList) {
+    List list = [];
+    for(ZIMErrorUserInfo errorUserInfo in errorUserList){
+      list.add(mZIMErrorUserInfo(errorUserInfo));
+    }
+    return list;
+  }
+
   static List<ZIMErrorUserInfo> oZIMErrorUserInfoList(List basicList) {
     List<ZIMErrorUserInfo> errorUserInfoList = [];
     for (Map errorUserInfoMap in basicList) {
@@ -2660,6 +2675,42 @@ class ZIMConverter {
     }
     userStatus.lastUpdateTime = userStatus.lastUpdateTime;
     return userStatus;
+  }
+
+  static Map mZIMUserStatus(ZIMUserStatus userStatus) {
+    Map map = {};
+    map['userID'] = userStatus.userID;
+    map['onlineStatus'] = userStatus.onlineStatus.value;
+    map['lastUpdateTime'] = userStatus.lastUpdateTime;
+    List onlinePlatforms = [];
+    for(ZIMPlatformType type in userStatus.onlinePlatforms){
+        onlinePlatforms.add(type.value);
+    }
+    map['onlinePlatforms'] = onlinePlatforms;
+    return map;
+  }
+
+  static List mZIMUserStatusList(List<ZIMUserStatus> statusList) {
+    List list = [];
+    for(ZIMUserStatus status in statusList){
+      list.add(mZIMUserStatus(status));
+    }
+    return list;
+  }
+
+  static Map mZIMUserStatusSubscription(ZIMUserStatusSubscription subscription) {
+    Map map = {};
+    map['userStatus'] = mZIMUserStatus(subscription.userStatus);
+    map['subscribeExpiredTime'] = subscription.subscribeExpiredTime;
+    return map;
+  }
+
+  static List mZIMUserStatusSubscriptionList(List<ZIMUserStatusSubscription> subscirptionList) {
+    List list = [];
+    for(ZIMUserStatusSubscription subscription in subscirptionList){
+      list.add(mZIMUserStatusSubscription(subscription));
+    }
+    return list;
   }
 
   static List<ZIMUserStatus> oZIMUserStatusList(List basicList) {
