@@ -153,7 +153,7 @@ class ZIMConverter {
 
   static List mZIMErrorUserInfoList(List<ZIMErrorUserInfo> errorUserList) {
     List list = [];
-    for(ZIMErrorUserInfo errorUserInfo in errorUserList){
+    for (ZIMErrorUserInfo errorUserInfo in errorUserList) {
       list.add(mZIMErrorUserInfo(errorUserInfo));
     }
     return list;
@@ -2683,8 +2683,8 @@ class ZIMConverter {
     map['onlineStatus'] = userStatus.onlineStatus.value;
     map['lastUpdateTime'] = userStatus.lastUpdateTime;
     List onlinePlatforms = [];
-    for(ZIMPlatformType type in userStatus.onlinePlatforms){
-        onlinePlatforms.add(type.value);
+    for (ZIMPlatformType type in userStatus.onlinePlatforms) {
+      onlinePlatforms.add(type.value);
     }
     map['onlinePlatforms'] = onlinePlatforms;
     return map;
@@ -2692,22 +2692,24 @@ class ZIMConverter {
 
   static List mZIMUserStatusList(List<ZIMUserStatus> statusList) {
     List list = [];
-    for(ZIMUserStatus status in statusList){
+    for (ZIMUserStatus status in statusList) {
       list.add(mZIMUserStatus(status));
     }
     return list;
   }
 
-  static Map mZIMUserStatusSubscription(ZIMUserStatusSubscription subscription) {
+  static Map mZIMUserStatusSubscription(
+      ZIMUserStatusSubscription subscription) {
     Map map = {};
     map['userStatus'] = mZIMUserStatus(subscription.userStatus);
     map['subscribeExpiredTime'] = subscription.subscribeExpiredTime;
     return map;
   }
 
-  static List mZIMUserStatusSubscriptionList(List<ZIMUserStatusSubscription> subscirptionList) {
+  static List mZIMUserStatusSubscriptionList(
+      List<ZIMUserStatusSubscription> subscirptionList) {
     List list = [];
-    for(ZIMUserStatusSubscription subscription in subscirptionList){
+    for (ZIMUserStatusSubscription subscription in subscirptionList) {
       list.add(mZIMUserStatusSubscription(subscription));
     }
     return list;

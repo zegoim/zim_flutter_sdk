@@ -287,6 +287,11 @@ class ZIMPluginConverter {
     static FTMap cnvZIMUserOfflinePushRuleToMap(const ZIMUserOfflinePushRule &offlinePushRule);
     static FTMap cnvZIMUserRuleToMap(const ZIMUserRule &rule);
     static FTMap cnvZIMSelfUserInfoToMap(const ZIMSelfUserInfo &info);
+    static FTMap cnvZIMUserStatusToMap(const ZIMUserStatus &status);
+    static FTArray cnvZIMUserStatusListToBasicList(const std::vector<ZIMUserStatus> &statusList);
+    static FTMap cnvZIMUserStatusSubscriptionToMap(const ZIMUserStatusSubscription &subscription);
+    static FTArray cnvZIMUserStatusSubscriptionListToBasicList(
+        const std::vector<ZIMUserStatusSubscription> &subscriptionList);
 
   public:
     static ZIMMessageSendConfig oZIMMessageSendConfig(FTMap configMap);
@@ -347,6 +352,9 @@ class ZIMPluginConverter {
     static ZIMFileCacheClearConfig cnvZIMFileCacheClearConfigToObject(FTMap configMap);
     static ZIMFileCacheQueryConfig cnvZIMFileCacheQueryConfigToObject(FTMap configMap);
     static ZIMUserOfflinePushRule cnvZIMUserOfflinePushRuleToObject(FTMap ruleMap);
+    static ZIMUserStatusSubscribeConfig cnvZIMUserStatusSubscribeConfigToObject(FTMap map);
+    static ZIMSubscribedUserStatusQueryConfig
+    cnvZIMSubscribedUserStatusQueryConfigToObject(FTMap map);
 
   public:
     static ZIMFriendAddConfig cnvZIMFriendAddConfigToObject(FTMap configMap);

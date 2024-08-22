@@ -41,9 +41,15 @@ class ZIMPluginMethodHandler {
     void uploadLog(FArgument &argument, FResult result);
     void renewToken(FArgument &argument, FResult result);
     void updateUserName(FArgument &argument, FResult result);
+
     void updateUserAvatarUrl(FArgument &argument, FResult result);
     void updateUserExtendedData(FArgument &argument, FResult result);
     void updateUserOfflinePushRule(FArgument &argument, FResult result);
+    void queryUsersStatus(FArgument &argument, FResult result);
+    void subscribeUsersStatus(FArgument &argument, FResult result);
+    void unsubscribeUserStatus(FArgument &argument, FResult result);
+    void querySubscribedUserStatusList(FArgument &argument, FResult result);
+
     void querySelfUserInfo(FArgument &argument, FResult result);
     void queryUsersInfo(FArgument &argument, FResult result);
     void queryConversationList(FArgument &argument, FResult result);

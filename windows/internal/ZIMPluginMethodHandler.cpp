@@ -229,6 +229,95 @@ void ZIMPluginMethodHandler::updateUserOfflinePushRule(FArgument &argument, FRes
         });
 }
 
+void ZIMPluginMethodHandler::queryUsersStatus(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto &userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    zim->queryUsersStatus(userIDsVec, [=](const std::vector<ZIMUserStatus> &userStatusList,
+                                          const std::vector<ZIMErrorUserInfo> &errorUserList,
+                                          const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("userStatusList")] =
+                ZIMPluginConverter::cnvZIMUserStatusListToBasicList(userStatusList);
+            retMap[FTValue("errorUserList")] =
+                ZIMPluginConverter::cnvZIMErrorUserInfoListToArray(errorUserList);
+            result->Success(retMap);
+        } else {
+            result->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::subscribeUsersStatus(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto &userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    ZIMUserStatusSubscribeConfig config =
+        ZIMPluginConverter::cnvZIMUserStatusSubscribeConfigToObject(argument[FTValue("config")]);
+    zim->subscribeUsersStatus(
+        userIDsVec, config,
+        [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
+            if (errorInfo.code == 0) {
+                FTMap retMap;
+                retMap[FTValue("errorUserList")] =
+                    ZIMPluginConverter::cnvZIMErrorUserInfoListToArray(errorUserList);
+                result->Success(retMap);
+            } else {
+                result->Error(std::to_string(errorInfo.code), errorInfo.message);
+            }
+        });
+}
+
+void ZIMPluginMethodHandler::unsubscribeUserStatus(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto &userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    zim->unsubscribeUserStatus(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList,
+                                               const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("errorUserList")] =
+                ZIMPluginConverter::cnvZIMErrorUserInfoListToArray(errorUserList);
+            result->Success(retMap);
+        } else {
+            result->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::querySubscribedUserStatusList(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+    ZIMSubscribedUserStatusQueryConfig config =
+        ZIMPluginConverter::cnvZIMSubscribedUserStatusQueryConfigToObject(
+            argument[FTValue("config")]);
+    zim->querySubscribedUserStatusList(
+        config, [=](const std::vector<ZIMUserStatusSubscription> &userStatusSubscriptionList,
+                    const ZIMError &errorInfo) {
+            if (errorInfo.code == 0) {
+                FTMap retMap;
+                retMap[FTValue("userStatusSubscriptionList")] =
+                    ZIMPluginConverter::cnvZIMUserStatusSubscriptionListToBasicList(
+                        userStatusSubscriptionList);
+                result->Success(retMap);
+            } else {
+                result->Error(std::to_string(errorInfo.code), errorInfo.message);
+            }
+        });
+}
+
 void ZIMPluginMethodHandler::querySelfUserInfo(FArgument &argument, FResult result) {
 
     CheckZIMInstanceExistAndObtainZIM();

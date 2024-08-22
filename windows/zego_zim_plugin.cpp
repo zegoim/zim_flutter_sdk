@@ -544,6 +544,15 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().querySelfUserInfo(argument, std::move(result));
     } else if (method_call.method_name() == "setGeofencingConfig") {
         ZIMPluginMethodHandler::getInstance().setGeofencingConfig(argument, std::move(result));
+    } else if (method_call.method_name() == "queryUsersStatus") {
+        ZIMPluginMethodHandler::getInstance().queryUsersStatus(argument, std::move(result));
+    } else if (method_call.method_name() == "subscribeUsersStatus") {
+        ZIMPluginMethodHandler::getInstance().subscribeUsersStatus(argument, std::move(result));
+    } else if (method_call.method_name() == "unsubscribeUserStatus") {
+        ZIMPluginMethodHandler::getInstance().unsubscribeUserStatus(argument, std::move(result));
+    } else if (method_call.method_name() == "querySubscribedUserStatusList") {
+        ZIMPluginMethodHandler::getInstance().querySubscribedUserStatusList(argument,
+                                                                            std::move(result));
     } else {
         result->NotImplemented();
     }

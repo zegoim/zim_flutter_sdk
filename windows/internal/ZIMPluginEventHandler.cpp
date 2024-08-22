@@ -71,6 +71,20 @@ void ZIMPluginEventHandler::onUserRuleUpdated(ZIM *zim, const ZIMUserRule &userR
     }
 }
 
+void ZIMPluginEventHandler::onUserStatusUpdated(ZIM *zim,
+                                                const std::vector<ZIMUserStatus> &userStatusList) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onUserStatusUpdated");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("userStatusList")] =
+            ZIMPluginConverter::cnvZIMUserStatusListToBasicList(userStatusList);
+
+        eventSink_->Success(retMap);
+    }
+}
+
 void ZIMPluginEventHandler::onTokenWillExpire(ZIM *zim, unsigned int second) {
     if (eventSink_) {
         FTMap retMap;
