@@ -1300,7 +1300,6 @@ FTMap ZIMPluginConverter::cnvZIMGroupInfoToMap(const ZIMGroupInfo &groupInfo) {
     groupInfoMap[FTValue("groupID")] = groupInfo.groupID;
     groupInfoMap[FTValue("groupName")] = groupInfo.groupName;
     groupInfoMap[FTValue("groupAvatarUrl")] = groupInfo.groupAvatarUrl;
-    groupInfoMap[FTValue("groupAlias")] = groupInfo.groupAlias;
 
     return groupInfoMap;
 }
@@ -1311,6 +1310,7 @@ FTArray ZIMPluginConverter::cnvZIMGroupListToArray(const std::vector<ZIMGroup> &
         FTMap groupMap;
         groupMap[FTValue("baseInfo")] = cnvZIMGroupInfoToMap(group.baseInfo);
         groupMap[FTValue("notificationStatus")] = FTValue((int32_t)group.notificationStatus);
+        groupMap[FTValue("groupAlias")] = group.groupAlias;
 
         groupArray.emplace_back(groupMap);
     }
@@ -1402,6 +1402,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo &group
 
     groupFullInfoMap[FTValue("baseInfo")] = cnvZIMGroupInfoToMap(groupInfo.baseInfo);
     groupFullInfoMap[FTValue("groupNotice")] = FTValue(groupInfo.groupNotice);
+    groupFullInfoMap[FTValue("groupAlias")] = FTValue(groupInfo.groupAlias);
     groupFullInfoMap[FTValue("groupAttributes")] = cnvSTLMapToFTMap(groupInfo.groupAttributes);
     groupFullInfoMap[FTValue("notificationStatus")] =
         FTValue((int32_t)groupInfo.notificationStatus);
@@ -1600,7 +1601,6 @@ ZIMGroupInfo ZIMPluginConverter::cnvZIMGroupInfoToObject(FTMap infoMap) {
     ZIMGroupInfo info;
     info.groupID = std::get<std::string>(infoMap[FTValue("groupID")]);
     info.groupName = std::get<std::string>(infoMap[FTValue("groupName")]);
-    info.groupAlias = std::get<std::string>(infoMap[FTValue("groupAlias")]);
     info.groupAvatarUrl = std::get<std::string>(infoMap[FTValue("groupAvatarUrl")]);
 
     return info;

@@ -1201,7 +1201,6 @@ class ZIMGroupInfo {
   /// Description: Group avatar url.
   String groupAvatarUrl = "";
 
-  String groupAlias = "";
   ZIMGroupInfo();
 }
 
@@ -1250,6 +1249,8 @@ class ZIMGroupFullInfo {
   /// Description: basic group notice.
   String groupNotice = "";
 
+  String groupAlias = "";
+  
   /// Description: where developers can customize key-value.
   Map<String, String> groupAttributes = {};
 
@@ -1276,6 +1277,9 @@ class ZIMGroup {
   /// Description: group DND status.
   ZIMGroupMessageNotificationStatus notificationStatus =
       ZIMGroupMessageNotificationStatus.notify;
+
+  String groupAlias = "";
+  
   ZIMGroup();
 }
 

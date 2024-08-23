@@ -397,7 +397,7 @@ void ZIMPluginEventHandler::onGroupNameUpdated(ZIM *zim, const std::string &grou
 }
 
 void ZIMPluginEventHandler::onGroupAliasUpdated(ZIM *zim, const std::string &groupAlias,
-                                                const ZIMGroupOperatedInfo &operatedInfo,
+                                                const std::string &operatedUserID,
                                                 const std::string &groupID) {
     if (eventSink_) {
         FTMap retMap;
@@ -406,8 +406,7 @@ void ZIMPluginEventHandler::onGroupAliasUpdated(ZIM *zim, const std::string &gro
         retMap[FTValue("handle")] = FTValue(handle);
         retMap[FTValue("groupID")] = FTValue(groupID);
         retMap[FTValue("groupAlias")] = FTValue(groupAlias);
-        retMap[FTValue("operatedInfo")] =
-            ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(operatedInfo);
+        retMap[FTValue("operatedUserID")] = FTValue(operatedUserID);
 
         eventSink_->Success(retMap);
     }

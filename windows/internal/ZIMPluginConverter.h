@@ -236,8 +236,6 @@ class ZIMPluginConverter {
     static FTMap cnvZIMRoomOperatedInfoToMap(const ZIMRoomOperatedInfo &info);
     static FTArray
     cnvZIMGroupMemberInfoListToArray(const std::vector<ZIMGroupMemberInfo> &memberList);
-    static FTMap cnvZIMGroupMessageReceiptMemberQueryConfigToMap(
-        const ZIMGroupMessageReceiptMemberQueryConfig &config);
     static FTMap cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo &groupInfo);
     static FTMap cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo &memberInfo);
     static FTMap cnvZIMGroupInfoToMap(const ZIMGroupInfo &groupInfo);

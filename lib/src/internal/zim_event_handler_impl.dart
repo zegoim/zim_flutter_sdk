@@ -188,7 +188,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           ZIMEventHandler.onGroupAliasUpdated!(
               zim,
               map['groupAlias'],
-              ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
+              map['operatedUserID'],
               map['groupID']);
           break;
         case 'onGroupNoticeUpdated':
