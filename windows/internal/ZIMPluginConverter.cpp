@@ -2025,7 +2025,7 @@ ZIMUserStatusSubscribeConfig
 ZIMPluginConverter::cnvZIMUserStatusSubscribeConfigToObject(FTMap map) {
     ZIMUserStatusSubscribeConfig config;
     config.subscriptionDuration =
-        ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("subscriptionDuration")]);
+        ZIMPluginConverter::cnvFTValueToInt32(map[FTValue("subscriptionDuration")]);
     return config;
 }
 
