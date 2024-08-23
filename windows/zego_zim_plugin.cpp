@@ -548,7 +548,7 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().queryUsersStatus(argument, std::move(result));
     } else if (method_call.method_name() == "subscribeUsersStatus") {
         ZIMPluginMethodHandler::getInstance().subscribeUsersStatus(argument, std::move(result));
-    } else if (method_call.method_name() == "unsubscribeUserStatus") {
+    } else if (method_call.method_name() == "unsubscribeUsersStatus") {
         ZIMPluginMethodHandler::getInstance().unsubscribeUserStatus(argument, std::move(result));
     } else if (method_call.method_name() == "querySubscribedUserStatusList") {
         ZIMPluginMethodHandler::getInstance().querySubscribedUserStatusList(argument,
