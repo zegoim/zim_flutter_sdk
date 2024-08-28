@@ -75,15 +75,15 @@ extension ZIMConnectionEventExtension on ZIMConnectionEvent {
 
 extension ZIMUserOnlineStatusExtension on ZIMUserOnlineStatus {
   static const valueMap = {
-    ZIMUserOnlineStatus.offline: 0,
-    ZIMUserOnlineStatus.online: 1,
+    ZIMUserOnlineStatus.online: 0,
+    ZIMUserOnlineStatus.offline: 1,
     ZIMUserOnlineStatus.logout: 2,
     ZIMUserOnlineStatus.unknown: 99
   };
 
   static const mapValue = {
-    0: ZIMUserOnlineStatus.offline,
-    1: ZIMUserOnlineStatus.online,
+    0: ZIMUserOnlineStatus.online,
+    1: ZIMUserOnlineStatus.offline,
     2: ZIMUserOnlineStatus.logout,
     99: ZIMUserOnlineStatus.unknown
   };
