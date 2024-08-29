@@ -2673,7 +2673,7 @@ class ZIMConverter {
       userStatus.onlinePlatforms
           .add(ZIMPlatformTypeExtension.mapValue[platform]!);
     }
-    userStatus.lastUpdateTime = userStatus.lastUpdateTime;
+    userStatus.lastUpdateTime = map['lastUpdateTime'];
     return userStatus;
   }
 
