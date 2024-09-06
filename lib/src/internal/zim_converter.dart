@@ -1173,7 +1173,7 @@ class ZIMConverter {
     if (groupFullInfo == null) {
       return null;
     }
-    
+
     Map groupMap = {};
     groupMap['groupID'] = groupFullInfo.baseInfo.groupID;
     groupMap['groupName'] = groupFullInfo.baseInfo.groupName;
@@ -1181,13 +1181,15 @@ class ZIMConverter {
     groupMap['groupNotice'] = groupFullInfo.groupNotice;
     groupMap['groupAlias'] = groupFullInfo.groupAlias;
     groupMap['groupAttributes'] = groupFullInfo.groupAttributes;
-    groupMap['mutedInfo'] = ZIMConverter.mZIMGroupMuteInfo(groupFullInfo.mutedInfo);
-    groupMap['verifyInfo'] = ZIMConverter.mZIMGroupVerifyInfo(groupFullInfo.verifyInfo);
+    groupMap['mutedInfo'] =
+        ZIMConverter.mZIMGroupMuteInfo(groupFullInfo.mutedInfo);
+    groupMap['verifyInfo'] =
+        ZIMConverter.mZIMGroupVerifyInfo(groupFullInfo.verifyInfo);
     groupMap['maxMemberCount'] = groupFullInfo.maxMemberCount;
     groupMap['createTime'] = groupFullInfo.createTime;
     groupMap['maxMemberCount'] = groupFullInfo.maxMemberCount;
     groupMap['notificationStatus'] = groupFullInfo.notificationStatus.value;
-    
+
     return groupMap;
   }
 
@@ -1266,9 +1268,9 @@ class ZIMConverter {
 
   static ZIMGroupAliasUpdatedResult oZIMGroupAliasUpdatedResult(Map resultMap) {
     return ZIMGroupAliasUpdatedResult(
-        groupID: resultMap['groupID'], groupAlias: resultMap['groupAlias'] ?? '');
+        groupID: resultMap['groupID'],
+        groupAlias: resultMap['groupAlias'] ?? '');
   }
-
 
   static ZIMGroupNoticeUpdatedResult oZIMGroupNoticeUpdatedResult(
       Map resultMap) {

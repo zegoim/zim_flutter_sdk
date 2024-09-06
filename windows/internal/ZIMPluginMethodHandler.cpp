@@ -262,7 +262,8 @@ void ZIMPluginMethodHandler::subscribeUsersStatus(FArgument &argument, FResult r
         userIDsVec.emplace_back(userID);
     }
     ZIMUserStatusSubscribeConfig config =
-        ZIMPluginConverter::cnvZIMUserStatusSubscribeConfigToObject(std::get<FTMap>(argument[FTValue("config")]));
+        ZIMPluginConverter::cnvZIMUserStatusSubscribeConfigToObject(
+            std::get<FTMap>(argument[FTValue("config")]));
     zim->subscribeUsersStatus(
         userIDsVec, config,
         [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {

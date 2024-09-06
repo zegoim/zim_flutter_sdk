@@ -1272,7 +1272,7 @@ class ZIMGroupFullInfo {
   String groupNotice = "";
 
   String groupAlias = "";
-  
+
   /// Description: where developers can customize key-value.
   Map<String, String> groupAttributes = {};
 
@@ -1301,7 +1301,7 @@ class ZIMGroup {
       ZIMGroupMessageNotificationStatus.notify;
 
   String groupAlias = "";
-  
+
   ZIMGroup();
 }
 

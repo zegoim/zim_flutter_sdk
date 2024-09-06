@@ -186,10 +186,7 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           if (ZIMEventHandler.onGroupAliasUpdated == null) return;
 
           ZIMEventHandler.onGroupAliasUpdated!(
-              zim,
-              map['groupAlias'],
-              map['operatedUserID'],
-              map['groupID']);
+              zim, map['groupAlias'], map['operatedUserID'], map['groupID']);
           break;
         case 'onGroupNoticeUpdated':
           if (ZIMEventHandler.onGroupNoticeUpdated == null) return;
