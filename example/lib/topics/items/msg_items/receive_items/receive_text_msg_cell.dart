@@ -36,11 +36,7 @@ class _MyCellState extends State<ReceiveTextMsgCell> {
                     height: 5,
                   ),
                   TextBubble(
-                      widget.message.message,
-                      Colors.white,
-                      Colors.black,
-                      5,
-                      5)
+                      widget.message.message, Colors.white, Colors.black, 5, 5)
                 ],
               ),
             ),

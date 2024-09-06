@@ -1,19 +1,16 @@
 package com.example.zego_zim_example.src.im.zego.serverassistant.utils;
 
 import android.os.Build;
-
 import androidx.annotation.RequiresApi;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TokenServerAssistant {
     static final private String VERSION_FLAG = "04";
@@ -120,7 +117,8 @@ public class TokenServerAssistant {
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     static public TokenInfo generateToken04(long appId, String userId, String secret,
-                                            int effectiveTimeInSeconds, String payload) throws JSONException {
+                                            int effectiveTimeInSeconds, String payload)
+        throws JSONException {
         TokenInfo token = new TokenInfo();
 
         // check the appId
@@ -199,7 +197,7 @@ public class TokenServerAssistant {
     }
 
     static private byte[] encrypt(byte[] content, byte[] secretKey, byte[] ivBytes)
-            throws Exception {
+        throws Exception {
         if (secretKey == null || secretKey.length != 32) {
             throw new IllegalArgumentException("secret key's length must be 32 bytes");
         }

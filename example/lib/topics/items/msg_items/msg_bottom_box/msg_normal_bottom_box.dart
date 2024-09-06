@@ -172,7 +172,6 @@ class _WidgetState extends State<MsgNormalBottomBox> {
                 height: 250,
                 width: double.infinity,
                 child: EmojiPicker(
-
                     onEmojiSelected: (Category? category, Emoji emoji) {
                       _onEmojiSelected(emoji);
                     },

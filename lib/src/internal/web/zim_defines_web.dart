@@ -50,7 +50,8 @@ class ZIM {
       dynamic notification);
   external PromiseJsImpl<dynamic> queryHistoryMessage(
       String conversationID, int conversationType, Object config);
-  external PromiseJsImpl<dynamic> queryMessages(dynamic messageSeqs,String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> queryMessages(
+      dynamic messageSeqs, String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> sendPeerMessage(
       Object message, String toUserID, Object config);
   external PromiseJsImpl<dynamic> sendRoomMessage(
@@ -95,8 +96,10 @@ class ZIM {
       String userID, String groupID);
   external PromiseJsImpl<dynamic> queryGroupMemberList(
       String groupID, Object? config);
-  external PromiseJsImpl<dynamic> queryConversationList(dynamic config,dynamic option);
-  external PromiseJsImpl<dynamic> queryConversationTotalUnreadMessageCount(dynamic config);
+  external PromiseJsImpl<dynamic> queryConversationList(
+      dynamic config, dynamic option);
+  external PromiseJsImpl<dynamic> queryConversationTotalUnreadMessageCount(
+      dynamic config);
   external PromiseJsImpl<dynamic> deleteConversation(
       String conversationID, dynamic conversationType, Object? config);
   external PromiseJsImpl<dynamic> deleteAllConversations(dynamic config);
@@ -113,7 +116,8 @@ class ZIM {
   external PromiseJsImpl<dynamic> callJoin(String callID, Object config);
   external PromiseJsImpl<dynamic> callQuit(String callID, Object config);
   external PromiseJsImpl<dynamic> callEnd(String callID, Object config);
-  external PromiseJsImpl<dynamic> callingInvite(dynamic invitees, String callID, Object config);
+  external PromiseJsImpl<dynamic> callingInvite(
+      dynamic invitees, String callID, Object config);
   external PromiseJsImpl<dynamic> queryCallInvitationList(Object config);
   external PromiseJsImpl<dynamic> queryRoomMemberAttributesList(
       String roomID, Object config);
@@ -127,38 +131,64 @@ class ZIM {
       Object notification);
   external PromiseJsImpl<dynamic> insertMessageToLocalDB(Object message,
       String conversationID, dynamic conversationType, String senderUserID);
-  external PromiseJsImpl<dynamic> setRoomMembersAttributes(dynamic attributes, dynamic userIDs, String roomID, Object config);
-  external PromiseJsImpl<dynamic> sendConversationMessageReceiptRead(String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> sendMessageReceiptsRead(dynamic messageList, String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> queryMessageReceiptsInfo(dynamic messageList, String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> queryGroupMessageReceiptReadMemberList(dynamic message, String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> queryGroupMessageReceiptUnreadMemberList(dynamic message, String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> revokeMessage(dynamic message, dynamic config);
+  external PromiseJsImpl<dynamic> setRoomMembersAttributes(
+      dynamic attributes, dynamic userIDs, String roomID, Object config);
+  external PromiseJsImpl<dynamic> sendConversationMessageReceiptRead(
+      String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> sendMessageReceiptsRead(
+      dynamic messageList, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> queryMessageReceiptsInfo(
+      dynamic messageList, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> queryGroupMessageReceiptReadMemberList(
+      dynamic message, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> queryGroupMessageReceiptUnreadMemberList(
+      dynamic message, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> revokeMessage(
+      dynamic message, dynamic config);
   external PromiseJsImpl<dynamic> queryConversationPinnedList(dynamic config);
-  external PromiseJsImpl<dynamic> updateConversationPinnedState(bool isPinned, String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> queryRoomMembers(dynamic userIDs, String roomID);
-  external PromiseJsImpl<dynamic> queryConversation(String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> updateConversationPinnedState(
+      bool isPinned, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> queryRoomMembers(
+      dynamic userIDs, String roomID);
+  external PromiseJsImpl<dynamic> queryConversation(
+      String conversationID, dynamic conversationType);
   external PromiseJsImpl<dynamic> searchLocalConversations(dynamic config);
   external PromiseJsImpl<dynamic> searchGlobalLocalMessages(dynamic config);
-  external PromiseJsImpl<dynamic> searchLocalMessages(String conversationID, dynamic conversationType, dynamic config);
+  external PromiseJsImpl<dynamic> searchLocalMessages(
+      String conversationID, dynamic conversationType, dynamic config);
   external PromiseJsImpl<dynamic> searchLocalGroups(dynamic config);
-  external PromiseJsImpl<dynamic> searchLocalGroupMembers(String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> addMessageReaction(String reactionType, dynamic message);
-  external PromiseJsImpl<dynamic> deleteMessageReaction(String reactionType, dynamic message);
-  external PromiseJsImpl<dynamic> queryMessageReactionUserList(dynamic message, dynamic config);
-  external PromiseJsImpl<dynamic> setConversationDraft(String draft, String conversationID, dynamic conversationType);
-  external PromiseJsImpl<dynamic> setConversationMark(int markType, bool enable, dynamic conversationInfos);
+  external PromiseJsImpl<dynamic> searchLocalGroupMembers(
+      String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> addMessageReaction(
+      String reactionType, dynamic message);
+  external PromiseJsImpl<dynamic> deleteMessageReaction(
+      String reactionType, dynamic message);
+  external PromiseJsImpl<dynamic> queryMessageReactionUserList(
+      dynamic message, dynamic config);
+  external PromiseJsImpl<dynamic> setConversationDraft(
+      String draft, String conversationID, dynamic conversationType);
+  external PromiseJsImpl<dynamic> setConversationMark(
+      int markType, bool enable, dynamic conversationInfos);
   external PromiseJsImpl<dynamic> queryCombineMessageDetail(dynamic message);
-  external PromiseJsImpl<dynamic> muteGroup(bool isMute, String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> muteGroupMembers(bool isMute, dynamic userIDs, String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> queryGroupMemberMutedList(String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> muteGroup(
+      bool isMute, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> muteGroupMembers(
+      bool isMute, dynamic userIDs, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> queryGroupMemberMutedList(
+      String groupID, dynamic config);
   external PromiseJsImpl<dynamic> addFriend(String userID, dynamic config);
-  external PromiseJsImpl<dynamic> deleteFriends(dynamic userIDs, dynamic config);
-  external PromiseJsImpl<dynamic> checkFriendsRelation(dynamic userIDs, dynamic config);
-  external PromiseJsImpl<dynamic> updateFriendAlias(String friendAlias, String userID);
-  external PromiseJsImpl<dynamic> updateFriendAttributes(dynamic friendAttributes, String userID);
-  external PromiseJsImpl<dynamic> acceptFriendApplication(String userID, dynamic config);
-  external PromiseJsImpl<dynamic> rejectFriendApplication(String userID, dynamic config);
+  external PromiseJsImpl<dynamic> deleteFriends(
+      dynamic userIDs, dynamic config);
+  external PromiseJsImpl<dynamic> checkFriendsRelation(
+      dynamic userIDs, dynamic config);
+  external PromiseJsImpl<dynamic> updateFriendAlias(
+      String friendAlias, String userID);
+  external PromiseJsImpl<dynamic> updateFriendAttributes(
+      dynamic friendAttributes, String userID);
+  external PromiseJsImpl<dynamic> acceptFriendApplication(
+      String userID, dynamic config);
+  external PromiseJsImpl<dynamic> rejectFriendApplication(
+      String userID, dynamic config);
   external PromiseJsImpl<dynamic> queryFriendsInfo(dynamic userIDs);
   external PromiseJsImpl<dynamic> queryFriendList(dynamic config);
   external PromiseJsImpl<dynamic> queryFriendApplicationList(dynamic config);
@@ -168,20 +198,33 @@ class ZIM {
   external PromiseJsImpl<dynamic> queryBlacklist(dynamic config);
   external PromiseJsImpl<dynamic> deleteAllConversationMessages(dynamic config);
   external PromiseJsImpl<dynamic> searchLocalFriends(dynamic config);
-  external PromiseJsImpl<dynamic> sendFriendApplication(String userID, dynamic config);
-  external PromiseJsImpl<dynamic> updateUserOfflinePushRule(dynamic offlinePushRule);
+  external PromiseJsImpl<dynamic> sendFriendApplication(
+      String userID, dynamic config);
+  external PromiseJsImpl<dynamic> updateUserOfflinePushRule(
+      dynamic offlinePushRule);
   external PromiseJsImpl<dynamic> querySelfUserInfo();
-  external PromiseJsImpl<dynamic> replyMessage(dynamic message, dynamic toOriginalMessage, dynamic config, dynamic notification);
-  external PromiseJsImpl<dynamic> queryMessageRepliedList(dynamic message, dynamic config);
-  external PromiseJsImpl<dynamic> updateGroupJoinMode(dynamic mode, String groupID);
-  external PromiseJsImpl<dynamic> updateGroupInviteMode(dynamic mode, String groupID);
-  external PromiseJsImpl<dynamic> updateGroupBeInviteMode(dynamic mode, String groupID);
-  external PromiseJsImpl<dynamic> sendGroupJoinApplication(String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> acceptGroupJoinApplication(String userID, String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> rejectGroupJoinApplication(String userID, String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> sendGroupInviteApplications(dynamic userIDs, String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> acceptGroupInviteApplication(String inviterUserID, String groupID, dynamic config);
-  external PromiseJsImpl<dynamic> rejectGroupInviteApplication(String inviterUserID, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> replyMessage(dynamic message,
+      dynamic toOriginalMessage, dynamic config, dynamic notification);
+  external PromiseJsImpl<dynamic> queryMessageRepliedList(
+      dynamic message, dynamic config);
+  external PromiseJsImpl<dynamic> updateGroupJoinMode(
+      dynamic mode, String groupID);
+  external PromiseJsImpl<dynamic> updateGroupInviteMode(
+      dynamic mode, String groupID);
+  external PromiseJsImpl<dynamic> updateGroupBeInviteMode(
+      dynamic mode, String groupID);
+  external PromiseJsImpl<dynamic> sendGroupJoinApplication(
+      String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> acceptGroupJoinApplication(
+      String userID, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> rejectGroupJoinApplication(
+      String userID, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> sendGroupInviteApplications(
+      dynamic userIDs, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> acceptGroupInviteApplication(
+      String inviterUserID, String groupID, dynamic config);
+  external PromiseJsImpl<dynamic> rejectGroupInviteApplication(
+      String inviterUserID, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> queryGroupApplicationList(dynamic config);
 }
 

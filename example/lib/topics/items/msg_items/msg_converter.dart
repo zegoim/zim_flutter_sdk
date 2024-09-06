@@ -46,12 +46,10 @@ class MsgConverter {
           }
           if (message.senderUserID == UserModel.shared().userInfo!.userID) {
             cell = SendVideoMsgCell(
-                message: message,
-                uploadingprogressModel: null);
+                message: message, uploadingprogressModel: null);
           } else {
             cell = ReceiveVideoMsgCell(
-                message: message,
-                downloadingProgressModel: null);
+                message: message, downloadingProgressModel: null);
           }
           break;
         case ZIMMessageType.revoke:

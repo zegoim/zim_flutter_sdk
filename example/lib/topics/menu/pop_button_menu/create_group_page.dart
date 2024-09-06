@@ -99,8 +99,8 @@ class _PageState extends State<CreateGroupPage> {
                           zimGroupInfo.groupID = widget.targetGroupID;
                           zimGroupInfo.groupName = widget.targetGroupName;
                           ZIMGroupCreatedResult result = await ZIM
-                              .getInstance()
-                              !.createGroup(zimGroupInfo, []);
+                              .getInstance()!
+                              .createGroup(zimGroupInfo, []);
                           Navigator.pop(context);
                           Navigator.push(context,
                               MaterialPageRoute(builder: ((context) {

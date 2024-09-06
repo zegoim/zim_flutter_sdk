@@ -5,7 +5,6 @@ import 'package:zego_zim/zego_zim.dart';
 import 'group_cell.dart';
 
 class GroupList extends StatefulWidget {
-
   List<ZIMGroup> _groupList = <ZIMGroup>[];
   List<GroupListCell> _groupWidgetList = <GroupListCell>[];
 
@@ -14,15 +13,11 @@ class GroupList extends StatefulWidget {
 }
 
 class GroupListState extends State<GroupList> {
-  
-
   @override
   void initState() {
     updateGroupList();
     super.initState();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +45,7 @@ class GroupListState extends State<GroupList> {
         groupWidgetList.add(cell);
       }
       widget._groupWidgetList = groupWidgetList;
-      setState(() {
-        
-      });
+      setState(() {});
     } on PlatformException catch (onError) {}
   }
 }

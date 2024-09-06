@@ -336,15 +336,12 @@ enum ZIMMessageSentStatus {
 enum ZIMMessageOrder {
   /// Represents message list in descending order (message list order is from new to old).
   descending,
+
   /// Represents message list in ascending order (message list order is from old to new).
   ascending
 }
 
-enum ZIMMessageRepliedInfoState {
-  normal,
-  deleted,
-  notFound
-}
+enum ZIMMessageRepliedInfoState { normal, deleted, notFound }
 
 /// conversation type.
 enum ZIMConversationType { unknown, peer, room, group }
@@ -354,18 +351,12 @@ enum ZIMMessageDeleteType {
   conversationAllMessagesDeleted,
   allConversationMessagesDeleted
 }
+
 /// conversation changed event.
-enum ZIMConversationEvent {
-  added,
-  updated,
-  disabled,
-  deleted
-}
+enum ZIMConversationEvent { added, updated, disabled, deleted }
+
 ///Enumeration of conversation notification status.
-enum ZIMConversationNotificationStatus {
-  notify,
-  doNotDisturb
-}
+enum ZIMConversationNotificationStatus { notify, doNotDisturb }
 
 /// Description: Group events.
 enum ZIMGroupEvent {
@@ -470,7 +461,17 @@ enum ZIMUserRelationType {
 
 enum ZIMBlacklistChangeAction { added, removed }
 
-enum ZIMPlatformType{win,iPhoneOS,android,macOS,linux,web,miniProgram,iPadOS,unknown}
+enum ZIMPlatformType {
+  win,
+  iPhoneOS,
+  android,
+  macOS,
+  linux,
+  web,
+  miniProgram,
+  iPadOS,
+  unknown
+}
 
 class ZIMVoIPConfig {
   ZIMCXHandleType iOSVoIPHandleType = ZIMCXHandleType.generic;
@@ -587,7 +588,8 @@ class ZIMMessageRevokeConfig {
 class ZIMMessageSendNotification {
   ZIMMessageAttachedCallback? onMessageAttached;
   ZIMMediaUploadingProgress? onMediaUploadingProgress;
-  ZIMMessageSendNotification({this.onMessageAttached,this.onMediaUploadingProgress});
+  ZIMMessageSendNotification(
+      {this.onMessageAttached, this.onMediaUploadingProgress});
 }
 
 class ZIMMediaMessageSendNotification {
@@ -783,7 +785,6 @@ class ZIMCustomMessage extends ZIMMessage {
 }
 
 class ZIMTipsMessage extends ZIMMessage {
-
   ZIMTipsMessageEvent event = ZIMTipsMessageEvent.groupCreated;
 
   ZIMUserInfo? operatedUser;
@@ -797,7 +798,7 @@ class ZIMMessageLiteInfo {
   ZIMMessageType type = ZIMMessageType.unknown;
 }
 
-class ZIMTextMessageLiteInfo extends ZIMMessageLiteInfo{
+class ZIMTextMessageLiteInfo extends ZIMMessageLiteInfo {
   String message = '';
 
   ZIMTextMessageLiteInfo() {
@@ -805,7 +806,7 @@ class ZIMTextMessageLiteInfo extends ZIMMessageLiteInfo{
   }
 }
 
-class ZIMCustomMessageLiteInfo extends ZIMMessageLiteInfo{
+class ZIMCustomMessageLiteInfo extends ZIMMessageLiteInfo {
   String message = '';
   int subType = 0;
 
@@ -814,7 +815,7 @@ class ZIMCustomMessageLiteInfo extends ZIMMessageLiteInfo{
   }
 }
 
-class ZIMCombineMessageLiteInfo extends ZIMMessageLiteInfo{
+class ZIMCombineMessageLiteInfo extends ZIMMessageLiteInfo {
   String title = '';
   String summary = '';
 
@@ -823,20 +824,20 @@ class ZIMCombineMessageLiteInfo extends ZIMMessageLiteInfo{
   }
 }
 
-class ZIMRevokeMessageLiteInfo extends ZIMMessageLiteInfo{
+class ZIMRevokeMessageLiteInfo extends ZIMMessageLiteInfo {
   ZIMRevokeMessageLiteInfo() {
     super.type = ZIMMessageType.revoke;
   }
 }
 
-class ZIMMediaMessageLiteInfo extends ZIMMessageLiteInfo{
+class ZIMMediaMessageLiteInfo extends ZIMMessageLiteInfo {
   int fileSize = 0;
   String fileName = '';
   String fileLocalPath = '';
   String fileDownloadUrl = '';
 }
 
-class ZIMImageMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+class ZIMImageMessageLiteInfo extends ZIMMediaMessageLiteInfo {
   int originalImageWidth = 0;
   int originalImageHeight = 0;
 
@@ -855,13 +856,13 @@ class ZIMImageMessageLiteInfo extends ZIMMediaMessageLiteInfo{
   }
 }
 
-class ZIMFileMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+class ZIMFileMessageLiteInfo extends ZIMMediaMessageLiteInfo {
   ZIMFileMessageLiteInfo() {
     super.type = ZIMMessageType.file;
   }
 }
 
-class ZIMAudioMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+class ZIMAudioMessageLiteInfo extends ZIMMediaMessageLiteInfo {
   int audioDuration = 0;
 
   ZIMAudioMessageLiteInfo() {
@@ -869,7 +870,7 @@ class ZIMAudioMessageLiteInfo extends ZIMMediaMessageLiteInfo{
   }
 }
 
-class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo{
+class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo {
   int videoDuration = 0;
   String videoFirstFrameDownloadUrl = '';
   String videoFirstFrameLocalPath = '';
@@ -881,7 +882,7 @@ class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo{
   }
 }
 
-class ZIMMessageRepliedInfo{
+class ZIMMessageRepliedInfo {
   ZIMMessageRepliedInfoState state = ZIMMessageRepliedInfoState.normal;
   ZIMMessageLiteInfo messageInfo = ZIMMessageLiteInfo();
   int messageID = 0;
@@ -890,7 +891,7 @@ class ZIMMessageRepliedInfo{
   int sentTime = 0;
 }
 
-class ZIMMessageRootRepliedCountInfo{
+class ZIMMessageRootRepliedCountInfo {
   int messageID = 0;
   String conversationID = '';
   ZIMConversationType conversationType = ZIMConversationType.unknown;
@@ -905,7 +906,7 @@ class ZIMMessageRootRepliedInfo {
   int repliedCount = 0;
 }
 
-class ZIMMessageRepliedListQueryConfig{
+class ZIMMessageRepliedListQueryConfig {
   int nextFlag = 0;
   int count = 0;
 }
@@ -948,12 +949,7 @@ class ZIMConversationTotalUnreadMessageCountQueryConfig {
   List<ZIMConversationType> conversationTypes = <ZIMConversationType>[];
 }
 
-enum ZIMMessageMentionedType {
-  unknown,
-  mentionMe,
-  mentionAll,
-  mentionAllAndMe
-}
+enum ZIMMessageMentionedType { unknown, mentionMe, mentionAll, mentionAllAndMe }
 
 enum ZIMGroupApplicationType {
   none,
@@ -2879,14 +2875,13 @@ typedef ZIMMessageExportingProgress = void Function(
     int exportedMessageCount, int totalMessageCount);
 
 class ZIMMessageImportConfig {
-
   ZIMMessageImportConfig();
 }
 
 class ZIMMessageExportConfig {
-
   ZIMMessageExportConfig();
 }
+
 class ZIMFriendAddConfig {
   String wording = "";
   String friendAlias = "";
@@ -2964,10 +2959,11 @@ class ZIMBlacklistQueryConfig {
 }
 
 class ZIMTipsMessageChangeInfo {
-  ZIMTipsMessageChangeInfoType type = ZIMTipsMessageChangeInfoType.groupMemberMutedChanged;
+  ZIMTipsMessageChangeInfoType type =
+      ZIMTipsMessageChangeInfoType.groupMemberMutedChanged;
 }
 
-class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo{
+class ZIMTipsMessageGroupChangeInfo extends ZIMTipsMessageChangeInfo {
   int groupDataFlag = 0;
   String groupName = '';
   String groupNotice = '';
@@ -2980,12 +2976,11 @@ class ZIMTipsMessageGroupMemberChangeInfo extends ZIMTipsMessageChangeInfo {
   int muteExpiredTime = 0;
 }
 
-class ZIMGroupDataFlag{
+class ZIMGroupDataFlag {
   static const int groupName = 1 << 0; // 0b0001
   static const int groupNotice = 1 << 1; // 0b0010
   static const int avatarUrl = 1 << 2; // 0b0100
 }
-
 
 class ZIMUserOfflinePushRule {
   List<ZIMPlatformType> onlinePlatforms = [];
@@ -3000,13 +2995,14 @@ class ZIMUserRule {
 class ZIMSelfUserInfo {
   ZIMUserRule userRule;
   ZIMUserFullInfo userFullInfo;
-  ZIMSelfUserInfo({required this.userRule,required this.userFullInfo});
+  ZIMSelfUserInfo({required this.userRule, required this.userFullInfo});
 }
 
 class ZIMUserOfflinePushRuleUpdatedResult {
   ZIMUserOfflinePushRule offlinePushRule;
   ZIMUserOfflinePushRuleUpdatedResult({required this.offlinePushRule});
 }
+
 /// Callback result of querying personal user information and rules.
 class ZIMSelfUserInfoQueriedResult {
   /// Own user information, rule data.
@@ -3027,5 +3023,6 @@ class ZIMConversationMarkSetResult {
 
 class ZIMConversationTotalUnreadMessageCountQueriedResult {
   int unreadMessageCount;
-  ZIMConversationTotalUnreadMessageCountQueriedResult({required this.unreadMessageCount});
+  ZIMConversationTotalUnreadMessageCountQueriedResult(
+      {required this.unreadMessageCount});
 }

@@ -9,8 +9,8 @@
 
 @implementation NSMutableArray (safeInvoke)
 
--(void)safeAddObject:(nullable id)object{
-    if(object == nil || object == NULL || [object isEqual:[NSNull null]]){
+- (void)safeAddObject:(nullable id)object {
+    if (object == nil || object == NULL || [object isEqual:[NSNull null]]) {
         [self addObject:[NSNull null]];
         return;
     }

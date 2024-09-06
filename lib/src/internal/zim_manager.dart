@@ -26,7 +26,7 @@ class ZIMManager {
     return await channel.invokeMethod('getVersion');
   }
 
-  static writeLog(String logString){
+  static writeLog(String logString) {
     // try{
     //   channel.invokeMethod('writeLog',{"logString":logString});
     // }catch(e,s){
@@ -35,20 +35,28 @@ class ZIMManager {
   }
 
   static setAdvancedConfig(String key, String value) async {
-    return await channel.invokeMethod('setAdvancedConfig',{'key':key,'value':value});
+    return await channel
+        .invokeMethod('setAdvancedConfig', {'key': key, 'value': value});
   }
 
   static setLogConfig(ZIMLogConfig config) {
-    channel.invokeMethod(
-        'setLogConfig', {'logPath': config.logPath, 'logSize': config.logSize, 'logLevel': config.logLevel});
+    channel.invokeMethod('setLogConfig', {
+      'logPath': config.logPath,
+      'logSize': config.logSize,
+      'logLevel': config.logLevel
+    });
   }
 
   static setCacheConfig(ZIMCacheConfig config) {
     channel.invokeMethod('setCacheConfig', {'cachePath': config.cachePath});
   }
 
-  static Future<bool> setGeofencingConfig(List<int> areaList ,ZIMGeofencingType type) async{
-    return await channel.invokeMethod('setGeofencingConfig',{'type':ZIMGeofencingTypeExtension.valueMap[type],'areaList':areaList});
+  static Future<bool> setGeofencingConfig(
+      List<int> areaList, ZIMGeofencingType type) async {
+    return await channel.invokeMethod('setGeofencingConfig', {
+      'type': ZIMGeofencingTypeExtension.valueMap[type],
+      'areaList': areaList
+    });
   }
 
   static ZIMEngine? createEngine(ZIMAppConfig config) {
