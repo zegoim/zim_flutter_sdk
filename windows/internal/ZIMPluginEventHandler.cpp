@@ -410,6 +410,22 @@ void ZIMPluginEventHandler::onGroupNameUpdated(ZIM *zim, const std::string &grou
     }
 }
 
+void ZIMPluginEventHandler::onGroupAliasUpdated(ZIM *zim, const std::string &groupAlias,
+                                                const std::string &operatedUserID,
+                                                const std::string &groupID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupAliasUpdated");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("groupID")] = FTValue(groupID);
+        retMap[FTValue("groupAlias")] = FTValue(groupAlias);
+        retMap[FTValue("operatedUserID")] = FTValue(operatedUserID);
+
+        eventSink_->Success(retMap);
+    }
+}
+
 void ZIMPluginEventHandler::onGroupAvatarUrlUpdated(ZIM *zim, const std::string &groupAvatarUrl,
                                                     const ZIMGroupOperatedInfo &operatedInfo,
                                                     const std::string &groupID) {

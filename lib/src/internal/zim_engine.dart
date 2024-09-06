@@ -525,6 +525,14 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMGroupAliasUpdatedResult> updateGroupAlias(
+      String groupAlias, String groupID) async {
+    Map resultMap = await channel.invokeMethod('updateGroupAlias',
+        {'handle': handle, 'groupAlias': groupAlias, 'groupID': groupID});
+    return ZIMConverter.oZIMGroupAliasUpdatedResult(resultMap);
+  }
+
+  @override
   Future<ZIMGroupNoticeUpdatedResult> updateGroupNotice(
       String groupNotice, String groupID) async {
     Map resultMap = await channel.invokeMethod('updateGroupNotice',

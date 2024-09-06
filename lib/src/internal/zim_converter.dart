@@ -1157,6 +1157,7 @@ class ZIMConverter {
     ZIMGroupFullInfo groupFullInfo = ZIMGroupFullInfo(
         baseInfo: oZIMGroupInfo(groupFullInfoMap['baseInfo'])!);
     groupFullInfo.groupNotice = groupFullInfoMap['groupNotice'] ?? '';
+    groupFullInfo.groupAlias = groupFullInfoMap['groupAlias'] ?? '';
     groupFullInfo.groupAttributes =
         (groupFullInfoMap['groupAttributes'] as Map).cast<String, String>();
     groupFullInfo.mutedInfo =
@@ -1166,6 +1167,28 @@ class ZIMConverter {
     groupFullInfo.maxMemberCount = groupFullInfoMap['maxMemberCount'];
     groupFullInfo.createTime = groupFullInfoMap['createTime'];
     return groupFullInfo;
+  }
+
+  static Map? mZIMGroupFullInfo(ZIMGroupFullInfo? groupFullInfo) {
+    if (groupFullInfo == null) {
+      return null;
+    }
+    
+    Map groupMap = {};
+    groupMap['groupID'] = groupFullInfo.baseInfo.groupID;
+    groupMap['groupName'] = groupFullInfo.baseInfo.groupName;
+    groupMap['groupAvatarUrl'] = groupFullInfo.baseInfo.groupAvatarUrl;
+    groupMap['groupNotice'] = groupFullInfo.groupNotice;
+    groupMap['groupAlias'] = groupFullInfo.groupAlias;
+    groupMap['groupAttributes'] = groupFullInfo.groupAttributes;
+    groupMap['mutedInfo'] = ZIMConverter.mZIMGroupMuteInfo(groupFullInfo.mutedInfo);
+    groupMap['verifyInfo'] = ZIMConverter.mZIMGroupVerifyInfo(groupFullInfo.verifyInfo);
+    groupMap['maxMemberCount'] = groupFullInfo.maxMemberCount;
+    groupMap['createTime'] = groupFullInfo.createTime;
+    groupMap['maxMemberCount'] = groupFullInfo.maxMemberCount;
+    groupMap['notificationStatus'] = groupFullInfo.notificationStatus.value;
+    
+    return groupMap;
   }
 
   static Map? mZIMGroupAdvancedConfig(ZIMGroupAdvancedConfig? config) {
@@ -1240,6 +1263,12 @@ class ZIMConverter {
     return ZIMGroupNameUpdatedResult(
         groupID: resultMap['groupID'], groupName: resultMap['groupName'] ?? '');
   }
+
+  static ZIMGroupAliasUpdatedResult oZIMGroupAliasUpdatedResult(Map resultMap) {
+    return ZIMGroupAliasUpdatedResult(
+        groupID: resultMap['groupID'], groupAlias: resultMap['groupAlias'] ?? '');
+  }
+
 
   static ZIMGroupNoticeUpdatedResult oZIMGroupNoticeUpdatedResult(
       Map resultMap) {
@@ -1361,6 +1390,7 @@ class ZIMConverter {
     ZIMGroup group = ZIMGroup();
     group.notificationStatus = ZIMGroupMessageNotificationStatusEventExtension
         .mapValue[resultMap['notificationStatus']]!;
+    group.groupAlias = resultMap['groupAlias'];
     group.baseInfo = oZIMGroupInfo(resultMap['baseInfo']);
     return group;
   }
@@ -2384,6 +2414,17 @@ class ZIMConverter {
         ZIMGroupBeInviteModeExtension.mapValue[map['beInviteMode']] ??
             ZIMGroupBeInviteMode.none;
     return verifyInfo;
+  }
+
+  static Map mZIMGroupVerifyInfo(ZIMGroupVerifyInfo info) {
+    Map map = {};
+
+    map['joinMode'] = ZIMGroupJoinModeExtension.valueMap[info.joinMode];
+    map['inviteMode'] = ZIMGroupInviteModeExtension.valueMap[info.inviteMode];
+    map['beInviteMode'] =
+        ZIMGroupBeInviteModeExtension.valueMap[info.beInviteMode];
+
+    return map;
   }
 
   //供自动化使用，sdk 使用前需要 check

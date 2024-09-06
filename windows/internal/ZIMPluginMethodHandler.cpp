@@ -2083,6 +2083,28 @@ void ZIMPluginMethodHandler::updateGroupAvatarUrl(FArgument &argument, FResult r
                               });
 }
 
+void ZIMPluginMethodHandler::updateGroupAlias(FArgument &argument, FResult result) {
+
+    CheckZIMInstanceExistAndObtainZIM();
+
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto groupAlias = std::get<std::string>(argument[FTValue("groupAlias")]);
+
+    zim->updateGroupAlias(
+        groupAlias, groupID,
+        [=](const std::string &groupID, const std::string &groupAlias, const ZIMError &errorInfo) {
+            if (errorInfo.code == 0) {
+                FTMap retMap;
+                retMap[FTValue("groupID")] = FTValue(groupID);
+                retMap[FTValue("groupAlias")] = FTValue(groupAlias);
+
+                result->Success(retMap);
+            } else {
+                result->Error(std::to_string(errorInfo.code), errorInfo.message);
+            }
+        });
+}
+
 void ZIMPluginMethodHandler::updateGroupNotice(FArgument &argument, FResult result) {
 
     CheckZIMInstanceExistAndObtainZIM();

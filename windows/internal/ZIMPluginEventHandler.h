@@ -103,6 +103,9 @@ class ZIMPluginEventHandler : public ZIMEventHandler {
     void onGroupNameUpdated(ZIM *zim, const std::string &groupName,
                             const ZIMGroupOperatedInfo &operatedInfo, const std::string &groupID);
 
+    void onGroupAliasUpdated(ZIM *zim, const std::string &groupAlias,
+                             const std::string &operatedUserID, const std::string &groupID);
+
     void onGroupAvatarUrlUpdated(ZIM *zim, const std::string &groupAvatarUrl,
                                  const ZIMGroupOperatedInfo &operatedInfo,
                                  const std::string &groupID);

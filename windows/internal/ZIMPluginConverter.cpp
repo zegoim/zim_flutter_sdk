@@ -1310,6 +1310,7 @@ FTArray ZIMPluginConverter::cnvZIMGroupListToArray(const std::vector<ZIMGroup> &
         FTMap groupMap;
         groupMap[FTValue("baseInfo")] = cnvZIMGroupInfoToMap(group.baseInfo);
         groupMap[FTValue("notificationStatus")] = FTValue((int32_t)group.notificationStatus);
+        groupMap[FTValue("groupAlias")] = group.groupAlias;
 
         groupArray.emplace_back(groupMap);
     }
@@ -1401,6 +1402,7 @@ FTMap ZIMPluginConverter::cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo &group
 
     groupFullInfoMap[FTValue("baseInfo")] = cnvZIMGroupInfoToMap(groupInfo.baseInfo);
     groupFullInfoMap[FTValue("groupNotice")] = FTValue(groupInfo.groupNotice);
+    groupFullInfoMap[FTValue("groupAlias")] = FTValue(groupInfo.groupAlias);
     groupFullInfoMap[FTValue("groupAttributes")] = cnvSTLMapToFTMap(groupInfo.groupAttributes);
     groupFullInfoMap[FTValue("notificationStatus")] =
         FTValue((int32_t)groupInfo.notificationStatus);

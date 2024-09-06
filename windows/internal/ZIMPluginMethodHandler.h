@@ -118,6 +118,7 @@ class ZIMPluginMethodHandler {
     void transferGroupOwner(FArgument &argument, FResult result);
     void updateGroupName(FArgument &argument, FResult result);
     void updateGroupAvatarUrl(FArgument &argument, FResult result);
+    void updateGroupAlias(FArgument &argument, FResult result);
     void updateGroupNotice(FArgument &argument, FResult result);
     void queryGroupInfo(FArgument &argument, FResult result);
     void setGroupAttributes(FArgument &argument, FResult result);

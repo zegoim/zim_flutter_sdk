@@ -351,6 +351,9 @@ void ZegoZimPlugin::HandleMethodCall(
     } else if (method_call.method_name() == "updateGroupName") {
         ZIMPluginMethodHandler::getInstance().updateGroupName(argument, std::move(result));
         return;
+    } else if (method_call.method_name() == "updateGroupAlias") {
+        ZIMPluginMethodHandler::getInstance().updateGroupAlias(argument, std::move(result));
+        return;
     } else if (method_call.method_name() == "updateGroupAvatarUrl") {
         ZIMPluginMethodHandler::getInstance().updateGroupAvatarUrl(argument, std::move(result));
         return;

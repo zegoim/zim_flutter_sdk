@@ -1196,6 +1196,9 @@ abstract class ZIM {
   Future<ZIMGroupAvatarUrlUpdatedResult> updateGroupAvatarUrl(
       String groupAvatarUrl, String groupID);
 
+  Future<ZIMGroupAliasUpdatedResult> updateGroupAlias(
+      String groupAlias, String groupID);
+
   /// Available since: 2.1.5 and above.
   ///
   /// Description: When a group is created, users can use this method to update the group bulletin.
