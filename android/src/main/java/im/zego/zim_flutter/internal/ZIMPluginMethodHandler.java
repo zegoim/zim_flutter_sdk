@@ -366,7 +366,7 @@ public class ZIMPluginMethodHandler {
         });
     }
 
-    public static void unsubscribeUserStatus(MethodCall call, Result result) {
+    public static void unsubscribeUsersStatus(MethodCall call, Result result) {
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
         if (zim == null) {
