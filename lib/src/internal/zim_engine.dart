@@ -354,6 +354,24 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMRoomSwitchedResult> switchRoom(
+      String fromRoomID,
+      ZIMRoomInfo toRoomInfo,
+      bool isCreateWhenRoomNotExisted,
+      ZIMRoomAdvancedConfig config) async {
+    Map resultMap;
+    resultMap = await channel.invokeMethod('switchRoom', {
+      'handle': handle,
+      'fromRoomID': fromRoomID,
+      'toRoomInfo': ZIMConverter.mZIMRoomInfo(toRoomInfo),
+      'isCreateWhenRoomNotExisted': isCreateWhenRoomNotExisted,
+      'config': ZIMConverter.mZIMRoomAdvancedConfig(config)
+    });
+
+    return ZIMConverter.oZIMRoomSwitchedResult(resultMap);
+  }
+
+  @override
   Future<ZIMRoomLeftResult> leaveRoom(String roomID) async {
     Map resultMap = await channel
         .invokeMethod('leaveRoom', {'handle': handle, 'roomID': roomID});

@@ -151,7 +151,11 @@ enum ZIMRoomEvent {
 
   connectTimeout,
 
-  kickedOutByOtherDevice
+  kickedOutByOtherDevice,
+
+  activeSwitch,
+
+  switchFailed,
 }
 
 /// The priority of the message.
@@ -2029,6 +2033,11 @@ class ZIMRoomCreatedResult {
 class ZIMRoomEnteredResult {
   ZIMRoomFullInfo roomInfo;
   ZIMRoomEnteredResult({required this.roomInfo});
+}
+
+class ZIMRoomSwitchedResult {
+  ZIMRoomFullInfo roomInfo;
+  ZIMRoomSwitchedResult({required this.roomInfo});
 }
 
 /// Callback of the result of joining the room.

@@ -1525,6 +1525,33 @@ void ZIMPluginMethodHandler::enterRoom(FArgument &argument, FResult result) {
                    });
 }
 
+void ZIMPluginMethodHandler::switchRoom(FArgument &argument, FResult result) {
+
+    CheckZIMInstanceExistAndObtainZIM();
+
+    auto fromRoomID = std::get<std::string>(argument[FTValue("fromRoomID")]);
+    auto toRoomInfo = ZIMPluginConverter::cnvZIMRoomInfoToObject(
+        std::get<FTMap>(argument[FTValue("toRoomInfo")]));
+    auto isCreateWhenRoomNotExisted =
+        std::get<bool>(argument[FTValue("isCreateWhenRoomNotExisted")]);
+    auto roomAdvancedConfig = ZIMPluginConverter::cnvZIMRoomAdvancedConfigToObject(
+        std::get<FTMap>(argument[FTValue("config")]));
+
+    zim->switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, roomAdvancedConfig,
+                    [=](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
+                        if (errorInfo.code == 0) {
+                            FTMap retMap;
+                            auto roomFullInfoMap =
+                                ZIMPluginConverter::cnvZIMRoomFullInfoToMap(roomInfo);
+                            retMap[FTValue("roomInfo")] = roomFullInfoMap;
+
+                            result->Success(retMap);
+                        } else {
+                            result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                        }
+                    });
+}
+
 void ZIMPluginMethodHandler::joinRoom(FArgument &argument, FResult result) {
 
     CheckZIMInstanceExistAndObtainZIM();

@@ -95,6 +95,7 @@ class ZIMPluginMethodHandler {
     void createRoom(FArgument &argument, FResult result);
     void createRoomWithConfig(FArgument &argument, FResult result);
     void joinRoom(FArgument &argument, FResult result);
+    void switchRoom(FArgument &argument, FResult result);
     void leaveRoom(FArgument &argument, FResult result);
     void leaveAllRoom(FArgument &argument, FResult result);
     void queryRoomMemberList(FArgument &argument, FResult result);
