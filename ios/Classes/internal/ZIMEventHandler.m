@@ -85,6 +85,19 @@
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim userStatusUpdated:(NSArray<ZIMUserStatus *> *)userStatusList {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic setObject:[ZIMPluginConverter mZIMUserStatusList:userStatusList]
+                  forKey:@"userStatusList"];
+    [resultDic setObject:handle forKey:@"handle"];
+    [resultDic setObject:@"onUserStatusUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
 - (void)zim:(ZIM *)zim userRuleUpdated:(ZIMUserRule *)userRule {
     if (_events == nil) {
         return;

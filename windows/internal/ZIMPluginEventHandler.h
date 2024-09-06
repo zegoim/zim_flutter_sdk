@@ -37,6 +37,8 @@ class ZIMPluginEventHandler : public ZIMEventHandler {
 
     void onUserRuleUpdated(ZIM *zim, const ZIMUserRule &userRule);
 
+    void onUserStatusUpdated(ZIM *zim, const std::vector<ZIMUserStatus> &userStatusList);
+
     void onRoomStateChanged(ZIM *zim, ZIMRoomState state, ZIMRoomEvent event,
                             const std::string &extendedData, const std::string &roomID);
 

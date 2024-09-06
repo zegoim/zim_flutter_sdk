@@ -2021,6 +2021,27 @@ ZIMFileCacheQueryConfig ZIMPluginConverter::cnvZIMFileCacheQueryConfigToObject(F
     return config;
 }
 
+ZIMUserStatusSubscribeConfig
+ZIMPluginConverter::cnvZIMUserStatusSubscribeConfigToObject(FTMap map) {
+    ZIMUserStatusSubscribeConfig config;
+    config.subscriptionDuration =
+        ZIMPluginConverter::cnvFTValueToInt32(map[FTValue("subscriptionDuration")]);
+    return config;
+}
+
+ZIMSubscribedUserStatusQueryConfig
+ZIMPluginConverter::cnvZIMSubscribedUserStatusQueryConfigToObject(FTMap map) {
+    ZIMSubscribedUserStatusQueryConfig config;
+    auto userIDs = std::get<FTArray>(map[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto &userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    config.userIDs = userIDsVec;
+    return config;
+}
+
 ZIMUserOfflinePushRule ZIMPluginConverter::cnvZIMUserOfflinePushRuleToObject(FTMap ruleMap) {
     ZIMUserOfflinePushRule offlinePushRule;
     offlinePushRule.onlinePlatforms = ZIMPluginConverter::cnvFTArrayToStlVectorIntValue(
@@ -2396,6 +2417,43 @@ FTMap ZIMPluginConverter::cnvZIMSelfUserInfoToMap(const ZIMSelfUserInfo &info) {
     infoMap[FTValue("userRule")] = cnvZIMUserRuleToMap(info.userRule);
     infoMap[FTValue("userFullInfo")] = cnvZIMUserFullInfoObjectToMap(info.userFullInfo);
     return infoMap;
+}
+
+FTMap ZIMPluginConverter::cnvZIMUserStatusToMap(const ZIMUserStatus &status) {
+    FTMap statusMap;
+    statusMap[FTValue("userID")] = FTValue(status.userID);
+    statusMap[FTValue("onlineStatus")] = FTValue((int32_t)status.onlineStatus);
+    statusMap[FTValue("onlinePlatforms")] = cnvStlVectorToFTArray(status.onlinePlatforms);
+    statusMap[FTValue("lastUpdateTime")] = (int64_t)status.lastUpdateTime;
+    return statusMap;
+}
+
+FTArray
+ZIMPluginConverter::cnvZIMUserStatusListToBasicList(const std::vector<ZIMUserStatus> &statusList) {
+    FTArray array;
+    for (auto &status : statusList) {
+        FTMap map = cnvZIMUserStatusToMap(status);
+        array.emplace_back(map);
+    }
+    return array;
+}
+
+FTMap ZIMPluginConverter::cnvZIMUserStatusSubscriptionToMap(
+    const ZIMUserStatusSubscription &subscription) {
+    FTMap map;
+    map[FTValue("userStatus")] = cnvZIMUserStatusToMap(subscription.userStatus);
+    map[FTValue("subscribeExpiredTime")] = (int64_t)subscription.subscribeExpiredTime;
+    return map;
+}
+
+FTArray ZIMPluginConverter::cnvZIMUserStatusSubscriptionListToBasicList(
+    const std::vector<ZIMUserStatusSubscription> &subscriptionList) {
+    FTArray array;
+    for (auto &subscription : subscriptionList) {
+        FTMap map = cnvZIMUserStatusSubscriptionToMap(subscription);
+        array.emplace_back(map);
+    }
+    return array;
 }
 
 FTMap ZIMPluginConverter::cnvZIMFriendInfoToMap(const ZIMFriendInfo &info) {

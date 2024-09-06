@@ -73,6 +73,24 @@ extension ZIMConnectionEventExtension on ZIMConnectionEvent {
   int get value => valueMap[this] ?? -1;
 }
 
+extension ZIMUserOnlineStatusExtension on ZIMUserOnlineStatus {
+  static const valueMap = {
+    ZIMUserOnlineStatus.online: 0,
+    ZIMUserOnlineStatus.offline: 1,
+    ZIMUserOnlineStatus.logout: 2,
+    ZIMUserOnlineStatus.unknown: 99
+  };
+
+  static const mapValue = {
+    0: ZIMUserOnlineStatus.online,
+    1: ZIMUserOnlineStatus.offline,
+    2: ZIMUserOnlineStatus.logout,
+    99: ZIMUserOnlineStatus.unknown
+  };
+
+  int get value => valueMap[this] ?? -1;
+}
+
 extension ZIMRoomEventExtension on ZIMRoomEvent {
   static const valueMap = {
     ZIMRoomEvent.success: 0,

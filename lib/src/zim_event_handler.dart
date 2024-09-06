@@ -38,6 +38,9 @@ class ZIMEventHandler {
   /// When to Trigger: When the user rule of the current user is changed, all users are notified by the callback.
   static void Function(ZIM zim, ZIMUserRule)? onUserRuleUpdated;
 
+  static void Function(ZIM zim, List<ZIMUserStatus> userStatusList)?
+      onUserStatusUpdated;
+
   // Supported version: 2.11.0 or later.
   //
   // Description: In the multi-terminal login scenario, after the user deletes the server level message on device A, other online multi-terminal devices will receive this callback..
