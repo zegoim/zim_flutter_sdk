@@ -269,6 +269,7 @@ class ZIMPluginConverter {
     static FTArray cnvZIMMessageReactionUserInfoListToArray(
         const std::vector<ZIMMessageReactionUserInfo> &reactionUserInfoList);
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo &info);
+    static FTMap cnvZIMMessageReceivedInfoToMap(const ZIMMessageReceivedInfo &info);
     static FTMap cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo &info);
     static flutter::EncodableValue
     cnvZIMGroupMuteInfoPtrToObj(const std::shared_ptr<ZIMGroupMuteInfo> infoPtr);

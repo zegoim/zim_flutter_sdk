@@ -643,6 +643,13 @@ class ZIMConverter {
     return messageList;
   }
 
+  static ZIMMessageReceivedInfo oZIMMessageReceivedInfo(Map map) {
+    ZIMMessageReceivedInfo oInfo = ZIMMessageReceivedInfo();
+    oInfo.isOfflineMessage = map['isOfflineMessage'];
+
+    return oInfo;
+  }
+
   static ZIMConversationListQueriedResult oZIMConversationListQueriedResult(
       Map resultMap) {
     List conversationBasicList = resultMap['conversationList'];

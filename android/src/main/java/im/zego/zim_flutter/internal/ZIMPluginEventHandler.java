@@ -172,6 +172,60 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onPeerMessageReceived(ZIM zim, ArrayList<ZIMMessage> messageList, ZIMMessageReceivedInfo info, String fromUserID) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onPeerMessageReceived");
+        resultMap.put("handle", handle);
+        resultMap.put("messageList",ZIMPluginConverter.mZIMMessageList(messageList));
+        resultMap.put("info", ZIMPluginConverter.mZIMMessageReceivedInfo(info));
+        resultMap.put("fromUserID",fromUserID);
+
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onRoomMessageReceived(ZIM zim, ArrayList<ZIMMessage> messageList, ZIMMessageReceivedInfo info, String fromRoomID) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onRoomMessageReceived");
+        resultMap.put("handle", handle);
+        resultMap.put("messageList",ZIMPluginConverter.mZIMMessageList(messageList));
+        resultMap.put("info", ZIMPluginConverter.mZIMMessageReceivedInfo(info));
+        resultMap.put("fromRoomID",fromRoomID);
+
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onGroupMessageReceived(ZIM zim, ArrayList<ZIMMessage> messageList, ZIMMessageReceivedInfo info, String fromGroupID) {
+        if(mysink == null){
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String,Object> resultMap = new HashMap<>();
+        resultMap.put("method","onGroupMessageReceived");
+        resultMap.put("handle", handle);
+        resultMap.put("messageList",ZIMPluginConverter.mZIMMessageList(messageList));
+        resultMap.put("info", ZIMPluginConverter.mZIMMessageReceivedInfo(info));
+        resultMap.put("fromGroupID",fromGroupID);
+
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onRoomMemberJoined(ZIM zim, ArrayList<ZIMUserInfo> memberList, String roomID) {
         if (mysink == null) {
             return;

@@ -142,6 +142,54 @@ void ZIMPluginEventHandler::onReceiveGroupMessage(
     }
 }
 
+void ZIMPluginEventHandler::onPeerMessageReceived(
+    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+    const ZIMMessageReceivedInfo &info, const std::string &fromUserID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onPeerMessageReceived");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMMessageReceivedInfoToMap(info);
+        retMap[FTValue("fromUserID")] = FTValue(fromUserID);
+
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onRoomMessageReceived(
+    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+    const ZIMMessageReceivedInfo &info, const std::string &fromRoomID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onRoomMessageReceived");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMMessageReceivedInfoToMap(info);
+        retMap[FTValue("fromRoomID")] = FTValue(fromRoomID);
+
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onGroupMessageReceived(
+    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+    const ZIMMessageReceivedInfo &info, const std::string &fromGroupID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupMessageReceived");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMMessageReceivedInfoToMap(info);
+        retMap[FTValue("fromGroupID")] = FTValue(fromGroupID);
+
+        eventSink_->Success(retMap);
+    }
+}
+
 void ZIMPluginEventHandler::onConversationChanged(
     ZIM *zim, const std::vector<ZIMConversationChangeInfo> &conversationChangeInfoList) {
     if (eventSink_) {
