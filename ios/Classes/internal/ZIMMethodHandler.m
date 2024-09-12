@@ -293,24 +293,27 @@
         return;
     }
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
-    [zim queryUsersStatus:userIDs
-                 callback:^(NSArray<ZIMUserStatus *> *_Nonnull userStatusList,
-                            NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
-                            ZIMError *_Nonnull errorInfo) {
-                   if (errorInfo.code == 0) {
-                       NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
-                       [resultDic setObject:[ZIMPluginConverter mZIMUserStatusList:userStatusList]
-                                     forKey:@"userStatusList"];
-                       [resultDic setObject:[ZIMPluginConverter mZIMErrorUserInfoList:errorUserList]
-                                     forKey:@"errorUserList"];
-                       result(resultDic);
-                   } else {
-                       result([FlutterError
-                           errorWithCode:[NSString stringWithFormat:@"%d", (int)errorInfo.code]
-                                 message:errorInfo.message
-                                 details:nil]);
-                   }
-                 }];
+    [zim queryUsersStatusByUserIDs:userIDs
+                          callback:^(NSArray<ZIMUserStatus *> *_Nonnull userStatusList,
+                                     NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
+                                     ZIMError *_Nonnull errorInfo) {
+                            if (errorInfo.code == 0) {
+                                NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+                                [resultDic
+                                    setObject:[ZIMPluginConverter mZIMUserStatusList:userStatusList]
+                                       forKey:@"userStatusList"];
+                                [resultDic setObject:[ZIMPluginConverter
+                                                         mZIMErrorUserInfoList:errorUserList]
+                                              forKey:@"errorUserList"];
+                                result(resultDic);
+                            } else {
+                                result([FlutterError
+                                    errorWithCode:[NSString
+                                                      stringWithFormat:@"%d", (int)errorInfo.code]
+                                          message:errorInfo.message
+                                          details:nil]);
+                            }
+                          }];
 }
 
 - (void)subscribeUsersStatus:(FlutterMethodCall *)call result:(FlutterResult)result {
@@ -350,8 +353,8 @@
         return;
     }
     NSArray<NSString *> *userIDs = [call.arguments objectForKey:@"userIDs"];
-
-    [zim unsubscribeUserStatus:userIDs
+    [zim
+        unsubscribeUsersStatus:userIDs
                       callback:^(NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
                                  ZIMError *_Nonnull errorInfo) {
                         if (errorInfo.code == 0) {
@@ -378,27 +381,29 @@
     }
     ZIMSubscribedUserStatusQueryConfig *config = [ZIMPluginConverter
         oZIMSubscribedUserStatusQueryConfig:[call.arguments objectForKey:@"config"]];
-    [zim
-        querySubscribedUserStatusList:config
-                             callback:^(NSArray<ZIMUserStatusSubscription *>
-                                            *_Nonnull userStatusSubscriptionList,
-                                        ZIMError *_Nonnull errorInfo) {
-                               if (errorInfo.code == 0) {
-                                   NSMutableDictionary *resultDic =
-                                       [[NSMutableDictionary alloc] init];
-                                   [resultDic
-                                       setObject:[ZIMPluginConverter mZIMUserStatusSubsciptionList:
-                                                                         userStatusSubscriptionList]
-                                          forKey:@"userStatusSubscriptionList"];
-                                   result(resultDic);
-                               } else {
-                                   result([FlutterError
-                                       errorWithCode:[NSString stringWithFormat:@"%d",
-                                                                                (int)errorInfo.code]
-                                             message:errorInfo.message
-                                             details:nil]);
-                               }
-                             }];
+    [zim querySubscribedUserStatusListWithConfig:config
+                                        callback:^(NSArray<ZIMUserStatusSubscription *>
+                                                       *_Nonnull userStatusSubscriptionList,
+                                                   ZIMError *_Nonnull errorInfo) {
+                                          if (errorInfo.code == 0) {
+                                              NSMutableDictionary *resultDic =
+                                                  [[NSMutableDictionary alloc] init];
+                                              [resultDic
+                                                  setObject:[ZIMPluginConverter
+                                                                mZIMUserStatusSubsciptionList:
+                                                                    userStatusSubscriptionList]
+                                                     forKey:@"userStatusSubscriptionList"];
+                                              result(resultDic);
+                                          } else {
+                                              result([FlutterError
+                                                  errorWithCode:[NSString
+                                                                    stringWithFormat:@"%d",
+                                                                                     (int)errorInfo
+                                                                                         .code]
+                                                        message:errorInfo.message
+                                                        details:nil]);
+                                          }
+                                        }];
 }
 
 - (void)queryUsersInfo:(FlutterMethodCall *)call result:(FlutterResult)result {

@@ -374,7 +374,7 @@ public class ZIMPluginMethodHandler {
             return;
         }
         ArrayList<String> userIDs = call.argument("userIDs");
-        zim.unsubscribeUserStatus(userIDs, new ZIMUsersStatusUnsubscribedCallback() {
+        zim.unsubscribeUsersStatus(userIDs, new ZIMUsersStatusUnsubscribedCallback() {
             @Override
             public void onUsersStatusUnsubscribed(ArrayList<ZIMErrorUserInfo> errorUserList,
                                                   ZIMError errorInfo) {

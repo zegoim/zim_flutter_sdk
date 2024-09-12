@@ -912,7 +912,7 @@ class ZIMMessageReceivedInfo {
   bool isOfflineMessage = false;
 }
 
-class ZIMMessageRepliedInfo{
+class ZIMMessageRepliedInfo {
   ZIMMessageRepliedInfoState state = ZIMMessageRepliedInfoState.normal;
   ZIMMessageLiteInfo messageInfo = ZIMMessageLiteInfo();
   int messageID = 0;
