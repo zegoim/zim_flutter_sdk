@@ -115,7 +115,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           if (ZIMEventHandler.onPeerMessageReceived == null) return;
           List<ZIMMessage> messageList =
               ZIMConverter.oZIMMessageList(map['messageList']);
-          ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMMessageReceivedInfo info =
+              ZIMConverter.oZIMMessageReceivedInfo(map['info']);
           ZIMEventHandler.onPeerMessageReceived!(
               zim, messageList, info, map['fromUserID']);
           break;
@@ -123,7 +124,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           if (ZIMEventHandler.onRoomMessageReceived == null) return;
           List<ZIMMessage> messageList =
               ZIMConverter.oZIMMessageList(map['messageList']);
-          ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMMessageReceivedInfo info =
+              ZIMConverter.oZIMMessageReceivedInfo(map['info']);
           ZIMEventHandler.onRoomMessageReceived!(
               zim, messageList, info, map['fromRoomID']);
           break;
@@ -131,7 +133,8 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           if (ZIMEventHandler.onGroupMessageReceived == null) return;
           List<ZIMMessage> messageList =
               ZIMConverter.oZIMMessageList(map['messageList']);
-          ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMMessageReceivedInfo info =
+              ZIMConverter.oZIMMessageReceivedInfo(map['info']);
           ZIMEventHandler.onGroupMessageReceived!(
               zim, messageList, info, map['fromGroupID']);
           break;

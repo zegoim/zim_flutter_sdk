@@ -286,8 +286,8 @@ void ZIMPluginMethodHandler::unsubscribeUserStatus(FArgument &argument, FResult 
         auto userID = std::get<std::string>(userIDValue);
         userIDsVec.emplace_back(userID);
     }
-    zim->unsubscribeUserStatus(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList,
-                                               const ZIMError &errorInfo) {
+    zim->unsubscribeUsersStatus(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList,
+                                                const ZIMError &errorInfo) {
         if (errorInfo.code == 0) {
             FTMap retMap;
             retMap[FTValue("errorUserList")] =

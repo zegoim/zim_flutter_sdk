@@ -54,17 +54,17 @@ class ZIMPluginEventHandler : public ZIMEventHandler {
                                const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
                                const std::string &fromGroupID);
 
-    void onPeerMessageReceived(
-    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
-    const ZIMMessageReceivedInfo &info, const std::string &fromUserID);
+    void onPeerMessageReceived(ZIM *zim,
+                               const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+                               const ZIMMessageReceivedInfo &info, const std::string &fromUserID);
 
-    void onRoomMessageReceived(
-    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
-    const ZIMMessageReceivedInfo &info, const std::string &fromRoomID);
+    void onRoomMessageReceived(ZIM *zim,
+                               const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+                               const ZIMMessageReceivedInfo &info, const std::string &fromRoomID);
 
-    void onGroupMessageReceived(
-    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
-    const ZIMMessageReceivedInfo &info, const std::string &fromGroupID);
+    void onGroupMessageReceived(ZIM *zim,
+                                const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+                                const ZIMMessageReceivedInfo &info, const std::string &fromGroupID);
 
     void
     onConversationChanged(ZIM *zim,

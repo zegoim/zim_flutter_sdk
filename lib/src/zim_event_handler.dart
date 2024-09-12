@@ -153,9 +153,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromUserID] The user ID of the message sender.
-  static void Function(
-          ZIM zim, List<ZIMMessage> messageList, ZIMMessageReceivedInfo info, String fromUserID)?
-      onPeerMessageReceived;
+  static void Function(ZIM zim, List<ZIMMessage> messageList,
+      ZIMMessageReceivedInfo info, String fromUserID)? onPeerMessageReceived;
 
   /// The callback for receiving room message.
   ///
@@ -164,9 +163,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromRoomID] ID of the room where the message was received.
-  static void Function(
-          ZIM zim, List<ZIMMessage> messageList, ZIMMessageReceivedInfo info, String fromRoomID)?
-      onRoomMessageReceived;
+  static void Function(ZIM zim, List<ZIMMessage> messageList,
+      ZIMMessageReceivedInfo info, String fromRoomID)? onRoomMessageReceived;
 
   /// The callback for receiving group message.
   ///
@@ -175,9 +173,8 @@ class ZIMEventHandler {
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
   /// [fromGroupID] ID of the group where the message was received.
-  static void Function(
-          ZIM zim, List<ZIMMessage> messageList, ZIMMessageReceivedInfo info, String fromGroupID)?
-      onGroupMessageReceived;
+  static void Function(ZIM zim, List<ZIMMessage> messageList,
+      ZIMMessageReceivedInfo info, String fromGroupID)? onGroupMessageReceived;
 
   /// Available since: 2.5.0 and above.
 
