@@ -442,6 +442,17 @@ class ZegoZimPlugin {
       case 'setConversationMark':
         return setConversationMark(call.arguments['markType'],
             call.arguments['enable'], call.arguments['infos']);
+      case 'subscribeUsersStatus':
+        return subscribeUsersStatus(call.arguments['userIDs'],call.arguments['config']);
+      case 'unsubscribeUsersStatus':
+        return unsubscribeUsersStatus(call.arguments['userIDs']);
+      case 'querySubscribedUserStatusList':
+        return querySubscribedUserStatusList(call.arguments['config']);
+      case 'queryUsersStatus':
+        return queryUsersStatus(call.arguments['userIDs']);
+      case 'switchRoom':
+        return switchRoom(call.arguments['fromRoomID'], call.arguments['toRoomInfo'], call.arguments['isCreateWhenRoomNotExisted'], call.arguments['config']);
+
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -2152,6 +2163,41 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> subscribeUsersStatus(dynamic userIDs, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.subscribeUsersStatus(userIDs, mapToJSObj(config))).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> unsubscribeUsersStatus(dynamic userIDs) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.unsubscribeUsersStatus(userIDs)).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> querySubscribedUserStatusList(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.querySubscribedUserStatusList(mapToJSObj(config))).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> queryUsersStatus(dynamic userIDs) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryUsersStatus(userIDs)).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> switchRoom(String fromRoomID, dynamic toRoomInfo, bool isCreateWhenRoomNotExisted, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.switchRoom(fromRoomID, mapToJSObj(toRoomInfo), isCreateWhenRoomNotExisted, mapToJSObj(config))).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
     return jsObjectToMap(result);
   }
 

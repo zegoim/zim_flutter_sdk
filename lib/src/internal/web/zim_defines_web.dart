@@ -226,6 +226,11 @@ class ZIM {
   external PromiseJsImpl<dynamic> rejectGroupInviteApplication(
       String inviterUserID, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> queryGroupApplicationList(dynamic config);
+  external PromiseJsImpl<dynamic> subscribeUsersStatus(dynamic userIDs,dynamic config);
+  external PromiseJsImpl<dynamic> unsubscribeUsersStatus(dynamic userIDs);
+  external PromiseJsImpl<dynamic> querySubscribedUserStatusList(dynamic config);
+  external PromiseJsImpl<dynamic> queryUsersStatus(dynamic userIDs);
+  external PromiseJsImpl<dynamic> switchRoom(String fromRoomID, dynamic toRoomInfo,bool isCreateWhenRoomNotExisted, dynamic config);
 }
 
 // @JS()
