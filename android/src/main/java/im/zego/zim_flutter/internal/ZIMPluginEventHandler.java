@@ -377,6 +377,24 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onGroupAliasUpdated(ZIM zim, String groupName, String operatedUserID,
+                                    String groupID) {
+        if (mysink == null) {
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onGroupAliasUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("groupName", groupName);
+        resultMap.put("operatedUserID", operatedUserID);
+        resultMap.put("groupID", groupID);
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onGroupNoticeUpdated(ZIM zim, String groupNotice, ZIMGroupOperatedInfo operatedInfo,
                                      String groupID) {
         if (mysink == null) {

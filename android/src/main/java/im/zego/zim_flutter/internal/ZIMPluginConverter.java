@@ -1637,6 +1637,7 @@ public class ZIMPluginConverter {
     static public HashMap<String, Object> mZIMGroupFullInfo(ZIMGroupFullInfo groupFullInfo) {
         HashMap<String, Object> groupFullInfoMap = new HashMap<>();
         groupFullInfoMap.put("groupNotice", groupFullInfo.groupNotice);
+        groupFullInfoMap.put("groupAlias", groupFullInfo.groupAlias);
         groupFullInfoMap.put("groupAttributes", groupFullInfo.groupAttributes);
         groupFullInfoMap.put("notificationStatus", groupFullInfo.notificationStatus.value());
         groupFullInfoMap.put("baseInfo", mZIMGroupInfo(groupFullInfo.baseInfo));
@@ -1734,6 +1735,7 @@ public class ZIMPluginConverter {
     static public HashMap<String, Object> mZIMGroup(ZIMGroup zimGroup) {
         HashMap<String, Object> zimGroupMap = new HashMap<>();
         zimGroupMap.put("baseInfo", mZIMGroupInfo(zimGroup.baseInfo));
+        zimGroupMap.put("groupAlias", zimGroup.groupAlias);
         zimGroupMap.put("notificationStatus", zimGroup.notificationStatus.value());
         return zimGroupMap;
     }

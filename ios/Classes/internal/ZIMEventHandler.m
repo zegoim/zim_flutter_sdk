@@ -620,6 +620,24 @@
 }
 
 - (void)zim:(ZIM *)zim
+    groupAliasUpdated:(NSString *)groupAlias
+       operatedUserID:(NSString *)operatedUserID
+              groupID:(NSString *)groupID {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:groupAlias forKey:@"groupAlias"];
+    [resultDic safeSetObject:operatedUserID forKey:@"operatedUserID"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupAliasUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
     groupNoticeUpdated:(NSString *)groupNotice
           operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
                groupID:(NSString *)groupID {

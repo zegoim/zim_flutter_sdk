@@ -1952,6 +1952,40 @@
           }];
 }
 
+- (void)switchRoom:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if (!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+
+    NSString *fromRoomID = [call.arguments objectForKey:@"fromRoomID"];
+    bool isCreateWhenRoomNotExisted = ((NSNumber *)[call.arguments safeObjectForKey:@"isCreateWhenRoomNotExisted"]).boolValue;
+    ZIMRoomInfo *toRoomInfo =
+        [ZIMPluginConverter oZIMRoomInfo:[call.arguments objectForKey:@"toRoomInfo"]];
+    ZIMRoomAdvancedConfig *config =
+        [ZIMPluginConverter oZIMRoomAdvancedConfig:[call.arguments objectForKey:@"config"]];
+        
+    [zim switchRoomFromRoomID:fromRoomID
+                   toRoomInfo:toRoomInfo
+  isCreateWhenRoomNotExisted:isCreateWhenRoomNotExisted
+                      config:config
+          callback:^(ZIMRoomFullInfo *_Nonnull roomInfo, ZIMError *_Nonnull errorInfo) {
+            if (errorInfo.code == 0) {
+                NSDictionary *roomInfoDic = [ZIMPluginConverter mZIMRoomFullInfo:roomInfo];
+                NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+                [resultDic safeSetObject:roomInfoDic forKey:@"roomInfo"];
+                result(resultDic);
+            } else {
+                result([FlutterError
+                    errorWithCode:[NSString stringWithFormat:@"%d", (int)errorInfo.code]
+                          message:errorInfo.message
+                          details:nil]);
+            }
+          }];
+}
+
 - (void)createRoom:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *handle = [call.arguments objectForKey:@"handle"];
     ZIM *zim = self.engineMap[handle];
@@ -2759,6 +2793,34 @@
                                      details:nil]);
                        }
                      }];
+}
+
+- (void)updateGroupAlias:(FlutterMethodCall *)call result:(FlutterResult)result {
+    NSString *handle = [call.arguments objectForKey:@"handle"];
+    ZIM *zim = self.engineMap[handle];
+    if (!zim) {
+        result([FlutterError errorWithCode:@"-1" message:@"no native instance" details:nil]);
+        return;
+    }
+
+    NSString *groupAlias = [call.arguments objectForKey:@"groupAlias"];
+    NSString *groupID = [call.arguments objectForKey:@"groupID"];
+    [zim updateGroupAlias:groupAlias
+                  groupID:groupID
+                 callback:^(NSString *_Nonnull groupID, NSString *_Nonnull groupAlias,
+                            ZIMError *_Nonnull errorInfo) {
+                  if (errorInfo.code == 0) {
+                      NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+                      [resultDic safeSetObject:groupID forKey:@"groupID"];
+                      [resultDic safeSetObject:groupAlias forKey:@"groupAlias"];
+                      result(resultDic);
+                  } else {
+                      result([FlutterError
+                          errorWithCode:[NSString stringWithFormat:@"%d", (int)errorInfo.code]
+                                message:errorInfo.message
+                                details:nil]);
+                  }
+                }];
 }
 
 - (void)updateGroupJoinMode:(FlutterMethodCall *)call result:(FlutterResult)result {

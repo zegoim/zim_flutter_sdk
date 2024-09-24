@@ -1575,6 +1575,7 @@
     NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupInfo:groupFullInfo.baseInfo];
     NSDictionary *groupMuteInfoDic = [ZIMPluginConverter mZIMGroupMuteInfo:groupFullInfo.mutedInfo];
     [groupFullInfoDic safeSetObject:groupInfoDic forKey:@"baseInfo"];
+    [groupFullInfoDic safeSetObject:groupFullInfo.groupAlias forKey:@"groupAlias"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupNotice forKey:@"groupNotice"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupAttributes forKey:@"groupAttributes"];
     [groupFullInfoDic safeSetObject:@(groupFullInfo.notificationStatus)
@@ -1683,6 +1684,8 @@
         return nil;
     }
     NSMutableDictionary *groupDic = [[NSMutableDictionary alloc] init];
+    
+    [groupDic safeSetObject:group.groupAlias forKey:@"groupAlias"];
     [groupDic safeSetObject:[NSNumber numberWithInt:(int)group.notificationStatus]
                      forKey:@"notificationStatus"];
     NSDictionary *baseInfoDic = [ZIMPluginConverter mZIMGroupInfo:group.baseInfo];

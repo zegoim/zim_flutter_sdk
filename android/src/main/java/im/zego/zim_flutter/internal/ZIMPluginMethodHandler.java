@@ -1769,6 +1769,36 @@ public class ZIMPluginMethodHandler {
         });
     }
 
+    public static void switchRoom(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if (zim == null) {
+            result.error("-1", "no native instance", null);
+            return;
+        }
+
+        String fromRoomID = call.argument("fromRoomID");
+        boolean isCreateWhenRoomNotExisted = call.argument("isCreateWhenRoomNotExisted");
+        ZIMRoomInfo toRoomInfo =
+            ZIMPluginConverter.oZIMRoomInfo(Objects.requireNonNull(call.argument("toRoomInfo")));
+        ZIMRoomAdvancedConfig config = ZIMPluginConverter.oZIMRoomAdvancedConfig(
+            Objects.requireNonNull(ZIMPluginCommonTools.safeGetHashMap(call.argument("config"))));
+        zim.switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config, new ZIMRoomSwitchedCallback() {
+            @Override
+            public void onRoomSwitched(ZIMRoomFullInfo roomInfo, ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    HashMap<String, Object> roomInfoMap =
+                        ZIMPluginConverter.mZIMRoomFullInfo(roomInfo);
+                    resultMap.put("roomInfo", roomInfoMap);
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
+                }
+            }
+        });
+    };
+
     public static void leaveRoom(MethodCall call, Result result) {
         String handle = call.argument("handle");
         ZIM zim = engineMap.get(handle);
@@ -2413,6 +2443,33 @@ public class ZIMPluginMethodHandler {
 
                     resultMap.put("groupID", groupID);
                     resultMap.put("groupAvatarUrl", groupAvatarUrl);
+                    result.success(resultMap);
+                } else {
+                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
+                }
+            }
+        });
+    }
+
+    public static void updateGroupAlias(MethodCall call, Result result) {
+        String handle = call.argument("handle");
+        ZIM zim = engineMap.get(handle);
+        if (zim == null) {
+            result.error("-1", "no native instance", null);
+            return;
+        }
+
+        String groupAlias = call.argument("groupAlias");
+        String groupID = call.argument("groupID");
+
+        zim.updateGroupAlias(groupAlias, groupID, new ZIMGroupAliasUpdatedCallback() {
+            @Override
+            public void onGroupAliasUpdated(String groupID, String groupAlias, ZIMError errorInfo) {
+                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+
+                    resultMap.put("groupID", groupID);
+                    resultMap.put("groupAlias", groupAlias);
                     result.success(resultMap);
                 } else {
                     result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
