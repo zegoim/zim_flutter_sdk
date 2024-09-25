@@ -377,7 +377,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
-    public void onGroupAliasUpdated(ZIM zim, String groupName, String operatedUserID,
+    public void onGroupAliasUpdated(ZIM zim, String groupAlias, String operatedUserID,
                                     String groupID) {
         if (mysink == null) {
             return;
@@ -388,7 +388,7 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("method", "onGroupAliasUpdated");
         resultMap.put("handle", handle);
-        resultMap.put("groupName", groupName);
+        resultMap.put("groupAlias", groupAlias);
         resultMap.put("operatedUserID", operatedUserID);
         resultMap.put("groupID", groupID);
         mysink.success(resultMap);
