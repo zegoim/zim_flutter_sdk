@@ -82,6 +82,14 @@ public class ZIMPluginMethodHandler {
         result.success(null);
     }
 
+    public static void setAdvancedConfig(MethodCall call, Result result) {
+        String key = call.argument("key");
+        String value = call.argument("value");
+
+        ZIM.setAdvancedConfig(key, value);
+        result.success(null);
+    }
+
     public static void setGeofencingConfig(MethodCall call, Result result) {
         ArrayList<Integer> areaList = call.argument("areaList");
         ZIMGeofencingType type = ZIMGeofencingType.getZIMGeofencingType(call.argument("type"));
