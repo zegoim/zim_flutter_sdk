@@ -2087,7 +2087,7 @@ ZIMPluginConverter::cnvZIMFriendApplicationAcceptConfigToObject(FTMap configMap)
     return config;
 }
 
-ZIMMessageSendConfig ZIMPluginConverter::oZIMMessageSendConfig(FTMap configMap,std::shared_ptr<ZIMPushConfig> pushConfigPtr,std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr) {
+ZIMMessageSendConfig ZIMPluginConverter::oZIMMessageSendConfig(FTMap configMap,std::shared_ptr<ZIMPushConfig>& pushConfigPtr,std::shared_ptr<ZIMVoIPConfig>& voIPConfigPtr) {
     ZIMMessageSendConfig config;
 
 

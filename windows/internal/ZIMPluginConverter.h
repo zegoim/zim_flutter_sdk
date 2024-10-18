@@ -293,7 +293,7 @@ class ZIMPluginConverter {
         const std::vector<ZIMUserStatusSubscription> &subscriptionList);
 
   public:
-    static ZIMMessageSendConfig oZIMMessageSendConfig(FTMap configMap,std::shared_ptr<ZIMPushConfig> pushConfigPtr,std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr);
+    static ZIMMessageSendConfig oZIMMessageSendConfig(FTMap configMap,std::shared_ptr<ZIMPushConfig>& pushConfigPtr,std::shared_ptr<ZIMVoIPConfig>& voIPConfigPtr);
     static ZIMMessageRepliedListQueryConfig oZIMMessageRepliedListQueryConfig(FTMap configMap);
     static std::shared_ptr<ZIMMessageRepliedInfo> cnvZIMMessageRepliedInfoToObject(FTMap infoMap);
     static std::shared_ptr<ZIMMessageLiteInfo> cnvZIMMessageLiteInfoToObject(FTMap infoMap);
