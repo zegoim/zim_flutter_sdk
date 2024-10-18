@@ -2087,11 +2087,9 @@ ZIMPluginConverter::cnvZIMFriendApplicationAcceptConfigToObject(FTMap configMap)
     return config;
 }
 
-ZIMMessageSendConfig ZIMPluginConverter::oZIMMessageSendConfig(FTMap configMap) {
+ZIMMessageSendConfig ZIMPluginConverter::oZIMMessageSendConfig(FTMap configMap,std::shared_ptr<ZIMPushConfig> pushConfigPtr,std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr) {
     ZIMMessageSendConfig config;
 
-    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
-    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 
     config.priority =
         (ZIMMessagePriority)ZIMPluginConverter::cnvFTValueToInt32(configMap[FTValue("priority")]);
