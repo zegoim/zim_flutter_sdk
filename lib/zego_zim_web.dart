@@ -432,6 +432,8 @@ class ZegoZimPlugin {
             call.arguments['groupID'], call.arguments['config']);
       case 'queryGroupApplicationList':
         return queryGroupApplicationList(call.arguments['config']);
+      case 'updateGroupAlias':
+        return updateGroupAlias(call.arguments['groupAlias'], call.arguments['groupID']);
       case 'writeLog':
         return writeLog(call.arguments['logString']);
       case 'queryMessages':
@@ -1010,6 +1012,13 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> updateGroupAlias(String groupAlias, String groupID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateGroupAlias(groupAlias, groupID)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
     return jsObjectToMap(result);
   }
 
@@ -2195,7 +2204,8 @@ class ZegoZimPlugin {
   }
 
   Future<Map<dynamic,dynamic>> switchRoom(String fromRoomID, dynamic toRoomInfo, bool isCreateWhenRoomNotExisted, dynamic config) async {
-    final result = await promiseToFuture(ZIM.getInstance()!.switchRoom(fromRoomID, mapToJSObj(toRoomInfo), isCreateWhenRoomNotExisted, mapToJSObj(config))).catchError((e){
+    Object _config = mapToJSObj(config);
+    final result = await promiseToFuture(ZIM.getInstance()!.switchRoom(fromRoomID, mapToJSObj(toRoomInfo), isCreateWhenRoomNotExisted, _config)).catchError((e){
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
     return jsObjectToMap(result);
@@ -2209,11 +2219,22 @@ class ZegoZimPlugin {
     }
 
     a.forEach((k, v) {
-      var key = k;
-      var value = v;
+      var key = k.toString();
+      var value = _dartValueToJs(v);
+
       js.setProperty(object, key, value);
     });
     return object;
+  }
+
+  static dynamic _dartValueToJs(dynamic value) {
+    if (value is Map) {
+      return mapToJSObj(value);
+    } else if (value is List) {
+      return value.map(_dartValueToJs).toList();
+    } else {
+      return value;
+    }
   }
 
   static Map jsObjectToMap(dynamic obj) {
