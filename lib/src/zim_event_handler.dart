@@ -124,6 +124,7 @@ class ZIMEventHandler {
 
 /* Message */
 
+  /// Deprecated since ZIM 2.18.0, please use  [onPeerMessageReceived] instead.
   /// The callback for receiving peer-to-peer message.
   ///
   /// When receiving peer-to-peer message from other user, you will receive this callback.
@@ -135,6 +136,7 @@ class ZIMEventHandler {
           ZIM zim, List<ZIMMessage> messageList, String fromUserID)?
       onReceivePeerMessage;
 
+  /// Deprecated since ZIM 2.18.0, please use  [onRoomMessageReceived] instead.
   /// The callback for receiving room message.
   ///
   /// This callback will be triggered when new message is received in a room.
@@ -146,6 +148,7 @@ class ZIMEventHandler {
           ZIM zim, List<ZIMMessage> messageList, String fromRoomID)?
       onReceiveRoomMessage;
 
+  /// Deprecated since ZIM 2.18.0, please use  [onGroupMessageReceived] instead.
   /// The callback for receiving group message.
   ///
   /// This callback will be triggered when new message is received in a roogroupm.

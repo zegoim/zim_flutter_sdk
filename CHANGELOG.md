@@ -1,3 +1,57 @@
+## 2.18.0
+
+### Features
+
+**Group Remark**
+- Allows users to set a personal group remark that is only visible to themselves. See [Group Profile Management - Modify Group Remark](#) for details.
+  - **Related APIs**: `updateGroupAlias`, `onGroupAliasUpdated`
+
+**User Online Status**
+- Supports subscribing to continuously monitor the online status changes of other users and querying the current status of other users in a one-time request. Users can also query their own subscription list and monitor changes in their own online platform status in multi-device scenarios. See [Online Status Subscription](#) for details.
+  - **Related APIs**: `subscribeUsersStatus`, `onUserStatusUpdated`, `unsubscribeUsersStatus`, `queryUsersStatus`, `querySubscribedUserStatusList`
+
+**Room User Avatar Retrieval**
+- Users can now retrieve avatar information of other users in the room through the `userAvatarUrl` property of the `ZIMRoomMemberInfo` class.
+  - **Related API**: `ZIMRoomMemberInfo > userAvatarUrl`
+
+**Room Switching**
+- Introduced the `switchRoom` API to enable seamless room switching, suitable for scenarios requiring instant transitions. See [Room Management - Switch Room](#) for details.
+  - **Related API**: `switchRoom`
+
+**Server-Side User Information Query**
+- Supports querying user information on the server side using user IDs, including user names, avatars, and custom fields.
+
+**Server-Side Room Message Revocation**
+- Enables revoking room messages through a server-side API.
+
+### Improvements and Optimizations
+
+**Conversation List Fetch Time Optimization**
+- Reduced the time taken to fetch the conversation list on initial login, enhancing the user experience.
+  - **Related API**: `queryConversationList`
+
+**Improved Server-Side Group Message Response**
+- Added `MsgId` to the response parameters of the `SendGroupMessage` API, facilitating message tracking.
+  - **Related API**: `SendGroupMessage`
+
+**Enhanced Message Callback Parameters**
+- Ensures `msg_id` parameter is no longer empty in the callback when message sending fails.
+  - **Related API**: Message Send Callback
+
+**Extended Message Metadata Retrieval**
+- Supports retrieving extended fields passed by the user through the `payload` parameter in the pre-send callback.
+  - **Related API**: Message Pre-Send Callback
+
+**Increased MessageBody ExtendedData Limit**
+- The `ExtendedData` field in the `MessageBody` structure now has a default limit of 1 KB. For higher limits, please contact ZEGO support.
+  - **Related API**: `MessageBody`
+
+### Deprecated and Removed
+
+**Deprecated Message Reception Callbacks**
+- `onReceivePeerMessage`, `onReceiveGroupMessage`, and `onReceiveRoomMessage` callbacks have been deprecated. Use the new callbacks `onPeerMessageReceived`, `onGroupMessageReceived`, and `onRoomMessageReceived` instead. 
+  - **New APIs**: `onPeerMessageReceived`, `onGroupMessageReceived`, `onRoomMessageReceived`
+  
 ## 2.17.1
 ### Fix some issue.
 
