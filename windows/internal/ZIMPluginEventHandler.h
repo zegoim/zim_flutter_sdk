@@ -37,6 +37,8 @@ class ZIMPluginEventHandler : public ZIMEventHandler {
 
     void onUserRuleUpdated(ZIM *zim, const ZIMUserRule &userRule);
 
+    void onUserStatusUpdated(ZIM *zim, const std::vector<ZIMUserStatus> &userStatusList);
+
     void onRoomStateChanged(ZIM *zim, ZIMRoomState state, ZIMRoomEvent event,
                             const std::string &extendedData, const std::string &roomID);
 
@@ -51,6 +53,18 @@ class ZIMPluginEventHandler : public ZIMEventHandler {
     void onReceiveGroupMessage(ZIM *zim,
                                const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
                                const std::string &fromGroupID);
+
+    void onPeerMessageReceived(ZIM *zim,
+                               const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+                               const ZIMMessageReceivedInfo &info, const std::string &fromUserID);
+
+    void onRoomMessageReceived(ZIM *zim,
+                               const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+                               const ZIMMessageReceivedInfo &info, const std::string &fromRoomID);
+
+    void onGroupMessageReceived(ZIM *zim,
+                                const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+                                const ZIMMessageReceivedInfo &info, const std::string &fromGroupID);
 
     void
     onConversationChanged(ZIM *zim,
@@ -100,6 +114,9 @@ class ZIMPluginEventHandler : public ZIMEventHandler {
 
     void onGroupNameUpdated(ZIM *zim, const std::string &groupName,
                             const ZIMGroupOperatedInfo &operatedInfo, const std::string &groupID);
+
+    void onGroupAliasUpdated(ZIM *zim, const std::string &groupAlias,
+                             const std::string &operatedUserID, const std::string &groupID);
 
     void onGroupAvatarUrlUpdated(ZIM *zim, const std::string &groupAvatarUrl,
                                  const ZIMGroupOperatedInfo &operatedInfo,

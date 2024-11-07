@@ -268,6 +268,9 @@ void ZegoZimPlugin::HandleMethodCall(
     if (method_call.method_name() == "enterRoom") {
         ZIMPluginMethodHandler::getInstance().enterRoom(argument, std::move(result));
         return;
+    } else if (method_call.method_name() == "switchRoom") {
+        ZIMPluginMethodHandler::getInstance().switchRoom(argument, std::move(result));
+        return;
     } else if (method_call.method_name() == "createRoom") {
         ZIMPluginMethodHandler::getInstance().createRoom(argument, std::move(result));
         return;
@@ -350,6 +353,9 @@ void ZegoZimPlugin::HandleMethodCall(
         return;
     } else if (method_call.method_name() == "updateGroupName") {
         ZIMPluginMethodHandler::getInstance().updateGroupName(argument, std::move(result));
+        return;
+    } else if (method_call.method_name() == "updateGroupAlias") {
+        ZIMPluginMethodHandler::getInstance().updateGroupAlias(argument, std::move(result));
         return;
     } else if (method_call.method_name() == "updateGroupAvatarUrl") {
         ZIMPluginMethodHandler::getInstance().updateGroupAvatarUrl(argument, std::move(result));
@@ -544,6 +550,15 @@ void ZegoZimPlugin::HandleMethodCall(
         ZIMPluginMethodHandler::getInstance().querySelfUserInfo(argument, std::move(result));
     } else if (method_call.method_name() == "setGeofencingConfig") {
         ZIMPluginMethodHandler::getInstance().setGeofencingConfig(argument, std::move(result));
+    } else if (method_call.method_name() == "queryUsersStatus") {
+        ZIMPluginMethodHandler::getInstance().queryUsersStatus(argument, std::move(result));
+    } else if (method_call.method_name() == "subscribeUsersStatus") {
+        ZIMPluginMethodHandler::getInstance().subscribeUsersStatus(argument, std::move(result));
+    } else if (method_call.method_name() == "unsubscribeUsersStatus") {
+        ZIMPluginMethodHandler::getInstance().unsubscribeUserStatus(argument, std::move(result));
+    } else if (method_call.method_name() == "querySubscribedUserStatusList") {
+        ZIMPluginMethodHandler::getInstance().querySubscribedUserStatusList(argument,
+                                                                            std::move(result));
     } else {
         result->NotImplemented();
     }

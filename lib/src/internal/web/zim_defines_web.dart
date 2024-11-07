@@ -77,6 +77,7 @@ class ZIM {
       String groupName, String groupID);
   external PromiseJsImpl<dynamic> updateGroupAvatarUrl(
       String groupAvatarUrl, String groupID);
+  external PromiseJsImpl<dynamic> updateGroupAlias(String groupAlias, String groupID);
   external PromiseJsImpl<dynamic> updateGroupNotice(
       String groupNotice, String groupID);
   external PromiseJsImpl<dynamic> queryGroupInfo(String groupID);
@@ -226,6 +227,11 @@ class ZIM {
   external PromiseJsImpl<dynamic> rejectGroupInviteApplication(
       String inviterUserID, String groupID, dynamic config);
   external PromiseJsImpl<dynamic> queryGroupApplicationList(dynamic config);
+  external PromiseJsImpl<dynamic> subscribeUsersStatus(dynamic userIDs,Object config);
+  external PromiseJsImpl<dynamic> unsubscribeUsersStatus(dynamic userIDs);
+  external PromiseJsImpl<dynamic> querySubscribedUserStatusList(dynamic config);
+  external PromiseJsImpl<dynamic> queryUsersStatus(dynamic userIDs);
+  external PromiseJsImpl<dynamic> switchRoom(String fromRoomID, dynamic toRoomInfo,bool isCreateWhenRoomNotExisted, Object? config);
 }
 
 // @JS()

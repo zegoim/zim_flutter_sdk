@@ -38,6 +38,9 @@ class ZIMEventHandler {
   /// When to Trigger: When the user rule of the current user is changed, all users are notified by the callback.
   static void Function(ZIM zim, ZIMUserRule)? onUserRuleUpdated;
 
+  static void Function(ZIM zim, List<ZIMUserStatus> userStatusList)?
+      onUserStatusUpdated;
+
   // Supported version: 2.11.0 or later.
   //
   // Description: In the multi-terminal login scenario, after the user deletes the server level message on device A, other online multi-terminal devices will receive this callback..
@@ -142,6 +145,36 @@ class ZIMEventHandler {
   static void Function(
           ZIM zim, List<ZIMMessage> messageList, String fromGroupID)?
       onReceiveGroupMessage;
+
+  /// The callback for receiving peer-to-peer message.
+  ///
+  /// When receiving peer-to-peer message from other user, you will receive this callback.
+  ///
+  /// [zim] ZIM instance.
+  /// [messageList] List of received messages.
+  /// [fromUserID] The user ID of the message sender.
+  static void Function(ZIM zim, List<ZIMMessage> messageList,
+      ZIMMessageReceivedInfo info, String fromUserID)? onPeerMessageReceived;
+
+  /// The callback for receiving room message.
+  ///
+  /// This callback will be triggered when new message is received in a room.
+  ///
+  /// [zim] ZIM instance.
+  /// [messageList] List of received messages.
+  /// [fromRoomID] ID of the room where the message was received.
+  static void Function(ZIM zim, List<ZIMMessage> messageList,
+      ZIMMessageReceivedInfo info, String fromRoomID)? onRoomMessageReceived;
+
+  /// The callback for receiving group message.
+  ///
+  /// This callback will be triggered when new message is received in a roogroupm.
+  ///
+  /// [zim] ZIM instance.
+  /// [messageList] List of received messages.
+  /// [fromGroupID] ID of the group where the message was received.
+  static void Function(ZIM zim, List<ZIMMessage> messageList,
+      ZIMMessageReceivedInfo info, String fromGroupID)? onGroupMessageReceived;
 
   /// Available since: 2.5.0 and above.
 
@@ -305,6 +338,10 @@ class ZIMEventHandler {
   /// [groupID] The groupID where the group name update occurred.
   static void Function(ZIM zim, String groupName,
       ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupNameUpdated;
+
+  static void Function(
+          ZIM zim, String groupAlias, String operatedUserID, String groupID)?
+      onGroupAliasUpdated;
 
   /// Description: Group avatar url change notification callback.
   ///

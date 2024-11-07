@@ -354,6 +354,24 @@ class ZIMEngine implements ZIM {
   }
 
   @override
+  Future<ZIMRoomSwitchedResult> switchRoom(
+      String fromRoomID,
+      ZIMRoomInfo toRoomInfo,
+      bool isCreateWhenRoomNotExisted,
+      ZIMRoomAdvancedConfig config) async {
+    Map resultMap;
+    resultMap = await channel.invokeMethod('switchRoom', {
+      'handle': handle,
+      'fromRoomID': fromRoomID,
+      'toRoomInfo': ZIMConverter.mZIMRoomInfo(toRoomInfo),
+      'isCreateWhenRoomNotExisted': isCreateWhenRoomNotExisted,
+      'config': ZIMConverter.mZIMRoomAdvancedConfig(config)
+    });
+
+    return ZIMConverter.oZIMRoomSwitchedResult(resultMap);
+  }
+
+  @override
   Future<ZIMRoomLeftResult> leaveRoom(String roomID) async {
     Map resultMap = await channel
         .invokeMethod('leaveRoom', {'handle': handle, 'roomID': roomID});
@@ -522,6 +540,14 @@ class ZIMEngine implements ZIM {
     Map resultMap = await channel.invokeMethod('updateGroupName',
         {'handle': handle, 'groupName': groupName, 'groupID': groupID});
     return ZIMConverter.oZIMGroupNameUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMGroupAliasUpdatedResult> updateGroupAlias(
+      String groupAlias, String groupID) async {
+    Map resultMap = await channel.invokeMethod('updateGroupAlias',
+        {'handle': handle, 'groupAlias': groupAlias, 'groupID': groupID});
+    return ZIMConverter.oZIMGroupAliasUpdatedResult(resultMap);
   }
 
   @override
@@ -1538,6 +1564,45 @@ class ZIMEngine implements ZIM {
       'offlinePushRule': ZIMConverter.mZIMUserOfflinePushRule(offlinePushRule),
     });
     return ZIMConverter.oZIMUserOfflinePushRuleInfoUpdatedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMUsersStatusQueriedResult> queryUsersStatus(
+      List<String> userIDs) async {
+    Map resultMap = await channel.invokeMethod(
+        'queryUsersStatus', {'handle': handle, 'userIDs': userIDs});
+    return ZIMConverter.oZIMUsersStatusQueriedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMUsersStatusSubscribedResult> subscribeUsersStatus(
+      List<String> userIDs, ZIMUserStatusSubscribeConfig config) async {
+    Map resultMap = await channel.invokeMethod('subscribeUsersStatus', {
+      'handle': handle,
+      'userIDs': userIDs,
+      'config': ZIMConverter.mZIMUserStatusSubscribeConfig(config)
+    });
+    return ZIMConverter.oZIMUsersStatusSubscribedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMUsersStatusUnsubscribedResult> unsubscribeUsersStatus(
+      List<String> userIDs) async {
+    Map resultMap = await channel.invokeMethod(
+        'unsubscribeUsersStatus', {'handle': handle, 'userIDs': userIDs});
+    return ZIMConverter.oZIMUsersStatusUnsubscribedResult(resultMap);
+  }
+
+  @override
+  Future<ZIMSubscribedUserStatusListQueriedResult>
+      querySubscribedUserStatusList(
+          ZIMSubscribedUserStatusQueryConfig config) async {
+    Map resultMap =
+        await channel.invokeMethod('querySubscribedUserStatusList', {
+      'handle': handle,
+      'config': ZIMConverter.mZIMSubscribedUserStatusQueryConfig(config)
+    });
+    return ZIMConverter.oZIMSubscribedUserStatusListQueriedResult(resultMap);
   }
 
   @override

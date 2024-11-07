@@ -151,7 +151,11 @@ enum ZIMRoomEvent {
 
   connectTimeout,
 
-  kickedOutByOtherDevice
+  kickedOutByOtherDevice,
+
+  activeSwitch,
+
+  switchFailed,
 }
 
 /// The priority of the message.
@@ -471,6 +475,28 @@ enum ZIMPlatformType {
   miniProgram,
   iPadOS,
   unknown
+}
+
+enum ZIMUserOnlineStatus { offline, online, logout, unknown }
+
+class ZIMUserStatus {
+  String userID = '';
+  ZIMUserOnlineStatus onlineStatus = ZIMUserOnlineStatus.unknown;
+  List<ZIMPlatformType> onlinePlatforms = [];
+  int lastUpdateTime = 0;
+}
+
+class ZIMUserStatusSubscription {
+  ZIMUserStatus userStatus = ZIMUserStatus();
+  int subscribeExpiredTime = 0;
+}
+
+class ZIMUserStatusSubscribeConfig {
+  int subscriptionDuration = 0;
+}
+
+class ZIMSubscribedUserStatusQueryConfig {
+  List<String> userIDs = [];
 }
 
 class ZIMVoIPConfig {
@@ -882,6 +908,10 @@ class ZIMVideoMessageLiteInfo extends ZIMMediaMessageLiteInfo {
   }
 }
 
+class ZIMMessageReceivedInfo {
+  bool isOfflineMessage = false;
+}
+
 class ZIMMessageRepliedInfo {
   ZIMMessageRepliedInfoState state = ZIMMessageRepliedInfoState.normal;
   ZIMMessageLiteInfo messageInfo = ZIMMessageLiteInfo();
@@ -1200,6 +1230,7 @@ class ZIMGroupInfo {
 
   /// Description: Group avatar url.
   String groupAvatarUrl = "";
+
   ZIMGroupInfo();
 }
 
@@ -1248,6 +1279,8 @@ class ZIMGroupFullInfo {
   /// Description: basic group notice.
   String groupNotice = "";
 
+  String groupAlias = "";
+
   /// Description: where developers can customize key-value.
   Map<String, String> groupAttributes = {};
 
@@ -1274,6 +1307,9 @@ class ZIMGroup {
   /// Description: group DND status.
   ZIMGroupMessageNotificationStatus notificationStatus =
       ZIMGroupMessageNotificationStatus.notify;
+
+  String groupAlias = "";
+
   ZIMGroup();
 }
 
@@ -2003,6 +2039,11 @@ class ZIMRoomEnteredResult {
   ZIMRoomEnteredResult({required this.roomInfo});
 }
 
+class ZIMRoomSwitchedResult {
+  ZIMRoomFullInfo roomInfo;
+  ZIMRoomSwitchedResult({required this.roomInfo});
+}
+
 /// Callback of the result of joining the room.
 ///
 /// Available since: 1.1.0 or above.
@@ -2298,6 +2339,12 @@ class ZIMGroupNameUpdatedResult {
   String groupID;
   String groupName;
   ZIMGroupNameUpdatedResult({required this.groupID, required this.groupName});
+}
+
+class ZIMGroupAliasUpdatedResult {
+  String groupID;
+  String groupAlias;
+  ZIMGroupAliasUpdatedResult({required this.groupID, required this.groupAlias});
 }
 
 /// Description: Return result of group avatar url update operation.
@@ -3025,4 +3072,27 @@ class ZIMConversationTotalUnreadMessageCountQueriedResult {
   int unreadMessageCount;
   ZIMConversationTotalUnreadMessageCountQueriedResult(
       {required this.unreadMessageCount});
+}
+
+class ZIMUsersStatusQueriedResult {
+  List<ZIMUserStatus> userStatusList;
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMUsersStatusQueriedResult(
+      {required this.userStatusList, required this.errorUserList});
+}
+
+class ZIMUsersStatusSubscribedResult {
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMUsersStatusSubscribedResult({required this.errorUserList});
+}
+
+class ZIMUsersStatusUnsubscribedResult {
+  List<ZIMErrorUserInfo> errorUserList;
+  ZIMUsersStatusUnsubscribedResult({required this.errorUserList});
+}
+
+class ZIMSubscribedUserStatusListQueriedResult {
+  List<ZIMUserStatusSubscription> userStatusSubscriptionList;
+  ZIMSubscribedUserStatusListQueriedResult(
+      {required this.userStatusSubscriptionList});
 }

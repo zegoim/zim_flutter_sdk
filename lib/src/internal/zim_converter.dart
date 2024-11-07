@@ -144,6 +144,21 @@ class ZIMConverter {
     return ZIMUserNameUpdatedResult(userName: resultMap['userName']);
   }
 
+  static Map mZIMErrorUserInfo(ZIMErrorUserInfo errorUserInfo) {
+    Map map = {};
+    map['userID'] = errorUserInfo.userID;
+    map['reason'] = errorUserInfo.reason;
+    return map;
+  }
+
+  static List mZIMErrorUserInfoList(List<ZIMErrorUserInfo> errorUserList) {
+    List list = [];
+    for (ZIMErrorUserInfo errorUserInfo in errorUserList) {
+      list.add(mZIMErrorUserInfo(errorUserInfo));
+    }
+    return list;
+  }
+
   static List<ZIMErrorUserInfo> oZIMErrorUserInfoList(List basicList) {
     List<ZIMErrorUserInfo> errorUserInfoList = [];
     for (Map errorUserInfoMap in basicList) {
@@ -628,6 +643,13 @@ class ZIMConverter {
     return messageList;
   }
 
+  static ZIMMessageReceivedInfo oZIMMessageReceivedInfo(Map map) {
+    ZIMMessageReceivedInfo oInfo = ZIMMessageReceivedInfo();
+    oInfo.isOfflineMessage = map['isOfflineMessage'];
+
+    return oInfo;
+  }
+
   static ZIMConversationListQueriedResult oZIMConversationListQueriedResult(
       Map resultMap) {
     List conversationBasicList = resultMap['conversationList'];
@@ -914,6 +936,14 @@ class ZIMConverter {
         errorInvitees: (resultMap['errorInvitees'] as List).cast<String>());
   }
 
+  static Map mZIMRoomFullInfo(ZIMRoomFullInfo roomInfo) {
+    Map roomInfoMap = {};
+    roomInfoMap['roomID'] = roomInfo.baseInfo.roomID;
+    roomInfoMap['roomName'] = roomInfo.baseInfo.roomName;
+
+    return roomInfoMap;
+  }
+
   static Map mZIMRoomInfo(ZIMRoomInfo roomInfo) {
     Map roomInfoMap = {};
     roomInfoMap['roomID'] = roomInfo.roomID;
@@ -948,11 +978,25 @@ class ZIMConverter {
     return ZIMRoomEnteredResult(roomInfo: roomInfo);
   }
 
+  static ZIMRoomSwitchedResult oZIMRoomSwitchedResult(Map resultMap) {
+    ZIMRoomFullInfo roomInfo = oZIMRoomFullInfo(resultMap['roomInfo']);
+
+    return ZIMRoomSwitchedResult(roomInfo: roomInfo);
+  }
+
   static Map mZIMRoomAdvancedConfig(ZIMRoomAdvancedConfig config) {
     Map configMap = {};
     configMap['roomAttributes'] = config.roomAttributes;
     configMap['roomDestroyDelayTime'] = config.roomDestroyDelayTime;
     return configMap;
+  }
+
+  static ZIMRoomAdvancedConfig oZIMRoomAdvancedConfig(Map resultMap) {
+    ZIMRoomAdvancedConfig config = ZIMRoomAdvancedConfig();
+    config.roomAttributes =
+        (resultMap['roomAttributes'] as Map).cast<String, String>();
+    config.roomDestroyDelayTime = resultMap['roomDestroyDelayTime'];
+    return config;
   }
 
   static ZIMRoomJoinedResult oZIMRoomJoinedResult(Map resultMap) {
@@ -1142,6 +1186,7 @@ class ZIMConverter {
     ZIMGroupFullInfo groupFullInfo = ZIMGroupFullInfo(
         baseInfo: oZIMGroupInfo(groupFullInfoMap['baseInfo'])!);
     groupFullInfo.groupNotice = groupFullInfoMap['groupNotice'] ?? '';
+    groupFullInfo.groupAlias = groupFullInfoMap['groupAlias'] ?? '';
     groupFullInfo.groupAttributes =
         (groupFullInfoMap['groupAttributes'] as Map).cast<String, String>();
     groupFullInfo.mutedInfo =
@@ -1151,6 +1196,30 @@ class ZIMConverter {
     groupFullInfo.maxMemberCount = groupFullInfoMap['maxMemberCount'];
     groupFullInfo.createTime = groupFullInfoMap['createTime'];
     return groupFullInfo;
+  }
+
+  static Map? mZIMGroupFullInfo(ZIMGroupFullInfo? groupFullInfo) {
+    if (groupFullInfo == null) {
+      return null;
+    }
+
+    Map groupMap = {};
+    groupMap['groupID'] = groupFullInfo.baseInfo.groupID;
+    groupMap['groupName'] = groupFullInfo.baseInfo.groupName;
+    groupMap['groupAvatarUrl'] = groupFullInfo.baseInfo.groupAvatarUrl;
+    groupMap['groupNotice'] = groupFullInfo.groupNotice;
+    groupMap['groupAlias'] = groupFullInfo.groupAlias;
+    groupMap['groupAttributes'] = groupFullInfo.groupAttributes;
+    groupMap['mutedInfo'] =
+        ZIMConverter.mZIMGroupMuteInfo(groupFullInfo.mutedInfo);
+    groupMap['verifyInfo'] =
+        ZIMConverter.mZIMGroupVerifyInfo(groupFullInfo.verifyInfo);
+    groupMap['maxMemberCount'] = groupFullInfo.maxMemberCount;
+    groupMap['createTime'] = groupFullInfo.createTime;
+    groupMap['maxMemberCount'] = groupFullInfo.maxMemberCount;
+    groupMap['notificationStatus'] = groupFullInfo.notificationStatus.value;
+
+    return groupMap;
   }
 
   static Map? mZIMGroupAdvancedConfig(ZIMGroupAdvancedConfig? config) {
@@ -1224,6 +1293,12 @@ class ZIMConverter {
   static ZIMGroupNameUpdatedResult oZIMGroupNameUpdatedResult(Map resultMap) {
     return ZIMGroupNameUpdatedResult(
         groupID: resultMap['groupID'], groupName: resultMap['groupName'] ?? '');
+  }
+
+  static ZIMGroupAliasUpdatedResult oZIMGroupAliasUpdatedResult(Map resultMap) {
+    return ZIMGroupAliasUpdatedResult(
+        groupID: resultMap['groupID'],
+        groupAlias: resultMap['groupAlias'] ?? '');
   }
 
   static ZIMGroupNoticeUpdatedResult oZIMGroupNoticeUpdatedResult(
@@ -1346,6 +1421,7 @@ class ZIMConverter {
     ZIMGroup group = ZIMGroup();
     group.notificationStatus = ZIMGroupMessageNotificationStatusEventExtension
         .mapValue[resultMap['notificationStatus']]!;
+    group.groupAlias = resultMap['groupAlias'];
     group.baseInfo = oZIMGroupInfo(resultMap['baseInfo']);
     return group;
   }
@@ -2371,6 +2447,17 @@ class ZIMConverter {
     return verifyInfo;
   }
 
+  static Map mZIMGroupVerifyInfo(ZIMGroupVerifyInfo info) {
+    Map map = {};
+
+    map['joinMode'] = ZIMGroupJoinModeExtension.valueMap[info.joinMode];
+    map['inviteMode'] = ZIMGroupInviteModeExtension.valueMap[info.inviteMode];
+    map['beInviteMode'] =
+        ZIMGroupBeInviteModeExtension.valueMap[info.beInviteMode];
+
+    return map;
+  }
+
   //供自动化使用，sdk 使用前需要 check
   static Map mZIMGroupMuteInfo(ZIMGroupMuteInfo muteInfo) {
     Map map = {};
@@ -2649,6 +2736,86 @@ class ZIMConverter {
         userFullInfo: oZIMUserFullInfo(map['userFullInfo']));
   }
 
+  static ZIMUserStatus oZIMUserStatus(Map map) {
+    ZIMUserStatus userStatus = ZIMUserStatus();
+    userStatus.userID = map['userID'];
+    userStatus.onlineStatus =
+        ZIMUserOnlineStatusExtension.mapValue[map['onlineStatus']]!;
+    for (int platform in map['onlinePlatforms']) {
+      userStatus.onlinePlatforms
+          .add(ZIMPlatformTypeExtension.mapValue[platform]!);
+    }
+    userStatus.lastUpdateTime = map['lastUpdateTime'];
+    return userStatus;
+  }
+
+  static Map mZIMUserStatus(ZIMUserStatus userStatus) {
+    Map map = {};
+    map['userID'] = userStatus.userID;
+    map['onlineStatus'] = userStatus.onlineStatus.value;
+    map['lastUpdateTime'] = userStatus.lastUpdateTime;
+    List onlinePlatforms = [];
+    for (ZIMPlatformType type in userStatus.onlinePlatforms) {
+      onlinePlatforms.add(type.value);
+    }
+    map['onlinePlatforms'] = onlinePlatforms;
+    return map;
+  }
+
+  static List mZIMUserStatusList(List<ZIMUserStatus> statusList) {
+    List list = [];
+    for (ZIMUserStatus status in statusList) {
+      list.add(mZIMUserStatus(status));
+    }
+    return list;
+  }
+
+  static Map mZIMUserStatusSubscription(
+      ZIMUserStatusSubscription subscription) {
+    Map map = {};
+    map['userStatus'] = mZIMUserStatus(subscription.userStatus);
+    map['subscribeExpiredTime'] = subscription.subscribeExpiredTime;
+    return map;
+  }
+
+  static List mZIMUserStatusSubscriptionList(
+      List<ZIMUserStatusSubscription> subscirptionList) {
+    List list = [];
+    for (ZIMUserStatusSubscription subscription in subscirptionList) {
+      list.add(mZIMUserStatusSubscription(subscription));
+    }
+    return list;
+  }
+
+  static List<ZIMUserStatus> oZIMUserStatusList(List basicList) {
+    List<ZIMUserStatus> list = [];
+    for (Map map in basicList) {
+      list.add(oZIMUserStatus(map));
+    }
+    return list;
+  }
+
+  static ZIMUserStatusSubscription oZIMUserStatusSubscription(Map map) {
+    ZIMUserStatusSubscription subscription = ZIMUserStatusSubscription();
+    subscription.userStatus = oZIMUserStatus(map['userStatus']);
+    subscription.subscribeExpiredTime = map['subscribeExpiredTime'];
+    return subscription;
+  }
+
+  static Map mZIMUserStatusSubscribeConfig(
+      ZIMUserStatusSubscribeConfig config) {
+    Map map = {};
+    map['subscriptionDuration'] = config.subscriptionDuration;
+    return map;
+  }
+
+  static Map mZIMSubscribedUserStatusQueryConfig(
+      ZIMSubscribedUserStatusQueryConfig config) {
+    Map map = {};
+    map['userIDs'] = config.userIDs;
+    return map;
+  }
+
   static ZIMSelfUserInfoQueriedResult oZIMSelfUserInfoQueriedResult(Map map) {
     return ZIMSelfUserInfoQueriedResult(
         selfUserInfo: oZIMSelfUserInfo(map['selfUserInfo']));
@@ -2658,6 +2825,38 @@ class ZIMConverter {
       oZIMUserOfflinePushRuleInfoUpdatedResult(Map map) {
     return ZIMUserOfflinePushRuleUpdatedResult(
         offlinePushRule: oZIMUserOfflinePushRule(map['offlinePushRule']));
+  }
+
+  static ZIMUsersStatusQueriedResult oZIMUsersStatusQueriedResult(Map map) {
+    List<ZIMUserStatus> userStatusList = [];
+    for (Map userStatusMap in map['userStatusList']) {
+      userStatusList.add(oZIMUserStatus(userStatusMap));
+    }
+    return ZIMUsersStatusQueriedResult(
+        userStatusList: userStatusList,
+        errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
+  }
+
+  static ZIMUsersStatusSubscribedResult oZIMUsersStatusSubscribedResult(
+      Map map) {
+    return ZIMUsersStatusSubscribedResult(
+        errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
+  }
+
+  static ZIMUsersStatusUnsubscribedResult oZIMUsersStatusUnsubscribedResult(
+      Map map) {
+    return ZIMUsersStatusUnsubscribedResult(
+        errorUserList: oZIMErrorUserInfoList(map['errorUserList']));
+  }
+
+  static ZIMSubscribedUserStatusListQueriedResult
+      oZIMSubscribedUserStatusListQueriedResult(Map map) {
+    List<ZIMUserStatusSubscription> list = [];
+    for (Map basicSubscription in map['userStatusSubscriptionList']) {
+      list.add(oZIMUserStatusSubscription(basicSubscription));
+    }
+    return ZIMSubscribedUserStatusListQueriedResult(
+        userStatusSubscriptionList: list);
   }
 
   static ZIMConversationMarkSetResult oZIMConversationMarkSetResult(Map map) {

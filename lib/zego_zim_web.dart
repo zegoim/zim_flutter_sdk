@@ -432,6 +432,8 @@ class ZegoZimPlugin {
             call.arguments['groupID'], call.arguments['config']);
       case 'queryGroupApplicationList':
         return queryGroupApplicationList(call.arguments['config']);
+      case 'updateGroupAlias':
+        return updateGroupAlias(call.arguments['groupAlias'], call.arguments['groupID']);
       case 'writeLog':
         return writeLog(call.arguments['logString']);
       case 'queryMessages':
@@ -442,6 +444,17 @@ class ZegoZimPlugin {
       case 'setConversationMark':
         return setConversationMark(call.arguments['markType'],
             call.arguments['enable'], call.arguments['infos']);
+      case 'subscribeUsersStatus':
+        return subscribeUsersStatus(call.arguments['userIDs'],call.arguments['config']);
+      case 'unsubscribeUsersStatus':
+        return unsubscribeUsersStatus(call.arguments['userIDs']);
+      case 'querySubscribedUserStatusList':
+        return querySubscribedUserStatusList(call.arguments['config']);
+      case 'queryUsersStatus':
+        return queryUsersStatus(call.arguments['userIDs']);
+      case 'switchRoom':
+        return switchRoom(call.arguments['fromRoomID'], call.arguments['toRoomInfo'], call.arguments['isCreateWhenRoomNotExisted'], call.arguments['config']);
+
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -999,6 +1012,13 @@ class ZegoZimPlugin {
       throw PlatformException(code: e.code.toString(), message: e.message);
     });
 
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> updateGroupAlias(String groupAlias, String groupID) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.updateGroupAlias(groupAlias, groupID)).catchError((e) {
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
     return jsObjectToMap(result);
   }
 
@@ -2155,6 +2175,42 @@ class ZegoZimPlugin {
     return jsObjectToMap(result);
   }
 
+  Future<Map<dynamic,dynamic>> subscribeUsersStatus(dynamic userIDs, dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.subscribeUsersStatus(userIDs, mapToJSObj(config))).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> unsubscribeUsersStatus(dynamic userIDs) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.unsubscribeUsersStatus(userIDs)).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> querySubscribedUserStatusList(dynamic config) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.querySubscribedUserStatusList(mapToJSObj(config))).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> queryUsersStatus(dynamic userIDs) async {
+    final result = await promiseToFuture(ZIM.getInstance()!.queryUsersStatus(userIDs)).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
+  Future<Map<dynamic,dynamic>> switchRoom(String fromRoomID, dynamic toRoomInfo, bool isCreateWhenRoomNotExisted, dynamic config) async {
+    Object _config = mapToJSObj(config);
+    final result = await promiseToFuture(ZIM.getInstance()!.switchRoom(fromRoomID, mapToJSObj(toRoomInfo), isCreateWhenRoomNotExisted, _config)).catchError((e){
+      throw PlatformException(code: e.code.toString(), message: e.message);
+    });
+    return jsObjectToMap(result);
+  }
+
   static Object mapToJSObj(Map<dynamic, dynamic>? a) {
     var object = js.newObject();
 
@@ -2163,11 +2219,22 @@ class ZegoZimPlugin {
     }
 
     a.forEach((k, v) {
-      var key = k;
-      var value = v;
+      var key = k.toString();
+      var value = _dartValueToJs(v);
+
       js.setProperty(object, key, value);
     });
     return object;
+  }
+
+  static dynamic _dartValueToJs(dynamic value) {
+    if (value is Map) {
+      return mapToJSObj(value);
+    } else if (value is List) {
+      return value.map(_dartValueToJs).toList();
+    } else {
+      return value;
+    }
   }
 
   static Map jsObjectToMap(dynamic obj) {

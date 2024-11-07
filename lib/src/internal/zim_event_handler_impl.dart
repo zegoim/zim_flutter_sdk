@@ -111,6 +111,33 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           ZIMEventHandler.onReceiveGroupMessage!(
               zim, messageList, map['fromGroupID']);
           break;
+        case 'onPeerMessageReceived':
+          if (ZIMEventHandler.onPeerMessageReceived == null) return;
+          List<ZIMMessage> messageList =
+              ZIMConverter.oZIMMessageList(map['messageList']);
+          ZIMMessageReceivedInfo info =
+              ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMEventHandler.onPeerMessageReceived!(
+              zim, messageList, info, map['fromUserID']);
+          break;
+        case 'onRoomMessageReceived':
+          if (ZIMEventHandler.onRoomMessageReceived == null) return;
+          List<ZIMMessage> messageList =
+              ZIMConverter.oZIMMessageList(map['messageList']);
+          ZIMMessageReceivedInfo info =
+              ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMEventHandler.onRoomMessageReceived!(
+              zim, messageList, info, map['fromRoomID']);
+          break;
+        case 'onGroupMessageReceived':
+          if (ZIMEventHandler.onGroupMessageReceived == null) return;
+          List<ZIMMessage> messageList =
+              ZIMConverter.oZIMMessageList(map['messageList']);
+          ZIMMessageReceivedInfo info =
+              ZIMConverter.oZIMMessageReceivedInfo(map['info']);
+          ZIMEventHandler.onGroupMessageReceived!(
+              zim, messageList, info, map['fromGroupID']);
+          break;
         case 'onRoomMemberJoined':
           if (ZIMEventHandler.onRoomMemberJoined == null) return;
           List<ZIMUserInfo> memberList =
@@ -181,6 +208,12 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
               map['groupName'],
               ZIMConverter.oZIMGroupOperatedInfo(map['operatedInfo']),
               map['groupID']);
+          break;
+        case 'onGroupAliasUpdated':
+          if (ZIMEventHandler.onGroupAliasUpdated == null) return;
+
+          ZIMEventHandler.onGroupAliasUpdated!(
+              zim, map['groupAlias'], map['operatedUserID'], map['groupID']);
           break;
         case 'onGroupNoticeUpdated':
           if (ZIMEventHandler.onGroupNoticeUpdated == null) return;
@@ -473,6 +506,12 @@ class ZIMEventHandlerImpl implements ZIMEventHandler {
           if (ZIMEventHandler.onUserRuleUpdated == null) return;
           ZIMUserRule userRule = ZIMConverter.oZIMUserRule(map['userRule']);
           ZIMEventHandler.onUserRuleUpdated!(zim, userRule);
+          break;
+        case 'onUserStatusUpdated':
+          if (ZIMEventHandler.onUserStatusUpdated == null) return;
+          List<ZIMUserStatus> userStatusList =
+              ZIMConverter.oZIMUserStatusList(map['userStatusList']);
+          ZIMEventHandler.onUserStatusUpdated!(zim, userStatusList);
           break;
         case 'onMessageRepliedCountChanged':
           if (ZIMEventHandler.onMessageRepliedCountChanged == null) return;

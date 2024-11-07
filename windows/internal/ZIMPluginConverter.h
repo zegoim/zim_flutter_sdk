@@ -236,8 +236,6 @@ class ZIMPluginConverter {
     static FTMap cnvZIMRoomOperatedInfoToMap(const ZIMRoomOperatedInfo &info);
     static FTArray
     cnvZIMGroupMemberInfoListToArray(const std::vector<ZIMGroupMemberInfo> &memberList);
-    static FTMap cnvZIMGroupMessageReceiptMemberQueryConfigToMap(
-        const ZIMGroupMessageReceiptMemberQueryConfig &config);
     static FTMap cnvZIMGroupFullInfoToMap(const ZIMGroupFullInfo &groupInfo);
     static FTMap cnvZIMGroupMemberInfoToMap(const ZIMGroupMemberInfo &memberInfo);
     static FTMap cnvZIMGroupInfoToMap(const ZIMGroupInfo &groupInfo);
@@ -271,6 +269,7 @@ class ZIMPluginConverter {
     static FTArray cnvZIMMessageReactionUserInfoListToArray(
         const std::vector<ZIMMessageReactionUserInfo> &reactionUserInfoList);
     static FTMap cnvZIMMessageDeletedInfoToMap(const ZIMMessageDeletedInfo &info);
+    static FTMap cnvZIMMessageReceivedInfoToMap(const ZIMMessageReceivedInfo &info);
     static FTMap cnvZIMGroupMuteInfoToMap(const ZIMGroupMuteInfo &info);
     static flutter::EncodableValue
     cnvZIMGroupMuteInfoPtrToObj(const std::shared_ptr<ZIMGroupMuteInfo> infoPtr);
@@ -287,9 +286,14 @@ class ZIMPluginConverter {
     static FTMap cnvZIMUserOfflinePushRuleToMap(const ZIMUserOfflinePushRule &offlinePushRule);
     static FTMap cnvZIMUserRuleToMap(const ZIMUserRule &rule);
     static FTMap cnvZIMSelfUserInfoToMap(const ZIMSelfUserInfo &info);
+    static FTMap cnvZIMUserStatusToMap(const ZIMUserStatus &status);
+    static FTArray cnvZIMUserStatusListToBasicList(const std::vector<ZIMUserStatus> &statusList);
+    static FTMap cnvZIMUserStatusSubscriptionToMap(const ZIMUserStatusSubscription &subscription);
+    static FTArray cnvZIMUserStatusSubscriptionListToBasicList(
+        const std::vector<ZIMUserStatusSubscription> &subscriptionList);
 
   public:
-    static ZIMMessageSendConfig oZIMMessageSendConfig(FTMap configMap);
+    static ZIMMessageSendConfig oZIMMessageSendConfig(FTMap configMap,std::shared_ptr<ZIMPushConfig>& pushConfigPtr,std::shared_ptr<ZIMVoIPConfig>& voIPConfigPtr);
     static ZIMMessageRepliedListQueryConfig oZIMMessageRepliedListQueryConfig(FTMap configMap);
     static std::shared_ptr<ZIMMessageRepliedInfo> cnvZIMMessageRepliedInfoToObject(FTMap infoMap);
     static std::shared_ptr<ZIMMessageLiteInfo> cnvZIMMessageLiteInfoToObject(FTMap infoMap);
@@ -347,6 +351,9 @@ class ZIMPluginConverter {
     static ZIMFileCacheClearConfig cnvZIMFileCacheClearConfigToObject(FTMap configMap);
     static ZIMFileCacheQueryConfig cnvZIMFileCacheQueryConfigToObject(FTMap configMap);
     static ZIMUserOfflinePushRule cnvZIMUserOfflinePushRuleToObject(FTMap ruleMap);
+    static ZIMUserStatusSubscribeConfig cnvZIMUserStatusSubscribeConfigToObject(FTMap map);
+    static ZIMSubscribedUserStatusQueryConfig
+    cnvZIMSubscribedUserStatusQueryConfigToObject(FTMap map);
 
   public:
     static ZIMFriendAddConfig cnvZIMFriendAddConfigToObject(FTMap configMap);

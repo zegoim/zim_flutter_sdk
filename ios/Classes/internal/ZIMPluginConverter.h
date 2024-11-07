@@ -364,4 +364,21 @@
 + (nullable ZIMConversationTotalUnreadMessageCountQueryConfig *)
     oZIMConversationTotalUnreadMessageCountQueryConfig:(nullable NSDictionary *)cofigMap;
 
++ (nullable NSDictionary *)mZIMUserStatus:(nullable ZIMUserStatus *)status;
+
++ (nullable NSArray<NSDictionary *> *)mZIMUserStatusList:
+    (nullable NSArray<ZIMUserStatus *> *)statusList;
+
++ (nullable NSDictionary *)mZIMUserStatusSubsciption:
+    (nullable ZIMUserStatusSubscription *)subscription;
+
++ (nullable NSArray<NSDictionary *> *)mZIMUserStatusSubsciptionList:
+    (nullable NSArray<ZIMUserStatusSubscription *> *)subscriptionList;
+
++ (nullable ZIMUserStatusSubscribeConfig *)oZIMUserStatusSubscribeConfig:
+    (nullable NSDictionary *)configMap;
+
++ (nullable ZIMSubscribedUserStatusQueryConfig *)oZIMSubscribedUserStatusQueryConfig:
+    (nullable NSDictionary *)configMap;
+
 @end

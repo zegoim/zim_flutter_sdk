@@ -692,6 +692,17 @@ public class ZIMPluginConverter {
         return messageList;
     }
 
+    static public HashMap<String, Object> mZIMMessageReceivedInfo(ZIMMessageReceivedInfo info) {
+        if (info == null) {
+            return null;
+        }
+
+        HashMap<String, Object> infoMap = new HashMap<>();
+        infoMap.put("isOfflineMessage", info.isOfflineMessage);
+
+        return infoMap;
+    }
+
     static public HashMap<String, Object> mZIMMessageRepliedInfo(ZIMMessageRepliedInfo info) {
         if (info == null) {
             return null;
@@ -1626,6 +1637,7 @@ public class ZIMPluginConverter {
     static public HashMap<String, Object> mZIMGroupFullInfo(ZIMGroupFullInfo groupFullInfo) {
         HashMap<String, Object> groupFullInfoMap = new HashMap<>();
         groupFullInfoMap.put("groupNotice", groupFullInfo.groupNotice);
+        groupFullInfoMap.put("groupAlias", groupFullInfo.groupAlias);
         groupFullInfoMap.put("groupAttributes", groupFullInfo.groupAttributes);
         groupFullInfoMap.put("notificationStatus", groupFullInfo.notificationStatus.value());
         groupFullInfoMap.put("baseInfo", mZIMGroupInfo(groupFullInfo.baseInfo));
@@ -1723,6 +1735,7 @@ public class ZIMPluginConverter {
     static public HashMap<String, Object> mZIMGroup(ZIMGroup zimGroup) {
         HashMap<String, Object> zimGroupMap = new HashMap<>();
         zimGroupMap.put("baseInfo", mZIMGroupInfo(zimGroup.baseInfo));
+        zimGroupMap.put("groupAlias", zimGroup.groupAlias);
         zimGroupMap.put("notificationStatus", zimGroup.notificationStatus.value());
         return zimGroupMap;
     }
@@ -2408,5 +2421,104 @@ public class ZIMPluginConverter {
             infoMap.put("classType", "ZIMTipsMessageGroupMemberChangeInfo");
         }
         return infoMap;
+    }
+
+    public static ZIMUserStatusSubscribeConfig
+    oZIMUserStatusSubscribeConfig(HashMap<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+        ZIMUserStatusSubscribeConfig config = new ZIMUserStatusSubscribeConfig();
+        config.subscriptionDuration = (int)map.get("subscriptionDuration");
+        return config;
+    }
+
+    public static ZIMUserStatus oZIMUserStatus(HashMap<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+        ZIMUserStatus userStatus = new ZIMUserStatus();
+        userStatus.userID = (String)map.get("userID");
+        userStatus.onlineStatus =
+            ZIMUserOnlineStatus.getZIMUserOnlineStatus((Integer)map.get("onlineStatus"));
+        userStatus.onlinePlatforms = new ArrayList<>();
+        for (Integer platformInt : (Integer[])map.get("onlinePlatforms")) {
+            userStatus.onlinePlatforms.add(ZIMPlatformType.getZIMPlatformType(platformInt));
+        }
+        userStatus.lastUpdateTime = (long)map.get("lastUpdateTime");
+        return userStatus;
+    }
+
+    public static HashMap<String, Object> mZIMUserStatus(ZIMUserStatus userStatus) {
+        if (userStatus == null) {
+            return null;
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userID", userStatus.userID);
+        map.put("onlineStatus", userStatus.onlineStatus.value());
+        map.put("lastUpdateTime", userStatus.lastUpdateTime);
+        ArrayList<Integer> onlinePlatforms = new ArrayList<Integer>();
+        for (ZIMPlatformType type : userStatus.onlinePlatforms) {
+            onlinePlatforms.add(type.value());
+        }
+        map.put("onlinePlatforms", onlinePlatforms);
+        return map;
+    }
+
+    public static ArrayList<ZIMUserStatus>
+    oZIMUserStatusList(ArrayList<HashMap<String, Object>> basicList) {
+        if (basicList == null) {
+            return null;
+        }
+        ArrayList<ZIMUserStatus> list = new ArrayList<>();
+        for (HashMap<String, Object> map : basicList) {
+            list.add(oZIMUserStatus(map));
+        }
+        return list;
+    }
+
+    public static ArrayList<HashMap<String, Object>>
+    mZIMUserStatusList(ArrayList<ZIMUserStatus> userStatusList) {
+        if (userStatusList == null) {
+            return null;
+        }
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+        for (ZIMUserStatus userStatus : userStatusList) {
+            list.add(mZIMUserStatus(userStatus));
+        }
+        return list;
+    }
+
+    public static ZIMSubscribedUserStatusQueryConfig
+    oZIMSubscribedUserStatusQueryConfig(HashMap<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+        ZIMSubscribedUserStatusQueryConfig config = new ZIMSubscribedUserStatusQueryConfig();
+        config.userIDs = (ArrayList<String>)map.get("userIDs");
+        return config;
+    }
+
+    public static HashMap<String, Object>
+    mZIMUserStatusSubscription(ZIMUserStatusSubscription subscription) {
+        if (subscription == null) {
+            return null;
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userStatus", mZIMUserStatus(subscription.userStatus));
+        map.put("subscribeExpiredTime", subscription.subscribeExpiredTime);
+        return map;
+    }
+
+    public static ArrayList<HashMap<String, Object>>
+    mZIMUserStatusSubscriptionList(ArrayList<ZIMUserStatusSubscription> subscriptionList) {
+        if (subscriptionList == null) {
+            return null;
+        }
+        ArrayList<HashMap<String, Object>> basicList = new ArrayList<>();
+        for (ZIMUserStatusSubscription subscription : subscriptionList) {
+            basicList.add(mZIMUserStatusSubscription(subscription));
+        }
+        return basicList;
     }
 }

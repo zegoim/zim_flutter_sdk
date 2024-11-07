@@ -41,9 +41,15 @@ class ZIMPluginMethodHandler {
     void uploadLog(FArgument &argument, FResult result);
     void renewToken(FArgument &argument, FResult result);
     void updateUserName(FArgument &argument, FResult result);
+
     void updateUserAvatarUrl(FArgument &argument, FResult result);
     void updateUserExtendedData(FArgument &argument, FResult result);
     void updateUserOfflinePushRule(FArgument &argument, FResult result);
+    void queryUsersStatus(FArgument &argument, FResult result);
+    void subscribeUsersStatus(FArgument &argument, FResult result);
+    void unsubscribeUserStatus(FArgument &argument, FResult result);
+    void querySubscribedUserStatusList(FArgument &argument, FResult result);
+
     void querySelfUserInfo(FArgument &argument, FResult result);
     void queryUsersInfo(FArgument &argument, FResult result);
     void queryConversationList(FArgument &argument, FResult result);
@@ -89,6 +95,7 @@ class ZIMPluginMethodHandler {
     void createRoom(FArgument &argument, FResult result);
     void createRoomWithConfig(FArgument &argument, FResult result);
     void joinRoom(FArgument &argument, FResult result);
+    void switchRoom(FArgument &argument, FResult result);
     void leaveRoom(FArgument &argument, FResult result);
     void leaveAllRoom(FArgument &argument, FResult result);
     void queryRoomMemberList(FArgument &argument, FResult result);
@@ -112,6 +119,7 @@ class ZIMPluginMethodHandler {
     void transferGroupOwner(FArgument &argument, FResult result);
     void updateGroupName(FArgument &argument, FResult result);
     void updateGroupAvatarUrl(FArgument &argument, FResult result);
+    void updateGroupAlias(FArgument &argument, FResult result);
     void updateGroupNotice(FArgument &argument, FResult result);
     void queryGroupInfo(FArgument &argument, FResult result);
     void setGroupAttributes(FArgument &argument, FResult result);

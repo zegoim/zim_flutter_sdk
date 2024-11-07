@@ -85,6 +85,19 @@
     _events(resultDic);
 }
 
+- (void)zim:(ZIM *)zim userStatusUpdated:(NSArray<ZIMUserStatus *> *)userStatusList {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic setObject:[ZIMPluginConverter mZIMUserStatusList:userStatusList]
+                  forKey:@"userStatusList"];
+    [resultDic setObject:handle forKey:@"handle"];
+    [resultDic setObject:@"onUserStatusUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
 - (void)zim:(ZIM *)zim userRuleUpdated:(ZIMUserRule *)userRule {
     if (_events == nil) {
         return;
@@ -222,6 +235,66 @@
         @"method" : @"onReceiveGroupMessage",
         @"handle" : handle,
         @"messageList" : basicMessageList,
+        @"fromGroupID" : fromGroupID
+    };
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    peerMessageReceived:(nonnull NSArray<ZIMMessage *> *)messageList
+                   info:(nonnull ZIMMessageReceivedInfo *)info
+             fromUserID:(nonnull NSString *)fromUserID {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
+    NSDictionary *resultDic = @{
+        @"method" : @"onPeerMessageReceived",
+        @"handle" : handle,
+        @"messageList" : basicMessageList,
+        @"info" : @{@"isOfflineMessage" : @(info.isOfflineMessage)},
+        @"fromUserID" : fromUserID
+    };
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    roomMessageReceived:(nonnull NSArray<ZIMMessage *> *)messageList
+                   info:(nonnull ZIMMessageReceivedInfo *)info
+             fromRoomID:(nonnull NSString *)fromRoomID {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
+    NSDictionary *resultDic = @{
+        @"method" : @"onRoomMessageReceived",
+        @"handle" : handle,
+        @"messageList" : basicMessageList,
+        @"info" : @{@"isOfflineMessage" : @(info.isOfflineMessage)},
+        @"fromRoomID" : fromRoomID
+    };
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    groupMessageReceived:(nonnull NSArray<ZIMMessage *> *)messageList
+                    info:(nonnull ZIMMessageReceivedInfo *)info
+             fromGroupID:(nonnull NSString *)fromGroupID {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+
+    NSArray *basicMessageList = [ZIMPluginConverter mZIMMessageList:messageList];
+    NSDictionary *resultDic = @{
+        @"method" : @"onGroupMessageReceived",
+        @"handle" : handle,
+        @"messageList" : basicMessageList,
+        @"info" : @{@"isOfflineMessage" : @(info.isOfflineMessage)},
         @"fromGroupID" : fromGroupID
     };
     _events(resultDic);
@@ -543,6 +616,24 @@
     [resultDic safeSetObject:groupID forKey:@"groupID"];
     [resultDic safeSetObject:handle forKey:@"handle"];
     [resultDic safeSetObject:@"onGroupNameUpdated" forKey:@"method"];
+    _events(resultDic);
+}
+
+- (void)zim:(ZIM *)zim
+    groupAliasUpdated:(NSString *)groupAlias
+       operatedUserID:(NSString *)operatedUserID
+              groupID:(NSString *)groupID {
+    if (_events == nil) {
+        return;
+    }
+    NSString *handle = [_engineEventMap objectForKey:zim];
+
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    [resultDic safeSetObject:groupAlias forKey:@"groupAlias"];
+    [resultDic safeSetObject:operatedUserID forKey:@"operatedUserID"];
+    [resultDic safeSetObject:groupID forKey:@"groupID"];
+    [resultDic safeSetObject:handle forKey:@"handle"];
+    [resultDic safeSetObject:@"onGroupAliasUpdated" forKey:@"method"];
     _events(resultDic);
 }
 

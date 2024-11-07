@@ -71,6 +71,20 @@ void ZIMPluginEventHandler::onUserRuleUpdated(ZIM *zim, const ZIMUserRule &userR
     }
 }
 
+void ZIMPluginEventHandler::onUserStatusUpdated(ZIM *zim,
+                                                const std::vector<ZIMUserStatus> &userStatusList) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onUserStatusUpdated");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("userStatusList")] =
+            ZIMPluginConverter::cnvZIMUserStatusListToBasicList(userStatusList);
+
+        eventSink_->Success(retMap);
+    }
+}
+
 void ZIMPluginEventHandler::onTokenWillExpire(ZIM *zim, unsigned int second) {
     if (eventSink_) {
         FTMap retMap;
@@ -122,6 +136,54 @@ void ZIMPluginEventHandler::onReceiveGroupMessage(
         auto &handle = this->engineEventMap[zim];
         retMap[FTValue("handle")] = FTValue(handle);
         retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+        retMap[FTValue("fromGroupID")] = FTValue(fromGroupID);
+
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onPeerMessageReceived(
+    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+    const ZIMMessageReceivedInfo &info, const std::string &fromUserID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onPeerMessageReceived");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMMessageReceivedInfoToMap(info);
+        retMap[FTValue("fromUserID")] = FTValue(fromUserID);
+
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onRoomMessageReceived(
+    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+    const ZIMMessageReceivedInfo &info, const std::string &fromRoomID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onRoomMessageReceived");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMMessageReceivedInfoToMap(info);
+        retMap[FTValue("fromRoomID")] = FTValue(fromRoomID);
+
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onGroupMessageReceived(
+    ZIM *zim, const std::vector<std::shared_ptr<ZIMMessage>> &messageList,
+    const ZIMMessageReceivedInfo &info, const std::string &fromGroupID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupMessageReceived");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("messageList")] = ZIMPluginConverter::cnvZIMMessageListToArray(messageList);
+        retMap[FTValue("info")] = ZIMPluginConverter::cnvZIMMessageReceivedInfoToMap(info);
         retMap[FTValue("fromGroupID")] = FTValue(fromGroupID);
 
         eventSink_->Success(retMap);
@@ -391,6 +453,22 @@ void ZIMPluginEventHandler::onGroupNameUpdated(ZIM *zim, const std::string &grou
         retMap[FTValue("groupName")] = FTValue(groupName);
         retMap[FTValue("operatedInfo")] =
             ZIMPluginConverter::cnvZIMGroupOperatedInfoToMap(operatedInfo);
+
+        eventSink_->Success(retMap);
+    }
+}
+
+void ZIMPluginEventHandler::onGroupAliasUpdated(ZIM *zim, const std::string &groupAlias,
+                                                const std::string &operatedUserID,
+                                                const std::string &groupID) {
+    if (eventSink_) {
+        FTMap retMap;
+        retMap[FTValue("method")] = FTValue("onGroupAliasUpdated");
+        auto &handle = this->engineEventMap[zim];
+        retMap[FTValue("handle")] = FTValue(handle);
+        retMap[FTValue("groupID")] = FTValue(groupID);
+        retMap[FTValue("groupAlias")] = FTValue(groupAlias);
+        retMap[FTValue("operatedUserID")] = FTValue(operatedUserID);
 
         eventSink_->Success(retMap);
     }

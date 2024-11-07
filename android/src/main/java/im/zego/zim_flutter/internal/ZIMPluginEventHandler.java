@@ -172,6 +172,63 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
     }
 
     @Override
+    public void onPeerMessageReceived(ZIM zim, ArrayList<ZIMMessage> messageList,
+                                      ZIMMessageReceivedInfo info, String fromUserID) {
+        if (mysink == null) {
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onPeerMessageReceived");
+        resultMap.put("handle", handle);
+        resultMap.put("messageList", ZIMPluginConverter.mZIMMessageList(messageList));
+        resultMap.put("info", ZIMPluginConverter.mZIMMessageReceivedInfo(info));
+        resultMap.put("fromUserID", fromUserID);
+
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onRoomMessageReceived(ZIM zim, ArrayList<ZIMMessage> messageList,
+                                      ZIMMessageReceivedInfo info, String fromRoomID) {
+        if (mysink == null) {
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onRoomMessageReceived");
+        resultMap.put("handle", handle);
+        resultMap.put("messageList", ZIMPluginConverter.mZIMMessageList(messageList));
+        resultMap.put("info", ZIMPluginConverter.mZIMMessageReceivedInfo(info));
+        resultMap.put("fromRoomID", fromRoomID);
+
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onGroupMessageReceived(ZIM zim, ArrayList<ZIMMessage> messageList,
+                                       ZIMMessageReceivedInfo info, String fromGroupID) {
+        if (mysink == null) {
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onGroupMessageReceived");
+        resultMap.put("handle", handle);
+        resultMap.put("messageList", ZIMPluginConverter.mZIMMessageList(messageList));
+        resultMap.put("info", ZIMPluginConverter.mZIMMessageReceivedInfo(info));
+        resultMap.put("fromGroupID", fromGroupID);
+
+        mysink.success(resultMap);
+    }
+
+    @Override
     public void onRoomMemberJoined(ZIM zim, ArrayList<ZIMUserInfo> memberList, String roomID) {
         if (mysink == null) {
             return;
@@ -315,6 +372,24 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("handle", handle);
         resultMap.put("groupName", groupName);
         resultMap.put("operatedInfo", ZIMPluginConverter.mZIMGroupOperatedInfo(operatedInfo));
+        resultMap.put("groupID", groupID);
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onGroupAliasUpdated(ZIM zim, String groupAlias, String operatedUserID,
+                                    String groupID) {
+        if (mysink == null) {
+            return;
+        }
+
+        String handle = engineMapForCallback.get(zim);
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onGroupAliasUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("groupAlias", groupAlias);
+        resultMap.put("operatedUserID", operatedUserID);
         resultMap.put("groupID", groupID);
         mysink.success(resultMap);
     }
@@ -728,6 +803,20 @@ public class ZIMPluginEventHandler extends ZIMEventHandler {
         resultMap.put("method", "onUserRuleUpdated");
         resultMap.put("handle", handle);
         resultMap.put("userRule", ZIMPluginConverter.mZIMUserRule(rule));
+        mysink.success(resultMap);
+    }
+
+    @Override
+    public void onUserStatusUpdated(ZIM zim, ArrayList<ZIMUserStatus> userStatusList) {
+        super.onUserStatusUpdated(zim, userStatusList);
+        if (mysink == null) {
+            return;
+        }
+        String handle = engineMapForCallback.get(zim);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("method", "onUserStatusUpdated");
+        resultMap.put("handle", handle);
+        resultMap.put("userStatusList", ZIMPluginConverter.mZIMUserStatusList(userStatusList));
         mysink.success(resultMap);
     }
 

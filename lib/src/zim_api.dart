@@ -835,6 +835,12 @@ abstract class ZIM {
   Future<ZIMRoomEnteredResult> enterRoom(
       ZIMRoomInfo roomInfo, ZIMRoomAdvancedConfig config);
 
+  Future<ZIMRoomSwitchedResult> switchRoom(
+      String fromRoomID,
+      ZIMRoomInfo toRoomInfo,
+      bool isCreateWhenRoomNotExisted,
+      ZIMRoomAdvancedConfig config);
+
   /// Leave a room.
   ///
   /// Available since: 2.1.5 or above.
@@ -1195,6 +1201,9 @@ abstract class ZIM {
   /// Related callbacks: The result of changing the group name can be obtained through the [ZIMGroupAvatarUrlUpdatedResult] callback, and the updated group avatar information can be obtained through the [ZIMEventHandler.onGroupAvatarUrlUpdated] callback.
   Future<ZIMGroupAvatarUrlUpdatedResult> updateGroupAvatarUrl(
       String groupAvatarUrl, String groupID);
+
+  Future<ZIMGroupAliasUpdatedResult> updateGroupAlias(
+      String groupAlias, String groupID);
 
   /// Available since: 2.1.5 and above.
   ///
@@ -1958,6 +1967,17 @@ abstract class ZIM {
   ///
   /// Restrictions: [ZIMSelfUserInfoQueriedResult]、[ZIMEventHandler.onUserInfoUpdated]、[ZIMEventHandler.onUserRuleUpdated]
   Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
+
+  Future<ZIMUsersStatusQueriedResult> queryUsersStatus(List<String> userIDs);
+
+  Future<ZIMUsersStatusSubscribedResult> subscribeUsersStatus(
+      List<String> userIDs, ZIMUserStatusSubscribeConfig config);
+
+  Future<ZIMUsersStatusUnsubscribedResult> unsubscribeUsersStatus(
+      List<String> userIDs);
+
+  Future<ZIMSubscribedUserStatusListQueriedResult>
+      querySubscribedUserStatusList(ZIMSubscribedUserStatusQueryConfig config);
 
   /// Supported versions: 2.17.0 and above.
   ///

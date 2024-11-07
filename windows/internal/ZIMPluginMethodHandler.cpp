@@ -229,6 +229,96 @@ void ZIMPluginMethodHandler::updateUserOfflinePushRule(FArgument &argument, FRes
         });
 }
 
+void ZIMPluginMethodHandler::queryUsersStatus(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto &userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    zim->queryUsersStatus(userIDsVec, [=](const std::vector<ZIMUserStatus> &userStatusList,
+                                          const std::vector<ZIMErrorUserInfo> &errorUserList,
+                                          const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("userStatusList")] =
+                ZIMPluginConverter::cnvZIMUserStatusListToBasicList(userStatusList);
+            retMap[FTValue("errorUserList")] =
+                ZIMPluginConverter::cnvZIMErrorUserInfoListToArray(errorUserList);
+            result->Success(retMap);
+        } else {
+            result->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::subscribeUsersStatus(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto &userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    ZIMUserStatusSubscribeConfig config =
+        ZIMPluginConverter::cnvZIMUserStatusSubscribeConfigToObject(
+            std::get<FTMap>(argument[FTValue("config")]));
+    zim->subscribeUsersStatus(
+        userIDsVec, config,
+        [=](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
+            if (errorInfo.code == 0) {
+                FTMap retMap;
+                retMap[FTValue("errorUserList")] =
+                    ZIMPluginConverter::cnvZIMErrorUserInfoListToArray(errorUserList);
+                result->Success(retMap);
+            } else {
+                result->Error(std::to_string(errorInfo.code), errorInfo.message);
+            }
+        });
+}
+
+void ZIMPluginMethodHandler::unsubscribeUserStatus(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+    auto userIDs = std::get<FTArray>(argument[FTValue("userIDs")]);
+    std::vector<std::string> userIDsVec;
+    for (auto &userIDValue : userIDs) {
+        auto userID = std::get<std::string>(userIDValue);
+        userIDsVec.emplace_back(userID);
+    }
+    zim->unsubscribeUsersStatus(userIDsVec, [=](const std::vector<ZIMErrorUserInfo> &errorUserList,
+                                                const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            FTMap retMap;
+            retMap[FTValue("errorUserList")] =
+                ZIMPluginConverter::cnvZIMErrorUserInfoListToArray(errorUserList);
+            result->Success(retMap);
+        } else {
+            result->Error(std::to_string(errorInfo.code), errorInfo.message);
+        }
+    });
+}
+
+void ZIMPluginMethodHandler::querySubscribedUserStatusList(FArgument &argument, FResult result) {
+    CheckZIMInstanceExistAndObtainZIM();
+    ZIMSubscribedUserStatusQueryConfig config =
+        ZIMPluginConverter::cnvZIMSubscribedUserStatusQueryConfigToObject(
+            std::get<FTMap>(argument[FTValue("config")]));
+    zim->querySubscribedUserStatusList(
+        config, [=](const std::vector<ZIMUserStatusSubscription> &userStatusSubscriptionList,
+                    const ZIMError &errorInfo) {
+            if (errorInfo.code == 0) {
+                FTMap retMap;
+                retMap[FTValue("userStatusSubscriptionList")] =
+                    ZIMPluginConverter::cnvZIMUserStatusSubscriptionListToBasicList(
+                        userStatusSubscriptionList);
+                result->Success(retMap);
+            } else {
+                result->Error(std::to_string(errorInfo.code), errorInfo.message);
+            }
+        });
+}
+
 void ZIMPluginMethodHandler::querySelfUserInfo(FArgument &argument, FResult result) {
 
     CheckZIMInstanceExistAndObtainZIM();
@@ -731,8 +821,11 @@ void ZIMPluginMethodHandler::sendMessage(FArgument &argument, FResult result) {
 
     int32_t messageAttachedCallbackID =
         ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageAttachedCallbackID")]);
+
+    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
     auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
 
     auto notification = std::make_shared<zim::ZIMMessageSendNotification>(
         [=](const std::shared_ptr<zim::ZIMMessage> &message) {
@@ -775,8 +868,13 @@ void ZIMPluginMethodHandler::sendPeerMessage(FArgument &argument, FResult result
     auto toUserID = std::get<std::string>(argument[FTValue("toUserID")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
+
+
+    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+
     auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
 
     zim->sendPeerMessage(
         messagePtr.get(), toUserID, config,
@@ -802,8 +900,13 @@ void ZIMPluginMethodHandler::sendRoomMessage(FArgument &argument, FResult result
     auto toRoomID = std::get<std::string>(argument[FTValue("toRoomID")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
+
+
+    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+
     auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
 
     zim->sendRoomMessage(
         messagePtr.get(), toRoomID, config,
@@ -829,8 +932,13 @@ void ZIMPluginMethodHandler::sendGroupMessage(FArgument &argument, FResult resul
     auto toGroupID = std::get<std::string>(argument[FTValue("toGroupID")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
+
+
+    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+
     auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
 
     zim->sendGroupMessage(
         messagePtr.get(), toGroupID, config,
@@ -858,8 +966,13 @@ void ZIMPluginMethodHandler::sendMediaMessage(FArgument &argument, FResult resul
         ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("conversationType")]);
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
+
+
+    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+
     auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
     int32_t progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
@@ -958,8 +1071,13 @@ void ZIMPluginMethodHandler::replyMessage(FArgument &argument, FResult result) {
     auto toOriginalMessage = ZIMPluginConverter::cnvZIMMessageToObject(
         std::get<FTMap>(argument[FTValue("toOriginalMessage")]));
 
+
+
+    std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
+    std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
+
     auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]));
+        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
 
     auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
     int32_t progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
@@ -1433,6 +1551,33 @@ void ZIMPluginMethodHandler::enterRoom(FArgument &argument, FResult result) {
                            result->Error(std::to_string(errorInfo.code), errorInfo.message);
                        }
                    });
+}
+
+void ZIMPluginMethodHandler::switchRoom(FArgument &argument, FResult result) {
+
+    CheckZIMInstanceExistAndObtainZIM();
+
+    auto fromRoomID = std::get<std::string>(argument[FTValue("fromRoomID")]);
+    auto toRoomInfo = ZIMPluginConverter::cnvZIMRoomInfoToObject(
+        std::get<FTMap>(argument[FTValue("toRoomInfo")]));
+    auto isCreateWhenRoomNotExisted =
+        std::get<bool>(argument[FTValue("isCreateWhenRoomNotExisted")]);
+    auto roomAdvancedConfig = ZIMPluginConverter::cnvZIMRoomAdvancedConfigToObject(
+        std::get<FTMap>(argument[FTValue("config")]));
+
+    zim->switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, roomAdvancedConfig,
+                    [=](const ZIMRoomFullInfo &roomInfo, const ZIMError &errorInfo) {
+                        if (errorInfo.code == 0) {
+                            FTMap retMap;
+                            auto roomFullInfoMap =
+                                ZIMPluginConverter::cnvZIMRoomFullInfoToMap(roomInfo);
+                            retMap[FTValue("roomInfo")] = roomFullInfoMap;
+
+                            result->Success(retMap);
+                        } else {
+                            result->Error(std::to_string(errorInfo.code), errorInfo.message);
+                        }
+                    });
 }
 
 void ZIMPluginMethodHandler::joinRoom(FArgument &argument, FResult result) {
@@ -1992,6 +2137,28 @@ void ZIMPluginMethodHandler::updateGroupAvatarUrl(FArgument &argument, FResult r
                                                     errorInfo.message);
                                   }
                               });
+}
+
+void ZIMPluginMethodHandler::updateGroupAlias(FArgument &argument, FResult result) {
+
+    CheckZIMInstanceExistAndObtainZIM();
+
+    auto groupID = std::get<std::string>(argument[FTValue("groupID")]);
+    auto groupAlias = std::get<std::string>(argument[FTValue("groupAlias")]);
+
+    zim->updateGroupAlias(
+        groupAlias, groupID,
+        [=](const std::string &groupID, const std::string &groupAlias, const ZIMError &errorInfo) {
+            if (errorInfo.code == 0) {
+                FTMap retMap;
+                retMap[FTValue("groupID")] = FTValue(groupID);
+                retMap[FTValue("groupAlias")] = FTValue(groupAlias);
+
+                result->Success(retMap);
+            } else {
+                result->Error(std::to_string(errorInfo.code), errorInfo.message);
+            }
+        });
 }
 
 void ZIMPluginMethodHandler::updateGroupNotice(FArgument &argument, FResult result) {
