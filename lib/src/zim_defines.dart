@@ -479,19 +479,34 @@ enum ZIMPlatformType {
 
 enum ZIMUserOnlineStatus { offline, online, logout, unknown }
 
+///Contains data about the user's online status.
 class ZIMUserStatus {
+  /// A unique identifier for a single user.
   String userID = '';
+  /// Enumeration that represents the current online status of the user.
   ZIMUserOnlineStatus onlineStatus = ZIMUserOnlineStatus.unknown;
+  /// The list of online platforms of the current user can be used to display the online platforms of the user, such as iPhone online and PC online. Please refer to ZIMPlatform for the meanings of the numbers.
   List<ZIMPlatformType> onlinePlatforms = [];
+  /// The timestamp of the last change of the user onlineStatus, which can be used to show that the user was offline/logged in before xxx minutes.
   int lastUpdateTime = 0;
 }
-
+///User online status subscription information. Contains the user's online status, a list of online platforms, subscription expiration time stamps, and more.
 class ZIMUserStatusSubscription {
+  /// The online status of the user.
   ZIMUserStatus userStatus = ZIMUserStatus();
+  /// The timestamp when the user's subscription expired.
   int subscribeExpiredTime = 0;
 }
-
+///subscribeUsersStatus Configuration items of the online status interface for subscribing users in batches.
 class ZIMUserStatusSubscribeConfig {
+
+  /// Description: Used to set the duration of this subscription.
+  ///
+  /// Use cases: This field is required.
+  ///
+  /// Value range: ：1 to 43200 (30 days), and the unit is minute.
+  ///
+  /// Caution: After the subscription is expired, the subscribed user will be deleted from the subscription list, and the status changes of the user will not be synchronized to the subscriber.
   int subscriptionDuration = 0;
 }
 
@@ -3057,9 +3072,13 @@ class ZIMSelfUserInfoQueriedResult {
   ZIMSelfUserInfoQueriedResult({required this.selfUserInfo});
 }
 
+/// The callback for querying the reply message list result.
 class ZIMMessageRepliedListQueriedResult {
+  ///Description: List of messages retrieved.
   List<ZIMMessage> messageList = [];
+  /// Description: Query anchor, used for the next page to be passed to [ZIMMessageRepliedListQueryConfig] for querying.
   int nextFlag = 0;
+  /// Description: Reply information for the root message.
   ZIMMessageRootRepliedInfo rootRepliedInfo = ZIMMessageRootRepliedInfo();
 }
 
@@ -3074,24 +3093,30 @@ class ZIMConversationTotalUnreadMessageCountQueriedResult {
       {required this.unreadMessageCount});
 }
 
+///Result callback of the queryUsersStatus interface for batch querying user online status.
 class ZIMUsersStatusQueriedResult {
+  /// Indicates the online status of the user to be queried.
   List<ZIMUserStatus> userStatusList;
+  /// Query the list of failed users.
   List<ZIMErrorUserInfo> errorUserList;
   ZIMUsersStatusQueriedResult(
       {required this.userStatusList, required this.errorUserList});
 }
-
+///The result of a callback to the online status of other users in a batch subscription.
 class ZIMUsersStatusSubscribedResult {
+  ///List of users who failed to subscribe.
   List<ZIMErrorUserInfo> errorUserList;
   ZIMUsersStatusSubscribedResult({required this.errorUserList});
 }
-
+///Result callback for batch unsubscribing subscribed users.
 class ZIMUsersStatusUnsubscribedResult {
+  ///Cancels the list of failed users.
   List<ZIMErrorUserInfo> errorUserList;
   ZIMUsersStatusUnsubscribedResult({required this.errorUserList});
 }
-
+/// QuerySubscribedUserStatusList query for the current user subscription list operation results callback.
 class ZIMSubscribedUserStatusListQueriedResult {
+  /// Subscription information for users in the subscription list.
   List<ZIMUserStatusSubscription> userStatusSubscriptionList;
   ZIMSubscribedUserStatusListQueriedResult(
       {required this.userStatusSubscriptionList});

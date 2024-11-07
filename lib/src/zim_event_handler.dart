@@ -38,6 +38,17 @@ class ZIMEventHandler {
   /// When to Trigger: When the user rule of the current user is changed, all users are notified by the callback.
   static void Function(ZIM zim, ZIMUserRule)? onUserRuleUpdated;
 
+  /// Available since: 2.18.0
+  ///
+  /// Description: User online status change notification.
+  ///
+  /// Use cases: This callback can be used when you needs to pay attention to the online status of certain users, for example, the online group members need to be displayed. After subscribing to users through the subscribeUsersStatus method, the online status of the targeted users and the changes of their online status during the validity period of the subscription will be notified to you through this callback.
+  ///
+  /// When to call /Trigger: After the current user subscribes to the target user for the first time, the event will be triggered if the target user is added to the subscription list for the first time, or the subscribed user's online status or online platform list. In addition, the callback will also be triggered if the current user has opened a multi-terminal login and the online platform has changed.
+  ///
+  ///
+  /// Restrictions: When the userStatusUpdated callback returns the userStatus information of the current user, the onlineStatus will be unknown and the lastUpdateTime will be 0, which cannot truly present the online status. Map the online status of the current user according to connectionStateChanged.
+  /// [userStatusList] A list with data about the user's online status.
   static void Function(ZIM zim, List<ZIMUserStatus> userStatusList)?
       onUserStatusUpdated;
 
@@ -152,6 +163,7 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
+  /// [info] Receive information about the message event.
   /// [fromUserID] The user ID of the message sender.
   static void Function(ZIM zim, List<ZIMMessage> messageList,
       ZIMMessageReceivedInfo info, String fromUserID)? onPeerMessageReceived;
@@ -162,6 +174,7 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
+  /// [info] Receive information about the message event.
   /// [fromRoomID] ID of the room where the message was received.
   static void Function(ZIM zim, List<ZIMMessage> messageList,
       ZIMMessageReceivedInfo info, String fromRoomID)? onRoomMessageReceived;
@@ -172,6 +185,7 @@ class ZIMEventHandler {
   ///
   /// [zim] ZIM instance.
   /// [messageList] List of received messages.
+  /// [info] Receive information about the message event.
   /// [fromGroupID] ID of the group where the message was received.
   static void Function(ZIM zim, List<ZIMMessage> messageList,
       ZIMMessageReceivedInfo info, String fromGroupID)? onGroupMessageReceived;
@@ -339,6 +353,17 @@ class ZIMEventHandler {
   static void Function(ZIM zim, String groupName,
       ZIMGroupOperatedInfo operatedInfo, String groupID)? onGroupNameUpdated;
 
+
+  /// Description: Group alias change notification callback.
+  ///
+  /// Use cases: When the group alias is changed, this notification synchronizes the latest group alias to all devices of the user who made the modification.
+  ///
+  /// When to Trigger: The group alias is changed.
+  ///
+  /// Related APIs: [updateGroupAlias].
+  /// [groupAlias] The updated group alias.
+  /// [operatedUserID] The userID of who modifies the group alias.
+  /// [groupID] The target group ID.
   static void Function(
           ZIM zim, String groupAlias, String operatedUserID, String groupID)?
       onGroupAliasUpdated;

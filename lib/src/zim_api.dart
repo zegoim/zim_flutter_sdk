@@ -1968,14 +1968,75 @@ abstract class ZIM {
   /// Restrictions: [ZIMSelfUserInfoQueriedResult]、[ZIMEventHandler.onUserInfoUpdated]、[ZIMEventHandler.onUserRuleUpdated]
   Future<ZIMSelfUserInfoQueriedResult> querySelfUserInfo();
 
+
+  /// Available since: 2.18.0
+  ///
+  /// Description: Query the online statuses of other users.
+  ///
+  /// Use cases: When you do not need to continuously follow the online statuses of certain users but only need to obtain their online statuses once, you can use this method.
+  ///
+  /// When to call /Trigger: Can be called after login and when the network conditions are good.
+  ///
+  /// Note: The query targets can not include unregistered users.
+  ///
+  /// Related callbacks: ZIMUsersStatusQueriedCallback.
+  /// [userIDs] The query target user list.
   Future<ZIMUsersStatusQueriedResult> queryUsersStatus(List<String> userIDs);
 
+  /// Available since: 2.18.0
+  ///
+  /// Description: Subscribing to the online status of other users through this interface.
+  ///
+  /// Use cases: When you enter the group/room/friends list and need to know which room/group members/friends are online, subscribe through this interface. When the online status of these users is updated successfully, the [onUserStatusUpdated] interface is updated.
+  ///
+  /// When to call /Trigger: Can be called when the login is successful and the network conditions are good.
+  ///
+  /// Restrictions: The maximum number of subscribers is 100. By default, a single user can subscribe to a maximum of 3000 users. When the number of subscribers reaches the upper limit, the new subscribers will overwrite the original subscribers.
+  ///
+  /// Caution: You cannot subscribe to the current login user through this interface. The subscribed user must be registered.
+  ///
+  /// Related callbacks: [ZIMUsersStatusSubscribedCallback],[onUserStatusUpdated]
+  ///
+  /// Related APIs: [unsubscribeUsersStatus]
+  /// [userIDs] List of subscribed users.
   Future<ZIMUsersStatusSubscribedResult> subscribeUsersStatus(
       List<String> userIDs, ZIMUserStatusSubscribeConfig config);
 
+
+  /// Available since: 2.18.0
+  ///
+  /// Description: Batch unsubscribe the target user in the current user subscription list.
+  ///
+  /// Use cases: In non-multi-terminal login scenarios, when you leave a room or group, if you no longer follow the online status of the room or group members for a short period of time, and you have subscribed to the online status of the room or group members when you enter the room or group, you can unsubscribe through this interface.
+  ///
+  /// When to call /Trigger: Called after login and when the network is in good condition.
+  ///
+  /// Restrictions: The maximum number of userids passed in at a time is 100.
+  ///
+  /// Caution: You cannot cancel a user that is not in the current user subscription list.
+  ///
+  /// Related callbacks: ZIMUsersStatusUnsubscribedCallback.
+  ///
+  /// Related APIs: subscribeUsersStatus、queryUsersStatus、querySubscribedUserStatusList.
+  /// [userIDs] List of users that have been canceled in batch.
   Future<ZIMUsersStatusUnsubscribedResult> unsubscribeUsersStatus(
       List<String> userIDs);
 
+
+  /// Available since: 2.18.0
+  ///
+  /// Description: This command is used to query the list of online users.
+  ///
+  /// Use cases: Through this interface, you can obtain the local cache of the online subscription list of the current user, so that you can know which users the current user has subscribed to, obtain the subscription expiration time of the subscriber, and obtain the status data of the subscriber when it changed last time.
+  ///
+  /// When to call /Trigger: It can be called after login, regardless of network status.
+  ///
+  /// Restrictions: The data obtained is the local cache of the SDK. When the network conditions are good after login, the SDK periodically synchronizes data to the background.
+  ///
+  /// Related callbacks: ZIMSubscribedUserStatusListQueriedCallback、subscribeUsersStatus、unsubscribeUsersStatus.
+  ///
+  /// Related APIs: subscribeUsersStatus、unsubscribeUsersStatus.
+  /// [config] Query the parameters related to the subscription list.
   Future<ZIMSubscribedUserStatusListQueriedResult>
       querySubscribedUserStatusList(ZIMSubscribedUserStatusQueryConfig config);
 
