@@ -1791,20 +1791,23 @@ public class ZIMPluginMethodHandler {
             ZIMPluginConverter.oZIMRoomInfo(Objects.requireNonNull(call.argument("toRoomInfo")));
         ZIMRoomAdvancedConfig config = ZIMPluginConverter.oZIMRoomAdvancedConfig(
             Objects.requireNonNull(ZIMPluginCommonTools.safeGetHashMap(call.argument("config"))));
-        zim.switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config, new ZIMRoomSwitchedCallback() {
-            @Override
-            public void onRoomSwitched(ZIMRoomFullInfo roomInfo, ZIMError errorInfo) {
-                if (errorInfo.code == ZIMErrorCode.SUCCESS) {
-                    HashMap<String, Object> resultMap = new HashMap<>();
-                    HashMap<String, Object> roomInfoMap =
-                        ZIMPluginConverter.mZIMRoomFullInfo(roomInfo);
-                    resultMap.put("roomInfo", roomInfoMap);
-                    result.success(resultMap);
-                } else {
-                    result.error(String.valueOf(errorInfo.code.value()), errorInfo.message, null);
-                }
-            }
-        });
+        zim.switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config,
+                       new ZIMRoomSwitchedCallback() {
+                           @Override
+                           public void onRoomSwitched(ZIMRoomFullInfo roomInfo,
+                                                      ZIMError errorInfo) {
+                               if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                                   HashMap<String, Object> resultMap = new HashMap<>();
+                                   HashMap<String, Object> roomInfoMap =
+                                       ZIMPluginConverter.mZIMRoomFullInfo(roomInfo);
+                                   resultMap.put("roomInfo", roomInfoMap);
+                                   result.success(resultMap);
+                               } else {
+                                   result.error(String.valueOf(errorInfo.code.value()),
+                                                errorInfo.message, null);
+                               }
+                           }
+                       });
     };
 
     public static void leaveRoom(MethodCall call, Result result) {

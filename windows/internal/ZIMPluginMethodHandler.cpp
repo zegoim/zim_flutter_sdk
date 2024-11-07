@@ -824,8 +824,8 @@ void ZIMPluginMethodHandler::sendMessage(FArgument &argument, FResult result) {
 
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
-    auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
+    auto config = ZIMPluginConverter::oZIMMessageSendConfig(
+        std::get<FTMap>(argument[FTValue("config")]), pushConfigPtr, voIPConfigPtr);
 
     auto notification = std::make_shared<zim::ZIMMessageSendNotification>(
         [=](const std::shared_ptr<zim::ZIMMessage> &message) {
@@ -869,12 +869,11 @@ void ZIMPluginMethodHandler::sendPeerMessage(FArgument &argument, FResult result
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 
-    auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
+    auto config = ZIMPluginConverter::oZIMMessageSendConfig(
+        std::get<FTMap>(argument[FTValue("config")]), pushConfigPtr, voIPConfigPtr);
 
     zim->sendPeerMessage(
         messagePtr.get(), toUserID, config,
@@ -901,12 +900,11 @@ void ZIMPluginMethodHandler::sendRoomMessage(FArgument &argument, FResult result
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 
-    auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
+    auto config = ZIMPluginConverter::oZIMMessageSendConfig(
+        std::get<FTMap>(argument[FTValue("config")]), pushConfigPtr, voIPConfigPtr);
 
     zim->sendRoomMessage(
         messagePtr.get(), toRoomID, config,
@@ -933,12 +931,11 @@ void ZIMPluginMethodHandler::sendGroupMessage(FArgument &argument, FResult resul
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 
-    auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
+    auto config = ZIMPluginConverter::oZIMMessageSendConfig(
+        std::get<FTMap>(argument[FTValue("config")]), pushConfigPtr, voIPConfigPtr);
 
     zim->sendGroupMessage(
         messagePtr.get(), toGroupID, config,
@@ -967,12 +964,11 @@ void ZIMPluginMethodHandler::sendMediaMessage(FArgument &argument, FResult resul
 
     FTMap configMap = std::get<FTMap>(argument[FTValue("config")]);
 
-
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 
-    auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
+    auto config = ZIMPluginConverter::oZIMMessageSendConfig(
+        std::get<FTMap>(argument[FTValue("config")]), pushConfigPtr, voIPConfigPtr);
 
     auto mediaMessagePtr = std::static_pointer_cast<ZIMMediaMessage>(messagePtr);
     int32_t progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);
@@ -1071,13 +1067,11 @@ void ZIMPluginMethodHandler::replyMessage(FArgument &argument, FResult result) {
     auto toOriginalMessage = ZIMPluginConverter::cnvZIMMessageToObject(
         std::get<FTMap>(argument[FTValue("toOriginalMessage")]));
 
-
-
     std::shared_ptr<ZIMPushConfig> pushConfigPtr = nullptr;
     std::shared_ptr<ZIMVoIPConfig> voIPConfigPtr = nullptr;
 
-    auto config =
-        ZIMPluginConverter::oZIMMessageSendConfig(std::get<FTMap>(argument[FTValue("config")]),pushConfigPtr,voIPConfigPtr);
+    auto config = ZIMPluginConverter::oZIMMessageSendConfig(
+        std::get<FTMap>(argument[FTValue("config")]), pushConfigPtr, voIPConfigPtr);
 
     auto messageID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("messageID")]);
     int32_t progressID = ZIMPluginConverter::cnvFTValueToInt32(argument[FTValue("progressID")]);

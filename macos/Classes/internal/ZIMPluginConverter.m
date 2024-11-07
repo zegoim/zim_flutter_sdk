@@ -1575,6 +1575,7 @@
     NSDictionary *groupInfoDic = [ZIMPluginConverter mZIMGroupInfo:groupFullInfo.baseInfo];
     NSDictionary *groupMuteInfoDic = [ZIMPluginConverter mZIMGroupMuteInfo:groupFullInfo.mutedInfo];
     [groupFullInfoDic safeSetObject:groupInfoDic forKey:@"baseInfo"];
+    [groupFullInfoDic safeSetObject:groupFullInfo.groupAlias forKey:@"groupAlias"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupNotice forKey:@"groupNotice"];
     [groupFullInfoDic safeSetObject:groupFullInfo.groupAttributes forKey:@"groupAttributes"];
     [groupFullInfoDic safeSetObject:@(groupFullInfo.notificationStatus)
@@ -1683,6 +1684,8 @@
         return nil;
     }
     NSMutableDictionary *groupDic = [[NSMutableDictionary alloc] init];
+
+    [groupDic safeSetObject:group.groupAlias forKey:@"groupAlias"];
     [groupDic safeSetObject:[NSNumber numberWithInt:(int)group.notificationStatus]
                      forKey:@"notificationStatus"];
     NSDictionary *baseInfoDic = [ZIMPluginConverter mZIMGroupInfo:group.baseInfo];
@@ -2623,4 +2626,74 @@
     return queryConfig;
 }
 
++ (nullable NSDictionary *)mZIMUserStatus:(nullable ZIMUserStatus *)status {
+    if (status == nil || [status isEqual:[NSNull null]]) {
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:status.userID forKey:@"userID"];
+    [dic setObject:@(status.onlineStatus) forKey:@"onlineStatus"];
+    [dic setObject:status.onlinePlatforms forKey:@"onlinePlatforms"];
+    [dic setObject:@(status.lastUpdateTime) forKey:@"lastUpdateTime"];
+    return dic;
+}
+
++ (nullable NSArray<NSDictionary *> *)mZIMUserStatusList:
+    (nullable NSArray<ZIMUserStatus *> *)statusList {
+    if (statusList == nil || [statusList isEqual:[NSNull null]]) {
+        return nil;
+    }
+    NSMutableArray<NSDictionary *> *basicList = [[NSMutableArray alloc] init];
+    for (ZIMUserStatus *userStatus in statusList) {
+        NSDictionary *dictionary = [ZIMPluginConverter mZIMUserStatus:userStatus];
+        [basicList addObject:dictionary];
+    }
+    return basicList;
+}
+
++ (nullable NSDictionary *)mZIMUserStatusSubsciption:
+    (nullable ZIMUserStatusSubscription *)subscription {
+    if (subscription == nil || [subscription isEqual:[NSNull null]]) {
+        return nil;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:[ZIMPluginConverter mZIMUserStatus:subscription.userStatus]
+            forKey:@"userStatus"];
+    [dic setObject:@(subscription.subscribeExpiredTime) forKey:@"subscribeExpiredTime"];
+    return dic;
+}
+
++ (nullable NSArray<NSDictionary *> *)mZIMUserStatusSubsciptionList:
+    (nullable NSArray<ZIMUserStatusSubscription *> *)subscriptionList {
+    if (subscriptionList == nil || [subscriptionList isEqual:[NSNull null]]) {
+        return nil;
+    }
+    NSMutableArray<NSDictionary *> *basicList = [[NSMutableArray alloc] init];
+    for (ZIMUserStatusSubscription *subscription in subscriptionList) {
+        NSDictionary *dictionary = [ZIMPluginConverter mZIMUserStatusSubsciption:subscription];
+        [basicList addObject:dictionary];
+    }
+    return basicList;
+}
+
++ (nullable ZIMUserStatusSubscribeConfig *)oZIMUserStatusSubscribeConfig:
+    (nullable NSDictionary *)configMap {
+    if (configMap == nil || [configMap isEqual:[NSNull null]]) {
+        return nil;
+    }
+    ZIMUserStatusSubscribeConfig *config = [[ZIMUserStatusSubscribeConfig alloc] init];
+    config.subscriptionDuration =
+        [[configMap objectForKey:@"subscriptionDuration"] unsignedIntValue];
+    return config;
+}
+
++ (nullable ZIMSubscribedUserStatusQueryConfig *)oZIMSubscribedUserStatusQueryConfig:
+    (nullable NSDictionary *)configMap {
+    if (configMap == nil || [configMap isEqual:[NSNull null]]) {
+        return nil;
+    }
+    ZIMSubscribedUserStatusQueryConfig *config = [[ZIMSubscribedUserStatusQueryConfig alloc] init];
+    config.userIDs = [configMap objectForKey:@"userIDs"];
+    return config;
+}
 @end

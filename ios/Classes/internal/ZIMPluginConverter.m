@@ -1684,7 +1684,7 @@
         return nil;
     }
     NSMutableDictionary *groupDic = [[NSMutableDictionary alloc] init];
-    
+
     [groupDic safeSetObject:group.groupAlias forKey:@"groupAlias"];
     [groupDic safeSetObject:[NSNumber numberWithInt:(int)group.notificationStatus]
                      forKey:@"notificationStatus"];
@@ -2696,4 +2696,5 @@
     config.userIDs = [configMap objectForKey:@"userIDs"];
     return config;
 }
+
 @end
