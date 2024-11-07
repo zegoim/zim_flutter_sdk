@@ -120,33 +120,40 @@ class ZIMEventHandlerWeb {
   }
 
   static void peerMessageReceived(ZIMEngine zim, dynamic data) {
-    if(ZIMEventHandler.onPeerMessageReceived == null) return;
+    if (ZIMEventHandler.onPeerMessageReceived == null) return;
     List<ZIMMessage> messageList =
-    ZIMConverter.oZIMMessageList(data['messageList']);
-    ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(data['info']);
-    ZIMEventHandler.onPeerMessageReceived!(zim,messageList,info,data['fromConversationID']);
+        ZIMConverter.oZIMMessageList(data['messageList']);
+    ZIMMessageReceivedInfo info =
+        ZIMConverter.oZIMMessageReceivedInfo(data['info']);
+    ZIMEventHandler.onPeerMessageReceived!(
+        zim, messageList, info, data['fromConversationID']);
   }
+
   static void roomMessageReceived(ZIMEngine zim, dynamic data) {
-    if(ZIMEventHandler.onRoomMessageReceived == null) return;
+    if (ZIMEventHandler.onRoomMessageReceived == null) return;
     List<ZIMMessage> messageList =
-    ZIMConverter.oZIMMessageList(data['messageList']);
-    ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(data['info']);
-    ZIMEventHandler.onRoomMessageReceived!(zim,messageList,info,data['fromConversationID']);
+        ZIMConverter.oZIMMessageList(data['messageList']);
+    ZIMMessageReceivedInfo info =
+        ZIMConverter.oZIMMessageReceivedInfo(data['info']);
+    ZIMEventHandler.onRoomMessageReceived!(
+        zim, messageList, info, data['fromConversationID']);
   }
 
   static void groupMessageReceived(ZIMEngine zim, dynamic data) {
-    if(ZIMEventHandler.onGroupMessageReceived == null) return;
+    if (ZIMEventHandler.onGroupMessageReceived == null) return;
     List<ZIMMessage> messageList =
-    ZIMConverter.oZIMMessageList(data['messageList']);
-    ZIMMessageReceivedInfo info = ZIMConverter.oZIMMessageReceivedInfo(data['info']);
-    ZIMEventHandler.onGroupMessageReceived!(zim,messageList,info,data['fromConversationID']);
+        ZIMConverter.oZIMMessageList(data['messageList']);
+    ZIMMessageReceivedInfo info =
+        ZIMConverter.oZIMMessageReceivedInfo(data['info']);
+    ZIMEventHandler.onGroupMessageReceived!(
+        zim, messageList, info, data['fromConversationID']);
   }
 
-
   static void userStatusUpdated(ZIMEngine zim, dynamic data) {
-    if(ZIMEventHandler.onUserStatusUpdated == null) return;
-    List<ZIMUserStatus> userStatusList = ZIMConverter.oZIMUserStatusList(data['userStatusList']);
-    ZIMEventHandler.onUserStatusUpdated!(zim,userStatusList);
+    if (ZIMEventHandler.onUserStatusUpdated == null) return;
+    List<ZIMUserStatus> userStatusList =
+        ZIMConverter.oZIMUserStatusList(data['userStatusList']);
+    ZIMEventHandler.onUserStatusUpdated!(zim, userStatusList);
   }
 
   static void messageRepliedInfoChanged(ZIMEngine zim, dynamic data) {
